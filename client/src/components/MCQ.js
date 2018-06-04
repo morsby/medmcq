@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actions from './actions';
+import * as actions from '../actions';
 
 import { Container, Dimmer, Loader } from 'semantic-ui-react';
 
-import ThemingLayout from './components/Theme';
-import Question from './components/Question';
-import QuestionNavigator from './components/QuestionNavigator';
-import QuestionHeader from './components/QuestionHeader';
-import Summary from './components/Summary';
+import ThemingLayout from './Theme';
+import Question from './Question';
+import QuestionNavigator from './QuestionNavigator';
+import QuestionHeader from './QuestionHeader';
+import Summary from './Summary';
 
-class App extends Component {
+class MCQ extends Component {
 	constructor(props) {
 		super(props);
 
@@ -63,4 +63,4 @@ function mapStateToProps(state) {
 	return { questions: state.questions, answers: state.answers };
 }
 
-export default connect(mapStateToProps, actions)(App);
+export default connect(mapStateToProps, actions)(MCQ);

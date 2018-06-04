@@ -41,12 +41,24 @@ const Summary = props => {
 		progress[n] = { n, svar };
 	}
 	console.log(progress);
+
+	let questionLinkText = question => {
+		let text;
+		if (question.length > 33) {
+			text = question.substring(0, 30) + ' ...';
+		} else {
+			text = question;
+		}
+
+		return text;
+	};
+
 	return (
 		<Card fluid>
 			<Card.Content>
 				<Card.Header>Fremgang</Card.Header>
 				{stats}
-				<Card.Description>
+				<Card.Description style={{ columns: '250px 4' }}>
 					<List ordered>
 						{progress.map(res => {
 							let color;
@@ -60,9 +72,8 @@ const Summary = props => {
 										props.clickHandler(res.n + 1)
 									}
 								>
-									{props.questions[res.n].question.substring(
-										0,
-										30
+									{questionLinkText(
+										props.questions[res.n].question
 									)}
 								</List.Item>
 							);

@@ -36,7 +36,7 @@ module.exports = app => {
 		question.examYear = q.examYear;
 		question.examSeason = q.examSeason;
 		question.specialty = q.specialty.toLowerCase();
-		question.tags = q.tags.toLowerCase();
+		//question.tags = q.tags.toLowerCase();
 
 		question.save(err => {
 			if (err) res.send(err);

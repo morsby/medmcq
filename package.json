@@ -4,6 +4,10 @@
 	"description":
 		"En webapp til visning af MCQ-opgaver fra kandidaten i medicin på AU",
 	"main": "server.js",
+	"engines": {
+		"node": "10.3.0",
+		"npm": "6.1.0"
+	},
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"server": "nodemon server.js",

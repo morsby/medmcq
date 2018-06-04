@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
+import marked from 'marked';
 
 import { Button, Card, Divider } from 'semantic-ui-react';
 
@@ -35,9 +36,13 @@ class Question extends Component {
 		return (
 			<Card fluid>
 				<Card.Content>
-					<Card.Header>
-						{this.props.questions[this.props.qn].question}
-					</Card.Header>
+					<Card.Header
+						dangerouslySetInnerHTML={{
+							__html: marked(
+								this.props.questions[this.props.qn].question
+							)
+						}}
+					/>
 
 					<Card.Description>
 						<Button.Group vertical>
