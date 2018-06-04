@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as actions from '../actions';
+import _ from 'lodash';
 import {
 	Container,
 	Header,
@@ -6,29 +9,45 @@ import {
 	Divider,
 	Button
 } from 'semantic-ui-react';
+import { Redirect } from 'react-router-dom';
 
 import MCQSelectorNumber from './MCQSelectorNumber';
+import MCQSelectorSets from './MCQSelectorSets';
 
 class MCQSelector extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = { type: 'random', n: 10 };
+		this.state = { submitted: false, err: [] };
 
-		this.onTypeChange = this.onTypeChange.bind(this);
-		this.onNChange = this.onNChange.bind(this);
+		this.onSettingsChange = this.onSettingsChange.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
-	onTypeChange(e, data) {
-		this.setState({ type: data.name });
+	onSettingsChange(e, { name, value }, prevSettings) {
+		this.props.changeSettings({ [name]: value }, this.props.settings);
 	}
 
-	onNChange(e, { value }) {
-		this.setState({ n: value });
+	handleSubmit() {
+		let err = [];
+		if (!this.props.settings.semester) {
+			err.push('Du skal vælge et semester først!');
+		}
+		if (this.props.settings.type === 'set' && !this.props.settings.set) {
+			err.push('Du skal vælge et sæt for at kunne starte!');
+		}
+
+		if (err.length === 0) {
+			this.setState({ submitted: true });
+		} else {
+			this.setState({ err });
+		}
 	}
 
 	render() {
-		console.log(this.state);
+		if (this.state.submitted) {
+			return <Redirect to="/mcq" />;
+		}
 		const semestre = [
 			{ text: '7. semester', value: '7' },
 			{ text: '8. semester', value: '8' },
@@ -36,6 +55,9 @@ class MCQSelector extends Component {
 			{ text: '11. semester', value: '11' }
 		];
 
+		let fordeling = _.groupBy(this.props.settings.questions, 'specialty');
+		// TODO: Få fordeling til at acceptere spørgsmål med flere specialer
+		console.log(this.props.settings);
 		return (
 			<Container>
 				<Header as="h1">
@@ -47,41 +69,75 @@ class MCQSelector extends Component {
 					fluid
 					selection
 					options={semestre}
+					name="semester"
+					value={this.props.settings.semester}
+					onChange={this.onSettingsChange}
 				/>
 				<Divider hidden />
 				<Button.Group fluid widths={3}>
 					<Button
-						name="random"
-						active={this.state.type === 'random'}
-						onClick={this.onTypeChange}
+						name="type"
+						value="random"
+						active={this.props.settings.type === 'random'}
+						onClick={this.onSettingsChange}
 					>
 						Tilfældige spørgsmål
 					</Button>
 					<Button
-						name="set"
-						active={this.state.type === 'set'}
-						onClick={this.onTypeChange}
+						name="type"
+						value="set"
+						active={this.props.settings.type === 'set'}
+						onClick={this.onSettingsChange}
 					>
 						Fulde eksamenssæt
 					</Button>
 					<Button
-						name="specialer"
-						active={this.state.type === 'specialer'}
-						onClick={this.onTypeChange}
+						name="type"
+						value="specialer"
+						active={this.props.settings.type === 'specialer'}
+						onClick={this.onSettingsChange}
 					>
 						Specialer
 					</Button>
 				</Button.Group>
 				<Divider hidden />
-				{this.state.type !== 'set' && (
+				{this.props.settings.type !== 'set' && (
 					<MCQSelectorNumber
-						n={this.state.n}
-						onNChange={this.onNChange}
+						n={this.props.settings.n}
+						onNChange={this.onSettingsChange}
 					/>
+				)}
+				{this.props.settings.type === 'set' && (
+					<MCQSelectorSets
+						settings={this.props.settings}
+						onChange={this.onSettingsChange}
+					/>
+				)}
+
+				<Divider hidden />
+				{this.props.settings.semester && (
+					<div>
+						Der er {this.props.settings.questions.length} spørgsmål
+						for det valgte semester.
+					</div>
+				)}
+				<Divider hidden />
+				{this.state.err.map(err => {
+					return <h5>{err}</h5>;
+				})}
+				{this.props.settings.type !== 'specialer' && (
+					<Button onClick={this.handleSubmit}>Start!</Button>
+				)}
+				{this.props.settings.type === 'specialer' && (
+					<h1>Denne funktion virker desværre ikke endnu ...</h1>
 				)}
 			</Container>
 		);
 	}
 }
 
-export default MCQSelector;
+function mapStateToProps(state) {
+	return { settings: state.settings };
+}
+
+export default connect(mapStateToProps, actions)(MCQSelector);

@@ -40,7 +40,6 @@ const Summary = props => {
 		}
 		progress[n] = { n, svar };
 	}
-	console.log(progress);
 
 	let questionLinkText = question => {
 		let text;

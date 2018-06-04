@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 
+import { Redirect } from 'react-router-dom';
+import _ from 'lodash';
 import { Container, Dimmer, Loader } from 'semantic-ui-react';
 
 import ThemingLayout from './Theme';
@@ -14,12 +16,28 @@ class MCQ extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = { qn: 0, answer: false };
+		this.state = { qn: 0, answer: false, toSelection: true };
 		this.onNavigate = this.onNavigate.bind(this);
 	}
 
 	componentWillMount() {
-		this.props.fetchAllQuestions();
+		if (this.props.settings.questions.length > 0) {
+			this.setState({ toSelection: false });
+			console.log(this.props.settings);
+			let selection,
+				type = this.props.settings.type;
+			if (type === 'random') {
+				selection = _.sampleSize(
+					this.props.settings.questions,
+					this.props.settings.n
+				);
+
+				selection = _.map(selection, '_id');
+			} else if (type === 'set') {
+				selection = { ...this.props.settings };
+			}
+			this.props.getQuestions(this.props.settings.type, selection);
+		}
 	}
 
 	onNavigate(q) {
@@ -29,6 +47,7 @@ class MCQ extends Component {
 	}
 
 	render() {
+		if (this.state.toSelection) return <Redirect to="/" />;
 		if (!this.props.questions)
 			return (
 				<Dimmer active page>
@@ -60,7 +79,11 @@ class MCQ extends Component {
 }
 
 function mapStateToProps(state) {
-	return { questions: state.questions, answers: state.answers };
+	return {
+		questions: state.questions,
+		answers: state.answers,
+		settings: state.settings
+	};
 }
 
 export default connect(mapStateToProps, actions)(MCQ);

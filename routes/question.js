@@ -1,3 +1,6 @@
+var uniqWith = require('lodash/uniqWith');
+var isEqual = require('lodash/isEqual');
+
 // MODELS
 const Question = require('../models/question.js');
 
@@ -11,9 +14,11 @@ module.exports = app => {
 		});
 	});
 
-	// GET: questions
+	// GET: bestemt spørgsmål
 	app.get('/api/questions/:id', (req, res) => {
-		Question.findById(req.params.id, (err, question) => {
+		let ids = req.params.id.split(',');
+
+		Question.find({ _id: { $in: ids } }, (err, question) => {
 			if (err) res.send(err);
 
 			res.json(question);
@@ -70,6 +75,20 @@ module.exports = app => {
 		});
 	});
 
+	// GET: alle spørgsmål fra et semester
+	app.get('/api/set/:semester', (req, res) => {
+		Question.find(
+			{
+				semester: req.params.semester
+			},
+			(err, questions) => {
+				if (err) res.send(err);
+
+				res.json(questions);
+			}
+		);
+	});
+
 	// GET: alle spørgsmål fra et bestemt sæt
 	app.get('/api/set/:semester/:examYear/:examSeason', (req, res) => {
 		Question.find(
@@ -80,7 +99,6 @@ module.exports = app => {
 			},
 			(err, questions) => {
 				if (err) res.send(err);
-
 				res.json(questions);
 			}
 		);
@@ -99,5 +117,66 @@ module.exports = app => {
 				res.json(questions);
 			}
 		);
+	});
+
+	/**
+	 * ======================================================================
+	 * Fanger kun antal spørgsmål og fordeling af Specialer samt eksamenssæt
+	 * ======================================================================
+	 */
+
+	// GET antal på semesteret
+	app.get('/api/count/:semester', (req, res) => {
+		Question.find({ semester: req.params.semester })
+			.select(['specialty', 'examSeason', 'examYear'])
+			.exec((err, questions) => {
+				if (err) res.send(err);
+
+				res.json(questions);
+			});
+	});
+
+	// GET de enkelte sæt på semesteret
+	app.get('/api/count/sets/:semester', (req, res) => {
+		/*Question.aggregate(
+			[
+				{ $match: { semester: Number(req.params.semester) } },
+				{
+					$project: {
+						eksamensdato: {
+							$concat: [
+								{ $substrBytes: ['$examYear', 0, 4] },
+								' - ',
+								'$examSeason'
+							]
+						}
+					}
+				}
+			],*/
+		Question.find(
+			{ semester: req.params.semester },
+			'-_id examSeason examYear',
+			(err, questions) => {
+				if (err) res.send(err);
+
+				let unique = uniqWith(questions, isEqual);
+
+				res.json(unique);
+			}
+		);
+	});
+
+	// GET antal på semesteret og speciale
+	app.get('/api/count/:semester/:specialty', (req, res) => {
+		Question.find({
+			semester: req.params.semester,
+			specialty: req.params.specialty
+		})
+			.select(['specialty', 'examSeason', 'examYear'])
+			.exec((err, questions) => {
+				if (err) res.send(err);
+
+				res.json(questions);
+			});
 	});
 };

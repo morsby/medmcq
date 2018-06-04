@@ -11,7 +11,7 @@ var QuestionSchema = new Schema({
 
 	// Metadata, til filtrering
 	semester: Number, // hvilket kandidatsemester?
-	examYear: String, // hvornår blev spørgsmålet stillet?
+	examYear: Number, // hvornår blev spørgsmålet stillet?
 	examSeason: String, // forår el. efterår?
 	specialty: [
 		{
