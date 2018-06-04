@@ -12,7 +12,10 @@
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"server": "nodemon server.js",
 		"client": "cd client && npm start",
-		"start": "concurrently \"npm run server\" \"npm run client\""
+		"dev": "concurrently \"npm run server\" \"npm run client\"",
+		"start": "node index.jx",
+		"heroku-postbuild":
+			"NPM_CONFIG_PRODUCTION=false npm install --dev --prefix client && npm run build --prefix client"
 	},
 	"author": "Morsby",
 	"license": "MIT",
