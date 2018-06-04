@@ -16,7 +16,7 @@ class MCQ extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = { qn: 0, answer: false, toSelection: true };
+		this.state = { qn: 0, toSelection: true };
 		this.onNavigate = this.onNavigate.bind(this);
 		this.toSelection = this.toSelection.bind(this);
 		this.getQuestions = this.getQuestions.bind(this);
@@ -25,7 +25,6 @@ class MCQ extends Component {
 	componentWillMount() {
 		if (this.props.settings.questions.length > 0) {
 			this.setState({ toSelection: false });
-			console.log(this.props.settings);
 			this.getQuestions();
 		}
 	}
@@ -54,6 +53,7 @@ class MCQ extends Component {
 			selection = { ...this.props.settings };
 		}
 		this.props.getQuestions(this.props.settings.type, selection);
+		this.setState({ qn: 0 });
 	}
 
 	render() {

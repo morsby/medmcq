@@ -7,7 +7,6 @@ const QuestionNavigator = props => {
 		<Pagination
 			fluid
 			widths={props.qmax < 7 ? props.qmax + 4 : 11}
-			defaultActivePage={1}
 			activePage={props.qn + 1}
 			totalPages={props.qmax}
 			onPageChange={(event, data) => {

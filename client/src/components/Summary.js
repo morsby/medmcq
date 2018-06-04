@@ -70,6 +70,7 @@ const Summary = props => {
 									onClick={() =>
 										props.clickHandler(res.n + 1)
 									}
+									key={res.n}
 								>
 									{questionLinkText(
 										props.questions[res.n].question

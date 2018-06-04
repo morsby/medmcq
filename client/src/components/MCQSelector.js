@@ -57,7 +57,6 @@ class MCQSelector extends Component {
 
 		let fordeling = _.groupBy(this.props.settings.questions, 'specialty');
 		// TODO: Få fordeling til at acceptere spørgsmål med flere specialer
-		console.log(this.props.settings);
 		return (
 			<Container>
 				<Header as="h1">
