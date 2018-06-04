@@ -4,7 +4,7 @@ import * as actions from '../actions';
 
 import { Redirect } from 'react-router-dom';
 import _ from 'lodash';
-import { Container, Dimmer, Loader } from 'semantic-ui-react';
+import { Container, Dimmer, Loader, Button } from 'semantic-ui-react';
 
 import ThemingLayout from './Theme';
 import Question from './Question';
@@ -18,25 +18,15 @@ class MCQ extends Component {
 
 		this.state = { qn: 0, answer: false, toSelection: true };
 		this.onNavigate = this.onNavigate.bind(this);
+		this.toSelection = this.toSelection.bind(this);
+		this.getQuestions = this.getQuestions.bind(this);
 	}
 
 	componentWillMount() {
 		if (this.props.settings.questions.length > 0) {
 			this.setState({ toSelection: false });
 			console.log(this.props.settings);
-			let selection,
-				type = this.props.settings.type;
-			if (type === 'random') {
-				selection = _.sampleSize(
-					this.props.settings.questions,
-					this.props.settings.n
-				);
-
-				selection = _.map(selection, '_id');
-			} else if (type === 'set') {
-				selection = { ...this.props.settings };
-			}
-			this.props.getQuestions(this.props.settings.type, selection);
+			this.getQuestions();
 		}
 	}
 
@@ -44,6 +34,26 @@ class MCQ extends Component {
 		this.setState({
 			qn: q - 1
 		});
+	}
+
+	toSelection() {
+		this.setState({ toSelection: true });
+	}
+
+	getQuestions() {
+		let selection,
+			type = this.props.settings.type;
+		if (type === 'random') {
+			selection = _.sampleSize(
+				this.props.settings.questions,
+				this.props.settings.n
+			);
+
+			selection = _.map(selection, '_id');
+		} else if (type === 'set') {
+			selection = { ...this.props.settings };
+		}
+		this.props.getQuestions(this.props.settings.type, selection);
 	}
 
 	render() {
@@ -71,6 +81,16 @@ class MCQ extends Component {
 						questions={this.props.questions}
 						answers={this.props.answers}
 						clickHandler={this.onNavigate}
+					/>
+					<Button
+						content="Vend tilbage til oversigten"
+						color="red"
+						onClick={this.toSelection}
+					/>
+					<Button
+						content="Få nye spørgsmål (samme indstillinger)"
+						color="yellow"
+						onClick={this.getQuestions}
 					/>
 				</Container>
 			</div>
