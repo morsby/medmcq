@@ -14,6 +14,8 @@ import { Redirect } from 'react-router-dom';
 import MCQSelectorNumber from './MCQSelectorNumber';
 import MCQSelectorSets from './MCQSelectorSets';
 
+import { semestre } from '../common';
+
 class MCQSelector extends Component {
 	constructor(props) {
 		super(props);
@@ -48,12 +50,6 @@ class MCQSelector extends Component {
 		if (this.state.submitted) {
 			return <Redirect to="/mcq" />;
 		}
-		const semestre = [
-			{ text: '7. semester', value: '7' },
-			{ text: '8. semester', value: '8' },
-			{ text: '9. semester', value: '9' },
-			{ text: '11. semester', value: '11' }
-		];
 
 		let fordeling = _.groupBy(this.props.settings.questions, 'specialty');
 		// TODO: Få fordeling til at acceptere spørgsmål med flere specialer

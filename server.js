@@ -16,6 +16,10 @@ var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+// multer tillader filuploads (billeder til spørgsmål)
+const multer = require('multer');
+const cloudinary = require('cloudinary');
+
 var port = process.env.PORT || 3001; // set our port
 
 // MODELS

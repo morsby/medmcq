@@ -1,5 +1,17 @@
+const keys = require('../config/keys');
+
 var uniqWith = require('lodash/uniqWith');
 var isEqual = require('lodash/isEqual');
+
+const multer = require('multer');
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+var cloudinary = require('cloudinary');
+cloudinary.config({
+	cloud_name: keys.cloudinary_cloud_name,
+	api_key: keys.cloudinary_api_key,
+	api_secret: keys.cloudinary_api_secret
+});
 
 // MODELS
 const Question = require('../models/question.js');
@@ -26,7 +38,7 @@ module.exports = app => {
 	});
 
 	// POST: Nyt spørgsmål
-	app.post('/api/questions', (req, res) => {
+	app.post('/api/questions', upload.single('image'), function(req, res) {
 		var question = new Question();
 
 		let q = req.body;
@@ -40,14 +52,34 @@ module.exports = app => {
 		question.semester = q.semester;
 		question.examYear = q.examYear;
 		question.examSeason = q.examSeason;
-		question.specialty = q.specialty.toLowerCase();
+		question.specialty = q.specialty;
 		//question.tags = q.tags.toLowerCase();
 
-		question.save(err => {
-			if (err) res.send(err);
+		if (!req.file) {
+			question.save(err => {
+				if (err) res.send(err);
 
-			res.json({ message: 'Question created!' });
-		});
+				res.json({ message: 'Question created!' });
+			});
+		} else {
+			// Uncomment når der skal uploades
+			cloudinary.v2.uploader
+				.upload_stream({ resource_type: 'image' }, function(
+					error,
+					imageResult
+				) {
+					// data er i imageResult
+
+					question.image = imageResult.url;
+					question.image_id = imageResult.public_id;
+					question.save(err => {
+						if (err) res.send(err);
+
+						res.json({ message: 'Question created!' });
+					});
+				})
+				.end(req.file.buffer);
+		}
 	});
 
 	// PUT: Opdater et spørgsmål

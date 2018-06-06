@@ -22,7 +22,9 @@ var QuestionSchema = new Schema({
 		{
 			type: String
 		}
-	]
+	],
+	image: String,
+	image_id: String
 });
 
 module.exports = mongoose.model('Question', QuestionSchema);

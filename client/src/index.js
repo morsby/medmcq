@@ -8,6 +8,7 @@ import reducers from './reducers';
 
 import MCQ from './components/MCQ';
 import MCQSelector from './components/MCQSelector';
+import AddQuestion from './components/AddQuestion';
 import ThemingLayout from './components/Theme';
 
 import registerServiceWorker from './registerServiceWorker';
@@ -20,6 +21,7 @@ ReactDOM.render(
 			<Switch>
 				<Route path="/mcq" component={MCQ} />
 				<Route path="/theme" component={ThemingLayout} />
+				<Route path="/add" component={AddQuestion} />
 				<Route path="/" component={MCQSelector} />
 			</Switch>
 		</BrowserRouter>

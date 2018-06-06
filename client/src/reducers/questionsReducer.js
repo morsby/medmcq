@@ -1,7 +1,7 @@
 import * as types from '../actions/types';
 import _ from 'lodash';
 
-export default function(state = null, action) {
+export default function(state = [], action) {
 	switch (action.type) {
 		case types.FETCH_QUESTIONS:
 			return action.payload || false;
