@@ -13,7 +13,7 @@ export const getQuestions = (type, selection) => async dispatch => {
 			`/api/set/${selection.semester}/${selection.set}`
 		);
 	}
-	if (res) dispatch({ type: types.FETCH_QUESTIONS, payload: res.data });
+	dispatch({ type: types.FETCH_QUESTIONS, payload: res.data });
 };
 
 export const answerQuestion = (id, answer, correct) => dispatch => {

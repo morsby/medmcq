@@ -52,6 +52,7 @@ class MCQ extends Component {
 		} else if (type === 'set') {
 			selection = { ...this.props.settings };
 		}
+
 		this.props.getQuestions(this.props.settings.type, selection);
 		this.setState({ qn: 0 });
 	}
@@ -106,4 +107,7 @@ function mapStateToProps(state) {
 	};
 }
 
-export default connect(mapStateToProps, actions)(MCQ);
+export default connect(
+	mapStateToProps,
+	actions
+)(MCQ);

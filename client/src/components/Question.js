@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 import marked from 'marked';
 
-import { Button, Card, Divider } from 'semantic-ui-react';
+import { Button, Card, Divider, Dimmer, Loader } from 'semantic-ui-react';
 
 class Question extends Component {
 	onAnswer(answer) {
@@ -24,6 +24,7 @@ class Question extends Component {
 	}
 
 	render() {
+		console.log(this.props.questions);
 		const evalAnswer = answer => {
 			if (!this.props.questions[this.props.qn].answer) return; // hvis ikke svaret
 			if (answer === this.props.questions[this.props.qn].correctAnswer)
@@ -32,6 +33,13 @@ class Question extends Component {
 				return 'red disabled'; // hvis forkert svar
 			return 'grey disabled'; // ikke valgt mulighed
 		};
+
+		if (!this.props.questions.length > 0)
+			return (
+				<Dimmer active page>
+					<Loader>Henter spørgsmål ...</Loader>
+				</Dimmer>
+			);
 
 		return (
 			<Card fluid>
@@ -91,4 +99,7 @@ function mapStateToProps(state) {
 	return { questions: state.questions };
 }
 
-export default connect(mapStateToProps, actions)(Question);
+export default connect(
+	mapStateToProps,
+	actions
+)(Question);
