@@ -6,7 +6,6 @@ import { Redirect } from 'react-router-dom';
 import _ from 'lodash';
 import { Container, Dimmer, Loader, Button } from 'semantic-ui-react';
 
-import ThemingLayout from './Theme';
 import Question from './Question';
 import QuestionNavigator from './QuestionNavigator';
 import QuestionHeader from './QuestionHeader';
@@ -43,6 +42,8 @@ class MCQ extends Component {
 		let selection,
 			type = this.props.settings.type;
 		if (type === 'random') {
+			// TODO: Bedre måde at udvælge random på:
+			// Evt. ny prop: index, shuffle alle spørgsmål --> udvælg fra array[index] til array[index + antal]
 			selection = _.sampleSize(
 				this.props.settings.questions,
 				this.props.settings.n

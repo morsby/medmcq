@@ -51,7 +51,7 @@ class MCQSelector extends Component {
 			return <Redirect to="/mcq" />;
 		}
 
-		let fordeling = _.groupBy(this.props.settings.questions, 'specialty');
+		//let fordeling = _.groupBy(this.props.settings.questions, 'specialty');
 		// TODO: Få fordeling til at acceptere spørgsmål med flere specialer
 		return (
 			<Container>
@@ -135,4 +135,7 @@ function mapStateToProps(state) {
 	return { settings: state.settings };
 }
 
-export default connect(mapStateToProps, actions)(MCQSelector);
+export default connect(
+	mapStateToProps,
+	actions
+)(MCQSelector);

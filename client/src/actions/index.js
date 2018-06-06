@@ -41,8 +41,7 @@ export const postQuestion = post => async dispatch => {
 };
 
 export const changeSettings = (settings, prevSettings) => async dispatch => {
-	let payload = { settings },
-		sets = null;
+	let payload = { settings };
 
 	if (settings.semester) {
 		const res = await axios.get('/api/count/' + settings.semester);

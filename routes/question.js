@@ -52,7 +52,7 @@ module.exports = app => {
 		question.semester = q.semester;
 		question.examYear = q.examYear;
 		question.examSeason = q.examSeason;
-		question.specialty = q.specialty;
+		question.specialty = q.specialty.split(',');
 		//question.tags = q.tags.toLowerCase();
 
 		if (!req.file) {

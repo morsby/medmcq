@@ -21,6 +21,7 @@ const initialState = {
 	answer3: '',
 	correctAnswer: null,
 	image: null,
+	imageSrc: '',
 	semester: null,
 	examSeason: null,
 	examYear: null
@@ -32,7 +33,8 @@ const resetState = {
 	answer2: '',
 	answer3: '',
 	correctAnswer: null,
-	image: null
+	image: null,
+	imageSrc: ''
 };
 
 class AddQuestion extends Component {
@@ -42,6 +44,7 @@ class AddQuestion extends Component {
 
 		this.onChange = this.onChange.bind(this);
 		this.onUpload = this.onUpload.bind(this);
+		this.removeImage = this.removeImage.bind(this);
 		this.handleClick = this.handleClick.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
@@ -70,6 +73,20 @@ class AddQuestion extends Component {
 
 	onUpload(e) {
 		this.setState({ image: e.target.files[0] });
+
+		// Assuming only image
+		var reader = new FileReader();
+
+		reader.onloadend = function(e) {
+			this.setState({
+				imageSrc: [reader.result],
+				imageWidth: '100%'
+			});
+		}.bind(this);
+	}
+
+	removeImage() {
+		this.setState({ imageSrc: '', image: null, imageWidth: 0 });
 	}
 
 	handleClick(e) {
@@ -84,7 +101,6 @@ class AddQuestion extends Component {
 	}
 
 	render() {
-		console.log(this.state);
 		var years = [];
 		for (var i = 2011; i <= new Date().getFullYear(); i++) {
 			years.push({ text: i, value: i });
@@ -238,28 +254,46 @@ class AddQuestion extends Component {
 										/>
 									</Form.Field>
 								</Form.Group>
-								<Form.Group>
-									<div className="body-content">
-										<div onClick={this.handleClick}>
-											{' '}
-											Upload billede
-											<input
-												type="file"
-												ref="fileUploader"
-												name="image"
-												style={{ display: 'none' }}
-												onChange={this.onUpload}
-											/>
-										</div>
+								<div>
+									<div>
+										<Button.Group fluid>
+											<Button
+												color="olive"
+												onClick={this.handleClick}
+											>
+												Upload billede
+											</Button>
+											<Button
+												color="teal"
+												onClick={this.removeImage}
+											>
+												Fjern billede
+											</Button>
+										</Button.Group>
 									</div>
-								</Form.Group>
-								<Form.Group>
-									<Form.Field>
-										<Button onClick={this.handleSubmit}>
-											Tilføj spørgsmål!
-										</Button>
-									</Form.Field>
-								</Form.Group>
+									<input
+										type="file"
+										ref="fileUploader"
+										name="image"
+										style={{ display: 'none' }}
+										onChange={this.onUpload}
+									/>
+
+									<img
+										src={this.state.imageSrc}
+										alt="Uploadet billede"
+										width={this.state.imageWidth}
+									/>
+								</div>
+								<div>
+									<Button
+										fluid
+										onClick={this.handleSubmit}
+										color="green"
+									>
+										Tilføj spørgsmål!
+									</Button>
+								</div>
 							</Form>
 						</Grid.Column>
 					</Grid.Row>
@@ -275,4 +309,7 @@ function mapStateToProps(state) {
 	};
 }
 
-export default connect(mapStateToProps, actions)(AddQuestion);
+export default connect(
+	mapStateToProps,
+	actions
+)(AddQuestion);

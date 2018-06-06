@@ -3,7 +3,14 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 import marked from 'marked';
 
-import { Button, Card, Divider, Dimmer, Loader } from 'semantic-ui-react';
+import {
+	Button,
+	Card,
+	Divider,
+	Dimmer,
+	Loader,
+	Image
+} from 'semantic-ui-react';
 
 class Question extends Component {
 	onAnswer(answer) {
@@ -24,13 +31,11 @@ class Question extends Component {
 	}
 
 	render() {
-		console.log(this.props.questions);
+		let question = this.props.questions[this.props.qn];
 		const evalAnswer = answer => {
-			if (!this.props.questions[this.props.qn].answer) return; // hvis ikke svaret
-			if (answer === this.props.questions[this.props.qn].correctAnswer)
-				return 'green disabled'; // hvis korrekt svar
-			if (answer === this.props.questions[this.props.qn].answer)
-				return 'red disabled'; // hvis forkert svar
+			if (!question.answer) return; // hvis ikke svaret
+			if (answer === question.correctAnswer) return 'green disabled'; // hvis korrekt svar
+			if (answer === question.answer) return 'red disabled'; // hvis forkert svar
 			return 'grey disabled'; // ikke valgt mulighed
 		};
 
@@ -46,20 +51,20 @@ class Question extends Component {
 				<Card.Content>
 					<Card.Header
 						dangerouslySetInnerHTML={{
-							__html: marked(
-								this.props.questions[this.props.qn].question
-							)
+							__html: marked(question.question)
 						}}
 					/>
 
 					<Card.Description>
+						{question.image && <Image src={question.image} />}
+						<Divider hidden />
 						<Button.Group vertical>
 							<Button
 								style={{ textAlign: 'left' }}
 								onClick={() => this.onAnswer(1)}
 								color={evalAnswer(1)}
 							>
-								A. {this.props.questions[this.props.qn].answer1}
+								A. {question.answer1}
 							</Button>
 							<Divider />
 							<Button
@@ -67,7 +72,7 @@ class Question extends Component {
 								onClick={() => this.onAnswer(2)}
 								color={evalAnswer(2)}
 							>
-								B. {this.props.questions[this.props.qn].answer2}
+								B. {question.answer2}
 							</Button>
 							<Divider />
 							<Button
@@ -75,20 +80,17 @@ class Question extends Component {
 								onClick={() => this.onAnswer(3)}
 								color={evalAnswer(3)}
 							>
-								C. {this.props.questions[this.props.qn].answer3}
+								C. {question.answer3}
 							</Button>
 						</Button.Group>
 					</Card.Description>
 				</Card.Content>
 				<Card.Content extra>
 					<div className="date">
-						Sæt: {this.props.questions[this.props.qn].examSeason}
-						{this.props.questions[this.props.qn].examYear}
+						Sæt: {question.examSeason}
+						{question.examYear}
 					</div>
-					<div className="">
-						Speciale:{' '}
-						{this.props.questions[this.props.qn].specialty}
-					</div>
+					<div className="">Speciale: {question.specialty}</div>
 				</Card.Content>
 			</Card>
 		);

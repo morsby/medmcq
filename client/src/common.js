@@ -11,7 +11,9 @@ export const specialer = {
 		{ value: 'infektionsmedicin', text: 'Infektionsmedicin' },
 		{ value: 'nefrologi', text: 'Nefrologi' },
 		{ value: 'almen_medicin', text: 'Almen medicin' },
-		{ value: 'paraklinik', text: 'Paraklinik' }
+		{ value: 'paraklinik', text: 'Paraklinik' },
+		{ value: 'gastroenterologi', text: 'Gastroenterologi' },
+		{ value: 'hæmatologi', text: 'Hæmatologi' }
 	],
 	8: [{ value: 'abdominalkirurgi', text: 'Abdominalkirurgi' }]
 };
