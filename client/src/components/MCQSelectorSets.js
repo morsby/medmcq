@@ -3,7 +3,7 @@ import { Form, Radio, Divider, Header } from 'semantic-ui-react';
 
 const radioGenerator = (set, props) => {
 	return (
-		<Form.Group>
+		<Form.Group key={set.api}>
 			<Form.Field>
 				<Radio
 					label={set.text}

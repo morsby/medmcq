@@ -4,12 +4,13 @@ import * as actions from '../actions';
 
 import { Redirect } from 'react-router-dom';
 import _ from 'lodash';
-import { Container, Dimmer, Loader, Button } from 'semantic-ui-react';
+import { Container, Dimmer, Loader, Button, Divider } from 'semantic-ui-react';
 
 import Question from './Question';
 import QuestionNavigator from './QuestionNavigator';
 import QuestionHeader from './QuestionHeader';
 import Summary from './Summary';
+import MainNavigation from './MainNavigation';
 
 class MCQ extends Component {
 	constructor(props) {
@@ -30,7 +31,7 @@ class MCQ extends Component {
 
 	onNavigate(q) {
 		this.setState({
-			qn: q - 1
+			qn: q
 		});
 	}
 
@@ -68,33 +69,31 @@ class MCQ extends Component {
 			);
 		return (
 			<div className="App">
-				<Container>
-					<QuestionHeader
-						qn={this.state.qn}
-						qmax={this.props.questions.length}
-					/>
-					<Question qn={this.state.qn} />
-					<QuestionNavigator
-						clickHandler={this.onNavigate}
-						qn={this.state.qn}
-						qmax={this.props.questions.length}
-					/>
-					<Summary
-						questions={this.props.questions}
-						answers={this.props.answers}
-						clickHandler={this.onNavigate}
-					/>
-					<Button
-						content="Vend tilbage til oversigten"
-						color="red"
-						onClick={this.toSelection}
-					/>
-					<Button
-						content="Få nye spørgsmål (samme indstillinger)"
-						color="yellow"
-						onClick={this.getQuestions}
-					/>
-				</Container>
+				<QuestionNavigator
+					clickHandler={this.onNavigate}
+					qn={this.state.qn}
+					qmax={this.props.questions.length}
+					fixed
+					position="top"
+				/>
+
+				<Question qn={this.state.qn} />
+
+				<QuestionNavigator
+					clickHandler={this.onNavigate}
+					qn={this.state.qn}
+					qmax={this.props.questions.length}
+				/>
+				<Summary
+					questions={this.props.questions}
+					answers={this.props.answers}
+					clickHandler={this.onNavigate}
+				/>
+				<MainNavigation
+					toSelection={this.toSelection}
+					newQuestions={this.getQuestions}
+					set={this.props.settings.type}
+				/>
 			</div>
 		);
 	}

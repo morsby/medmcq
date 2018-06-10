@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Card, List } from 'semantic-ui-react';
+import { Card, List, Container } from 'semantic-ui-react';
 
 const Summary = props => {
 	let stats = '';
@@ -21,7 +21,7 @@ const Summary = props => {
 				<Card.Content>
 					Du svarede rigtigt på {correct} af {props.answers.length}{' '}
 					spørgsmål. Det svarer til{' '}
-					{Math.round(correct / props.answers.length * 10000) / 100}%
+					{Math.round((correct / props.answers.length) * 10000) / 100}%
 				</Card.Content>
 			);
 		}
@@ -53,35 +53,37 @@ const Summary = props => {
 	};
 
 	return (
-		<Card fluid>
-			<Card.Content>
-				<Card.Header>Fremgang</Card.Header>
-				{stats}
-				<Card.Description style={{ columns: '250px 4' }}>
-					<List ordered>
-						{progress.map(res => {
-							let color;
-							if (res.svar === 'Korrekt') color = 'green';
-							if (res.svar === 'Forkert') color = 'red';
-							return (
-								<List.Item
-									as="a"
-									style={{ color }}
-									onClick={() =>
-										props.clickHandler(res.n + 1)
-									}
-									key={res.n}
-								>
-									{questionLinkText(
-										props.questions[res.n].question
-									)}
-								</List.Item>
-							);
-						})}
-					</List>
-				</Card.Description>
-			</Card.Content>
-		</Card>
+		<Container>
+			<Card fluid>
+				<Card.Content>
+					<Card.Header>Fremgang</Card.Header>
+					{stats}
+					<Card.Description style={{ columns: '250px 4' }}>
+						<List ordered>
+							{progress.map(res => {
+								let color;
+								if (res.svar === 'Korrekt') color = 'green';
+								if (res.svar === 'Forkert') color = 'red';
+								return (
+									<List.Item
+										as="a"
+										style={{ color }}
+										onClick={() =>
+											props.clickHandler(res.n)
+										}
+										key={res.n}
+									>
+										{questionLinkText(
+											props.questions[res.n].question
+										)}
+									</List.Item>
+								);
+							})}
+						</List>
+					</Card.Description>
+				</Card.Content>
+			</Card>
+		</Container>
 	);
 };
 

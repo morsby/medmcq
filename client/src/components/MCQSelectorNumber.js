@@ -3,7 +3,7 @@ import { Form, Radio, Divider, Header } from 'semantic-ui-react';
 
 const MCQSelectorNumber = props => {
 	return (
-		<Form inline>
+		<Form>
 			<Header as="h3">Hvor mange spørgsmål vil du have?</Header>
 			<Form.Group>
 				<Form.Field width={1}>

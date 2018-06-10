@@ -3,13 +3,17 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 import marked from 'marked';
 
+import { imageURL } from '../common';
+
 import {
+	Container,
 	Button,
-	Card,
+	Grid,
 	Divider,
 	Dimmer,
 	Loader,
-	Image
+	Image,
+	Segment
 } from 'semantic-ui-react';
 
 class Question extends Component {
@@ -47,52 +51,67 @@ class Question extends Component {
 			);
 
 		return (
-			<Card fluid>
-				<Card.Content>
-					<Card.Header
-						dangerouslySetInnerHTML={{
-							__html: marked(question.question)
-						}}
-					/>
-
-					<Card.Description>
-						{question.image && <Image src={question.image} />}
-						<Divider hidden />
-						<Button.Group vertical>
-							<Button
-								style={{ textAlign: 'left' }}
-								onClick={() => this.onAnswer(1)}
-								color={evalAnswer(1)}
-							>
-								A. {question.answer1}
-							</Button>
-							<Divider />
-							<Button
-								style={{ textAlign: 'left' }}
-								onClick={() => this.onAnswer(2)}
-								color={evalAnswer(2)}
-							>
-								B. {question.answer2}
-							</Button>
-							<Divider />
-							<Button
-								style={{ textAlign: 'left' }}
-								onClick={() => this.onAnswer(3)}
-								color={evalAnswer(3)}
-							>
-								C. {question.answer3}
-							</Button>
-						</Button.Group>
-					</Card.Description>
-				</Card.Content>
-				<Card.Content extra>
+			<Container
+				style={{
+					paddingTop: '112px'
+				}}
+			>
+				<Segment>
+					<Grid divided columns="equal">
+						<Grid.Row>
+							<Grid.Column>
+								<div
+									style={{ fontSize: '18px' }}
+									dangerouslySetInnerHTML={{
+										__html: marked(question.question)
+									}}
+								/>
+								<Divider />
+								<Button.Group vertical fluid>
+									<Button
+										style={{ textAlign: 'left' }}
+										onClick={() => this.onAnswer(1)}
+										color={evalAnswer(1)}
+										size="large"
+									>
+										A. {question.answer1}
+									</Button>
+									<Divider hidden />
+									<Button
+										style={{ textAlign: 'left' }}
+										onClick={() => this.onAnswer(2)}
+										color={evalAnswer(2)}
+										size="large"
+									>
+										B. {question.answer2}
+									</Button>
+									<Divider hidden />
+									<Button
+										style={{ textAlign: 'left' }}
+										onClick={() => this.onAnswer(3)}
+										color={evalAnswer(3)}
+										size="large"
+									>
+										C. {question.answer3}
+									</Button>
+								</Button.Group>
+							</Grid.Column>
+							{question.image && (
+								<Grid.Column>
+									<Image src={imageURL(question.image_id)} />
+								</Grid.Column>
+							)}
+						</Grid.Row>
+					</Grid>
+					<Divider />
 					<div className="date">
 						Sæt: {question.examSeason}
 						{question.examYear}
 					</div>
 					<div className="">Speciale: {question.specialty}</div>
-				</Card.Content>
-			</Card>
+				</Segment>
+				<Divider hidden />
+			</Container>
 		);
 	}
 }
