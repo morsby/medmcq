@@ -13,7 +13,8 @@ import {
 	Dimmer,
 	Loader,
 	Image,
-	Segment
+	Segment,
+	List
 } from 'semantic-ui-react';
 
 class Question extends Component {
@@ -104,11 +105,25 @@ class Question extends Component {
 						</Grid.Row>
 					</Grid>
 					<Divider />
-					<div className="date">
-						Sæt: {question.examSeason}
-						{question.examYear}
-					</div>
-					<div className="">Speciale: {question.specialty}</div>
+					<List horizontal>
+						<List.Item>
+							<List.Header>Sæt: </List.Header>
+						</List.Item>
+						<List.Item>
+							{question.examSeason}
+							{question.examYear}
+						</List.Item>
+					</List>
+					<br />
+					<List horizontal>
+						<List.Item>
+							<List.Header>Speciale: </List.Header>
+						</List.Item>
+
+						{question.specialty.map(e => (
+							<List.Item>{e}</List.Item>
+						))}
+					</List>
 				</Segment>
 				<Divider hidden />
 			</Container>
