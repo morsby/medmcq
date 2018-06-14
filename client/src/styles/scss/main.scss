@@ -1,0 +1,45 @@
+@import '_colors';
+@import '_layout';
+
+@import '_headers';
+
+@import '_question';
+
+#root {
+	.ui.button {
+		/*	background-color: $color-one;
+	color: #fff;
+
+	&:hover,
+	&.active,
+	&.active:hover {
+		background-color: $color-two;
+		color: #fff;
+	}*/
+
+		&.green {
+			background-color: $color-correct;
+		}
+		&.red {
+			background-color: $color-wrong;
+		}
+		&.grey {
+			background-color: $color-not-selected;
+		}
+
+		&.green,
+		&.red,
+		&.grey {
+			&:hover {
+				cursor: default;
+			}
+		}
+	}
+
+	.svar-korrekt {
+		color: $color-correct;
+	}
+	.svar-forkert {
+		color: $color-wrong;
+	}
+}

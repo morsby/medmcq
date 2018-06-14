@@ -1,0 +1,3 @@
+html,body,#root{height:100%}.flex-container{display:flex;flex-direction:column;height:100%}.content{padding-top:15px;flex:1 0 auto}.main-footer{margin-top:25px;background:#002546;color:#fff;flex-shrink:0;padding:25px 0}#root h1{color:#003d73}.question{margin-top:50px}#root .ui.button.green{background-color:#25b109}#root .ui.button.red{background-color:#ff0500}#root .ui.button.grey{background-color:#8f9490}#root .ui.button.green:hover,#root .ui.button.red:hover,#root .ui.button.grey:hover{cursor:default}#root .svar-korrekt{color:#25b109}#root .svar-forkert{color:#ff0500}
+
+/*# sourceMappingURL=main.css.map */

@@ -1,10 +1,12 @@
 import React from 'react';
 
-import { Container, Menu, Icon, Button } from 'semantic-ui-react';
+import { Container, Menu, Icon } from 'semantic-ui-react';
 
 const QuestionNavigator = props => {
 	return (
-		<Container>
+		<Container
+			{...(props.position === 'top' ? { className: 'top-nav' } : {})}
+		>
 			<Menu
 				size="large"
 				fluid
@@ -16,7 +18,7 @@ const QuestionNavigator = props => {
 					onClick={() => props.clickHandler(props.qn - 1)}
 				>
 					<Icon name="step backward" />
-					Forrige spørgsmål
+					Forrige
 				</Menu.Item>
 				<Menu.Item header>
 					{props.position === 'top' && (
@@ -29,7 +31,7 @@ const QuestionNavigator = props => {
 					{...(props.qn + 1 >= props.qmax ? { disabled: true } : {})}
 					onClick={() => props.clickHandler(props.qn + 1)}
 				>
-					Næste spørgsmål
+					Næste
 					<Icon name="step forward" />
 				</Menu.Item>
 			</Menu>

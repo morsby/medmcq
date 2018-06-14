@@ -39,9 +39,9 @@ class Question extends Component {
 		let question = this.props.questions[this.props.qn];
 		const evalAnswer = answer => {
 			if (!question.answer) return; // hvis ikke svaret
-			if (answer === question.correctAnswer) return 'green disabled'; // hvis korrekt svar
-			if (answer === question.answer) return 'red disabled'; // hvis forkert svar
-			return 'grey disabled'; // ikke valgt mulighed
+			if (answer === question.correctAnswer) return 'green'; // hvis korrekt svar
+			if (answer === question.answer) return 'red'; // hvis forkert svar
+			return 'grey'; // ikke valgt mulighed
 		};
 
 		if (!this.props.questions.length > 0)
@@ -52,11 +52,7 @@ class Question extends Component {
 			);
 
 		return (
-			<Container
-				style={{
-					paddingTop: '112px'
-				}}
-			>
+			<Container className="question">
 				<Segment>
 					<Grid divided columns="equal">
 						<Grid.Row>
@@ -66,6 +62,7 @@ class Question extends Component {
 									dangerouslySetInnerHTML={{
 										__html: marked(question.question)
 									}}
+									ref={ref => (this._div = ref)}
 								/>
 								<Divider />
 								<Button.Group vertical fluid>
@@ -121,7 +118,7 @@ class Question extends Component {
 						</List.Item>
 
 						{question.specialty.map(e => (
-							<List.Item>{e}</List.Item>
+							<List.Item key={e}>{e}</List.Item>
 						))}
 					</List>
 				</Segment>

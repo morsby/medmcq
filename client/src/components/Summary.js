@@ -61,13 +61,15 @@ const Summary = props => {
 					<Card.Description style={{ columns: '250px 4' }}>
 						<List ordered>
 							{progress.map(res => {
-								let color;
-								if (res.svar === 'Korrekt') color = 'green';
-								if (res.svar === 'Forkert') color = 'red';
+								let svar;
+								if (res.svar === 'Korrekt')
+									svar = 'svar-korrekt';
+								if (res.svar === 'Forkert')
+									svar = 'svar-forkert';
 								return (
 									<List.Item
 										as="a"
-										style={{ color }}
+										className={svar}
 										onClick={() =>
 											props.clickHandler(res.n)
 										}

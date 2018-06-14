@@ -10,6 +10,8 @@ import MCQ from './components/MCQ';
 import MCQSelector from './components/MCQSelector';
 import AddQuestion from './components/AddQuestion';
 
+import './styles/css/main.css';
+
 import registerServiceWorker from './registerServiceWorker';
 
 const store = createStore(reducers, {}, applyMiddleware(reduxThunk));

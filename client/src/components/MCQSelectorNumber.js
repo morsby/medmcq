@@ -6,7 +6,7 @@ const MCQSelectorNumber = props => {
 		<Form>
 			<Header as="h3">Hvor mange spørgsmål vil du have?</Header>
 			<Form.Group>
-				<Form.Field width={1}>
+				<Form.Field>
 					<Radio
 						label="5"
 						value={5}
@@ -17,17 +17,17 @@ const MCQSelectorNumber = props => {
 					<Divider vertical hidden />
 				</Form.Field>
 
-				<Form.Field width={1}>
+				<Form.Field>
 					<Radio
 						label="10"
 						value={10}
 						name="n"
 						checked={props.n === 10}
 						onChange={props.onNChange}
-						width={1}
+						width={2}
 					/>
 				</Form.Field>
-				<Form.Field width={1}>
+				<Form.Field>
 					<Radio
 						label="20"
 						value={20}
@@ -37,7 +37,7 @@ const MCQSelectorNumber = props => {
 						width={3}
 					/>
 				</Form.Field>
-				<Form.Field width={1}>
+				<Form.Field>
 					<Radio
 						label="40"
 						value={40}
@@ -46,7 +46,7 @@ const MCQSelectorNumber = props => {
 						onChange={props.onNChange}
 					/>
 				</Form.Field>
-				<Form.Field width={1}>
+				<Form.Field>
 					<Radio
 						label="80"
 						value={80}

@@ -4,13 +4,13 @@ import * as actions from '../actions';
 
 import { Redirect } from 'react-router-dom';
 import _ from 'lodash';
-import { Container, Dimmer, Loader, Button, Divider } from 'semantic-ui-react';
+import { Dimmer, Loader } from 'semantic-ui-react';
 
 import Question from './Question';
 import QuestionNavigator from './QuestionNavigator';
-import QuestionHeader from './QuestionHeader';
 import Summary from './Summary';
 import MainNavigation from './MainNavigation';
+import Footer from './Footer';
 
 class MCQ extends Component {
 	constructor(props) {
@@ -33,6 +33,22 @@ class MCQ extends Component {
 		this.setState({
 			qn: q
 		});
+
+		const smoothScroll = h => {
+			let top = window.pageYOffset || document.documentElement.scrollTop;
+			let px = 20;
+			let i = h || top;
+			if (i > px) {
+				setTimeout(() => {
+					window.scrollTo(0, i);
+					smoothScroll(i - px);
+				}, 10);
+			} else {
+				window.scrollTo(0, 0);
+			}
+		};
+
+		smoothScroll();
 	}
 
 	toSelection() {
@@ -68,32 +84,35 @@ class MCQ extends Component {
 				</Dimmer>
 			);
 		return (
-			<div className="App">
-				<QuestionNavigator
-					clickHandler={this.onNavigate}
-					qn={this.state.qn}
-					qmax={this.props.questions.length}
-					fixed
-					position="top"
-				/>
+			<div className="flex-container">
+				<div className="content">
+					<QuestionNavigator
+						clickHandler={this.onNavigate}
+						qn={this.state.qn}
+						qmax={this.props.questions.length}
+						fixed
+						position="top"
+					/>
 
-				<Question qn={this.state.qn} />
+					<Question qn={this.state.qn} />
 
-				<QuestionNavigator
-					clickHandler={this.onNavigate}
-					qn={this.state.qn}
-					qmax={this.props.questions.length}
-				/>
-				<Summary
-					questions={this.props.questions}
-					answers={this.props.answers}
-					clickHandler={this.onNavigate}
-				/>
-				<MainNavigation
-					toSelection={this.toSelection}
-					newQuestions={this.getQuestions}
-					set={this.props.settings.type}
-				/>
+					<QuestionNavigator
+						clickHandler={this.onNavigate}
+						qn={this.state.qn}
+						qmax={this.props.questions.length}
+					/>
+					<Summary
+						questions={this.props.questions}
+						answers={this.props.answers}
+						clickHandler={this.onNavigate}
+					/>
+					<MainNavigation
+						toSelection={this.toSelection}
+						newQuestions={this.getQuestions}
+						set={this.props.settings.type}
+					/>
+				</div>
+				<Footer />
 			</div>
 		);
 	}
