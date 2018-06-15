@@ -1,3 +1,10 @@
+import _ from 'lodash';
+
+export const urls = {
+	quiz: '/quiz',
+	add: '/add'
+};
+
 export const semestre = [
 	{ text: '7. semester (Inflammation)', value: 7 },
 	{ text: '8. semester (Abdomen)', value: 8 },
@@ -29,3 +36,19 @@ export const specialer = {
 
 export const imageURL = id =>
 	`https://res.cloudinary.com/dw0rj924o/image/upload/f_auto,q_auto/${id}`;
+
+export const selectQuestions = settings => {
+	let selection,
+		type = settings.type;
+	if (type === 'random') {
+		// TODO: Bedre måde at udvælge random på:
+		// Evt. ny prop: index, shuffle alle spørgsmål --> udvælg fra array[index] til array[index + antal]
+		selection = _.sampleSize(settings.questions, settings.n);
+
+		selection = _.map(selection, '_id');
+	} else if (type === 'set') {
+		selection = { ...settings };
+	}
+
+	return selection;
+};

@@ -14,7 +14,7 @@ import MCQSelectorNumber from './MCQSelectorNumber';
 import MCQSelectorSets from './MCQSelectorSets';
 import Footer from './Footer';
 
-import { semestre } from '../common';
+import { semestre, selectQuestions, urls } from '../common';
 
 class MCQSelector extends Component {
 	constructor(props) {
@@ -30,7 +30,7 @@ class MCQSelector extends Component {
 		this.props.changeSettings({ [name]: value }, this.props.settings);
 	}
 
-	handleSubmit() {
+	handleSubmit(type) {
 		let err = [];
 		if (!this.props.settings.semester) {
 			err.push('Du skal vælge et semester først!');
@@ -41,6 +41,12 @@ class MCQSelector extends Component {
 
 		if (err.length === 0) {
 			this.setState({ submitted: true });
+			if (type === 'new') {
+				this.props.getQuestions(
+					this.props.settings.type,
+					selectQuestions(this.props.settings)
+				);
+			}
 		} else {
 			this.setState({ err });
 		}
@@ -48,7 +54,7 @@ class MCQSelector extends Component {
 
 	render() {
 		if (this.state.submitted) {
-			return <Redirect to="/mcq" />;
+			return <Redirect to={urls.quiz} />;
 		}
 
 		//let fordeling = _.groupBy(this.props.settings.questions, 'specialty');
@@ -122,7 +128,14 @@ class MCQSelector extends Component {
 						return <h5>{err}</h5>;
 					})}
 					{this.props.settings.type !== 'specialer' && (
-						<Button onClick={this.handleSubmit}>Start!</Button>
+						<Button onClick={() => this.handleSubmit('new')}>
+							Start!
+						</Button>
+					)}
+					{this.props.answers.length > 0 && (
+						<Button onClick={() => this.handleSubmit('cont')}>
+							Fortsæt med igangværende spørgsmål
+						</Button>
 					)}
 					{this.props.settings.type === 'specialer' && (
 						<h1>Denne funktion virker desværre ikke endnu ...</h1>
@@ -135,7 +148,7 @@ class MCQSelector extends Component {
 }
 
 function mapStateToProps(state) {
-	return { settings: state.settings };
+	return { settings: state.settings, answers: state.answers };
 }
 
 export default connect(

@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import * as actions from '../actions';
 
 import { Redirect } from 'react-router-dom';
-import _ from 'lodash';
 import { Dimmer, Loader } from 'semantic-ui-react';
 
 import Question from './Question';
@@ -11,6 +10,8 @@ import QuestionNavigator from './QuestionNavigator';
 import Summary from './Summary';
 import MainNavigation from './MainNavigation';
 import Footer from './Footer';
+
+import { selectQuestions } from '../common';
 
 class MCQ extends Component {
 	constructor(props) {
@@ -25,7 +26,6 @@ class MCQ extends Component {
 	componentWillMount() {
 		if (this.props.settings.questions.length > 0) {
 			this.setState({ toSelection: false });
-			this.getQuestions();
 		}
 	}
 
@@ -56,22 +56,10 @@ class MCQ extends Component {
 	}
 
 	getQuestions() {
-		let selection,
-			type = this.props.settings.type;
-		if (type === 'random') {
-			// TODO: Bedre måde at udvælge random på:
-			// Evt. ny prop: index, shuffle alle spørgsmål --> udvælg fra array[index] til array[index + antal]
-			selection = _.sampleSize(
-				this.props.settings.questions,
-				this.props.settings.n
-			);
-
-			selection = _.map(selection, '_id');
-		} else if (type === 'set') {
-			selection = { ...this.props.settings };
-		}
-
-		this.props.getQuestions(this.props.settings.type, selection);
+		this.props.getQuestions(
+			this.props.settings.type,
+			selectQuestions(this.props.settings)
+		);
 		this.setState({ qn: 0 });
 	}
 

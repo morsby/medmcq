@@ -65,7 +65,6 @@ class AddQuestion extends Component {
 					semester: this.state.semester,
 					set: this.state.examYear + '/' + this.state.examSeason
 				};
-
 				this.props.getQuestions(type, selection);
 			}
 		});
