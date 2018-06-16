@@ -10,6 +10,7 @@ I listen nedenfor ses de planlagte projekter:
 Her ses ting, jeg overvejer at indføre:
 
 - Feedback-system
+- Side hvor man kan følge med i ændringer
 - Login-system?
 
 Denne frontend er bootstrapped med [Create-React-App](https://github.com/facebook/create-react-app)

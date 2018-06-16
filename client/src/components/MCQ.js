@@ -4,7 +4,7 @@ import * as actions from '../actions';
 
 import { Redirect } from 'react-router-dom';
 import { Dimmer, Loader } from 'semantic-ui-react';
-
+import Swipeable from 'react-swipeable';
 import Question from './Question';
 import QuestionNavigator from './QuestionNavigator';
 import Summary from './Summary';
@@ -21,6 +21,7 @@ class MCQ extends Component {
 		this.onNavigate = this.onNavigate.bind(this);
 		this.toSelection = this.toSelection.bind(this);
 		this.getQuestions = this.getQuestions.bind(this);
+		this.swiped = this.swiped.bind(this);
 	}
 
 	componentWillMount() {
@@ -63,6 +64,20 @@ class MCQ extends Component {
 		this.setState({ qn: 0 });
 	}
 
+	swiped(e, deltaX, isFlick) {
+		let min = 0,
+			max = this.props.questions.length,
+			move;
+
+		if (deltaX > 0) {
+			move = this.state.qn + 1;
+		}
+		if (deltaX < 0) {
+			move = this.state.qn - 1;
+		}
+		if (move >= min && move < max) this.onNavigate(move);
+	}
+
 	render() {
 		if (this.state.toSelection) return <Redirect to="/" />;
 		if (!this.props.questions)
@@ -81,9 +96,12 @@ class MCQ extends Component {
 						fixed
 						position="top"
 					/>
-
-					<Question qn={this.state.qn} />
-
+					<Swipeable
+						onSwipedLeft={this.swiped}
+						onSwipedRight={this.swiped}
+					>
+						<Question qn={this.state.qn} />
+					</Swipeable>
 					<QuestionNavigator
 						clickHandler={this.onNavigate}
 						qn={this.state.qn}
