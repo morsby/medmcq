@@ -22,11 +22,30 @@ class MCQ extends Component {
 		this.toSelection = this.toSelection.bind(this);
 		this.getQuestions = this.getQuestions.bind(this);
 		this.swiped = this.swiped.bind(this);
+		this.onKeydown = this.onKeydown.bind(this);
 	}
 
 	componentWillMount() {
 		if (this.props.settings.questions.length > 0) {
 			this.setState({ toSelection: false });
+		}
+	}
+
+	componentDidMount() {
+		document.addEventListener('keydown', this.onKeydown);
+	}
+	componentWillUnmount() {
+		document.removeEventListener('keydown', this.onKeydown);
+	}
+
+	onKeydown(e) {
+		// Navigation
+		let qn = this.state.qn,
+			max = this.props.questions.length;
+		if (e.key === 'ArrowLeft') {
+			if (qn > 0) this.onNavigate(this.state.qn - 1);
+		} else if (e.key === 'ArrowRight') {
+			if (qn < max - 1) this.onNavigate(this.state.qn + 1);
 		}
 	}
 
