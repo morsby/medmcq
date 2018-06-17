@@ -18,6 +18,25 @@ import {
 } from 'semantic-ui-react';
 
 class Question extends Component {
+	constructor(props) {
+		super(props);
+		this.onKeydown = this.onKeydown.bind(this);
+	}
+	componentDidMount() {
+		document.addEventListener('keydown', this.onKeydown);
+	}
+	componentWillUnmount() {
+		document.removeEventListener('keydown', this.onKeydown);
+	}
+
+	onKeydown(e) {
+		let answer = Number(e.key),
+			keys = [1, 2, 3];
+		if (keys.includes(answer)) {
+			this.onAnswer(answer);
+		}
+	}
+
 	onAnswer(answer) {
 		// If not already answered:
 		if (!this.props.questions[this.props.qn].answer) {
