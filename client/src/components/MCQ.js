@@ -5,6 +5,7 @@ import * as actions from '../actions';
 import { Redirect } from 'react-router-dom';
 import { Dimmer, Loader } from 'semantic-ui-react';
 import Swipeable from 'react-swipeable';
+import LoaderRetry from './LoaderRetry';
 import Question from './Question';
 import QuestionNavigator from './QuestionNavigator';
 import Summary from './Summary';
@@ -102,7 +103,13 @@ class MCQ extends Component {
 		if (!this.props.questions || this.props.settings.isFetching)
 			return (
 				<Dimmer active page>
-					<Loader>Henter spørgsmål ...</Loader>
+					<Loader>
+						Henter spørgsmål ...
+						<LoaderRetry
+							lastFetch={this.props.settings.lastFetch}
+							handleClick={this.getQuestions}
+						/>
+					</Loader>
 				</Dimmer>
 			);
 		return (
