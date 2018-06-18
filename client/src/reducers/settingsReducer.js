@@ -8,7 +8,8 @@ export default function(
 		set: null,
 		questions: [],
 		sets: [],
-		isFetching: false
+		isFetching: false,
+		lastFetch: null
 	},
 	action
 ) {
@@ -45,9 +46,11 @@ export default function(
 			}
 			return newState;
 		case types.IS_FETCHING:
-			return { ...state, isFetching: true };
+			return Date.now() - state.lastFetch > 1000
+				? { ...state, isFetching: true }
+				: state;
 		case types.FETCH_QUESTIONS:
-			return { ...state, isFetching: false };
+			return { ...state, isFetching: false, lastFetch: Date.now() };
 		default:
 			return state;
 	}
