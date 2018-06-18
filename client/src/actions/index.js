@@ -15,7 +15,11 @@ export const getQuestions = (type, selection) => async dispatch => {
 			`/api/set/${selection.semester}/${selection.set}`
 		);
 	}
-	dispatch({ type: types.FETCH_QUESTIONS, payload: res.data });
+	dispatch({
+		type: types.FETCH_QUESTIONS,
+		payload: res.data,
+		questionType: type
+	});
 };
 
 export const answerQuestion = (id, answer, correct) => dispatch => {

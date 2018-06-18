@@ -43,6 +43,7 @@ export const selectQuestions = settings => {
 	if (type === 'random') {
 		// TODO: Bedre måde at udvælge random på:
 		// Evt. ny prop: index, shuffle alle spørgsmål --> udvælg fra array[index] til array[index + antal]
+		// herved fås nye spørgsmål hver gang
 		selection = _.sampleSize(settings.questions, settings.n);
 
 		selection = _.map(selection, '_id');
