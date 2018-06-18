@@ -99,7 +99,7 @@ class MCQ extends Component {
 
 	render() {
 		if (this.state.toSelection) return <Redirect to="/" />;
-		if (!this.props.questions)
+		if (!this.props.questions || this.props.settings.isFetching)
 			return (
 				<Dimmer active page>
 					<Loader>Henter spørgsmål ...</Loader>

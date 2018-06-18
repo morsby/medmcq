@@ -2,6 +2,8 @@ import axios from 'axios';
 import * as types from './types';
 
 export const getQuestions = (type, selection) => async dispatch => {
+	dispatch({ type: types.IS_FETCHING });
+
 	let res = { data: [] };
 
 	if (type === 'random' && selection.length > 0) {

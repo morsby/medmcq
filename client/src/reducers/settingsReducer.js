@@ -7,7 +7,8 @@ export default function(
 		semester: null,
 		set: null,
 		questions: [],
-		sets: []
+		sets: [],
+		isFetching: false
 	},
 	action
 ) {
@@ -43,7 +44,10 @@ export default function(
 				newState.sets = sets;
 			}
 			return newState;
-
+		case types.IS_FETCHING:
+			return { ...state, isFetching: true };
+		case types.FETCH_QUESTIONS:
+			return { ...state, isFetching: false };
 		default:
 			return state;
 	}
