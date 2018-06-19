@@ -2,6 +2,7 @@ const keys = require('../config/keys');
 
 var uniqWith = require('lodash/uniqWith');
 var isEqual = require('lodash/isEqual');
+var sanitizeHtml = require('sanitize-html');
 
 const multer = require('multer');
 const storage = multer.memoryStorage();
@@ -43,10 +44,10 @@ module.exports = app => {
 
 		let q = req.body;
 
-		question.question = q.question;
-		question.answer1 = q.answer1;
-		question.answer2 = q.answer2;
-		question.answer3 = q.answer3;
+		question.question = sanitizeHtml(q.question);
+		question.answer1 = sanitizeHtml(q.answer1);
+		question.answer2 = sanitizeHtml(q.answer2);
+		question.answer3 = sanitizeHtml(q.answer3);
 		question.correctAnswer = q.correctAnswer;
 
 		question.semester = q.semester;
