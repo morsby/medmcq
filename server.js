@@ -22,9 +22,6 @@ const cloudinary = require('cloudinary');
 
 var port = process.env.PORT || 3001; // set our port
 
-// MODELS
-const question = require('./models/question.js');
-
 // ROUTES
 var router = express.Router();
 
@@ -34,6 +31,8 @@ router.get('/', function(req, res) {
 
 // more routes for our API will happen here
 require('./routes/question')(app);
+require('./routes/feedback')(app);
+require('./routes/comment')(app);
 
 // Registrer alle routes fra denne fil (prefixed '/api')
 //app.use('/api', router);
