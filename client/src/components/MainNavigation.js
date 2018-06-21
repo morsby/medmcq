@@ -13,7 +13,7 @@ const MainNavigation = props => {
 				</Menu.Item>
 				{props.set !== 'set' && (
 					<Menu.Item color="yellow" onClick={props.newQuestions}>
-						Nye spørgsmål (samme indstillinger)
+						Nye spørgsmål (senest valgte indstillinger)
 					</Menu.Item>
 				)}
 			</Menu>
