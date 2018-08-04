@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 
-import { Redirect } from 'react-router-dom';
 import { Dimmer, Loader } from 'semantic-ui-react';
 import Swipeable from 'react-swipeable';
 import LoaderRetry from './LoaderRetry';
@@ -18,7 +17,7 @@ class MCQ extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = { qn: 0, toSelection: true };
+		this.state = { qn: 0 };
 		this.onNavigate = this.onNavigate.bind(this);
 		this.toSelection = this.toSelection.bind(this);
 		this.getQuestions = this.getQuestions.bind(this);
@@ -27,8 +26,8 @@ class MCQ extends Component {
 	}
 
 	componentWillMount() {
-		if (this.props.settings.questions.length > 0) {
-			this.setState({ toSelection: false });
+		if (this.props.settings.questions.length === 0) {
+			this.toSelection();
 		}
 	}
 
@@ -73,7 +72,7 @@ class MCQ extends Component {
 	}
 
 	toSelection() {
-		this.setState({ toSelection: true });
+		this.props.history.push('/');
 	}
 
 	getQuestions() {
@@ -99,7 +98,6 @@ class MCQ extends Component {
 	}
 
 	render() {
-		if (this.state.toSelection) return <Redirect to="/" />;
 		if (!this.props.questions || this.props.settings.isFetching)
 			return (
 				<Dimmer active page>

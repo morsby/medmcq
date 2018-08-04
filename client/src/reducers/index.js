@@ -2,9 +2,11 @@ import { combineReducers } from 'redux';
 import questionsReducer from './questionsReducer';
 import answersReducer from './answersReducer';
 import settingsReducer from './settingsReducer';
+import feedbackReducer from './feedbackReducer';
 
 export default combineReducers({
 	questions: questionsReducer,
 	answers: answersReducer,
-	settings: settingsReducer
+	settings: settingsReducer,
+	feedback: feedbackReducer
 });

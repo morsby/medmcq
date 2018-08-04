@@ -37,13 +37,14 @@ module.exports = app => {
 		var feedback = new Feedback();
 		let q = req.body;
 
-		feedback.text = q.feedback;
-		feedback.save(err => {
-			feedback.save(err => {
-				if (err) res.send(err);
+		feedback.title = q.title;
+		feedback.text = q.text;
+		feedback.author = q.author;
 
-				res.json({ message: 'Question created!' });
-			});
+		feedback.save(err => {
+			if (err) res.send(err);
+
+			res.json({ message: 'Question created!', id: feedback._id });
 		});
 	});
 
@@ -51,12 +52,32 @@ module.exports = app => {
 	app.put('/api/feedback/:id', (req, res) => {
 		Feedback.findById(req.params.id, (err, feedback) => {
 			if (err) res.send(err);
-
+			let q = req.body;
 			// Opdater noget
+			feedback.title = q.title;
+			feedback.text = q.text;
+			feedback.edited = Date.now();
+
 			feedback.save(err => {
 				if (err) res.send(err);
 
 				res.json({ message: 'Feedback opdateret!' });
+			});
+		});
+	});
+
+	// VOTE
+	app.put('/api/feedback/:id/vote', (req, res) => {
+		Feedback.findById(req.params.id, (err, feedback) => {
+			feedback.votes = feedback.votes + Number(req.body.val);
+			feedback.save(err => {
+				if (err) res.send(err);
+
+				res.json({
+					message: 'Der er stemt!',
+					id: feedback._id,
+					val: req.body.val
+				});
 			});
 		});
 	});

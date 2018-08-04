@@ -5,10 +5,12 @@
 
 @import '_question';
 
+@import '_feedback';
+
 #root {
 	.ui.button {
 		/*	background-color: $color-one;
-	color: #fff;
+	color: #fff; 
 
 	&:hover,
 	&.active,
