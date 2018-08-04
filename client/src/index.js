@@ -15,6 +15,9 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import MCQ from './components/MCQ';
 import MCQSelector from './components/MCQSelector';
 import AddQuestion from './components/AddQuestion';
+import FeedbackList from './components/FeedbackList';
+import FeedbackSingle from './components/FeedbackSingle';
+import FeedbackPost from './components/FeedbackPost';
 import LoadingPage from './components/LoadingPage';
 import { urls } from './common';
 
@@ -38,8 +41,17 @@ ReactDOM.render(
 		<PersistGate loading={<LoadingPage />} persistor={persistor}>
 			<BrowserRouter>
 				<Switch>
-					<Route path={urls.quiz} component={MCQ} />
+					<Route
+						path={`${urls.feedback}/new`}
+						component={FeedbackPost}
+					/>
+					<Route
+						path={`${urls.feedback}/:id`}
+						component={FeedbackSingle}
+					/>
+					<Route path={urls.feedback} component={FeedbackList} />
 					<Route path={urls.add} component={AddQuestion} />
+					<Route path={urls.quiz} component={MCQ} />
 					<Route path="/" component={MCQSelector} />
 				</Switch>
 			</BrowserRouter>

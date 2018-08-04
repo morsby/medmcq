@@ -2,7 +2,8 @@ import _ from 'lodash';
 
 export const urls = {
 	quiz: '/quiz',
-	add: '/add'
+	add: '/add',
+	feedback: '/feedback'
 };
 
 export const semestre = [

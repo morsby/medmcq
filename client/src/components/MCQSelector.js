@@ -8,7 +8,6 @@ import {
 	Divider,
 	Button
 } from 'semantic-ui-react';
-import { Redirect } from 'react-router-dom';
 
 import MCQSelectorNumber from './MCQSelectorNumber';
 import MCQSelectorSets from './MCQSelectorSets';
@@ -47,16 +46,13 @@ class MCQSelector extends Component {
 					selectQuestions(this.props.settings)
 				);
 			}
+			this.props.history.push(urls.quiz);
 		} else {
 			this.setState({ err });
 		}
 	}
 
 	render() {
-		if (this.state.submitted) {
-			return <Redirect to={urls.quiz} />;
-		}
-
 		//let fordeling = _.groupBy(this.props.settings.questions, 'specialty');
 		// TODO: Få fordeling til at acceptere spørgsmål med flere specialer
 		return (
