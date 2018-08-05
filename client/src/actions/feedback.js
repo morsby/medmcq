@@ -28,14 +28,10 @@ export const postFeedback = (post, callback) => async dispatch => {
 	callback(res.data.id);
 };
 
-export const postFeedbackComment = post => async dispatch => {
-	const res = await axios.post(
-		`/api/feedback/${post.feedbackId}/comment`,
-		post
-	);
-
-	//dispatch({ type: types.POST_FEEDBACK_COMMENT, payload: res.data });
-	dispatch(fetchFeedbackSpecific(post.feedbackId));
+export const postFeedbackComment = post => dispatch => {
+	axios
+		.post(`/api/feedback/${post.feedbackId}/comment`, post)
+		.then(dispatch(fetchFeedbackSpecific(post.feedbackId)));
 };
 
 export const voteFeedback = (id, val) => async dispatch => {

@@ -38,7 +38,9 @@ const FeedbackSingleContent = props => {
 						}}
 						disabled={votedDown}
 					>
-						👍
+						<span role="img" aria-label="thumbs up">
+							👍
+						</span>
 					</Button>
 					<Button
 						basic
@@ -48,7 +50,9 @@ const FeedbackSingleContent = props => {
 						}}
 						disabled={votedUp}
 					>
-						👎
+						<span role="img" aria-label="thumbs down">
+							👎
+						</span>
 					</Button>
 				</Card.Content>
 			)}

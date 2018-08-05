@@ -2,12 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
 
-import { Container, Button } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 import { Form, Field } from 'react-final-form';
-
-import FeedbackNavigation from './FeedbackNavigation';
-import FeedbackSingleContent from './FeedbackSingleContent';
-import Footer from './Footer';
 
 let initialState = {
 	title: '',
@@ -33,7 +29,10 @@ class FeedbackCommentPost extends Component {
 	handleSubmit = formValues => {
 		formValues.feedbackId = this.props.feedbackId;
 		formValues.parent_id = this.props.replyId;
-		return this.props.postFeedbackComment(formValues);
+		return new Promise((resolve, reject) => {
+			this.props.postFeedbackComment(formValues);
+			resolve();
+		});
 	};
 
 	render() {
@@ -58,7 +57,7 @@ class FeedbackCommentPost extends Component {
 					}) => (
 						<form
 							onSubmit={event => {
-								handleSubmit(event).then(() => form.reset());
+								handleSubmit(event).then(form.reset());
 							}}
 							className="ui form"
 						>
