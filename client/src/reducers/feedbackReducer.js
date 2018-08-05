@@ -10,7 +10,6 @@ export default function(
 		case types.FETCH_FEEDBACK_SPECIFIC:
 			return { ...state, feedbackSingle: action.payload };
 		case types.VOTE_FEEDBACK:
-			//TODO: Gør det til et array indeholdende alle ids
 			let { id, val } = action.payload;
 			return {
 				...state,

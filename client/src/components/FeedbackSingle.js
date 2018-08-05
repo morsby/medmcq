@@ -45,7 +45,6 @@ class FeedbackSingle extends Component {
 			votedFor = this.props.votedFor.hasOwnProperty(feedback._id)
 				? this.props.votedFor[feedback._id]
 				: undefined;
-		console.log(votedFor);
 
 		return (
 			<div className="flex-container">

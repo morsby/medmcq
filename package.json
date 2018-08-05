@@ -1,19 +1,22 @@
 {
 	"name": "au-medicin-mcq",
-	"version": "0.0.1",
-	"description": "En webapp til visning af MCQ-opgaver fra kandidaten i medicin på AU",
+	"version": "0.1.0",
+	"description":
+		"En webapp til visning af MCQ-opgaver fra kandidaten i medicin på AU",
 	"main": "server.js",
 	"engines": {
 		"node": "10.3.0",
 		"npm": "6.1.0"
 	},
+	"repository": "https://github.com/Morsby/au-medicin-mcq",
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"server": "nodemon server.js",
 		"client": "cd client && npm start",
 		"dev": "concurrently \"npm run server\" \"npm run client\"",
 		"start": "node server.js",
-		"heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --dev --prefix client && npm run build --prefix client"
+		"heroku-postbuild":
+			"NPM_CONFIG_PRODUCTION=false npm install --dev --prefix client && npm run build --prefix client"
 	},
 	"author": "Morsby",
 	"license": "MIT",

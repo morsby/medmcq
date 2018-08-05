@@ -7,7 +7,7 @@ import _ from 'lodash';
 
 import { urls } from '../common';
 
-import { Container } from 'semantic-ui-react';
+import { Container, List } from 'semantic-ui-react';
 
 import FeedbackNavigation from './FeedbackNavigation';
 import FeedbackListItem from './FeedbackListItem';
@@ -58,6 +58,41 @@ class FeedbackList extends Component {
 						kommentere forslag, andre har stillet).
 					</p>
 
+					<h2>Smarte/skjulte funktioner</h2>
+					<p>
+						Siden gemmer mange ting lokalt på din enhed (ikke som
+						cookies) - eksempelvis de spørgsmål, du er i gang med
+						(hvis du har svaret på minimum ét spørgsmål), dit
+						semester og andre valg, du foretager på siden – dette er
+						så du nemt kan vende tilbage til siden. Hvis du
+						"stemmer" på feedback-forslag, bliver dette også gemt,
+						så der ikke kan stemmes mere end én gang per forslag.
+					</p>
+					<List bulleted>
+						<List.Item>
+							På en computer kan du
+							<List>
+								<List.Item>
+									navigere mellem spørgsmål med piletasterne
+								</List.Item>
+								<List.Item>
+									besvare spørgsmål ved brug af tallene 1, 2
+									og 3 for hhv. svarmulighed A, B og C.
+								</List.Item>
+							</List>
+						</List.Item>
+						<List.Item>
+							På en telefon kan du
+							<List>
+								<List.Item>
+									navigere mellem spørgsmål ved at swipe
+									(virker måske også på en touchskærms-pc?)
+								</List.Item>
+							</List>
+						</List.Item>
+					</List>
+
+					<h2>Feedback</h2>
 					<p>
 						Sorter feedback efter{' '}
 						<span
@@ -84,6 +119,14 @@ class FeedbackList extends Component {
 							/>
 						);
 					})}
+					<h2>Vil du hjælpe?</h2>
+					<p>
+						Har du lyst til at hjælpe med vedligehold af siden, kan
+						du tage kontakt på sidens repository på{' '}
+						<a href="https://github.com/Morsby/au-medicin-mcq">
+							GitHub
+						</a>.
+					</p>
 				</Container>
 				<Footer />
 			</div>

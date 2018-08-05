@@ -9,7 +9,6 @@ I listen nedenfor ses de planlagte projekter:
 
 Her ses ting, jeg overvejer at indføre:
 
-- Feedback-system
 - Side hvor man kan følge med i ændringer
 - Login-system?
 
