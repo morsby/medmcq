@@ -18,7 +18,7 @@ const radioGenerator = (set, props) => {
 	);
 };
 
-const MCQSelectorSets = props => {
+const SelectionSets = props => {
 	if (!props.settings.semester)
 		return (
 			<Header as="h3">
@@ -39,4 +39,4 @@ const MCQSelectorSets = props => {
 	);
 };
 
-export default MCQSelectorSets;
+export default SelectionSets;

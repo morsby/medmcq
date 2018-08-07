@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Button } from 'semantic-ui-react';
-class LoaderRetry extends Component {
+import { Dimmer, Loader, Button } from 'semantic-ui-react';
+class QuizLoader extends Component {
 	constructor(props) {
 		super(props);
 		this.state = { seconds: 0 };
@@ -18,8 +18,9 @@ class LoaderRetry extends Component {
 		}));
 	}
 	render() {
+		let longWait = '';
 		if (this.state.seconds >= 2) {
-			return (
+			longWait = (
 				<div style={{ margin: '5px 0' }}>
 					<p>Hm, det tager længere end vanligt.</p>
 					<p>Har du en dårlig forbindelse?</p>
@@ -31,10 +32,16 @@ class LoaderRetry extends Component {
 					</Button>
 				</div>
 			);
-		} else {
-			return null;
 		}
+		return (
+			<Dimmer active page>
+				<Loader>
+					Henter spørgsmål ...
+					{longWait}
+				</Loader>
+			</Dimmer>
+		);
 	}
 }
 
-export default LoaderRetry;
+export default QuizLoader;

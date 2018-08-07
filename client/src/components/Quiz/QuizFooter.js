@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Container, Menu, Divider } from 'semantic-ui-react';
 
-const MainNavigation = props => {
+const QuizFooter = props => {
 	let widths = props.set === 'set' ? 1 : 2;
 	return (
 		<Container>
@@ -21,4 +21,4 @@ const MainNavigation = props => {
 	);
 };
 
-export default MainNavigation;
+export default QuizFooter;

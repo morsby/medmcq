@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, Radio, Divider, Header } from 'semantic-ui-react';
 
-const MCQSelectorNumber = props => {
+const SelectionHowMany = props => {
 	return (
 		<Form>
 			<Header as="h3">Hvor mange spørgsmål vil du have?</Header>
@@ -60,4 +60,4 @@ const MCQSelectorNumber = props => {
 	);
 };
 
-export default MCQSelectorNumber;
+export default SelectionHowMany;

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
-import { urls } from '../common';
+import { urls } from '../../common';
 
 import { Menu } from 'semantic-ui-react';
 

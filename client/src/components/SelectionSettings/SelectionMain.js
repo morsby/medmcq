@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../actions';
+import * as actions from '../../actions';
 import {
 	Container,
 	Header,
@@ -9,13 +9,13 @@ import {
 	Button
 } from 'semantic-ui-react';
 
-import MCQSelectorNumber from './MCQSelectorNumber';
-import MCQSelectorSets from './MCQSelectorSets';
-import Footer from './Footer';
+import SelectionHowMany from './SelectionHowMany';
+import SelectionSets from './SelectionSets';
+import Footer from '../Misc/Footer';
 
-import { semestre, selectQuestions, urls } from '../common';
+import { semestre, selectQuestions, urls } from '../../common';
 
-class MCQSelector extends Component {
+class SelectionMain extends Component {
 	constructor(props) {
 		super(props);
 
@@ -100,13 +100,13 @@ class MCQSelector extends Component {
 					</Button.Group>
 					<Divider hidden />
 					{this.props.settings.type !== 'set' && (
-						<MCQSelectorNumber
+						<SelectionHowMany
 							n={this.props.settings.n}
 							onNChange={this.onSettingsChange}
 						/>
 					)}
 					{this.props.settings.type === 'set' && (
-						<MCQSelectorSets
+						<SelectionSets
 							settings={this.props.settings}
 							onChange={this.onSettingsChange}
 						/>
@@ -150,4 +150,4 @@ function mapStateToProps(state) {
 export default connect(
 	mapStateToProps,
 	actions
-)(MCQSelector);
+)(SelectionMain);

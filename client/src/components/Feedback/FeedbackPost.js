@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../actions';
+import * as actions from '../../actions';
 
 import { Container, Button } from 'semantic-ui-react';
 import { Form, Field } from 'react-final-form';
 
 import FeedbackNavigation from './FeedbackNavigation';
 import FeedbackSingleContent from './FeedbackSingleContent';
-import Footer from './Footer';
+import Footer from '../Misc/Footer';
 
 let initialState = {
 	title: '',

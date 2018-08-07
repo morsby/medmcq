@@ -1,7 +1,7 @@
 import React from 'react';
 import { withRouter } from 'react-router';
 import { Container } from 'semantic-ui-react';
-import { urls } from '../common';
+import { urls } from '../../common';
 
 const Footer = props => {
 	const handleClick = path => {

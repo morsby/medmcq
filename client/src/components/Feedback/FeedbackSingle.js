@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as actions from '../actions';
+import * as actions from '../../actions';
 import { connect } from 'react-redux';
 
 import { Container, Segment } from 'semantic-ui-react';
@@ -7,7 +7,7 @@ import FeedbackComment from './FeedbackComment';
 import FeedbackCommentPost from './FeedbackCommentPost';
 import FeedbackSingleContent from './FeedbackSingleContent';
 import FeedbackNavigation from './FeedbackNavigation';
-import Footer from './Footer';
+import Footer from '../Misc/Footer';
 
 class FeedbackSingle extends Component {
 	constructor(props) {
@@ -40,6 +40,9 @@ class FeedbackSingle extends Component {
 	}
 
 	render() {
+		//TODO: Flyt hentning af data også ind i FeedbackList, tjek om det er det samme id; hvis ikke, hent nye data.
+		//TODO: Vent med render til data er tilstede.
+
 		let feedback = this.props.feedbackSingle.feedback,
 			comments = this.props.feedbackSingle.comments,
 			votedFor = this.props.votedFor.hasOwnProperty(feedback._id)

@@ -10,7 +10,7 @@ export const getQuestions = (type, selection) => async dispatch => {
 		// Selection er et array af id'er
 		res = await axios.get(`/api/questions/${selection.join()}`);
 	} else if (type === 'set') {
-		// Selection er settings-props fra MCQSelector
+		// Selection er settings-props fra SelectionMain
 		res = await axios.get(
 			`/api/set/${selection.semester}/${selection.set}`
 		);

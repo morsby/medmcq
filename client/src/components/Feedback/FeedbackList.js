@@ -1,17 +1,17 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../actions';
+import * as actions from '../../actions';
 import { withRouter } from 'react-router';
 
 import _ from 'lodash';
 
-import { urls } from '../common';
+import { urls } from '../../common';
 
 import { Container, List } from 'semantic-ui-react';
 
 import FeedbackNavigation from './FeedbackNavigation';
 import FeedbackListItem from './FeedbackListItem';
-import Footer from './Footer';
+import Footer from '../Misc/Footer';
 
 class FeedbackList extends Component {
 	constructor(props) {

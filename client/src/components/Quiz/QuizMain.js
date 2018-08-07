@@ -1,19 +1,18 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../actions';
+import * as actions from '../../actions';
 
-import { Dimmer, Loader } from 'semantic-ui-react';
 import Swipeable from 'react-swipeable';
-import LoaderRetry from './LoaderRetry';
+import QuizLoader from './QuizLoader';
 import Question from './Question';
-import QuestionNavigator from './QuestionNavigator';
-import Summary from './Summary';
-import MainNavigation from './MainNavigation';
-import Footer from './Footer';
+import QuizNavigator from './QuizNavigator';
+import Summary from './QuizSummary';
+import QuizFooter from './QuizFooter';
+import Footer from '../Misc/Footer';
 
-import { selectQuestions } from '../common';
+import { selectQuestions } from '../../common';
 
-class MCQ extends Component {
+class QuizMain extends Component {
 	constructor(props) {
 		super(props);
 
@@ -99,21 +98,11 @@ class MCQ extends Component {
 
 	render() {
 		if (!this.props.questions || this.props.settings.isFetching)
-			return (
-				<Dimmer active page>
-					<Loader>
-						Henter spørgsmål ...
-						<LoaderRetry
-							lastFetch={this.props.settings.lastFetch}
-							handleClick={this.getQuestions}
-						/>
-					</Loader>
-				</Dimmer>
-			);
+			return <QuizLoader handleClick={this.getQuestions} />;
 		return (
 			<div className="flex-container">
 				<div className="content">
-					<QuestionNavigator
+					<QuizNavigator
 						clickHandler={this.onNavigate}
 						qn={this.state.qn}
 						qmax={this.props.questions.length}
@@ -126,7 +115,7 @@ class MCQ extends Component {
 					>
 						<Question qn={this.state.qn} />
 					</Swipeable>
-					<QuestionNavigator
+					<QuizNavigator
 						clickHandler={this.onNavigate}
 						qn={this.state.qn}
 						qmax={this.props.questions.length}
@@ -136,7 +125,7 @@ class MCQ extends Component {
 						answers={this.props.answers}
 						clickHandler={this.onNavigate}
 					/>
-					<MainNavigation
+					<QuizFooter
 						toSelection={this.toSelection}
 						newQuestions={this.getQuestions}
 						set={this.props.settings.type}
@@ -159,4 +148,4 @@ function mapStateToProps(state) {
 export default connect(
 	mapStateToProps,
 	actions
-)(MCQ);
+)(QuizMain);

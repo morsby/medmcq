@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../actions';
+import * as actions from '../../actions';
 
-import { semestre, specialer } from '../common';
+import { semestre, specialer } from '../../common';
 import {
 	Container,
 	Button,
@@ -37,7 +37,7 @@ const resetState = {
 	imageSrc: ''
 };
 
-class AddQuestion extends Component {
+class QuestionAdd extends Component {
 	constructor(props) {
 		super(props);
 		this.state = initialState;
@@ -311,4 +311,4 @@ function mapStateToProps(state) {
 export default connect(
 	mapStateToProps,
 	actions
-)(AddQuestion);
+)(QuestionAdd);

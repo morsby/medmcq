@@ -12,13 +12,13 @@ import reducers from './reducers';
 
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import MCQ from './components/MCQ';
-import MCQSelector from './components/MCQSelector';
-import AddQuestion from './components/AddQuestion';
-import FeedbackList from './components/FeedbackList';
-import FeedbackSingle from './components/FeedbackSingle';
-import FeedbackPost from './components/FeedbackPost';
-import LoadingPage from './components/LoadingPage';
+import QuizMain from './components/Quiz/QuizMain';
+import SelectionMain from './components/SelectionSettings/SelectionMain';
+import QuestionAdd from './components/Quiz/QuestionAdd';
+import FeedbackList from './components/Feedback/FeedbackList';
+import FeedbackSingle from './components/Feedback/FeedbackSingle';
+import FeedbackPost from './components/Feedback/FeedbackPost';
+import LoadingPage from './components/Misc/LoadingPage';
 import { urls } from './common';
 
 import './styles/css/main.css';
@@ -50,9 +50,9 @@ ReactDOM.render(
 						component={FeedbackSingle}
 					/>
 					<Route path={urls.feedback} component={FeedbackList} />
-					<Route path={urls.add} component={AddQuestion} />
-					<Route path={urls.quiz} component={MCQ} />
-					<Route path="/" component={MCQSelector} />
+					<Route path={urls.add} component={QuestionAdd} />
+					<Route path={urls.quiz} component={QuizMain} />
+					<Route path="/" component={SelectionMain} />
 				</Switch>
 			</BrowserRouter>
 		</PersistGate>

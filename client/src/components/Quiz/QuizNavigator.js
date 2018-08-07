@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Container, Menu, Icon } from 'semantic-ui-react';
 
-const QuestionNavigator = props => {
+const QuizNavigator = props => {
 	return (
 		<Container
 			{...(props.position === 'top' ? { className: 'top-nav' } : {})}
@@ -39,4 +39,4 @@ const QuestionNavigator = props => {
 	);
 };
 
-export default QuestionNavigator;
+export default QuizNavigator;
