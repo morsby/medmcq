@@ -12,15 +12,21 @@ import {
 	Divider,
 	Dimmer,
 	Loader,
-	Image,
 	Segment,
 	List
 } from 'semantic-ui-react';
 
+import QuestionImage from './QuestionImage';
+
 class Question extends Component {
 	constructor(props) {
 		super(props);
+
+		this.state = { imgOpen: false };
+
 		this.onKeydown = this.onKeydown.bind(this);
+		this.onImgClick = this.onImgClick.bind(this);
+		this.onImgClose = this.onImgClose.bind(this);
 	}
 	componentDidMount() {
 		document.addEventListener('keydown', this.onKeydown);
@@ -29,11 +35,20 @@ class Question extends Component {
 		document.removeEventListener('keydown', this.onKeydown);
 	}
 
+	componentWillUpdate(nextProps, nextState) {
+		// For at forhindre lightbox i at være åben på tværs af navigationer
+		if (this.props.qn !== nextProps.qn) {
+			this.setState({ imgOpen: false });
+		}
+	}
+
 	onKeydown(e) {
-		let answer = Number(e.key),
-			keys = [1, 2, 3];
-		if (keys.includes(answer)) {
-			this.onAnswer(answer);
+		if (!this.state.imgOpen) {
+			let answer = Number(e.key),
+				keys = [1, 2, 3];
+			if (keys.includes(answer)) {
+				this.onAnswer(answer);
+			}
 		}
 	}
 
@@ -52,6 +67,13 @@ class Question extends Component {
 				}
 			);
 		}
+	}
+
+	onImgClose() {
+		this.setState({ imgOpen: false });
+	}
+	onImgClick() {
+		this.setState({ imgOpen: true });
 	}
 
 	render() {
@@ -73,7 +95,7 @@ class Question extends Component {
 		return (
 			<Container className="question">
 				<Segment>
-					<Grid divided columns="equal">
+					<Grid divided columns="equal" stackable={true}>
 						<Grid.Row>
 							<Grid.Column>
 								<div
@@ -115,7 +137,12 @@ class Question extends Component {
 							</Grid.Column>
 							{question.image && (
 								<Grid.Column>
-									<Image src={imageURL(question.image_id)} />
+									<QuestionImage
+										img={imageURL(question.image_id)}
+										onClick={this.onImgClick}
+										onClose={this.onImgClose}
+										imgOpen={this.state.imgOpen}
+									/>
 								</Grid.Column>
 							)}
 						</Grid.Row>

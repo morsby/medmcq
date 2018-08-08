@@ -1,5 +1,8 @@
 import _ from 'lodash';
 
+// Lightbox css
+import 'react-image-lightbox/style.css'; // This only needs to be imported once in your app
+
 export const urls = {
 	quiz: '/quiz',
 	add: '/add',
