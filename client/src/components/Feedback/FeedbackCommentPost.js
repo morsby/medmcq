@@ -18,8 +18,6 @@ let initialState = {
 	displayErr: false
 };
 
-// TODO: Scroll til formular når der klikkes på "svar"
-
 class FeedbackCommentPost extends Component {
 	constructor(props) {
 		super(props);

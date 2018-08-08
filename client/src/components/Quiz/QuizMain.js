@@ -10,7 +10,7 @@ import Summary from './QuizSummary';
 import QuizFooter from './QuizFooter';
 import Footer from '../Misc/Footer';
 
-import { selectQuestions } from '../../common';
+import { selectQuestions, smoothScroll } from '../../common';
 
 class QuizMain extends Component {
 	constructor(props) {
@@ -52,20 +52,6 @@ class QuizMain extends Component {
 		this.setState({
 			qn: q
 		});
-
-		const smoothScroll = h => {
-			let top = window.pageYOffset || document.documentElement.scrollTop;
-			let px = 20;
-			let i = h || top;
-			if (i > px) {
-				setTimeout(() => {
-					window.scrollTo(0, i);
-					smoothScroll(i - px);
-				}, 10);
-			} else {
-				window.scrollTo(0, 0);
-			}
-		};
 
 		smoothScroll();
 	}

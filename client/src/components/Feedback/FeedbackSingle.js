@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
 import * as actions from '../../actions';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 
 import { Container, Segment } from 'semantic-ui-react';
 import FeedbackComment from './FeedbackComment';
 import FeedbackCommentPost from './FeedbackCommentPost';
 import FeedbackSingleContent from './FeedbackSingleContent';
 import FeedbackNavigation from './FeedbackNavigation';
+
+import LoadingPage from '../Misc/LoadingPage';
 import Footer from '../Misc/Footer';
+
+import { smoothScroll } from '../../common';
 
 class FeedbackSingle extends Component {
 	constructor(props) {
@@ -19,11 +24,18 @@ class FeedbackSingle extends Component {
 	}
 
 	componentWillMount() {
-		this.props.fetchFeedbackSpecific(this.props.match.params.id);
+		if (this.pathId() !== this.props.feedbackSingle.feedback._id) {
+			this.props.fetchFeedbackSpecific(this.pathId());
+		}
 	}
 
 	onReply(id, slug) {
 		this.setState({ replyId: id, replySlug: slug });
+		smoothScroll(null, 'down');
+	}
+
+	pathId() {
+		return this.props.match.params.id;
 	}
 
 	onVote(val) {
@@ -40,8 +52,9 @@ class FeedbackSingle extends Component {
 	}
 
 	render() {
-		//TODO: Flyt hentning af data også ind i FeedbackList, tjek om det er det samme id; hvis ikke, hent nye data.
-		//TODO: Vent med render til data er tilstede.
+		if (this.pathId() !== this.props.feedbackSingle.feedback._id) {
+			return <LoadingPage />;
+		}
 
 		let feedback = this.props.feedbackSingle.feedback,
 			comments = this.props.feedbackSingle.comments,
@@ -74,6 +87,7 @@ class FeedbackSingle extends Component {
 									comment={comment}
 									key={comment._id}
 									onReply={this.onReply}
+									replyId={this.state.replyId}
 								/>
 							);
 						})}
@@ -97,7 +111,9 @@ function mapStateToProps(state) {
 	};
 }
 
-export default connect(
-	mapStateToProps,
-	actions
-)(FeedbackSingle);
+export default withRouter(
+	connect(
+		mapStateToProps,
+		actions
+	)(FeedbackSingle)
+);

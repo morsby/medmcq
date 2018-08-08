@@ -54,3 +54,29 @@ export const selectQuestions = settings => {
 
 	return selection;
 };
+
+export const smoothScroll = (h, dir = 'up') => {
+	let top = window.pageYOffset || document.documentElement.scrollTop;
+	let bottom = document.body.scrollHeight;
+	let px = 20;
+	let i = h || top;
+	if (dir === 'up') {
+		if (i > px) {
+			setTimeout(() => {
+				window.scrollTo(0, i);
+				smoothScroll(i - px);
+			}, 10);
+		} else {
+			window.scrollTo(0, 0);
+		}
+	} else if (dir === 'down') {
+		if (i < bottom - px) {
+			setTimeout(() => {
+				window.scrollTo(0, i);
+				smoothScroll(i + px, dir);
+			}, 10);
+		} else {
+			window.scrollTo(0, bottom);
+		}
+	}
+};

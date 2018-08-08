@@ -27,6 +27,7 @@ class FeedbackList extends Component {
 	}
 
 	handleClick(id) {
+		this.props.fetchFeedbackSpecific(id);
 		this.props.history.push(`${urls.feedback}/${id}`);
 	}
 

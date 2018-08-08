@@ -20,7 +20,7 @@ const FeedbackComment = props => {
 
 				<Card.Meta>
 					<Button
-						basic
+						basic={props.replyId !== props.comment._id}
 						color="green"
 						onClick={() =>
 							props.onReply(props.comment._id, props.comment.slug)
