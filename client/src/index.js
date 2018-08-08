@@ -12,6 +12,7 @@ import reducers from './reducers';
 
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import ScrollToTop from './components/Misc/ScrollToTop';
 import QuizMain from './components/Quiz/QuizMain';
 import SelectionMain from './components/SelectionSettings/SelectionMain';
 import QuestionAdd from './components/Quiz/QuestionAdd';
@@ -40,20 +41,22 @@ ReactDOM.render(
 	<Provider store={store}>
 		<PersistGate loading={<LoadingPage />} persistor={persistor}>
 			<BrowserRouter>
-				<Switch>
-					<Route
-						path={`${urls.feedback}/new`}
-						component={FeedbackPost}
-					/>
-					<Route
-						path={`${urls.feedback}/:id`}
-						component={FeedbackSingle}
-					/>
-					<Route path={urls.feedback} component={FeedbackList} />
-					<Route path={urls.add} component={QuestionAdd} />
-					<Route path={urls.quiz} component={QuizMain} />
-					<Route path="/" component={SelectionMain} />
-				</Switch>
+				<ScrollToTop>
+					<Switch>
+						<Route
+							path={`${urls.feedback}/new`}
+							component={FeedbackPost}
+						/>
+						<Route
+							path={`${urls.feedback}/:id`}
+							component={FeedbackSingle}
+						/>
+						<Route path={urls.feedback} component={FeedbackList} />
+						<Route path={urls.add} component={QuestionAdd} />
+						<Route path={urls.quiz} component={QuizMain} />
+						<Route path="/" component={SelectionMain} />
+					</Switch>
+				</ScrollToTop>
 			</BrowserRouter>
 		</PersistGate>
 	</Provider>,
