@@ -8,7 +8,13 @@ export default function(
 		case types.FETCH_FEEDBACK:
 			return { ...state, feedback: action.payload };
 		case types.FETCH_FEEDBACK_SPECIFIC:
-			return { ...state, feedbackSingle: action.payload };
+			return {
+				...state,
+				feedbackSingle: {
+					feedback: action.payload.feedback,
+					comments: action.payload.comments
+				}
+			};
 		case types.VOTE_FEEDBACK:
 			let { id, val } = action.payload;
 			return {

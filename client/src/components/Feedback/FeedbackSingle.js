@@ -21,12 +21,11 @@ class FeedbackSingle extends Component {
 
 		this.onReply = this.onReply.bind(this);
 		this.onVote = this.onVote.bind(this);
+		this.handleReplyReset = this.handleReplyReset.bind(this);
 	}
 
 	componentWillMount() {
-		if (this.pathId() !== this.props.feedbackSingle.feedback._id) {
-			this.props.fetchFeedbackSpecific(this.pathId());
-		}
+		this.props.fetchFeedbackSpecific(this.pathId());
 	}
 
 	onReply(id, slug) {
@@ -49,6 +48,10 @@ class FeedbackSingle extends Component {
 				val
 			);
 		}
+	}
+
+	handleReplyReset() {
+		this.setState({ replyId: null, replySlug: null });
 	}
 
 	render() {
@@ -96,6 +99,7 @@ class FeedbackSingle extends Component {
 						feedbackId={feedback._id}
 						replyId={this.state.replyId}
 						replySlug={this.state.replySlug}
+						replyReset={this.handleReplyReset}
 					/>
 				</Container>
 				<Footer />

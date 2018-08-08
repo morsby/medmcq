@@ -27,8 +27,10 @@ class FeedbackCommentPost extends Component {
 	handleSubmit = formValues => {
 		formValues.feedbackId = this.props.feedbackId;
 		formValues.parent_id = this.props.replyId;
+		console.log(formValues);
 		return new Promise((resolve, reject) => {
 			this.props.postFeedbackComment(formValues);
+			this.props.replyReset();
 			resolve();
 		});
 	};
@@ -51,7 +53,8 @@ class FeedbackCommentPost extends Component {
 						submitting,
 						pristine,
 						values,
-						form
+						form,
+						invalid
 					}) => (
 						<form
 							onSubmit={event => {
@@ -74,7 +77,18 @@ class FeedbackCommentPost extends Component {
 											<p>
 												Du er ved at svare på
 												kommentaren med id:{' '}
-												{this.props.replySlug}
+												{this.props.replySlug}. Skriv i
+												stedet en{' '}
+												<a
+													style={{
+														cursor: 'pointer'
+													}}
+													onClick={() =>
+														this.props.replyReset()
+													}
+												>
+													ny kommentar
+												</a>.
 											</p>
 										)}
 										<div className="ui info message mini form-explanation">
@@ -102,7 +116,10 @@ class FeedbackCommentPost extends Component {
 								)}
 							</Field>
 
-							<Button type="submit" disabled={submitting}>
+							<Button
+								type="submit"
+								disabled={submitting || pristine || invalid}
+							>
 								Submit
 							</Button>
 						</form>

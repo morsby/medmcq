@@ -9,7 +9,10 @@ var app = express();
 
 // Database
 const mongoose = require('mongoose');
-mongoose.connect(keys.mongoURI);
+mongoose.connect(
+	keys.mongoURI,
+	{ useNewUrlParser: true }
+);
 
 // bodyParser tillader JSON-posts
 var bodyParser = require('body-parser');
