@@ -5,7 +5,6 @@ export default function(state = [], action) {
 	switch (action.type) {
 		case types.FETCH_QUESTIONS:
 			let questions = action.payload;
-			if (action.questionType !== 'set') questions = _.shuffle(questions);
 			return questions || false;
 		case types.ANSWER_QUESTION:
 			let newState = [...state];
