@@ -5,7 +5,11 @@ export default function(state = [], action) {
 	switch (action.type) {
 		case types.FETCH_QUESTIONS:
 			let questions = action.payload;
-			if (action.questionType === 'specialer') {
+			// Shuffle questions if not in set
+			if (
+				action.questionType === 'specialer' ||
+				action.questionType === 'random'
+			) {
 				questions = _.shuffle(questions);
 			}
 			return questions || false;
