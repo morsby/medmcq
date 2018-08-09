@@ -10,8 +10,14 @@ const Footer = props => {
 	return (
 		<footer className="main-footer">
 			<Container>
-				Siden er lavet med tilladelse fra Institut for Klinisk Medicin,
-				Health, Aarhus Universitet.
+				<p>
+					Siden er lavet med tilladelse fra Institut for Klinisk
+					Medicin, Health, Aarhus Universitet.
+				</p>
+				<p style={{ float: 'left' }}>
+					Copyright &copy; {new Date().getFullYear()} Sigurd Morsby
+					Larsen.
+				</p>
 				{props.history.location.pathname.substr(1, 8) !==
 					'feedback' && (
 					<div
