@@ -80,8 +80,7 @@ export const imageURL = id => 'http://div.morsby.dk/tmp.png';
 export const selectQuestions = settings => {
 	let selection,
 		type = settings.type,
-		questions = settings.questions,
-		n = settings.n;
+		questions = settings.questions;
 
 	if (type === 'random' || type === 'specialer') {
 		if (type === 'specialer') {

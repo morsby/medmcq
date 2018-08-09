@@ -1,6 +1,5 @@
 import axios from 'axios';
 import * as types from './types';
-import _ from 'lodash';
 
 export const getQuestions = (type, selection) => async dispatch => {
 	dispatch({ type: types.IS_FETCHING });
