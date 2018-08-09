@@ -55,7 +55,7 @@ export const selectQuestions = settings => {
 		selection = _.sampleSize(settings.questions, settings.n);
 
 		selection = _.map(selection, '_id');
-	} else if (type === 'set') {
+	} else {
 		selection = { ...settings };
 	}
 

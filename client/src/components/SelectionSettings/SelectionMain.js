@@ -11,6 +11,7 @@ import {
 
 import SelectionHowMany from './SelectionHowMany';
 import SelectionSets from './SelectionSets';
+import SelectionSpecialties from './SelectionSpecialties';
 import Footer from '../Misc/Footer';
 
 import { semestre, selectQuestions, urls } from '../../common';
@@ -26,7 +27,19 @@ class SelectionMain extends Component {
 	}
 
 	onSettingsChange(e, { name, value }, prevSettings) {
-		this.props.changeSettings({ [name]: value }, this.props.settings);
+		let newValue = value;
+		if (name === 'specialer') {
+			let currValues = this.props.settings.specialer,
+				index = currValues.indexOf(value);
+			newValue = currValues;
+
+			if (index > -1) {
+				newValue.splice(index, 1);
+			} else {
+				newValue.push(value);
+			}
+		}
+		this.props.changeSettings({ [name]: newValue }, this.props.settings);
 	}
 
 	handleSubmit(type) {
@@ -53,8 +66,6 @@ class SelectionMain extends Component {
 	}
 
 	render() {
-		//let fordeling = _.groupBy(this.props.settings.questions, 'specialty');
-		// TODO: Få fordeling til at acceptere spørgsmål med flere specialer
 		return (
 			<div className="flex-container">
 				<Container className="content">
@@ -103,6 +114,7 @@ class SelectionMain extends Component {
 						<SelectionHowMany
 							n={this.props.settings.n}
 							onNChange={this.onSettingsChange}
+							total={this.props.settings.questions.length}
 						/>
 					)}
 					{this.props.settings.type === 'set' && (
@@ -111,30 +123,25 @@ class SelectionMain extends Component {
 							onChange={this.onSettingsChange}
 						/>
 					)}
-
-					<Divider hidden />
-					{this.props.settings.semester && (
-						<div>
-							Der er {this.props.settings.questions.length}{' '}
-							spørgsmål for det valgte semester.
-						</div>
+					{this.props.settings.type === 'specialer' && (
+						<SelectionSpecialties
+							settings={this.props.settings}
+							onChange={this.onSettingsChange}
+						/>
 					)}
 					<Divider hidden />
+
 					{this.state.err.map(err => {
 						return <h5>{err}</h5>;
 					})}
-					{this.props.settings.type !== 'specialer' && (
-						<Button onClick={() => this.handleSubmit('new')}>
-							Start!
-						</Button>
-					)}
+					<Button onClick={() => this.handleSubmit('new')}>
+						Start!
+					</Button>
+
 					{this.props.answers.length > 0 && (
 						<Button onClick={() => this.handleSubmit('cont')}>
 							Fortsæt med igangværende spørgsmål
 						</Button>
-					)}
-					{this.props.settings.type === 'specialer' && (
-						<h1>Denne funktion virker desværre ikke endnu ...</h1>
 					)}
 				</Container>
 				<Footer />

@@ -6,6 +6,7 @@ export default function(
 		n: 10,
 		semester: null,
 		set: null,
+		specialer: [],
 		questions: [],
 		sets: [],
 		isFetching: false,

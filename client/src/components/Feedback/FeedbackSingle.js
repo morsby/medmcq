@@ -15,6 +15,8 @@ import Footer from '../Misc/Footer';
 import { smoothScroll } from '../../common';
 
 class FeedbackSingle extends Component {
+	// TODO: Få component til at opdatere selv ved dybt nested ny kommentar.
+
 	constructor(props) {
 		super(props);
 		this.state = { replyId: null, replySlug: null };
@@ -55,7 +57,6 @@ class FeedbackSingle extends Component {
 	}
 
 	render() {
-		console.log(this.props.feedbackSingle);
 		let currId = this.props.feedbackSingle.hasOwnProperty('feedback')
 			? this.props.feedbackSingle.feedback._id
 			: null;

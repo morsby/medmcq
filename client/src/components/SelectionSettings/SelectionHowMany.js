@@ -56,6 +56,10 @@ const SelectionHowMany = props => {
 					/>
 				</Form.Field>
 			</Form.Group>
+
+			<div>Der er {props.total} spørgsmål for det valgte semester.</div>
+
+			<Divider hidden />
 		</Form>
 	);
 };

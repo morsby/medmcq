@@ -3,7 +3,7 @@ import * as types from './types';
 
 export const getQuestions = (type, selection) => async dispatch => {
 	dispatch({ type: types.IS_FETCHING });
-
+	console.log(type, selection);
 	let res = { data: [] };
 
 	if (type === 'random' && selection.length > 0) {
@@ -13,6 +13,12 @@ export const getQuestions = (type, selection) => async dispatch => {
 		// Selection er settings-props fra SelectionMain
 		res = await axios.get(
 			`/api/set/${selection.semester}/${selection.set}`
+		);
+	} else if (type === 'specialer') {
+		res = await axios.get(
+			`/api/speciale/${
+				selection.semester
+			}/${selection.specialer.join()}?n=${selection.n}`
 		);
 	}
 	dispatch({

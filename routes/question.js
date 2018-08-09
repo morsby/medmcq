@@ -139,17 +139,18 @@ module.exports = app => {
 
 	// GET: alle inden for hvert speciale
 	app.get('/api/speciale/:semester/:specialty', (req, res) => {
-		Question.find(
-			{
-				semester: req.params.semester,
-				specialty: req.params.specialty
-			},
-			(err, questions) => {
+		let specialties = req.params.specialty.split(',');
+		let n = Number(req.query.n) || 0;
+		Question.find({
+			semester: req.params.semester,
+			specialty: { $in: specialties }
+		})
+			.limit(n)
+			.exec((err, questions) => {
 				if (err) res.send(err);
 
 				res.json(questions);
-			}
-		);
+			});
 	});
 
 	/**
