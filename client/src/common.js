@@ -38,6 +38,10 @@ export const specialer = {
 	]
 };
 
+export const breakpoints = {
+	mobile: 768
+};
+
 export const imageURL = id =>
 	`https://res.cloudinary.com/dw0rj924o/image/upload/f_auto,q_auto/${id}`;
 

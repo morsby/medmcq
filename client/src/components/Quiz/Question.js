@@ -3,19 +3,20 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import marked from 'marked';
 
-import { imageURL } from '../../common';
+import { imageURL, breakpoints } from '../../common';
 
 import {
 	Container,
-	Button,
 	Grid,
 	Divider,
 	Dimmer,
 	Loader,
 	Segment,
-	List
+	List,
+	Responsive
 } from 'semantic-ui-react';
 
+import QuestionAnswerButtons from './QuestionAnswerButtons';
 import QuestionImage from './QuestionImage';
 
 class Question extends Component {
@@ -27,6 +28,7 @@ class Question extends Component {
 		this.onKeydown = this.onKeydown.bind(this);
 		this.onImgClick = this.onImgClick.bind(this);
 		this.onImgClose = this.onImgClose.bind(this);
+		this.onAnswer = this.onAnswer.bind(this);
 	}
 	componentDidMount() {
 		document.addEventListener('keydown', this.onKeydown);
@@ -78,12 +80,6 @@ class Question extends Component {
 
 	render() {
 		let question = this.props.questions[this.props.qn];
-		const evalAnswer = answer => {
-			if (!question.answer) return; // hvis ikke svaret
-			if (answer === question.correctAnswer) return 'green'; // hvis korrekt svar
-			if (answer === question.answer) return 'red'; // hvis forkert svar
-			return 'grey'; // ikke valgt mulighed
-		};
 
 		if (!this.props.questions.length > 0)
 			return (
@@ -105,35 +101,17 @@ class Question extends Component {
 									}}
 									ref={ref => (this._div = ref)}
 								/>
-								<Divider />
-								<Button.Group vertical fluid>
-									<Button
-										style={{ textAlign: 'left' }}
-										onClick={() => this.onAnswer(1)}
-										color={evalAnswer(1)}
-										size="large"
-									>
-										A. {question.answer1}
-									</Button>
-									<Divider hidden />
-									<Button
-										style={{ textAlign: 'left' }}
-										onClick={() => this.onAnswer(2)}
-										color={evalAnswer(2)}
-										size="large"
-									>
-										B. {question.answer2}
-									</Button>
-									<Divider hidden />
-									<Button
-										style={{ textAlign: 'left' }}
-										onClick={() => this.onAnswer(3)}
-										color={evalAnswer(3)}
-										size="large"
-									>
-										C. {question.answer3}
-									</Button>
-								</Button.Group>
+
+								<Responsive
+									as="div"
+									minWidth={breakpoints.mobile + 1}
+								>
+									<Divider />
+									<QuestionAnswerButtons
+										question={question}
+										onAnswer={this.onAnswer}
+									/>
+								</Responsive>
 							</Grid.Column>
 							{question.image && (
 								<Grid.Column>
@@ -147,6 +125,13 @@ class Question extends Component {
 							)}
 						</Grid.Row>
 					</Grid>
+					<Responsive as="div" maxWidth={breakpoints.mobile}>
+						<Divider />
+						<QuestionAnswerButtons
+							question={question}
+							onAnswer={this.onAnswer}
+						/>
+					</Responsive>
 					<Divider />
 					<List horizontal>
 						<List.Item>
