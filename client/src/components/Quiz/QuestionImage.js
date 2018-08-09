@@ -6,7 +6,7 @@ import Lightbox from 'react-image-lightbox';
 const QuestionImage = props => {
 	return (
 		<div>
-			<Image src={props.img} onClick={props.onClick} />
+			<Image src={props.img} onClick={props.onClick} className="click" />
 			{props.imgOpen && (
 				<Lightbox mainSrc={props.img} onCloseRequest={props.onClose} />
 			)}

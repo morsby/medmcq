@@ -55,7 +55,12 @@ class FeedbackSingle extends Component {
 	}
 
 	render() {
-		if (this.pathId() !== this.props.feedbackSingle.feedback._id) {
+		console.log(this.props.feedbackSingle);
+		let currId = this.props.feedbackSingle.hasOwnProperty('feedback')
+			? this.props.feedbackSingle.feedback._id
+			: null;
+
+		if (!currId || this.pathId() !== currId) {
 			return <LoadingPage />;
 		}
 
