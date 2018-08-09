@@ -1,5 +1,6 @@
 import axios from 'axios';
 import * as types from './types';
+import _ from 'lodash';
 
 export const getQuestions = (type, selection) => async dispatch => {
 	dispatch({ type: types.IS_FETCHING });
@@ -20,6 +21,8 @@ export const getQuestions = (type, selection) => async dispatch => {
 				selection.semester
 			}/${selection.specialer.join()}?n=${selection.n}`
 		);
+
+		res.data = _.shuffle(res.data);
 	}
 	dispatch({
 		type: types.FETCH_QUESTIONS,

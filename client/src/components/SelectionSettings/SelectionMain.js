@@ -39,6 +39,7 @@ class SelectionMain extends Component {
 				newValue.push(value);
 			}
 		}
+		this.setState({ err: [] });
 		this.props.changeSettings({ [name]: newValue }, this.props.settings);
 	}
 
@@ -47,8 +48,24 @@ class SelectionMain extends Component {
 		if (!this.props.settings.semester) {
 			err.push('Du skal vælge et semester først!');
 		}
+		if (
+			this.props.settings.type === 'specialer' &&
+			this.props.settings.specialer.length === 0
+		) {
+			err.push('Du skal vælge mindst ét speciale.');
+		}
 		if (this.props.settings.type === 'set' && !this.props.settings.set) {
 			err.push('Du skal vælge et sæt for at kunne starte!');
+			if (this.props.settings.semester === 11) {
+				err.push('You have to select a set to start.');
+			}
+		}
+
+		if (this.props.settings.questions.length === 0) {
+			err.push('Der er ingen spørgsmål for det valgte semester.');
+			if (this.props.settings.semester === 11) {
+				err.push('There are no questions for the selected semester.');
+			}
 		}
 
 		if (err.length === 0) {
@@ -109,6 +126,7 @@ class SelectionMain extends Component {
 							Specialer
 						</Button>
 					</Button.Group>
+
 					<Divider hidden />
 					{this.props.settings.type !== 'set' && (
 						<SelectionHowMany
@@ -130,14 +148,12 @@ class SelectionMain extends Component {
 						/>
 					)}
 					<Divider hidden />
-
 					{this.state.err.map(err => {
 						return <h5>{err}</h5>;
 					})}
 					<Button onClick={() => this.handleSubmit('new')}>
 						Start!
 					</Button>
-
 					{this.props.answers.length > 0 && (
 						<Button onClick={() => this.handleSubmit('cont')}>
 							Fortsæt med igangværende spørgsmål

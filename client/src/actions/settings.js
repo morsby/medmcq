@@ -8,6 +8,7 @@ export const changeSettings = (settings, prevSettings) => async dispatch => {
 		const res = await axios.get('/api/count/' + settings.semester);
 		let data = res.data;
 		payload = { ...payload, questions: data };
+		payload.settings.specialer = [];
 	}
 
 	dispatch({

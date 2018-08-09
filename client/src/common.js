@@ -18,23 +18,55 @@ export const semestre = [
 
 export const specialer = {
 	7: [
-		{ value: 'reumatologi', text: 'Reumatologi' },
+		{ value: 'gastroenterologi', text: 'Gastroenterologi' },
+		{ value: 'hæmatologi', text: 'Hæmatologi' },
 		{ value: 'infektionsmedicin', text: 'Infektionsmedicin' },
 		{ value: 'nefrologi', text: 'Nefrologi' },
+		{ value: 'reumatologi', text: 'Reumatologi' },
 		{ value: 'almen_medicin', text: 'Almen medicin' },
-		{ value: 'paraklinik', text: 'Paraklinik' },
-		{ value: 'gastroenterologi', text: 'Gastroenterologi' },
-		{ value: 'hæmatologi', text: 'Hæmatologi' }
+		{ value: 'paraklinik', text: 'Paraklinik' }
 	],
 	8: [
 		{
 			value: 'abdominalkirurgi',
 			text: 'Abdominalkirurgi'
 		},
+		{ value: 'plastikkirurgi', text: 'Plastikkirurgi' },
 		{
 			value: 'urologi',
 			text: 'Urologi'
-		}
+		},
+		{ value: 'onkologi', text: 'Onkologi' },
+		{ value: 'socialmedicin', text: 'Socialmedicin' },
+		{ value: 'almen_medicin', text: 'Almen medicin' },
+		{ value: 'paraklinik', text: 'Paraklinik' }
+	],
+	9: [
+		{ value: 'anæstesiologi', text: 'Anæstesiologi' },
+		{
+			value: 'kardiologi',
+			text: 'Kardiologi'
+		},
+		{ value: 'lungemedicin', text: 'Lungemedicin' },
+		{ value: 'karkirurgi', text: 'Karkirurgi' },
+		{ value: 'thoraxkirurgi', text: 'Thoraxkirurgi' },
+		{ value: 'almen_medicin', text: 'Almen medicin' },
+		{ value: 'paraklinik', text: 'Paraklinik' }
+	],
+	11: [
+		{ value: 'gyn', text: 'Gynækologi/Gynaecology' },
+		{ value: 'obs', text: 'Obstetrik/Obstetrics' },
+		{ value: 'pæd/ped', text: 'Pædiatri/Pediatrics' },
+		{
+			value: 'retsmedicin/forensic_medicine',
+			text: 'Retsmedicin/Forensic medicine'
+		},
+		{
+			value: 'klinisk_genetik/clinical_genetics',
+			text: 'Klinisk genetik/Clinical genetics'
+		},
+		{ value: 'almen_medicin/gp', text: 'Almen medicin/General practice' },
+		{ value: 'paraklinik/paraclinical', text: 'Paraklinik/Paraclinical' }
 	]
 };
 
