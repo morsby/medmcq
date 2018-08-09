@@ -27,7 +27,7 @@ class FeedbackCommentPost extends Component {
 	handleSubmit = formValues => {
 		formValues.feedbackId = this.props.feedbackId;
 		formValues.parent_id = this.props.replyId;
-		console.log(formValues);
+
 		return new Promise((resolve, reject) => {
 			this.props.postFeedbackComment(formValues);
 			this.props.replyReset();

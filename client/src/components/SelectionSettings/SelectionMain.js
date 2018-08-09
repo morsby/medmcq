@@ -109,14 +109,7 @@ class SelectionMain extends Component {
 						>
 							Tilfældige spørgsmål
 						</Button>
-						<Button
-							name="type"
-							value="set"
-							active={this.props.settings.type === 'set'}
-							onClick={this.onSettingsChange}
-						>
-							Fulde eksamenssæt
-						</Button>
+
 						<Button
 							name="type"
 							value="specialer"
@@ -124,6 +117,14 @@ class SelectionMain extends Component {
 							onClick={this.onSettingsChange}
 						>
 							Specialer
+						</Button>
+						<Button
+							name="type"
+							value="set"
+							active={this.props.settings.type === 'set'}
+							onClick={this.onSettingsChange}
+						>
+							Fulde eksamenssæt
 						</Button>
 					</Button.Group>
 

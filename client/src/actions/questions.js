@@ -4,10 +4,9 @@ import _ from 'lodash';
 
 export const getQuestions = (type, selection) => async dispatch => {
 	dispatch({ type: types.IS_FETCHING });
-	console.log(type, selection);
 	let res = { data: [] };
 
-	if (type === 'random' && selection.length > 0) {
+	if ((type === 'random' || type === 'specialer') && selection.length > 0) {
 		// Selection er et array af id'er
 		res = await axios.get(`/api/questions/${selection.join()}`);
 	} else if (type === 'set') {
@@ -15,14 +14,6 @@ export const getQuestions = (type, selection) => async dispatch => {
 		res = await axios.get(
 			`/api/set/${selection.semester}/${selection.set}`
 		);
-	} else if (type === 'specialer') {
-		res = await axios.get(
-			`/api/speciale/${
-				selection.semester
-			}/${selection.specialer.join()}?n=${selection.n}`
-		);
-
-		res.data = _.shuffle(res.data);
 	}
 	dispatch({
 		type: types.FETCH_QUESTIONS,

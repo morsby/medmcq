@@ -23,17 +23,19 @@ export default function(
 			if (questions) {
 				let sets = [];
 				questions.forEach(q => {
-					let season, text, api;
+					let season, text, api, specialer;
 					q.examSeason === 'F'
 						? (season = 'Forår')
 						: (season = 'Efterår');
 					text = `${season} ${q.examYear}`;
 					api = `${q.examYear}/${q.examSeason}`;
+					specialer = q.specialty;
 					sets.push({
 						examSeason: q.examSeason,
 						examYear: q.examYear,
 						text,
-						api
+						api,
+						specialer
 					});
 				});
 				sets = _.orderBy(

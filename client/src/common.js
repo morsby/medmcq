@@ -79,12 +79,22 @@ export const imageURL = id =>
 
 export const selectQuestions = settings => {
 	let selection,
-		type = settings.type;
-	if (type === 'random') {
+		type = settings.type,
+		questions = settings.questions,
+		n = settings.n;
+
+	if (type === 'random' || type === 'specialer') {
+		if (type === 'specialer') {
+			questions = _.filter(questions, q => {
+				return (
+					_.intersection(q.specialty, settings.specialer).length > 0
+				);
+			});
+		}
 		// TODO: Bedre måde at udvælge random på:
 		// Evt. ny prop: index, shuffle alle spørgsmål --> udvælg fra array[index] til array[index + antal]
 		// herved fås nye spørgsmål hver gang
-		selection = _.sampleSize(settings.questions, settings.n);
+		selection = _.sampleSize(questions, settings.n);
 
 		selection = _.map(selection, '_id');
 	} else {
