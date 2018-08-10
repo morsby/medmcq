@@ -23,7 +23,7 @@ class Question extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = { imgOpen: false, pristine: false };
+		this.state = { imgOpen: false, pristine: true };
 
 		this.onKeydown = this.onKeydown.bind(this);
 		this.onImgClick = this.onImgClick.bind(this);
@@ -32,7 +32,9 @@ class Question extends Component {
 	}
 	componentDidMount() {
 		document.addEventListener('keydown', this.onKeydown);
+		this.mouseMover();
 	}
+
 	componentWillUnmount() {
 		document.removeEventListener('keydown', this.onKeydown);
 	}
@@ -41,14 +43,18 @@ class Question extends Component {
 		// For at forhindre lightbox i at være åben på tværs af navigationer
 		if (this.props.qn !== nextProps.qn) {
 			this.setState({ imgOpen: false, pristine: true });
-			document.addEventListener(
-				'mousemove',
-				() => {
-					this.setState({ pristine: false });
-				},
-				{ once: true }
-			);
+			this.mouseMover();
 		}
+	}
+
+	mouseMover() {
+		document.addEventListener(
+			'mousemove',
+			() => {
+				this.setState({ pristine: false });
+			},
+			{ once: true }
+		);
 	}
 
 	onKeydown(e) {
@@ -108,12 +114,12 @@ class Question extends Component {
 									}}
 									ref={ref => (this._div = ref)}
 								/>
-
 								<Responsive
 									as="div"
 									minWidth={breakpoints.mobile + 1}
 								>
 									<Divider />
+
 									<QuestionAnswerButtons
 										question={question}
 										onAnswer={this.onAnswer}
@@ -138,6 +144,7 @@ class Question extends Component {
 						<QuestionAnswerButtons
 							question={question}
 							onAnswer={this.onAnswer}
+							pristine={this.state.pristine}
 						/>
 					</Responsive>
 					<Divider />

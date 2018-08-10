@@ -33,8 +33,15 @@
 		}
 	}
 
-	.pristine button:hover {
-		background-color: $button-hover-color;
+	.pristine {
+		button,
+		button:hover,
+		button:active,
+		button:focus,
+		button.active,
+		button.active:active {
+			background-color: $button-hover-color;
+		}
 	}
 
 	.svar-korrekt {
