@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router';
-import { Container } from 'semantic-ui-react';
+import { Container, Icon } from 'semantic-ui-react';
 import { urls } from '../../common';
 
 const Footer = props => {
@@ -12,11 +12,10 @@ const Footer = props => {
 			<Container>
 				<p>
 					Siden er lavet med tilladelse fra Institut for Klinisk
-					Medicin, Health, Aarhus Universitet.
+					Medicin, Health, Aarhus Universitet
 				</p>
-				<p style={{ float: 'left' }}>
-					Copyright &copy; {new Date().getFullYear()} Sigurd Morsby
-					Larsen.
+				<p style={{ float: 'left', fontSize: '0.8rem' }}>
+					<Icon name="heartbeat" />Sigurd Morsby Larsen
 				</p>
 				{props.history.location.pathname.substr(1, 8) !==
 					'feedback' && (
