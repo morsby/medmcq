@@ -1,3 +1,46 @@
 .question {
 	margin-top: 50px;
 }
+
+#root {
+	.ui.button {
+		/*	background-color: $color-one;
+	color: #fff; 
+
+	&:hover,
+	&.active,
+	&.active:hover {
+		background-color: $color-two;
+		color: #fff;
+	}*/
+
+		&.green {
+			background-color: $color-correct;
+		}
+		&.red {
+			background-color: $color-wrong;
+		}
+		&.grey {
+			background-color: $color-not-selected;
+		}
+
+		&.green,
+		&.red,
+		&.grey {
+			&:hover {
+				cursor: default;
+			}
+		}
+	}
+
+	.pristine button:hover {
+		background-color: $button-hover-color;
+	}
+
+	.svar-korrekt {
+		color: $color-correct;
+	}
+	.svar-forkert {
+		color: $color-wrong;
+	}
+}

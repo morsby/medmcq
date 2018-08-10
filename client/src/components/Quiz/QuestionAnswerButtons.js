@@ -10,8 +10,9 @@ const QuestionAnswerButtons = props => {
 		return 'grey'; // ikke valgt mulighed
 	};
 
+	let pristine = props.pristine ? 'pristine' : '';
 	return (
-		<Button.Group vertical fluid>
+		<Button.Group vertical fluid className={pristine}>
 			<Button
 				style={{ textAlign: 'left' }}
 				onClick={() => props.onAnswer(1)}

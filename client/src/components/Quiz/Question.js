@@ -23,7 +23,7 @@ class Question extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = { imgOpen: false };
+		this.state = { imgOpen: false, pristine: false };
 
 		this.onKeydown = this.onKeydown.bind(this);
 		this.onImgClick = this.onImgClick.bind(this);
@@ -40,7 +40,14 @@ class Question extends Component {
 	componentWillUpdate(nextProps, nextState) {
 		// For at forhindre lightbox i at være åben på tværs af navigationer
 		if (this.props.qn !== nextProps.qn) {
-			this.setState({ imgOpen: false });
+			this.setState({ imgOpen: false, pristine: true });
+			document.addEventListener(
+				'mousemove',
+				() => {
+					this.setState({ pristine: false });
+				},
+				{ once: true }
+			);
 		}
 	}
 
@@ -110,6 +117,7 @@ class Question extends Component {
 									<QuestionAnswerButtons
 										question={question}
 										onAnswer={this.onAnswer}
+										pristine={this.state.pristine}
 									/>
 								</Responsive>
 							</Grid.Column>
