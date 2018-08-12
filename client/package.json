@@ -2,7 +2,11 @@
 	"name": "client",
 	"version": "0.1.0",
 	"private": true,
-	"proxy": "http://localhost:3001",
+	"proxy": {
+		"/api/*": {
+			"target": "http://localhost:3001"
+		}
+	},
 	"dependencies": {
 		"axios": "^0.18.0",
 		"final-form": "^4.9.1",
@@ -26,7 +30,8 @@
 		"build": "react-scripts build",
 		"test": "react-scripts test --env=jsdom",
 		"eject": "react-scripts eject",
-		"sass": "node-sass --watch --output src/styles/css --output-style compressed --source-map true --source-map-contents src/styles/scss/main.scss"
+		"sass":
+			"node-sass --watch --output src/styles/css --output-style compressed --source-map true --source-map-contents src/styles/scss/main.scss"
 	},
 	"devDependencies": {
 		"concurrently": "^3.6.1"

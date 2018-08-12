@@ -14,6 +14,25 @@ mongoose.connect(
 	{ useNewUrlParser: true }
 );
 
+// For logins:
+var passport = require('passport');
+var cookieParser = require('cookie-parser');
+var session = require('cookie-session');
+
+app.use(cookieParser()); // read cookies (needed for auth)
+app.use(
+	session({
+		secret: keys.session,
+		resave: true,
+		saveUninitialized: true
+	})
+); // session secret
+
+require('./config/passport')(passport); // pass passport for configuration
+
+app.use(passport.initialize());
+app.use(passport.session()); // persistent login sessions
+
 // bodyParser tillader JSON-posts
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -36,6 +55,7 @@ router.get('/', function(req, res) {
 require('./routes/question')(app);
 require('./routes/feedback')(app);
 require('./routes/comment')(app);
+require('./routes/user')(app);
 
 // Registrer alle routes fra denne fil (prefixed '/api')
 //app.use('/api', router);

@@ -13,13 +13,23 @@ import reducers from './reducers';
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import ScrollToTop from './components/Misc/ScrollToTop';
+import LoadingPage from './components/Misc/LoadingPage';
+
+// Routes
 import QuizMain from './components/Quiz/QuizMain';
+
 import SelectionMain from './components/SelectionSettings/SelectionMain';
+
 import QuestionAdd from './components/Quiz/QuestionAdd';
+
 import FeedbackList from './components/Feedback/FeedbackList';
 import FeedbackSingle from './components/Feedback/FeedbackSingle';
 import FeedbackPost from './components/Feedback/FeedbackPost';
-import LoadingPage from './components/Misc/LoadingPage';
+
+import Signup from './components/Auth/Signup';
+import Login from './components/Auth/Login';
+import Logout from './components/Auth/Logout';
+
 import { urls } from './common';
 
 import './styles/css/main.css';
@@ -54,6 +64,9 @@ ReactDOM.render(
 						<Route path={urls.feedback} component={FeedbackList} />
 						<Route path={urls.add} component={QuestionAdd} />
 						<Route path={urls.quiz} component={QuizMain} />
+						<Route path={urls.signup} component={Signup} />
+						<Route path={urls.login} component={Login} />
+						<Route path={urls.logout} component={Logout} />
 						<Route path="/" component={SelectionMain} />
 					</Switch>
 				</ScrollToTop>

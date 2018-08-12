@@ -4,9 +4,13 @@ import _ from 'lodash';
 import 'react-image-lightbox/style.css'; // This only needs to be imported once in your app
 
 export const urls = {
+	base: 'http://localhost:3000',
 	quiz: '/quiz',
 	add: '/add',
-	feedback: '/feedback'
+	feedback: '/feedback',
+	signup: '/signup',
+	login: '/login',
+	logout: '/logout'
 };
 
 export const semestre = [

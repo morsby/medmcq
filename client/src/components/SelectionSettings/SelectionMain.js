@@ -13,6 +13,7 @@ import SelectionHowMany from './SelectionHowMany';
 import SelectionSets from './SelectionSets';
 import SelectionSpecialties from './SelectionSpecialties';
 import Footer from '../Misc/Footer';
+import { default as UIHeader } from '../Misc/Header';
 
 import { semestre, selectQuestions, urls } from '../../common';
 
@@ -85,6 +86,7 @@ class SelectionMain extends Component {
 	render() {
 		return (
 			<div className="flex-container">
+				<UIHeader />
 				<Container className="content">
 					<Header as="h1">
 						MCQ'er fra kandidaten på medicin ved Aarhus Universitet
@@ -168,7 +170,11 @@ class SelectionMain extends Component {
 }
 
 function mapStateToProps(state) {
-	return { settings: state.settings, answers: state.answers };
+	return {
+		settings: state.settings,
+		answers: state.answers,
+		auth: state.auth
+	};
 }
 
 export default connect(

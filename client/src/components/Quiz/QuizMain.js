@@ -8,6 +8,7 @@ import Question from './Question';
 import QuizNavigator from './QuizNavigator';
 import Summary from './QuizSummary';
 import QuizFooter from './QuizFooter';
+
 import Footer from '../Misc/Footer';
 
 import { selectQuestions, smoothScroll } from '../../common';
@@ -94,6 +95,7 @@ class QuizMain extends Component {
 						qmax={this.props.questions.length}
 						fixed
 						position="top"
+						style={{ top: '50px !important' }}
 					/>
 					<Swipeable
 						onSwipedLeft={this.swiped}

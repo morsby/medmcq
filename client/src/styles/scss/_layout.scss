@@ -16,6 +16,12 @@ body,
 	flex: 1 0 auto;
 }
 
+.main-header {
+	background: $color-two;
+	color: #fff;
+	padding: 15px 0;
+}
+
 .main-footer {
 	margin-top: 25px;
 	background: $color-two;
