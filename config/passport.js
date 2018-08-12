@@ -39,7 +39,6 @@ module.exports = function(passport) {
 				}
 
 				user.comparePassword(password, (err, isValid) => {
-					console.log(isValid);
 					if (!isValid) {
 						let error = {
 							message: 'Incorrect password.'

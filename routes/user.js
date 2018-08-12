@@ -1,5 +1,8 @@
 const keys = require('../config/keys');
 const passport = require('passport');
+
+const permit = require('../permission'); // middleware for checking if user's role is permitted to make request
+
 // MODELS
 const User = require('../models/user');
 
@@ -60,10 +63,14 @@ module.exports = app => {
 	});
 
 	// DELETE: comment
-	app.delete('/api/feedback/:f_id/comment/:c_id', (req, res) => {
-		Comment.remove({ _id: req.params.c_id }, err => {
-			if (err) res.send(err);
-		});
-		res.send('Slettet');
-	});
+	app.delete(
+		'/api/feedback/:f_id/comment/:c_id',
+		permit('admin'),
+		(req, res) => {
+			Comment.remove({ _id: req.params.c_id }, err => {
+				if (err) res.send(err);
+			});
+			res.send('Slettet');
+		}
+	);
 };

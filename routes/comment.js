@@ -2,6 +2,8 @@ var randomstring = require('randomstring');
 
 const keys = require('../config/keys');
 
+const permit = require('../permission'); // middleware for checking if user's role is permitted to make request
+
 // MODELS
 const Comment = require('../models/comment');
 const Feedback = require('../models/feedback');
@@ -52,10 +54,14 @@ module.exports = app => {
 	});
 
 	// DELETE: comment
-	app.delete('/api/feedback/:f_id/comment/:c_id', (req, res) => {
-		Comment.remove({ _id: req.params.c_id }, err => {
-			if (err) res.send(err);
-		});
-		res.send('Slettet');
-	});
+	app.delete(
+		'/api/feedback/:f_id/comment/:c_id',
+		permit('admin'),
+		(req, res) => {
+			Comment.remove({ _id: req.params.c_id }, err => {
+				if (err) res.send(err);
+			});
+			res.send({ message: 'Beskeden er slettet' });
+		}
+	);
 };

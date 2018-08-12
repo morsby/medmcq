@@ -2,6 +2,8 @@ var randomstring = require('randomstring');
 var _ = require('lodash');
 const keys = require('../config/keys');
 
+const permit = require('../permission'); // middleware for checking if user's role is permitted to make request
+
 // MODELS
 const Feedback = require('../models/feedback.js');
 const Comment = require('../models/comment.js');
@@ -83,7 +85,7 @@ module.exports = app => {
 	});
 
 	//DELETE: feedback
-	app.delete('/api/feedback/:id', (req, res) => {
+	app.delete('/api/feedback/:id', permit('admin'), (req, res) => {
 		Feedback.remove({ _id: req.params.id }, err => {
 			if (err) res.send(err);
 

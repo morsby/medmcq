@@ -1,5 +1,7 @@
 const keys = require('../config/keys');
 
+const permit = require('../permission'); // middleware for checking if user's role is permitted to make request
+
 var uniqWith = require('lodash/uniqWith');
 var isEqual = require('lodash/isEqual');
 var sanitizeHtml = require('sanitize-html');
@@ -84,7 +86,7 @@ module.exports = app => {
 	});
 
 	// PUT: Opdater et spørgsmål
-	app.put('/api/questions/:id', (req, res) => {
+	app.put('/api/questions/:id', permit('admin'), (req, res) => {
 		Question.findById(req.params.id, (err, question) => {
 			if (err) res.send(err);
 
@@ -100,7 +102,7 @@ module.exports = app => {
 	});
 
 	// DELETE: Slet et spørgsmål
-	app.delete('/api/questions/:id', (req, res) => {
+	app.delete('/api/questions/:id', permit('admin'), (req, res) => {
 		Question.remove({ _id: req.params.id }, (err, question) => {
 			if (err) res.send(err);
 
