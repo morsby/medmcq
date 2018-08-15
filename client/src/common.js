@@ -10,7 +10,8 @@ export const urls = {
 	feedback: '/feedback',
 	signup: '/signup',
 	login: '/login',
-	logout: '/logout'
+	logout: '/logout',
+	profile: '/profile'
 };
 
 export const semestre = [

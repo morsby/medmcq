@@ -39,3 +39,12 @@ export const fetchUser = () => async dispatch => {
 
 	dispatch({ type: types.AUTH_CURRENT_USER, payload: res.data });
 };
+
+export const getAnsweredQuestions = ids => async dispatch => {
+	let res = await axios.get(`/api/questions/${ids.join()}`);
+
+	dispatch({
+		type: types.AUTH_GET_ANSWERED_QUESTIONS,
+		payload: res.data
+	});
+};

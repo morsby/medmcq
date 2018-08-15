@@ -20,7 +20,7 @@ export default function(
 			let newState = { ...state, ...newSettings };
 			let questions = action.payload.questions;
 
-			if (questions) {
+			if (action.payload.questions) {
 				let sets = [];
 				questions.forEach(q => {
 					let season, text, api;

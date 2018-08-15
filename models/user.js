@@ -6,8 +6,9 @@ const bcrypt = require('bcryptjs'),
 var UserSchema = new Schema({
 	username: { type: String, required: true, index: { unique: true } },
 	password: { type: String, required: true, select: false },
-	email: { type: String, required: true },
-	role: { type: String, required: true, default: 'user' }
+	email: { type: String },
+	role: { type: String, required: true, default: 'user' },
+	answeredQuestions: {}
 });
 
 UserSchema.pre('save', function(next) {

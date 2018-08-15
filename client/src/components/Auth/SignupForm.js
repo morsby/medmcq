@@ -4,7 +4,7 @@ import { withRouter } from 'react-router';
 import * as actions from '../../actions';
 
 import { Form, Field } from 'react-final-form';
-import { Button, Divider } from 'semantic-ui-react';
+import { Button, Divider, Message } from 'semantic-ui-react';
 
 const SignupForm = props => {
 	let onSubmit = async values => {
@@ -13,7 +13,7 @@ const SignupForm = props => {
 
 	let usernameAvailable = async username => {
 		if (!username) {
-			return 'Required!';
+			return 'Du skal udfylde et brugernavn!';
 		} else {
 			let available = await props.checkUsernameAvailability(username);
 
@@ -22,6 +22,7 @@ const SignupForm = props => {
 	};
 
 	const emailValid = email => {
+		if (!email) return '';
 		const validator = new RegExp(
 			"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
 		);
@@ -31,7 +32,7 @@ const SignupForm = props => {
 
 	let passwordValid = pwd => {
 		if (!pwd) {
-			return 'Required';
+			return 'Du skal indtaste en adgangskode';
 		}
 
 		const uppercase = new RegExp('[A-Z]').test(pwd);
@@ -52,59 +53,145 @@ const SignupForm = props => {
 		} else return null;
 	};
 
+	let passwordRepeatValid = (pwdRepeat, allValues) => {
+		if (pwdRepeat !== allValues.password) {
+			return 'De to adgangskoder matcher ikke';
+		} else return null;
+	};
+
 	return (
 		<Form
 			onSubmit={onSubmit}
-			render={({ handleSubmit, pristine, invalid }) => (
-				<form onSubmit={handleSubmit} className="ui form">
-					<Field name="username" validate={usernameAvailable}>
-						{({ input, meta }) => (
-							<div>
-								<label>Username</label>
-								<input
-									{...input}
-									type="text"
-									placeholder="Username"
-								/>
-								{meta.error &&
-									meta.touched && <span>{meta.error}</span>}
-							</div>
-						)}
-					</Field>
-
-					<Field name="email" validate={emailValid}>
-						{({ input, meta }) => (
-							<div>
-								<label>Email</label>
-								<input
-									{...input}
-									type="email"
-									placeholder="Username"
-								/>
-								{meta.error &&
-									meta.touched && <span>{meta.error}</span>}
-							</div>
-						)}
-					</Field>
-
-					<Field name="password" validate={passwordValid}>
-						{({ input, meta }) => (
-							<div>
-								<label>Password</label>
-								<input
-									{...input}
-									type="password"
-									placeholder="Password"
-								/>
-								{meta.error &&
-									meta.touched && <span>{meta.error}</span>}
-							</div>
-						)}
-					</Field>
-					<Divider hidden />
-					<Button disabled={pristine || invalid}>Submit</Button>
-				</form>
-			)}
+			render={({ handleSubmit, pristine, invalid, values }) => {
+				let firstPassword = values.password;
+				return (
+					<form onSubmit={handleSubmit} className="ui form custom">
+						<Field name="username" validate={usernameAvailable}>
+							{({ input, meta }) => (
+								<div
+									className={
+										'field ' +
+										(meta.error && meta.touched
+											? 'error'
+											: '')
+									}
+								>
+									<label>Brugernavn</label>
+									<input
+										{...input}
+										type="text"
+										placeholder="Brugernavn"
+									/>
+									{meta.error &&
+										meta.touched && (
+											<Message error visible={true}>
+												{meta.error}
+											</Message>
+										)}
+								</div>
+							)}
+						</Field>
+						<Divider hidden />
+						<Field name="email" validate={emailValid}>
+							{({ input, meta }) => (
+								<div
+									className={
+										'field ' +
+										(meta.error && meta.touched
+											? 'error'
+											: '')
+									}
+								>
+									<label>Email</label>
+									<input
+										{...input}
+										type="email"
+										placeholder="Email"
+									/>
+									{meta.error &&
+										meta.touched && (
+											<Message error visible={true}>
+												{meta.error}
+											</Message>
+										)}
+									{meta.touched &&
+										!meta.error && (
+											<Message warning visible={true}>
+												Du behøver ikke indtaste en
+												email-adresse, men hvis du
+												glemmer dine loginoplysninger
+												uden den, kan du ikke få din
+												bruger tilbage.
+											</Message>
+										)}
+								</div>
+							)}
+						</Field>
+						<Divider hidden />
+						<Field name="password" validate={passwordValid}>
+							{({ input, meta }) => (
+								<div
+									className={
+										'field ' +
+										(meta.error && meta.touched
+											? 'error'
+											: '')
+									}
+								>
+									<label>Kodeord</label>
+									<input
+										{...input}
+										type="password"
+										placeholder="Kodeord"
+									/>
+									{meta.error &&
+										meta.touched && (
+											<Message
+												error
+												visible={true}
+												size="small"
+											>
+												{meta.error}
+											</Message>
+										)}
+								</div>
+							)}
+						</Field>
+						<Divider hidden />
+						<Field
+							name="password-repeat"
+							validate={passwordRepeatValid}
+							bla={firstPassword}
+						>
+							{({ input, meta }) => (
+								<div
+									className={
+										'field ' +
+										(meta.error && meta.touched
+											? 'error'
+											: '')
+									}
+								>
+									<label>Gentag kodeord</label>
+									<input
+										{...input}
+										type="password"
+										placeholder="Gentag kodeord"
+									/>
+									{meta.error &&
+										meta.touched && (
+											<Message error visible={true}>
+												{meta.error}
+											</Message>
+										)}
+								</div>
+							)}
+						</Field>
+						<Divider hidden />
+						<Button disabled={pristine || invalid}>Submit</Button>
+					</form>
+				);
+			}}
 		/>
 	);
 };

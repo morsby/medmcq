@@ -1,0 +1,24 @@
+#root {
+	.ui.list.analysis {
+		.item {
+			span {
+				font-weight: bold;
+			}
+			&:nth-child(1) {
+				span {
+					color: green;
+				}
+			}
+			&:nth-child(2) {
+				span {
+					color: red;
+				}
+			}
+			&:nth-child(3) {
+				span {
+					color: rgb(218, 110, 27);
+				}
+			}
+		}
+	}
+}

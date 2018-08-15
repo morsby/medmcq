@@ -21,7 +21,15 @@ export const getQuestions = (type, selection) => async dispatch => {
 	});
 };
 
-export const answerQuestion = (id, answer, correct) => dispatch => {
+export const answerQuestion = (id, answer, correct, semester) => dispatch => {
+	let post = {
+		questionId: id,
+		answer: correct ? 'correct' : 'wrong',
+		semester
+	};
+
+	axios.post('/api/questions/answer', post);
+
 	dispatch({ type: types.ANSWER_QUESTION, payload: { id, answer, correct } });
 };
 

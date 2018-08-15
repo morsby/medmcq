@@ -29,3 +29,9 @@ body,
 	flex-shrink: 0;
 	padding: 25px 0;
 }
+
+.ui.form.custom {
+	.ui.message {
+		margin-top: 5px;
+	}
+}

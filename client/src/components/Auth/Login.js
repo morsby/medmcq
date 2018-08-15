@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Container } from 'semantic-ui-react';
+import { Container, Button } from 'semantic-ui-react';
 
 import Header from '../Misc/Header';
 import Footer from '../Misc/Footer';

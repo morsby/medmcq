@@ -13,3 +13,4 @@ export const VOTE_FEEDBACK = 'vote_feedback';
 
 export const AUTH_SIGNUP = 'auth_signup';
 export const AUTH_CURRENT_USER = 'auth_current_user';
+export const AUTH_GET_ANSWERED_QUESTIONS = 'auth_get_answered_questions';

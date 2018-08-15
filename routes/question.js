@@ -5,6 +5,7 @@ const permit = require('../permission'); // middleware for checking if user's ro
 var uniqWith = require('lodash/uniqWith');
 var isEqual = require('lodash/isEqual');
 var sanitizeHtml = require('sanitize-html');
+var _ = require('lodash');
 
 const multer = require('multer');
 const storage = multer.memoryStorage();
@@ -18,6 +19,7 @@ cloudinary.config({
 
 // MODELS
 const Question = require('../models/question.js');
+const User = require('../models/user.js');
 
 module.exports = app => {
 	// GET: questions
@@ -214,5 +216,50 @@ module.exports = app => {
 
 				res.json(questions);
 			});
+	});
+
+	/**
+	 * ======================================================================
+	 * Besvar et spørgsmål
+	 * ======================================================================
+	 */
+
+	app.post('/api/questions/answer', (req, res) => {
+		if (!req.user) {
+			res.status(403);
+			res.send('Not logged in');
+		} else {
+			let { questionId, semester, answer } = req.body;
+
+			if (!questionId || !semester || !answer) {
+				res.status(400);
+				res.send('Info lacking');
+			}
+			// Save the question to the user
+			User.findById(req.user._id, (err, user) => {
+				if (err) res.send(err);
+
+				let answeredQuestions = user.answeredQuestions || {},
+					values = _.get(answeredQuestions, [semester, questionId], {
+						correct: 0,
+						wrong: 0
+					});
+
+				values[answer] = values[answer] + 1;
+				_.set(answeredQuestions, [semester, questionId], values);
+
+				user.answeredQuestions = answeredQuestions;
+
+				user.markModified('answeredQuestions');
+				user.save(err => {
+					if (err) res.send(err);
+
+					res.send({
+						message: 'Question answered',
+						user: user
+					});
+				});
+			});
+		}
 	});
 };

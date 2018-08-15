@@ -29,6 +29,7 @@ import FeedbackPost from './components/Feedback/FeedbackPost';
 import Signup from './components/Auth/Signup';
 import Login from './components/Auth/Login';
 import Logout from './components/Auth/Logout';
+import Profile from './components/Auth/Profile';
 
 import { urls } from './common';
 
@@ -67,6 +68,7 @@ ReactDOM.render(
 						<Route path={urls.signup} component={Signup} />
 						<Route path={urls.login} component={Login} />
 						<Route path={urls.logout} component={Logout} />
+						<Route path={urls.profile} component={Profile} />
 						<Route path="/" component={SelectionMain} />
 					</Switch>
 				</ScrollToTop>

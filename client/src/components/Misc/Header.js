@@ -19,11 +19,17 @@ const Header = props => {
 		text = (
 			<div>
 				Velkommen, {user.username}.{' '}
-				<a onClick={() => handleClick('logout')}>Log ud</a>
+				<a onClick={() => handleClick('logout')} className="click">
+					Log ud
+				</a>.
 			</div>
 		);
 	} else {
-		text = <a onClick={() => handleClick('login')}>Log ind</a>;
+		text = (
+			<a onClick={() => handleClick('login')} className="click">
+				Log ind
+			</a>
+		);
 	}
 
 	return (
@@ -35,7 +41,8 @@ const Header = props => {
 
 function mapStateToProps(state) {
 	return {
-		auth: state.auth
+		auth: state.auth,
+		settings: state.settings
 	};
 }
 

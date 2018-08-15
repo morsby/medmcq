@@ -79,7 +79,8 @@ class Question extends Component {
 					correct:
 						this.props.questions[this.props.qn].correctAnswer ===
 						answer
-				}
+				},
+				this.props.questions[this.props.qn].semester
 			);
 		}
 	}
