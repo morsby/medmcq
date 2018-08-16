@@ -80,14 +80,6 @@ class Profile extends Component {
 		this.setState({ details: !this.state.details });
 	};
 
-	handleFilter = filter => {
-		if (this.state.filter === filter) {
-			this.setState({ filter: null });
-		} else {
-			this.setState({ filter });
-		}
-	};
-
 	generateTabContent = performance => {
 		let totalAnswers = Object.keys(performance.answeredQuestions).length,
 			{ allRight, allWrong, mixed } = performance.summary;
@@ -102,29 +94,18 @@ class Profile extends Component {
 					<p>Af dem har du svaret</p>
 					<List bulleted className="analysis">
 						<List.Item>
-							<a onClick={() => this.handleFilter('allRight')}>
-								rigtigt
-							</a>{' '}
-							<em>hver</em> gang på {allRight.length} spørgsmål
+							<span>rigtigt</span> <em>hver</em> gang på{' '}
+							{allRight.length} spørgsmål
 						</List.Item>
 						<List.Item>
-							<a onClick={() => this.handleFilter('allWrong')}>
-								forkert
-							</a>{' '}
-							<em>hver</em> gang på {allWrong.length} spørgsmål
+							<span>forkert</span> <em>hver</em> gang på{' '}
+							{allWrong.length} spørgsmål
 						</List.Item>
 						<List.Item>
-							<a onClick={() => this.handleFilter('mixed')}>
-								både
-							</a>{' '}
-							rigtigt <em>og</em> forkert på {mixed.length}{' '}
-							spørgsmål
+							<span>både</span> rigtigt <em>og</em> forkert på{' '}
+							{mixed.length} spørgsmål
 						</List.Item>
 					</List>
-					<p>
-						Klik på ét af resultaterne for at filtrere i
-						detaljelisten.
-					</p>
 				</div>
 				<Divider hidden />
 				<Button

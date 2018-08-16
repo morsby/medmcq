@@ -1,21 +1,21 @@
 #root {
 	.ui.list.analysis {
 		.item {
-			a {
+			span {
 				font-weight: bold;
 			}
 			&:nth-child(1) {
-				a {
+				span {
 					color: green;
 				}
 			}
 			&:nth-child(2) {
-				a {
+				span {
 					color: red;
 				}
 			}
 			&:nth-child(3) {
-				a {
+				span {
 					color: rgb(218, 110, 27);
 				}
 			}
