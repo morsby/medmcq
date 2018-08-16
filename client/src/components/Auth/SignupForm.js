@@ -8,7 +8,10 @@ import { Button, Divider, Message } from 'semantic-ui-react';
 
 const SignupForm = props => {
 	let onSubmit = async values => {
-		props.signup(values).then(() => props.history.push('/login'));
+		props
+			.signup(values)
+			.then(props.fetchUser())
+			.then(props.history.push('/login'));
 	};
 
 	let usernameAvailable = async username => {
@@ -46,6 +49,7 @@ const SignupForm = props => {
 		let strength = 0;
 		validator.map(e => {
 			if (e) strength++;
+			return null;
 		});
 
 		if (strength < 3 || !length) {
@@ -188,7 +192,9 @@ const SignupForm = props => {
 							)}
 						</Field>
 						<Divider hidden />
-						<Button disabled={pristine || invalid}>Submit</Button>
+						<Button disabled={pristine || invalid}>
+							Opret bruger
+						</Button>
 					</form>
 				);
 			}}

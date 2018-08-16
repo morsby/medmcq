@@ -20,6 +20,12 @@ body,
 	background: $color-two;
 	color: #fff;
 	padding: 15px 0;
+
+	.header-text {
+		float: left;
+		line-height: 36px;
+		vertical-align: middle;
+	}
 }
 
 .main-footer {
@@ -28,6 +34,9 @@ body,
 	color: #fff;
 	flex-shrink: 0;
 	padding: 25px 0;
+	.footer-text {
+		float: left;
+	}
 }
 
 .ui.form.custom {

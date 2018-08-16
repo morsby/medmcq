@@ -1,6 +1,6 @@
 import React from 'react';
 import { withRouter } from 'react-router';
-import { Container, Icon } from 'semantic-ui-react';
+import { Container, Icon, Button } from 'semantic-ui-react';
 import { urls } from '../../common';
 
 const Footer = props => {
@@ -10,25 +10,23 @@ const Footer = props => {
 	return (
 		<footer className="main-footer">
 			<Container>
-				<p>
-					Siden er lavet med tilladelse fra Institut for Klinisk
-					Medicin, Health, Aarhus Universitet
-				</p>
-				<p style={{ float: 'left', fontSize: '0.8rem' }}>
-					<Icon name="heartbeat" />Sigurd Morsby Larsen
-				</p>
+				<div className="footer-text">
+					<p>
+						Siden er lavet med tilladelse fra Institut for Klinisk
+						Medicin, Health, Aarhus Universitet
+					</p>
+					<p>
+						<Icon name="heartbeat" />Sigurd Morsby Larsen
+					</p>
+				</div>
 				{props.history.location.pathname.substr(1, 8) !==
 					'feedback' && (
-					<div
-						style={{
-							float: 'right',
-							fontWeight: 'bold',
-							cursor: 'pointer'
-						}}
+					<Button
+						floated="right"
 						onClick={() => handleClick(urls.feedback)}
 					>
 						Feedback og hjælp
-					</div>
+					</Button>
 				)}
 			</Container>
 		</footer>

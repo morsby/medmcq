@@ -1,16 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { Container, Icon } from 'semantic-ui-react';
+import { Container, Button } from 'semantic-ui-react';
 import { urls } from '../../common';
 
 const Header = props => {
 	const handleClick = path => {
-		if (path === 'login') {
-			props.history.push(urls[path]);
-		} else if (path === 'logout') {
-			window.location.href = urls.base + '/api/auth/logout';
-		}
+		props.history.push(urls[path]);
 	};
 
 	let text,
@@ -18,10 +14,13 @@ const Header = props => {
 	if (user) {
 		text = (
 			<div>
-				Velkommen, {user.username}.{' '}
-				<a onClick={() => handleClick('logout')} className="click">
-					Log ud
-				</a>.
+				Velkommen,{' '}
+				<strong
+					onClick={() => handleClick('profile')}
+					className="click"
+				>
+					{user.username}
+				</strong>.
 			</div>
 		);
 	} else {
@@ -34,7 +33,14 @@ const Header = props => {
 
 	return (
 		<header className="main-header">
-			<Container>{text}</Container>
+			<Container>
+				<div className="header-text">{text}</div>
+				{props.location.pathname !== '/' && (
+					<Button floated="right" onClick={() => handleClick('root')}>
+						Gå til forsiden
+					</Button>
+				)}
+			</Container>
 		</header>
 	);
 };

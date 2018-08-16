@@ -40,11 +40,19 @@ export const fetchUser = () => async dispatch => {
 	dispatch({ type: types.AUTH_CURRENT_USER, payload: res.data });
 };
 
-export const getAnsweredQuestions = ids => async dispatch => {
-	let res = await axios.get(`/api/questions/${ids.join()}`);
+export const getAnsweredQuestions = answers => async dispatch => {
+	// Receives an object of objects. Keys of the parent object are question IDs
+	let ids = Object.keys(answers),
+		questions = [];
 
+	if (ids.length > 0) {
+		let res = await axios.get(`/api/questions/${ids.join()}`);
+
+		questions = res.data;
+	}
 	dispatch({
 		type: types.AUTH_GET_ANSWERED_QUESTIONS,
-		payload: res.data
+		answers,
+		questions
 	});
 };

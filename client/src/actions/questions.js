@@ -24,7 +24,7 @@ export const getQuestions = (type, selection) => async dispatch => {
 export const answerQuestion = (id, answer, correct, semester) => dispatch => {
 	let post = {
 		questionId: id,
-		answer: correct ? 'correct' : 'wrong',
+		answer: correct.correct ? 'correct' : 'wrong',
 		semester
 	};
 

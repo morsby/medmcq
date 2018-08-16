@@ -30,14 +30,14 @@ class LoginForm extends Component {
 
 	usernameValid = async username => {
 		if (!username) {
-			return 'Required!';
+			return 'Du skal indtaste et brugernavn!';
 		}
 		return null;
 	};
 
 	passwordValid = pwd => {
 		if (!pwd) {
-			return 'Required';
+			return 'Du skal indtaste en adgangskode';
 		}
 		return null;
 	};
@@ -48,22 +48,34 @@ class LoginForm extends Component {
 				<Form
 					onSubmit={this.onSubmit}
 					render={({ handleSubmit, pristine, invalid }) => (
-						<form onSubmit={handleSubmit} className="ui form">
+						<form
+							onSubmit={handleSubmit}
+							className="ui form custom"
+						>
 							<Field
 								name="username"
 								validate={this.usernameValid}
 							>
 								{({ input, meta }) => (
-									<div>
-										<label>Username</label>
+									<div
+										className={
+											'field ' +
+											(meta.error && meta.touched
+												? 'error'
+												: '')
+										}
+									>
+										<label>Brugernavn</label>
 										<input
 											{...input}
 											type="text"
-											placeholder="Username"
+											placeholder="Brugernavn"
 										/>
 										{meta.error &&
 											meta.touched && (
-												<span>{meta.error}</span>
+												<Message error visible={true}>
+													{meta.error}
+												</Message>
 											)}
 									</div>
 								)}
@@ -74,16 +86,29 @@ class LoginForm extends Component {
 								validate={this.passwordValid}
 							>
 								{({ input, meta }) => (
-									<div>
-										<label>Password</label>
+									<div
+										className={
+											'field ' +
+											(meta.error && meta.touched
+												? 'error'
+												: '')
+										}
+									>
+										<label>Kodeord</label>
 										<input
 											{...input}
 											type="password"
-											placeholder="Password"
+											placeholder="Kodeord"
 										/>
 										{meta.error &&
 											meta.touched && (
-												<span>{meta.error}</span>
+												<Message
+													error
+													visible={true}
+													size="small"
+												>
+													{meta.error}
+												</Message>
 											)}
 									</div>
 								)}
@@ -95,8 +120,9 @@ class LoginForm extends Component {
 							<Button
 								floated="left"
 								disabled={pristine || invalid}
+								positive
 							>
-								Submit
+								Log ind
 							</Button>
 						</form>
 					)}

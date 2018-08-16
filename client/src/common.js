@@ -5,6 +5,7 @@ import 'react-image-lightbox/style.css'; // This only needs to be imported once 
 
 export const urls = {
 	base: 'http://localhost:3000',
+	root: '/',
 	quiz: '/quiz',
 	add: '/add',
 	feedback: '/feedback',
