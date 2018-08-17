@@ -10,6 +10,7 @@ import FeedbackSingleContent from './FeedbackSingleContent';
 import FeedbackNavigation from './FeedbackNavigation';
 
 import LoadingPage from '../Misc/LoadingPage';
+import Header from '../Misc/Header';
 import Footer from '../Misc/Footer';
 
 import { smoothScroll } from '../../common';
@@ -73,6 +74,7 @@ class FeedbackSingle extends Component {
 
 		return (
 			<div className="flex-container">
+				<Header />
 				<Container className="content">
 					<FeedbackNavigation
 						id={feedback._id}

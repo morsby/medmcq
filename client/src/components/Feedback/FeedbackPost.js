@@ -7,6 +7,7 @@ import { Form, Field } from 'react-final-form';
 
 import FeedbackNavigation from './FeedbackNavigation';
 import FeedbackSingleContent from './FeedbackSingleContent';
+import Header from '../Misc/Header';
 import Footer from '../Misc/Footer';
 
 let initialState = {
@@ -37,6 +38,7 @@ class FeedbackPost extends Component {
 	render() {
 		return (
 			<div className="flex-container">
+				<Header />
 				<Container className="content">
 					<FeedbackNavigation />
 					<Form

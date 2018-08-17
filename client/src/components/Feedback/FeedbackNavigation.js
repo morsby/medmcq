@@ -43,9 +43,6 @@ class FeedbackNavigation extends Component {
 							Kom med et forslag
 						</Menu.Item>
 					)}
-					<Menu.Item header onClick={this.handleClick} path="/">
-						Tilbage til forsiden
-					</Menu.Item>
 				</Menu.Menu>
 			</Menu>
 		);
