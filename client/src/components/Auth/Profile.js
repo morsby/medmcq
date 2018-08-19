@@ -142,8 +142,7 @@ class Profile extends Component {
 						floated="right"
 						negative
 						onClick={() =>
-							(window.location.href =
-								urls.base + '/api/auth/logout')
+							(window.location.href = '/api/auth/logout')
 						}
 					>
 						Log ud
