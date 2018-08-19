@@ -9,10 +9,13 @@ export const urls = {
 	quiz: '/quiz',
 	add: '/add',
 	feedback: '/feedback',
-	signup: '/signup',
+	signup: '/opret',
 	login: '/login',
 	logout: '/logout',
-	profile: '/profile'
+	profile: '/profil',
+	editProfile: '/profil/rediger',
+	forgotPassword: '/glemt-kodeord', //HVIS DENNE ÆNDRES SKAL OGSÅ ÆNDRES I API'ens config/urls.js
+	resetPassword: '/nyt-kodeord'
 };
 
 export const semestre = [

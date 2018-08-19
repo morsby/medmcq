@@ -40,6 +40,12 @@ export const fetchUser = () => async dispatch => {
 	dispatch({ type: types.AUTH_CURRENT_USER, payload: res.data });
 };
 
+export const editProfile = (values, callback) => async dispatch => {
+	let res = await axios.put('/api/auth/edit', values);
+
+	return callback(res.data);
+};
+
 export const getAnsweredQuestions = answers => async dispatch => {
 	// Receives an object of objects. Keys of the parent object are question IDs
 	let ids = Object.keys(answers),
@@ -55,4 +61,14 @@ export const getAnsweredQuestions = answers => async dispatch => {
 		answers,
 		questions
 	});
+};
+
+export const forgotPassword = (email, callback) => async dispatch => {
+	let res = await axios.post('/api/auth/forgot', { email: email });
+	return callback(res.data);
+};
+
+export const resetPassword = (token, values, callback) => async dispatch => {
+	let res = await axios.post(`/api/auth/reset/${token}`, values);
+	return callback(res.data);
 };

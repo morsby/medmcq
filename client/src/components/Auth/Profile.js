@@ -12,8 +12,6 @@ import Footer from '../Misc/Footer';
 
 import ProfileAnswerDetails from './ProfileAnswerDetails';
 
-// TODO: Auth kræves
-
 class Profile extends Component {
 	constructor(props) {
 		super(props);
@@ -32,13 +30,6 @@ class Profile extends Component {
 					return 0;
 			}
 		};
-
-		this.props.fetchUser().then(() => {
-			if (!this.props.auth.user) this.props.history.push(urls.login);
-			else {
-				this.getQuestions(semester || 7);
-			}
-		});
 
 		this.state = {
 			activeTab: getIndex(semester),
@@ -78,6 +69,10 @@ class Profile extends Component {
 
 	toggleDetails = () => {
 		this.setState({ details: !this.state.details });
+	};
+
+	handleNavigation = path => {
+		this.props.history.push(urls[path]);
 	};
 
 	generateTabContent = performance => {
@@ -137,6 +132,13 @@ class Profile extends Component {
 				<Container className="content">
 					<h2>{user.username}</h2>
 					<Button
+						basic
+						color="yellow"
+						onClick={() => this.handleNavigation('editProfile')}
+					>
+						Rediger profil
+					</Button>
+					<Button
 						floated="right"
 						negative
 						onClick={() =>
@@ -146,6 +148,7 @@ class Profile extends Component {
 					>
 						Log ud
 					</Button>
+					<Divider hidden />
 					<p>
 						Herunder kan du se, hvordan du har klaret dig for hvert
 						semester

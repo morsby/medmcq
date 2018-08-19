@@ -8,7 +8,9 @@ var UserSchema = new Schema({
 	password: { type: String, required: true, select: false },
 	email: { type: String },
 	role: { type: String, required: true, default: 'user' },
-	answeredQuestions: {}
+	answeredQuestions: {},
+	resetPasswordToken: { type: String },
+	resetPasswordExpires: { type: Number }
 });
 
 UserSchema.pre('save', function(next) {
@@ -23,7 +25,7 @@ UserSchema.pre('save', function(next) {
 
 UserSchema.methods.comparePassword = function(candidatePassword, cb) {
 	let res = bcrypt.compare(candidatePassword, this.password, (err, res) => {
-		if (err) return err;
+		if (err) return cb(err, false);
 		cb(null, res);
 	});
 };

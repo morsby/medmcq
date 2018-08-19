@@ -24,11 +24,7 @@ const Header = props => {
 			</div>
 		);
 	} else {
-		text = (
-			<a onClick={() => handleClick('login')} className="click">
-				Log ind
-			</a>
-		);
+		text = <Button onClick={() => handleClick('login')}>Log ind</Button>;
 	}
 
 	return (

@@ -15,6 +15,8 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import ScrollToTop from './components/Misc/ScrollToTop';
 import LoadingPage from './components/Misc/LoadingPage';
 
+import PrivateRoute from './components/Misc/PrivateRoute';
+
 // Routes
 import QuizMain from './components/Quiz/QuizMain';
 
@@ -30,6 +32,9 @@ import Signup from './components/Auth/Signup';
 import Login from './components/Auth/Login';
 import Logout from './components/Auth/Logout';
 import Profile from './components/Auth/Profile';
+import EditProfile from './components/Auth/EditProfile';
+import ForgotPassword from './components/Auth/ForgotPassword';
+import ResetPassword from './components/Auth/ResetPassword';
 
 import { urls } from './common';
 
@@ -68,7 +73,20 @@ ReactDOM.render(
 						<Route path={urls.signup} component={Signup} />
 						<Route path={urls.login} component={Login} />
 						<Route path={urls.logout} component={Logout} />
-						<Route path={urls.profile} component={Profile} />
+						<PrivateRoute
+							isLoggedIn={true}
+							path={urls.editProfile}
+							component={EditProfile}
+						/>
+						<PrivateRoute path={urls.profile} component={Profile} />
+						<Route
+							path={urls.forgotPassword}
+							component={ForgotPassword}
+						/>
+						<Route
+							path={`${urls.resetPassword}/:token`}
+							component={ResetPassword}
+						/>
 						<Route path="/" component={SelectionMain} />
 					</Switch>
 				</ScrollToTop>
