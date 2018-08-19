@@ -40,8 +40,6 @@ import { urls } from './common';
 
 import './styles/css/main.css';
 
-import registerServiceWorker from './registerServiceWorker';
-
 const persistConfig = {
 	key: 'root',
 	storage: storage,
@@ -95,5 +93,4 @@ ReactDOM.render(
 	</Provider>,
 	document.querySelector('#root')
 );
-
-registerServiceWorker();
+git
