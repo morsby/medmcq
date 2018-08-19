@@ -3,8 +3,18 @@ import _ from 'lodash';
 // Lightbox css
 import 'react-image-lightbox/style.css'; // This only needs to be imported once in your app
 
+let baseURL;
+// Return correct credentials
+if (process.env.NODE_ENV === 'production') {
+	// we're in production, return these keys
+	baseURL = 'https://localhost:3000';
+} else {
+	// we're in development, return these keys
+	baseURL = 'http://localhost:3000';
+}
+
 export const urls = {
-	base: 'http://localhost:3000',
+	base: baseURL,
 	root: '/',
 	quiz: '/quiz',
 	add: '/add',
