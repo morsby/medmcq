@@ -4,13 +4,18 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import { urls } from '../../common';
 
+import LoadingPage from './LoadingPage';
+
 class PrivateRoute extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.props.fetchUser();
+		this.state = { loading: true };
+
+		this.props.fetchUser().then(() => this.setState({ loading: false }));
 	}
 	render() {
+		if (this.state.loading) return <LoadingPage />;
 		if (!this.props.auth.user) {
 			return <Redirect to={urls.login} />;
 		}

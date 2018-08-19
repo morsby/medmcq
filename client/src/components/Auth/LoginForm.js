@@ -15,19 +15,18 @@ class LoginForm extends Component {
 		this.state = { error: null };
 	}
 
-	handleSignup = () => {
-		this.props.history.push(urls.signup);
-	};
-
-	handleForgot = () => {
-		this.props.history.push(urls.forgotPassword);
+	handleNavigation = path => {
+		this.props.history.push(urls[path]);
 	};
 
 	onSubmit = async values => {
 		let login = await this.props.login(values);
+
 		if (login.type === 'success') {
-			this.props.history.push(urls.profile);
+			console.log('s');
+			return this.handleNavigation('profile');
 		} else {
+			console.log('f');
 			this.setState({ error: 'Login mislykkedes' });
 		}
 	};
@@ -132,10 +131,15 @@ class LoginForm extends Component {
 					)}
 				/>
 				<div style={{ float: 'right' }}>
-					<Button onClick={this.handleForgot} color="blue">
+					<Button
+						onClick={() => this.handleNavigation('forgotPassword')}
+						color="blue"
+					>
 						Glemt kodeord?
 					</Button>
-					<Button onClick={this.handleSignup}>Opret bruger</Button>
+					<Button onClick={() => this.handleNavigation('signup')}>
+						Opret bruger
+					</Button>
 				</div>
 			</div>
 		);

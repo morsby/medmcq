@@ -26,9 +26,6 @@ export const login = post => async dispatch => {
 		.catch(function(error) {
 			// handle error
 			console.log(error);
-		})
-		.then(function() {
-			// Always done
 		});
 
 	return response;
