@@ -22,7 +22,7 @@ module.exports = app => {
 		user.email = q.email;
 
 		user.save(err => {
-			if (err) res.send(err);
+			if (err) return res.send(err);
 
 			res.json({ message: 'Bruger tilføjet', id: user._id });
 		});
