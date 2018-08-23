@@ -160,7 +160,7 @@ class SelectionMain extends Component {
             <SelectionSets
               settings={this.props.settings}
               onChange={this.onSettingsChange}
-              answeredQuestions={user}
+              user={user}
             />
           )}
           {this.props.settings.type === "specialer" && (
@@ -170,30 +170,33 @@ class SelectionMain extends Component {
             />
           )}
           <Divider hidden />
-          {this.state.err.map(err => {
-            return <Message negative>{err}</Message>;
-          })}
-          {user ||
-            (this.props.settings.type === "specialer" && (
-              <Message info>
-                {user && (
+          {this.state.err.length > 0 && (
+            <Message negative>
+              {this.state.err.map(err => {
+                return <p key={err}>{err}</p>;
+              })}
+            </Message>
+          )}
+          {(user || this.props.settings.type === "specialer") && (
+            <Message info>
+              {user && (
+                <p>
+                  Bemærk, at såfremt de valgte indstillinger resulterer i færre
+                  spørgsmål end det ønskede antal, får du blot alle tilgængelige
+                  spørgsmål. Er antallet af spørgsmål 0, vælges ligeligt blandt
+                  alle.
+                </p>
+              )}
+              {this.props.settings.type === "specialer" &&
+                !user && (
                   <p>
-                    Bemærk, at såfremt de valgte indstillinger resulterer i
+                    Bemærk, at såfremt de valgte specialer til sammen indeholder
                     færre spørgsmål end det ønskede antal, får du blot alle
-                    tilgængelige spørgsmål. Er antallet af spørgsmål 0, vælges
-                    ligeligt blandt alle.
+                    tilgængelige.
                   </p>
                 )}
-                {this.props.settings.type === "specialer" &&
-                  !user && (
-                    <p>
-                      Bemærk, at såfremt de valgte specialer til sammen
-                      indeholder færre spørgsmål end det ønskede antal, får du
-                      blot alle tilgængelige.
-                    </p>
-                  )}
-              </Message>
-            ))}
+            </Message>
+          )}
           <Button onClick={() => this.handleSubmit("new")}>Start!</Button>
           {this.props.answers.length > 0 && (
             <Button onClick={() => this.handleSubmit("cont")}>

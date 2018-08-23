@@ -10,6 +10,7 @@ const radioGenerator = (set, props, groupedQuestions) => {
       _.map(groupedQuestions[set.api], "_id"),
       Object.keys(props.user.answeredQuestions[props.settings.semester])
     ).length;
+
     if (missingLength === 0) missing = <Icon name="check" color="green" />;
   }
 

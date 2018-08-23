@@ -87,12 +87,12 @@ export const imageURL = id => "http://div.morsby.dk/tmp.png";
 
 export const selectQuestions = (settings, answeredQuestions = null) => {
   let selection;
-  let { type, questions, onlyNew, semester } = settings;
+  let { type, questions, onlyNew, semester, specialer } = settings;
 
   if (type === "random" || type === "specialer") {
     if (type === "specialer") {
       questions = _.filter(questions, q => {
-        return _.intersection(q.specialty, settings.specialer).length > 0;
+        return _.intersection(q.specialty, specialer).length > 0;
       });
     }
     // TODO: Giv besvarede spørgsmål en værdi, så spørgsmål der er svaret på færre gange hyppigere vælges
@@ -100,7 +100,7 @@ export const selectQuestions = (settings, answeredQuestions = null) => {
     if (onlyNew && answeredQuestions) {
       questions = _.filter(
         questions,
-        q => !Object.keys(answeredQuestions[settings.semester]).includes(q._id)
+        q => !Object.keys(answeredQuestions[semester]).includes(q._id)
       );
       console.log(questions);
     }
