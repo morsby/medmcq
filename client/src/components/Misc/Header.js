@@ -4,7 +4,7 @@ import * as actions from "../../actions";
 
 import { withRouter } from "react-router";
 import { Container, Button } from "semantic-ui-react";
-import { urls } from "../../common";
+import { urls } from "../../utils/common";
 
 class Header extends Component {
   componentDidMount() {

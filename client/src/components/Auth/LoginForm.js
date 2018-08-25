@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import * as actions from '../../actions';
 
-import { urls } from '../../common';
+import { urls } from '../../utils/common';
 
 import { Form, Field } from 'react-final-form';
 import { Button, Divider, Message } from 'semantic-ui-react';

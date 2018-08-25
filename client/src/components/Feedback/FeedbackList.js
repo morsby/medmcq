@@ -5,7 +5,7 @@ import { withRouter } from "react-router";
 
 import _ from "lodash";
 
-import { urls } from "../../common";
+import { urls } from "../../utils/common";
 
 import { Container, List } from "semantic-ui-react";
 

@@ -4,7 +4,7 @@ Dette er mappen med React-delen af webappen.
 
 I listen nedenfor ses de planlagte projekter:
 
-- Bedre måde at udvælge random på: __TODO__ [client/src/common.js](client/src/common.js)
+- Bedre måde at udvælge random på: __TODO__ [client/src/utils/common.js](client/src/utils/common.js)
 - Få component til at opdatere selv ved dybt nested ny kommentar. __TODO__ [client/src/components/Feedback/FeedbackSingle.js](client/src/components/Feedback/FeedbackSingle.js)
 - Validation __TODO__ [client/src/components/Quiz/QuestionAdd.js](client/src/components/Quiz/QuestionAdd.js)
 

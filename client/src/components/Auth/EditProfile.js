@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
-import { urls } from '../../common';
+import { urls } from '../../utils/common';
 
 import { Container, Message, Button, Divider } from 'semantic-ui-react';
 import { Form, Field } from 'react-final-form';

@@ -36,7 +36,7 @@ import EditProfile from './components/Auth/EditProfile';
 import ForgotPassword from './components/Auth/ForgotPassword';
 import ResetPassword from './components/Auth/ResetPassword';
 
-import { urls } from './common';
+import { urls } from './utils/common';
 
 import './styles/css/main.css';
 
