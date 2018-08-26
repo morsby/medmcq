@@ -1,92 +1,59 @@
-import React from 'react';
+import React from "react";
+import PropTypes from "prop-types";
 
-import { Card, List, Container } from 'semantic-ui-react';
+import { truncateText } from "../../utils/common";
+import { calculateResults } from "../../utils/quiz";
 
-const Summary = props => {
-	let stats = '';
-	if (props.questions.length === props.answers.length) {
-		let count = 0,
-			correct = 0,
-			i = props.answers.length;
+import { Card, List, Container } from "semantic-ui-react";
 
-		while (i--) {
-			if (typeof props.answers[i] === 'undefined') {
-				count++;
-			} else if (props.answers[i] === true) {
-				correct++;
-			}
-		}
-		if (count === 0) {
-			stats = (
-				<Card.Content>
-					Du svarede rigtigt på {correct} af {props.answers.length}{' '}
-					spørgsmål. Det svarer til{' '}
-					{Math.round((correct / props.answers.length) * 10000) / 100}%
-				</Card.Content>
-			);
-		}
-	}
+// TODO: Refactor - gør logik mere gennemskuelig
 
-	let progress = [],
-		n = props.questions.length;
-	while (n--) {
-		let svar;
-		if (props.answers[n] === true) {
-			svar = 'Korrekt';
-		} else if (props.answers[n] === false) {
-			svar = 'Forkert';
-		} else if (typeof props.answers[n] === 'undefined') {
-			svar = 'Ikke besvaret ...';
-		}
-		progress[n] = { n, svar };
-	}
+const QuizSummary = ({ questions, answers, clickHandler }) => {
+    let results = calculateResults(answers, questions.length);
 
-	let questionLinkText = question => {
-		let text;
-		if (question.length > 33) {
-			text = question.substring(0, 30) + ' ...';
-		} else {
-			text = question;
-		}
-
-		return text;
-	};
-
-	return (
-		<Container>
-			<Card fluid>
-				<Card.Content>
-					<Card.Header>Fremgang</Card.Header>
-					{stats}
-					<Card.Description style={{ columns: '250px 4' }}>
-						<List ordered>
-							{progress.map(res => {
-								let svar;
-								if (res.svar === 'Korrekt')
-									svar = 'svar-korrekt';
-								if (res.svar === 'Forkert')
-									svar = 'svar-forkert';
-								return (
-									<List.Item
-										as="a"
-										className={svar}
-										onClick={() =>
-											props.clickHandler(res.n)
-										}
-										key={res.n}
-									>
-										{questionLinkText(
-											props.questions[res.n].question
-										)}
-									</List.Item>
-								);
-							})}
-						</List>
-					</Card.Description>
-				</Card.Content>
-			</Card>
-		</Container>
-	);
+    return (
+        <Container>
+            <Card fluid>
+                <Card.Content>
+                    <Card.Header>Fremgang</Card.Header>
+                    {results.done && (
+                        <Card.Content>
+                            Du svarede rigtigt på {results.correct} af{" "}
+                            {results.n} spørgsmål. Det svarer til{" "}
+                            {results.percentage}
+                        </Card.Content>
+                    )}
+                    <Card.Description style={{ columns: "250px 4" }}>
+                        <List ordered>
+                            {questions.map((q, index) => {
+                                let svar;
+                                if (q.answer && q.answer === q.correctAnswer)
+                                    svar = "svar-korrekt";
+                                if (q.answer && q.answer !== q.correctAnswer)
+                                    svar = "svar-forkert";
+                                return (
+                                    <List.Item
+                                        as="a"
+                                        className={svar}
+                                        onClick={() => clickHandler(index)}
+                                        key={q._id}
+                                    >
+                                        {truncateText(q.question)}
+                                    </List.Item>
+                                );
+                            })}
+                        </List>
+                    </Card.Description>
+                </Card.Content>
+            </Card>
+        </Container>
+    );
 };
 
-export default Summary;
+QuizSummary.propTypes = {
+    questions: PropTypes.array.isRequired,
+    answers: PropTypes.array.isRequired,
+    clickHandler: PropTypes.func.isRequired
+};
+
+export default QuizSummary;

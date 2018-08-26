@@ -82,3 +82,10 @@ export const breakpoints = {
 
 export const imageURL = id => "http://div.morsby.dk/tmp.png";
 //`https://res.cloudinary.com/dw0rj924o/image/upload/f_auto,q_auto/${id}`;
+
+export const truncateText = (text, length = 30) => {
+    if (!text) return;
+    if (text.length + 3 > length) {
+        return text.substring(0, length) + " ...";
+    } else return text;
+};

@@ -97,9 +97,10 @@ class SelectionMain extends Component {
             sets,
             set
         } = this.props.settings;
-        let user;
+        let user, answeredQuestions;
         if (this.props.auth.user) {
             user = this.props.auth.user;
+            answeredQuestions = user.answeredQuestions[semester];
         } else {
             user = null;
         }
@@ -146,7 +147,7 @@ class SelectionMain extends Component {
                             sets={sets}
                             activeSet={set}
                             semester={semester}
-                            answeredQuestions={user.answeredQuestions[semester]}
+                            answeredQuestions={answeredQuestions}
                             onChange={this.onSettingsChange}
                         />
                     )}

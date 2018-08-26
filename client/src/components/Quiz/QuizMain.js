@@ -6,132 +6,144 @@ import Swipeable from "react-swipeable";
 import QuizLoader from "./QuizLoader";
 import Question from "./Question";
 import QuizNavigator from "./QuizNavigator";
-import Summary from "./QuizSummary";
+import QuizSummary from "./QuizSummary";
 import QuizFooter from "./QuizFooter";
 
 import Footer from "../Misc/Footer";
 
 import { selectQuestions, smoothScroll } from "../../utils/quiz";
+import { urls } from "../../utils/common";
 
 class QuizMain extends Component {
-  state = { qn: 0 };
+    state = { qn: 0 };
 
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
 
-    this.onNavigate = this.onNavigate.bind(this);
-    this.toSelection = this.toSelection.bind(this);
-    this.getQuestions = this.getQuestions.bind(this);
-    this.swiped = this.swiped.bind(this);
-    this.onKeydown = this.onKeydown.bind(this);
-  }
-
-  componentWillMount() {
-    if (this.props.settings.questions.length === 0) {
-      this.toSelection();
+        this.onChangeQuestion = this.onChangeQuestion.bind(this);
+        this.navigateToRoot = this.navigateToRoot.bind(this);
+        this.getQuestions = this.getQuestions.bind(this);
+        this.swiped = this.swiped.bind(this);
+        this.onKeydown = this.onKeydown.bind(this);
     }
-  }
 
-  componentDidMount() {
-    document.addEventListener("keydown", this.onKeydown);
-  }
-  componentWillUnmount() {
-    document.removeEventListener("keydown", this.onKeydown);
-  }
+    componentDidMount() {
+        document.addEventListener("keydown", this.onKeydown);
 
-  onKeydown(e) {
-    // Navigation
-    let qn = this.state.qn,
-      max = this.props.questions.length;
-    if (e.key === "ArrowLeft") {
-      if (qn > 0) this.onNavigate(this.state.qn - 1);
-    } else if (e.key === "ArrowRight") {
-      if (qn < max - 1) this.onNavigate(this.state.qn + 1);
+        if (this.props.settings.questions.length === 0) {
+            this.navigateToRoot();
+        }
     }
-  }
-
-  onNavigate(q) {
-    this.setState({
-      qn: q
-    });
-
-    smoothScroll();
-  }
-
-  toSelection() {
-    this.props.history.push("/");
-  }
-
-  getQuestions() {
-    this.props.getQuestions(
-      this.props.settings.type,
-      selectQuestions(this.props.settings)
-    );
-    this.setState({ qn: 0 });
-  }
-
-  swiped(e, deltaX, isFlick) {
-    let min = 0,
-      max = this.props.questions.length,
-      move;
-
-    if (deltaX > 0) {
-      move = this.state.qn + 1;
+    componentWillUnmount() {
+        document.removeEventListener("keydown", this.onKeydown);
     }
-    if (deltaX < 0) {
-      move = this.state.qn - 1;
-    }
-    if (move >= min && move < max) this.onNavigate(move);
-  }
 
-  render() {
-    if (!this.props.questions || this.props.settings.isFetching)
-      return <QuizLoader handleClick={this.getQuestions} />;
-    return (
-      <div className="flex-container">
-        <div className="content">
-          <QuizNavigator
-            clickHandler={this.onNavigate}
-            qn={this.state.qn}
-            qmax={this.props.questions.length}
-            fixed
-            position="top"
-            style={{ top: "50px !important" }}
-          />
-          <Swipeable onSwipedLeft={this.swiped} onSwipedRight={this.swiped}>
-            <Question qn={this.state.qn} />
-          </Swipeable>
-          <QuizNavigator
-            clickHandler={this.onNavigate}
-            qn={this.state.qn}
-            qmax={this.props.questions.length}
-          />
-          <Summary
-            questions={this.props.questions}
-            answers={this.props.answers}
-            clickHandler={this.onNavigate}
-          />
-          <QuizFooter
-            toSelection={this.toSelection}
-            newQuestions={this.getQuestions}
-            set={this.props.settings.type}
-          />
-        </div>
-        <Footer />
-      </div>
-    );
-  }
+    onKeydown(e) {
+        // Navigation
+        let qn = this.state.qn,
+            max = this.props.questions.length;
+        if (e.key === "ArrowLeft") {
+            if (qn > 0) this.onChangeQuestion(this.state.qn - 1);
+        } else if (e.key === "ArrowRight") {
+            if (qn < max - 1) this.onChangeQuestion(this.state.qn + 1);
+        }
+    }
+
+    onChangeQuestion(q) {
+        this.setState({
+            qn: q
+        });
+
+        smoothScroll();
+    }
+
+    navigateToRoot() {
+        this.props.history.push(urls.root);
+    }
+
+    getQuestions() {
+        let { getQuestions, settings } = this.props;
+        getQuestions(settings.type, selectQuestions(settings));
+        this.setState({ qn: 0 });
+    }
+
+    swiped(e, deltaX, isFlick) {
+        let min = 0,
+            max = this.props.questions.length,
+            move;
+
+        if (deltaX > 0) {
+            move = this.state.qn + 1;
+        }
+        if (deltaX < 0) {
+            move = this.state.qn - 1;
+        }
+        if (move >= min && move < max) this.onChangeQuestion(move);
+    }
+
+    render() {
+        let { questions, settings, answers } = this.props,
+            { qn } = this.state;
+
+        if (!questions || settings.isFetching)
+            return (
+                <QuizLoader
+                    handleClick={this.getQuestions}
+                    handleAbort={this.navigateToRoot}
+                />
+            );
+
+        return (
+            <div className="flex-container">
+                <div className="content">
+                    <QuizNavigator
+                        clickHandler={this.onChangeQuestion}
+                        qn={qn}
+                        qmax={questions.length}
+                        fixed
+                        position="top"
+                    />
+
+                    <Swipeable
+                        onSwipedLeft={this.swiped}
+                        onSwipedRight={this.swiped}
+                    >
+                        <Question qn={qn} />
+                    </Swipeable>
+
+                    <QuizNavigator
+                        clickHandler={this.onChangeQuestion}
+                        qn={qn}
+                        qmax={questions.length}
+                    />
+
+                    <QuizSummary
+                        questions={questions}
+                        answers={answers}
+                        clickHandler={this.onChangeQuestion}
+                    />
+
+                    <QuizFooter
+                        navigateToRoot={this.navigateToRoot}
+                        newQuestions={this.getQuestions}
+                        set={settings.type === "set"}
+                    />
+                </div>
+                <Footer />
+            </div>
+        );
+    }
 }
 
 function mapStateToProps(state) {
-  return {
-    questions: state.questions,
-    answers: state.answers,
-    settings: state.settings
-  };
+    return {
+        questions: state.questions,
+        answers: state.answers,
+        settings: state.settings
+    };
 }
 
 export default connect(
-  mapStateToProps,
-  actions
+    mapStateToProps,
+    actions
 )(QuizMain);

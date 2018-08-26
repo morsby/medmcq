@@ -1,46 +1,55 @@
-import React from 'react';
+import React from "react";
+import PropTypes from "prop-types";
 
-import { Button, Divider } from 'semantic-ui-react';
+import { Button, Divider } from "semantic-ui-react";
 
-const QuestionAnswerButtons = props => {
-	const evalAnswer = answer => {
-		if (!props.question.answer) return; // hvis ikke svaret
-		if (answer === props.question.correctAnswer) return 'green'; // hvis korrekt svar
-		if (answer === props.question.answer) return 'red'; // hvis forkert svar
-		return 'grey'; // ikke valgt mulighed
-	};
+import { evalAnswer } from "../../utils/quiz";
 
-	let pristine = props.pristine ? 'pristine' : '';
-	return (
-		<Button.Group vertical fluid className={pristine}>
-			<Button
-				style={{ textAlign: 'left' }}
-				onClick={() => props.onAnswer(1)}
-				color={evalAnswer(1)}
-				size="large"
-			>
-				A. {props.question.answer1}
-			</Button>
-			<Divider hidden />
-			<Button
-				style={{ textAlign: 'left' }}
-				onClick={() => props.onAnswer(2)}
-				color={evalAnswer(2)}
-				size="large"
-			>
-				B. {props.question.answer2}
-			</Button>
-			<Divider hidden />
-			<Button
-				style={{ textAlign: 'left' }}
-				onClick={() => props.onAnswer(3)}
-				color={evalAnswer(3)}
-				size="large"
-			>
-				C. {props.question.answer3}
-			</Button>
-		</Button.Group>
-	);
+const QuestionAnswerButtons = ({ pristine, onAnswer, question }) => {
+    const generateButton = answerNo => {
+        let answerText;
+        switch (answerNo) {
+        case 1:
+            answerText = "A. ";
+            break;
+        case 2:
+            answerText = "B. ";
+            break;
+        case 3:
+            answerText = "C. ";
+            break;
+        default:
+            break;
+        }
+        answerText = answerText + question[`answer${answerNo}`];
+        return (
+            <Button
+                style={{ textAlign: "left" }}
+                onClick={() => onAnswer(answerNo)}
+                color={evalAnswer(question, answerNo)}
+                size="large"
+            >
+                {answerText}
+            </Button>
+        );
+    };
+
+    let pristineClass = pristine ? "pristine" : "";
+    return (
+        <Button.Group vertical fluid className={pristineClass}>
+            {generateButton(1)}
+            <Divider hidden />
+            {generateButton(2)}
+            <Divider hidden />
+            {generateButton(3)}
+        </Button.Group>
+    );
+};
+
+QuestionAnswerButtons.propTypes = {
+    onAnswer: PropTypes.func.isRequired,
+    question: PropTypes.object.isRequired,
+    pristine: PropTypes.bool
 };
 
 export default QuestionAnswerButtons;
