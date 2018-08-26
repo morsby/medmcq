@@ -38,45 +38,45 @@ class SelectionMain extends Component {
         this.props.changeSettings({ type: name, value });
     }
 
-    handleSubmit(type) {
+    handleSubmit(quizType) {
         let err = [];
+
+        let { semester, type, set, questions, specialer } = this.props.settings;
+
         // VALIDATION
         // Semester
-        if (!this.props.settings.semester) {
+        if (!semester) {
             err.push("Du skal vælge et semester først!");
         }
 
         //Specialer
-        if (
-            this.props.settings.type === "specialer" &&
-            this.props.settings.specialer.length === 0
-        ) {
+        if (quizType === "specialer" && specialer.length === 0) {
             err.push("Du skal vælge mindst ét speciale.");
         }
 
         // Sæt
-        if (this.props.settings.type === "set" && !this.props.settings.set) {
+        if (quizType === "set" && !set) {
             err.push("Du skal vælge et sæt for at kunne starte!");
-            if (this.props.settings.semester === 11) {
+            if (semester === 11) {
                 err.push("You have to select a set to start.");
             }
         }
         // Findes der spørgsmål?
-        if (this.props.settings.questions.length === 0) {
+        if (questions.length === 0) {
             err.push("Der er ingen spørgsmål for det valgte semester.");
-            if (this.props.settings.semester === 11) {
+            if (semester === 11) {
                 err.push("There are no questions for the selected semester.");
             }
         }
 
         // tjek for fejl, start eller ej
         if (err.length === 0) {
-            if (type === "new") {
+            if (quizType === "new") {
                 this.props.getQuestions(
-                    this.props.settings.type,
+                    type,
                     selectQuestions(
                         this.props.settings,
-                        this.props.auth.user.answeredQuestions
+                        this.props.user.answeredQuestions
                     )
                 );
             }
@@ -97,12 +97,10 @@ class SelectionMain extends Component {
             sets,
             set
         } = this.props.settings;
-        let user, answeredQuestions;
-        if (this.props.auth.user) {
-            user = this.props.auth.user;
+        let { user } = this.props,
+            answeredQuestions;
+        if (this.props.user) {
             answeredQuestions = user.answeredQuestions[semester];
-        } else {
-            user = null;
         }
 
         return (
@@ -188,7 +186,7 @@ function mapStateToProps(state) {
     return {
         settings: state.settings,
         answers: state.answers,
-        auth: state.auth
+        user: state.auth.user
     };
 }
 

@@ -14,7 +14,7 @@ class PrivateRoute extends React.Component {
     }
     render() {
         if (this.state.loading) return <LoadingPage />;
-        if (!this.props.auth.user) {
+        if (!this.props.user) {
             return <Redirect to={urls.login} />;
         }
         return <Route {...this.props} />;
@@ -22,7 +22,7 @@ class PrivateRoute extends React.Component {
 }
 
 function mapStateToProps(state) {
-    return { auth: state.auth };
+    return { user: state.auth.user };
 }
 
 export default connect(
