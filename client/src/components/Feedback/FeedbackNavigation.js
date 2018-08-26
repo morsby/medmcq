@@ -1,52 +1,51 @@
-import React, { Component } from 'react';
-import { withRouter } from 'react-router';
-import { urls } from '../../utils/common';
+import React from "react";
+import PropTypes from "prop-types";
+import { withRouter } from "react-router";
+import { urls } from "../../utils/common";
 
-import { Menu } from 'semantic-ui-react';
+import { Menu } from "semantic-ui-react";
 
-class FeedbackNavigation extends Component {
-	constructor(props) {
-		super(props);
+const FeedbackNavigation = ({
+    id,
+    title,
+    history, // fra withRouter
+    match // fra withRouter
+}) => {
+    const handleClick = (e, data) => {
+        history.push(data.path);
+    };
 
-		this.handleClick = this.handleClick.bind(this);
-	}
+    return (
+        <Menu>
+            <Menu.Item header onClick={handleClick} path={urls.feedback}>
+                Feedback og hjælp
+            </Menu.Item>
 
-	handleClick(e, data) {
-		this.props.history.push(data.path);
-	}
+            {id && (
+                <Menu.Item
+                    onClick={handleClick}
+                    path={`${urls.feedback}/${id}`}
+                >
+                    Forslag: {title}
+                </Menu.Item>
+            )}
+            <Menu.Menu position="right">
+                {match.path !== `${urls.feedback}/new` && (
+                    <Menu.Item
+                        onClick={handleClick}
+                        path={`${urls.feedback}/new`}
+                    >
+                        Kom med et forslag
+                    </Menu.Item>
+                )}
+            </Menu.Menu>
+        </Menu>
+    );
+};
 
-	render() {
-		return (
-			<Menu>
-				<Menu.Item
-					header
-					onClick={this.handleClick}
-					path={urls.feedback}
-				>
-					Feedback og hjælp
-				</Menu.Item>
-
-				{this.props.id && (
-					<Menu.Item
-						onClick={this.handleClick}
-						path={`${urls.feedback}/${this.props.id}`}
-					>
-						Forslag: {this.props.title}
-					</Menu.Item>
-				)}
-				<Menu.Menu position="right">
-					{this.props.match.path !== `${urls.feedback}/new` && (
-						<Menu.Item
-							onClick={this.handleClick}
-							path={`${urls.feedback}/new`}
-						>
-							Kom med et forslag
-						</Menu.Item>
-					)}
-				</Menu.Menu>
-			</Menu>
-		);
-	}
-}
+FeedbackNavigation.propTypes = {
+    id: PropTypes.string,
+    title: PropTypes.string
+};
 
 export default withRouter(FeedbackNavigation);

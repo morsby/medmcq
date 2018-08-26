@@ -1,63 +1,71 @@
-import React from 'react';
-import marked from 'marked';
-import { Card, Button, Icon, Label } from 'semantic-ui-react';
+import React from "react";
+import PropTypes from "prop-types";
 
-const FeedbackSingleContent = props => {
-	let votedUp = props.votedFor && props.votedFor.val === 1,
-		votedDown = props.votedFor && props.votedFor.val === -1;
+import marked from "marked";
+import { Card, Button, Icon, Label } from "semantic-ui-react";
 
-	return (
-		<Card fluid>
-			<Card.Content>
-				<Card.Meta>
-					{new Date(props.date).toLocaleString('da-DK')}
-				</Card.Meta>
-				<Card.Header>{props.title}</Card.Header>
-				<p
-					dangerouslySetInnerHTML={{
-						__html: marked(props.text)
-					}}
-				/>
-			</Card.Content>
-			{props.id && (
-				<Card.Content extra>
-					<Button as="div" labelPosition="right">
-						<Button color="red">
-							<Icon name="heart" />
-						</Button>
-						<Label as="a" basic color="red" pointing="left">
-							{props.votes}
-						</Label>
-					</Button>
+const FeedbackSingleContent = ({ feedback, votedFor, handleVote }) => {
+    let votedUp = votedFor && votedFor.val === 1,
+        votedDown = votedFor && votedFor.val === -1;
 
-					<Button
-						basic
-						positive
-						onClick={() => {
-							props.handleVote(1);
-						}}
-						disabled={votedDown}
-					>
-						<span role="img" aria-label="thumbs up">
-							👍
-						</span>
-					</Button>
-					<Button
-						basic
-						negative
-						onClick={() => {
-							props.handleVote(-1);
-						}}
-						disabled={votedUp}
-					>
-						<span role="img" aria-label="thumbs down">
-							👎
-						</span>
-					</Button>
-				</Card.Content>
-			)}
-		</Card>
-	);
+    return (
+        <Card fluid>
+            <Card.Content>
+                <Card.Meta>
+                    {new Date(feedback.date).toLocaleString("da-DK")}
+                </Card.Meta>
+                <Card.Header>{feedback.title}</Card.Header>
+                <p
+                    dangerouslySetInnerHTML={{
+                        __html: marked(feedback.text)
+                    }}
+                />
+            </Card.Content>
+            {feedback._id && (
+                <Card.Content extra>
+                    <Button as="div" labelPosition="right">
+                        <Button color="red">
+                            <Icon name="heart" />
+                        </Button>
+                        <Label as="a" basic color="red" pointing="left">
+                            {feedback.votes}
+                        </Label>
+                    </Button>
+
+                    <Button
+                        basic
+                        positive
+                        onClick={() => {
+                            handleVote(1);
+                        }}
+                        disabled={votedDown}
+                    >
+                        <span role="img" aria-label="thumbs up">
+                            👍
+                        </span>
+                    </Button>
+                    <Button
+                        basic
+                        negative
+                        onClick={() => {
+                            handleVote(-1);
+                        }}
+                        disabled={votedUp}
+                    >
+                        <span role="img" aria-label="thumbs down">
+                            👎
+                        </span>
+                    </Button>
+                </Card.Content>
+            )}
+        </Card>
+    );
+};
+
+FeedbackSingleContent.propTypes = {
+    feedback: PropTypes.object.isRequired,
+    votedFor: PropTypes.object,
+    handleVote: PropTypes.func.isRequired
 };
 
 export default FeedbackSingleContent;
