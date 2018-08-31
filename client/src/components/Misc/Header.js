@@ -12,6 +12,7 @@ class Header extends Component {
     componentDidMount() {
         this.props.fetchUser();
     }
+
     render() {
         let { user, history, location } = this.props;
 
@@ -58,8 +59,7 @@ class Header extends Component {
 
 function mapStateToProps(state) {
     return {
-        user: state.auth.user,
-        settings: state.settings
+        user: state.auth.user
     };
 }
 

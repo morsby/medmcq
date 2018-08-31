@@ -4,16 +4,16 @@ import { withRouter } from "react-router";
 import * as actions from "../../actions";
 
 import { urls } from "../../utils/common";
+import {
+    loginUsernameValid,
+    loginPasswordValid
+} from "../../utils/formValidation";
 
 import { Form, Field } from "react-final-form";
 import { Button, Divider, Message } from "semantic-ui-react";
 
 class LoginForm extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = { error: null };
-    }
+    state = { error: null };
 
     handleNavigation = path => {
         this.props.history.push(urls[path]);
@@ -23,27 +23,12 @@ class LoginForm extends Component {
         let login = await this.props.login(values);
 
         if (login.type === "success") {
-            console.log("s");
             return this.handleNavigation("profile");
         } else {
-            console.log("f");
             this.setState({ error: "Login mislykkedes" });
         }
     };
 
-    usernameValid = async username => {
-        if (!username) {
-            return "Du skal indtaste et brugernavn!";
-        }
-        return null;
-    };
-
-    passwordValid = pwd => {
-        if (!pwd) {
-            return "Du skal indtaste en adgangskode";
-        }
-        return null;
-    };
     // TODO: Autocomplete
     render() {
         return (
@@ -57,7 +42,7 @@ class LoginForm extends Component {
                         >
                             <Field
                                 name="username"
-                                validate={this.usernameValid}
+                                validate={loginUsernameValid}
                             >
                                 {({ input, meta }) => (
                                     <div
@@ -86,7 +71,7 @@ class LoginForm extends Component {
 
                             <Field
                                 name="password"
-                                validate={this.passwordValid}
+                                validate={loginPasswordValid}
                             >
                                 {({ input, meta }) => (
                                     <div

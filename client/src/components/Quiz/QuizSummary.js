@@ -6,8 +6,6 @@ import { calculateResults } from "../../utils/quiz";
 
 import { Card, List, Container } from "semantic-ui-react";
 
-// TODO: Refactor - gør logik mere gennemskuelig
-
 const QuizSummary = ({ questions, answers, clickHandler }) => {
     let results = calculateResults(answers, questions.length);
 

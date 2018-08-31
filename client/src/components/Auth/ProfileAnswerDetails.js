@@ -8,13 +8,9 @@ import marked from "marked";
 import { Table, Button, Divider } from "semantic-ui-react";
 
 class ProfileAnswerDetails extends Component {
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            filter: null
-        };
-    }
+    state = {
+        filter: null
+    };
 
     startQuiz = () => {
         let ids;

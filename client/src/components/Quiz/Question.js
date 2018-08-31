@@ -68,7 +68,7 @@ class Question extends Component {
     }
 
     onAnswer(answer) {
-        let { answerQuestion, questions, qn } = this.props;
+        let { answerQuestion, questions, qn, user } = this.props;
 
         // If not already answered:
         if (!questions[qn].answer) {
@@ -80,7 +80,8 @@ class Question extends Component {
                     qn: qn,
                     correct: questions[qn].correctAnswer === answer
                 },
-                questions[qn].semester
+                questions[qn].semester,
+                user
             );
         }
     }
@@ -158,11 +159,7 @@ class Question extends Component {
     }
 }
 
-function mapStateToProps(state) {
-    return { questions: state.questions };
-}
-
 export default connect(
-    mapStateToProps,
+    null,
     actions
 )(Question);

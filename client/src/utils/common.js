@@ -17,9 +17,9 @@ export const urls = {
 
 export const semestre = [
     { text: "7. semester (Inflammation)", value: 7 },
-    { text: "8. semester (Abdomen)", value: 8 },
-    { text: "9. semester (Hjerte-lunge-kar)", value: 9 },
-    { text: "11. semester (Familie-samfund / GOP)", value: 11 }
+    { text: "8. semester (Abdomen)", value: 8 }
+    /*{ text: "9. semester (Hjerte-lunge-kar)", value: 9 },
+    { text: "11. semester (Familie-samfund / GOP)", value: 11 } */
 ];
 
 export const specialer = {
@@ -46,8 +46,8 @@ export const specialer = {
         { value: "socialmedicin", text: "Socialmedicin" },
         //    { value: "almen_medicin", text: "Almen medicin" },
         { value: "paraklinik", text: "Paraklinik" }
-    ],
-    9: [
+    ]
+    /*9: [
         { value: "anæstesiologi", text: "Anæstesiologi" },
         {
             value: "kardiologi",
@@ -73,7 +73,7 @@ export const specialer = {
         },
         //{ value: "almen_medicin/gp", text: "Almen medicin/General practice" },
         { value: "paraklinik/paraclinical", text: "Paraklinik/Paraclinical" }
-    ]
+    ] */
 };
 
 export const breakpoints = {

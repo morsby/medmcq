@@ -82,7 +82,7 @@ class QuizMain extends Component {
     }
 
     render() {
-        let { questions, settings, answers } = this.props,
+        let { questions, settings, answers, user } = this.props,
             { qn } = this.state;
 
         if (!questions || settings.isFetching)
@@ -108,7 +108,7 @@ class QuizMain extends Component {
                         onSwipedLeft={this.swiped}
                         onSwipedRight={this.swiped}
                     >
-                        <Question qn={qn} />
+                        <Question qn={qn} questions={questions} user={user} />
                     </Swipeable>
 
                     <QuizNavigator
@@ -139,7 +139,8 @@ function mapStateToProps(state) {
     return {
         questions: state.questions,
         answers: state.answers,
-        settings: state.settings
+        settings: state.settings,
+        user: state.auth.user
     };
 }
 

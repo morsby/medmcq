@@ -21,14 +21,20 @@ export const getQuestions = (type, selection) => async dispatch => {
     });
 };
 
-export const answerQuestion = (id, answer, correct, semester) => dispatch => {
+export const answerQuestion = (
+    id,
+    answer,
+    correct,
+    semester,
+    user = null
+) => dispatch => {
     let post = {
         questionId: id,
         answer: correct.correct ? "correct" : "wrong",
         semester
     };
     // TODO: POST kun hvis logget ind
-    axios.post("/api/questions/answer", post);
+    if (user) axios.post("/api/questions/answer", post);
 
     dispatch({ type: types.ANSWER_QUESTION, payload: { id, answer, correct } });
 };
