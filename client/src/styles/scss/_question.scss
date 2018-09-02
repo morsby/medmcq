@@ -1,10 +1,10 @@
 .question {
-	margin-top: 100px;
+    margin-top: 100px;
 }
 
 #root {
-	.ui.button {
-		/*	background-color: $color-one;
+    .ui.button {
+        /*	background-color: $color-one;
 	color: #fff; 
 
 	&:hover,
@@ -14,40 +14,40 @@
 		color: #fff;
 	}*/
 
-		&.green {
-			background-color: $color-correct;
-		}
-		&.red {
-			background-color: $color-wrong;
-		}
-		&.grey {
-			background-color: $color-not-selected;
-		}
+        &.green {
+            background-color: $color-correct;
+        }
+        &.red {
+            background-color: $color-wrong;
+        }
+        &.grey {
+            background-color: $color-not-selected;
+        }
 
-		&.green,
-		&.red,
-		&.grey {
-			&:hover {
-				cursor: default;
-			}
-		}
-	}
+        &.green,
+        &.red,
+        &.grey {
+            &:hover {
+                cursor: default;
+            }
+        }
+    }
 
-	.pristine {
-		button,
-		button:hover,
-		button:active,
-		button:focus,
-		button.active,
-		button.active:active {
-			background-color: $button-hover-color;
-		}
-	}
+    .pristine {
+        button,
+        button:hover,
+        button:active,
+        button:focus,
+        button.active,
+        button.active:active {
+            background-color: $button-hover-color;
+        }
+    }
 
-	.svar-korrekt {
-		color: $color-correct;
-	}
-	.svar-forkert {
-		color: $color-wrong;
-	}
+    .svar-korrekt {
+        color: $color-correct;
+    }
+    .svar-forkert {
+        color: $color-wrong;
+    }
 }

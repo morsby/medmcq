@@ -21,7 +21,7 @@ class QuizMain extends Component {
         super(props);
 
         this.onChangeQuestion = this.onChangeQuestion.bind(this);
-        this.navigateToRoot = this.navigateToRoot.bind(this);
+        this.navigateToPage = this.navigateToPage.bind(this);
         this.getQuestions = this.getQuestions.bind(this);
         this.swiped = this.swiped.bind(this);
         this.onKeydown = this.onKeydown.bind(this);
@@ -57,8 +57,8 @@ class QuizMain extends Component {
         smoothScroll();
     }
 
-    navigateToRoot() {
-        this.props.history.push(urls.root);
+    navigateToPage(path) {
+        this.props.history.push(urls[path]);
     }
 
     getQuestions() {
@@ -123,11 +123,7 @@ class QuizMain extends Component {
                         clickHandler={this.onChangeQuestion}
                     />
 
-                    <QuizFooter
-                        navigateToRoot={this.navigateToRoot}
-                        newQuestions={this.getQuestions}
-                        set={settings.type === "set"}
-                    />
+                    <QuizFooter navigateToPage={this.navigateToPage} />
                 </div>
                 <Footer />
             </div>

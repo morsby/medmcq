@@ -3,29 +3,28 @@ import PropTypes from "prop-types";
 
 import { Container, Menu, Divider } from "semantic-ui-react";
 
-const QuizFooter = ({ navigateToRoot, newQuestions, set }) => {
-    let widths = set ? 1 : 2;
+const QuizFooter = ({ navigateToPage }) => {
     return (
         <Container>
             <Divider hidden />
-            <Menu widths={widths}>
-                <Menu.Item color="red" onClick={navigateToRoot}>
-                    Tilbage til oversigten
+            <Menu widths={2}>
+                <Menu.Item color="red" onClick={() => navigateToPage("root")}>
+                    Tilbage til forsiden
                 </Menu.Item>
-                {!set && (
-                    <Menu.Item color="yellow" onClick={newQuestions}>
-                        Nye spørgsmål (senest valgte indstillinger)
-                    </Menu.Item>
-                )}
+
+                <Menu.Item
+                    color="yellow"
+                    onClick={() => navigateToPage("profile")}
+                >
+                    Til din profil
+                </Menu.Item>
             </Menu>
         </Container>
     );
 };
 
 QuizFooter.propTypes = {
-    navigateToRoot: PropTypes.func.isRequired,
-    newQuestions: PropTypes.func.isRequired,
-    set: PropTypes.bool
+    navigateToPage: PropTypes.func.isRequired
 };
 
 export default QuizFooter;
