@@ -1,6 +1,6 @@
 import _ from "lodash";
 
-export const selectQuestions = (settings, answeredQuestions = null) => {
+export const selectQuestions = (settings, user = null) => {
     let selection;
     let { type, questions, onlyNew, semester, specialer } = settings;
 
@@ -12,11 +12,14 @@ export const selectQuestions = (settings, answeredQuestions = null) => {
         }
         // TODO: Giv besvarede spørgsmål en værdi, så spørgsmål der er svaret på færre gange hyppigere vælges
 
-        if (onlyNew && answeredQuestions) {
+        if (onlyNew && user) {
             // Udtræk de spørgsmål, der ikke allerede er besvaret
             questions = _.filter(
                 questions,
-                q => !Object.keys(answeredQuestions[semester]).includes(q._id)
+                q =>
+                    !Object.keys(user.answeredQuestions[semester]).includes(
+                        q._id
+                    )
             );
         }
 

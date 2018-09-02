@@ -33,7 +33,6 @@ export const answerQuestion = (
         answer: correct.correct ? "correct" : "wrong",
         semester
     };
-    // TODO: POST kun hvis logget ind
     if (user) axios.post("/api/questions/answer", post);
 
     dispatch({ type: types.ANSWER_QUESTION, payload: { id, answer, correct } });

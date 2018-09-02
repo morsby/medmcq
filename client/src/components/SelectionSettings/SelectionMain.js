@@ -74,10 +74,7 @@ class SelectionMain extends Component {
             if (quizType === "new") {
                 this.props.getQuestions(
                     type,
-                    selectQuestions(
-                        this.props.settings,
-                        this.props.user.answeredQuestions
-                    )
+                    selectQuestions(this.props.settings, this.props.user)
                 );
             }
             this.props.history.push(urls.quiz);
