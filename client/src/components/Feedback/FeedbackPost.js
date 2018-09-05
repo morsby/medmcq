@@ -17,7 +17,8 @@ const FeedbackPost = ({ postFeedback, history }) => {
         });
     };
 
-    // TODO: Refactor: Flyt validation ud af filen
+    // TODO: Refactor: Flyt validation ud
+
     return (
         <div className="flex-container">
             <Header />

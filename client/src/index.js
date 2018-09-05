@@ -14,6 +14,7 @@ import { PersistGate } from "redux-persist/lib/integration/react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import ScrollToTop from "./components/Misc/ScrollToTop";
 import LoadingPage from "./components/Misc/LoadingPage";
+import ErrorPage from "./components/Misc/404";
 
 import PrivateRoute from "./components/Misc/PrivateRoute";
 
@@ -57,6 +58,7 @@ ReactDOM.render(
             <BrowserRouter>
                 <ScrollToTop>
                     <Switch>
+                        <Route exact path="/" component={SelectionMain} />
                         <Route
                             path={`${urls.feedback}/new`}
                             component={FeedbackPost}
@@ -85,7 +87,7 @@ ReactDOM.render(
                             path={`${urls.resetPassword}/:token`}
                             component={ResetPassword}
                         />
-                        <Route path="/" component={SelectionMain} />
+                        <Route component={ErrorPage} />
                     </Switch>
                 </ScrollToTop>
             </BrowserRouter>
