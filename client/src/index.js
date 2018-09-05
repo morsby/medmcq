@@ -1,6 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom";
-
+import { unregister } from "./registerServiceWorker";
 // Redux
 import { Provider } from "react-redux";
 import { createStore, applyMiddleware } from "redux";
@@ -51,6 +51,8 @@ const pReducer = persistReducer(persistConfig, reducers);
 
 const store = createStore(pReducer, {}, applyMiddleware(reduxThunk));
 export const persistor = persistStore(store);
+
+unregister();
 
 ReactDOM.render(
     <Provider store={store}>
