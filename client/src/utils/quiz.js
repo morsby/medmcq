@@ -14,13 +14,15 @@ export const selectQuestions = (settings, user = null) => {
 
         if (onlyNew && user) {
             // Udtræk de spørgsmål, der ikke allerede er besvaret
-            questions = _.filter(
+            let questionsNew = _.filter(
                 questions,
                 q =>
                     !Object.keys(user.answeredQuestions[semester]).includes(
                         q._id
                     )
             );
+            // Hvis ikke alle spørgsmål er besvaret, medtages alle
+            if (questionsNew.length > 0) questions = questionsNew;
         }
 
         selection = _.sampleSize(questions, settings.n);

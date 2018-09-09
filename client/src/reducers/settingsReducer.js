@@ -60,7 +60,13 @@ export default function(
                     );
                     sets = _.uniqWith(sets, _.isEqual);
 
-                    return { ...state, sets, questions, semester: value };
+                    return {
+                        ...state,
+                        sets,
+                        questions,
+                        semester: value,
+                        specialer: []
+                    };
                 case "set":
                     return { ...state, set: value };
 

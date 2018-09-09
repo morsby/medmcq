@@ -50,12 +50,12 @@ class SelectionMain extends Component {
         }
 
         //Specialer
-        if (quizType === "specialer" && specialer.length === 0) {
+        if (type === "specialer" && specialer.length === 0) {
             err.push("Du skal vælge mindst ét speciale.");
         }
 
         // Sæt
-        if (quizType === "set" && !set) {
+        if (type === "set" && !set) {
             err.push("Du skal vælge et sæt for at kunne starte!");
             if (semester === 11) {
                 err.push("You have to select a set to start.");
