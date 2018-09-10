@@ -10,8 +10,10 @@
 	"dependencies": {
 		"axios": "^0.18.0",
 		"final-form": "^4.9.1",
+		"jspdf": "^1.4.1",
 		"lodash": "^4.17.10",
 		"marked": "^0.4.0",
+		"pdfmake": "^0.1.38",
 		"prop-types": "^15.6.2",
 		"react": "^16.4.2",
 		"react-dom": "^16.4.2",
@@ -34,6 +36,7 @@
 		"sass": "node-sass --watch --output src/styles/css --output-style compressed --source-map true --source-map-contents src/styles/scss/main.scss"
 	},
 	"devDependencies": {
+		"case-sensitive-paths-webpack-plugin": "^2.1.2",
 		"concurrently": "^3.6.1"
 	}
 }

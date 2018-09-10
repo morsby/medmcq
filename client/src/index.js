@@ -37,6 +37,8 @@ import EditProfile from "./components/Auth/EditProfile";
 import ForgotPassword from "./components/Auth/ForgotPassword";
 import ResetPassword from "./components/Auth/ResetPassword";
 
+import Print from "./components/Misc/Print";
+
 import { urls } from "./utils/common";
 
 import "./styles/css/main.css";
@@ -89,6 +91,7 @@ ReactDOM.render(
                             path={`${urls.resetPassword}/:token`}
                             component={ResetPassword}
                         />
+                        <Route path="/print" component={Print} />
                         <Route component={ErrorPage} />
                     </Switch>
                 </ScrollToTop>

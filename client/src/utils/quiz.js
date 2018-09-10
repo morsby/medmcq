@@ -21,7 +21,7 @@ export const selectQuestions = (settings, user = null) => {
                         q._id
                     )
             );
-            // Hvis ikke alle spørgsmål er besvaret, medtages alle
+            // Hvis ikke galle spørgsmål er besvaret, medtages alle
             if (questionsNew.length > 0) questions = questionsNew;
         }
 
