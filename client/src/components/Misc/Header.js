@@ -14,7 +14,7 @@ class Header extends Component {
     }
 
     render() {
-        let { user, history, location } = this.props;
+        let { user, history, location, noPrint } = this.props;
 
         const handleClick = path => {
             history.push(urls[path]);
@@ -39,8 +39,10 @@ class Header extends Component {
             );
         }
 
+        let printClass = noPrint ? "hide-on-print" : "";
+
         return (
-            <header className="main-header">
+            <header className={`main-header ${printClass}`}>
                 <Container>
                     <div className="header-text">{text}</div>
                     {location.pathname !== "/" && (

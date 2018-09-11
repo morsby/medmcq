@@ -1,0 +1,36 @@
+.print {
+    h3 {
+        margin-top: 2rem;
+        margin-bottom: 1.25rem;
+    }
+
+    img {
+        margin: 1rem 0;
+    }
+
+    ol.correct-1 {
+        li:nth-of-type(1) {
+            color: red;
+        }
+    }
+    ol.correct-2 {
+        li:nth-of-type(2) {
+            color: red !important;
+        }
+    }
+    ol.correct-3 {
+        li:nth-of-type(3) {
+            color: red;
+        }
+    }
+}
+
+.hide-on-print {
+    @media print {
+        display: none !important;
+    }
+}
+
+.avoid-page-break {
+    page-break-inside: avoid;
+}

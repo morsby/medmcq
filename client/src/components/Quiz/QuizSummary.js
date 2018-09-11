@@ -1,10 +1,11 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { truncateText } from "../../utils/common";
+import { urls, truncateText } from "../../utils/common";
 import { calculateResults } from "../../utils/quiz";
 
-import { Card, List, Container } from "semantic-ui-react";
+import { Card, List, Container, Button } from "semantic-ui-react";
+import { Link } from "react-router-dom";
 
 const QuizSummary = ({ questions, answers, clickHandler }) => {
     let results = calculateResults(answers, questions.length);
@@ -42,6 +43,11 @@ const QuizSummary = ({ questions, answers, clickHandler }) => {
                             })}
                         </List>
                     </Card.Description>
+                </Card.Content>
+                <Card.Content extra textAlign="center">
+                    <Link to={urls.print}>
+                        <Button basic>Print disse spørgsmål</Button>
+                    </Link>
                 </Card.Content>
             </Card>
         </Container>

@@ -12,7 +12,8 @@ export const urls = {
     profile: "/profil",
     editProfile: "/profil/rediger",
     forgotPassword: "/glemt-kodeord", //HVIS DENNE ÆNDRES SKAL OGSÅ ÆNDRES I API'ens config/urls.js
-    resetPassword: "/nyt-kodeord"
+    resetPassword: "/nyt-kodeord",
+    print: "/print"
 };
 
 export const semestre = [
@@ -80,8 +81,8 @@ export const breakpoints = {
     mobile: 768
 };
 
-export const imageURL = id => "http://div.morsby.dk/tmp.png";
-//`https://res.cloudinary.com/dw0rj924o/image/upload/f_auto,q_auto/${id}`;
+export const imageURL = id =>
+    `https://res.cloudinary.com/dw0rj924o/image/upload/f_auto,q_auto/${id}`;
 
 export const truncateText = (text, length = 30) => {
     if (!text) return;
