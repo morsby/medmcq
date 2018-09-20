@@ -1,6 +1,7 @@
 // server.js
 
 // BASE SETUP
+require("dotenv").config();
 const keys = require("./config/keys");
 
 // call the packages we need
