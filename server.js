@@ -9,8 +9,10 @@ var sslRedirect = require("heroku-ssl-redirect");
 var express = require("express");
 var app = express();
 
-app.use(sslRedirect());
-
+// if heroku, force SSL
+if (process.env.NODE_ENV === "production") {
+    app.use(sslRedirect());
+}
 // Database
 const mongoose = require("mongoose");
 mongoose.connect(
@@ -60,7 +62,10 @@ require("./routes/user")(app);
 // Registrer alle routes fra denne fil (prefixed '/api')
 //app.use('/api', router);
 
-if (process.env.NODE_ENV === "production") {
+if (
+    process.env.NODE_ENV === "production" ||
+    process.env.NODE_ENV === "au_server"
+) {
     // Express will serve prod. assets
     // (js, css files)
     app.use(express.static("client/build"));
