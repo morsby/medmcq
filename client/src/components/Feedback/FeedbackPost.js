@@ -113,9 +113,11 @@ const FeedbackPost = ({ postFeedback, history }) => {
 
                             <h4>Sådan her kommer dit forslag til at se ud:</h4>
                             <FeedbackSingleContent
-                                title={values.title || "Titel"}
-                                date={new Date()}
-                                text={values.text || "Forslag"}
+                                feedback={{
+                                    title: values.title || "Titel",
+                                    date: new Date(),
+                                    text: values.text || "Forslag"
+                                }}
                             />
                         </form>
                     )}
