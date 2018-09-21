@@ -5,7 +5,7 @@ export default function(
         type: "random",
         n: 10,
         onlyNew: false,
-        semester: null,
+        semester: 7,
         set: null,
         specialer: [],
         questions: [],

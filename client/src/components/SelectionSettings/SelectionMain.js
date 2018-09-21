@@ -96,7 +96,10 @@ class SelectionMain extends Component {
         } = this.props.settings;
         let { user } = this.props,
             answeredQuestions;
-        if (this.props.user) {
+        if (
+            this.props.user &&
+            this.props.user.hasOwnProperty("answeredQuestions")
+        ) {
             answeredQuestions = user.answeredQuestions[semester];
         }
 
