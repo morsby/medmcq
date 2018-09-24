@@ -4,7 +4,7 @@ import { withRouter } from "react-router";
 
 import _ from "lodash";
 
-import { Icon } from "semantic-ui-react";
+import { Icon, Message } from "semantic-ui-react";
 
 import FeedbackListItem from "./FeedbackListItem";
 
@@ -36,6 +36,13 @@ class FeedbackList extends Component {
         return (
             <div>
                 <h2>Feedback</h2>
+                <Message info>
+                    Der findes kun spørgsmål fra Inflammations- og
+                    Abdomensemestrene, da de kursusansvarlige for HLK- og
+                    GOP-semestrene ikke ønskede at deltage. Jeg kan derfor ikke
+                    tilføje disse sæt, før I får overbevist de ansvarlige for,
+                    at det er en god idé.
+                </Message>
                 <p>
                     Sorter feedback efter{" "}
                     <span

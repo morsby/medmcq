@@ -5,7 +5,7 @@ import { withRouter } from "react-router";
 
 import { urls } from "../../utils/common";
 
-import { Container } from "semantic-ui-react";
+import { Container, Message } from "semantic-ui-react";
 
 import FeedbackNavigation from "./FeedbackNavigation";
 import FeedbackList from "./FeedbackList";
@@ -38,6 +38,13 @@ class FeedbackIndex extends Component {
                 <Container className="content">
                     <FeedbackNavigation />
                     <h1>Feedback og hjælp</h1>
+
+                    <Message warning>
+                        <Message.Header>Disclaimer</Message.Header>
+                        Svarene var gældende, da spørgsmålene blev stillet.
+                        Klinisk praksis og retningslinjer ændrer sig over tiden,
+                        og svarene kan have ændret sig.
+                    </Message>
                     <p>
                         Her på siden er der en oversigt over de lidt skjulte
                         funktioner, denne app har – samt mulighed for at komme
@@ -65,10 +72,9 @@ class FeedbackIndex extends Component {
                         Siden benytter open source tracking i form af Matomo.
                         Denne er indstillet til at respektere browser-opt-out,
                         ikke at sætte cookies og at anonymisere IP-adresser. Det
-                        vil silge, at du er fuldstændig anonym. Data gemmes i
-                        min egen database og deles ikke. Data bruges til at
-                        skabe et (dermed underestimeret) overslag over brugen af
-                        siden.
+                        vil sige, at du er fuldstændig anonym. Data gemmes i min
+                        egen database og deles ikke. Data bruges til at skabe et
+                        (dermed underestimeret) overslag over brugen af siden.
                     </p>
                     <p>
                         Siden benytter ingen cookies, med mindre du opretter en
