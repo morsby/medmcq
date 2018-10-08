@@ -1,14 +1,14 @@
 {
-    "name": "AU Medicin MCQ",
-    "short_name": "MedMCQ",
+    "name": "medMCQ",
+    "short_name": "medMCQ",
     "icons": [
         {
-            "src": "/android-chrome-192x192.png?v=1sad72ua7",
+            "src": "/android-chrome-192x192.png?v=RyQ20p64qJ",
             "sizes": "192x192",
             "type": "image/png"
         },
         {
-            "src": "/android-chrome-512x512.png?v=1sad72ua7",
+            "src": "/android-chrome-512x512.png?v=RyQ20p64qJ",
             "sizes": "512x512",
             "type": "image/png"
         }
