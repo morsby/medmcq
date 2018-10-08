@@ -98,7 +98,7 @@ class Question extends Component {
         let question = this.props.questions[this.props.qn],
             text = question.question
                 .replace(/\^(\w)\^/g, "<sup>$1</sup>")
-                .replace(/\~(\w)\~/g, "<sub>$1</sub>");
+                .replace(/~(\w)~/g, "<sub>$1</sub>");
         if (!this.props.questions.length > 0)
             return (
                 <Dimmer active page>

@@ -5,7 +5,7 @@ import { withRouter } from "react-router";
 
 import { urls } from "../../utils/common";
 
-import { Container, Message } from "semantic-ui-react";
+import { Container } from "semantic-ui-react";
 
 import FeedbackNavigation from "./FeedbackNavigation";
 import FeedbackList from "./FeedbackList";
