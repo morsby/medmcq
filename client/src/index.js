@@ -25,6 +25,8 @@ import SelectionMain from "./components/SelectionSettings/SelectionMain";
 
 import QuestionAdd from "./components/Quiz/QuestionAdd";
 
+import About from "./components/Misc/About";
+
 import FeedbackIndex from "./components/Feedback/FeedbackIndex";
 import FeedbackSingle from "./components/Feedback/FeedbackSingle";
 import FeedbackPost from "./components/Feedback/FeedbackPost";
@@ -72,6 +74,7 @@ ReactDOM.render(
                             component={FeedbackSingle}
                         />
                         <Route path={urls.feedback} component={FeedbackIndex} />
+                        <Route path={urls.about} component={About} />
                         <Route path={urls.add} component={QuestionAdd} />
                         <Route path={urls.quiz} component={QuizMain} />
                         <Route path={urls.signup} component={Signup} />

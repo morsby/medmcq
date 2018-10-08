@@ -10,8 +10,6 @@ import { Container, Message } from "semantic-ui-react";
 import FeedbackNavigation from "./FeedbackNavigation";
 import FeedbackList from "./FeedbackList";
 
-import FancyFunctions from "./FancyFunctions";
-
 import Header from "../Misc/Header";
 import Footer from "../Misc/Footer";
 
@@ -37,22 +35,7 @@ class FeedbackIndex extends Component {
                 <Header />
                 <Container className="content">
                     <FeedbackNavigation />
-                    <h1>Feedback og hjælp</h1>
-
-                    <Message warning>
-                        <Message.Header>Disclaimer</Message.Header>
-                        Svarene var gældende, da spørgsmålene blev stillet.
-                        Klinisk praksis og retningslinjer ændrer sig over tiden,
-                        og svarene kan have ændret sig.
-                    </Message>
-                    <p>
-                        Her på siden er der en oversigt over de lidt skjulte
-                        funktioner, denne app har – samt mulighed for at komme
-                        med forslag til forbedringer (og se, bedømme og
-                        kommentere forslag, andre har stillet).
-                    </p>
-
-                    <FancyFunctions />
+                    <h1>Feedback</h1>
 
                     <FeedbackList
                         feedback={this.props.feedback}

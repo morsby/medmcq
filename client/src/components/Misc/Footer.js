@@ -19,15 +19,14 @@ const Footer = props => {
                         <Icon name="heartbeat" />Sigurd Morsby Larsen
                     </p>
                 </div>
-                {props.history.location.pathname.substr(1, 8) !==
-                    "feedback" && (
-                        <Button
-                            floated="right"
-                            onClick={() => handleClick(urls.feedback)}
-                        >
-                        Feedback og hjælp
-                        </Button>
-                    )}
+                {props.history.location.pathname !== urls.about && (
+                    <Button
+                        floated="right"
+                        onClick={() => handleClick(urls.about)}
+                    >
+                        Om siden
+                    </Button>
+                )}
             </Container>
         </footer>
     );

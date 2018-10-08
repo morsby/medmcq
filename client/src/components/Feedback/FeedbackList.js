@@ -40,8 +40,8 @@ class FeedbackList extends Component {
                     Der findes kun spørgsmål fra Inflammations- og
                     Abdomensemestrene, da de kursusansvarlige for HLK- og
                     GOP-semestrene ikke ønskede at deltage. Jeg kan derfor ikke
-                    tilføje disse sæt, før I får overbevist de ansvarlige for,
-                    at det er en god idé.
+                    tilføje disse sæt, før I får overbevist de ansvarlige om, at
+                    det er en god idé.
                 </Message>
                 <p>
                     Sorter feedback efter{" "}

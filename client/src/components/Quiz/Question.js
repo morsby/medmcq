@@ -95,8 +95,10 @@ class Question extends Component {
     }
 
     render() {
-        let question = this.props.questions[this.props.qn];
-
+        let question = this.props.questions[this.props.qn],
+            text = question.question
+                .replace(/\^(\w)\^/g, "<sup>$1</sup>")
+                .replace(/\~(\w)\~/g, "<sub>$1</sub>");
         if (!this.props.questions.length > 0)
             return (
                 <Dimmer active page>
@@ -113,7 +115,9 @@ class Question extends Component {
                                 <div
                                     style={{ fontSize: "18px" }}
                                     dangerouslySetInnerHTML={{
-                                        __html: marked(question.question)
+                                        __html: marked(text, {
+                                            smartypants: true
+                                        })
                                     }}
                                     ref={ref => (this._div = ref)}
                                 />

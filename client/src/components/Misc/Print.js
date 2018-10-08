@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { urls } from "../../utils/common";
 
 import { Container, Button } from "semantic-ui-react";
-import { Link } from "react-router-dom";
 
 import Header from "../Misc/Header";
 import PrintDisplayQuestion from "./PrintDisplayQuestion";
