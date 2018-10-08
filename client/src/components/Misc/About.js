@@ -19,7 +19,7 @@ const About = ({ history }) => {
             <Container className="content">
                 <h1>Om siden</h1>
                 <Message warning>
-                    <Message.Header>Vedr. rigtigheden af svar</Message.Header>
+                    <Message.Header>BEMÆRK</Message.Header>
                     <p>
                         Denne side er et frivilligt arbejdsredskab til dig der
                         vil teste dine MCQ-færdigheder inden for de medicinske
