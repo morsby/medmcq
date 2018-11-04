@@ -68,14 +68,15 @@ const FeedbackCommentPost = ({
                                             Du er ved at svare på kommentaren
                                             med id: {replySlug}. Skriv i stedet
                                             en{" "}
-                                            <a
+                                            <span
                                                 style={{
-                                                    cursor: "pointer"
+                                                    cursor: "pointer",
+                                                    color: "rgb(87, 138, 251)"
                                                 }}
                                                 onClick={() => replyReset()}
                                             >
-                                                ny kommentar
-                                            </a>.
+                                                ny kommentar.
+                                            </span>
                                         </p>
                                     )}
                                     <div className="ui info message mini form-explanation">
@@ -96,8 +97,8 @@ const FeedbackCommentPost = ({
                                     <div className="form-error">
                                         {meta.error &&
                                             meta.touched && (
-                                                <span>{meta.error}</span>
-                                            )}
+                                            <span>{meta.error}</span>
+                                        )}
                                     </div>
                                 </div>
                             )}

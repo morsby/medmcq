@@ -1,40 +1,42 @@
 {
-    "name": "client",
-    "version": "0.1.0",
-    "private": true,
-    "proxy": {
-        "/api/*": {
-            "target": "http://localhost:3001"
-        }
-    },
-    "dependencies": {
-        "axios": "^0.18.0",
-        "final-form": "^4.10.0",
-        "lodash": "^4.17.11",
-        "marked": "^0.5.0",
-        "prop-types": "^15.6.2",
-        "react": "^16.5.2",
-        "react-dom": "^16.5.2",
-        "react-final-form": "^3.6.6",
-        "react-image-lightbox": "^5.0.0",
-        "react-redux": "^5.0.7",
-        "react-router-dom": "^4.3.1",
-        "react-scripts": "1.1.4",
-        "react-swipeable": "^4.3.0",
-        "redux": "^4.0.0",
-        "redux-persist": "^5.10.0",
-        "redux-thunk": "^2.3.0",
-        "semantic-ui-react": "^0.80.2"
-    },
-    "scripts": {
-        "start": "concurrently \"react-scripts start\" \"npm run sass\"",
-        "build": "react-scripts build",
-        "test": "react-scripts test --env=jsdom",
-        "eject": "react-scripts eject",
-        "sass": "node-sass --watch --output src/styles/css --output-style compressed --source-map true --source-map-contents src/styles/scss/main.scss"
-    },
-    "devDependencies": {
-        "case-sensitive-paths-webpack-plugin": "^2.1.2",
-        "concurrently": "^3.6.1"
-    }
+  "name": "client",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.18.0",
+    "final-form": "^4.10.0",
+    "http-proxy-middleware": "^0.19.0",
+    "lodash": "^4.17.11",
+    "marked": "^0.5.0",
+    "prop-types": "^15.6.2",
+    "react": "^16.5.2",
+    "react-dom": "^16.5.2",
+    "react-final-form": "^3.6.6",
+    "react-image-lightbox": "^5.0.0",
+    "react-redux": "^5.0.7",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "2.1.1",
+    "react-swipeable": "^4.3.0",
+    "redux": "^4.0.0",
+    "redux-persist": "^5.10.0",
+    "redux-thunk": "^2.3.0",
+    "semantic-ui-react": "^0.80.2"
+  },
+  "scripts": {
+    "start": "concurrently \"react-scripts start\" \"npm run sass\"",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject",
+    "sass": "node-sass --watch --output src/styles/css --output-style compressed --source-map true --source-map-contents src/styles/scss/main.scss"
+  },
+  "devDependencies": {
+    "case-sensitive-paths-webpack-plugin": "^2.1.2",
+    "concurrently": "^3.6.1"
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
