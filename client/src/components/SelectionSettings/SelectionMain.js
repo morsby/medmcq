@@ -193,7 +193,7 @@ class SelectionMain extends Component {
                     <SelectionMessage user={user} type={type} />
                     <Button
                         onClick={() => this.handleSubmit("new")}
-                        disabled={antalValgte < 1}
+                        disabled={antalValgte < 1 && type === "specialer"}
                     >
                         Start!
                     </Button>
