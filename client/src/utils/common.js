@@ -31,12 +31,12 @@ export const specialer = {
         { value: "infektionsmedicin", text: "Infektionsmedicin" },
         { value: "nefrologi", text: "Nefrologi" },
         { value: "reumatologi", text: "Reumatologi" },
-        //    { value: "almen_medicin", text: "Almen medicin" },
-        //{ value: "paraklinik", text: "Paraklinik" }
-        { value: "klinisk_biokemi", text: "Klinisk biokemi" },
+        { value: "almen_medicin", text: "Almen medicin" },
+        { value: "paraklinik", text: "Paraklinik" }
+        /*{ value: "klinisk_biokemi", text: "Klinisk biokemi" },
         { value: "klinisk_mikrobiologi", text: "Klinisk mikrobiologi" },
         { value: "klinisk_immunologi", text: "Klinisk immunologi" },
-        { value: "radiologi", text: "Radiologi" }
+        { value: "radiologi", text: "Radiologi" } */
     ],
     8: [
         {

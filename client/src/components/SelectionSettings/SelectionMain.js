@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as actions from "../../actions";
 
+import _ from "lodash";
+
 import {
     Container,
     Header,
@@ -21,6 +23,7 @@ import Footer from "../Misc/Footer";
 import { default as UIHeader } from "../Misc/Header";
 
 import { semestre, urls } from "../../utils/common";
+import { specialer as specialerCommon } from "../../utils/common";
 import { selectQuestions } from "../../utils/quiz";
 
 class SelectionMain extends Component {
@@ -103,6 +106,25 @@ class SelectionMain extends Component {
             answeredQuestions = user.answeredQuestions[semester];
         }
 
+        // Laver et array af specialer for semesteret
+        let uniques = specialerCommon[semester].map(s => s.value);
+
+        // Grupperer de fundne spørgsmål efter specialer
+        let questionsBySpecialty = _.countBy(
+            // Laver et flat array af alle i spg indeholdte specialer
+            _.flattenDeep(questions.map(a => a.specialty)),
+            e => {
+                return uniques[uniques.indexOf(e)];
+            }
+        );
+
+        // Tjekker hvor mange der er valgt
+        let antalValgte = 0;
+        specialer.map(s => {
+            let n = questionsBySpecialty[s] ? questionsBySpecialty[s] : 0;
+            return (antalValgte = antalValgte + n);
+        });
+
         return (
             <div className="flex-container">
                 <UIHeader />
@@ -153,7 +175,9 @@ class SelectionMain extends Component {
                     {type === "specialer" && (
                         <SelectionSpecialtiesSelector
                             semester={semester}
+                            questions={questions}
                             valgteSpecialer={specialer}
+                            antalPerSpeciale={questionsBySpecialty}
                             onChange={this.onSettingsChange}
                         />
                     )}
@@ -167,7 +191,10 @@ class SelectionMain extends Component {
                         </Message>
                     )}
                     <SelectionMessage user={user} type={type} />
-                    <Button onClick={() => this.handleSubmit("new")}>
+                    <Button
+                        onClick={() => this.handleSubmit("new")}
+                        disabled={antalValgte < 1}
+                    >
                         Start!
                     </Button>
                     {this.props.answers.length > 0 && (

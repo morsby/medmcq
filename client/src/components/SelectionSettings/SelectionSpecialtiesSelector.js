@@ -5,12 +5,13 @@ import { Form, Checkbox, Divider, Header } from "semantic-ui-react";
 
 import { specialer } from "../../utils/common";
 
-const checkboxGenerator = (speciale, erValgt, onChange) => {
+const checkboxGenerator = (speciale, erValgt, antalSpg, onChange) => {
+    let antal = antalSpg === undefined ? 0 : antalSpg;
     return (
         <Form.Group key={speciale.value}>
             <Form.Field>
                 <Checkbox
-                    label={speciale.text}
+                    label={`${speciale.text} (${antal} spørgsmål)`}
                     value={speciale.value}
                     checked={erValgt}
                     name="specialer"
@@ -25,7 +26,9 @@ const checkboxGenerator = (speciale, erValgt, onChange) => {
 const SelectionSpecialtiesSelector = ({
     semester = 7,
     valgteSpecialer = [],
-    onChange
+    onChange,
+    questions = [],
+    antalPerSpeciale = []
 }) => {
     if (!semester)
         return (
@@ -42,7 +45,12 @@ const SelectionSpecialtiesSelector = ({
 
             {specialer[semester].map(speciale => {
                 let erValgt = valgteSpecialer.includes(speciale.value);
-                return checkboxGenerator(speciale, erValgt, onChange);
+                return checkboxGenerator(
+                    speciale,
+                    erValgt,
+                    antalPerSpeciale[speciale.value],
+                    onChange
+                );
             })}
         </Form>
     );
