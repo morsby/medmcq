@@ -31,7 +31,7 @@ class QuizMain extends Component {
         document.addEventListener("keydown", this.onKeydown);
 
         if (this.props.settings.questions.length === 0) {
-            this.navigateToRoot();
+            this.navigateToPath("root");
         }
     }
     componentWillUnmount() {
@@ -89,7 +89,7 @@ class QuizMain extends Component {
             return (
                 <QuizLoader
                     handleClick={this.getQuestions}
-                    handleAbort={this.navigateToRoot}
+                    handleAbort={() => this.navigateToPath("root")}
                 />
             );
 
