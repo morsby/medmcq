@@ -2,6 +2,8 @@ import React from "react";
 import marked from "marked";
 import { imageURL } from "../../utils/common";
 
+// TODO: Lad correctAnswer være et array!
+
 const PrintDisplayQuestion = props => {
     let {
         question,
@@ -9,8 +11,7 @@ const PrintDisplayQuestion = props => {
         answer2,
         answer3,
         correctAnswer,
-        image,
-        image_id
+        image
     } = props.questionProp;
     return (
         <div>
@@ -21,7 +22,7 @@ const PrintDisplayQuestion = props => {
             />
             {image && (
                 <img
-                    src={imageURL(image_id)}
+                    src={imageURL(image)}
                     alt="billede til eksamensspørgsmål"
                 />
             )}

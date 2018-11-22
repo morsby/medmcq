@@ -86,9 +86,13 @@ export const breakpoints = {
     mobile: 768
 };
 
-export const imageURL = id =>
-    `https://res.cloudinary.com/dw0rj924o/image/upload/f_auto,q_auto/${id}`;
-
+export const imageURL = image => {
+    if (image.match("cloudinary")) {
+        return image;
+    } else {
+        return `/images/${image}`;
+    }
+};
 export const truncateText = (text, length = 30) => {
     if (!text) return;
     if (text.length + 3 > length) {

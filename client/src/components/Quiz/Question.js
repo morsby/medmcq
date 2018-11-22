@@ -68,6 +68,7 @@ class Question extends Component {
     }
 
     onAnswer(answer) {
+        // TODO: Lad correctAnswer være et array!
         let { answerQuestion, questions, qn, user } = this.props;
 
         // If not already answered:
@@ -137,7 +138,7 @@ class Question extends Component {
                             {question.image && (
                                 <Grid.Column>
                                     <QuestionImage
-                                        img={imageURL(question.image_id)}
+                                        img={imageURL(question.image)}
                                         onClick={this.onImgClick}
                                         onClose={this.onImgClose}
                                         imgOpen={this.state.imgOpen}
