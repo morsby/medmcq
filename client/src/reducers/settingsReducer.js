@@ -40,23 +40,32 @@ export default function(
                 case "semester":
                     let sets = [];
                     questions.forEach(q => {
-                        let season, text, api;
-                        q.examSeason === "F"
+                        let season,
+                            text,
+                            api,
+                            reex = "";
+                        q.examSeason.charAt(0) === "F"
                             ? (season = "Forår")
                             : (season = "Efterår");
-                        text = `${season} ${q.examYear}`;
+
+                        if (q.examSeason.toLowerCase().includes("ree")) {
+                            reex = " (reeks)";
+                        }
+
+                        text = `${season} ${q.examYear}${reex}`;
                         api = `${q.examYear}/${q.examSeason}`;
                         sets.push({
-                            examSeason: q.examSeason,
+                            examSeason: q.examSeason.charAt(0),
                             examYear: q.examYear,
+                            reex,
                             text,
                             api
                         });
                     });
                     sets = _.orderBy(
                         sets,
-                        ["examYear", "examSeason"],
-                        ["asc", "desc"]
+                        ["examYear", "examSeason", "reex"],
+                        ["asc", "desc", "asc"]
                     );
                     sets = _.uniqWith(sets, _.isEqual);
 
