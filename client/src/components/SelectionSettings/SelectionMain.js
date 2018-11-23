@@ -76,7 +76,7 @@ class SelectionMain extends Component {
         if (err.length === 0) {
             if (quizType === "new") {
                 this.props.getQuestions(
-                    type,
+                    this.props.settings,
                     selectQuestions(this.props.settings, this.props.user)
                 );
             }

@@ -2,6 +2,7 @@ import _ from "lodash";
 
 export const selectQuestions = (settings, user = null) => {
     let selection;
+    // Bør slettes
     let { type, questions, onlyNew, semester, specialer } = settings;
 
     if (type === "random" || type === "specialer") {

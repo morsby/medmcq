@@ -63,7 +63,7 @@ class QuizMain extends Component {
 
     getQuestions() {
         let { getQuestions, settings } = this.props;
-        getQuestions(settings.type, selectQuestions(settings));
+        getQuestions(settings, selectQuestions(settings));
         this.setState({ qn: 0 });
     }
 

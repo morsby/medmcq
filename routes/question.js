@@ -1,182 +1,226 @@
-const keys = require('../config/keys');
+const keys = require("../config/keys");
 
-const permit = require('../permission'); // middleware for checking if user's role is permitted to make request
+const permit = require("../permission"); // middleware for checking if user's role is permitted to make request
 
-var uniqWith = require('lodash/uniqWith');
-var isEqual = require('lodash/isEqual');
-var sanitizeHtml = require('sanitize-html');
-var _ = require('lodash');
+var uniqWith = require("lodash/uniqWith");
+var isEqual = require("lodash/isEqual");
+var sanitizeHtml = require("sanitize-html");
+var _ = require("lodash");
 
-const multer = require('multer');
+const multer = require("multer");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-var cloudinary = require('cloudinary');
+var cloudinary = require("cloudinary");
 cloudinary.config({
-	cloud_name: keys.cloudinary_cloud_name,
-	api_key: keys.cloudinary_api_key,
-	api_secret: keys.cloudinary_api_secret
+    cloud_name: keys.cloudinary_cloud_name,
+    api_key: keys.cloudinary_api_key,
+    api_secret: keys.cloudinary_api_secret
 });
 
 // MODELS
-const Question = require('../models/question.js');
-const User = require('../models/user.js');
+const Question = require("../models/question.js");
+const User = require("../models/user.js");
 
 module.exports = app => {
-	// GET: questions
-	app.get('/api/questions', (req, res) => {
-		Question.find(function(err, questions) {
-			if (err) res.send(err);
+    // GET: questions
+    app.get("/api/questions", (req, res) => {
+        Question.find(function(err, questions) {
+            if (err) res.send(err);
 
-			res.json(questions);
-		});
-	});
+            res.json(questions);
+        });
+    });
 
-	// GET: bestemt spørgsmål
-	app.get('/api/questions/:id', (req, res) => {
-		let ids = req.params.id.split(',');
+    // GET: tilfældige spørgsmål
+    app.get("/api/questions/random", (req, res) => {
+        let { n, specialer, unique, semester } = req.query;
 
-		Question.find({ _id: { $in: ids } }, (err, question) => {
-			if (err) res.send(err);
+        let answeredQuestions = [];
 
-			res.json(question);
-		});
-	});
+        if (req.user && unique) {
+            let userAnsweredQuestions = req.user.answeredQuestions;
+            _.map(userAnsweredQuestions, s =>
+                answeredQuestions.push(Object.keys(s))
+            );
+            answeredQuestions = _.flatten(answeredQuestions);
+        }
 
-	// POST: Nyt spørgsmål
-	app.post('/api/questions', upload.single('image'), function(req, res) {
-		var question = new Question();
+        let filter = {
+            _id: { $nin: answeredQuestions },
+            semester: { $eq: semester }
+        };
 
-		let q = req.body;
+        if (specialer) {
+            filter.specialty = { $in: specialer.split(",") };
+        }
 
-		question.question = sanitizeHtml(q.question);
-		question.answer1 = sanitizeHtml(q.answer1);
-		question.answer2 = sanitizeHtml(q.answer2);
-		question.answer3 = sanitizeHtml(q.answer3);
-		question.correctAnswer = q.correctAnswer;
+        Question.findRandom(filter, {}, { limit: n }, (err, questions) => {
+            if (err) res.send(err);
 
-		question.semester = q.semester;
-		question.examYear = q.examYear;
-		question.examSeason = q.examSeason;
-		question.specialty = q.specialty.split(',');
-		//question.tags = q.tags.toLowerCase();
+            if (!questions) {
+                let filter2 = { ...filter };
+                delete filter2._id;
+                Question.findRandom(
+                    filter2,
+                    {},
+                    { limit: n },
+                    (err, questions) => {
+                        if (err) res.send(err);
+                        res.json(questions);
+                    }
+                );
+            } else {
+                res.json(questions);
+            }
+        });
+    });
 
-		if (!req.file) {
-			question.save(err => {
-				if (err) res.send(err);
+    // GET: bestemt spørgsmål
+    app.get("/api/questions/:id", (req, res) => {
+        let ids = req.params.id.split(",");
 
-				res.json({ message: 'Question created!' });
-			});
-		} else {
-			// Uncomment når der skal uploades
-			cloudinary.v2.uploader
-				.upload_stream({ resource_type: 'image' }, function(
-					error,
-					imageResult
-				) {
-					// data er i imageResult
+        Question.find({ _id: { $in: ids } }, (err, question) => {
+            if (err) res.send(err);
 
-					question.image = imageResult.url;
-					question.image_id = imageResult.public_id;
-					question.save(err => {
-						if (err) res.send(err);
+            res.json(question);
+        });
+    });
 
-						res.json({ message: 'Question created!' });
-					});
-				})
-				.end(req.file.buffer);
-		}
-	});
+    // POST: Nyt spørgsmål
+    app.post("/api/questions", upload.single("image"), function(req, res) {
+        var question = new Question();
 
-	// PUT: Opdater et spørgsmål
-	app.put('/api/questions/:id', permit('admin'), (req, res) => {
-		Question.findById(req.params.id, (err, question) => {
-			if (err) res.send(err);
+        let q = req.body;
 
-			// Opdater spørgsmålet
-			// fx question.question = req.params.question;
+        question.question = sanitizeHtml(q.question);
+        question.answer1 = sanitizeHtml(q.answer1);
+        question.answer2 = sanitizeHtml(q.answer2);
+        question.answer3 = sanitizeHtml(q.answer3);
+        question.correctAnswer = q.correctAnswer;
 
-			question.save(err => {
-				if (err) res.send(err);
+        question.semester = q.semester;
+        question.examYear = q.examYear;
+        question.examSeason = q.examSeason;
+        question.specialty = q.specialty.split(",");
+        //question.tags = q.tags.toLowerCase();
 
-				res.json({ message: 'Spørgsmålet er opdateret!' });
-			});
-		});
-	});
+        if (!req.file) {
+            question.save(err => {
+                if (err) res.send(err);
 
-	// DELETE: Slet et spørgsmål
-	app.delete('/api/questions/:id', permit('admin'), (req, res) => {
-		Question.remove({ _id: req.params.id }, (err, question) => {
-			if (err) res.send(err);
+                res.json({ message: "Question created!" });
+            });
+        } else {
+            // Uncomment når der skal uploades
+            cloudinary.v2.uploader
+                .upload_stream({ resource_type: "image" }, function(
+                    error,
+                    imageResult
+                ) {
+                    // data er i imageResult
 
-			res.json({ message: 'Spørgsmålet er slettet!' });
-		});
-	});
+                    question.image = imageResult.url;
+                    question.image_id = imageResult.public_id;
+                    question.save(err => {
+                        if (err) res.send(err);
 
-	// GET: alle spørgsmål fra et semester
-	app.get('/api/set/:semester', (req, res) => {
-		Question.find(
-			{
-				semester: req.params.semester
-			},
-			(err, questions) => {
-				if (err) res.send(err);
+                        res.json({ message: "Question created!" });
+                    });
+                })
+                .end(req.file.buffer);
+        }
+    });
 
-				res.json(questions);
-			}
-		);
-	});
+    // PUT: Opdater et spørgsmål
+    app.put("/api/questions/:id", permit("admin"), (req, res) => {
+        Question.findById(req.params.id, (err, question) => {
+            if (err) res.send(err);
 
-	// GET: alle spørgsmål fra et bestemt sæt
-	app.get('/api/set/:semester/:examYear/:examSeason', (req, res) => {
-		Question.find(
-			{
-				semester: req.params.semester,
-				examYear: req.params.examYear,
-				examSeason: req.params.examSeason
-			},
-			(err, questions) => {
-				if (err) res.send(err);
-				res.json(questions);
-			}
-		);
-	});
+            // Opdater spørgsmålet
+            // fx question.question = req.params.question;
 
-	// GET: alle inden for hvert speciale
-	app.get('/api/speciale/:semester/:specialty', (req, res) => {
-		let specialties = req.params.specialty.split(',');
-		let n = Number(req.query.n) || 0;
-		Question.find({
-			semester: req.params.semester,
-			specialty: { $in: specialties }
-		})
-			.limit(n)
-			.exec((err, questions) => {
-				if (err) res.send(err);
+            question.save(err => {
+                if (err) res.send(err);
 
-				res.json(questions);
-			});
-	});
+                res.json({ message: "Spørgsmålet er opdateret!" });
+            });
+        });
+    });
 
-	/**
-	 * ======================================================================
-	 * Fanger kun antal spørgsmål og fordeling af Specialer samt eksamenssæt
-	 * ======================================================================
-	 */
+    // DELETE: Slet et spørgsmål
+    app.delete("/api/questions/:id", permit("admin"), (req, res) => {
+        Question.remove({ _id: req.params.id }, (err, question) => {
+            if (err) res.send(err);
 
-	// GET antal på semesteret
-	app.get('/api/count/:semester', (req, res) => {
-		Question.find({ semester: req.params.semester })
-			.select(['specialty', 'examSeason', 'examYear'])
-			.exec((err, questions) => {
-				if (err) res.send(err);
+            res.json({ message: "Spørgsmålet er slettet!" });
+        });
+    });
 
-				res.json(questions);
-			});
-	});
+    // GET: alle spørgsmål fra et semester
+    app.get("/api/set/:semester", (req, res) => {
+        Question.find(
+            {
+                semester: req.params.semester
+            },
+            (err, questions) => {
+                if (err) res.send(err);
 
-	// GET de enkelte sæt på semesteret
-	app.get('/api/count/sets/:semester', (req, res) => {
-		/*Question.aggregate(
+                res.json(questions);
+            }
+        );
+    });
+
+    // GET: alle spørgsmål fra et bestemt sæt
+    app.get("/api/set/:semester/:examYear/:examSeason", (req, res) => {
+        Question.find(
+            {
+                semester: req.params.semester,
+                examYear: req.params.examYear,
+                examSeason: req.params.examSeason
+            },
+            (err, questions) => {
+                if (err) res.send(err);
+                res.json(questions);
+            }
+        );
+    });
+
+    // GET: alle inden for hvert speciale
+    app.get("/api/speciale/:semester/:specialty", (req, res) => {
+        let specialties = req.params.specialty.split(",");
+        let n = Number(req.query.n) || 0;
+        Question.find({
+            semester: req.params.semester,
+            specialty: { $in: specialties }
+        })
+            .limit(n)
+            .exec((err, questions) => {
+                if (err) res.send(err);
+
+                res.json(questions);
+            });
+    });
+
+    /**
+     * ======================================================================
+     * Fanger kun antal spørgsmål og fordeling af Specialer samt eksamenssæt
+     * ======================================================================
+     */
+
+    // GET antal på semesteret
+    app.get("/api/count/:semester", (req, res) => {
+        Question.find({ semester: req.params.semester })
+            .select(["specialty", "examSeason", "examYear"])
+            .exec((err, questions) => {
+                if (err) res.send(err);
+
+                res.json(questions);
+            });
+    });
+
+    // GET de enkelte sæt på semesteret
+    app.get("/api/count/sets/:semester", (req, res) => {
+        /*Question.aggregate(
 			[
 				{ $match: { semester: Number(req.params.semester) } },
 				{
@@ -191,75 +235,75 @@ module.exports = app => {
 					}
 				}
 			],*/
-		Question.find(
-			{ semester: req.params.semester },
-			'-_id examSeason examYear',
-			(err, questions) => {
-				if (err) res.send(err);
+        Question.find(
+            { semester: req.params.semester },
+            "-_id examSeason examYear",
+            (err, questions) => {
+                if (err) res.send(err);
 
-				let unique = uniqWith(questions, isEqual);
+                let unique = uniqWith(questions, isEqual);
 
-				res.json(unique);
-			}
-		);
-	});
+                res.json(unique);
+            }
+        );
+    });
 
-	// GET antal på semesteret og speciale
-	app.get('/api/count/:semester/:specialty', (req, res) => {
-		Question.find({
-			semester: req.params.semester,
-			specialty: req.params.specialty
-		})
-			.select(['specialty', 'examSeason', 'examYear'])
-			.exec((err, questions) => {
-				if (err) res.send(err);
+    // GET antal på semesteret og speciale
+    app.get("/api/count/:semester/:specialty", (req, res) => {
+        Question.find({
+            semester: req.params.semester,
+            specialty: req.params.specialty
+        })
+            .select(["specialty", "examSeason", "examYear"])
+            .exec((err, questions) => {
+                if (err) res.send(err);
 
-				res.json(questions);
-			});
-	});
+                res.json(questions);
+            });
+    });
 
-	/**
-	 * ======================================================================
-	 * Besvar et spørgsmål
-	 * ======================================================================
-	 */
+    /**
+     * ======================================================================
+     * Besvar et spørgsmål
+     * ======================================================================
+     */
 
-	app.post('/api/questions/answer', (req, res) => {
-		if (!req.user) {
-			res.status(403);
-			res.send('Not logged in');
-		} else {
-			let { questionId, semester, answer } = req.body;
+    app.post("/api/questions/answer", (req, res) => {
+        if (!req.user) {
+            res.status(403);
+            res.send("Not logged in");
+        } else {
+            let { questionId, semester, answer } = req.body;
 
-			if (!questionId || !semester || !answer) {
-				res.status(400);
-				res.send('Info lacking');
-			}
-			// Save the question to the user
-			User.findById(req.user._id, (err, user) => {
-				if (err) res.send(err);
+            if (!questionId || !semester || !answer) {
+                res.status(400);
+                res.send("Info lacking");
+            }
+            // Save the question to the user
+            User.findById(req.user._id, (err, user) => {
+                if (err) res.send(err);
 
-				let answeredQuestions = user.answeredQuestions || {},
-					values = _.get(answeredQuestions, [semester, questionId], {
-						correct: 0,
-						wrong: 0
-					});
+                let answeredQuestions = user.answeredQuestions || {},
+                    values = _.get(answeredQuestions, [semester, questionId], {
+                        correct: 0,
+                        wrong: 0
+                    });
 
-				values[answer] = values[answer] + 1;
-				_.set(answeredQuestions, [semester, questionId], values);
+                values[answer] = values[answer] + 1;
+                _.set(answeredQuestions, [semester, questionId], values);
 
-				user.answeredQuestions = answeredQuestions;
+                user.answeredQuestions = answeredQuestions;
 
-				user.markModified('answeredQuestions');
-				user.save(err => {
-					if (err) res.send(err);
+                user.markModified("answeredQuestions");
+                user.save(err => {
+                    if (err) res.send(err);
 
-					res.send({
-						message: 'Question answered',
-						user: user
-					});
-				});
-			});
-		}
-	});
+                    res.send({
+                        message: "Question answered",
+                        user: user
+                    });
+                });
+            });
+        }
+    });
 };

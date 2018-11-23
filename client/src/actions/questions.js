@@ -1,13 +1,25 @@
 import axios from "axios";
 import * as types from "./types";
 
-export const getQuestions = (type, selection) => async dispatch => {
+export const getQuestions = (settings, selection) => async dispatch => {
+    let { type, semester, specialer, n, onlyNew } = settings;
+
     dispatch({ type: types.IS_FETCHING });
     let res = { data: [] };
 
     if ((type === "random" || type === "specialer") && selection.length > 0) {
         // Selection er et array af id'er
-        res = await axios.get(`/api/questions/${selection.join()}`);
+        let querySpecialer = "",
+            unique = "";
+        if (type === "specialer") {
+            querySpecialer = "&specialer=" + specialer.join(",");
+        }
+
+        if (onlyNew) unique = "&unique=t";
+
+        res = await axios.get(
+            `/api/questions/random?semester=${semester}&n=${n}${querySpecialer}${unique}`
+        );
     } else if (type === "set") {
         // Selection er settings-props fra SelectionMain
         res = await axios.get(
