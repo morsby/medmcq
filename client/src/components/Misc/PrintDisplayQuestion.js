@@ -15,6 +15,8 @@ const PrintDisplayQuestion = props => {
             image
         } = props.questionProp,
         text = subSupScript(question);
+    if (Array.isArray(correctAnswer))
+        correctAnswer = correctAnswer.join(" correct-");
 
     return (
         <div>
