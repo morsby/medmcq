@@ -1,23 +1,26 @@
 import React from "react";
 import marked from "marked";
 import { imageURL } from "../../utils/common";
+import { subSupScript } from "../../utils/quiz";
 
 // TODO: Lad correctAnswer være et array!
 
 const PrintDisplayQuestion = props => {
     let {
-        question,
-        answer1,
-        answer2,
-        answer3,
-        correctAnswer,
-        image
-    } = props.questionProp;
+            question,
+            answer1,
+            answer2,
+            answer3,
+            correctAnswer,
+            image
+        } = props.questionProp,
+        text = subSupScript(question);
+
     return (
         <div>
             <div
                 dangerouslySetInnerHTML={{
-                    __html: marked(question)
+                    __html: marked(text)
                 }}
             />
             {image && (

@@ -172,17 +172,16 @@ module.exports = app => {
 
     // GET: alle spørgsmål fra et bestemt sæt
     app.get("/api/set/:semester/:examYear/:examSeason", (req, res) => {
-        Question.find(
-            {
-                semester: req.params.semester,
-                examYear: req.params.examYear,
-                examSeason: req.params.examSeason
-            },
-            (err, questions) => {
+        Question.find({
+            semester: req.params.semester,
+            examYear: req.params.examYear,
+            examSeason: req.params.examSeason
+        })
+            .sort("n")
+            .exec((err, questions) => {
                 if (err) res.send(err);
                 res.json(questions);
-            }
-        );
+            });
     });
 
     // GET: alle inden for hvert speciale

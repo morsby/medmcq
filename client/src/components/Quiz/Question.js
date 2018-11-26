@@ -4,6 +4,7 @@ import * as actions from "../../actions";
 import marked from "marked";
 
 import { imageURL, breakpoints } from "../../utils/common";
+import { subSupScript } from "../../utils/quiz";
 
 import {
     Container,
@@ -97,9 +98,7 @@ class Question extends Component {
 
     render() {
         let question = this.props.questions[this.props.qn],
-            text = question.question
-                .replace(/\^(\w)\^/g, "<sup>$1</sup>")
-                .replace(/~(\w)~/g, "<sub>$1</sub>");
+            text = subSupScript(question.question);
         if (!this.props.questions.length > 0)
             return (
                 <Dimmer active page>

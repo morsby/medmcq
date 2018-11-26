@@ -93,3 +93,9 @@ export const calculateResults = (answers, numberOfQuestions) => {
         percentage: `${Math.round((correct / answers.length) * 10000) / 100}%`
     };
 };
+
+export const subSupScript = text => {
+    return text
+        .replace(/\^(.+?)\^/g, "<sup>$1</sup>")
+        .replace(/~(.+?)~/g, "<sub>$1</sub>");
+};
