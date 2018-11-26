@@ -72,6 +72,7 @@ const About = ({ history }) => {
                 </Message>
 
                 <FancyFunctions />
+
                 <Divider hidden />
                 <Button
                     color="red"
@@ -80,6 +81,20 @@ const About = ({ history }) => {
                     onClick={handleClick}
                     className="click"
                 />
+                <h2>Privatliv og cookies</h2>
+                <p>
+                    Siden benytter open source tracking i form af Matomo. Denne
+                    er indstillet til at respektere browser-opt-out, ikke at
+                    sætte cookies og at anonymisere IP-adresser. Det vil sige,
+                    at du er fuldstændig anonym. Data gemmes i min egen database
+                    og deles ikke. Data bruges til at skabe et (dermed
+                    underestimeret) overslag over brugen af siden.
+                </p>
+                <p>
+                    Siden benytter ingen cookies, med mindre du opretter en
+                    bruger og logger ind. I dette tilfælde sættes en cookie, der
+                    husker, at du er logget ind til næste gang.
+                </p>
             </Container>
             <Footer />
         </div>

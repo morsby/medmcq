@@ -48,21 +48,8 @@ class FeedbackIndex extends Component {
                         du tage kontakt på sidens repository på{" "}
                         <a href="https://github.com/Morsby/au-medicin-mcq">
                             GitHub
-                        </a>.
-                    </p>
-                    <h2>Privatliv og cookies</h2>
-                    <p>
-                        Siden benytter open source tracking i form af Matomo.
-                        Denne er indstillet til at respektere browser-opt-out,
-                        ikke at sætte cookies og at anonymisere IP-adresser. Det
-                        vil sige, at du er fuldstændig anonym. Data gemmes i min
-                        egen database og deles ikke. Data bruges til at skabe et
-                        (dermed underestimeret) overslag over brugen af siden.
-                    </p>
-                    <p>
-                        Siden benytter ingen cookies, med mindre du opretter en
-                        bruger og logger ind. I dette tilfælde sættes en cookie,
-                        der husker, at du er logget ind til næste gang.
+                        </a>
+                        .
                     </p>
                 </Container>
                 <Footer />
