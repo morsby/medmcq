@@ -75,12 +75,22 @@ class Question extends Component {
         // If not already answered:
         if (!questions[qn].answer) {
             // Call answerQuestion action with id (passed from parent) and answer
+
+            let truthy;
+            if (Array.isArray(questions[qn].correctAnswer)) {
+                truthy = questions[qn].correctAnswer.includes(answer)
+                    ? true
+                    : false;
+            } else {
+                truthy = questions[qn].correctAnswer === answer;
+            }
+
             answerQuestion(
                 questions[qn]._id,
                 answer,
                 {
                     qn: qn,
-                    correct: questions[qn].correctAnswer === answer
+                    correct: truthy
                 },
                 questions[qn].semester,
                 user

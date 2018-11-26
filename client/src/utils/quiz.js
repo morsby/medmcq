@@ -64,7 +64,12 @@ export const smoothScroll = (h, dir = "up") => {
 
 export const evalAnswer = (question, answer) => {
     if (!question.answer) return; // hvis ikke svaret
-    if (answer === question.correctAnswer) return "green"; // hvis korrekt svar
+
+    if (Array.isArray(question.correctAnswer)) {
+        if (question.correctAnswer.includes(answer)) return "green";
+    } else {
+        if (answer === question.correctAnswer) return "green"; // hvis korrekt svar
+    }
     if (answer === question.answer) return "red"; // hvis forkert svar
     return "grey"; // ikke valgt mulighed
 };

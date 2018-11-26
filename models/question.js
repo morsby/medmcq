@@ -9,7 +9,7 @@ var QuestionSchema = new Schema({
     answer1: String,
     answer2: String,
     answer3: String,
-    correctAnswer: Number,
+    correctAnswer: {},
 
     // Metadata, til filtrering
     semester: Number, // hvilket kandidatsemester?

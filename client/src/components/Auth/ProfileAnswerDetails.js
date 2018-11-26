@@ -21,7 +21,7 @@ class ProfileAnswerDetails extends Component {
             ids = summary[this.state.filter];
         }
 
-        this.props.getQuestions("random", ids);
+        this.props.getQuestions({ type: "ids" }, ids);
         this.props.history.push("/quiz");
     };
 
@@ -128,7 +128,8 @@ class ProfileAnswerDetails extends Component {
                                                     q.userAnswers.wrong)) *
                                                 100,
                                             2
-                                        )}%
+                                        )}
+                                        %
                                     </Table.Cell>
                                 </Table.Row>
                             );

@@ -26,10 +26,19 @@ const QuizSummary = ({ questions, answers, clickHandler }) => {
                         <List ordered>
                             {questions.map((q, index) => {
                                 let svar;
-                                if (q.answer && q.answer === q.correctAnswer)
+                                if (
+                                    q.answer &&
+                                    (q.answer === q.correctAnswer ||
+                                        (Array.isArray(q.correctAnswer) &&
+                                            q.correctAnswer.includes(q.answer)))
+                                ) {
                                     svar = "svar-korrekt";
-                                if (q.answer && q.answer !== q.correctAnswer)
+                                } else if (
+                                    q.answer &&
+                                    q.answer !== q.correctAnswer
+                                ) {
                                     svar = "svar-forkert";
+                                }
                                 return (
                                     <List.Item
                                         as="a"
