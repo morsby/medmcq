@@ -96,7 +96,7 @@ module.exports = app => {
         });
     });
 
-    // POST: Nyt spørgsmål
+    /*// POST: Nyt spørgsmål
     app.post("/api/questions", upload.single("image"), function(req, res) {
         var question = new Question();
 
@@ -139,7 +139,7 @@ module.exports = app => {
                 })
                 .end(req.file.buffer);
         }
-    });
+    }); */
 
     // PUT: Opdater et spørgsmål
     //app.put("/api/questions/:id", permit("admin"), (req, res) => { }

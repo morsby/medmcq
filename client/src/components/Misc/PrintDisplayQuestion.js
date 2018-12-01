@@ -3,8 +3,6 @@ import marked from "marked";
 import { imageURL } from "../../utils/common";
 import { subSupScript } from "../../utils/quiz";
 
-// TODO: Lad correctAnswer være et array!
-
 const PrintDisplayQuestion = props => {
     let {
             question,

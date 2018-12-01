@@ -87,7 +87,6 @@ class Question extends Component {
     }
 
     onAnswer(answer) {
-        // TODO: Lad correctAnswer være et array!
         let { answerQuestion, questions, qn, user } = this.props;
 
         // If not already answered:

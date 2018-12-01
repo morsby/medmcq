@@ -8,8 +8,6 @@ import { Container, Button } from "semantic-ui-react";
 import Header from "../Misc/Header";
 import PrintDisplayQuestion from "./PrintDisplayQuestion";
 
-// TODO: Tillad valg af spørgsmål herfra (inkl. alle spørgsmål)
-
 class Print extends Component {
     state = { showCorrect: false };
 
