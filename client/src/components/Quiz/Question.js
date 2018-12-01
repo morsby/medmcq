@@ -13,15 +13,22 @@ import {
     Dimmer,
     Loader,
     Segment,
+    Button,
     Responsive
 } from "semantic-ui-react";
 
 import QuestionAnswerButtons from "./QuestionAnswerButtons";
 import QuestionImage from "./QuestionImage";
 import QuestionMetadata from "./QuestionMetadata";
+import QuestionComments from "./QuestionComments";
 
 class Question extends Component {
-    state = { imgOpen: false, pristine: true };
+    state = {
+        imgOpen: false,
+        commentsOpen: false,
+        newComment: "",
+        pristine: true
+    };
 
     constructor(props) {
         super(props);
@@ -29,6 +36,9 @@ class Question extends Component {
         this.onKeydown = this.onKeydown.bind(this);
         this.onImgClick = this.onImgClick.bind(this);
         this.onImgClose = this.onImgClose.bind(this);
+        this.onCommentsToggle = this.onCommentsToggle.bind(this);
+        this.onCommentWrite = this.onCommentWrite.bind(this);
+        this.onCommentPost = this.onCommentPost.bind(this);
         this.onAnswer = this.onAnswer.bind(this);
     }
     componentDidMount() {
@@ -43,7 +53,12 @@ class Question extends Component {
     componentWillUpdate(nextProps, nextState) {
         // For at forhindre lightbox i at være åben på tværs af navigationer
         if (this.props.qn !== nextProps.qn) {
-            this.setState({ imgOpen: false, pristine: true });
+            this.setState({
+                imgOpen: false,
+                commentsOpen: false,
+                newComment: "",
+                pristine: true
+            });
             this.mouseMover();
         }
     }
@@ -59,7 +74,10 @@ class Question extends Component {
     }
 
     onKeydown(e) {
-        if (!this.state.imgOpen) {
+        if (
+            !this.state.imgOpen &&
+            document.activeElement.tagName !== "TEXTAREA"
+        ) {
             let answer = Number(e.key),
                 keys = [1, 2, 3];
             if (keys.includes(answer)) {
@@ -106,9 +124,31 @@ class Question extends Component {
         this.setState({ imgOpen: true });
     }
 
+    onCommentsToggle() {
+        this.setState(prevState => {
+            return { commentsOpen: !prevState.commentsOpen };
+        });
+    }
+
+    onCommentWrite(e, { value }) {
+        this.setState({ newComment: value });
+    }
+
+    onCommentPost() {
+        if (this.state.newComment.length >= 3) {
+            this.props.commentQuestion(
+                this.props.questions[this.props.qn]._id,
+                this.state.newComment
+            );
+            this.setState({ newComment: "" });
+        }
+    }
+
     render() {
         let question = this.props.questions[this.props.qn],
-            text = subSupScript(question.question);
+            text = subSupScript(question.question),
+            user = this.props.user;
+
         if (!this.props.questions.length > 0)
             return (
                 <Dimmer active page>
@@ -166,6 +206,20 @@ class Question extends Component {
                     </Responsive>
                     <Divider />
                     <QuestionMetadata question={question} />
+
+                    <Button basic onClick={this.onCommentsToggle}>
+                        {this.state.commentsOpen ? "Skjul" : "Vis"} kommentarer
+                        ({question.comments.length})
+                    </Button>
+                    {this.state.commentsOpen && (
+                        <QuestionComments
+                            comments={question.comments}
+                            value={this.state.newComment}
+                            onCommentWrite={this.onCommentWrite}
+                            onCommentPost={this.onCommentPost}
+                            isLoggedIn={user}
+                        />
+                    )}
                 </Segment>
                 <Divider hidden />
             </Container>

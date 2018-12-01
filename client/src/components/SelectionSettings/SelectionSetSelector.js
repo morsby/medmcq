@@ -14,6 +14,7 @@ const radioGenerator = (
     onChange
 ) => {
     let missing = "";
+
     if (answeredQuestions) {
         let missingQuestions = _.difference(
             getIds(groupedQuestions[set.api]),

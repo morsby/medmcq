@@ -1,26 +1,33 @@
-import * as types from '../actions/types';
-import _ from 'lodash';
+import * as types from "../actions/types";
+import _ from "lodash";
 
 export default function(state = [], action) {
-	switch (action.type) {
-		case types.FETCH_QUESTIONS:
-			let questions = action.payload;
-			// Shuffle questions if not in set
-			if (
-				action.questionType === 'specialer' ||
-				action.questionType === 'random'
-			) {
-				questions = _.shuffle(questions);
-			}
-			return questions || false;
-		case types.ANSWER_QUESTION:
-			let newState = [...state];
+    let newState, q;
+    switch (action.type) {
+    case types.FETCH_QUESTIONS:
+        let questions = action.payload;
+        // Shuffle questions if not in set
+        if (
+            action.questionType === "specialer" ||
+                action.questionType === "random"
+        ) {
+            questions = _.shuffle(questions);
+        }
+        return questions || false;
+    case types.ANSWER_QUESTION:
+        newState = [...state];
 
-			let q = _.findIndex(newState, { _id: action.payload.id });
-			newState[q].answer = action.payload.answer;
-			return newState;
+        q = _.findIndex(newState, { _id: action.payload.id });
+        newState[q].answer = action.payload.answer;
+        return newState;
+    case types.QUESTION_COMMENT:
+        let { _id, comments } = action.payload.question;
 
-		default:
-			return state;
-	}
+        newState = [...state];
+        q = _.findIndex(newState, { _id });
+        newState[q].comments = comments;
+        return newState;
+    default:
+        return state;
+    }
 }

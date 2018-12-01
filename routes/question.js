@@ -86,6 +86,16 @@ module.exports = app => {
         });
     });
 
+    // POST: hent bestemt spørgsmål (skal være post af hensyn til URL-længde)
+    app.post("/api/questions/ids/", (req, res) => {
+        let ids = req.body.ids;
+        Question.find({ _id: { $in: ids } }, (err, question) => {
+            if (err) res.send(err);
+
+            res.json(question);
+        });
+    });
+
     // POST: Nyt spørgsmål
     app.post("/api/questions", upload.single("image"), function(req, res) {
         var question = new Question();
@@ -132,19 +142,49 @@ module.exports = app => {
     });
 
     // PUT: Opdater et spørgsmål
-    app.put("/api/questions/:id", permit("admin"), (req, res) => {
-        Question.findById(req.params.id, (err, question) => {
-            if (err) res.send(err);
+    //app.put("/api/questions/:id", permit("admin"), (req, res) => { }
 
-            // Opdater spørgsmålet
-            // fx question.question = req.params.question;
-
-            question.save(err => {
+    // PUT: kommentar
+    app.put("/api/questions/:id/comment", (req, res) => {
+        if (!req.user) {
+            res.status(403);
+            res.send("Not logged in");
+        } else {
+            let id = req.params.id;
+            Question.findById(id, (err, question) => {
                 if (err) res.send(err);
 
-                res.json({ message: "Spørgsmålet er opdateret!" });
+                // Opdater spørgsmålet
+                // fx question.question = req.params.question;
+                if (!Array.isArray(question.comments)) question.comments = [];
+
+                let comment = { ...req.body, user: req.user.username };
+                question.comments.push(comment);
+                console.log(question);
+
+                question.save(err => {
+                    if (err) res.send(err);
+
+                    User.findById(req.user._id, (err, user) => {
+                        if (err) return res.send({ type: "error", data: err });
+                        if (!Array.isArray(user.comments)) user.comments = [];
+
+                        if (user.comments.indexOf(id) === -1) {
+                            user.comments.push(id);
+
+                            user.save(err => {
+                                if (err) res.send(err);
+                            });
+                        }
+                    });
+
+                    res.json({
+                        message: "Kommentaren er tilføjet!",
+                        question
+                    });
+                });
             });
-        });
+        }
     });
 
     // DELETE: Slet et spørgsmål

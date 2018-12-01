@@ -25,7 +25,9 @@ export const getQuestions = (settings, selection) => async dispatch => {
             `/api/set/${selection.semester}/${selection.set}`
         );
     } else if (type === "ids") {
-        res = await axios.get(`/api/questions/${selection.join(",")}`);
+        res = await axios.post("/api/questions/ids", {
+            ids: selection
+        });
     }
     dispatch({
         type: types.FETCH_QUESTIONS,
@@ -69,4 +71,11 @@ export const postQuestion = post => async dispatch => {
 
     const res = await axios.post("/api/questions", formData);
     dispatch({ type: types.POST_QUESTION, payload: res.data });
+};
+
+export const commentQuestion = (id, comment) => async dispatch => {
+    const res = await axios.put(`/api/questions/${id}/comment`, {
+        comment
+    });
+    dispatch({ type: types.QUESTION_COMMENT, payload: res.data });
 };

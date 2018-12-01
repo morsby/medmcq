@@ -54,7 +54,12 @@ class Profile extends Component {
         this.props.history.push(urls[path]);
     };
 
-    generateTabContent = performance => {
+    startQuiz = ids => {
+        this.props.getQuestions({ type: "ids" }, ids);
+        this.handleNavigation("quiz");
+    };
+
+    generateTabContent = (performance, user) => {
         let totalAnswers = Object.keys(performance.answeredQuestions).length,
             { allRight, allWrong, mixed } = performance.summary;
         return (
@@ -82,6 +87,16 @@ class Profile extends Component {
                     </List>
                 </div>
                 <Divider hidden />
+                <p>
+                    Du har kommenteret på {user.comments.length} spørgsmål.{" "}
+                    <a
+                        className="click"
+                        onClick={() => this.startQuiz(user.comments)}
+                    >
+                        Se om der er kommet nye kommentarer på disse spørgsmål.
+                    </a>
+                </p>
+                <Divider hidden />
                 <Button
                     onClick={this.toggleDetails}
                     disabled={totalAnswers === 0}
@@ -100,7 +115,9 @@ class Profile extends Component {
             panes.push({
                 menuItem: `${e}. semester`,
                 render: () => (
-                    <Tab.Pane>{this.generateTabContent(performance)}</Tab.Pane>
+                    <Tab.Pane>
+                        {this.generateTabContent(performance, user)}
+                    </Tab.Pane>
                 )
             })
         );
@@ -136,6 +153,7 @@ class Profile extends Component {
                         activeIndex={this.state.activeTab}
                         onTabChange={this.handleTabChange}
                     />
+
                     {this.state.details && (
                         <ProfileAnswerDetails
                             performance={performance}

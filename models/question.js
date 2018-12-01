@@ -26,7 +26,14 @@ var QuestionSchema = new Schema({
         }
     ],
     image: String,
-    image_id: String
+    image_id: String,
+    comments: [
+        {
+            user: String,
+            date: { type: Date, default: Date.now },
+            comment: String
+        }
+    ]
 });
 
 QuestionSchema.plugin(random);
