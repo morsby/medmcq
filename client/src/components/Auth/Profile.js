@@ -89,12 +89,15 @@ class Profile extends Component {
                 <Divider hidden />
                 <p>
                     Du har kommenteret på {user.comments.length} spørgsmål.{" "}
-                    <a
-                        className="click"
-                        onClick={() => this.startQuiz(user.comments)}
-                    >
-                        Se om der er kommet nye kommentarer på disse spørgsmål.
-                    </a>
+                    {user.comments.length > 0 && (
+                        <a
+                            className="click"
+                            onClick={() => this.startQuiz(user.comments)}
+                        >
+                            Se om der er kommet nye kommentarer på disse
+                            spørgsmål.
+                        </a>
+                    )}
                 </p>
                 <Divider hidden />
                 <Button

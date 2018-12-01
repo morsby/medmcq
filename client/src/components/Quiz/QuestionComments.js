@@ -49,6 +49,9 @@ export default ({
                         onChange={onCommentWrite}
                         value={value}
                     />
+                    <Message info>
+                        At skrive en kommentar vise dit brugernavn offentligt.
+                    </Message>
                     <Button
                         onClick={onCommentPost}
                         disabled={value.length < 3}
