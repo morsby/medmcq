@@ -18,7 +18,7 @@ I `/client` findes React-layoutet, der henter data fra api'en og viser spørgsm�
 
 ### React
 
-- [ ] **Ca. 10% af besvarede spørgsmål bliver ikke registreret i profilen**
+- [ ] **Ca. 10% af besvarede spørgsmål bliver ikke registreret i profilen?**
 - [ ] Hent settings på load
 - [ ] Fix gammel SelectQuestions-funktion (utils/quiz)
 - [ ] Lad buttons tage html input

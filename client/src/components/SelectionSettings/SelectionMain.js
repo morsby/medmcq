@@ -202,6 +202,24 @@ class SelectionMain extends Component {
                             Fortsæt med igangværende spørgsmål
                         </Button>
                     )}
+                    {user && (
+                        <Message warning>
+                            <Message.Header>Lidt ustabilitet...</Message.Header>
+                            <p>
+                                Der er desværre lidt ustabilitet i den funktion,
+                                der gemmer hvilke spørgsmål, du har besvaret
+                                (... eller i hvert fald burde gøre det). Så hvis
+                                du kører fulde eksamenssæt, må du foreløbig selv
+                                holde styr på, hvilke sæt, du har besvaret. Det
+                                betyder desværre også, at funktionen "
+                                <em>
+                                    Giv mig kun spørgsmål, jeg ikke har svaret
+                                    på tidligere
+                                </em>
+                                " ikke helt holder det, den lover.
+                            </p>
+                        </Message>
+                    )}
                 </Container>
                 <Footer />
             </div>
