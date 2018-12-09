@@ -18,6 +18,7 @@ I `/client` findes React-layoutet, der henter data fra api'en og viser spørgsm�
 
 ### React
 
+- [ ] **Ca. 10% af besvarede spørgsmål bliver ikke registreret i profilen**
 - [ ] Hent settings på load
 - [ ] Fix gammel SelectQuestions-funktion (utils/quiz)
 - [ ] Lad buttons tage html input
@@ -36,3 +37,4 @@ I `/client` findes React-layoutet, der henter data fra api'en og viser spørgsm�
 - [ ] Udvikling af algoritme, så "tilfældige spørgsmål" fortrinsvist tager spørgsmål, der er svaret forkert tidligere/ikke tidligere besvaret
 - [ ] Mulighed for at tilføje/ændre specialer
 - [ ] Mulighed for rettelse af spørgsmål
+- [ ] Mulighed for tilføjelse af personlige kommentarer

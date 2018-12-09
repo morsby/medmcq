@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import marked from "marked";
 import { Form, TextArea, Button, Comment, Message } from "semantic-ui-react";
 
@@ -50,7 +50,8 @@ export default ({
                         value={value}
                     />
                     <Message info>
-                        At skrive en kommentar vise dit brugernavn offentligt.
+                        At skrive en kommentar vil vise dit brugernavn
+                        offentligt.
                     </Message>
                     <Button
                         onClick={onCommentPost}
