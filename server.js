@@ -15,6 +15,7 @@ if (process.env.NODE_ENV === "production") {
 }
 // Database
 const mongoose = require("mongoose");
+mongoose.set("useCreateIndex", true);
 mongoose.connect(
     keys.mongoURI,
     { useNewUrlParser: true }
