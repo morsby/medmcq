@@ -2,29 +2,43 @@ import axios from "axios";
 import * as types from "./types";
 
 export const getQuestions = (settings, selection) => async dispatch => {
-    let { type, semester, specialer, n, onlyNew } = settings;
+    let { type, semester, specialer, n, onlyNew, set } = settings;
     dispatch({ type: types.IS_FETCHING });
     let res = { data: [] };
 
-    if ((type === "random" || type === "specialer") && selection.length > 0) {
-        // Selection er et array af id'er
-        let querySpecialer = "",
-            unique = "";
-        if (type === "specialer") {
-            querySpecialer = "&specialer=" + specialer.join(",");
+    // Hvis der ikke bedes om helt specifikke spørgsmål
+    if (type !== "ids") {
+        // Bedes der om et eksamenssæt?
+        if (type === "set") {
+            set = set.split("/");
+
+            res = await axios.get(
+                `/api/questions?semester=${semester}&examYear=${
+                    set[0]
+                }&examSeason=${set[1]}`
+            );
+        } else if (
+            // Bedes der om tilfældige spørgsmål (evt. inden for et/flere speciale(r)?)
+            (type === "random" || type === "specialer") &&
+            selection.length > 0
+        ) {
+            // Lav tomme strings til API-request
+            let querySpecialer = "",
+                unique = "";
+
+            // Spcialeønsker? Lav det til en streng!
+            if (type === "specialer") {
+                querySpecialer = "&specialer=" + specialer.join(",");
+            }
+
+            // Nye spørgsmål? lav det til en streng!
+            if (onlyNew) unique = "&unique=t";
+
+            res = await axios.get(
+                `/api/questions?semester=${semester}&n=${n}${querySpecialer}${unique}`
+            );
         }
-
-        if (onlyNew) unique = "&unique=t";
-
-        res = await axios.get(
-            `/api/questions/random?semester=${semester}&n=${n}${querySpecialer}${unique}`
-        );
-    } else if (type === "set") {
-        // Selection er settings-props fra SelectionMain
-        res = await axios.get(
-            `/api/set/${selection.semester}/${selection.set}`
-        );
-    } else if (type === "ids") {
+    } else {
         res = await axios.post("/api/questions/ids", {
             ids: selection
         });

@@ -21,58 +21,88 @@ cloudinary.config({
 const Question = require("../models/question.js");
 const User = require("../models/user.js");
 
+// TODO: Før statistik over get("/api/questions"), post("/api/questions/ids/"), post("/api/questions/answer")
+
 module.exports = app => {
-    // GET: questions
+    // GET: spørgsmål
     app.get("/api/questions", (req, res) => {
-        Question.find(function(err, questions) {
-            if (err) res.send(err);
+        let {
+            n,
+            specialer,
+            unique,
+            semester,
+            examSeason,
+            examYear
+        } = req.query;
 
-            res.json(questions);
-        });
-    });
+        // Hent alle spørgsmål hvis der ikke er query params
+        if (!n && !semester) {
+            Question.find(function(err, questions) {
+                if (err) res.send(err);
 
-    // GET: tilfældige spørgsmål
-    app.get("/api/questions/random", (req, res) => {
-        let { n, specialer, unique, semester } = req.query;
-
-        let answeredQuestions = [];
-
-        if (req.user && unique) {
-            let userAnsweredQuestions = req.user.answeredQuestions;
-            _.map(userAnsweredQuestions, s =>
-                answeredQuestions.push(Object.keys(s))
-            );
-            answeredQuestions = _.flatten(answeredQuestions);
-        }
-
-        let filter = {
-            _id: { $nin: answeredQuestions },
-            semester: { $eq: semester }
-        };
-
-        if (specialer) {
-            filter.specialty = { $in: specialer.split(",") };
-        }
-
-        Question.findRandom(filter, {}, { limit: n }, (err, questions) => {
-            if (err) res.send(err);
-
-            if (!questions) {
-                let filter2 = { ...filter };
-                delete filter2._id;
-                Question.findRandom(
-                    filter2,
-                    {},
-                    { limit: n },
-                    (err, questions) => {
-                        if (err) res.send(err);
-                        res.json(questions);
-                    }
-                );
-            } else {
                 res.json(questions);
+            });
+        } else if (semester && examSeason && examYear) {
+            console.log(examSeason, examYear);
+            Question.find({
+                semester: semester,
+                examYear: examYear,
+                examSeason: examSeason
+            })
+                .sort("n")
+                .exec((err, questions) => {
+                    if (err) res.send(err);
+                    res.json(questions);
+                });
+        } else {
+            // Er der krav til spørgsmål?
+
+            // Er der ikke givet ønske om antal? Så hent max 9999 spørgsmål
+            if (!n) n = 9999;
+
+            let answeredQuestions = [];
+            // Hvis logget ind OG beder om "kun nye spørgsmål"
+            if (req.user && unique) {
+                let userAnsweredQuestions = req.user.answeredQuestions;
+                _.map(userAnsweredQuestions, s =>
+                    answeredQuestions.push(Object.keys(s))
+                );
+                answeredQuestions = _.flatten(answeredQuestions);
             }
-        });
+
+            // Mongoose filter
+            let filter = {
+                _id: { $nin: answeredQuestions },
+                semester: { $eq: semester }
+            };
+
+            if (specialer) {
+                filter.specialty = { $in: specialer.split(",") };
+            }
+
+            // Find spørgsmål baseret på filteret
+            Question.findRandom(filter, {}, { limit: n }, (err, questions) => {
+                if (err) res.send(err);
+
+                // Hvis der ikke er nogen spørgsmål ud fra filteret
+                // (pga. alle spørgsmål der opfylder kriterierne ER besvarede)
+                if (!questions) {
+                    let filter2 = { ...filter };
+                    delete filter2._id;
+                    Question.findRandom(
+                        filter2,
+                        {},
+                        { limit: n },
+                        (err, questions) => {
+                            if (err) res.send(err);
+                            res.json(questions);
+                        }
+                    );
+                } else {
+                    res.json(questions);
+                }
+            });
+        }
     });
 
     // GET: bestemt spørgsmål
@@ -96,6 +126,7 @@ module.exports = app => {
         });
     });
 
+    // Bliver p.t. ikke brugt, da spørgsmål tilføjes direkte til databasen
     /*// POST: Nyt spørgsmål
     app.post("/api/questions", upload.single("image"), function(req, res) {
         var question = new Question();
@@ -196,50 +227,6 @@ module.exports = app => {
         });
     });
 
-    // GET: alle spørgsmål fra et semester
-    app.get("/api/set/:semester", (req, res) => {
-        Question.find(
-            {
-                semester: req.params.semester
-            },
-            (err, questions) => {
-                if (err) res.send(err);
-
-                res.json(questions);
-            }
-        );
-    });
-
-    // GET: alle spørgsmål fra et bestemt sæt
-    app.get("/api/set/:semester/:examYear/:examSeason", (req, res) => {
-        Question.find({
-            semester: req.params.semester,
-            examYear: req.params.examYear,
-            examSeason: req.params.examSeason
-        })
-            .sort("n")
-            .exec((err, questions) => {
-                if (err) res.send(err);
-                res.json(questions);
-            });
-    });
-
-    // GET: alle inden for hvert speciale
-    app.get("/api/speciale/:semester/:specialty", (req, res) => {
-        let specialties = req.params.specialty.split(",");
-        let n = Number(req.query.n) || 0;
-        Question.find({
-            semester: req.params.semester,
-            specialty: { $in: specialties }
-        })
-            .limit(n)
-            .exec((err, questions) => {
-                if (err) res.send(err);
-
-                res.json(questions);
-            });
-    });
-
     /**
      * ======================================================================
      * Fanger kun antal spørgsmål og fordeling af Specialer samt eksamenssæt
@@ -247,52 +234,9 @@ module.exports = app => {
      */
 
     // GET antal på semesteret
+    // Bruges på quiz-vælger-siden til at vise hvor mange spørgsmål der er for hvert semester
     app.get("/api/count/:semester", (req, res) => {
         Question.find({ semester: req.params.semester })
-            .select(["specialty", "examSeason", "examYear"])
-            .exec((err, questions) => {
-                if (err) res.send(err);
-
-                res.json(questions);
-            });
-    });
-
-    // GET de enkelte sæt på semesteret
-    app.get("/api/count/sets/:semester", (req, res) => {
-        /*Question.aggregate(
-			[
-				{ $match: { semester: Number(req.params.semester) } },
-				{
-					$project: {
-						eksamensdato: {
-							$concat: [
-								{ $substrBytes: ['$examYear', 0, 4] },
-								' - ',
-								'$examSeason'
-							]
-						}
-					}
-				}
-			],*/
-        Question.find(
-            { semester: req.params.semester },
-            "-_id examSeason examYear",
-            (err, questions) => {
-                if (err) res.send(err);
-
-                let unique = uniqWith(questions, isEqual);
-
-                res.json(unique);
-            }
-        );
-    });
-
-    // GET antal på semesteret og speciale
-    app.get("/api/count/:semester/:specialty", (req, res) => {
-        Question.find({
-            semester: req.params.semester,
-            specialty: req.params.specialty
-        })
             .select(["specialty", "examSeason", "examYear"])
             .exec((err, questions) => {
                 if (err) res.send(err);
