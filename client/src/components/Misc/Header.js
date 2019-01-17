@@ -24,14 +24,19 @@ class Header extends Component {
 
         if (user) {
             højreMenu = (
+                <>
                 <Menu.Item>
                     <strong>Velkommen {user.username}</strong>
+                </Menu.Item>
+                <Menu.Item>
                     <Button
+                        basic inverted
                         onClick={() => handleClick("profile")}
                         className="click">
                         Profil
                     </Button>
                 </Menu.Item>
+                </>
             );
         } else {
             højreMenu = (
@@ -44,14 +49,16 @@ class Header extends Component {
         let printClass = noPrint ? "hide-on-print" : "";
 
         return (
-            <Menu icon='labeled' inverted color='blue'>
-                <Menu.Item onClick={() => handleClick("root")}>
-                    <Icon name='home' size='big'/> Forside
-                </Menu.Item>
-                <Menu.Menu position='right'>
-                    {højreMenu}
-                </Menu.Menu>
-            </Menu>
+            <header>
+                <Menu inverted color='blue'>
+                    <Menu.Item onClick={() => handleClick("root")}>
+                        <Icon name='home' size='big'/> Forside
+                    </Menu.Item>
+                    <Menu.Menu position='right'>
+                        {højreMenu}
+                    </Menu.Menu>
+                </Menu>
+            </header>
         );
     }
 }

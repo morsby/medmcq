@@ -57,6 +57,15 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
                         onChange={onChange}
                     />
                 </Form.Field>
+                <Form.Field>
+                    <input
+                        label="Anden værdi"
+                        name="n"
+                        type='text'
+                        value={n}
+                        onChange={onChange}
+                    />
+                </Form.Field>
             </Form.Group>
 
             <div>Der er {total} spørgsmål for det valgte semester.</div>

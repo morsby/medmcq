@@ -62,10 +62,9 @@ class QuizMain extends Component {
         smoothScroll();
     }
 
-    swipeChecker(e, deltaX, deltaY, isFlick, velocity) {
-        console.log("You Swiped...", e, deltaX, deltaY, isFlick, velocity)
-      }
-
+    // swipeChecker(e, deltaX, deltaY, isFlick, velocity) {
+    //     console.log("You Swiped...", e, deltaX, deltaY, isFlick, velocity)
+    //   }
 
     navigateToPage(path) {
         this.props.history.push(urls[path]);
@@ -120,7 +119,7 @@ class QuizMain extends Component {
                         onSwipedLeft={this.swiped}
                         onSwipedRight={this.swiped}
                         flickThreshold={flickNumber}
-                        onSwiped={this.swipeChecker}
+                        // onSwiped={this.swipeChecker}
                     >
                         <Question qn={qn} questions={questions} user={user} />
                     </Swipeable>

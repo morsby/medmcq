@@ -37,7 +37,10 @@ class SelectionMain extends Component {
     }
     
     componentDidMount() {
-        
+        // TODO: Hvis personen første gang loader siden uden et gemt state
+        // vil der ikke være nogen spørgsmål før man skifter semester.
+        // det skal altså hentes på første load (eventuelt bare 7. semester
+        // for at gøre det nemt)
     }
 
     onSettingsChange(e, { name, value }) {
@@ -185,7 +188,6 @@ class SelectionMain extends Component {
                             onChange={this.onSettingsChange}
                         />
                     )}
-                    <Divider hidden />
 
                     {this.state.err.length > 0 && (
                         <Message negative>
