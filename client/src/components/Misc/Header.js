@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import * as actions from "../../actions";
 
 import { withRouter } from "react-router";
-import { Container, Button } from "semantic-ui-react";
+import { Button, Menu, Icon } from "semantic-ui-react";
 import { urls } from "../../utils/common";
 
 // TODO: Evt. fjern connect - men skal så modtage `user` via parents
@@ -20,41 +20,38 @@ class Header extends Component {
             history.push(urls[path]);
         };
 
-        let text;
+        let højreMenu;
+
         if (user) {
-            text = (
-                <div>
-                    Velkommen,{" "}
-                    <strong
+            højreMenu = (
+                <Menu.Item>
+                    <strong>Velkommen {user.username}</strong>
+                    <Button
                         onClick={() => handleClick("profile")}
-                        className="click"
-                    >
-                        {user.username}
-                    </strong>.
-                </div>
+                        className="click">
+                        Profil
+                    </Button>
+                </Menu.Item>
             );
         } else {
-            text = (
-                <Button onClick={() => handleClick("login")}>Log ind</Button>
+            højreMenu = (
+                <Menu.Item>
+                    <Icon name='user md' onClick={() => handleClick("login")} /> Log ind
+                </Menu.Item>
             );
         }
 
         let printClass = noPrint ? "hide-on-print" : "";
 
         return (
-            <header className={`main-header ${printClass}`}>
-                <Container>
-                    <div className="header-text">{text}</div>
-                    {location.pathname !== "/" && (
-                        <Button
-                            floated="right"
-                            onClick={() => handleClick("root")}
-                        >
-                            Gå til forsiden
-                        </Button>
-                    )}
-                </Container>
-            </header>
+            <Menu icon='labeled' inverted color='blue'>
+                <Menu.Item onClick={() => handleClick("root")}>
+                    <Icon name='home' size='big'/> Forside
+                </Menu.Item>
+                <Menu.Menu position='right'>
+                    {højreMenu}
+                </Menu.Menu>
+            </Menu>
         );
     }
 }

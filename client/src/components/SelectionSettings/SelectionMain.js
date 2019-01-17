@@ -35,6 +35,10 @@ class SelectionMain extends Component {
         this.onSettingsChange = this.onSettingsChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
+    
+    componentDidMount() {
+        
+    }
 
     onSettingsChange(e, { name, value }) {
         this.setState({ err: [] });

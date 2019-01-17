@@ -42,6 +42,7 @@ import Print from "./components/Misc/Print";
 import { urls } from "./utils/common";
 
 import "./styles/css/main.css";
+import './semantic/dist/semantic.min.css'
 
 const persistConfig = {
     key: "root",

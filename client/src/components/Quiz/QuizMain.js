@@ -7,12 +7,15 @@ import QuizLoader from "./QuizLoader";
 import Question from "./Question";
 import QuizNavigator from "./QuizNavigator";
 import QuizSummary from "./QuizSummary";
-import QuizFooter from "./QuizFooter";
 
 import Footer from "../Misc/Footer";
 
 import { selectQuestions, smoothScroll } from "../../utils/quiz";
 import { urls } from "../../utils/common";
+import Header from "../Misc/Header";
+
+const flickNumber = 0.1;
+
 
 class QuizMain extends Component {
     state = { qn: 0 };
@@ -39,6 +42,8 @@ class QuizMain extends Component {
     }
 
     onKeydown(e) {
+        // TODO: HER SKAL TILFØJES AT HVIS COMMENT BOX ER AKTIV, SKAL IF IKKE KØRE = ARROWKEYS LÅSES.
+
         // Navigation
         let qn = this.state.qn,
             max = this.props.questions.length;
@@ -57,6 +62,11 @@ class QuizMain extends Component {
         smoothScroll();
     }
 
+    swipeChecker(e, deltaX, deltaY, isFlick, velocity) {
+        console.log("You Swiped...", e, deltaX, deltaY, isFlick, velocity)
+      }
+
+
     navigateToPage(path) {
         this.props.history.push(urls[path]);
     }
@@ -72,10 +82,10 @@ class QuizMain extends Component {
             max = this.props.questions.length,
             move;
 
-        if (deltaX > 0) {
+        if (deltaX > 400) {
             move = this.state.qn + 1;
         }
-        if (deltaX < 0) {
+        if (deltaX < -400) {
             move = this.state.qn - 1;
         }
         if (move >= min && move < max) this.onChangeQuestion(move);
@@ -95,18 +105,22 @@ class QuizMain extends Component {
 
         return (
             <div className="flex-container">
+
+                <Header />
+
                 <div className="content">
                     <QuizNavigator
                         clickHandler={this.onChangeQuestion}
                         qn={qn}
                         qmax={questions.length}
-                        fixed
                         position="top"
                     />
 
                     <Swipeable
                         onSwipedLeft={this.swiped}
                         onSwipedRight={this.swiped}
+                        flickThreshold={flickNumber}
+                        onSwiped={this.swipeChecker}
                     >
                         <Question qn={qn} questions={questions} user={user} />
                     </Swipeable>
@@ -123,7 +137,6 @@ class QuizMain extends Component {
                         clickHandler={this.onChangeQuestion}
                     />
 
-                    <QuizFooter navigateToPage={this.navigateToPage} />
                 </div>
                 <Footer />
             </div>

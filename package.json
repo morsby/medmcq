@@ -40,6 +40,7 @@
         "sanitize-html": "^1.18.4"
     },
     "devDependencies": {
-        "concurrently": "^3.6.1"
+        "concurrently": "^3.6.1",
+        "nodemon": "^1.18.9"
     }
 }
