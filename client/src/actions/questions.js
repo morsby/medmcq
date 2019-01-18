@@ -2,33 +2,47 @@ import axios from "axios";
 import * as types from "./types";
 
 export const getQuestions = (settings, selection) => async dispatch => {
-    let { type, semester, specialer, n, onlyNew } = settings;
+    let { type, semester, specialer, n, onlyNew, set } = settings;
     dispatch({ type: types.IS_FETCHING });
     let res = { data: [] };
 
-    if ((type === "random" || type === "specialer") && selection.length > 0) {
-        // Selection er et array af id'er
-        let querySpecialer = "",
-            unique = "";
-        if (type === "specialer") {
-            querySpecialer = "&specialer=" + specialer.join(",");
-        }
+    // Hvilke spøgsmål bedes der om?
+    switch (type) {
+        case "ids":
+            res = await axios.post("/api/questions/ids", {
+                ids: selection
+            });
+            break;
+        case "set":
+            set = set.split("/");
 
-        if (onlyNew) unique = "&unique=t";
+            res = await axios.get(
+                `/api/questions?semester=${semester}&examYear=${
+                    set[0]
+                }&examSeason=${set[1]}`
+            );
+            break;
+        case "random":
+        case "specialer":
+            if (selection.length === 0) break;
+            // Lav tomme strings til API-request
+            let querySpecialer = "",
+                unique = "";
 
-        res = await axios.get(
-            `/api/questions/random?semester=${semester}&n=${n}${querySpecialer}${unique}`
-        );
-    } else if (type === "set") {
-        // Selection er settings-props fra SelectionMain
-        res = await axios.get(
-            `/api/set/${selection.semester}/${selection.set}`
-        );
-    } else if (type === "ids") {
-        res = await axios.post("/api/questions/ids", {
-            ids: selection
-        });
+            // Spcialeønsker? Lav det til en streng!
+            if (type === "specialer") {
+                querySpecialer = "&specialer=" + specialer.join(",");
+            }
+
+            // Nye spørgsmål? lav det til en streng!
+            if (onlyNew) unique = "&unique=t";
+
+            // Generer den samlede query-streng
+            res = await axios.get(
+                `/api/questions?semester=${semester}&n=${n}${querySpecialer}${unique}`
+            );
     }
+
     dispatch({
         type: types.FETCH_QUESTIONS,
         payload: res.data,

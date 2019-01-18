@@ -46,6 +46,16 @@ class SelectionMain extends Component {
         }
     }
 
+    componentDidMount() {
+        if(this.props.settings.questions.length === 0) {
+            let name = 'semester';
+            let value = 7;
+            let e = null;
+            
+            this.onSettingsChange(e, { name, value })
+        }
+    }
+
     onSettingsChange(e, { name, value }) {
         this.setState({ err: [] });
         this.props.changeSettings({ type: name, value });
