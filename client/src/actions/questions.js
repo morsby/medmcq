@@ -6,10 +6,14 @@ export const getQuestions = (settings, selection) => async dispatch => {
     dispatch({ type: types.IS_FETCHING });
     let res = { data: [] };
 
-    // Hvis der ikke bedes om helt specifikke spørgsmål
-    if (type !== "ids") {
-        // Bedes der om et eksamenssæt?
-        if (type === "set") {
+    // Hvilke spøgsmål bedes der om?
+    switch (type) {
+        case "ids":
+            res = await axios.post("/api/questions/ids", {
+                ids: selection
+            });
+            break;
+        case "set":
             set = set.split("/");
 
             res = await axios.get(
@@ -17,11 +21,10 @@ export const getQuestions = (settings, selection) => async dispatch => {
                     set[0]
                 }&examSeason=${set[1]}`
             );
-        } else if (
-            // Bedes der om tilfældige spørgsmål (evt. inden for et/flere speciale(r)?)
-            (type === "random" || type === "specialer") &&
-            selection.length > 0
-        ) {
+            break;
+        case "random":
+        case "specialer":
+            if (selection.length === 0) break;
             // Lav tomme strings til API-request
             let querySpecialer = "",
                 unique = "";
@@ -34,15 +37,12 @@ export const getQuestions = (settings, selection) => async dispatch => {
             // Nye spørgsmål? lav det til en streng!
             if (onlyNew) unique = "&unique=t";
 
+            // Generer den samlede query-streng
             res = await axios.get(
                 `/api/questions?semester=${semester}&n=${n}${querySpecialer}${unique}`
             );
-        }
-    } else {
-        res = await axios.post("/api/questions/ids", {
-            ids: selection
-        });
     }
+
     dispatch({
         type: types.FETCH_QUESTIONS,
         payload: res.data,

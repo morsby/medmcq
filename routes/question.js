@@ -35,15 +35,20 @@ module.exports = app => {
             examYear
         } = req.query;
 
-        // Hent alle spørgsmål hvis der ikke er query params
+        /* 
+            Nedenfor er nogle lidt vilde if-else statements.     
+            De omhandler hvilke spørgsmål der ønskes
+        */
+
         if (!n && !semester) {
+            // Hent alle spørgsmål hvis der ikke er query params
             Question.find(function(err, questions) {
                 if (err) res.send(err);
 
                 res.json(questions);
             });
         } else if (semester && examSeason && examYear) {
-            console.log(examSeason, examYear);
+            // Hent det eksamenssæt der bedes om
             Question.find({
                 semester: semester,
                 examYear: examYear,
@@ -55,12 +60,15 @@ module.exports = app => {
                     res.json(questions);
                 });
         } else {
-            // Er der krav til spørgsmål?
+            /* Der ønskes hverken alle spg. eller et sæt; så vi skal udregne
+                hvilke, vi vil have, ud fra diverse parametre
+            */
 
             // Er der ikke givet ønske om antal? Så hent max 9999 spørgsmål
             if (!n) n = 9999;
 
-            let answeredQuestions = [];
+            let answeredQuestions = []; // skal initieres tomt pga. filter
+
             // Hvis logget ind OG beder om "kun nye spørgsmål"
             if (req.user && unique) {
                 let userAnsweredQuestions = req.user.answeredQuestions;
@@ -105,7 +113,7 @@ module.exports = app => {
         }
     });
 
-    // GET: bestemt spørgsmål
+    // GET: bestemte spørgsmål (kan kun håndtere få spg)
     app.get("/api/questions/:id", (req, res) => {
         let ids = req.params.id.split(",");
 
@@ -116,7 +124,8 @@ module.exports = app => {
         });
     });
 
-    // POST: hent bestemt spørgsmål (skal være post af hensyn til URL-længde)
+    // POST: hent bestemt spørgsmål (skal være post af hensyn til URL-længde;)
+    // kan håndtere højt antal spg.
     app.post("/api/questions/ids/", (req, res) => {
         let ids = req.body.ids;
         Question.find({ _id: { $in: ids } }, (err, question) => {
@@ -175,7 +184,7 @@ module.exports = app => {
     // PUT: Opdater et spørgsmål
     //app.put("/api/questions/:id", permit("admin"), (req, res) => { }
 
-    // PUT: kommentar
+    // PUT: kommentar til spørgsmål
     app.put("/api/questions/:id/comment", (req, res) => {
         if (!req.user) {
             res.status(403);
@@ -191,7 +200,6 @@ module.exports = app => {
 
                 let comment = { ...req.body, user: req.user.username };
                 question.comments.push(comment);
-                console.log(question);
 
                 question.save(err => {
                     if (err) res.send(err);
