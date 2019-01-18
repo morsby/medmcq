@@ -4,6 +4,7 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 var LogSchema = new Schema({
+    date: { type: Date, default: Date.now },
     log_type: String, // answer || fetch_question
     fetch_type: String, // set, random, specialty, ids, all
     fetch_semester: Number,
