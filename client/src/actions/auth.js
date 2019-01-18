@@ -50,7 +50,8 @@ export const getAnsweredQuestions = answers => async dispatch => {
 
     if (ids.length > 0) {
         const res = await axios.post("/api/questions/ids", {
-            ids: ids
+            ids: ids,
+            purpose: "profile-stats"
         });
 
         questions = res.data;

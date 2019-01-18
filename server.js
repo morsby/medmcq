@@ -54,6 +54,11 @@ var port = process.env.PORT || 3001; // set our port
 // ROUTES
 var router = express.Router();
 
+// log requests to DB
+const saveReq = require("./middleware/saveReq");
+
+app.use(saveReq);
+
 // more routes for our API will happen here
 require("./routes/question")(app);
 require("./routes/feedback")(app);

@@ -60,6 +60,7 @@ export const answerQuestion = (
     let post = {
         questionId: id,
         answer: correct.correct ? "correct" : "wrong",
+        answerNo: answer,
         semester
     };
     if (user) axios.post("/api/questions/answer", post);
