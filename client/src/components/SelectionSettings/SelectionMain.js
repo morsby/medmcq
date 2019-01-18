@@ -37,10 +37,11 @@ class SelectionMain extends Component {
     }
     
     componentDidMount() {
-        // TODO: Hvis personen første gang loader siden uden et gemt state
-        // vil der ikke være nogen spørgsmål før man skifter semester.
-        // det skal altså hentes på første load (eventuelt bare 7. semester
-        // for at gøre det nemt)
+        let name = 'semester';
+        let value = 7;
+        let e = null;
+        
+        this.onSettingsChange(e, { name, value })
     }
 
     onSettingsChange(e, { name, value }) {

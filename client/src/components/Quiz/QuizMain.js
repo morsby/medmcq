@@ -42,7 +42,7 @@ class QuizMain extends Component {
     }
 
     onKeydown(e) {
-        // TODO: HER SKAL TILFØJES AT HVIS COMMENT BOX ER AKTIV, SKAL IF IKKE KØRE = ARROWKEYS LÅSES.
+        // TODO: DER SKAL TILFØJES AT HVIS COMMENT BOX ER AKTIV, SKAL IF IKKE KØRE = ARROWKEYS LÅSES.
 
         // Navigation
         let qn = this.state.qn,
