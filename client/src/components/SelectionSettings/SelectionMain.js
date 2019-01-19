@@ -46,16 +46,6 @@ class SelectionMain extends Component {
         }
     }
 
-    componentDidMount() {
-        if(this.props.settings.questions.length === 0) {
-            let name = 'semester';
-            let value = 7;
-            let e = null;
-            
-            this.onSettingsChange(e, { name, value })
-        }
-    }
-
     onSettingsChange(e, { name, value }) {
         this.setState({ err: [] });
         this.props.changeSettings({ type: name, value });
@@ -91,6 +81,23 @@ class SelectionMain extends Component {
                 err.push("There are no questions for the selected semester.");
             }
         }
+
+        // // TODO-THOMAS: Er der valgt for mange spørgsmål eller for få?
+        // if (questions.length > 1000) {
+        //     err.push("Du har valgt for mange spørgsmål");
+        //     if (semester === 11) {
+        //         err.push("You have picked too many questions");
+        //     }
+        // }
+
+        
+        // // TODO-THOMAS: Er der valgt for mange spørgsmål eller for få?
+        // if (questions.length < 1) {
+        //     err.push("Antal spørgsmål kan ikke være negativt");
+        //     if (semester === 11) {
+        //         err.push("The number of questions can not be a negative number");
+        //     }
+        // }
 
         // tjek for fejl, start eller ej
         if (err.length === 0) {

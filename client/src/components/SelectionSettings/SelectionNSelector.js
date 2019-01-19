@@ -1,13 +1,19 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { Form, Radio, Checkbox, Divider, Header } from "semantic-ui-react";
+import { Label, Input, Form, Radio, Checkbox, Divider, Header } from "semantic-ui-react";
 
 const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
+
+    let labelError;
+
+    if (n > 1000 || n < 1) 
+    {labelError = <Label pointing='left'>Værdi skal være mellem 1 og 1000</Label>};
+
     return (
         <Form>
             <Header as="h3">Hvor mange spørgsmål vil du have?</Header>
-            <Form.Group>
+            <Form.Group inline>
                 <Form.Field>
                     <Radio
                         label="5"
@@ -16,9 +22,7 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
                         checked={n === 5}
                         onChange={onChange}
                     />
-                    <Divider vertical hidden />
                 </Form.Field>
-
                 <Form.Field>
                     <Radio
                         label="10"
@@ -26,7 +30,6 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
                         name="n"
                         checked={n === 10}
                         onChange={onChange}
-                        width={2}
                     />
                 </Form.Field>
                 <Form.Field>
@@ -36,7 +39,6 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
                         name="n"
                         checked={n === 20}
                         onChange={onChange}
-                        width={3}
                     />
                 </Form.Field>
                 <Form.Field>
@@ -57,15 +59,19 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
                         onChange={onChange}
                     />
                 </Form.Field>
+                {/* TODO-THOMAS: Validation for input field */}
                 <Form.Field>
-                    <input
-                        label="Anden værdi"
+                    <Input
+                        label='Anden værdi'
                         name="n"
-                        type='text'
+                        type='number'
+                        min='1'
                         value={n}
+                        labelPosition='left'
                         onChange={onChange}
                     />
                 </Form.Field>
+                {labelError}
             </Form.Group>
 
             <div>Der er {total} spørgsmål for det valgte semester.</div>

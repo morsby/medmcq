@@ -1,6 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router";
-import { Container, Icon, Button, Menu } from "semantic-ui-react";
+import { Icon, Menu, Divider } from "semantic-ui-react";
 import { urls } from "../../utils/common";
 
 const Footer = props => {
@@ -19,13 +19,16 @@ const Footer = props => {
     };
     return (
             <footer style={footerStyle}>
-                <Menu inverted color='blue'>
-                    <Menu.Item style={paragraphStyle}>
+                <Menu attached inverted color='blue'>
+                    <Menu.Item position="right" style={paragraphStyle}>
                         <p>Siden er lavet med tilladelse fra Institut for Klinisk
                             Medicin, Health, Aarhus Universitet.</p>
-                            <Icon name="heartbeat" />Sigurd Morsby Larsen
+                            <Icon name="heartbeat" />{/*Udviklet af*/} Sigurd Morsby Larsen
+                        {/* <p><Icon name='graduation cap' />Vedligeholdes og forbedres i samarbejde med 
+                            <strong><a href="https://cesu.au.dk"> CESU </a></strong>
+                            og Thomas Jensen</p> */}
                     </Menu.Item>
-                    <Menu.Menu position='right'>
+                    <Menu.Menu position='left'>
                         
                         {props.history.location.pathname !== urls.about && (
                             <Menu.Item onClick={() => handleClick(urls.about)}>

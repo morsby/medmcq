@@ -26,22 +26,23 @@ class Header extends Component {
             højreMenu = (
                 <>
                 <Menu.Item>
-                    <strong>Velkommen {user.username}</strong>
+                    <strong>Velkommen {user.username[0].toUpperCase() + user.username.substring(1)}</strong>
                 </Menu.Item>
-                <Menu.Item>
-                    <Button
-                        basic inverted
-                        onClick={() => handleClick("profile")}
+                <Menu.Item onClick={() => handleClick("profile")}>
+                    <Icon
+                        name='id card outline'
+                        size='big'
+                        basic
+                        inverted
                         className="click">
-                        Profil
-                    </Button>
+                    </Icon>Profil
                 </Menu.Item>
                 </>
             );
         } else {
             højreMenu = (
-                <Menu.Item>
-                    <Icon name='user md' onClick={() => handleClick("login")} /> Log ind
+                <Menu.Item onClick={() => handleClick("login")}>
+                    <Icon name='user md' /> Log ind
                 </Menu.Item>
             );
         }
@@ -50,7 +51,7 @@ class Header extends Component {
 
         return (
             <header>
-                <Menu inverted color='blue'>
+                <Menu attached inverted color='blue'>
                     <Menu.Item onClick={() => handleClick("root")}>
                         <Icon name='home' size='big'/> Forside
                     </Menu.Item>
