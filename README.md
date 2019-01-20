@@ -12,6 +12,10 @@ I `/client` findes React-layoutet, der henter data fra api'en og viser spørgsm�
 
 ## TODOs
 
+### Andet, vigtigt
+
+- [ ] **Dubletter af enkelte brugernavne (case-insensitive) -- hvordan håndteres dette?**
+
 ### API
 
 - [ ] Oprydning (særligt `routes/questions.js`)
