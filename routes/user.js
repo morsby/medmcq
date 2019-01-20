@@ -28,22 +28,43 @@ module.exports = app => {
         });
     });
 
-    // Check username
-    app.post("/api/auth/check-username", (req, res) => {
+    // Check availability
+    app.post("/api/auth/check-availability", (req, res) => {
         // Matcher præcise brugernavne uafhængigt af case
-        User.findOne(
-            {
-                username: {
-                    $regex: new RegExp("^" + req.body.username + "$", "i")
-                }
-            },
-            (err, user) => {
-                if (err) throw err;
+        switch (req.body.field) {
+        case "username":
+            User.findOne(
+                {
+                    username: {
+                        $regex: new RegExp("^" + req.body.value + "$", "i")
+                    }
+                },
+                (err, user) => {
+                    if (err) throw err;
 
-                let available = user ? false : true;
-                res.send(available);
-            }
-        );
+                    let available = user ? false : true;
+                    res.send(available);
+                }
+            );
+            break;
+        case "email":
+            User.findOne(
+                {
+                    email: {
+                        $regex: new RegExp("^" + req.body.value + "$", "i")
+                    }
+                },
+                (err, user) => {
+                    if (err) throw err;
+
+                    let available = user ? false : true;
+                    res.send(available);
+                }
+            );
+            break;
+        default:
+            return;
+        }
     });
 
     // SIGNIN
