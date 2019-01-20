@@ -24,7 +24,8 @@ I `/client` findes React-layoutet, der henter data fra api'en og viser spørgsm�
 
 - [ ] **Ca. 10% af besvarede spørgsmål bliver ikke registreret i profilen?**
 - [ ] Hent settings på load
-- [x] ~~Fix gammel SelectQuestions-funktion (utils/quiz)~~ (slettet)
+- [ ] Debounce checkUsername ved signup
+- [ ] Check også for unik email? (Mongo vil smide en fejl)
 - [ ] Lad buttons tage html input
 - [ ] Autocomplete i profil-formularer
 - [ ] Få component til at opdatere selv ved dybt nested ny kommentar. 
@@ -32,6 +33,7 @@ I `/client` findes React-layoutet, der henter data fra api'en og viser spørgsm�
 - [ ] Ryd op i Component-logik (større projekt ... - særligt formular-validation og Redux-connects)
 - [ ] Print virker ikke i alle browsers
 - [x] Formindsk Swipe-følsomhed
+- [x] ~~Fix gammel SelectQuestions-funktion (utils/quiz)~~ (slettet)
 
 
 ## Planlagte projekter

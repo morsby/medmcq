@@ -24,7 +24,6 @@ import { default as UIHeader } from "../Misc/Header";
 
 import { semestre, urls } from "../../utils/common";
 import { specialer as specialerCommon } from "../../utils/common";
-import { selectQuestions } from "../../utils/quiz";
 
 class SelectionMain extends Component {
     state = { err: [] };

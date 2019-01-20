@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 export const smoothScroll = (h, dir = "up") => {
     let top = window.pageYOffset || document.documentElement.scrollTop;
     let bottom = document.body.scrollHeight;
