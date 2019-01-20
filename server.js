@@ -1,4 +1,5 @@
 // server.js
+const helmet = require('helmet')
 
 // BASE SETUP
 require("dotenv").config();
@@ -9,10 +10,14 @@ var sslRedirect = require("heroku-ssl-redirect");
 var express = require("express");
 var app = express();
 
+// Mandatory Middleware for secure HTTP headers
+app.use(helmet())
+
 // if heroku, force SSL
 if (process.env.NODE_ENV === "production") {
     app.use(sslRedirect());
 }
+
 // Database
 const mongoose = require("mongoose");
 mongoose.set("useCreateIndex", true);
