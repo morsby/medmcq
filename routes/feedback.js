@@ -19,20 +19,16 @@ module.exports = app => {
 	});
 
 	// GET: feedback id
-	app.get('/api/feedback/:id', (req, res) => {
-		Feedback.findById(req.params.id).exec(async (err, feedback) => {
-			if (err) res.send(err);
+	app.get('/api/feedback/:id', async (req, res) => {
+		feedback = await Feedback.findById(req.params.id)
+			.catch(err => res.send(new Error(err)))
+		
+		let comments = await Comment.find({ feedback_id: req.params.id })
+			.sort('full_slug')
 
-			let comments = await Comment.find({
-				feedback_id: req.params.id
-			})
-				.sort('full_slug')
-				.exec();
-
-			let ret = { feedback, comments };
-			res.json(ret);
+		let ret = { feedback, comments }
+		res.json(ret)
 		});
-	});
 
 	// POST: feedback
 	app.post('/api/feedback', (req, res) => {
