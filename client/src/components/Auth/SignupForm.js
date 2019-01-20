@@ -20,14 +20,26 @@ const SignupForm = props => {
             .then(props.history.push("/login"));
     };
 
-    const usernameAvailable = async username => {
+    const userAvailable = async username => {
         if (!username) {
             return "Du skal udfylde et brugernavn!";
         } else {
-            let available = await props.checkUsernameAvailability(username);
+            let available = await props.checkUserAvailability(
+                "username",
+                username
+            );
 
             return available ? null : "Brugernavnet er taget";
         }
+    };
+
+    const emailValidLocal = async email => {
+        let error = emailValid(email);
+        if (error) return error;
+
+        let available = await props.checkUserAvailability("email", email);
+
+        return available ? null : "Emailen er allerede brugt";
     };
 
     return (
@@ -36,7 +48,7 @@ const SignupForm = props => {
             render={({ handleSubmit, pristine, invalid }) => {
                 return (
                     <form onSubmit={handleSubmit} className="ui form custom">
-                        <Field name="username" validate={usernameAvailable}>
+                        <Field name="username" validate={userAvailable}>
                             {({ input, meta }) => (
                                 <div
                                     className={
@@ -64,7 +76,7 @@ const SignupForm = props => {
                         <Divider hidden />
                         <Field
                             name="email"
-                            validate={emailValid}
+                            validate={emailValidLocal}
                             validateFields={[]}
                         >
                             {({ input, meta }) => (

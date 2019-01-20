@@ -80,7 +80,12 @@ class Question extends Component {
         ) {
             let answer = Number(e.key),
                 keys = [1, 2, 3];
-            if (keys.includes(answer)) {
+            if (
+                keys.includes(answer) &&
+                !e.altKey &&
+                !e.ctrlKey &&
+                !e.metaKey
+            ) {
                 this.onAnswer(answer);
             }
         }

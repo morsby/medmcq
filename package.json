@@ -14,7 +14,9 @@
         "client": "cd client && npm start",
         "dev": "concurrently \"npm run server\" \"npm run client\"",
         "start": "node server.js",
-        "heroku-postbuild": "npm install --dev --prefix client && npm run build --prefix client"
+        "heroku-postbuild": "npm install --dev --prefix client && npm run build --prefix client",
+        "update": "git pull && npm install && npm install --preflix client",
+        "build": "npm run update && npm run build --prefix client"
     },
     "author": "Morsby",
     "license": "MIT",
@@ -33,6 +35,7 @@
         "lodash": "^4.17.11",
         "mongoose": "^5.4.4",
         "mongoose-simple-random": "^0.4.1",
+        "mongoose-unique-validator": "^2.0.2",
         "multer": "^1.4.1",
         "multer-storage-cloudinary": "^2.2.1",
         "passport": "^0.4.0",

@@ -10,7 +10,7 @@ import QuizSummary from "./QuizSummary";
 
 import Footer from "../Misc/Footer";
 
-import { selectQuestions, smoothScroll } from "../../utils/quiz";
+import { smoothScroll } from "../../utils/quiz";
 import { urls } from "../../utils/common";
 import Header from "../Misc/Header";
 
@@ -47,6 +47,7 @@ class QuizMain extends Component {
         // Navigation
         let qn = this.state.qn,
             max = this.props.questions.length;
+        if (document.activeElement.tagName === "TEXTAREA") return;
         if (e.key === "ArrowLeft") {
             if (qn > 0) this.onChangeQuestion(this.state.qn - 1);
         } else if (e.key === "ArrowRight") {
@@ -72,7 +73,7 @@ class QuizMain extends Component {
 
     getQuestions() {
         let { getQuestions, settings } = this.props;
-        getQuestions(settings, selectQuestions(settings));
+        getQuestions(settings);
         this.setState({ qn: 0 });
     }
 

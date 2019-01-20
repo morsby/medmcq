@@ -1,12 +1,23 @@
 const mongoose = require("mongoose");
+const uniqueValidator = require("mongoose-unique-validator");
 const Schema = mongoose.Schema;
 const bcrypt = require("bcryptjs"),
     salt = bcrypt.genSaltSync(10);
 
 var UserSchema = new Schema({
-    username: { type: String, required: true, index: { unique: true } },
+    username: {
+        type: String,
+        required: true,
+        unique: true,
+        uniqueCaseInsensitive: true
+    },
     password: { type: String, required: true, select: false },
-    email: { type: String },
+    email: {
+        type: String,
+        unique: true,
+        required: false,
+        uniqueCaseInsensitive: true
+    },
     role: { type: String, required: true, default: "user" },
     comments: [{ type: Schema.Types.ObjectId }],
     answeredQuestions: {},
@@ -30,5 +41,8 @@ UserSchema.methods.comparePassword = function(candidatePassword, cb) {
         cb(null, res);
     });
 };
+
+// For at få unikke brugernavne, case-insensitively
+UserSchema.plugin(uniqueValidator);
 
 module.exports = mongoose.model("User", UserSchema);

@@ -1,8 +1,12 @@
 import axios from "axios";
 import * as types from "./types";
 
-export const getQuestions = (settings, selection) => async dispatch => {
+export const getQuestions = (
+    settings,
+    requestedIds = null
+) => async dispatch => {
     let { type, semester, specialer, n, onlyNew, set } = settings;
+
     dispatch({ type: types.IS_FETCHING });
     let res = { data: [] };
 
@@ -10,7 +14,7 @@ export const getQuestions = (settings, selection) => async dispatch => {
     switch (type) {
         case "ids":
             res = await axios.post("/api/questions/ids", {
-                ids: selection
+                ids: requestedIds
             });
             break;
         case "set":
@@ -24,7 +28,6 @@ export const getQuestions = (settings, selection) => async dispatch => {
             break;
         case "random":
         case "specialer":
-            if (selection.length === 0) break;
             // Lav tomme strings til API-request
             let querySpecialer = "",
                 unique = "";
@@ -41,6 +44,9 @@ export const getQuestions = (settings, selection) => async dispatch => {
             res = await axios.get(
                 `/api/questions?semester=${semester}&n=${n}${querySpecialer}${unique}`
             );
+            break;
+        default:
+            return null;
     }
 
     dispatch({

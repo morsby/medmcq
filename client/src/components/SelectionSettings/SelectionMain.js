@@ -24,7 +24,6 @@ import { default as UIHeader } from "../Misc/Header";
 
 import { semestre, urls } from "../../utils/common";
 import { specialer as specialerCommon } from "../../utils/common";
-import { selectQuestions } from "../../utils/quiz";
 
 class SelectionMain extends Component {
     state = { err: [] };
@@ -37,12 +36,12 @@ class SelectionMain extends Component {
     }
     
     componentDidMount() {
-        if(this.props.settings.questions.length === 0) {
-            let name = 'semester';
+        if (this.props.settings.questions.length === 0) {
+            let name = "semester";
             let value = 7;
             let e = null;
-            
-            this.onSettingsChange(e, { name, value })
+
+            this.onSettingsChange(e, { name, value });
         }
     }
 
@@ -102,10 +101,7 @@ class SelectionMain extends Component {
         // tjek for fejl, start eller ej
         if (err.length === 0) {
             if (quizType === "new") {
-                this.props.getQuestions(
-                    this.props.settings,
-                    selectQuestions(this.props.settings, this.props.user)
-                );
+                this.props.getQuestions(this.props.settings);
             }
             this.props.history.push(urls.quiz);
         } else {

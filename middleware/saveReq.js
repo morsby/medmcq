@@ -16,9 +16,10 @@ var LogSchema = new Schema({
     ],
     fetch_set: String, // Hvilket eksamenssæt bedes der om?
     fetch_unique: Boolean, // kun nye spørgsmål?
-    answer_question_id: String, // ID for question answered
+    answer_question_id: mongoose.Schema.Types.ObjectId, // ID for question answered
     answer_answer: Number, // what was answered? 1 || 2 || 3
-    answer_correct: Boolean // svarede de rigtigt?
+    answer_correct: Boolean, // svarede de rigtigt?
+    logged_in: { type: Boolean, default: false }
 });
 
 let Logs = mongoose.model("Logs", LogSchema);
@@ -26,7 +27,8 @@ let Logs = mongoose.model("Logs", LogSchema);
 const saveReq = function(req, res, next) {
     /// Fører statistik over: api/questions, /api/questions/ids/, /api/questions/answer
     if (
-        req.path === "/api/questions/ids" ||
+        (req.path === "/api/questions/ids" &&
+            req.body.purpose !== "profile-stats") ||
         req.path === "/api/questions" ||
         req.path === "/api/questions/answer"
     ) {
@@ -40,6 +42,8 @@ const saveReq = function(req, res, next) {
         } = req.query;
         let log = new Logs();
 
+        if (req.user) log.logged_in = true;
+
         if (
             req.path === "/api/questions/ids" ||
             req.path === "/api/questions"
@@ -51,13 +55,14 @@ const saveReq = function(req, res, next) {
 
             log.fetch_unique = unique;
 
-            if (!n && !semester) {
+            // Hvis der ikke er hverken antal, semester eller postes (for at bede om ids)
+            if (!n && !semester && req.method === "GET") {
                 log.fetch_type = "all";
             } else if (semester && examSeason && examYear) {
                 // Hent det eksamenssæt der bedes om
                 log.fetch_type = "set";
                 log.fetch_set = `${examYear}/${examSeason}`;
-            } else {
+            } else if (req.method === "GET") {
                 /* Der ønskes hverken alle spg. eller et sæt; så vi skal udregne
                     hvilke, vi vil have, ud fra diverse parametre
                 */
@@ -77,10 +82,7 @@ const saveReq = function(req, res, next) {
                 }
             }
 
-            if (
-                req.path === "/api/questions/ids" &&
-                req.body.purpose !== "profile-stats"
-            ) {
+            if (req.path === "/api/questions/ids" && req.method === "POST") {
                 log.fetch_type = "ids";
             }
         } else if (req.path === "/api/questions/answer") {
