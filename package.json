@@ -14,7 +14,8 @@
         "client": "cd client && npm start",
         "dev": "concurrently \"npm run server\" \"npm run client\"",
         "start": "node server.js",
-        "heroku-postbuild": "npm install --dev --prefix client && npm run build --prefix client"
+        "heroku-postbuild": "npm install --dev --prefix client && npm run build --prefix client",
+        "update": "git pull && npm install && npm run build --prefix client"
     },
     "author": "Morsby",
     "license": "MIT",
