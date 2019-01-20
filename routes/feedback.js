@@ -21,8 +21,9 @@ module.exports = app => {
 	// GET: feedback id
 	app.get('/api/feedback/:id', async (req, res) => {
 		feedback = await Feedback.findById(req.params.id)
-			.catch(err => res.send(new Error(err)))
-		
+			.catch(err => console.log(err.message))
+    	if (!feedback) return res.status(400).send('ID not found')
+			
 		let comments = await Comment.find({ feedback_id: req.params.id })
 			.sort('full_slug')
 
