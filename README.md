@@ -14,7 +14,8 @@ I `/client` findes React-layoutet, der henter data fra api'en og viser spørgsm�
 
 ### Andet, vigtigt
 
-- [ ] **Dubletter af enkelte brugernavne (case-insensitive) -- hvordan håndteres dette?**
+- [ ] **Dubletter af enkelte brugernavne (case-insensitive) og emails -- hvordan håndteres dette?**
+- [ ] Bloker mellemrum m.v. i brugernavne
 
 ### API
 
@@ -24,9 +25,7 @@ I `/client` findes React-layoutet, der henter data fra api'en og viser spørgsm�
 
 - [ ] **Ca. 10% af besvarede spørgsmål bliver ikke registreret i profilen?**
 - [ ] Hent settings på load
-- [ ] Debounce checkUsername ved signup
-- [ ] Check også for unik email? (Mongo vil smide en fejl)
-- [ ] Lad buttons tage html input
+- [ ] Debounce checkUser ved signup
 - [ ] Autocomplete i profil-formularer
 - [ ] Få component til at opdatere selv ved dybt nested ny kommentar. 
 - [ ] Undgå at Firefox åbner søge-dialogen, når der svares på spørgsmål med tal
@@ -34,7 +33,8 @@ I `/client` findes React-layoutet, der henter data fra api'en og viser spørgsm�
 - [ ] Print virker ikke i alle browsers
 - [x] Formindsk Swipe-følsomhed
 - [x] ~~Fix gammel SelectQuestions-funktion (utils/quiz)~~ (slettet)
-
+- [x] Check også for unik email? (Mongo vil smide en fejl)
+- [x] Lad buttons tage html input
 
 ## Planlagte projekter
 

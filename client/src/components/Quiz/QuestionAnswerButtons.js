@@ -4,6 +4,8 @@ import PropTypes from "prop-types";
 import { Button, Divider } from "semantic-ui-react";
 
 import { evalAnswer } from "../../utils/quiz";
+import marked from "marked";
+import { subSupScript } from "../../utils/quiz";
 
 const QuestionAnswerButtons = ({ pristine, onAnswer, question }) => {
     const generateButton = answerNo => {
@@ -22,6 +24,7 @@ const QuestionAnswerButtons = ({ pristine, onAnswer, question }) => {
             break;
         }
         answerText = answerText + question[`answer${answerNo}`];
+        answerText = subSupScript(answerText);
         return (
             <Button
                 style={{ textAlign: "left" }}
@@ -29,7 +32,11 @@ const QuestionAnswerButtons = ({ pristine, onAnswer, question }) => {
                 color={evalAnswer(question, answerNo)}
                 size="large"
             >
-                {answerText}
+                <div
+                    dangerouslySetInnerHTML={{
+                        __html: marked(answerText)
+                    }}
+                />
             </Button>
         );
     };
