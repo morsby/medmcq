@@ -11,7 +11,7 @@ import QuizFooter from "./QuizFooter";
 
 import Footer from "../Misc/Footer";
 
-import { selectQuestions, smoothScroll } from "../../utils/quiz";
+import { smoothScroll } from "../../utils/quiz";
 import { urls } from "../../utils/common";
 
 class QuizMain extends Component {
@@ -64,7 +64,7 @@ class QuizMain extends Component {
 
     getQuestions() {
         let { getQuestions, settings } = this.props;
-        getQuestions(settings, selectQuestions(settings));
+        getQuestions(settings);
         this.setState({ qn: 0 });
     }
 

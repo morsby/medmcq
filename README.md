@@ -20,14 +20,14 @@ I `/client` findes React-layoutet, der henter data fra api'en og viser spørgsm�
 
 - [ ] **Ca. 10% af besvarede spørgsmål bliver ikke registreret i profilen?**
 - [ ] Hent settings på load
-- [ ] Fix gammel SelectQuestions-funktion (utils/quiz)
+- [x] ~~Fix gammel SelectQuestions-funktion (utils/quiz)~~ (slettet)
 - [ ] Lad buttons tage html input
 - [ ] Autocomplete i profil-formularer
 - [ ] Få component til at opdatere selv ved dybt nested ny kommentar. 
 - [ ] Undgå at Firefox åbner søge-dialogen, når der svares på spørgsmål med tal
 - [ ] Ryd op i Component-logik (større projekt ... - særligt formular-validation og Redux-connects)
 - [ ] Print virker ikke i alle browsers
-- [ ] Formindsk Swipe-følsomhed
+- [x] Formindsk Swipe-følsomhed
 
 
 ## Planlagte projekter
