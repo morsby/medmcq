@@ -13,7 +13,12 @@ export const selectQuestions = (settings, user = null) => {
         }
         // TODO: Giv besvarede spørgsmål en værdi, så spørgsmål der er svaret på færre gange hyppigere vælges
 
-        if (onlyNew && user) {
+        // Fix for nye brugere, der beder om kun nye spørgsmål
+        let userHasAnsweredQuestions =
+            user.hasOwnProperty("answeredQuestions") &&
+            user.answeredQuestions.hasOwnProperty(semester);
+
+        if (onlyNew && user && userHasAnsweredQuestions) {
             // Udtræk de spørgsmål, der ikke allerede er besvaret
             let questionsNew = _.filter(
                 questions,
@@ -22,7 +27,7 @@ export const selectQuestions = (settings, user = null) => {
                         q._id
                     )
             );
-            // Hvis ikke galle spørgsmål er besvaret, medtages alle
+            // Hvis alle spørgsmål er besvaret, medtages alle
             if (questionsNew.length > 0) questions = questionsNew;
         }
 

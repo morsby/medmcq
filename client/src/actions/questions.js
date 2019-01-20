@@ -3,6 +3,7 @@ import * as types from "./types";
 
 export const getQuestions = (settings, selection) => async dispatch => {
     let { type, semester, specialer, n, onlyNew, set } = settings;
+
     dispatch({ type: types.IS_FETCHING });
     let res = { data: [] };
 
@@ -41,6 +42,9 @@ export const getQuestions = (settings, selection) => async dispatch => {
             res = await axios.get(
                 `/api/questions?semester=${semester}&n=${n}${querySpecialer}${unique}`
             );
+            break;
+        default:
+            return null;
     }
 
     dispatch({
