@@ -21,12 +21,12 @@ const Footer = props => {
             <footer style={footerStyle}>
                 <Menu attached inverted color='blue'>
                     <Menu.Item position="right" style={paragraphStyle}>
-                        {/* <p>Siden er lavet med tilladelse fra Institut for Klinisk
-                            Medicin, Health, Aarhus Universitet.</p> */}
+                        <p>Siden er lavet med tilladelse fra Institut for Klinisk
+                            Medicin, Health, Aarhus Universitet.</p>
                             <Icon name="heartbeat" />{/*Udviklet af*/} Sigurd Morsby Larsen
-                        <p><Icon name='graduation cap' />Vedligeholdes og forbedres i samarbejde med 
+                        {/* <p><Icon name='graduation cap' />Vedligeholdes og forbedres i samarbejde med 
                             <strong><a href="https://cesu.au.dk"> CESU </a></strong>
-                            og Thomas Jensen</p>
+                            og Thomas Jensen</p> */}
                     </Menu.Item>
                     <Menu.Menu position='left'>
                         
