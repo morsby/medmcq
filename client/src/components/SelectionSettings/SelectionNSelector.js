@@ -16,7 +16,7 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
 
     if (n > 1000 || n < 1) {
         labelError = (
-            <Label pointing="left">Værdi skal være mellem 1 og 1000</Label>
+            <Label pointing="left">Værdi skal være mellem 1 og 300</Label>
         );
     }
 
@@ -69,7 +69,6 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
                         onChange={onChange}
                     />
                 </Form.Field>
-                {/* TODO-THOMAS: Validation for input field */}
                 <Form.Field>
                     <Input
                         label="Anden værdi"

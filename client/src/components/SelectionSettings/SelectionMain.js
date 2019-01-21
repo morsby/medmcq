@@ -48,9 +48,6 @@ class SelectionMain extends Component {
     onSettingsChange(e, { value, name }) {
         this.setState({ err: [] });
 
-        if (name === "n" && !value) {
-            return;
-        }
         this.props.changeSettings({ type: name, value });
     }
 
@@ -58,6 +55,10 @@ class SelectionMain extends Component {
         let err = [];
 
         let { semester, type, set, questions, specialer } = this.props.settings;
+
+        // Når den er tom modtager den fuldt antal
+        console.log(questions.length)
+
 
         // VALIDATION
         // Semester
@@ -77,6 +78,7 @@ class SelectionMain extends Component {
                 err.push("You have to select a set to start.");
             }
         }
+
         // Findes der spørgsmål?
         if (questions.length === 0) {
             err.push("Der er ingen spørgsmål for det valgte semester.");
@@ -85,21 +87,26 @@ class SelectionMain extends Component {
             }
         }
 
-        // // TODO-THOMAS: Er der valgt for mange spørgsmål eller for få?
-        // if (questions.length > 1000) {
-        //     err.push("Du har valgt for mange spørgsmål");
-        //     if (semester === 11) {
-        //         err.push("You have picked too many questions");
-        //     }
-        // }
+        if (!questions.length) {
+            err.push("Du skal vælge et antal spørgsmål.");
+            if (semester === 11) {
+                err.push("You must select a number of questions.");
+            }
+        }
 
-        // // TODO-THOMAS: Er der valgt for mange spørgsmål eller for få?
-        // if (questions.length < 1) {
-        //     err.push("Antal spørgsmål kan ikke være negativt");
-        //     if (semester === 11) {
-        //         err.push("The number of questions can not be a negative number");
-        //     }
-        // }
+        if (questions.length > 300) {
+            err.push("Du har valgt for mange spørgsmål");
+            if (semester === 11) {
+                err.push("You have picked too many questions");
+            }
+        }
+
+        if (questions.length < 0) {
+            err.push("Antal spørgsmål kan ikke være negativt");
+            if (semester === 11) {
+                err.push("The number of questions can not be a negative number");
+            }
+        }
 
         // tjek for fejl, start eller ej
         if (err.length === 0) {

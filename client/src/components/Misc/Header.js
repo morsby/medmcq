@@ -18,7 +18,7 @@ class Header extends Component {
     }
 
     render() {
-        let { user, history, location, noPrint } = this.props;
+        let { user, history } = this.props;
 
         const handleClick = path => {
             history.push(urls[path]);
@@ -55,8 +55,6 @@ class Header extends Component {
             );
         }
 
-        let printClass = noPrint ? "hide-on-print" : "";
-
         return (
             <header>
                 <Menu stackable attached inverted color="blue" width={5}>
@@ -64,7 +62,7 @@ class Header extends Component {
                         <Icon name="home" size="big" /> Forside
                     </Menu.Item>
                     <Menu.Menu position="right">
-                        <Menu.Item>
+                        {/* <Menu.Item>
                             <Flag
                                 style={this.flagStyle}
                                 onClick={() => console.log("clicked")}
@@ -75,7 +73,7 @@ class Header extends Component {
                                 onClick={() => console.log("clicked")}
                                 name="gb"
                             />
-                        </Menu.Item>
+                        </Menu.Item> */}
                         {højreMenu}
                     </Menu.Menu>
                 </Menu>

@@ -12,7 +12,6 @@ import Footer from "../Misc/Footer";
 
 import { smoothScroll } from "../../utils/quiz";
 import { urls } from "../../utils/common";
-import Header from "../Misc/Header";
 import QuizHeader from "../Misc/QuizHeader";
 
 const flickNumber = 0.1;

@@ -1,6 +1,6 @@
 import React from "react";
 import { withRouter } from "react-router";
-import { Icon, Menu, Divider } from "semantic-ui-react";
+import { Icon, Menu } from "semantic-ui-react";
 import { urls } from "../../utils/common";
 
 const Footer = props => {

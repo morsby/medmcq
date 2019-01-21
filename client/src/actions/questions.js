@@ -102,7 +102,7 @@ export const commentQuestion = (id, comment) => async dispatch => {
 };
 
 export const deleteComment = (question_id, comment_id) => async dispatch => {
-    const res = await axios.delete(
+    await axios.delete(
         `/api/questions/${question_id}/comment/${comment_id}`
     );
 
@@ -117,7 +117,7 @@ export const editComment = (
     comment_id,
     comment
 ) => async dispatch => {
-    const res = await axios.put(
+    await axios.put(
         `/api/questions/${question_id}/comment/${comment_id}`,
         { comment }
     );

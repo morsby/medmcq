@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import * as actions from "../../actions";
 
 import { withRouter } from "react-router";
-import { Flag, Menu, Icon } from "semantic-ui-react";
+import { Menu, Icon } from "semantic-ui-react";
 import { urls } from "../../utils/common";
 
 // TODO: Evt. fjern connect - men skal så modtage `user` via parents
@@ -18,7 +18,7 @@ class QuizHeader extends Component {
     }
 
     render() {
-        let { user, history, location, noPrint } = this.props;
+        let { user, history } = this.props;
 
         const handleClick = path => {
             history.push(urls[path]);
@@ -47,8 +47,6 @@ class QuizHeader extends Component {
                 </Menu.Item>
             );
         }
-
-        let printClass = noPrint ? "hide-on-print" : "";
 
         return (
             <header>
