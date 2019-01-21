@@ -1,5 +1,6 @@
 // server.js
 const helmet = require('helmet')
+const comment = require('./routes/comment')
 
 // BASE SETUP
 require("dotenv").config();
@@ -67,7 +68,7 @@ app.use(saveReq);
 // more routes for our API will happen here
 require("./routes/question")(app);
 require("./routes/feedback")(app);
-require("./routes/comment")(app);
+app.use("./routes/comment", comment);
 require("./routes/user")(app);
 
 // Registrer alle routes fra denne fil (prefixed '/api')
