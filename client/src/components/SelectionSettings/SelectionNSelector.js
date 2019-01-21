@@ -8,7 +8,8 @@ import {
     Radio,
     Checkbox,
     Divider,
-    Header
+    Header,
+    Grid
 } from "semantic-ui-react";
 
 const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
@@ -23,7 +24,8 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
     return (
         <Form>
             <Header as="h3">Hvor mange spørgsmål vil du have?</Header>
-            <Form.Group inline>
+            <Grid columns={5}>
+                <Grid.Column>
                 <Form.Field>
                     <Radio
                         label="5"
@@ -33,6 +35,8 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
                         onChange={onChange}
                     />
                 </Form.Field>
+                </Grid.Column>
+                <Grid.Column>
                 <Form.Field>
                     <Radio
                         label="10"
@@ -42,6 +46,8 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
                         onChange={onChange}
                     />
                 </Form.Field>
+                </Grid.Column>
+                <Grid.Column>
                 <Form.Field>
                     <Radio
                         label="20"
@@ -51,6 +57,8 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
                         onChange={onChange}
                     />
                 </Form.Field>
+                </Grid.Column>
+                <Grid.Column>
                 <Form.Field>
                     <Radio
                         label="40"
@@ -60,6 +68,8 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
                         onChange={onChange}
                     />
                 </Form.Field>
+                </Grid.Column>
+                <Grid.Column>
                 <Form.Field>
                     <Radio
                         label="80"
@@ -69,6 +79,8 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
                         onChange={onChange}
                     />
                 </Form.Field>
+                </Grid.Column>
+                <Grid.Column width={7}>
                 <Form.Field>
                     <Input
                         label="Anden værdi"
@@ -80,9 +92,13 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
                         onChange={onChange}
                     />
                 </Form.Field>
+                </Grid.Column>
+                <Grid.Column>
                 {labelError}
-            </Form.Group>
-
+                </Grid.Column>
+            </Grid>
+            
+            <Divider hidden />
             <div>Der er {total} spørgsmål for det valgte semester.</div>
             <Divider hidden />
 
