@@ -2,7 +2,7 @@ import React from "react";
 import marked from "marked";
 import { Form, TextArea, Button, Comment, Message } from "semantic-ui-react";
 
-const QuestionComment = ({ comment }) => {
+const QuestionComment = ({ comment, user, deleteComment, editComment }) => {
     return (
         <Comment
             key={comment._id}
@@ -19,6 +19,14 @@ const QuestionComment = ({ comment }) => {
                 <Comment.Metadata style={{ color: "rgb(140, 140, 140)" }}>
                     {new Date(comment.date).toLocaleString("da-DK")}
                 </Comment.Metadata>
+                {comment.user === user.username && (
+                    <>
+                        <span onClick={() => deleteComment(comment._id)}>
+                            Slet!
+                        </span>
+                        <span onClick={() => editComment(comment)}>Ret!</span>
+                    </>
+                )}
                 <Comment.Text
                     style={{ marginTop: "1em" }}
                     dangerouslySetInnerHTML={{
@@ -35,13 +43,19 @@ export default ({
     value,
     onCommentWrite,
     onCommentPost,
-    isLoggedIn
+    onDeleteComment,
+    onEditComment,
+    editingComment,
+    undoEdit,
+    user
 }) => {
     let form;
-    if (isLoggedIn) {
+    if (user) {
+        let skrivRet = editingComment ? "Ret" : "Skriv";
         form = (
             <div style={{ marginTop: "1em" }}>
-                <h5>Skriv en kommentar</h5>
+                <h5>{skrivRet} en kommentar</h5>
+
                 <Form>
                     <TextArea
                         name="comment"
@@ -60,6 +74,7 @@ export default ({
                     >
                         Kommentér
                     </Button>
+                    {editingComment && <Button onClick={undoEdit}>X</Button>}
                 </Form>
             </div>
         );
@@ -70,7 +85,13 @@ export default ({
         <div>
             <div>
                 {comments.map(c => (
-                    <QuestionComment comment={c} />
+                    <QuestionComment
+                        key={c._id}
+                        comment={c}
+                        user={user}
+                        deleteComment={onDeleteComment}
+                        editComment={onEditComment}
+                    />
                 ))}
             </div>
             {form}

@@ -38,9 +38,11 @@ I `/client` findes React-layoutet, der henter data fra api'en og viser spørgsm�
 
 ## Planlagte projekter
 
-- [x] Mulighed for at kommentere spørgsmål
+- [ ] Excel-ark?
+- [ ] Oversættelse til engelsk (hvordan?)
 - [ ] Side hvor man kan følge med i ændringer
 - [ ] Udvikling af algoritme, så "tilfældige spørgsmål" fortrinsvist tager spørgsmål, der er svaret forkert tidligere/ikke tidligere besvaret
 - [ ] Mulighed for at tilføje/ændre specialer
 - [ ] Mulighed for rettelse af spørgsmål
 - [ ] Mulighed for tilføjelse af personlige kommentarer
+- [x] Mulighed for at kommentere spørgsmål

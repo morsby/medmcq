@@ -27,6 +27,7 @@ class Question extends Component {
         imgOpen: false,
         commentsOpen: false,
         newComment: "",
+        editingComment: "",
         pristine: true
     };
 
@@ -39,6 +40,9 @@ class Question extends Component {
         this.onCommentsToggle = this.onCommentsToggle.bind(this);
         this.onCommentWrite = this.onCommentWrite.bind(this);
         this.onCommentPost = this.onCommentPost.bind(this);
+        this.onDeleteComment = this.onDeleteComment.bind(this);
+        this.onEditComment = this.onEditComment.bind(this);
+        this.undoEdit = this.undoEdit.bind(this);
         this.onAnswer = this.onAnswer.bind(this);
     }
     componentDidMount() {
@@ -57,6 +61,7 @@ class Question extends Component {
                 imgOpen: false,
                 commentsOpen: false,
                 newComment: "",
+                editingComment: "",
                 pristine: true
             });
             this.mouseMover();
@@ -140,12 +145,38 @@ class Question extends Component {
 
     onCommentPost() {
         if (this.state.newComment.length >= 3) {
-            this.props.commentQuestion(
-                this.props.questions[this.props.qn]._id,
-                this.state.newComment
-            );
-            this.setState({ newComment: "" });
+            if (this.state.editingComment) {
+                this.props.editComment(
+                    this.props.questions[this.props.qn]._id,
+                    this.state.editingComment,
+                    this.state.newComment
+                );
+            } else {
+                this.props.commentQuestion(
+                    this.props.questions[this.props.qn]._id,
+                    this.state.newComment
+                );
+            }
+            this.setState({ newComment: "", editComment: "" });
         }
+    }
+
+    onDeleteComment(comment_id) {
+        this.props.deleteComment(
+            this.props.questions[this.props.qn]._id,
+            comment_id
+        );
+    }
+
+    onEditComment(comment) {
+        this.setState({
+            newComment: comment.comment,
+            editingComment: comment._id
+        });
+    }
+
+    undoEdit() {
+        this.setState({ newComment: "", editingComment: "" });
     }
 
     render() {
@@ -221,7 +252,11 @@ class Question extends Component {
                             value={this.state.newComment}
                             onCommentWrite={this.onCommentWrite}
                             onCommentPost={this.onCommentPost}
-                            isLoggedIn={user}
+                            onDeleteComment={this.onDeleteComment}
+                            onEditComment={this.onEditComment}
+                            editingComment={this.state.editingComment}
+                            undoEdit={this.undoEdit}
+                            user={user}
                         />
                     )}
                 </Segment>

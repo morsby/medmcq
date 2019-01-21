@@ -3,6 +3,8 @@ export const FETCH_QUESTIONS = "fetch_RANDOM_questions";
 export const ANSWER_QUESTION = "answer_question";
 export const POST_QUESTION = "post_question";
 export const QUESTION_COMMENT = "question_comment";
+export const QUESTION_COMMENT_DELETE = "question_comment_delete";
+export const QUESTION_COMMENT_EDIT = "question_comment_edit";
 
 export const CHANGE_SETTINGS = "change_settings";
 

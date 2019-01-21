@@ -1,14 +1,24 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import { Label, Input, Form, Radio, Checkbox, Divider, Header } from "semantic-ui-react";
+import {
+    Label,
+    Input,
+    Form,
+    Radio,
+    Checkbox,
+    Divider,
+    Header
+} from "semantic-ui-react";
 
 const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
-
     let labelError;
 
-    if (n > 1000 || n < 1) 
-    {labelError = <Label pointing='left'>Værdi skal være mellem 1 og 1000</Label>};
+    if (n > 1000 || n < 1) {
+        labelError = (
+            <Label pointing="left">Værdi skal være mellem 1 og 1000</Label>
+        );
+    }
 
     return (
         <Form>
@@ -62,12 +72,12 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
                 {/* TODO-THOMAS: Validation for input field */}
                 <Form.Field>
                     <Input
-                        label='Anden værdi'
+                        label="Anden værdi"
                         name="n"
-                        type='number'
-                        min='1'
+                        type="number"
+                        min="1"
                         value={n}
-                        labelPosition='left'
+                        labelPosition="left"
                         onChange={onChange}
                     />
                 </Form.Field>

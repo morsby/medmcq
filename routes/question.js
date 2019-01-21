@@ -226,6 +226,50 @@ module.exports = app => {
         }
     });
 
+    app.put(
+        "/api/questions/:question_id/comment/:comment_id",
+        async (req, res) => {
+            let question = await Question.findById(req.params.question_id);
+
+            let comment = await question.comments;
+
+            index = _.findIndex(comment, { id: req.params.comment_id });
+
+            if (req.user.username === question.comments[index].user) {
+                question.comments[index].comment = req.body.comment;
+                question.save(err => {
+                    if (err) res.send(new Error(err));
+
+                    res.json("kommentar ændret");
+                });
+            } else {
+                res.json("ikke din kommentar");
+            }
+        }
+    );
+
+    app.delete(
+        "/api/questions/:question_id/comment/:comment_id",
+        async (req, res) => {
+            let question = await Question.findById(req.params.question_id);
+
+            let comment = await question.comments;
+
+            index = _.findIndex(comment, { id: req.params.comment_id });
+
+            if (req.user.username === question.comments[index].user) {
+                question.comments.splice(index, 1);
+                question.save(err => {
+                    if (err) res.send(new Error(err));
+
+                    res.json("kommentar slettet");
+                });
+            } else {
+                res.json("ikke din kommentar");
+            }
+        }
+    );
+
     // DELETE: Slet et spørgsmål
     app.delete("/api/questions/:id", permit("admin"), (req, res) => {
         Question.remove({ _id: req.params.id }, (err, question) => {

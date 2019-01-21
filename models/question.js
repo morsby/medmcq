@@ -30,6 +30,7 @@ var QuestionSchema = new Schema({
     comments: [
         {
             user: String,
+            user_id: mongoose.Schema.Types.ObjectId,
             date: { type: Date, default: Date.now },
             comment: String
         }

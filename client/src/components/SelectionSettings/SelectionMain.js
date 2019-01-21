@@ -34,7 +34,7 @@ class SelectionMain extends Component {
         this.onSettingsChange = this.onSettingsChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-    
+
     componentDidMount() {
         if (this.props.settings.questions.length === 0) {
             let name = "semester";
@@ -45,8 +45,12 @@ class SelectionMain extends Component {
         }
     }
 
-    onSettingsChange(e, { name, value }) {
+    onSettingsChange(e, { value, name }) {
         this.setState({ err: [] });
+
+        if (name === "n" && !value) {
+            return;
+        }
         this.props.changeSettings({ type: name, value });
     }
 
@@ -89,7 +93,6 @@ class SelectionMain extends Component {
         //     }
         // }
 
-        
         // // TODO-THOMAS: Er der valgt for mange spørgsmål eller for få?
         // if (questions.length < 1) {
         //     err.push("Antal spørgsmål kan ikke være negativt");

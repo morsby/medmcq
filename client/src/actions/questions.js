@@ -100,3 +100,30 @@ export const commentQuestion = (id, comment) => async dispatch => {
     });
     dispatch({ type: types.QUESTION_COMMENT, payload: res.data });
 };
+
+export const deleteComment = (question_id, comment_id) => async dispatch => {
+    const res = await axios.delete(
+        `/api/questions/${question_id}/comment/${comment_id}`
+    );
+
+    dispatch({
+        type: types.QUESTION_COMMENT_DELETE,
+        payload: { questionId: question_id, commentId: comment_id }
+    });
+};
+
+export const editComment = (
+    question_id,
+    comment_id,
+    comment
+) => async dispatch => {
+    const res = await axios.put(
+        `/api/questions/${question_id}/comment/${comment_id}`,
+        { comment }
+    );
+
+    dispatch({
+        type: types.QUESTION_COMMENT_EDIT,
+        payload: { questionId: question_id, commentId: comment_id, comment }
+    });
+};

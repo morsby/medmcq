@@ -10,8 +10,8 @@ import { urls } from "../../utils/common";
 
 class Header extends Component {
     flagStyle = {
-        cursor: 'pointer'
-    }
+        cursor: "pointer"
+    };
 
     componentDidMount() {
         this.props.fetchUser();
@@ -29,24 +29,28 @@ class Header extends Component {
         if (user) {
             højreMenu = (
                 <>
-                <Menu.Item>
-                    <strong>Velkommen {user.username[0].toUpperCase() + user.username.substring(1)}</strong>
-                </Menu.Item>
-                <Menu.Item onClick={() => handleClick("profile")}>
-                    <Icon
-                        name='id card outline'
-                        size='big'
-                        basic
-                        inverted
-                        className="click">
-                    </Icon>Profil
-                </Menu.Item>
+                    <Menu.Item>
+                        <strong>
+                            Velkommen{" "}
+                            {user.username[0].toUpperCase() +
+                                user.username.substring(1)}
+                        </strong>
+                    </Menu.Item>
+                    <Menu.Item onClick={() => handleClick("profile")}>
+                        <Icon
+                            name="id card outline"
+                            size="big"
+                            inverted
+                            className="click"
+                        />
+                        Profil
+                    </Menu.Item>
                 </>
             );
         } else {
             højreMenu = (
                 <Menu.Item onClick={() => handleClick("login")}>
-                    <Icon name='user md' /> Log ind
+                    <Icon name="user md" /> Log ind
                 </Menu.Item>
             );
         }
@@ -55,14 +59,22 @@ class Header extends Component {
 
         return (
             <header>
-                <Menu stackable attached inverted color='blue'>
+                <Menu stackable attached inverted color="blue" width={5}>
                     <Menu.Item onClick={() => handleClick("root")}>
-                        <Icon name='home' size='big'/> Forside
+                        <Icon name="home" size="big" /> Forside
                     </Menu.Item>
-                    <Menu.Menu position='right'>
+                    <Menu.Menu position="right">
                         <Menu.Item>
-                        <Flag style={this.flagStyle} onClick={() => console.log('clicked')} name='dk' />
-                        <Flag style={this.flagStyle} onClick={() => console.log('clicked')} name='uk' />
+                            <Flag
+                                style={this.flagStyle}
+                                onClick={() => console.log("clicked")}
+                                name="dk"
+                            />
+                            <Flag
+                                style={this.flagStyle}
+                                onClick={() => console.log("clicked")}
+                                name="gb"
+                            />
                         </Menu.Item>
                         {højreMenu}
                     </Menu.Menu>
