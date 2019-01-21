@@ -82,10 +82,10 @@ class QuizMain extends Component {
             max = this.props.questions.length,
             move;
 
-        if (deltaX > 300) {
+        if (deltaX > 200) {
             move = this.state.qn + 1;
         }
-        if (deltaX < -300) {
+        if (deltaX < -200) {
             move = this.state.qn - 1;
         }
         if (move >= min && move < max) this.onChangeQuestion(move);
