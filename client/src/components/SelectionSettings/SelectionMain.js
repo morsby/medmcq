@@ -54,13 +54,14 @@ class SelectionMain extends Component {
     handleSubmit(quizType) {
         let err = [];
 
-        let { semester, type, set, questions, specialer } = this.props.settings;
+        let { n, semester, type, set, questions, specialer } = this.props.settings;
 
         // Når den er tom modtager den fuldt antal
         console.log(questions.length)
 
 
         // VALIDATION
+        // Question.length = Antallet af spørgsmål for et semester eller speciale
         // Semester
         if (!semester) {
             err.push("Du skal vælge et semester først!");
@@ -87,21 +88,21 @@ class SelectionMain extends Component {
             }
         }
 
-        if (!questions.length) {
+        if (!n) {
             err.push("Du skal vælge et antal spørgsmål.");
             if (semester === 11) {
                 err.push("You must select a number of questions.");
             }
         }
 
-        if (questions.length > 300) {
+        if (n > 300) {
             err.push("Du har valgt for mange spørgsmål");
             if (semester === 11) {
                 err.push("You have picked too many questions");
             }
         }
 
-        if (questions.length < 0) {
+        if (n < 0) {
             err.push("Antal spørgsmål kan ikke være negativt");
             if (semester === 11) {
                 err.push("The number of questions can not be a negative number");

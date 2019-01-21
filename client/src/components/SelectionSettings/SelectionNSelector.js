@@ -16,7 +16,7 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
 
     if (n > 1000 || n < 1) {
         labelError = (
-            <Label pointing="left">Værdi skal være mellem 1 og 300</Label>
+            <Label pointing="left" basic color="red">Værdi skal være mellem 1 og 300</Label>
         );
     }
 
