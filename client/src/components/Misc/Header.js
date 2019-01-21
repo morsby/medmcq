@@ -3,12 +3,16 @@ import { connect } from "react-redux";
 import * as actions from "../../actions";
 
 import { withRouter } from "react-router";
-import { Button, Menu, Icon } from "semantic-ui-react";
+import { Flag, Menu, Icon } from "semantic-ui-react";
 import { urls } from "../../utils/common";
 
 // TODO: Evt. fjern connect - men skal så modtage `user` via parents
 
 class Header extends Component {
+    flagStyle = {
+        cursor: 'pointer'
+    }
+
     componentDidMount() {
         this.props.fetchUser();
     }
@@ -56,6 +60,10 @@ class Header extends Component {
                         <Icon name='home' size='big'/> Forside
                     </Menu.Item>
                     <Menu.Menu position='right'>
+                        <Menu.Item>
+                        <Flag style={this.flagStyle} onClick={() => console.log('clicked')} name='dk' />
+                        <Flag style={this.flagStyle} onClick={() => console.log('clicked')} name='uk' />
+                        </Menu.Item>
                         {højreMenu}
                     </Menu.Menu>
                 </Menu>

@@ -153,9 +153,9 @@ class SelectionMain extends Component {
                 <UIHeader />
                 <Container className="content">
                     <Header as="h1">
-                        MCQ'er fra kandidaten på medicin ved Aarhus Universitet
+                        MCQ-items fra medicin - Aarhus Universitet
                     </Header>
-                    <Header as="h3">Indtast dine valg nedenfor</Header>
+                    <Header as="h3">Vælg semester nedenfor</Header>
                     <Dropdown
                         placeholder="Vælg semester"
                         fluid
