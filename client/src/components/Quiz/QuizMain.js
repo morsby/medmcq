@@ -13,6 +13,7 @@ import Footer from "../Misc/Footer";
 import { smoothScroll } from "../../utils/quiz";
 import { urls } from "../../utils/common";
 import Header from "../Misc/Header";
+import QuizHeader from "../Misc/QuizHeader";
 
 const flickNumber = 0.1;
 
@@ -106,7 +107,7 @@ class QuizMain extends Component {
         return (
             <div className="flex-container">
 
-                <Header />
+                <QuizHeader />
 
                 <div className="content">
                     <QuizNavigator

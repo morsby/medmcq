@@ -8,7 +8,7 @@ import { urls } from "../../utils/common";
 
 // TODO: Evt. fjern connect - men skal så modtage `user` via parents
 
-class Header extends Component {
+class QuizHeader extends Component {
     flagStyle = {
         cursor: 'pointer'
     }
@@ -29,9 +29,6 @@ class Header extends Component {
         if (user) {
             højreMenu = (
                 <>
-                <Menu.Item>
-                    <strong>Velkommen {user.username[0].toUpperCase() + user.username.substring(1)}</strong>
-                </Menu.Item>
                 <Menu.Item onClick={() => handleClick("profile")}>
                     <Icon
                         name='id card outline'
@@ -60,10 +57,6 @@ class Header extends Component {
                         <Icon name='home' size='big'/> Forside
                     </Menu.Item>
                     <Menu.Menu position='right'>
-                        <Menu.Item>
-                        <Flag style={this.flagStyle} onClick={() => console.log('clicked')} name='dk' />
-                        <Flag style={this.flagStyle} onClick={() => console.log('clicked')} name='uk' />
-                        </Menu.Item>
                         {højreMenu}
                     </Menu.Menu>
                 </Menu>
@@ -82,5 +75,5 @@ export default withRouter(
     connect(
         mapStateToProps,
         actions
-    )(Header)
+    )(QuizHeader)
 );

@@ -155,7 +155,7 @@ class SelectionMain extends Component {
                     <Header as="h1">
                         MCQ-items fra medicin - Aarhus Universitet
                     </Header>
-                    <Header as="h3">Vælg semester nedenfor</Header>
+                    <Header as="h3">Vælg semester</Header>
                     <Dropdown
                         placeholder="Vælg semester"
                         fluid
