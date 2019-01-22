@@ -12,32 +12,36 @@ import reducers from './reducers';
 
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import ScrollToTop from './components/Misc/ScrollToTop';
-import LoadingPage from './components/Misc/LoadingPage';
-import ErrorPage from './components/Misc/404';
+import ScrollToTop from './components/Misc/HOC/ScrollToTop';
 
-import PrivateRoute from './components/Misc/PrivateRoute';
+import PrivateRoute from './components/Misc/HOC/PrivateRoute';
 
 // Routes
-import QuizMain from './components/Quiz/QuizMain';
+// Diverse
+import LoadingPage from './components/Misc/Pages/LoadingPage';
+import ErrorPage from './components/Misc/Pages/404';
+import Print from './components/Misc/Pages/Print/Print';
+// Selections
+import SelectionMain from './components/SelectionSettings/SelectionMain/SelectionMain';
 
-import SelectionMain from './components/SelectionSettings/SelectionMain';
+// Selve quizzen
+import QuizMain from './components/Quiz/QuizMain/QuizMain';
 
-import About from './components/Misc/About';
+import About from './components/Misc/Pages/About/About';
 
-import FeedbackIndex from './components/Feedback/FeedbackIndex';
-import FeedbackSingle from './components/Feedback/FeedbackSingle';
-import FeedbackPost from './components/Feedback/FeedbackPost';
+// Feedback
+import FeedbackIndex from './components/Feedback/FeedbackIndex/FeedbackIndex';
+import FeedbackSingle from './components/Feedback/FeedbackSingle/FeedbackSingle';
+import FeedbackPost from './components/Feedback/FeedbackPost/FeedbackPost';
 
-import Signup from './components/Auth/Signup';
-import Login from './components/Auth/Login';
-import Logout from './components/Auth/Logout';
-import Profile from './components/Auth/Profile';
-import EditProfile from './components/Auth/EditProfile';
-import ForgotPassword from './components/Auth/ForgotPassword';
-import ResetPassword from './components/Auth/ResetPassword';
-
-import Print from './components/Misc/Print';
+// Auth
+import Signup from './components/Auth/Signup/Signup';
+import Login from './components/Auth/Login/Login';
+import Logout from './components/Auth/Logout/Logout';
+import Profile from './components/Auth/Profile/Profile';
+import EditProfile from './components/Auth/Profile/EditProfile';
+import ForgotPassword from './components/Auth/Password/ForgotPassword';
+import ResetPassword from './components/Auth/Password/ResetPassword';
 
 import { urls } from './utils/common';
 
