@@ -8,6 +8,7 @@
         "npm": "6.2.0"
     },
     "prettier": {
+        "printWidth": 80,
         "trailingComma": "all",
         "tabWidth": 4,
         "semi": true,
