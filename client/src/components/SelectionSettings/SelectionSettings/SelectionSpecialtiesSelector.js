@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Form, Checkbox, Divider, Header } from 'semantic-ui-react';
 
-import { specialer } from '../../../../utils/common';
+import { specialer } from '../../../utils/common';
 
 const checkboxGenerator = (speciale, erValgt, antalSpg, onChange) => {
     let antal = antalSpg === undefined ? 0 : antalSpg;

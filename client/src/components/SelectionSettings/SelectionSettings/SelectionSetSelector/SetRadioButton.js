@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-import { groupQuestions, getIds } from '../../../../../utils/questions';
+import { groupQuestions, getIds } from '../../../../utils/questions';
 import { Form, Radio, Divider, Header, Icon } from 'semantic-ui-react';
 
 const SetRadioButton = ({

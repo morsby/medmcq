@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../../../actions';
+import * as actions from '../../actions';
 
 import _ from 'lodash';
 
@@ -19,11 +19,11 @@ import SelectionSpecialtiesSelector from './SelectionSettings/SelectionSpecialti
 import SelectionTypeSelector from './SelectionSettings/SelectionTypeSelector';
 import SelectionMessage from './SelectionMessage/SelectionMessage';
 
-import Footer from '../../Layout/Footer';
-import { default as UIHeader } from '../../Layout/Header';
+import Footer from '../Layout/Footer';
+import { default as UIHeader } from '../Layout/Header';
 
-import { semestre, urls } from '../../../utils/common';
-import { specialer as specialerCommon } from '../../../utils/common';
+import { semestre, urls } from '../../utils/common';
+import { specialer as specialerCommon } from '../../utils/common';
 
 class SelectionMain extends Component {
     state = { err: [] };

@@ -22,7 +22,7 @@ import LoadingPage from './components/Misc/Pages/LoadingPage';
 import ErrorPage from './components/Misc/Pages/404';
 import Print from './components/Misc/Pages/Print/Print';
 // Selections
-import SelectionMain from './components/SelectionSettings/SelectionMain/SelectionMain';
+import SelectionMain from './components/SelectionSettings/Selection';
 
 // Selve quizzen
 import Quiz from './components/Quiz/Quiz';
