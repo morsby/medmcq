@@ -8,8 +8,12 @@
         "npm": "6.2.0"
     },
     "prettier": {
+<<<<<<< HEAD
         "printWidth": 80,
         "trailingComma": "all",
+=======
+        "trailingComma": "es5",
+>>>>>>> parent of bf92af8... Update to prettier
         "tabWidth": 4,
         "semi": true,
         "singleQuote": true
