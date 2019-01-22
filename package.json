@@ -51,7 +51,12 @@
         "sanitize-html": "^1.20.0"
     },
     "devDependencies": {
+        "babel-eslint": "^10.0.1",
         "concurrently": "^3.6.1",
-        "nodemon": "^1.18.9"
+        "eslint": "^5.12.1",
+        "eslint-config-prettier": "^3.6.0",
+        "eslint-plugin-prettier": "^3.0.1",
+        "nodemon": "^1.18.9",
+        "prettier": "^1.16.0"
     }
 }
