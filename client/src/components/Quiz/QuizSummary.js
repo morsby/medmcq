@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { urls, truncateText } from '../../../utils/common';
-import { calculateResults } from '../../../utils/quiz';
+import { urls, truncateText } from '../../utils/common';
+import { calculateResults } from '../../utils/quiz';
 
 import { Card, List, Container, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';

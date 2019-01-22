@@ -25,7 +25,7 @@ import Print from './components/Misc/Pages/Print/Print';
 import SelectionMain from './components/SelectionSettings/SelectionMain/SelectionMain';
 
 // Selve quizzen
-import QuizMain from './components/Quiz/QuizMain/QuizMain';
+import Quiz from './components/Quiz/Quiz';
 
 import About from './components/Misc/Pages/About/About';
 
@@ -78,7 +78,7 @@ ReactDOM.render(
                         />
                         <Route path={urls.feedback} component={FeedbackIndex} />
                         <Route path={urls.about} component={About} />
-                        <Route path={urls.quiz} component={QuizMain} />
+                        <Route path={urls.quiz} component={Quiz} />
                         <Route path={urls.signup} component={Signup} />
                         <Route path={urls.login} component={Login} />
                         <Route path={urls.logout} component={Logout} />

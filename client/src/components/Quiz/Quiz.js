@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actions from '../../../actions';
+import * as actions from '../../actions';
 
 import Swipeable from 'react-swipeable';
 import QuizLoader from './QuizLoader';
@@ -8,11 +8,11 @@ import Question from './Question/Question';
 import QuizNavigator from './QuizNavigator';
 import QuizSummary from './QuizSummary';
 
-import Header from '../../Layout/Header';
-import Footer from '../../Layout/Footer';
+import Header from '../Layout/Header';
+import Footer from '../Layout/Footer';
 
-import { smoothScroll } from '../../../utils/quiz';
-import { urls } from '../../../utils/common';
+import { smoothScroll } from '../../utils/quiz';
+import { urls } from '../../utils/common';
 
 const flickNumber = 0.1;
 

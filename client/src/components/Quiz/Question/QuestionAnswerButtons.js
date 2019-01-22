@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 
 import { Button, Divider } from 'semantic-ui-react';
 
-import { evalAnswer } from '../../../../utils/quiz';
+import { evalAnswer } from '../../../utils/quiz';
 import marked from 'marked';
-import { subSupScript } from '../../../../utils/quiz';
+import { subSupScript } from '../../../utils/quiz';
 
 const QuestionAnswerButtons = ({ pristine, onAnswer, question }) => {
     const generateButton = answerNo => {
