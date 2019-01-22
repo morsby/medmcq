@@ -16,7 +16,7 @@
     },
     "repository": "https://github.com/Morsby/au-medicin-mcq",
     "scripts": {
-        "format": "prettier-eslint \"client/src/**/*.js\"",
+        "format": "prettier-eslint \"client/src/**/*.js\" --write",
         "test": "echo \"Error: no test specified\" && exit 1",
         "server": "nodemon server.js",
         "client": "cd client && npm start",
