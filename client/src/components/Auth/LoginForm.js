@@ -1,16 +1,16 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { withRouter } from "react-router";
-import * as actions from "../../actions";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
+import * as actions from '../../actions';
 
-import { urls } from "../../utils/common";
+import { urls } from '../../utils/common';
 import {
     loginUsernameValid,
-    loginPasswordValid
-} from "../../utils/formValidation";
+    loginPasswordValid,
+} from '../../utils/formValidation';
 
-import { Form, Field } from "react-final-form";
-import { Button, Divider, Message } from "semantic-ui-react";
+import { Form, Field } from 'react-final-form';
+import { Button, Divider, Message } from 'semantic-ui-react';
 
 class LoginForm extends Component {
     state = { error: null };
@@ -22,10 +22,10 @@ class LoginForm extends Component {
     onSubmit = async values => {
         let login = await this.props.login(values);
 
-        if (login.type === "success") {
-            return this.handleNavigation("profile");
+        if (login.type === 'success') {
+            return this.handleNavigation('profile');
         } else {
-            this.setState({ error: "Login mislykkedes" });
+            this.setState({ error: 'Login mislykkedes' });
         }
     };
 
@@ -47,10 +47,10 @@ class LoginForm extends Component {
                                 {({ input, meta }) => (
                                     <div
                                         className={
-                                            "field " +
+                                            'field ' +
                                             (meta.error && meta.touched
-                                                ? "error"
-                                                : "")
+                                                ? 'error'
+                                                : '')
                                         }
                                     >
                                         <label>Brugernavn</label>
@@ -59,12 +59,11 @@ class LoginForm extends Component {
                                             type="text"
                                             placeholder="Brugernavn"
                                         />
-                                        {meta.error &&
-                                            meta.touched && (
-                                                <Message error visible={true}>
-                                                    {meta.error}
-                                                </Message>
-                                            )}
+                                        {meta.error && meta.touched && (
+                                            <Message error visible={true}>
+                                                {meta.error}
+                                            </Message>
+                                        )}
                                     </div>
                                 )}
                             </Field>
@@ -76,10 +75,10 @@ class LoginForm extends Component {
                                 {({ input, meta }) => (
                                     <div
                                         className={
-                                            "field " +
+                                            'field ' +
                                             (meta.error && meta.touched
-                                                ? "error"
-                                                : "")
+                                                ? 'error'
+                                                : '')
                                         }
                                     >
                                         <label>Kodeord</label>
@@ -88,16 +87,15 @@ class LoginForm extends Component {
                                             type="password"
                                             placeholder="Kodeord"
                                         />
-                                        {meta.error &&
-                                            meta.touched && (
-                                                <Message
-                                                    error
-                                                    visible={true}
-                                                    size="small"
-                                                >
-                                                    {meta.error}
-                                                </Message>
-                                            )}
+                                        {meta.error && meta.touched && (
+                                            <Message
+                                                error
+                                                visible={true}
+                                                size="small"
+                                            >
+                                                {meta.error}
+                                            </Message>
+                                        )}
                                     </div>
                                 )}
                             </Field>
@@ -115,14 +113,14 @@ class LoginForm extends Component {
                         </form>
                     )}
                 />
-                <div style={{ float: "right" }}>
+                <div style={{ float: 'right' }}>
                     <Button
-                        onClick={() => this.handleNavigation("forgotPassword")}
+                        onClick={() => this.handleNavigation('forgotPassword')}
                         color="blue"
                     >
                         Glemt kodeord?
                     </Button>
-                    <Button onClick={() => this.handleNavigation("signup")}>
+                    <Button onClick={() => this.handleNavigation('signup')}>
                         Opret bruger
                     </Button>
                 </div>
@@ -133,7 +131,7 @@ class LoginForm extends Component {
 
 function mapStateToProps(state) {
     return {
-        auth: state.auth
+        auth: state.auth,
     };
 }
 

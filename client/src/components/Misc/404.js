@@ -1,9 +1,9 @@
-import React from "react";
+import React from 'react';
 
-import { Container } from "semantic-ui-react";
+import { Container } from 'semantic-ui-react';
 
-import Header from "./Header";
-import Footer from "./Footer";
+import Header from './Header';
+import Footer from './Footer';
 
 const ErrorPage = props => {
     return (

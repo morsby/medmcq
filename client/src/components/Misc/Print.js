@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import { urls } from "../../utils/common";
+import { urls } from '../../utils/common';
 
-import { Container, Button } from "semantic-ui-react";
+import { Container, Button } from 'semantic-ui-react';
 
-import Header from "../Misc/Header";
-import PrintDisplayQuestion from "./PrintDisplayQuestion";
+import Header from '../Misc/Header';
+import PrintDisplayQuestion from './PrintDisplayQuestion';
 
 class Print extends Component {
     state = { showCorrect: false };
@@ -41,7 +41,7 @@ class Print extends Component {
                                 className="primary"
                                 onClick={this.toggleAnswers}
                             >
-                                {showCorrect ? "Skjul" : "Vis"} rigtige svar
+                                {showCorrect ? 'Skjul' : 'Vis'} rigtige svar
                             </Button>
                             <Button
                                 className="hide-on-print"
@@ -53,7 +53,7 @@ class Print extends Component {
                         <Button
                             color="yellow"
                             floated="right"
-                            onClick={() => this.handleNavigation("quiz")}
+                            onClick={() => this.handleNavigation('quiz')}
                         >
                             Vend tilbage til quizzen
                         </Button>
@@ -78,7 +78,7 @@ class Print extends Component {
 
 function mapStateToProps(state) {
     return {
-        questions: state.questions
+        questions: state.questions,
     };
 }
 

@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import { Button } from "semantic-ui-react";
+import { Button } from 'semantic-ui-react';
 
 const SelectionTypeSelector = props => {
     return (
@@ -9,7 +9,7 @@ const SelectionTypeSelector = props => {
             <Button
                 name="type"
                 value="random"
-                active={props.type === "random"}
+                active={props.type === 'random'}
                 onClick={props.handleClick}
             >
                 Tilfældige spørgsmål
@@ -18,7 +18,7 @@ const SelectionTypeSelector = props => {
             <Button
                 name="type"
                 value="specialer"
-                active={props.type === "specialer"}
+                active={props.type === 'specialer'}
                 onClick={props.handleClick}
             >
                 Specialer
@@ -26,7 +26,7 @@ const SelectionTypeSelector = props => {
             <Button
                 name="type"
                 value="set"
-                active={props.type === "set"}
+                active={props.type === 'set'}
                 onClick={props.handleClick}
             >
                 Fulde eksamenssæt
@@ -37,7 +37,7 @@ const SelectionTypeSelector = props => {
 
 SelectionTypeSelector.propTypes = {
     type: PropTypes.string.isRequired,
-    handleClick: PropTypes.func.isRequired
+    handleClick: PropTypes.func.isRequired,
 };
 
 export default SelectionTypeSelector;

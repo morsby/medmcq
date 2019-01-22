@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import * as actions from "../../actions";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as actions from '../../actions';
 
-import _ from "lodash";
+import _ from 'lodash';
 
 import {
     Container,
@@ -10,20 +10,20 @@ import {
     Dropdown,
     Divider,
     Button,
-    Message
-} from "semantic-ui-react";
+    Message,
+} from 'semantic-ui-react';
 
-import SelectionNSelector from "./SelectionNSelector";
-import SelectionSetSelector from "./SelectionSetSelector";
-import SelectionSpecialtiesSelector from "./SelectionSpecialtiesSelector";
-import SelectionTypeSelector from "./SelectionTypeSelector";
-import SelectionMessage from "./SelectionMessage";
+import SelectionNSelector from './SelectionNSelector';
+import SelectionSetSelector from './SelectionSetSelector';
+import SelectionSpecialtiesSelector from './SelectionSpecialtiesSelector';
+import SelectionTypeSelector from './SelectionTypeSelector';
+import SelectionMessage from './SelectionMessage';
 
-import Footer from "../Misc/Footer";
-import { default as UIHeader } from "../Misc/Header";
+import Footer from '../Misc/Footer';
+import { default as UIHeader } from '../Misc/Header';
 
-import { semestre, urls } from "../../utils/common";
-import { specialer as specialerCommon } from "../../utils/common";
+import { semestre, urls } from '../../utils/common';
+import { specialer as specialerCommon } from '../../utils/common';
 
 class SelectionMain extends Component {
     state = { err: [] };
@@ -37,7 +37,7 @@ class SelectionMain extends Component {
 
     componentDidMount() {
         if (this.props.settings.questions.length === 0) {
-            let name = "semester";
+            let name = 'semester';
             let value = 7;
             let e = null;
 
@@ -54,64 +54,72 @@ class SelectionMain extends Component {
     handleSubmit(quizType) {
         let err = [];
 
-        let { n, semester, type, set, questions, specialer } = this.props.settings;
+        let {
+            n,
+            semester,
+            type,
+            set,
+            questions,
+            specialer,
+        } = this.props.settings;
 
         // Når den er tom modtager den fuldt antal
-        console.log(questions.length)
-
+        console.log(questions.length);
 
         // VALIDATION
         // Question.length = Antallet af spørgsmål for et semester eller speciale
         // Semester
         if (!semester) {
-            err.push("Du skal vælge et semester først!");
+            err.push('Du skal vælge et semester først!');
         }
 
         //Specialer
-        if (type === "specialer" && specialer.length === 0) {
-            err.push("Du skal vælge mindst ét speciale.");
+        if (type === 'specialer' && specialer.length === 0) {
+            err.push('Du skal vælge mindst ét speciale.');
         }
 
         // Sæt
-        if (type === "set" && !set) {
-            err.push("Du skal vælge et sæt for at kunne starte!");
+        if (type === 'set' && !set) {
+            err.push('Du skal vælge et sæt for at kunne starte!');
             if (semester === 11) {
-                err.push("You have to select a set to start.");
+                err.push('You have to select a set to start.');
             }
         }
 
         // Findes der spørgsmål?
         if (questions.length === 0) {
-            err.push("Der er ingen spørgsmål for det valgte semester.");
+            err.push('Der er ingen spørgsmål for det valgte semester.');
             if (semester === 11) {
-                err.push("There are no questions for the selected semester.");
+                err.push('There are no questions for the selected semester.');
             }
         }
 
         if (!n) {
-            err.push("Du skal vælge et antal spørgsmål.");
+            err.push('Du skal vælge et antal spørgsmål.');
             if (semester === 11) {
-                err.push("You must select a number of questions.");
+                err.push('You must select a number of questions.');
             }
         }
 
         if (n > 300) {
-            err.push("Du har valgt for mange spørgsmål");
+            err.push('Du har valgt for mange spørgsmål');
             if (semester === 11) {
-                err.push("You have picked too many questions");
+                err.push('You have picked too many questions');
             }
         }
 
         if (n < 0) {
-            err.push("Antal spørgsmål kan ikke være negativt");
+            err.push('Antal spørgsmål kan ikke være negativt');
             if (semester === 11) {
-                err.push("The number of questions can not be a negative number");
+                err.push(
+                    'The number of questions can not be a negative number'
+                );
             }
         }
 
         // tjek for fejl, start eller ej
         if (err.length === 0) {
-            if (quizType === "new") {
+            if (quizType === 'new') {
                 this.props.getQuestions(this.props.settings);
             }
             this.props.history.push(urls.quiz);
@@ -129,13 +137,13 @@ class SelectionMain extends Component {
             onlyNew,
             questions,
             sets,
-            set
+            set,
         } = this.props.settings;
         let { user } = this.props,
             answeredQuestions;
         if (
             this.props.user &&
-            this.props.user.hasOwnProperty("answeredQuestions")
+            this.props.user.hasOwnProperty('answeredQuestions')
         ) {
             answeredQuestions = user.answeredQuestions[semester];
         }
@@ -184,7 +192,7 @@ class SelectionMain extends Component {
 
                     <Divider hidden />
 
-                    {type !== "set" && (
+                    {type !== 'set' && (
                         <SelectionNSelector
                             n={n}
                             onlyNew={onlyNew}
@@ -195,7 +203,7 @@ class SelectionMain extends Component {
                         />
                     )}
 
-                    {type === "set" && (
+                    {type === 'set' && (
                         <SelectionSetSelector
                             questions={questions}
                             sets={sets}
@@ -206,7 +214,7 @@ class SelectionMain extends Component {
                         />
                     )}
 
-                    {type === "specialer" && (
+                    {type === 'specialer' && (
                         <SelectionSpecialtiesSelector
                             semester={semester}
                             questions={questions}
@@ -225,13 +233,13 @@ class SelectionMain extends Component {
                     )}
                     <SelectionMessage user={user} type={type} />
                     <Button
-                        onClick={() => this.handleSubmit("new")}
-                        disabled={antalValgte < 1 && type === "specialer"}
+                        onClick={() => this.handleSubmit('new')}
+                        disabled={antalValgte < 1 && type === 'specialer'}
                     >
                         Start!
                     </Button>
                     {this.props.answers.length > 0 && (
-                        <Button onClick={() => this.handleSubmit("cont")}>
+                        <Button onClick={() => this.handleSubmit('cont')}>
                             Fortsæt med igangværende spørgsmål
                         </Button>
                     )}
@@ -264,7 +272,7 @@ function mapStateToProps(state) {
     return {
         settings: state.settings,
         answers: state.answers,
-        user: state.auth.user
+        user: state.auth.user,
     };
 }
 

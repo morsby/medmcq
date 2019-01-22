@@ -1,11 +1,11 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import { Container, Menu, Icon } from "semantic-ui-react";
+import { Container, Menu, Icon } from 'semantic-ui-react';
 
 const QuizNavigator = ({ clickHandler, qn, qmax, fixed, position }) => {
     return (
-        <Container {...(position === "top" ? { className: "top-nav" } : {})}>
+        <Container {...(position === 'top' ? { className: 'top-nav' } : {})}>
             <Menu
                 size="large"
                 fluid
@@ -20,7 +20,7 @@ const QuizNavigator = ({ clickHandler, qn, qmax, fixed, position }) => {
                     Forrige
                 </Menu.Item>
                 <Menu.Item header>
-                    {position === "top" && (
+                    {position === 'top' && (
                         <span>
                             Spørgsmål {qn + 1} af {qmax}
                         </span>
@@ -43,7 +43,7 @@ QuizNavigator.propTypes = {
     qn: PropTypes.number.isRequired,
     qmax: PropTypes.number.isRequired,
     fixed: PropTypes.bool,
-    position: PropTypes.string
+    position: PropTypes.string,
 };
 
 export default QuizNavigator;

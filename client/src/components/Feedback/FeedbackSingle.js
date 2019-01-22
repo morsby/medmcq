@@ -1,19 +1,19 @@
-import React, { Component } from "react";
-import * as actions from "../../actions";
-import { connect } from "react-redux";
-import { withRouter } from "react-router";
+import React, { Component } from 'react';
+import * as actions from '../../actions';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 
-import { Container, Segment } from "semantic-ui-react";
-import FeedbackComment from "./FeedbackComment";
-import FeedbackCommentPost from "./FeedbackCommentPost";
-import FeedbackSingleContent from "./FeedbackSingleContent";
-import FeedbackNavigation from "./FeedbackNavigation";
+import { Container, Segment } from 'semantic-ui-react';
+import FeedbackComment from './FeedbackComment';
+import FeedbackCommentPost from './FeedbackCommentPost';
+import FeedbackSingleContent from './FeedbackSingleContent';
+import FeedbackNavigation from './FeedbackNavigation';
 
-import LoadingPage from "../Misc/LoadingPage";
-import Header from "../Misc/Header";
-import Footer from "../Misc/Footer";
+import LoadingPage from '../Misc/LoadingPage';
+import Header from '../Misc/Header';
+import Footer from '../Misc/Footer';
 
-import { smoothScroll } from "../../utils/quiz";
+import { smoothScroll } from '../../utils/quiz';
 
 class FeedbackSingle extends Component {
     // TODO: Få component til at opdatere selv ved dybt nested ny kommentar.
@@ -33,7 +33,7 @@ class FeedbackSingle extends Component {
 
     onReply(id, slug) {
         this.setState({ replyId: id, replySlug: slug });
-        smoothScroll(null, "down");
+        smoothScroll(null, 'down');
     }
 
     pathId() {
@@ -61,7 +61,7 @@ class FeedbackSingle extends Component {
         let { feedbackSingle, votedFor } = this.props;
         let { replyId, replySlug } = this.state;
 
-        let currId = feedbackSingle.hasOwnProperty("feedback")
+        let currId = feedbackSingle.hasOwnProperty('feedback')
             ? feedbackSingle.feedback._id
             : null;
 
@@ -119,7 +119,7 @@ class FeedbackSingle extends Component {
 function mapStateToProps(state) {
     return {
         feedbackSingle: state.feedback.feedbackSingle,
-        votedFor: state.feedback.votedFor
+        votedFor: state.feedback.votedFor,
     };
 }
 

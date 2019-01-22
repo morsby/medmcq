@@ -1,9 +1,9 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import { Form, Checkbox, Divider, Header } from "semantic-ui-react";
+import { Form, Checkbox, Divider, Header } from 'semantic-ui-react';
 
-import { specialer } from "../../utils/common";
+import { specialer } from '../../utils/common';
 
 const checkboxGenerator = (speciale, erValgt, antalSpg, onChange) => {
     let antal = antalSpg === undefined ? 0 : antalSpg;
@@ -28,7 +28,7 @@ const SelectionSpecialtiesSelector = ({
     valgteSpecialer = [],
     onChange,
     questions = [],
-    antalPerSpeciale = []
+    antalPerSpeciale = [],
 }) => {
     if (!semester)
         return (
@@ -59,7 +59,7 @@ const SelectionSpecialtiesSelector = ({
 SelectionSpecialtiesSelector.propTypes = {
     semester: PropTypes.number,
     valgteSpecialer: PropTypes.array,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
 };
 
 export default SelectionSpecialtiesSelector;

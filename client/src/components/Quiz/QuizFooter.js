@@ -1,20 +1,20 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import { Container, Menu, Divider } from "semantic-ui-react";
+import { Container, Menu, Divider } from 'semantic-ui-react';
 
 const QuizFooter = ({ navigateToPage }) => {
     return (
         <Container>
             <Divider hidden />
             <Menu widths={2}>
-                <Menu.Item color="red" onClick={() => navigateToPage("root")}>
+                <Menu.Item color="red" onClick={() => navigateToPage('root')}>
                     Tilbage til forsiden
                 </Menu.Item>
 
                 <Menu.Item
                     color="yellow"
-                    onClick={() => navigateToPage("profile")}
+                    onClick={() => navigateToPage('profile')}
                 >
                     Til din profil
                 </Menu.Item>
@@ -24,7 +24,7 @@ const QuizFooter = ({ navigateToPage }) => {
 };
 
 QuizFooter.propTypes = {
-    navigateToPage: PropTypes.func.isRequired
+    navigateToPage: PropTypes.func.isRequired,
 };
 
 export default QuizFooter;

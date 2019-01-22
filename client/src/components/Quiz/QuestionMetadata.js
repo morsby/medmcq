@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import { List } from "semantic-ui-react";
+import { List } from 'semantic-ui-react';
 
 const QuestionMetadata = ({ question }) => {
     return (
@@ -30,7 +30,7 @@ const QuestionMetadata = ({ question }) => {
 };
 
 QuestionMetadata.propTypes = {
-    question: PropTypes.object.isRequired
+    question: PropTypes.object.isRequired,
 };
 
 export default QuestionMetadata;

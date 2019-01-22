@@ -1,19 +1,19 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { withRouter } from "react-router";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
 
-import _ from "lodash";
+import _ from 'lodash';
 
-import { Icon, Message } from "semantic-ui-react";
+import { Icon, Message } from 'semantic-ui-react';
 
-import FeedbackListItem from "./FeedbackListItem";
+import FeedbackListItem from './FeedbackListItem';
 
 class FeedbackList extends Component {
-    state = { sortBy: "votes", order: "desc" };
+    state = { sortBy: 'votes', order: 'desc' };
 
     sortBy(key) {
         if (key === this.state.sortBy) {
-            let order = this.state.order === "desc" ? "asc" : "desc";
+            let order = this.state.order === 'desc' ? 'asc' : 'desc';
             this.setState({ order });
         } else {
             this.setState({ sortBy: key });
@@ -27,7 +27,7 @@ class FeedbackList extends Component {
         let sortedFeedback = _.orderBy(feedback, sortBy, order);
 
         let icon =
-            order === "desc" ? (
+            order === 'desc' ? (
                 <Icon name="sort descending" />
             ) : (
                 <Icon name="sort ascending" />
@@ -44,24 +44,24 @@ class FeedbackList extends Component {
                     det er en god idé.
                 </Message>
                 <p>
-                    Sorter feedback efter{" "}
+                    Sorter feedback efter{' '}
                     <span
-                        style={{ fontWeight: "bold" }}
+                        style={{ fontWeight: 'bold' }}
                         className="click"
-                        onClick={() => this.sortBy("date")}
+                        onClick={() => this.sortBy('date')}
                     >
                         dato
-                    </span>{" "}
-                    {sortBy === "date" && icon}
-                    eller{" "}
+                    </span>{' '}
+                    {sortBy === 'date' && icon}
+                    eller{' '}
                     <span
-                        style={{ fontWeight: "bold" }}
+                        style={{ fontWeight: 'bold' }}
                         className="click"
-                        onClick={() => this.sortBy("votes")}
+                        onClick={() => this.sortBy('votes')}
                     >
                         popularitet
                     </span>
-                    {sortBy === "votes" && icon}
+                    {sortBy === 'votes' && icon}
                 </p>
 
                 {sortedFeedback.map(e => {
@@ -80,6 +80,6 @@ class FeedbackList extends Component {
 
 FeedbackList.propTypes = {
     feedback: PropTypes.array,
-    getSpecificFeedback: PropTypes.func.isRequired
+    getSpecificFeedback: PropTypes.func.isRequired,
 };
 export default withRouter(FeedbackList);

@@ -1,5 +1,5 @@
-import axios from "axios";
-import * as types from "./types";
+import axios from 'axios';
+import * as types from './types';
 
 export const getQuestions = (
     settings,
@@ -12,13 +12,13 @@ export const getQuestions = (
 
     // Hvilke spøgsmål bedes der om?
     switch (type) {
-        case "ids":
-            res = await axios.post("/api/questions/ids", {
-                ids: requestedIds
+        case 'ids':
+            res = await axios.post('/api/questions/ids', {
+                ids: requestedIds,
             });
             break;
-        case "set":
-            set = set.split("/");
+        case 'set':
+            set = set.split('/');
 
             res = await axios.get(
                 `/api/questions?semester=${semester}&examYear=${
@@ -26,19 +26,19 @@ export const getQuestions = (
                 }&examSeason=${set[1]}`
             );
             break;
-        case "random":
-        case "specialer":
+        case 'random':
+        case 'specialer':
             // Lav tomme strings til API-request
-            let querySpecialer = "",
-                unique = "";
+            let querySpecialer = '',
+                unique = '';
 
             // Spcialeønsker? Lav det til en streng!
-            if (type === "specialer") {
-                querySpecialer = "&specialer=" + specialer.join(",");
+            if (type === 'specialer') {
+                querySpecialer = '&specialer=' + specialer.join(',');
             }
 
             // Nye spørgsmål? lav det til en streng!
-            if (onlyNew) unique = "&unique=t";
+            if (onlyNew) unique = '&unique=t';
 
             // Generer den samlede query-streng
             res = await axios.get(
@@ -52,7 +52,7 @@ export const getQuestions = (
     dispatch({
         type: types.FETCH_QUESTIONS,
         payload: res.data,
-        questionType: type
+        questionType: type,
     });
 };
 
@@ -65,11 +65,11 @@ export const answerQuestion = (
 ) => dispatch => {
     let post = {
         questionId: id,
-        answer: correct.correct ? "correct" : "wrong",
+        answer: correct.correct ? 'correct' : 'wrong',
         answerNo: answer,
-        semester
+        semester,
     };
-    if (user) axios.post("/api/questions/answer", post);
+    if (user) axios.post('/api/questions/answer', post);
 
     dispatch({ type: types.ANSWER_QUESTION, payload: { id, answer, correct } });
 };
@@ -77,38 +77,36 @@ export const answerQuestion = (
 export const postQuestion = post => async dispatch => {
     const formData = new FormData();
 
-    formData.append("question", post.question);
-    formData.append("answer1", post.answer1);
-    formData.append("answer2", post.answer2);
-    formData.append("answer3", post.answer3);
-    formData.append("correctAnswer", post.correctAnswer);
-    formData.append("semester", post.semester);
-    formData.append("examYear", post.examYear);
-    formData.append("examSeason", post.examSeason);
-    formData.append("specialty", post.specialty);
+    formData.append('question', post.question);
+    formData.append('answer1', post.answer1);
+    formData.append('answer2', post.answer2);
+    formData.append('answer3', post.answer3);
+    formData.append('correctAnswer', post.correctAnswer);
+    formData.append('semester', post.semester);
+    formData.append('examYear', post.examYear);
+    formData.append('examSeason', post.examSeason);
+    formData.append('specialty', post.specialty);
     if (post.image) {
-        formData.append("image", post.image, post.image.name);
+        formData.append('image', post.image, post.image.name);
     }
 
-    const res = await axios.post("/api/questions", formData);
+    const res = await axios.post('/api/questions', formData);
     dispatch({ type: types.POST_QUESTION, payload: res.data });
 };
 
 export const commentQuestion = (id, comment) => async dispatch => {
     const res = await axios.put(`/api/questions/${id}/comment`, {
-        comment
+        comment,
     });
     dispatch({ type: types.QUESTION_COMMENT, payload: res.data });
 };
 
 export const deleteComment = (question_id, comment_id) => async dispatch => {
-    await axios.delete(
-        `/api/questions/${question_id}/comment/${comment_id}`
-    );
+    await axios.delete(`/api/questions/${question_id}/comment/${comment_id}`);
 
     dispatch({
         type: types.QUESTION_COMMENT_DELETE,
-        payload: { questionId: question_id, commentId: comment_id }
+        payload: { questionId: question_id, commentId: comment_id },
     });
 };
 
@@ -117,13 +115,12 @@ export const editComment = (
     comment_id,
     comment
 ) => async dispatch => {
-    await axios.put(
-        `/api/questions/${question_id}/comment/${comment_id}`,
-        { comment }
-    );
+    await axios.put(`/api/questions/${question_id}/comment/${comment_id}`, {
+        comment,
+    });
 
     dispatch({
         type: types.QUESTION_COMMENT_EDIT,
-        payload: { questionId: question_id, commentId: comment_id, comment }
+        payload: { questionId: question_id, commentId: comment_id, comment },
     });
 };

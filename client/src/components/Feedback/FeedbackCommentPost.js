@@ -1,17 +1,17 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import * as actions from "../../actions";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import * as actions from '../../actions';
 
-import { Button } from "semantic-ui-react";
-import { Form, Field } from "react-final-form";
+import { Button } from 'semantic-ui-react';
+import { Form, Field } from 'react-final-form';
 
 const FeedbackCommentPost = ({
     feedbackId,
     replyId,
     replySlug,
     replyReset,
-    postFeedbackComment // fra actions connect
+    postFeedbackComment, // fra actions connect
 }) => {
     const handleSubmit = formValues => {
         formValues.feedbackId = feedbackId;
@@ -34,7 +34,7 @@ const FeedbackCommentPost = ({
                     const errors = {};
 
                     if (!values.text || values.text.length < 10) {
-                        errors.text = "Teksten skal minimum være 10 tegn";
+                        errors.text = 'Teksten skal minimum være 10 tegn';
                     }
                     return errors;
                 }}
@@ -44,7 +44,7 @@ const FeedbackCommentPost = ({
                     pristine,
                     values,
                     form,
-                    invalid
+                    invalid,
                 }) => (
                     <form
                         onSubmit={event => {
@@ -56,10 +56,10 @@ const FeedbackCommentPost = ({
                             {({ input, meta }) => (
                                 <div
                                     className={
-                                        "field " +
+                                        'field ' +
                                         (meta.error && meta.touched
-                                            ? "error"
-                                            : "")
+                                            ? 'error'
+                                            : '')
                                     }
                                 >
                                     <label>Kommentar</label>
@@ -67,11 +67,11 @@ const FeedbackCommentPost = ({
                                         <p>
                                             Du er ved at svare på kommentaren
                                             med id: {replySlug}. Skriv i stedet
-                                            en{" "}
+                                            en{' '}
                                             <span
                                                 style={{
-                                                    cursor: "pointer",
-                                                    color: "rgb(87, 138, 251)"
+                                                    cursor: 'pointer',
+                                                    color: 'rgb(87, 138, 251)',
                                                 }}
                                                 onClick={() => replyReset()}
                                             >
@@ -86,7 +86,7 @@ const FeedbackCommentPost = ({
                                             rel="noopener noreferrer"
                                         >
                                             Markdown-formattering
-                                        </a>{" "}
+                                        </a>{' '}
                                         er undersøttet
                                     </div>
                                     <textarea
@@ -95,8 +95,7 @@ const FeedbackCommentPost = ({
                                     />
 
                                     <div className="form-error">
-                                        {meta.error &&
-                                            meta.touched && (
+                                        {meta.error && meta.touched && (
                                             <span>{meta.error}</span>
                                         )}
                                     </div>
@@ -121,7 +120,7 @@ FeedbackCommentPost.propTypes = {
     feedbackId: PropTypes.string.isRequired,
     replyId: PropTypes.string,
     replySlug: PropTypes.string,
-    replyReset: PropTypes.func.isRequired
+    replyReset: PropTypes.func.isRequired,
 };
 
 export default connect(

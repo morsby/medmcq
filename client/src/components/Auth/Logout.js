@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react';
 
-import { connect } from "react-redux";
+import { connect } from 'react-redux';
 
-import * as actions from "../../actions";
+import * as actions from '../../actions';
 
-import { Container } from "semantic-ui-react";
-import { Link } from "react-router-dom";
+import { Container } from 'semantic-ui-react';
+import { Link } from 'react-router-dom';
 
-import Header from "../Misc/Header";
-import Footer from "../Misc/Footer";
+import Header from '../Misc/Header';
+import Footer from '../Misc/Footer';
 
 const Logout = props => {
     props.fetchUser();

@@ -1,16 +1,16 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import * as actions from "../../actions";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as actions from '../../actions';
 
-import { withRouter } from "react-router";
-import { Flag, Menu, Icon } from "semantic-ui-react";
-import { urls } from "../../utils/common";
+import { withRouter } from 'react-router';
+import { Flag, Menu, Icon } from 'semantic-ui-react';
+import { urls } from '../../utils/common';
 
 // TODO: Evt. fjern connect - men skal så modtage `user` via parents
 
 class Header extends Component {
     flagStyle = {
-        cursor: "pointer"
+        cursor: 'pointer',
     };
 
     componentDidMount() {
@@ -31,12 +31,12 @@ class Header extends Component {
                 <>
                     <Menu.Item>
                         <strong>
-                            Velkommen{" "}
+                            Velkommen{' '}
                             {user.username[0].toUpperCase() +
                                 user.username.substring(1)}
                         </strong>
                     </Menu.Item>
-                    <Menu.Item onClick={() => handleClick("profile")}>
+                    <Menu.Item onClick={() => handleClick('profile')}>
                         <Icon
                             name="id card outline"
                             size="big"
@@ -49,7 +49,7 @@ class Header extends Component {
             );
         } else {
             højreMenu = (
-                <Menu.Item onClick={() => handleClick("login")}>
+                <Menu.Item onClick={() => handleClick('login')}>
                     <Icon name="user md" /> Log ind
                 </Menu.Item>
             );
@@ -58,7 +58,7 @@ class Header extends Component {
         return (
             <header>
                 <Menu stackable attached inverted color="blue" width={5}>
-                    <Menu.Item onClick={() => handleClick("root")}>
+                    <Menu.Item onClick={() => handleClick('root')}>
                         <Icon name="home" size="big" /> Forside
                     </Menu.Item>
                     <Menu.Menu position="right">
@@ -84,7 +84,7 @@ class Header extends Component {
 
 function mapStateToProps(state) {
     return {
-        user: state.auth.user
+        user: state.auth.user,
     };
 }
 

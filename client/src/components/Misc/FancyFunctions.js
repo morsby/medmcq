@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import { List } from "semantic-ui-react";
+import { List } from 'semantic-ui-react';
 
 const FancyFunctions = () => (
     <div>
@@ -48,7 +48,7 @@ const FancyFunctions = () => (
                         det går galt (og om der er systematik bag)
                     </List.Item>
                     <List.Item>
-                        kan du bede om kun at få spørgsmål, du <em>ikke</em>{" "}
+                        kan du bede om kun at få spørgsmål, du <em>ikke</em>{' '}
                         allerede har svaret på
                     </List.Item>
                 </List>

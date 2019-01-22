@@ -1,8 +1,8 @@
-import * as types from "../actions/types";
-import _ from "lodash";
+import * as types from '../actions/types';
+import _ from 'lodash';
 export default function(
     state = {
-        type: "random",
+        type: 'random',
         n: 10,
         onlyNew: false,
         semester: 7,
@@ -11,7 +11,7 @@ export default function(
         questions: [],
         sets: [],
         isFetching: false,
-        lastFetch: null
+        lastFetch: null,
     },
     action
 ) {
@@ -20,10 +20,10 @@ export default function(
             let { value, questions } = action.newSettings;
 
             switch (action.newSettings.type) {
-                case "type":
+                case 'type':
                     return { ...state, type: value };
 
-                case "specialer":
+                case 'specialer':
                     let specialer = state.specialer,
                         alreadySelected = state.specialer.indexOf(value);
 
@@ -34,22 +34,22 @@ export default function(
                     }
                     return { ...state, specialer };
 
-                case "onlyNew":
+                case 'onlyNew':
                     return { ...state, onlyNew: !state.onlyNew };
 
-                case "semester":
+                case 'semester':
                     let sets = [];
                     questions.forEach(q => {
                         let season,
                             text,
                             api,
-                            reex = "";
-                        q.examSeason.charAt(0) === "F"
-                            ? (season = "Forår")
-                            : (season = "Efterår");
+                            reex = '';
+                        q.examSeason.charAt(0) === 'F'
+                            ? (season = 'Forår')
+                            : (season = 'Efterår');
 
-                        if (q.examSeason.toLowerCase().includes("ree")) {
-                            reex = " (reeks)";
+                        if (q.examSeason.toLowerCase().includes('ree')) {
+                            reex = ' (reeks)';
                         }
 
                         text = `${season} ${q.examYear}${reex}`;
@@ -59,13 +59,13 @@ export default function(
                             examYear: q.examYear,
                             reex,
                             text,
-                            api
+                            api,
                         });
                     });
                     sets = _.orderBy(
                         sets,
-                        ["examYear", "examSeason", "reex"],
-                        ["asc", "desc", "asc"]
+                        ['examYear', 'examSeason', 'reex'],
+                        ['asc', 'desc', 'asc']
                     );
                     sets = _.uniqWith(sets, _.isEqual);
 
@@ -74,12 +74,12 @@ export default function(
                         sets,
                         questions,
                         semester: value,
-                        specialer: []
+                        specialer: [],
                     };
-                case "set":
+                case 'set':
                     return { ...state, set: value };
 
-                case "n":
+                case 'n':
                     return { ...state, n: value };
 
                 default:

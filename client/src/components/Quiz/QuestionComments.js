@@ -1,23 +1,23 @@
-import React from "react";
-import marked from "marked";
-import { Form, TextArea, Button, Comment, Message } from "semantic-ui-react";
+import React from 'react';
+import marked from 'marked';
+import { Form, TextArea, Button, Comment, Message } from 'semantic-ui-react';
 
 const QuestionComment = ({ comment, user, deleteComment, editComment }) => {
     return (
         <Comment
             key={comment._id}
             style={{
-                border: "1px solid rgb(140,140,140)",
-                borderRadius: "5px",
-                marginTop: "1em",
-                padding: "0.5em",
-                paddingTop: 0
+                border: '1px solid rgb(140,140,140)',
+                borderRadius: '5px',
+                marginTop: '1em',
+                padding: '0.5em',
+                paddingTop: 0,
             }}
         >
             <Comment.Content>
                 <Comment.Author as="strong">{comment.user}</Comment.Author>
-                <Comment.Metadata style={{ color: "rgb(140, 140, 140)" }}>
-                    {new Date(comment.date).toLocaleString("da-DK")}
+                <Comment.Metadata style={{ color: 'rgb(140, 140, 140)' }}>
+                    {new Date(comment.date).toLocaleString('da-DK')}
                 </Comment.Metadata>
                 {comment.user === user.username && (
                     <>
@@ -28,9 +28,9 @@ const QuestionComment = ({ comment, user, deleteComment, editComment }) => {
                     </>
                 )}
                 <Comment.Text
-                    style={{ marginTop: "1em" }}
+                    style={{ marginTop: '1em' }}
                     dangerouslySetInnerHTML={{
-                        __html: marked(comment.comment)
+                        __html: marked(comment.comment),
                     }}
                 />
             </Comment.Content>
@@ -47,13 +47,13 @@ export default ({
     onEditComment,
     editingComment,
     undoEdit,
-    user
+    user,
 }) => {
     let form;
     if (user) {
-        let skrivRet = editingComment ? "Ret" : "Skriv";
+        let skrivRet = editingComment ? 'Ret' : 'Skriv';
         form = (
-            <div style={{ marginTop: "1em" }}>
+            <div style={{ marginTop: '1em' }}>
                 <h5>{skrivRet} en kommentar</h5>
 
                 <Form>
@@ -70,7 +70,7 @@ export default ({
                     <Button
                         onClick={onCommentPost}
                         disabled={value.length < 3}
-                        style={{ margin: "0.5em 0" }}
+                        style={{ margin: '0.5em 0' }}
                     >
                         Kommentér
                     </Button>

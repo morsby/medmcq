@@ -7,16 +7,16 @@ import Footer from '../Misc/Footer';
 import LoginForm from './LoginForm';
 
 const Login = props => {
-	return (
-		<div className="flex-container">
-			<Header />
-			<Container className="content">
-				<h3>Log ind</h3>
-				<LoginForm />
-			</Container>
-			<Footer />
-		</div>
-	);
+    return (
+        <div className="flex-container">
+            <Header />
+            <Container className="content">
+                <h3>Log ind</h3>
+                <LoginForm />
+            </Container>
+            <Footer />
+        </div>
+    );
 };
 
 export default Login;

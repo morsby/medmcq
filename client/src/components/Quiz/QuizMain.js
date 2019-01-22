@@ -1,21 +1,20 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import * as actions from "../../actions";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as actions from '../../actions';
 
-import Swipeable from "react-swipeable";
-import QuizLoader from "./QuizLoader";
-import Question from "./Question";
-import QuizNavigator from "./QuizNavigator";
-import QuizSummary from "./QuizSummary";
+import Swipeable from 'react-swipeable';
+import QuizLoader from './QuizLoader';
+import Question from './Question';
+import QuizNavigator from './QuizNavigator';
+import QuizSummary from './QuizSummary';
 
-import Footer from "../Misc/Footer";
+import Footer from '../Misc/Footer';
 
-import { smoothScroll } from "../../utils/quiz";
-import { urls } from "../../utils/common";
-import QuizHeader from "../Misc/QuizHeader";
+import { smoothScroll } from '../../utils/quiz';
+import { urls } from '../../utils/common';
+import QuizHeader from '../Misc/QuizHeader';
 
 const flickNumber = 0.1;
-
 
 class QuizMain extends Component {
     state = { qn: 0 };
@@ -31,14 +30,14 @@ class QuizMain extends Component {
     }
 
     componentDidMount() {
-        document.addEventListener("keydown", this.onKeydown);
+        document.addEventListener('keydown', this.onKeydown);
 
         if (this.props.settings.questions.length === 0) {
-            this.navigateToPage("root");
+            this.navigateToPage('root');
         }
     }
     componentWillUnmount() {
-        document.removeEventListener("keydown", this.onKeydown);
+        document.removeEventListener('keydown', this.onKeydown);
     }
 
     onKeydown(e) {
@@ -47,17 +46,17 @@ class QuizMain extends Component {
         // Navigation
         let qn = this.state.qn,
             max = this.props.questions.length;
-        if (document.activeElement.tagName === "TEXTAREA") return;
-        if (e.key === "ArrowLeft") {
+        if (document.activeElement.tagName === 'TEXTAREA') return;
+        if (e.key === 'ArrowLeft') {
             if (qn > 0) this.onChangeQuestion(this.state.qn - 1);
-        } else if (e.key === "ArrowRight") {
+        } else if (e.key === 'ArrowRight') {
             if (qn < max - 1) this.onChangeQuestion(this.state.qn + 1);
         }
     }
 
     onChangeQuestion(q) {
         this.setState({
-            qn: q
+            qn: q,
         });
 
         smoothScroll();
@@ -85,7 +84,7 @@ class QuizMain extends Component {
         if (deltaX > 75) {
             move = this.state.qn + 1;
         }
-        
+
         if (deltaX < -75) {
             move = this.state.qn - 1;
         }
@@ -100,13 +99,12 @@ class QuizMain extends Component {
             return (
                 <QuizLoader
                     handleClick={this.getQuestions}
-                    handleAbort={() => this.navigateToPage("root")}
+                    handleAbort={() => this.navigateToPage('root')}
                 />
             );
 
         return (
             <div className="flex-container">
-
                 <QuizHeader />
 
                 <div className="content">
@@ -137,7 +135,6 @@ class QuizMain extends Component {
                         answers={answers}
                         clickHandler={this.onChangeQuestion}
                     />
-
                 </div>
                 <Footer />
             </div>
@@ -150,7 +147,7 @@ function mapStateToProps(state) {
         questions: state.questions,
         answers: state.answers,
         settings: state.settings,
-        user: state.auth.user
+        user: state.auth.user,
     };
 }
 

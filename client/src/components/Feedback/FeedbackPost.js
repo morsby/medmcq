@@ -1,19 +1,19 @@
-import React from "react";
-import { connect } from "react-redux";
-import * as actions from "../../actions";
+import React from 'react';
+import { connect } from 'react-redux';
+import * as actions from '../../actions';
 
-import { Container, Button } from "semantic-ui-react";
-import { Form, Field } from "react-final-form";
+import { Container, Button } from 'semantic-ui-react';
+import { Form, Field } from 'react-final-form';
 
-import FeedbackNavigation from "./FeedbackNavigation";
-import FeedbackSingleContent from "./FeedbackSingleContent";
-import Header from "../Misc/Header";
-import Footer from "../Misc/Footer";
+import FeedbackNavigation from './FeedbackNavigation';
+import FeedbackSingleContent from './FeedbackSingleContent';
+import Header from '../Misc/Header';
+import Footer from '../Misc/Footer';
 
 const FeedbackPost = ({ postFeedback, history }) => {
     const handleSubmit = formValues => {
         postFeedback(formValues, id => {
-            setTimeout(history.push("/feedback/" + id), 50);
+            setTimeout(history.push('/feedback/' + id), 50);
         });
     };
 
@@ -29,11 +29,11 @@ const FeedbackPost = ({ postFeedback, history }) => {
                     validate={values => {
                         const errors = {};
                         if (!values.title || values.title.length < 3) {
-                            errors.title = "Titlen skal minimum være 3 tegn";
+                            errors.title = 'Titlen skal minimum være 3 tegn';
                         }
 
                         if (!values.text || values.text.length < 10) {
-                            errors.text = "Teksten skal minimum være 10 tegn";
+                            errors.text = 'Teksten skal minimum være 10 tegn';
                         }
                         return errors;
                     }}
@@ -42,17 +42,17 @@ const FeedbackPost = ({ postFeedback, history }) => {
                         submitting,
                         pristine,
                         values,
-                        form
+                        form,
                     }) => (
                         <form onSubmit={handleSubmit} className="ui form">
                             <Field name="title">
                                 {({ input, meta }) => (
                                     <div
                                         className={
-                                            "field " +
+                                            'field ' +
                                             (meta.error && meta.touched
-                                                ? "error"
-                                                : "")
+                                                ? 'error'
+                                                : '')
                                         }
                                     >
                                         <label>Titel</label>
@@ -62,10 +62,9 @@ const FeedbackPost = ({ postFeedback, history }) => {
                                             placeholder="Titel"
                                         />
                                         <div className="form-error">
-                                            {meta.error &&
-                                                meta.touched && (
-                                                    <span>{meta.error}</span>
-                                                )}
+                                            {meta.error && meta.touched && (
+                                                <span>{meta.error}</span>
+                                            )}
                                         </div>
                                     </div>
                                 )}
@@ -75,10 +74,10 @@ const FeedbackPost = ({ postFeedback, history }) => {
                                 {({ input, meta }) => (
                                     <div
                                         className={
-                                            "field " +
+                                            'field ' +
                                             (meta.error && meta.touched
-                                                ? "error"
-                                                : "")
+                                                ? 'error'
+                                                : '')
                                         }
                                     >
                                         <label>Forslag</label>
@@ -89,7 +88,7 @@ const FeedbackPost = ({ postFeedback, history }) => {
                                                 rel="noopener noreferrer"
                                             >
                                                 Markdown-formattering
-                                            </a>{" "}
+                                            </a>{' '}
                                             er undersøttet
                                         </div>
                                         <textarea
@@ -98,10 +97,9 @@ const FeedbackPost = ({ postFeedback, history }) => {
                                         />
 
                                         <div className="form-error">
-                                            {meta.error &&
-                                                meta.touched && (
-                                                    <span>{meta.error}</span>
-                                                )}
+                                            {meta.error && meta.touched && (
+                                                <span>{meta.error}</span>
+                                            )}
                                         </div>
                                     </div>
                                 )}
@@ -114,9 +112,9 @@ const FeedbackPost = ({ postFeedback, history }) => {
                             <h4>Sådan her kommer dit forslag til at se ud:</h4>
                             <FeedbackSingleContent
                                 feedback={{
-                                    title: values.title || "Titel",
+                                    title: values.title || 'Titel',
                                     date: new Date(),
-                                    text: values.text || "Forslag"
+                                    text: values.text || 'Forslag',
                                 }}
                             />
                         </form>

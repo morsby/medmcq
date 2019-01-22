@@ -6,9 +6,9 @@ import feedbackReducer from './feedbackReducer';
 import authReducer from './authReducer';
 
 export default combineReducers({
-	questions: questionsReducer,
-	answers: answersReducer,
-	settings: settingsReducer,
-	feedback: feedbackReducer,
-	auth: authReducer
+    questions: questionsReducer,
+    answers: answersReducer,
+    settings: settingsReducer,
+    feedback: feedbackReducer,
+    auth: authReducer,
 });

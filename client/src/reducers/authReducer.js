@@ -1,14 +1,14 @@
-import * as types from "../actions/types";
+import * as types from '../actions/types';
 
-import _ from "lodash";
+import _ from 'lodash';
 
 export default function(
     state = {
         user: null,
         performance: {
             answeredQuestions: {},
-            summary: { allRight: [], allWrong: [], mixed: [] }
-        }
+            summary: { allRight: [], allWrong: [], mixed: [] },
+        },
     },
     action
 ) {
@@ -26,7 +26,7 @@ export default function(
                 answeredQuestions[e._id] = e;
                 _.set(answeredQuestions, [e._id], {
                     ...answeredQuestions[e._id],
-                    userAnswers: answers[e._id]
+                    userAnswers: answers[e._id],
                 });
                 return null;
             });

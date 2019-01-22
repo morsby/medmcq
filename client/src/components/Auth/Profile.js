@@ -1,17 +1,17 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import { connect } from "react-redux";
-import * as actions from "../../actions";
-import { urls, semestre } from "../../utils/common";
-import { semesterIndices } from "../../utils/auth";
-import _ from "lodash";
+import { connect } from 'react-redux';
+import * as actions from '../../actions';
+import { urls, semestre } from '../../utils/common';
+import { semesterIndices } from '../../utils/auth';
+import _ from 'lodash';
 
-import { Container, Tab, List, Button, Divider } from "semantic-ui-react";
+import { Container, Tab, List, Button, Divider } from 'semantic-ui-react';
 
-import Header from "../Misc/Header";
-import Footer from "../Misc/Footer";
+import Header from '../Misc/Header';
+import Footer from '../Misc/Footer';
 
-import ProfileAnswerDetails from "./ProfileAnswerDetails";
+import ProfileAnswerDetails from './ProfileAnswerDetails';
 
 class Profile extends Component {
     constructor(props) {
@@ -22,7 +22,7 @@ class Profile extends Component {
             activeTab: semesterIndices(semester),
             details: true,
             hidden: null,
-            semester: semester
+            semester: semester,
         };
     }
 
@@ -33,7 +33,7 @@ class Profile extends Component {
     getQuestions = semester => {
         let answeredQuestions = _.get(
             this.props,
-            ["auth", "user", "answeredQuestions", semester],
+            ['auth', 'user', 'answeredQuestions', semester],
             {}
         );
 
@@ -55,8 +55,8 @@ class Profile extends Component {
     };
 
     startQuiz = ids => {
-        this.props.getQuestions({ type: "ids" }, ids);
-        this.handleNavigation("quiz");
+        this.props.getQuestions({ type: 'ids' }, ids);
+        this.handleNavigation('quiz');
     };
 
     generateTabContent = (performance, user) => {
@@ -73,15 +73,15 @@ class Profile extends Component {
                     <p>Af dem har du svaret</p>
                     <List bulleted className="analysis">
                         <List.Item>
-                            <span>rigtigt</span> <em>hver</em> gang på{" "}
+                            <span>rigtigt</span> <em>hver</em> gang på{' '}
                             {allRight.length} spørgsmål
                         </List.Item>
                         <List.Item>
-                            <span>forkert</span> <em>hver</em> gang på{" "}
+                            <span>forkert</span> <em>hver</em> gang på{' '}
                             {allWrong.length} spørgsmål
                         </List.Item>
                         <List.Item>
-                            <span>både</span> rigtigt <em>og</em> forkert på{" "}
+                            <span>både</span> rigtigt <em>og</em> forkert på{' '}
                             {mixed.length} spørgsmål
                         </List.Item>
                     </List>
@@ -99,7 +99,7 @@ class Profile extends Component {
                     onClick={this.toggleDetails}
                     disabled={totalAnswers === 0}
                 >
-                    {this.state.details ? "Skjul" : "Vis"} detaljer
+                    {this.state.details ? 'Skjul' : 'Vis'} detaljer
                 </Button>
             </div>
         );
@@ -107,7 +107,7 @@ class Profile extends Component {
 
     render() {
         const { performance, user } = this.props.auth,
-            semesters = _.map(semestre, "value");
+            semesters = _.map(semestre, 'value');
         let panes = [];
         semesters.map(e =>
             panes.push({
@@ -116,7 +116,7 @@ class Profile extends Component {
                     <Tab.Pane>
                         {this.generateTabContent(performance, user)}
                     </Tab.Pane>
-                )
+                ),
             })
         );
 
@@ -128,7 +128,7 @@ class Profile extends Component {
                     <Button
                         basic
                         color="yellow"
-                        onClick={() => this.handleNavigation("editProfile")}
+                        onClick={() => this.handleNavigation('editProfile')}
                     >
                         Rediger profil
                     </Button>
@@ -136,7 +136,7 @@ class Profile extends Component {
                         floated="right"
                         negative
                         onClick={() =>
-                            (window.location.href = "/api/auth/logout")
+                            (window.location.href = '/api/auth/logout')
                         }
                     >
                         Log ud
@@ -168,7 +168,7 @@ class Profile extends Component {
 function mapStateToProps(state) {
     return {
         auth: state.auth,
-        settings: state.settings
+        settings: state.settings,
     };
 }
 

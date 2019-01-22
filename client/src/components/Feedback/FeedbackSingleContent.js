@@ -1,8 +1,8 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import marked from "marked";
-import { Card, Button, Icon, Label } from "semantic-ui-react";
+import marked from 'marked';
+import { Card, Button, Icon, Label } from 'semantic-ui-react';
 
 const FeedbackSingleContent = ({ feedback, votedFor, handleVote }) => {
     let votedUp = votedFor && votedFor.val === 1,
@@ -12,12 +12,12 @@ const FeedbackSingleContent = ({ feedback, votedFor, handleVote }) => {
         <Card fluid>
             <Card.Content>
                 <Card.Meta>
-                    {new Date(feedback.date).toLocaleString("da-DK")}
+                    {new Date(feedback.date).toLocaleString('da-DK')}
                 </Card.Meta>
                 <Card.Header>{feedback.title}</Card.Header>
                 <p
                     dangerouslySetInnerHTML={{
-                        __html: marked(feedback.text)
+                        __html: marked(feedback.text),
                     }}
                 />
             </Card.Content>
@@ -65,7 +65,7 @@ const FeedbackSingleContent = ({ feedback, votedFor, handleVote }) => {
 FeedbackSingleContent.propTypes = {
     feedback: PropTypes.object.isRequired,
     votedFor: PropTypes.object,
-    handleVote: PropTypes.func.isRequired
+    handleVote: PropTypes.func.isRequired,
 };
 
 export default FeedbackSingleContent;

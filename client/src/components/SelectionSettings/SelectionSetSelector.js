@@ -1,10 +1,10 @@
-import React from "react";
-import PropTypes from "prop-types";
-import _ from "lodash";
+import React from 'react';
+import PropTypes from 'prop-types';
+import _ from 'lodash';
 
-import { groupQuestions, getIds } from "../../utils/questions";
+import { groupQuestions, getIds } from '../../utils/questions';
 
-import { Form, Radio, Divider, Header, Icon } from "semantic-ui-react";
+import { Form, Radio, Divider, Header, Icon } from 'semantic-ui-react';
 
 const radioGenerator = (
     set,
@@ -13,7 +13,7 @@ const radioGenerator = (
     activeSet,
     onChange
 ) => {
-    let missing = "";
+    let missing = '';
 
     if (answeredQuestions) {
         let missingQuestions = _.difference(
@@ -34,7 +34,7 @@ const radioGenerator = (
                     checked={set.api === activeSet}
                     name="set"
                     onChange={onChange}
-                />{" "}
+                />{' '}
                 {missing}
                 <Divider vertical hidden />
             </Form.Field>
@@ -48,7 +48,7 @@ const SelectionSetSelector = ({
     sets,
     questions,
     answeredQuestions,
-    onChange
+    onChange,
 }) => {
     if (!semester)
         return (
@@ -82,7 +82,7 @@ SelectionSetSelector.propTypes = {
     sets: PropTypes.array,
     questions: PropTypes.array,
     answeredQuestions: PropTypes.object,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
 };
 
 export default SelectionSetSelector;

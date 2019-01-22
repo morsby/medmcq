@@ -1,10 +1,10 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import { Message } from "semantic-ui-react";
+import { Message } from 'semantic-ui-react';
 
 const SelectionMessage = ({ user = null, type }) => {
-    if (user && type !== "set")
+    if (user && type !== 'set')
         return (
             <Message info>
                 <p>
@@ -15,7 +15,7 @@ const SelectionMessage = ({ user = null, type }) => {
                 </p>
             </Message>
         );
-    if (!user && type === "specialer")
+    if (!user && type === 'specialer')
         return (
             <p>
                 Bemærk, at såfremt de valgte specialer til sammen indeholder
@@ -28,7 +28,7 @@ const SelectionMessage = ({ user = null, type }) => {
 
 SelectionMessage.propTypes = {
     user: PropTypes.object,
-    type: PropTypes.string.isRequired
+    type: PropTypes.string.isRequired,
 };
 
 export default SelectionMessage;

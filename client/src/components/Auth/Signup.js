@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
-import { Container, Message } from "semantic-ui-react";
+import { Container, Message } from 'semantic-ui-react';
 
-import Header from "../Misc/Header";
-import Footer from "../Misc/Footer";
-import SignupForm from "./SignupForm";
+import Header from '../Misc/Header';
+import Footer from '../Misc/Footer';
+import SignupForm from './SignupForm';
 
 const Signup = props => {
     return (

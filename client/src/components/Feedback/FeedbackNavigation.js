@@ -1,15 +1,15 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { withRouter } from "react-router";
-import { urls } from "../../utils/common";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { withRouter } from 'react-router';
+import { urls } from '../../utils/common';
 
-import { Menu } from "semantic-ui-react";
+import { Menu } from 'semantic-ui-react';
 
 const FeedbackNavigation = ({
     id,
     title,
     history, // fra withRouter
-    match // fra withRouter
+    match, // fra withRouter
 }) => {
     const handleClick = (e, data) => {
         history.push(data.path);
@@ -45,7 +45,7 @@ const FeedbackNavigation = ({
 
 FeedbackNavigation.propTypes = {
     id: PropTypes.string,
-    title: PropTypes.string
+    title: PropTypes.string,
 };
 
 export default withRouter(FeedbackNavigation);

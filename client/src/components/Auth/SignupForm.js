@@ -1,35 +1,35 @@
-import React from "react";
-import { connect } from "react-redux";
-import { withRouter } from "react-router";
-import * as actions from "../../actions";
+import React from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
+import * as actions from '../../actions';
 
 import {
     emailValid,
     passwordValid,
-    passwordRepeatValid
-} from "../../utils/formValidation";
+    passwordRepeatValid,
+} from '../../utils/formValidation';
 
-import { Form, Field } from "react-final-form";
-import { Button, Divider, Message } from "semantic-ui-react";
+import { Form, Field } from 'react-final-form';
+import { Button, Divider, Message } from 'semantic-ui-react';
 
 const SignupForm = props => {
     let onSubmit = async values => {
         props
             .signup(values)
             .then(props.fetchUser())
-            .then(props.history.push("/login"));
+            .then(props.history.push('/login'));
     };
 
     const userAvailable = async username => {
         if (!username) {
-            return "Du skal udfylde et brugernavn!";
+            return 'Du skal udfylde et brugernavn!';
         } else {
             let available = await props.checkUserAvailability(
-                "username",
+                'username',
                 username
             );
 
-            return available ? null : "Brugernavnet er taget";
+            return available ? null : 'Brugernavnet er taget';
         }
     };
 
@@ -37,9 +37,9 @@ const SignupForm = props => {
         let error = emailValid(email);
         if (error) return error;
 
-        let available = await props.checkUserAvailability("email", email);
+        let available = await props.checkUserAvailability('email', email);
 
-        return available ? null : "Emailen er allerede brugt";
+        return available ? null : 'Emailen er allerede brugt';
     };
 
     return (
@@ -52,10 +52,10 @@ const SignupForm = props => {
                             {({ input, meta }) => (
                                 <div
                                     className={
-                                        "field " +
+                                        'field ' +
                                         (meta.error && meta.touched
-                                            ? "error"
-                                            : "")
+                                            ? 'error'
+                                            : '')
                                     }
                                 >
                                     <label>Brugernavn</label>
@@ -64,12 +64,11 @@ const SignupForm = props => {
                                         type="text"
                                         placeholder="Brugernavn"
                                     />
-                                    {meta.error &&
-                                        meta.touched && (
-                                            <Message error visible={true}>
-                                                {meta.error}
-                                            </Message>
-                                        )}
+                                    {meta.error && meta.touched && (
+                                        <Message error visible={true}>
+                                            {meta.error}
+                                        </Message>
+                                    )}
                                 </div>
                             )}
                         </Field>
@@ -82,10 +81,10 @@ const SignupForm = props => {
                             {({ input, meta }) => (
                                 <div
                                     className={
-                                        "field " +
+                                        'field ' +
                                         (meta.error && meta.touched
-                                            ? "error"
-                                            : "")
+                                            ? 'error'
+                                            : '')
                                     }
                                 >
                                     <label>Email</label>
@@ -94,22 +93,19 @@ const SignupForm = props => {
                                         type="email"
                                         placeholder="Email"
                                     />
-                                    {meta.error &&
-                                        meta.touched && (
-                                            <Message error visible={true}>
-                                                {meta.error}
-                                            </Message>
-                                        )}
-                                    {meta.touched &&
-                                        !meta.error && (
-                                            <Message warning visible={true}>
-                                                Du behøver ikke indtaste en
-                                                email-adresse, men hvis du
-                                                glemmer dine loginoplysninger
-                                                uden den, kan du ikke få din
-                                                bruger tilbage.
-                                            </Message>
-                                        )}
+                                    {meta.error && meta.touched && (
+                                        <Message error visible={true}>
+                                            {meta.error}
+                                        </Message>
+                                    )}
+                                    {meta.touched && !meta.error && (
+                                        <Message warning visible={true}>
+                                            Du behøver ikke indtaste en
+                                            email-adresse, men hvis du glemmer
+                                            dine loginoplysninger uden den, kan
+                                            du ikke få din bruger tilbage.
+                                        </Message>
+                                    )}
                                 </div>
                             )}
                         </Field>
@@ -117,15 +113,15 @@ const SignupForm = props => {
                         <Field
                             name="password"
                             validate={passwordValid}
-                            validateFields={["password-repeat"]}
+                            validateFields={['password-repeat']}
                         >
                             {({ input, meta }) => (
                                 <div
                                     className={
-                                        "field " +
+                                        'field ' +
                                         (meta.error && meta.touched
-                                            ? "error"
-                                            : "")
+                                            ? 'error'
+                                            : '')
                                     }
                                 >
                                     <label>Kodeord</label>
@@ -134,16 +130,15 @@ const SignupForm = props => {
                                         type="password"
                                         placeholder="Kodeord"
                                     />
-                                    {meta.error &&
-                                        meta.touched && (
-                                            <Message
-                                                error
-                                                visible={true}
-                                                size="small"
-                                            >
-                                                {meta.error}
-                                            </Message>
-                                        )}
+                                    {meta.error && meta.touched && (
+                                        <Message
+                                            error
+                                            visible={true}
+                                            size="small"
+                                        >
+                                            {meta.error}
+                                        </Message>
+                                    )}
                                 </div>
                             )}
                         </Field>
@@ -151,15 +146,15 @@ const SignupForm = props => {
                         <Field
                             name="password-repeat"
                             validate={passwordRepeatValid}
-                            validateFields={["password"]}
+                            validateFields={['password']}
                         >
                             {({ input, meta }) => (
                                 <div
                                     className={
-                                        "field " +
+                                        'field ' +
                                         (meta.error && meta.touched
-                                            ? "error"
-                                            : "")
+                                            ? 'error'
+                                            : '')
                                     }
                                 >
                                     <label>Gentag kodeord</label>
@@ -168,12 +163,11 @@ const SignupForm = props => {
                                         type="password"
                                         placeholder="Gentag kodeord"
                                     />
-                                    {meta.error &&
-                                        meta.touched && (
-                                            <Message error visible={true}>
-                                                {meta.error}
-                                            </Message>
-                                        )}
+                                    {meta.error && meta.touched && (
+                                        <Message error visible={true}>
+                                            {meta.error}
+                                        </Message>
+                                    )}
                                 </div>
                             )}
                         </Field>
@@ -190,7 +184,7 @@ const SignupForm = props => {
 
 function mapStateToProps(state) {
     return {
-        auth: state.auth
+        auth: state.auth,
     };
 }
 

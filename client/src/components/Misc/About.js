@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 
-import { urls } from "../../utils/common";
+import { urls } from '../../utils/common';
 
-import { Container, Message, List, Button, Divider } from "semantic-ui-react";
-import Header from "./Header";
-import Footer from "./Footer";
+import { Container, Message, List, Button, Divider } from 'semantic-ui-react';
+import Header from './Header';
+import Footer from './Footer';
 
-import FancyFunctions from "./FancyFunctions";
+import FancyFunctions from './FancyFunctions';
 
 const About = ({ history }) => {
     const handleClick = () => {

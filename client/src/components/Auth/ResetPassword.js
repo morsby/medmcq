@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import * as actions from "../../actions";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as actions from '../../actions';
 
-import { passwordValid, passwordRepeatValid } from "../../utils/formValidation";
+import { passwordValid, passwordRepeatValid } from '../../utils/formValidation';
 
-import { Container, Message, Button, Divider } from "semantic-ui-react";
-import { Form, Field } from "react-final-form";
+import { Container, Message, Button, Divider } from 'semantic-ui-react';
+import { Form, Field } from 'react-final-form';
 
-import Header from "../Misc/Header";
-import Footer from "../Misc/Footer";
+import Header from '../Misc/Header';
+import Footer from '../Misc/Footer';
 
 class ResetPassword extends Component {
     state = { message: null };
@@ -34,7 +34,7 @@ class ResetPassword extends Component {
                             pristine,
                             invalid,
                             values,
-                            form
+                            form,
                         }) => {
                             return (
                                 <form
@@ -50,10 +50,10 @@ class ResetPassword extends Component {
                                         {({ input, meta }) => (
                                             <div
                                                 className={
-                                                    "field " +
+                                                    'field ' +
                                                     (meta.error && meta.touched
-                                                        ? "error"
-                                                        : "")
+                                                        ? 'error'
+                                                        : '')
                                                 }
                                             >
                                                 <label>Kodeord</label>
@@ -62,16 +62,15 @@ class ResetPassword extends Component {
                                                     type="password"
                                                     placeholder="Kodeord"
                                                 />
-                                                {meta.error &&
-                                                    meta.touched && (
-                                                        <Message
-                                                            error
-                                                            visible={true}
-                                                            size="small"
-                                                        >
-                                                            {meta.error}
-                                                        </Message>
-                                                    )}
+                                                {meta.error && meta.touched && (
+                                                    <Message
+                                                        error
+                                                        visible={true}
+                                                        size="small"
+                                                    >
+                                                        {meta.error}
+                                                    </Message>
+                                                )}
                                             </div>
                                         )}
                                     </Field>
@@ -83,10 +82,10 @@ class ResetPassword extends Component {
                                         {({ input, meta }) => (
                                             <div
                                                 className={
-                                                    "field " +
+                                                    'field ' +
                                                     (meta.error && meta.touched
-                                                        ? "error"
-                                                        : "")
+                                                        ? 'error'
+                                                        : '')
                                                 }
                                             >
                                                 <label>Gentag kodeord</label>
@@ -95,23 +94,22 @@ class ResetPassword extends Component {
                                                     type="password"
                                                     placeholder="Gentag kodeord"
                                                 />
-                                                {meta.error &&
-                                                    meta.touched && (
-                                                        <Message
-                                                            error
-                                                            visible={true}
-                                                        >
-                                                            {meta.error}
-                                                        </Message>
-                                                    )}
+                                                {meta.error && meta.touched && (
+                                                    <Message
+                                                        error
+                                                        visible={true}
+                                                    >
+                                                        {meta.error}
+                                                    </Message>
+                                                )}
                                             </div>
                                         )}
                                     </Field>
                                     {message && (
                                         <Message
-                                            negative={message.type === "error"}
+                                            negative={message.type === 'error'}
                                             positive={
-                                                message.type === "success"
+                                                message.type === 'success'
                                             }
                                         >
                                             {message.data}

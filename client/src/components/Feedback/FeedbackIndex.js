@@ -1,17 +1,17 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import * as actions from "../../actions";
-import { withRouter } from "react-router";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as actions from '../../actions';
+import { withRouter } from 'react-router';
 
-import { urls } from "../../utils/common";
+import { urls } from '../../utils/common';
 
-import { Container } from "semantic-ui-react";
+import { Container } from 'semantic-ui-react';
 
-import FeedbackNavigation from "./FeedbackNavigation";
-import FeedbackList from "./FeedbackList";
+import FeedbackNavigation from './FeedbackNavigation';
+import FeedbackList from './FeedbackList';
 
-import Header from "../Misc/Header";
-import Footer from "../Misc/Footer";
+import Header from '../Misc/Header';
+import Footer from '../Misc/Footer';
 
 class FeedbackIndex extends Component {
     constructor(props) {
@@ -45,7 +45,7 @@ class FeedbackIndex extends Component {
                     <h2>Vil du hjælpe?</h2>
                     <p>
                         Har du lyst til at hjælpe med vedligehold af siden, kan
-                        du tage kontakt på sidens repository på{" "}
+                        du tage kontakt på sidens repository på{' '}
                         <a href="https://github.com/Morsby/au-medicin-mcq">
                             GitHub
                         </a>
@@ -60,7 +60,7 @@ class FeedbackIndex extends Component {
 
 function mapStateToProps(state) {
     return {
-        feedback: state.feedback.feedback
+        feedback: state.feedback.feedback,
     };
 }
 

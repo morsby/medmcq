@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import * as actions from "../../actions";
-import marked from "marked";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as actions from '../../actions';
+import marked from 'marked';
 
-import { imageURL, breakpoints } from "../../utils/common";
-import { subSupScript } from "../../utils/quiz";
+import { imageURL, breakpoints } from '../../utils/common';
+import { subSupScript } from '../../utils/quiz';
 
 import {
     Container,
@@ -14,21 +14,21 @@ import {
     Loader,
     Segment,
     Button,
-    Responsive
-} from "semantic-ui-react";
+    Responsive,
+} from 'semantic-ui-react';
 
-import QuestionAnswerButtons from "./QuestionAnswerButtons";
-import QuestionImage from "./QuestionImage";
-import QuestionMetadata from "./QuestionMetadata";
-import QuestionComments from "./QuestionComments";
+import QuestionAnswerButtons from './QuestionAnswerButtons';
+import QuestionImage from './QuestionImage';
+import QuestionMetadata from './QuestionMetadata';
+import QuestionComments from './QuestionComments';
 
 class Question extends Component {
     state = {
         imgOpen: false,
         commentsOpen: false,
-        newComment: "",
-        editingComment: "",
-        pristine: true
+        newComment: '',
+        editingComment: '',
+        pristine: true,
     };
 
     constructor(props) {
@@ -46,12 +46,12 @@ class Question extends Component {
         this.onAnswer = this.onAnswer.bind(this);
     }
     componentDidMount() {
-        document.addEventListener("keydown", this.onKeydown);
+        document.addEventListener('keydown', this.onKeydown);
         this.mouseMover();
     }
 
     componentWillUnmount() {
-        document.removeEventListener("keydown", this.onKeydown);
+        document.removeEventListener('keydown', this.onKeydown);
     }
 
     componentWillUpdate(nextProps, nextState) {
@@ -60,9 +60,9 @@ class Question extends Component {
             this.setState({
                 imgOpen: false,
                 commentsOpen: false,
-                newComment: "",
-                editingComment: "",
-                pristine: true
+                newComment: '',
+                editingComment: '',
+                pristine: true,
             });
             this.mouseMover();
         }
@@ -70,7 +70,7 @@ class Question extends Component {
 
     mouseMover() {
         document.addEventListener(
-            "mousemove",
+            'mousemove',
             () => {
                 this.setState({ pristine: false });
             },
@@ -81,7 +81,7 @@ class Question extends Component {
     onKeydown(e) {
         if (
             !this.state.imgOpen &&
-            document.activeElement.tagName !== "TEXTAREA"
+            document.activeElement.tagName !== 'TEXTAREA'
         ) {
             let answer = Number(e.key),
                 keys = [1, 2, 3];
@@ -117,7 +117,7 @@ class Question extends Component {
                 answer,
                 {
                     qn: qn,
-                    correct: truthy
+                    correct: truthy,
                 },
                 questions[qn].semester,
                 user
@@ -157,7 +157,7 @@ class Question extends Component {
                     this.state.newComment
                 );
             }
-            this.setState({ newComment: "", editComment: "" });
+            this.setState({ newComment: '', editComment: '' });
         }
     }
 
@@ -171,12 +171,12 @@ class Question extends Component {
     onEditComment(comment) {
         this.setState({
             newComment: comment.comment,
-            editingComment: comment._id
+            editingComment: comment._id,
         });
     }
 
     undoEdit() {
-        this.setState({ newComment: "", editingComment: "" });
+        this.setState({ newComment: '', editingComment: '' });
     }
 
     render() {
@@ -198,11 +198,11 @@ class Question extends Component {
                         <Grid.Row>
                             <Grid.Column>
                                 <div
-                                    style={{ fontSize: "18px" }}
+                                    style={{ fontSize: '18px' }}
                                     dangerouslySetInnerHTML={{
                                         __html: marked(text, {
-                                            smartypants: true
-                                        })
+                                            smartypants: true,
+                                        }),
                                     }}
                                     ref={ref => (this._div = ref)}
                                 />
@@ -243,7 +243,7 @@ class Question extends Component {
                     <QuestionMetadata question={question} />
 
                     <Button basic onClick={this.onCommentsToggle}>
-                        {this.state.commentsOpen ? "Skjul" : "Vis"} kommentarer
+                        {this.state.commentsOpen ? 'Skjul' : 'Vis'} kommentarer
                         ({question.comments.length})
                     </Button>
                     {this.state.commentsOpen && (

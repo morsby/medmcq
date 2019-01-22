@@ -1,15 +1,15 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { withRouter } from "react-router";
-import * as actions from "../../actions";
-import _ from "lodash";
-import marked from "marked";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
+import * as actions from '../../actions';
+import _ from 'lodash';
+import marked from 'marked';
 
-import { Table, Button, Divider } from "semantic-ui-react";
+import { Table, Button, Divider } from 'semantic-ui-react';
 
 class ProfileAnswerDetails extends Component {
     state = {
-        filter: null
+        filter: null,
     };
 
     startQuiz = () => {
@@ -21,8 +21,8 @@ class ProfileAnswerDetails extends Component {
             ids = summary[this.state.filter];
         }
 
-        this.props.getQuestions({ type: "ids" }, ids);
-        this.props.history.push("/quiz");
+        this.props.getQuestions({ type: 'ids' }, ids);
+        this.props.history.push('/quiz');
     };
 
     handleFilter = filter => {
@@ -44,7 +44,7 @@ class ProfileAnswerDetails extends Component {
                 <Divider hidden />
                 {total > 0 && (
                     <Button onClick={this.startQuiz}>
-                        Start en quiz med {total > 1 ? "alle" : ""} nedenstående{" "}
+                        Start en quiz med {total > 1 ? 'alle' : ''} nedenstående{' '}
                         {total} spørgsmål
                     </Button>
                 )}
@@ -61,21 +61,21 @@ class ProfileAnswerDetails extends Component {
                     <Button
                         basic
                         positive
-                        onClick={() => this.handleFilter("allRight")}
+                        onClick={() => this.handleFilter('allRight')}
                     >
                         Vis altid rigtige
                     </Button>
                     <Button
                         basic
                         negative
-                        onClick={() => this.handleFilter("allWrong")}
+                        onClick={() => this.handleFilter('allWrong')}
                     >
                         Vis altid forkerte
                     </Button>
                     <Button
                         basic
                         color="yellow"
-                        onClick={() => this.handleFilter("mixed")}
+                        onClick={() => this.handleFilter('mixed')}
                     >
                         Vis blandede
                     </Button>
@@ -110,7 +110,7 @@ class ProfileAnswerDetails extends Component {
                                     <Table.Cell>
                                         <div
                                             dangerouslySetInnerHTML={{
-                                                __html: marked(q.question)
+                                                __html: marked(q.question),
                                             }}
                                         />
                                     </Table.Cell>

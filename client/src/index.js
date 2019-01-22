@@ -1,53 +1,53 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import { unregister } from "./registerServiceWorker";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { unregister } from './registerServiceWorker';
 // Redux
-import { Provider } from "react-redux";
-import { createStore, applyMiddleware } from "redux";
-import reduxThunk from "redux-thunk";
-import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage";
-import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
-import reducers from "./reducers";
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import reduxThunk from 'redux-thunk';
+import { persistStore, persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
+import reducers from './reducers';
 
-import { PersistGate } from "redux-persist/lib/integration/react";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import ScrollToTop from "./components/Misc/ScrollToTop";
-import LoadingPage from "./components/Misc/LoadingPage";
-import ErrorPage from "./components/Misc/404";
+import { PersistGate } from 'redux-persist/lib/integration/react';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import ScrollToTop from './components/Misc/ScrollToTop';
+import LoadingPage from './components/Misc/LoadingPage';
+import ErrorPage from './components/Misc/404';
 
-import PrivateRoute from "./components/Misc/PrivateRoute";
+import PrivateRoute from './components/Misc/PrivateRoute';
 
 // Routes
-import QuizMain from "./components/Quiz/QuizMain";
+import QuizMain from './components/Quiz/QuizMain';
 
-import SelectionMain from "./components/SelectionSettings/SelectionMain";
+import SelectionMain from './components/SelectionSettings/SelectionMain';
 
-import About from "./components/Misc/About";
+import About from './components/Misc/About';
 
-import FeedbackIndex from "./components/Feedback/FeedbackIndex";
-import FeedbackSingle from "./components/Feedback/FeedbackSingle";
-import FeedbackPost from "./components/Feedback/FeedbackPost";
+import FeedbackIndex from './components/Feedback/FeedbackIndex';
+import FeedbackSingle from './components/Feedback/FeedbackSingle';
+import FeedbackPost from './components/Feedback/FeedbackPost';
 
-import Signup from "./components/Auth/Signup";
-import Login from "./components/Auth/Login";
-import Logout from "./components/Auth/Logout";
-import Profile from "./components/Auth/Profile";
-import EditProfile from "./components/Auth/EditProfile";
-import ForgotPassword from "./components/Auth/ForgotPassword";
-import ResetPassword from "./components/Auth/ResetPassword";
+import Signup from './components/Auth/Signup';
+import Login from './components/Auth/Login';
+import Logout from './components/Auth/Logout';
+import Profile from './components/Auth/Profile';
+import EditProfile from './components/Auth/EditProfile';
+import ForgotPassword from './components/Auth/ForgotPassword';
+import ResetPassword from './components/Auth/ResetPassword';
 
-import Print from "./components/Misc/Print";
+import Print from './components/Misc/Print';
 
-import { urls } from "./utils/common";
+import { urls } from './utils/common';
 
-import "./styles/css/main.css";
-import './semantic/dist/semantic.min.css'
+import './styles/css/main.css';
+import './semantic/dist/semantic.min.css';
 
 const persistConfig = {
-    key: "root",
+    key: 'root',
     storage: storage,
-    stateReconciler: autoMergeLevel2 // see "Merge Process" section for details.
+    stateReconciler: autoMergeLevel2, // see "Merge Process" section for details.
 };
 
 const pReducer = persistReducer(persistConfig, reducers);
@@ -99,5 +99,5 @@ ReactDOM.render(
             </BrowserRouter>
         </PersistGate>
     </Provider>,
-    document.querySelector("#root")
+    document.querySelector('#root')
 );

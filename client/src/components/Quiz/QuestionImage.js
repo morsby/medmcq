@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
-import { Image } from "semantic-ui-react";
-import Lightbox from "react-image-lightbox";
+import { Image } from 'semantic-ui-react';
+import Lightbox from 'react-image-lightbox';
 
 const QuestionImage = ({ img, imgOpen, onClick, onClose }) => {
     return (

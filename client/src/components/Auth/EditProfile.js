@@ -1,14 +1,14 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import * as actions from "../../actions";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as actions from '../../actions';
 
-import { urls } from "../../utils/common";
-import * as validation from "../../utils/formValidation";
-import { Container, Message, Button, Divider } from "semantic-ui-react";
-import { Form, Field } from "react-final-form";
+import { urls } from '../../utils/common';
+import * as validation from '../../utils/formValidation';
+import { Container, Message, Button, Divider } from 'semantic-ui-react';
+import { Form, Field } from 'react-final-form';
 
-import Header from "../Misc/Header";
-import Footer from "../Misc/Footer";
+import Header from '../Misc/Header';
+import Footer from '../Misc/Footer';
 
 // TODO: Autocomplete
 
@@ -40,7 +40,7 @@ class EditProfile extends Component {
                             pristine,
                             invalid,
                             values,
-                            form
+                            form,
                         }) => {
                             return (
                                 <form
@@ -66,10 +66,10 @@ class EditProfile extends Component {
                                         {({ input, meta }) => (
                                             <div
                                                 className={
-                                                    "field " +
+                                                    'field ' +
                                                     (meta.error && meta.touched
-                                                        ? "error"
-                                                        : "")
+                                                        ? 'error'
+                                                        : '')
                                                 }
                                             >
                                                 <label>Email</label>
@@ -78,31 +78,27 @@ class EditProfile extends Component {
                                                     type="email"
                                                     placeholder="E-mail"
                                                 />
-                                                {meta.error &&
-                                                    meta.touched && (
-                                                        <Message
-                                                            error
-                                                            visible={true}
-                                                        >
-                                                            {meta.error}
-                                                        </Message>
-                                                    )}
-                                                {meta.touched &&
-                                                    !meta.error && (
-                                                        <Message
-                                                            warning
-                                                            visible={true}
-                                                        >
-                                                            Du behøver ikke
-                                                            indtaste en
-                                                            email-adresse, men
-                                                            hvis du glemmer dine
-                                                            loginoplysninger
-                                                            uden den, kan du
-                                                            ikke få din bruger
-                                                            tilbage.
-                                                        </Message>
-                                                    )}
+                                                {meta.error && meta.touched && (
+                                                    <Message
+                                                        error
+                                                        visible={true}
+                                                    >
+                                                        {meta.error}
+                                                    </Message>
+                                                )}
+                                                {meta.touched && !meta.error && (
+                                                    <Message
+                                                        warning
+                                                        visible={true}
+                                                    >
+                                                        Du behøver ikke indtaste
+                                                        en email-adresse, men
+                                                        hvis du glemmer dine
+                                                        loginoplysninger uden
+                                                        den, kan du ikke få din
+                                                        bruger tilbage.
+                                                    </Message>
+                                                )}
                                             </div>
                                         )}
                                     </Field>
@@ -113,10 +109,10 @@ class EditProfile extends Component {
                                         {({ input, meta }) => (
                                             <div
                                                 className={
-                                                    "field " +
+                                                    'field ' +
                                                     (meta.error && meta.touched
-                                                        ? "error"
-                                                        : "")
+                                                        ? 'error'
+                                                        : '')
                                                 }
                                             >
                                                 <label>Nyt kodeord</label>
@@ -125,16 +121,15 @@ class EditProfile extends Component {
                                                     type="password"
                                                     placeholder="Efterlad blankt for at beholde koden"
                                                 />
-                                                {meta.error &&
-                                                    meta.touched && (
-                                                        <Message
-                                                            error
-                                                            visible={true}
-                                                            size="small"
-                                                        >
-                                                            {meta.error}
-                                                        </Message>
-                                                    )}
+                                                {meta.error && meta.touched && (
+                                                    <Message
+                                                        error
+                                                        visible={true}
+                                                        size="small"
+                                                    >
+                                                        {meta.error}
+                                                    </Message>
+                                                )}
                                             </div>
                                         )}
                                     </Field>
@@ -148,10 +143,10 @@ class EditProfile extends Component {
                                         {({ input, meta }) => (
                                             <div
                                                 className={
-                                                    "field " +
+                                                    'field ' +
                                                     (meta.error && meta.touched
-                                                        ? "error"
-                                                        : "")
+                                                        ? 'error'
+                                                        : '')
                                                 }
                                             >
                                                 <label>
@@ -162,23 +157,22 @@ class EditProfile extends Component {
                                                     type="password"
                                                     placeholder="Gentag nyt kodeord"
                                                 />
-                                                {meta.error &&
-                                                    meta.touched && (
-                                                        <Message
-                                                            error
-                                                            visible={true}
-                                                        >
-                                                            {meta.error}
-                                                        </Message>
-                                                    )}
+                                                {meta.error && meta.touched && (
+                                                    <Message
+                                                        error
+                                                        visible={true}
+                                                    >
+                                                        {meta.error}
+                                                    </Message>
+                                                )}
                                             </div>
                                         )}
                                     </Field>
                                     {message && (
                                         <Message
-                                            negative={message.type === "error"}
+                                            negative={message.type === 'error'}
                                             positive={
-                                                message.type === "success"
+                                                message.type === 'success'
                                             }
                                         >
                                             {message.data}
@@ -195,7 +189,7 @@ class EditProfile extends Component {
                                         basic
                                         color="yellow"
                                         onClick={() =>
-                                            this.handleNavigation("profile")
+                                            this.handleNavigation('profile')
                                         }
                                     >
                                         Tilbage til din profil

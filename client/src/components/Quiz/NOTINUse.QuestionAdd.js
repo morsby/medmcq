@@ -1,8 +1,8 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import * as actions from "../../actions";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as actions from '../../actions';
 
-import { semestre, specialer } from "../../utils/common";
+import { semestre, specialer } from '../../utils/common';
 import {
     Container,
     Button,
@@ -11,30 +11,30 @@ import {
     Dropdown,
     Header,
     Grid,
-    List
-} from "semantic-ui-react";
+    List,
+} from 'semantic-ui-react';
 
 const initialState = {
-    question: "",
-    answer1: "",
-    answer2: "",
-    answer3: "",
+    question: '',
+    answer1: '',
+    answer2: '',
+    answer3: '',
     correctAnswer: null,
     image: null,
-    imageSrc: "",
+    imageSrc: '',
     semester: null,
     examSeason: null,
-    examYear: null
+    examYear: null,
 };
 
 const resetState = {
-    question: "",
-    answer1: "",
-    answer2: "",
-    answer3: "",
+    question: '',
+    answer1: '',
+    answer2: '',
+    answer3: '',
     correctAnswer: null,
     image: null,
-    imageSrc: ""
+    imageSrc: '',
 };
 
 class QuestionAdd extends Component {
@@ -60,10 +60,10 @@ class QuestionAdd extends Component {
                 this.state.examSeason &&
                 this.state.examYear
             ) {
-                let type = "set";
+                let type = 'set';
                 let selection = {
                     semester: this.state.semester,
-                    set: this.state.examYear + "/" + this.state.examSeason
+                    set: this.state.examYear + '/' + this.state.examSeason,
                 };
                 this.props.getQuestions(type, selection);
             }
@@ -79,13 +79,13 @@ class QuestionAdd extends Component {
         reader.onloadend = function(e) {
             this.setState({
                 imageSrc: [reader.result],
-                imageWidth: "100%"
+                imageWidth: '100%',
             });
         }.bind(this);
     }
 
     removeImage() {
-        this.setState({ imageSrc: "", image: null, imageWidth: 0 });
+        this.setState({ imageSrc: '', image: null, imageWidth: 0 });
     }
 
     handleClick(e) {
@@ -108,9 +108,9 @@ class QuestionAdd extends Component {
         let exams = {
             years,
             season: [
-                { text: "Forår", value: "F" },
-                { text: "Efterår", value: "E" }
-            ]
+                { text: 'Forår', value: 'F' },
+                { text: 'Efterår', value: 'E' },
+            ],
         };
 
         let printQuestions = q => {
@@ -124,7 +124,7 @@ class QuestionAdd extends Component {
                 <Grid columns={2}>
                     <Grid.Row>
                         <Grid.Column width={4}>
-                            I sættet findes allerede{" "}
+                            I sættet findes allerede{' '}
                             {this.props.questions.length} spørgsmål:
                             <List>
                                 {this.props.questions.map(q =>
@@ -275,7 +275,7 @@ class QuestionAdd extends Component {
                                         type="file"
                                         ref="fileUploader"
                                         name="image"
-                                        style={{ display: "none" }}
+                                        style={{ display: 'none' }}
                                         onChange={this.onUpload}
                                     />
 
@@ -305,7 +305,7 @@ class QuestionAdd extends Component {
 
 function mapStateToProps(state) {
     return {
-        questions: state.questions
+        questions: state.questions,
     };
 }
 

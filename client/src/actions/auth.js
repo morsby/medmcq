@@ -1,16 +1,16 @@
-import axios from "axios";
-import * as types from "./types";
+import axios from 'axios';
+import * as types from './types';
 
 export const checkUserAvailability = (field, value) => async () => {
     let res = await axios.post(`/api/auth/check-availability`, {
         field,
-        value
+        value,
     });
     return res.data;
 };
 
 export const signup = post => async dispatch => {
-    let res = await axios.post("/api/signup", post);
+    let res = await axios.post('/api/signup', post);
 
     //dispatch({ type: types.AUTH_SIGNUP, payload: res.data });
     return res.data;
@@ -19,7 +19,7 @@ export const signup = post => async dispatch => {
 export const login = post => async dispatch => {
     let response;
     await axios
-        .post("/api/auth/login", post)
+        .post('/api/auth/login', post)
         .then(function(res) {
             // handle success
             dispatch(fetchUser());
@@ -35,13 +35,13 @@ export const login = post => async dispatch => {
 };
 
 export const fetchUser = () => async dispatch => {
-    let res = await axios.get("/api/auth/current_user");
+    let res = await axios.get('/api/auth/current_user');
 
     dispatch({ type: types.AUTH_CURRENT_USER, payload: res.data });
 };
 
 export const editProfile = (values, callback) => async dispatch => {
-    let res = await axios.put("/api/auth/edit", values);
+    let res = await axios.put('/api/auth/edit', values);
 
     return callback(res.data);
 };
@@ -52,9 +52,9 @@ export const getAnsweredQuestions = answers => async dispatch => {
         questions = [];
 
     if (ids.length > 0) {
-        const res = await axios.post("/api/questions/ids", {
+        const res = await axios.post('/api/questions/ids', {
             ids: ids,
-            purpose: "profile-stats"
+            purpose: 'profile-stats',
         });
 
         questions = res.data;
@@ -62,12 +62,12 @@ export const getAnsweredQuestions = answers => async dispatch => {
     dispatch({
         type: types.AUTH_GET_ANSWERED_QUESTIONS,
         answers,
-        questions
+        questions,
     });
 };
 
 export const forgotPassword = (email, callback) => async dispatch => {
-    let res = await axios.post("/api/auth/forgot", { email: email });
+    let res = await axios.post('/api/auth/forgot', { email: email });
     return callback(res.data);
 };
 

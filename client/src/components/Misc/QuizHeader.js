@@ -1,17 +1,17 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import * as actions from "../../actions";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as actions from '../../actions';
 
-import { withRouter } from "react-router";
-import { Menu, Icon } from "semantic-ui-react";
-import { urls } from "../../utils/common";
+import { withRouter } from 'react-router';
+import { Menu, Icon } from 'semantic-ui-react';
+import { urls } from '../../utils/common';
 
 // TODO: Evt. fjern connect - men skal så modtage `user` via parents
 
 class QuizHeader extends Component {
     flagStyle = {
-        cursor: 'pointer'
-    }
+        cursor: 'pointer',
+    };
 
     componentDidMount() {
         this.props.fetchUser();
@@ -29,34 +29,33 @@ class QuizHeader extends Component {
         if (user) {
             højreMenu = (
                 <>
-                <Menu.Item onClick={() => handleClick("profile")}>
-                    <Icon
-                        name='id card outline'
-                        size='big'
-                        basic
-                        inverted
-                        className="click">
-                    </Icon>Profil
-                </Menu.Item>
+                    <Menu.Item onClick={() => handleClick('profile')}>
+                        <Icon
+                            name="id card outline"
+                            size="big"
+                            basic
+                            inverted
+                            className="click"
+                        />
+                        Profil
+                    </Menu.Item>
                 </>
             );
         } else {
             højreMenu = (
-                <Menu.Item onClick={() => handleClick("login")}>
-                    <Icon name='user md' /> Log ind
+                <Menu.Item onClick={() => handleClick('login')}>
+                    <Icon name="user md" /> Log ind
                 </Menu.Item>
             );
         }
 
         return (
             <header>
-                <Menu stackable attached inverted color='blue'>
-                    <Menu.Item onClick={() => handleClick("root")}>
-                        <Icon name='home' size='big'/> Forside
+                <Menu stackable attached inverted color="blue">
+                    <Menu.Item onClick={() => handleClick('root')}>
+                        <Icon name="home" size="big" /> Forside
                     </Menu.Item>
-                    <Menu.Menu position='right'>
-                        {højreMenu}
-                    </Menu.Menu>
+                    <Menu.Menu position="right">{højreMenu}</Menu.Menu>
                 </Menu>
             </header>
         );
@@ -65,7 +64,7 @@ class QuizHeader extends Component {
 
 function mapStateToProps(state) {
     return {
-        user: state.auth.user
+        user: state.auth.user,
     };
 }
 
