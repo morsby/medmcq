@@ -8,7 +8,7 @@
         "npm": "6.2.0"
     },
     "prettier": {
-        "trailingComma": "es5",
+        "trailingComma": "all",
         "tabWidth": 4,
         "semi": true,
         "singleQuote": true
