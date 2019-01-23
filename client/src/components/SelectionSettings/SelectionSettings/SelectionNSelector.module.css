@@ -1,6 +1,6 @@
 @media only screen and (min-width: 1200px) {
     .divstyle {
-        width: 50%;
+        width: 30%;
     }
     .labelstyle {
         margin-top: 4px !important;
@@ -12,7 +12,7 @@
 
 @media only screen and (min-width: 700px) {
     .divstyle {
-        width: 80%;
+        width: 30%;
     }
     .labelstyle {
         margin-top: 4px !important;

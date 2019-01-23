@@ -30,7 +30,7 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
         <Form>
             <Header as="h3">Hvor mange spørgsmål vil du have?</Header>
             <div className={styles.divstyle}>
-                <Grid divided columns={5}>
+                <Grid columns={5}>
                     <Grid.Row>
                         <Grid.Column>
                             <Form.Field>

@@ -1,6 +1,14 @@
 import React from 'react';
 import marked from 'marked';
-import { Form, TextArea, Button, Comment, Message } from 'semantic-ui-react';
+import {
+    Form,
+    TextArea,
+    Button,
+    Comment,
+    Message,
+    Icon,
+    Menu,
+} from 'semantic-ui-react';
 
 const QuestionComment = ({ comment, user, deleteComment, editComment }) => {
     return (
@@ -19,20 +27,31 @@ const QuestionComment = ({ comment, user, deleteComment, editComment }) => {
                 <Comment.Metadata style={{ color: 'rgb(140, 140, 140)' }}>
                     {new Date(comment.date).toLocaleString('da-DK')}
                 </Comment.Metadata>
-                {comment.user === user.username && (
-                    <>
-                        <span onClick={() => deleteComment(comment._id)}>
-                            Slet!
-                        </span>
-                        <span onClick={() => editComment(comment)}>Ret!</span>
-                    </>
-                )}
+
                 <Comment.Text
-                    style={{ marginTop: '1em' }}
+                    style={{ marginTop: '1em', fontSize: '18px' }}
                     dangerouslySetInnerHTML={{
                         __html: marked(comment.comment),
                     }}
                 />
+                {comment.user === user.username && (
+                    <Menu size="mini" icon="labeled" secondary>
+                        <Menu.Item
+                            onClick={() => deleteComment(comment._id)}
+                            style={{ cursor: 'pointer' }}
+                        >
+                            <Icon name="trash" color="red" />
+                            Slet!
+                        </Menu.Item>
+                        <Menu.Item
+                            style={{ cursor: 'pointer' }}
+                            onClick={() => editComment(comment)}
+                        >
+                            <Icon name="edit" color="yellow" />
+                            Ret!
+                        </Menu.Item>
+                    </Menu>
+                )}
             </Comment.Content>
         </Comment>
     );
