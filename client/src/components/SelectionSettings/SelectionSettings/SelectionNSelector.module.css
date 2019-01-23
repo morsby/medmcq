@@ -1,0 +1,11 @@
+@media only screen and (min-width: 1200px) {
+    .divstyle {
+        width: 50%;
+    }
+}
+
+@media only screen and (min-width: 700px) {
+    .divstyle {
+        width: 80%;
+    }
+}
