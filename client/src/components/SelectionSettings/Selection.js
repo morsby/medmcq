@@ -238,6 +238,7 @@ class SelectionMain extends Component {
                     >
                         Start!
                     </Button>
+                    <Divider hidden />
                     {this.props.answers.length > 0 && (
                         <Button onClick={() => this.handleSubmit('cont')}>
                             Fortsæt med igangværende spørgsmål
