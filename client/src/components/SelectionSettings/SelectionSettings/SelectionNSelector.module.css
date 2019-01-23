@@ -2,10 +2,25 @@
     .divstyle {
         width: 50%;
     }
+    .labelstyle {
+        margin-top: 4px !important;
+    }
+    .inputfield {
+        width: 30% !important;
+    }
 }
 
 @media only screen and (min-width: 700px) {
     .divstyle {
         width: 80%;
+    }
+    .labelstyle {
+        margin-top: 4px !important;
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .labelstyle {
+        margin-top: 0 !important;
     }
 }

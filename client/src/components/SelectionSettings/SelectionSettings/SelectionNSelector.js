@@ -19,7 +19,7 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
     if (n > 1000 || n < 1) {
         labelError = (
             <div>
-                <Label style={{ marginTop: '4px' }} basic color="red">
+                <Label className={styles.labelstyle} basic color="red">
                     Værdi skal være mellem 1 og 300
                 </Label>
             </div>
@@ -30,8 +30,8 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
         <Form>
             <Header as="h3">Hvor mange spørgsmål vil du have?</Header>
             <div className={styles.divstyle}>
-                <Grid doubling columns={5}>
-                    <Grid.Row divided>
+                <Grid divided columns={5}>
+                    <Grid.Row>
                         <Grid.Column>
                             <Form.Field>
                                 <Radio
@@ -93,7 +93,7 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
             <div>
                 <Grid stackable columns={2}>
                     <Grid.Row>
-                        <Grid.Column>
+                        <Grid.Column className={styles.inputfield}>
                             <Form.Field>
                                 <Input
                                     label="Anden værdi"
