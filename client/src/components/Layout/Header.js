@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
 import { withRouter } from 'react-router';
-import { Flag, Menu, Icon } from 'semantic-ui-react';
-import { urls } from '../../utils/common';
+import { Flag, Menu, Icon, Responsive } from 'semantic-ui-react';
+import { urls, breakpoints } from '../../utils/common';
 
 // TODO: Evt. fjern connect - men skal så modtage `user` via parents
 
@@ -29,13 +29,13 @@ class Header extends Component {
         if (user) {
             højreMenu = (
                 <>
-                    <Menu.Item>
+                    <Responsive as={Menu.Item} minWidth={breakpoints.mobile}>
                         <strong>
                             Velkommen{' '}
                             {user.username[0].toUpperCase() +
                                 user.username.substring(1)}
                         </strong>
-                    </Menu.Item>
+                    </Responsive>
                     <Menu.Item onClick={() => handleClick('profile')}>
                         <Icon
                             name="id card outline"
@@ -57,7 +57,7 @@ class Header extends Component {
 
         return (
             <header>
-                <Menu stackable attached inverted color="blue" width={5}>
+                <Menu inverted color="blue" attached>
                     <Menu.Item onClick={() => handleClick('root')}>
                         <Icon name="home" size="big" /> Forside
                     </Menu.Item>
