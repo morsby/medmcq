@@ -104,3 +104,7 @@ export const allowedNs = {
     min: 1,
     max: 300,
 };
+
+export const validationRegex = {
+    username: /^[a-zA-ZæøåÆØÅ0-9]+([._]?[a-zA-Z0-9]+)*$/,
+};

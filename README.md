@@ -17,7 +17,7 @@ Hvis et punkt er tildelt en udvikler, vil det fremgå med navn og/eller `branch`
 ### Andet, vigtigt
 
 - [x] **Dubletter af enkelte brugernavne (case-insensitive) og emails -- hvordan håndteres dette?**
-- [ ] Bloker mellemrum m.v. i brugernavne (Sigurd - `username-validation`)
+- [x] Bloker mellemrum m.v. i brugernavne (Sigurd - `username-validation`)
 
 ### API
 
