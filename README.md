@@ -12,19 +12,22 @@ I `/client` findes React-layoutet, der henter data fra api'en og viser spørgsm�
 
 ## TODOs
 
+Hvis et punkt er tildelt en udvikler, vil det fremgå med navn og/eller `branch` efter punktet.
+
 ### Andet, vigtigt
 
-- [ ] **Dubletter af enkelte brugernavne (case-insensitive) og emails -- hvordan håndteres dette?**
-- [ ] Bloker mellemrum m.v. i brugernavne
+- [x] **Dubletter af enkelte brugernavne (case-insensitive) og emails -- hvordan håndteres dette?**
+- [ ] Bloker mellemrum m.v. i brugernavne (Sigurd - `username-validation`)
 
 ### API
 
 - [ ] Oprydning (særligt `routes/questions.js`)
+- [ ] Brug Router module (Thomas - `api-cleaning`)
+- [ ] async/await syntax (Thomas - `api-cleaning`)
 
 ### React
 
 - [ ] **Ca. 10% af besvarede spørgsmål bliver ikke registreret i profilen?**
-- [ ] Hent settings på load
 - [ ] Debounce checkUser ved signup
 - [ ] Autocomplete i profil-formularer
 - [ ] Få component til at opdatere selv ved dybt nested ny kommentar. 
@@ -35,6 +38,7 @@ I `/client` findes React-layoutet, der henter data fra api'en og viser spørgsm�
 - [x] ~~Fix gammel SelectQuestions-funktion (utils/quiz)~~ (slettet)
 - [x] Check også for unik email? (Mongo vil smide en fejl)
 - [x] Lad buttons tage html input
+- [x] Hent settings på load
 
 ## Planlagte projekter
 
