@@ -99,3 +99,8 @@ export const truncateText = (text, length = 30) => {
         return text.substring(0, length) + ' ...';
     } else return text;
 };
+
+export const allowedNs = {
+    min: 1,
+    max: 300,
+};

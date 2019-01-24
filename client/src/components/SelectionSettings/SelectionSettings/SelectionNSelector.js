@@ -1,5 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+
+import { allowedNs } from '../../../utils/common';
+
 import styles from './SelectionNSelector.module.css';
 
 import {
@@ -16,10 +19,10 @@ import {
 const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
     let labelError;
 
-    if (n > 1000 || n < 1) {
+    if (n > allowedNs.max || n < allowedNs.min) {
         labelError = (
             <Label basic color="red" pointing>
-                Værdi skal være mellem 1 og 300
+                Værdi skal være mellem {allowedNs.min} og {allowedNs.max}
             </Label>
         );
     }

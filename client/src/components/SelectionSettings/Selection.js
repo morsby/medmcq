@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
+import { allowedNs } from '../../utils/common';
+
 import _ from 'lodash';
 
 import {
@@ -48,6 +50,8 @@ class SelectionMain extends Component {
     onSettingsChange(e, { value, name }) {
         this.setState({ err: [] });
 
+        if (name === 'n' && value) value = Number(value);
+
         this.props.changeSettings({ type: name, value });
     }
 
@@ -64,7 +68,6 @@ class SelectionMain extends Component {
         } = this.props.settings;
 
         // Når den er tom modtager den fuldt antal
-        console.log(questions.length);
 
         // VALIDATION
         // Question.length = Antallet af spørgsmål for et semester eller speciale
@@ -234,7 +237,11 @@ class SelectionMain extends Component {
                     <SelectionMessage user={user} type={type} />
                     <Button
                         onClick={() => this.handleSubmit('new')}
-                        disabled={antalValgte < 1 && type === 'specialer'}
+                        disabled={
+                            (antalValgte < 1 && type === 'specialer') ||
+                            n < allowedNs.min ||
+                            n > allowedNs.max
+                        }
                     >
                         Start!
                     </Button>
