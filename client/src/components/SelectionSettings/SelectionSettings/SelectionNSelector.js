@@ -18,21 +18,24 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
 
     if (n > 1000 || n < 1) {
         labelError = (
-            <div>
-                <Label className={styles.labelstyle} basic color="red">
-                    Værdi skal være mellem 1 og 300
-                </Label>
-            </div>
+            <Label basic color="red" pointing>
+                Værdi skal være mellem 1 og 300
+            </Label>
         );
     }
 
     return (
         <Form>
             <Header as="h3">Hvor mange spørgsmål vil du have?</Header>
-            <div className={styles.divstyle}>
-                <Grid columns={5}>
+            <div>
+                <Grid verticalAlign="top">
                     <Grid.Row>
-                        <Grid.Column>
+                        <Grid.Column
+                            computer={1}
+                            tablet={2}
+                            mobile={3}
+                            className={styles.height38}
+                        >
                             <Form.Field>
                                 <Radio
                                     label="5"
@@ -43,7 +46,12 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
                                 />
                             </Form.Field>
                         </Grid.Column>
-                        <Grid.Column>
+                        <Grid.Column
+                            computer={1}
+                            tablet={2}
+                            mobile={3}
+                            className={styles.height38}
+                        >
                             <Form.Field>
                                 <Radio
                                     label="10"
@@ -54,7 +62,12 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
                                 />
                             </Form.Field>
                         </Grid.Column>
-                        <Grid.Column>
+                        <Grid.Column
+                            computer={1}
+                            tablet={2}
+                            mobile={3}
+                            className={styles.height38}
+                        >
                             <Form.Field>
                                 <Radio
                                     label="20"
@@ -65,7 +78,12 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
                                 />
                             </Form.Field>
                         </Grid.Column>
-                        <Grid.Column>
+                        <Grid.Column
+                            computer={1}
+                            tablet={2}
+                            mobile={3}
+                            className={styles.height38}
+                        >
                             <Form.Field>
                                 <Radio
                                     label="40"
@@ -76,7 +94,12 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
                                 />
                             </Form.Field>
                         </Grid.Column>
-                        <Grid.Column>
+                        <Grid.Column
+                            computer={1}
+                            tablet={2}
+                            mobile={3}
+                            className={styles.height38}
+                        >
                             <Form.Field>
                                 <Radio
                                     label="80"
@@ -87,15 +110,15 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
                                 />
                             </Form.Field>
                         </Grid.Column>
-                    </Grid.Row>
-                </Grid>
-            </div>
-            <div>
-                <Grid stackable columns={2}>
-                    <Grid.Row>
-                        <Grid.Column className={styles.inputfield}>
+                        <Grid.Column
+                            computer={4}
+                            tablet={6}
+                            mobile={16}
+                            textAlign="center"
+                        >
                             <Form.Field>
                                 <Input
+                                    fluid
                                     label="Anden værdi"
                                     name="n"
                                     type="number"
@@ -104,9 +127,9 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
                                     labelPosition="left"
                                     onChange={onChange}
                                 />
+                                {labelError}
                             </Form.Field>
                         </Grid.Column>
-                        <Grid.Column>{labelError}</Grid.Column>
                     </Grid.Row>
                 </Grid>
             </div>

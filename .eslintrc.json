@@ -1,9 +1,11 @@
 {
     "parser": "babel-eslint",
-    "extends": ["prettier"],
+    "extends": ["eslint:recommended", "plugin:react/recommended", "prettier"],
     "plugins": ["prettier"],
     "rules": {
-        "prettier/prettier": "error"
+        "prettier/prettier": "error",
+        "react/jsx-uses-react": "error",
+        "react/jsx-uses-vars": "error"
     },
     "parserOptions": {
         "ecmaVersion": 6,

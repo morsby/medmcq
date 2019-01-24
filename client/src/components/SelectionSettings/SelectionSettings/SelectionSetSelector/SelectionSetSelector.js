@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 
-import { groupQuestions, getIds } from '../../../../utils/questions';
+import { groupQuestions } from '../../../../utils/questions';
 
 import SetRadioButton from './SetRadioButton';
-import { Form, Radio, Divider, Header, Icon } from 'semantic-ui-react';
+import { Form, Header } from 'semantic-ui-react';
 
 const SelectionSetSelector = ({
     semester,
@@ -31,6 +30,7 @@ const SelectionSetSelector = ({
             {sets.map(set => {
                 return (
                     <SetRadioButton
+                        key={set.api}
                         set={set}
                         answeredQuestions={answeredQuestions}
                         groupedQuestions={groupQuestions(questions)[set.api]}

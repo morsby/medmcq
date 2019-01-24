@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-import { groupQuestions, getIds } from '../../../../utils/questions';
-import { Form, Radio, Divider, Header, Icon } from 'semantic-ui-react';
+import { getIds } from '../../../../utils/questions';
+import { Form, Radio, Divider, Icon } from 'semantic-ui-react';
 
 const SetRadioButton = ({
     set,
@@ -40,6 +40,14 @@ const SetRadioButton = ({
             </Form.Field>
         </Form.Group>
     );
+};
+
+SetRadioButton.propTypes = {
+    set: PropTypes.object,
+    answeredQuestions: PropTypes.func,
+    groupedQuestions: PropTypes.func,
+    activeSet: PropTypes.string,
+    onChange: PropTypes.func,
 };
 
 export default SetRadioButton;
