@@ -1,38 +1,23 @@
-const keys = require("../config/keys");
+const permit = require('../permission'); // middleware for checking if user's role is permitted to make request
 
-const permit = require("../permission"); // middleware for checking if user's role is permitted to make request
-
-var uniqWith = require("lodash/uniqWith");
-var isEqual = require("lodash/isEqual");
-var sanitizeHtml = require("sanitize-html");
-var _ = require("lodash");
-
-const multer = require("multer");
-const storage = multer.memoryStorage();
-const upload = multer({ storage: storage });
-var cloudinary = require("cloudinary");
-cloudinary.config({
-    cloud_name: keys.cloudinary_cloud_name,
-    api_key: keys.cloudinary_api_key,
-    api_secret: keys.cloudinary_api_secret
-});
+var _ = require('lodash');
 
 // MODELS
-const Question = require("../models/question.js");
-const User = require("../models/user.js");
+const Question = require('../models/question.js');
+const User = require('../models/user.js');
 
 // TODO: Før statistik over get("/api/questions"), post("/api/questions/ids/"), post("/api/questions/answer")
 
 module.exports = app => {
     // GET: spørgsmål
-    app.get("/api/questions", (req, res) => {
+    app.get('/api/questions', (req, res) => {
         let {
             n,
             specialer,
             unique,
             semester,
             examSeason,
-            examYear
+            examYear,
         } = req.query;
 
         /* 
@@ -52,9 +37,9 @@ module.exports = app => {
             Question.find({
                 semester: semester,
                 examYear: examYear,
-                examSeason: examSeason
+                examSeason: examSeason,
             })
-                .sort("n")
+                .sort('n')
                 .exec((err, questions) => {
                     if (err) res.send(err);
                     res.json(questions);
@@ -81,11 +66,11 @@ module.exports = app => {
             // Mongoose filter
             let filter = {
                 _id: { $nin: answeredQuestions },
-                semester: { $eq: semester }
+                semester: { $eq: semester },
             };
 
             if (specialer) {
-                filter.specialty = { $in: specialer.split(",") };
+                filter.specialty = { $in: specialer.split(',') };
             }
 
             // Find spørgsmål baseret på filteret
@@ -114,8 +99,8 @@ module.exports = app => {
     });
 
     // GET: bestemte spørgsmål (kan kun håndtere få spg)
-    app.get("/api/questions/:id", (req, res) => {
-        let ids = req.params.id.split(",");
+    app.get('/api/questions/:id', (req, res) => {
+        let ids = req.params.id.split(',');
 
         Question.find({ _id: { $in: ids } }, (err, question) => {
             if (err) res.send(err);
@@ -126,7 +111,7 @@ module.exports = app => {
 
     // POST: hent bestemt spørgsmål (skal være post af hensyn til URL-længde;)
     // kan håndtere højt antal spg.
-    app.post("/api/questions/ids/", (req, res) => {
+    app.post('/api/questions/ids/', (req, res) => {
         let ids = req.body.ids;
         Question.find({ _id: { $in: ids } }, (err, question) => {
             if (err) res.send(err);
@@ -149,7 +134,7 @@ module.exports = app => {
         question.correctAnswer = q.correctAnswer;
 
         question.semester = q.semester;
-        question.examYear = q.examYear;
+        question.examYear = q.examYear; 
         question.examSeason = q.examSeason;
         question.specialty = q.specialty.split(",");
         //question.tags = q.tags.toLowerCase();
@@ -185,10 +170,10 @@ module.exports = app => {
     //app.put("/api/questions/:id", permit("admin"), (req, res) => { }
 
     // PUT: kommentar til spørgsmål
-    app.put("/api/questions/:id/comment", (req, res) => {
+    app.put('/api/questions/:id/comment', (req, res) => {
         if (!req.user) {
             res.status(403);
-            res.send("Not logged in");
+            res.send('Not logged in');
         } else {
             let id = req.params.id;
             Question.findById(id, (err, question) => {
@@ -205,7 +190,7 @@ module.exports = app => {
                     if (err) res.send(err);
 
                     User.findById(req.user._id, (err, user) => {
-                        if (err) return res.send({ type: "error", data: err });
+                        if (err) return res.send({ type: 'error', data: err });
                         if (!Array.isArray(user.comments)) user.comments = [];
 
                         if (user.comments.indexOf(id) === -1) {
@@ -218,64 +203,85 @@ module.exports = app => {
                     });
 
                     res.json({
-                        message: "Kommentaren er tilføjet!",
-                        question
+                        message: 'Kommentaren er tilføjet!',
+                        question,
                     });
                 });
             });
         }
     });
 
+    // Opdater kommentar
     app.put(
-        "/api/questions/:question_id/comment/:comment_id",
+        '/api/questions/:question_id/comment/:comment_id',
         async (req, res) => {
             let question = await Question.findById(req.params.question_id);
 
             let comment = await question.comments;
 
-            index = _.findIndex(comment, { id: req.params.comment_id });
+            let index = _.findIndex(comment, { id: req.params.comment_id });
 
             if (req.user.username === question.comments[index].user) {
                 question.comments[index].comment = req.body.comment;
                 question.save(err => {
                     if (err) res.send(new Error(err));
 
-                    res.json("kommentar ændret");
+                    res.json('kommentar ændret');
                 });
             } else {
-                res.json("ikke din kommentar");
+                res.json('ikke din kommentar');
             }
         }
     );
 
+    // Slet kommentar
     app.delete(
-        "/api/questions/:question_id/comment/:comment_id",
+        '/api/questions/:question_id/comment/:comment_id',
         async (req, res) => {
-            let question = await Question.findById(req.params.question_id);
+            let { question_id, comment_id } = req.params;
+
+            let question = await Question.findById(question_id);
 
             let comment = await question.comments;
 
-            index = _.findIndex(comment, { id: req.params.comment_id });
+            let index = _.findIndex(comment, { id: comment_id });
 
             if (req.user.username === question.comments[index].user) {
                 question.comments.splice(index, 1);
+
+                /* Ikke så intuitivt: Hvis der ikke længere er en kommentar på
+                spørgsmålet af brugeren, slettes spørgsmåls-id'et fra brugerens
+                profil, så det ikke fremgår af listen over kommenterede spørgsmål.
+                
+                Det er altså vigtigt, at dette komme EFTER at selve kommentaren 
+                er fjernet*/
+                if (_.findIndex(comment, { user: req.user.username }) === -1) {
+                    let user = await User.findById(req.user._id);
+
+                    let indexProfile = user.comments.indexOf(comment_id);
+                    user.comments.splice(indexProfile, 1);
+                    user.save(err => {
+                        if (err) res.send(err);
+                    });
+                }
+
                 question.save(err => {
                     if (err) res.send(new Error(err));
 
-                    res.json("kommentar slettet");
+                    res.json('kommentar slettet');
                 });
             } else {
-                res.json("ikke din kommentar");
+                res.json('ikke din kommentar');
             }
         }
     );
 
     // DELETE: Slet et spørgsmål
-    app.delete("/api/questions/:id", permit("admin"), (req, res) => {
+    app.delete('/api/questions/:id', permit('admin'), (req, res) => {
         Question.remove({ _id: req.params.id }, (err, question) => {
             if (err) res.send(err);
 
-            res.json({ message: "Spørgsmålet er slettet!" });
+            res.json({ message: 'Spørgsmålet er slettet!' });
         });
     });
 
@@ -287,9 +293,9 @@ module.exports = app => {
 
     // GET antal på semesteret
     // Bruges på quiz-vælger-siden til at vise hvor mange spørgsmål der er for hvert semester
-    app.get("/api/count/:semester", (req, res) => {
+    app.get('/api/count/:semester', (req, res) => {
         Question.find({ semester: req.params.semester })
-            .select(["specialty", "examSeason", "examYear"])
+            .select(['specialty', 'examSeason', 'examYear'])
             .exec((err, questions) => {
                 if (err) res.send(err);
 
@@ -303,16 +309,16 @@ module.exports = app => {
      * ======================================================================
      */
 
-    app.post("/api/questions/answer", (req, res) => {
+    app.post('/api/questions/answer', (req, res) => {
         if (!req.user) {
             res.status(403);
-            res.send("Not logged in");
+            res.send('Not logged in');
         } else {
             let { questionId, semester, answer } = req.body;
 
             if (!questionId || !semester || !answer) {
                 res.status(400);
-                res.send("Info lacking");
+                res.send('Info lacking');
             }
             // Save the question to the user
             User.findById(req.user._id, (err, user) => {
@@ -321,7 +327,7 @@ module.exports = app => {
                 let answeredQuestions = user.answeredQuestions || {},
                     values = _.get(answeredQuestions, [semester, questionId], {
                         correct: 0,
-                        wrong: 0
+                        wrong: 0,
                     });
 
                 values[answer] = values[answer] + 1;
@@ -329,13 +335,13 @@ module.exports = app => {
 
                 user.answeredQuestions = answeredQuestions;
 
-                user.markModified("answeredQuestions");
+                user.markModified('answeredQuestions');
                 user.save(err => {
                     if (err) res.send(err);
 
                     res.send({
-                        message: "Question answered",
-                        user: user
+                        message: 'Question answered',
+                        user: user,
                     });
                 });
             });
