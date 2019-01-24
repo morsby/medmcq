@@ -10,7 +10,7 @@ import {
     Menu,
 } from 'semantic-ui-react';
 
-const QuestionComment = ({ comment, user, deleteComment, editComment }) => {
+const SingleComment = ({ comment, user, deleteComment, editComment }) => {
     return (
         <Comment
             key={comment._id}
@@ -57,7 +57,7 @@ const QuestionComment = ({ comment, user, deleteComment, editComment }) => {
     );
 };
 
-export default ({
+const QuestionComments = ({
     comments,
     value,
     onCommentWrite,
@@ -89,11 +89,15 @@ export default ({
                     <Button
                         onClick={onCommentPost}
                         disabled={value.length < 3}
-                        style={{ margin: '0.5em 0' }}
+                        style={{ margin: '0.5em 1em 0.5em 0' }}
                     >
                         Kommentér
                     </Button>
-                    {editingComment && <Button onClick={undoEdit}>X</Button>}
+                    {editingComment && (
+                        <Button negative onClick={undoEdit}>
+                            Fortryd ændring
+                        </Button>
+                    )}
                 </Form>
             </div>
         );
@@ -104,7 +108,7 @@ export default ({
         <div>
             <div>
                 {comments.map(c => (
-                    <QuestionComment
+                    <SingleComment
                         key={c._id}
                         comment={c}
                         user={user}
@@ -117,3 +121,5 @@ export default ({
         </div>
     );
 };
+
+export default QuestionComments;

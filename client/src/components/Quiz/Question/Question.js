@@ -157,7 +157,7 @@ class Question extends Component {
                     this.state.newComment
                 );
             }
-            this.setState({ newComment: '', editComment: '' });
+            this.setState({ newComment: '', editingComment: '' });
         }
     }
 
