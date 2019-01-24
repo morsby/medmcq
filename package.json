@@ -23,7 +23,7 @@
         "dev": "concurrently \"npm run server\" \"npm run client\"",
         "start": "node server.js",
         "heroku-postbuild": "npm install --dev --prefix client && npm run build --prefix client",
-        "update": "git pull && npm install && npm install --preflix client",
+        "update": "git pull && npm install && npm install --prefix client",
         "build": "npm run update && npm run build --prefix client"
     },
     "author": "Morsby",
