@@ -30,7 +30,7 @@ const SignupForm = props => {
             !username.match(validationRegex.username)
         ) {
             return `Ugyldigt brugernavn. Brugernavne skal være mindst 3 tegn og må ikke indeholde mellemrum. 
-            Gyldige brugernavne er f.eks sigurd, sig_urd, sig.urd og sigurd123`;
+            Gyldige brugernavne er f.eks. sigurd, sig_urd, sig.urd og sigurd123`;
         } else {
             let available = await props.checkUserAvailability(
                 'username',
