@@ -11,7 +11,6 @@ import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
 
 // TODO: Autocomplete
-
 class EditProfile extends Component {
     state = { message: null };
 

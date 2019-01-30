@@ -3,18 +3,24 @@ import PropTypes from 'prop-types';
 
 import { Container, Menu, Icon } from 'semantic-ui-react';
 
-const QuizNavigator = ({ clickHandler, qn, qmax, fixed, position }) => {
+/**
+ * En menu, der tillader navigation i quizzen frem og tilbage samt viser
+ * aktuelle spørgsmål.
+ * Vises både over og under spørgsmålet.
+ * Alle props kommer fra Quiz.js
+ * @param {func}   onNavigate Selve funktionen der navigerer
+ * @param {number} qn         Index for det akutelle spørgsmål
+ * @param {number} qmax       Hvor mange spørgsmål er der at navigere mellem?
+ * @param {string} position   Er det menuen over eller under spørgsmålet?
+ */
+
+const QuizNavigator = ({ onNavigate, qn, qmax, position }) => {
     return (
         <Container {...(position === 'top' ? { className: 'top-nav' } : {})}>
-            <Menu
-                size="large"
-                fluid
-                widths={3}
-                {...(fixed ? { fixed: position } : {})}
-            >
+            <Menu size="large" fluid widths={3}>
                 <Menu.Item
                     {...(qn <= 0 ? { disabled: true } : {})}
-                    onClick={() => clickHandler(qn - 1)}
+                    onClick={() => onNavigate(qn - 1)}
                 >
                     <Icon name="step backward" />
                     Forrige
@@ -28,7 +34,7 @@ const QuizNavigator = ({ clickHandler, qn, qmax, fixed, position }) => {
                 </Menu.Item>
                 <Menu.Item
                     {...(qn + 1 >= qmax ? { disabled: true } : {})}
-                    onClick={() => clickHandler(qn + 1)}
+                    onClick={() => onNavigate(qn + 1)}
                 >
                     Næste
                     <Icon name="step forward" />
@@ -39,10 +45,9 @@ const QuizNavigator = ({ clickHandler, qn, qmax, fixed, position }) => {
 };
 
 QuizNavigator.propTypes = {
-    clickHandler: PropTypes.func.isRequired,
+    onNavigate: PropTypes.func.isRequired,
     qn: PropTypes.number.isRequired,
     qmax: PropTypes.number.isRequired,
-    fixed: PropTypes.bool,
     position: PropTypes.string,
 };
 

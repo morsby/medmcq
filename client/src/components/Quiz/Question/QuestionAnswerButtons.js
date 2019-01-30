@@ -42,6 +42,7 @@ const QuestionAnswerButtons = ({ pristine, onAnswer, question }) => {
     };
 
     let pristineClass = pristine ? 'pristine' : '';
+
     return (
         <Button.Group vertical fluid className={pristineClass}>
             {generateButton(1)}

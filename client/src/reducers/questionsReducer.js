@@ -15,11 +15,15 @@ export default function(state = [], action) {
             }
             return questions || false;
         case types.ANSWER_QUESTION:
-            newState = [...state];
+            return state.map(item => {
+                if (item._id !== action.payload.id) return item;
 
-            q = _.findIndex(newState, { _id: action.payload.id });
-            newState[q].answer = action.payload.answer;
-            return newState;
+                return {
+                    ...item,
+                    answer: action.payload.answer,
+                };
+            });
+
         case types.QUESTION_COMMENT:
             let { _id, comments } = action.payload.question;
 

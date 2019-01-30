@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 
 import { List } from 'semantic-ui-react';
 
+/**
+ * Viser metadata (speciale, sæt, mv.) for spørgsmålet
+ * @param {object} question Spørgsmåls-objectet
+ */
 const QuestionMetadata = ({ question }) => {
     return (
         <div>

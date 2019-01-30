@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as actions from '../../../actions';
 import marked from 'marked';
@@ -10,8 +11,6 @@ import {
     Container,
     Grid,
     Divider,
-    Dimmer,
-    Loader,
     Segment,
     Button,
     Responsive,
@@ -20,14 +19,44 @@ import {
 import QuestionAnswerButtons from './QuestionAnswerButtons';
 import QuestionImage from './QuestionImage';
 import QuestionMetadata from './QuestionMetadata';
-import QuestionComments from './QuestionComments';
+import QuestionComments from './QuestionComments/QuestionComments';
+
+/**
+ * Component ansvarlig for at vise selve spørgsmålet, evt. billeder, kommentarer
+ * og svar.
+ */
 
 class Question extends Component {
     state = {
+        /**
+         * Er lightbox åben?
+         * @type {Boolean}
+         */
         imgOpen: false,
+
+        /**
+         * Er kommentarer vist?
+         * @type {Boolean}
+         */
         commentsOpen: false,
+
+        /**
+         * Evt. kommentartekst
+         * @type {String}
+         */
         newComment: '',
+
+        /**
+         * ID på den kommentar der rettes.
+         * @type {String}
+         */
         editingComment: '',
+
+        /**
+         * Er der blevet flyttet på mus el.lign.?
+         * Benyttes til styling af svar-buttons.
+         * @type {Boolean}
+         */
         pristine: true,
     };
 
@@ -36,9 +65,8 @@ class Question extends Component {
 
         this.onKeydown = this.onKeydown.bind(this);
         this.onImgClick = this.onImgClick.bind(this);
-        this.onImgClose = this.onImgClose.bind(this);
         this.onCommentsToggle = this.onCommentsToggle.bind(this);
-        this.onCommentWrite = this.onCommentWrite.bind(this);
+        this.onCommentType = this.onCommentType.bind(this);
         this.onCommentPost = this.onCommentPost.bind(this);
         this.onDeleteComment = this.onDeleteComment.bind(this);
         this.onEditComment = this.onEditComment.bind(this);
@@ -54,9 +82,11 @@ class Question extends Component {
         document.removeEventListener('keydown', this.onKeydown);
     }
 
-    componentWillUpdate(nextProps, nextState) {
-        // For at forhindre lightbox i at være åben på tværs af navigationer
-        if (this.props.qn !== nextProps.qn) {
+    /**
+     * For at forhindre lightbox i at være åben på tværs af navigationer
+     */
+    componentDidUpdate(prevProps) {
+        if (this.props.question._id !== prevProps.question._id) {
             this.setState({
                 imgOpen: false,
                 commentsOpen: false,
@@ -68,6 +98,10 @@ class Question extends Component {
         }
     }
 
+    /**
+     * For at se om musen er bevæget -- hvis den er, er siden ikke "pristine".
+     * Dette bruges i styling af svar-buttons
+     */
     mouseMover() {
         document.addEventListener(
             'mousemove',
@@ -78,6 +112,10 @@ class Question extends Component {
         );
     }
 
+    /**
+     * For at kunne svare med tal på keyboardet
+     * Tager højde for modifier keys (alt, ctrl, meta)
+     */
     onKeydown(e) {
         if (
             !this.state.imgOpen &&
@@ -96,64 +134,87 @@ class Question extends Component {
         }
     }
 
+    /**
+     * Ansvarlig for at fortælle redux at der er svaret
+     * @param  {number} answer Det der er svaret (1, 2 el. 3)
+     */
     onAnswer(answer) {
-        let { answerQuestion, questions, qn, user } = this.props;
+        let { answerQuestion, question, user, qn } = this.props;
 
         // If not already answered:
-        if (!questions[qn].answer) {
-            // Call answerQuestion action with id (passed from parent) and answer
-
-            let truthy;
-            if (Array.isArray(questions[qn].correctAnswer)) {
-                truthy = questions[qn].correctAnswer.includes(answer)
+        if (!question.answer) {
+            // Er svaret korrekt? Tager højde for flere korrekte svarmuligheder
+            let correct;
+            if (Array.isArray(question.correctAnswer)) {
+                correct = question.correctAnswer.includes(answer)
                     ? true
                     : false;
             } else {
-                truthy = questions[qn].correctAnswer === answer;
+                correct = question.correctAnswer === answer;
             }
 
+            // Call answerQuestion fra redux
             answerQuestion(
-                questions[qn]._id,
+                question._id,
                 answer,
                 {
                     qn: qn,
-                    correct: truthy,
+                    correct: correct,
                 },
-                questions[qn].semester,
+                question.semester,
                 user
             );
         }
     }
 
-    onImgClose() {
-        this.setState({ imgOpen: false });
-    }
-
+    /** Håndtering af pop-up af billeder **/
     onImgClick() {
-        this.setState({ imgOpen: true });
+        this.setState(prevState => {
+            return { imgOpen: !prevState.imgOpen };
+        });
     }
 
+    /**
+     * Håndtering af kommentarer. Er de synlige?
+     */
     onCommentsToggle() {
         this.setState(prevState => {
             return { commentsOpen: !prevState.commentsOpen };
         });
     }
 
-    onCommentWrite(e, { value }) {
+    /**
+     * Styrer den nye kommentar.
+     * Kaldes fra QuestionComments.js
+     * @param  {[type]} e     fra Semantic UI onClick
+     * @param  {string} value kommentaren
+     */
+    onCommentType(e, { value }) {
         this.setState({ newComment: value });
     }
 
+    /**
+     * Poster en kommentar.
+     * De brugte props (edit/commentQuestion) er fra redux.
+     */
     onCommentPost() {
         if (this.state.newComment.length >= 3) {
             if (this.state.editingComment) {
+                /**
+                 *  Hvis vi er ved at rette i en kommentar
+                 *  (dvs. editingComment = dennes id.)
+                 */
                 this.props.editComment(
-                    this.props.questions[this.props.qn]._id,
+                    this.props.question._id,
                     this.state.editingComment,
                     this.state.newComment
                 );
             } else {
+                /**
+                 *  Det er en ny kommentar
+                 */
                 this.props.commentQuestion(
-                    this.props.questions[this.props.qn]._id,
+                    this.props.question._id,
                     this.state.newComment
                 );
             }
@@ -161,13 +222,18 @@ class Question extends Component {
         }
     }
 
+    /**
+     * Slet kommentar. Fra redux
+     */
     onDeleteComment(comment_id) {
-        this.props.deleteComment(
-            this.props.questions[this.props.qn]._id,
-            comment_id
-        );
+        this.props.deleteComment(this.props.question._id, comment_id);
     }
 
+    /**
+     * Når der ønskes at ændre en kommentar.
+     * Kaldes fra QuestionComments.js
+     * @param  {object} comment Kommentaren der skal ændres.
+     */
     onEditComment(comment) {
         this.setState({
             newComment: comment.comment,
@@ -175,21 +241,16 @@ class Question extends Component {
         });
     }
 
+    /**
+     * Fortryder ændring af kommentar
+     */
     undoEdit() {
         this.setState({ newComment: '', editingComment: '' });
     }
 
     render() {
-        let question = this.props.questions[this.props.qn],
-            text = subSupScript(question.question),
-            user = this.props.user;
-
-        if (!this.props.questions.length > 0)
-            return (
-                <Dimmer active page>
-                    <Loader>Henter spørgsmål ...</Loader>
-                </Dimmer>
-            );
+        let { question, user } = this.props,
+            text = subSupScript(question.question);
 
         return (
             <Container className="question">
@@ -224,7 +285,6 @@ class Question extends Component {
                                     <QuestionImage
                                         img={imageURL(question.image)}
                                         onClick={this.onImgClick}
-                                        onClose={this.onImgClose}
                                         imgOpen={this.state.imgOpen}
                                     />
                                 </Grid.Column>
@@ -249,8 +309,8 @@ class Question extends Component {
                     {this.state.commentsOpen && (
                         <QuestionComments
                             comments={question.comments}
-                            value={this.state.newComment}
-                            onCommentWrite={this.onCommentWrite}
+                            newComment={this.state.newComment}
+                            onCommentType={this.onCommentType}
                             onCommentPost={this.onCommentPost}
                             onDeleteComment={this.onDeleteComment}
                             onEditComment={this.onEditComment}
@@ -265,6 +325,50 @@ class Question extends Component {
         );
     }
 }
+
+Question.propTypes = {
+    /**
+     * Det aktuelle spørgsmål. Fra Quiz.js
+     * @type {array}
+     */
+    question: PropTypes.object,
+
+    /**
+     * Nuværende spørgsmålsindeks. Benyttes til at besvare spørgsmål. Fra Quiz.js
+     * @type {number}
+     */
+    qn: PropTypes.number,
+
+    /**
+     * Brugeren (hvis nogen). Fra Quiz.js
+     * @type {object}
+     */
+    user: PropTypes.object,
+
+    /**
+     * Action der kaldes ved svar. Fra redux.
+     * @type {func}
+     */
+    answerQuestion: PropTypes.func,
+
+    /**
+     * Action der kaldes ved ændring af kommentar. Fra redux.
+     * @type {func}
+     */
+    editComment: PropTypes.func,
+
+    /**
+     * Action der kaldes ved kommentar. Fra redux.
+     * @type {func}
+     */
+    commentQuestion: PropTypes.func,
+
+    /**
+     * Action der kaldes ved sletning af kommentar. Fra redux.
+     * @type {func}
+     */
+    deleteComment: PropTypes.func,
+};
 
 export default connect(
     null,

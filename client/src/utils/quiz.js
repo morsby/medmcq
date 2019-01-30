@@ -25,7 +25,7 @@ export const smoothScroll = (h, dir = 'up') => {
 };
 
 export const evalAnswer = (question, answer) => {
-    if (!question.answer) return; // hvis ikke svaret
+    if (!question.answer) return null; // hvis ikke svaret
 
     if (Array.isArray(question.correctAnswer)) {
         if (question.correctAnswer.includes(answer)) return 'green';

@@ -7,6 +7,15 @@ import { calculateResults } from '../../utils/quiz';
 import { Card, List, Container, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 
+/**
+ * Viser et overblik over alle spørgsmål i quizzen og fremgangen.
+ *
+ * Alle props er fra Quiz.js
+ * @param {array}   questions    Indeholder alle spørgsmålene.
+ * @param {arrat}   answers      Array af BOOLEANS om svaret (rigtigt/forkert)
+ * @param {func}    clickHandler Funktion der navigerer til det klikkede spg.
+ */
+
 const QuizSummary = ({ questions, answers, clickHandler }) => {
     let results = calculateResults(answers, questions.length);
 

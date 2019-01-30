@@ -27,7 +27,8 @@ Hvis et punkt er tildelt en udvikler, vil det fremgå med navn og/eller `branch`
 
 ### React
 
-- [ ] **Ca. 10% af besvarede spørgsmål bliver ikke registreret i profilen?**
+- [ ] Ca. 10% af besvarede spørgsmål bliver ikke registreret i profilen? -- stadig?
+- [ ] Bedre immutability i Redux. Se [denne side](https://redux.js.org/recipes/structuring-reducers/immutable-update-patterns)
 - [ ] Debounce checkUser ved signup
 - [ ] Autocomplete i profil-formularer
 - [ ] Få component til at opdatere selv ved dybt nested ny kommentar. 
@@ -43,7 +44,7 @@ Hvis et punkt er tildelt en udvikler, vil det fremgå med navn og/eller `branch`
 ## Planlagte projekter
 
 - [ ] Excel-ark?
-- [ ] Oversættelse til engelsk (hvordan?)
+- [ ] Oversættelse til engelsk (hvordan? -- måske [react-intl](https://github.com/yahoo/react-intl))
 - [ ] Side hvor man kan følge med i ændringer
 - [ ] Udvikling af algoritme, så "tilfældige spørgsmål" fortrinsvist tager spørgsmål, der er svaret forkert tidligere/ikke tidligere besvaret
 - [ ] Mulighed for at tilføje/ændre specialer
