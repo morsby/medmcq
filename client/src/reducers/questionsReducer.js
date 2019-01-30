@@ -1,62 +1,53 @@
 import * as types from '../actions/types';
 import _ from 'lodash';
 
-export default function(state = [], action) {
-    let newState, q, questionIndex, commentIndex;
-    switch (action.type) {
-        case types.FETCH_QUESTIONS:
-            let questions = action.payload;
-            // Shuffle questions if not in set
-            if (
-                action.questionType === 'specialer' ||
-                action.questionType === 'random'
-            ) {
-                questions = _.shuffle(questions);
-            }
-            return questions || false;
-        case types.ANSWER_QUESTION:
-            return state.map(item => {
-                if (item._id !== action.payload.id) return item;
+import { createReducer } from 'redux-starter-kit';
 
-                return {
-                    ...item,
-                    answer: action.payload.answer,
-                };
-            });
+const initialState = [{}];
 
-        case types.QUESTION_COMMENT:
-            let { _id, comments } = action.payload.question;
+export default createReducer(initialState, {
+    [types.FETCH_QUESTIONS]: (state, action) => {
+        let qs = action.payload;
+        // Shuffle questions if not in set
+        if (
+            action.questionType === 'specialer' ||
+            action.questionType === 'random'
+        ) {
+            qs = _.shuffle(qs);
+        }
+        return qs || false;
+    },
+    [types.ANSWER_QUESTION]: (state, action) => {
+        const index = _.findIndex(state, { _id: action.payload.id });
+        const q = state[index];
+        q.answer = action.payload.answer;
+    },
+    [types.QUESTION_COMMENT]: (state, action) => {
+        const { _id, comments } = action.payload.question;
+        const index = _.findIndex(state, { _id });
 
-            newState = [...state];
-            q = _.findIndex(newState, { _id });
-            newState[q].comments = comments;
-            return newState;
-        case types.QUESTION_COMMENT_DELETE:
-            newState = [...state];
-
-            questionIndex = _.findIndex(newState, {
+        state[index].comments = comments;
+    },
+    [types.QUESTION_COMMENT_DELETE]: (state, action) => {
+        const questionIndex = _.findIndex(state, {
                 _id: action.payload.questionId,
-            });
-            commentIndex = _.findIndex(newState[questionIndex].comments, {
+            }),
+            commentIndex = _.findIndex(state, {
                 _id: action.payload.commentId,
             });
 
-            newState[questionIndex].comments.splice(commentIndex, 1);
-            return newState;
-        case types.QUESTION_COMMENT_EDIT:
-            newState = [...state];
-
-            questionIndex = _.findIndex(newState, {
+        state[questionIndex].comments.splice(commentIndex, 1);
+    },
+    [types.QUESTION_COMMENT_EDIT]: (state, action) => {
+        const questionIndex = _.findIndex(state, {
                 _id: action.payload.questionId,
-            });
-            commentIndex = _.findIndex(newState[questionIndex].comments, {
+            }),
+            question = state[questionIndex],
+            commentIndex = _.findIndex(question.comments, {
                 _id: action.payload.commentId,
-            });
+            }),
+            comment = question.comments[commentIndex];
 
-            newState[questionIndex].comments[commentIndex].comment =
-                action.payload.comment;
-            return newState;
-        default:
-            return state;
-    }
-}
+        comment.comment = action.payload.comment;
+    },
+});
