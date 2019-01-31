@@ -281,7 +281,6 @@ class SelectionMain extends Component {
 function mapStateToProps(state) {
     return {
         settings: state.settings,
-        answers: state.answers,
         user: state.auth.user,
         questions: state.questions,
     };

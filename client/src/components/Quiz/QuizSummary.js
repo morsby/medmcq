@@ -12,7 +12,6 @@ import { Link } from 'react-router-dom';
  *
  * Alle props er fra Quiz.js
  * @param {array}   questions    Indeholder alle spørgsmålene.
- * @param {arrat}   answers      Array af BOOLEANS om svaret (rigtigt/forkert)
  * @param {func}    clickHandler Funktion der navigerer til det klikkede spg.
  */
 
