@@ -226,10 +226,10 @@ module.exports = app => {
                 question.save(err => {
                     if (err) res.send(new Error(err));
 
-                    res.json('kommentar ændret');
+                    res.json({ message: 'kommentar ændret', question });
                 });
             } else {
-                res.json('ikke din kommentar');
+                res.json({ message: 'ikke din kommentar', question });
             }
         }
     );
@@ -268,10 +268,10 @@ module.exports = app => {
                 question.save(err => {
                     if (err) res.send(new Error(err));
 
-                    res.json('kommentar slettet');
+                    res.json({ message: 'kommentar slettet', question });
                 });
             } else {
-                res.json('ikke din kommentar');
+                res.json({ message: 'ikke din kommentar', question });
             }
         }
     );

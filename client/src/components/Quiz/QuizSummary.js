@@ -16,15 +16,15 @@ import { Link } from 'react-router-dom';
  * @param {func}    clickHandler Funktion der navigerer til det klikkede spg.
  */
 
-const QuizSummary = ({ questions, answers, clickHandler }) => {
-    let results = calculateResults(answers, questions.length);
+const QuizSummary = ({ questions, clickHandler }) => {
+    let results = calculateResults(questions);
 
     return (
         <Container>
             <Card fluid>
                 <Card.Content>
                     <Card.Header>Fremgang</Card.Header>
-                    {results.done && (
+                    {results.status === 'done' && (
                         <Card.Content>
                             Du svarede rigtigt på {results.correct} af{' '}
                             {results.n} spørgsmål. Det svarer til{' '}
@@ -74,7 +74,6 @@ const QuizSummary = ({ questions, answers, clickHandler }) => {
 
 QuizSummary.propTypes = {
     questions: PropTypes.array.isRequired,
-    answers: PropTypes.array.isRequired,
     clickHandler: PropTypes.func.isRequired,
 };
 

@@ -1,3 +1,5 @@
+import _ from 'lodash';
+
 export const smoothScroll = (h, dir = 'up') => {
     let top = window.pageYOffset || document.documentElement.scrollTop;
     let bottom = document.body.scrollHeight;
@@ -36,29 +38,30 @@ export const evalAnswer = (question, answer) => {
     return 'grey'; // ikke valgt mulighed
 };
 
-export const calculateResults = (answers, numberOfQuestions) => {
-    if (answers.length < numberOfQuestions) {
-        return { done: false };
+export const calculateResults = questions => {
+    let answered = _.filter(questions, o => typeof o.answer === 'number'),
+        res;
+
+    if (answered.length === 0) {
+        res = { status: false };
+    } else if (answered.length > 0 && answered.length < questions.length) {
+        res = { status: 'in_progress' };
+    } else {
+        let correct = 0;
+        answered.map(question => {
+            if (question.answer === question.correctAnswer) correct++;
+        });
+
+        res = {
+            status: 'done',
+            n: questions.length,
+            correct,
+            percentage: `${Math.round((correct / answered.length) * 10000) /
+                100}%`,
+        };
     }
 
-    let correct = 0;
-    for (var i = 0, l = answers.length; i < l; i++) {
-        if (
-            typeof answers[i] === 'undefined' ||
-            typeof answers[i] !== 'boolean'
-        ) {
-            return { done: false };
-        } else if (answers[i] === true) {
-            correct++;
-        }
-    }
-
-    return {
-        done: true,
-        n: answers.length,
-        correct,
-        percentage: `${Math.round((correct / answers.length) * 10000) / 100}%`,
-    };
+    return res;
 };
 
 export const subSupScript = text => {

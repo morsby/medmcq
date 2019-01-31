@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
 import { allowedNs } from '../../utils/common';
+import { calculateResults } from '../../utils/quiz';
 
 import _ from 'lodash';
 
@@ -246,7 +247,8 @@ class SelectionMain extends Component {
                         Start!
                     </Button>
                     <Divider hidden />
-                    {this.props.answers.length > 0 && (
+                    {calculateResults(this.props.questions).status ===
+                        'in_progress' && (
                         <Button onClick={() => this.handleSubmit('cont')}>
                             Fortsæt med igangværende spørgsmål
                         </Button>
@@ -281,6 +283,7 @@ function mapStateToProps(state) {
         settings: state.settings,
         answers: state.answers,
         user: state.auth.user,
+        questions: state.questions,
     };
 }
 

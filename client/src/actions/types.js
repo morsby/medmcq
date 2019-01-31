@@ -5,6 +5,7 @@ export const POST_QUESTION = 'post_question';
 export const QUESTION_COMMENT = 'question_comment';
 export const QUESTION_COMMENT_DELETE = 'question_comment_delete';
 export const QUESTION_COMMENT_EDIT = 'question_comment_edit';
+export const QUESTION_COMMENT_UPDATE = 'question_comment_update';
 
 export const CHANGE_SETTINGS = 'change_settings';
 

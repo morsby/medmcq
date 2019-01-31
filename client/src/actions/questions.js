@@ -98,15 +98,23 @@ export const commentQuestion = (id, comment) => async dispatch => {
     const res = await axios.put(`/api/questions/${id}/comment`, {
         comment,
     });
-    dispatch({ type: types.QUESTION_COMMENT, payload: res.data });
+    dispatch({
+        type: types.QUESTION_COMMENT_UPDATE,
+        payload: res.data,
+    });
 };
 
 export const deleteComment = (question_id, comment_id) => async dispatch => {
-    await axios.delete(`/api/questions/${question_id}/comment/${comment_id}`);
+    const res = await axios.delete(
+        `/api/questions/${question_id}/comment/${comment_id}`
+    );
 
     dispatch({
-        type: types.QUESTION_COMMENT_DELETE,
-        payload: { questionId: question_id, commentId: comment_id },
+        type: types.QUESTION_COMMENT_UPDATE,
+        payload: {
+            questionId: question_id,
+            comments: res.data,
+        },
     });
 };
 
@@ -115,12 +123,18 @@ export const editComment = (
     comment_id,
     comment
 ) => async dispatch => {
-    await axios.put(`/api/questions/${question_id}/comment/${comment_id}`, {
-        comment,
-    });
+    const res = await axios.put(
+        `/api/questions/${question_id}/comment/${comment_id}`,
+        {
+            comment,
+        }
+    );
 
     dispatch({
-        type: types.QUESTION_COMMENT_EDIT,
-        payload: { questionId: question_id, commentId: comment_id, comment },
+        type: types.QUESTION_COMMENT_UPDATE,
+        payload: {
+            questionId: question_id,
+            comments: res.data,
+        },
     });
 };
