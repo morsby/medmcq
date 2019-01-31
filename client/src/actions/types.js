@@ -6,6 +6,7 @@ export const QUESTION_COMMENT = 'question_comment';
 export const QUESTION_COMMENT_DELETE = 'question_comment_delete';
 export const QUESTION_COMMENT_EDIT = 'question_comment_edit';
 export const QUESTION_COMMENT_UPDATE = 'question_comment_update';
+export const QUESTION_SPECIALTY_UPDATE = 'question_specialty_update';
 
 export const CHANGE_SETTINGS = 'change_settings';
 

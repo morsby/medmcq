@@ -46,4 +46,13 @@ export default createReducer(initialState, {
 
         state[index].comments = comments;
     },
+    [types.QUESTION_SPECIALTY_UPDATE]: (state, action) => {
+        /**
+         * Find det id i arrayet og erstat specialerne.
+         */
+        const { _id, specialty } = action.payload;
+        const index = _.findIndex(state, { _id });
+
+        state[index].specialty = specialty;
+    },
 });

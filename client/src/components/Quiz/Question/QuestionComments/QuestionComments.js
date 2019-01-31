@@ -14,7 +14,7 @@ import QuestionCommentSingle from './QuestionCommentSingle';
  * @param {func} onDeleteComment    Funktion der sletter kommentar
  * @param {func} onEditComment      Funktion til at åbne ændring af kommentar
  * @param {string} editingComment   id til ændret kommentar. false hvis ny kommentar
- * @param {func} undoEdit           Funktion der fortryder ændring / starter ny kommentar
+ * @param {func} undoEditComment           Funktion der fortryder ændring / starter ny kommentar
  * @param {object} user             Brugeren
  */
 const QuestionComments = ({
@@ -25,7 +25,7 @@ const QuestionComments = ({
     onDeleteComment,
     onEditComment,
     editingComment,
-    undoEdit,
+    undoEditComment,
     user,
 }) => {
     let form;
@@ -54,7 +54,7 @@ const QuestionComments = ({
                         Kommentér
                     </Button>
                     {editingComment && (
-                        <Button negative onClick={undoEdit}>
+                        <Button negative onClick={undoEditComment}>
                             Fortryd ændring
                         </Button>
                     )}
@@ -90,7 +90,7 @@ QuestionComments.propTypes = {
     onDeleteComment: PropTypes.func,
     onEditComment: PropTypes.func,
     editingComment: PropTypes.string,
-    undoEdit: PropTypes.func,
+    undoEditComment: PropTypes.func,
     user: PropTypes.object,
 };
 

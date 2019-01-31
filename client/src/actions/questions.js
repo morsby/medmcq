@@ -138,3 +138,14 @@ export const editComment = (
         },
     });
 };
+
+export const editSpecialties = (questionId, specialty) => async dispatch => {
+    const res = await axios.patch(`/api/questions/${questionId}/specialty`, {
+        specialty,
+    });
+
+    dispatch({
+        type: types.QUESTION_SPECIALTY_UPDATE,
+        payload: res.data,
+    });
+};

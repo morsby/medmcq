@@ -58,6 +58,19 @@ class Question extends Component {
          * @type {Boolean}
          */
         pristine: true,
+
+        /**
+         * Er vi i gang med at ændre på specialer?
+         * @type {Boolean}
+         */
+        editingSpecialties: false,
+
+        /**
+         * Selected specialties
+         * Defaults til allerede kendte værdier
+         * @type {Array]
+         */
+        selectedSpecialties: this.props.question.specialty,
     };
 
     constructor(props) {
@@ -70,8 +83,12 @@ class Question extends Component {
         this.onCommentPost = this.onCommentPost.bind(this);
         this.onDeleteComment = this.onDeleteComment.bind(this);
         this.onEditComment = this.onEditComment.bind(this);
-        this.undoEdit = this.undoEdit.bind(this);
+        this.undoEditComment = this.undoEditComment.bind(this);
         this.onAnswer = this.onAnswer.bind(this);
+
+        this.onSpecialtiesEditToggle = this.onSpecialtiesEditToggle.bind(this);
+        this.onEditSpecialty = this.onEditSpecialty.bind(this);
+        this.onSaveSpecialties = this.onSaveSpecialties.bind(this);
     }
     componentDidMount() {
         document.addEventListener('keydown', this.onKeydown);
@@ -97,7 +114,6 @@ class Question extends Component {
             this.mouseMover();
         }
     }
-
     /**
      * For at se om musen er bevæget -- hvis den er, er siden ikke "pristine".
      * Dette bruges i styling af svar-buttons
@@ -244,8 +260,30 @@ class Question extends Component {
     /**
      * Fortryder ændring af kommentar
      */
-    undoEdit() {
+    undoEditComment() {
         this.setState({ newComment: '', editingComment: '' });
+    }
+
+    /**
+     * Ændring af specialer
+     * @param {??}
+     */
+    onSpecialtiesEditToggle() {
+        this.setState(prevState => {
+            return { editingSpecialties: !prevState.editingSpecialties };
+        });
+    }
+
+    onEditSpecialty(e, { value }) {
+        this.setState({ selectedSpecialties: value });
+    }
+
+    onSaveSpecialties() {
+        this.props.editSpecialties(
+            this.props.question._id,
+            this.state.selectedSpecialties
+        );
+        this.setState({ editingSpecialties: false });
     }
 
     render() {
@@ -300,7 +338,15 @@ class Question extends Component {
                         />
                     </Responsive>
                     <Divider />
-                    <QuestionMetadata question={question} />
+                    <QuestionMetadata
+                        question={question}
+                        onToggleSpecialties={this.onSpecialtiesEditToggle}
+                        selectedSpecialties={this.state.selectedSpecialties}
+                        editingSpecialties={this.state.editingSpecialties}
+                        onEditSpecialty={this.onEditSpecialty}
+                        onSaveSpecialties={this.onSaveSpecialties}
+                        user={user}
+                    />
 
                     <Button basic onClick={this.onCommentsToggle}>
                         {this.state.commentsOpen ? 'Skjul' : 'Vis'} kommentarer
@@ -315,7 +361,7 @@ class Question extends Component {
                             onDeleteComment={this.onDeleteComment}
                             onEditComment={this.onEditComment}
                             editingComment={this.state.editingComment}
-                            undoEdit={this.undoEdit}
+                            undoEditComment={this.undoEditComment}
                             user={user}
                         />
                     )}

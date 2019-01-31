@@ -18,6 +18,7 @@ const QuestionCommentSingle = ({
     deleteComment,
     editComment,
 }) => {
+    if (!user) user = {};
     return (
         <Comment
             key={comment._id}

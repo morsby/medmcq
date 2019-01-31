@@ -166,8 +166,20 @@ module.exports = app => {
         }
     }); */
 
-    // PUT: Opdater et spørgsmål
-    //app.put("/api/questions/:id", permit("admin"), (req, res) => { }
+    // patch: Opdater et spørgsmåls specialer
+    app.patch(
+        '/api/questions/:id/specialty',
+        permit('admin', 'editor'),
+        async (req, res) => {
+            let question = await Question.findById(req.params.id);
+
+            question.specialty = req.body.specialty;
+
+            await question.save();
+
+            res.send(question);
+        }
+    );
 
     // PUT: kommentar til spørgsmål
     app.put('/api/questions/:id/comment', (req, res) => {
