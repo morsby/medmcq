@@ -166,8 +166,8 @@ module.exports = app => {
         }
     }); */
 
-    // patch: Opdater et spørgsmåls specialer
-    app.patch(
+    // put: Opdater et spørgsmåls specialer
+    app.put(
         '/api/questions/:id/specialty',
         permit('admin', 'editor'),
         async (req, res) => {

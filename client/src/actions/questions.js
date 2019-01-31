@@ -140,7 +140,7 @@ export const editComment = (
 };
 
 export const editSpecialties = (questionId, specialty) => async dispatch => {
-    const res = await axios.patch(`/api/questions/${questionId}/specialty`, {
+    const res = await axios.put(`/api/questions/${questionId}/specialty`, {
         specialty,
     });
 
