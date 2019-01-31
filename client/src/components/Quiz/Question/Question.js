@@ -100,7 +100,8 @@ class Question extends Component {
     }
 
     /**
-     * For at forhindre lightbox i at være åben på tværs af navigationer
+     * For at forhindre lightbox i at være åben på tværs af navigationer og ændring
+     * af specialer nulstilles
      */
     componentDidUpdate(prevProps) {
         if (this.props.question._id !== prevProps.question._id) {
@@ -110,6 +111,7 @@ class Question extends Component {
                 newComment: '',
                 editingComment: '',
                 pristine: true,
+                selectedSpecialties: this.props.question.specialty,
             });
             this.mouseMover();
         }
