@@ -31,3 +31,5 @@ export const semesterIndices = value => {
         }
     }
 };
+
+export const superUserRoles = ['admin', 'editor'];
