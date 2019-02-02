@@ -28,10 +28,10 @@ Hvis et punkt er tildelt en udvikler, vil det fremgå med navn og/eller `branch`
 ### React
 
 - [ ] Ca. 10% af besvarede spørgsmål bliver ikke registreret i profilen? -- stadig?
-- [ ] Bedre immutability i Redux. Se [denne side](https://redux.js.org/recipes/structuring-reducers/immutable-update-patterns)
+- [ ] Bedre immutability i Redux. Se [denne side](https://redux.js.org/recipes/structuring-reducers/immutable-update-patterns) (Sigurd - `immutable-redux`)
 - [ ] Debounce checkUser ved signup
 - [ ] Autocomplete i profil-formularer
-- [ ] Få component til at opdatere selv ved dybt nested ny kommentar. 
+- [ ] Få component til at opdatere selv ved dybt nested ny kommentar. (Klares nok i `immutable-redux`)
 - [ ] Undgå at Firefox åbner søge-dialogen, når der svares på spørgsmål med tal
 - [ ] Ryd op i Component-logik (større projekt ... - særligt formular-validation og Redux-connects)
 - [ ] Print virker ikke i alle browsers
@@ -47,7 +47,7 @@ Hvis et punkt er tildelt en udvikler, vil det fremgå med navn og/eller `branch`
 - [ ] Oversættelse til engelsk (hvordan? -- måske [react-intl](https://github.com/yahoo/react-intl))
 - [ ] Side hvor man kan følge med i ændringer
 - [ ] Udvikling af algoritme, så "tilfældige spørgsmål" fortrinsvist tager spørgsmål, der er svaret forkert tidligere/ikke tidligere besvaret
-- [ ] Mulighed for at tilføje/ændre specialer
 - [ ] Mulighed for rettelse af spørgsmål
 - [ ] Mulighed for tilføjelse af personlige kommentarer
+- [x] Mulighed for at tilføje/ændre specialer
 - [x] Mulighed for at kommentere spørgsmål
