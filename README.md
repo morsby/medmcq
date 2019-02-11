@@ -43,8 +43,8 @@ Hvis et punkt er tildelt en udvikler, vil det fremgå med navn og/eller `branch`
 
 ## Planlagte projekter
 
+- [ ] Oversættelse til engelsk (Sigurd - `localize`)
 - [ ] Excel-ark?
-- [ ] Oversættelse til engelsk (hvordan? -- måske [react-intl](https://github.com/yahoo/react-intl))
 - [ ] Side hvor man kan følge med i ændringer
 - [ ] Udvikling af algoritme, så "tilfældige spørgsmål" fortrinsvist tager spørgsmål, der er svaret forkert tidligere/ikke tidligere besvaret
 - [ ] Mulighed for rettelse af spørgsmål
