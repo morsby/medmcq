@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import ReactRouterPropTypes from 'react-router-prop-types';
+import PropTypes from 'prop-types';
+
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
@@ -8,6 +11,9 @@ import { urls, breakpoints } from '../../utils/common';
 
 // TODO: Evt. fjern connect - men skal så modtage `user` via parents
 
+/**
+ * Header-component. Viser headeren og tjekker at brugeren er logget ind.
+ */
 class Header extends Component {
     flagStyle = {
         cursor: 'pointer',
@@ -81,6 +87,23 @@ class Header extends Component {
         );
     }
 }
+
+Header.propTypes = {
+    /**
+     * Func der henter den aktuelt indloggede bruger. Fra redux.
+     */
+    fetchUser: PropTypes.func,
+
+    /**
+     * Brugeren fra fetchUser.
+     */
+    user: PropTypes.object,
+
+    /**
+     * History fra ReactRouter. Bruges til navigation.
+     */
+    history: ReactRouterPropTypes.history,
+};
 
 function mapStateToProps(state) {
     return {

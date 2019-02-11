@@ -7,7 +7,19 @@ import { evalAnswer } from '../../../utils/quiz';
 import marked from 'marked';
 import { subSupScript } from '../../../utils/quiz';
 
+/**
+ * Component der viser svarmuligheder.
+ * Alle props er fra Question.js
+ * @param {Boolean} pristine Hvorvidt musen er blevet rykket. Bruges til styling.
+ * @param {func}    onAnswer Func der kaldes når der svares på spg.
+ * @param {object}  question Selve spørgsmålet.
+ */
 const QuestionAnswerButtons = ({ pristine, onAnswer, question }) => {
+    /**
+     * Func der prefixer svarmuligheder med A, B og C samt laver knappen.
+     * @param  {Number} answerNo Svarmulighed nr. 1, 2 el. 3
+     * @return {Comp}            Selve knappen.
+     */
     const generateButton = answerNo => {
         let answerText;
         switch (answerNo) {
@@ -24,6 +36,9 @@ const QuestionAnswerButtons = ({ pristine, onAnswer, question }) => {
                 break;
         }
         answerText = answerText + question[`answer${answerNo}`];
+        /**
+         * subSupScript tillader sub- og superscripts vha. markdown-syntaks.
+         */
         answerText = subSupScript(answerText);
         return (
             <Button

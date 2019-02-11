@@ -11,6 +11,11 @@ import FeedbackSingleContent from '../FeedbackSingle/FeedbackSingleContent';
 import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
 
+/**
+ * Component der tillader post af ny feedback.
+ * @param {func} postFeedback Funktion der poster feedback til API'en. Fra redux
+ * @param {}     history      Fra react-router (fordi denne component kaldes fra src/index.js)
+ */
 const FeedbackPost = ({ postFeedback, history }) => {
     const handleSubmit = formValues => {
         postFeedback(formValues, id => {

@@ -65,7 +65,7 @@ const FeedbackSingleContent = ({ feedback, votedFor, handleVote }) => {
 FeedbackSingleContent.propTypes = {
     feedback: PropTypes.object.isRequired,
     votedFor: PropTypes.object,
-    handleVote: PropTypes.func.isRequired,
+    handleVote: PropTypes.func,
 };
 
 export default FeedbackSingleContent;

@@ -45,7 +45,7 @@ const SetRadioButton = ({
 SetRadioButton.propTypes = {
     set: PropTypes.object,
     answeredQuestions: PropTypes.func,
-    groupedQuestions: PropTypes.func,
+    groupedQuestions: PropTypes.array,
     activeSet: PropTypes.string,
     onChange: PropTypes.func,
 };

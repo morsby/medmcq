@@ -6,6 +6,11 @@ import { urls } from '../../../utils/common';
 
 import LoadingPage from '../Pages/LoadingPage';
 
+/**
+ * Higher Order Component der blokerer visse URLS for brugere der ikke er logget ind
+ * (fx profilen m.v.)
+ */
+
 class PrivateRoute extends React.Component {
     state = { loading: true };
 

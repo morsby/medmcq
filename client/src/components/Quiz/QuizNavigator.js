@@ -7,11 +7,7 @@ import { Container, Menu, Icon } from 'semantic-ui-react';
  * En menu, der tillader navigation i quizzen frem og tilbage samt viser
  * aktuelle spørgsmål.
  * Vises både over og under spørgsmålet.
- * Alle props kommer fra Quiz.js
- * @param {func}   onNavigate Selve funktionen der navigerer
- * @param {number} qn         Index for det akutelle spørgsmål
- * @param {number} qmax       Hvor mange spørgsmål er der at navigere mellem?
- * @param {string} position   Er det menuen over eller under spørgsmålet?
+ * Alle props kommer fra Quiz.js og beskrives i bunden.
  */
 
 const QuizNavigator = ({ onNavigate, qn, qmax, position }) => {
@@ -45,9 +41,24 @@ const QuizNavigator = ({ onNavigate, qn, qmax, position }) => {
 };
 
 QuizNavigator.propTypes = {
+    /**
+     * onNavigate Selve funktionen der navigerer
+     */
     onNavigate: PropTypes.func.isRequired,
+
+    /**
+     * qn         Index for det akutelle spørgsmål
+     */
     qn: PropTypes.number.isRequired,
+
+    /**
+     * qmax       Hvor mange spørgsmål er der at navigere mellem?
+     */
     qmax: PropTypes.number.isRequired,
+
+    /**
+     * position   Er det menuen over eller under spørgsmålet?
+     */
     position: PropTypes.string,
 };
 

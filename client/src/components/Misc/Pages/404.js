@@ -5,7 +5,10 @@ import { Container } from 'semantic-ui-react';
 import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
 
-const ErrorPage = props => {
+/**
+ * 404-page.
+ */
+const ErrorPage = () => {
     return (
         <div className="flex-container">
             <Header />

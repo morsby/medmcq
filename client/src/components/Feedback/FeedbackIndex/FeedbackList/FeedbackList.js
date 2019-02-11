@@ -8,6 +8,10 @@ import { Icon, Message } from 'semantic-ui-react';
 
 import FeedbackListItem from './FeedbackListItem';
 
+/**
+ * Component der viser oversigt over forslag, selve listen.
+ * Kaldes af ../FeedbackIndex.js
+ */
 class FeedbackList extends Component {
     state = { sortBy: 'votes', order: 'desc' };
 
@@ -79,7 +83,16 @@ class FeedbackList extends Component {
 }
 
 FeedbackList.propTypes = {
+    /**
+     * Array af feedback-forslag.
+     * Fra ../FeedbackIndex.js
+     */
     feedback: PropTypes.array,
-    getSpecificFeedback: PropTypes.func.isRequired,
+
+    /**
+     * Funktion der henter detaljer omkring et bestemt forslag.
+     * Fra redux
+     */
+    getSpecificFeedback: PropTypes.func,
 };
 export default withRouter(FeedbackList);

@@ -50,6 +50,7 @@ export const calculateResults = questions => {
         let correct = 0;
         answered.map(question => {
             if (question.answer === question.correctAnswer) correct++;
+            return correct;
         });
 
         res = {

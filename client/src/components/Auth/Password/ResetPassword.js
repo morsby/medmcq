@@ -13,6 +13,11 @@ import { Form, Field } from 'react-final-form';
 import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
 
+/**
+ * Component der nulstiller kodeordet hvis URL'ens token er gyldigt.
+ * Props er resetPassword (fra redux) og token der hentes via URL.
+ *
+ */
 class ResetPassword extends Component {
     state = { message: null };
 

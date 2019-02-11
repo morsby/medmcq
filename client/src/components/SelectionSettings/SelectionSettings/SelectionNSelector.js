@@ -10,13 +10,16 @@ import {
     Input,
     Form,
     Radio,
-    Checkbox,
     Divider,
     Header,
     Grid,
 } from 'semantic-ui-react';
 
-const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
+/**
+ * Component der giver mulighed for ændring af antal ønskede spørgsmål.
+ * Alle props kommer fra ../Selection.js
+ */
+const SelectionNSelector = ({ n, onChange, total }) => {
     let labelError;
 
     if (n > allowedNs.max || n < allowedNs.min) {
@@ -140,28 +143,25 @@ const SelectionNSelector = ({ n, onChange, total, onlyNew, user }) => {
             <Divider hidden />
             <div>Der er {total} spørgsmål for det valgte semester.</div>
             <Divider hidden />
-
-            {user && (
-                <div>
-                    <Checkbox
-                        name="onlyNew"
-                        checked={onlyNew}
-                        onClick={onChange}
-                        label="Giv mig kun spørgsmål, jeg ikke har svaret på tidligere"
-                    />
-                    <Divider hidden />
-                </div>
-            )}
         </Form>
     );
 };
 
 SelectionNSelector.propTypes = {
+    /**
+     * Aktuelt ønskede antal.
+     */
     n: PropTypes.number.isRequired,
+
+    /**
+     * Hvor mange spørgsmål er der for semesteret?
+     */
     total: PropTypes.number.isRequired,
+
+    /**
+     * Func der ændrer det ønskede antal
+     */
     onChange: PropTypes.func.isRequired,
-    onlyNew: PropTypes.bool,
-    user: PropTypes.object,
 };
 
 export default SelectionNSelector;

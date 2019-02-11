@@ -12,6 +12,11 @@ import {
 import { Form, Field } from 'react-final-form';
 import { Button, Divider, Message } from 'semantic-ui-react';
 
+/**
+ * Component der viser login-formularen.
+ * Kaldes af ./Login.js
+ * Props er history (fra react-router) og login (fra redux)
+ */
 class LoginForm extends Component {
     state = { error: null };
 

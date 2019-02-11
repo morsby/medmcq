@@ -3,6 +3,11 @@ import PropTypes from 'prop-types';
 
 import { Message } from 'semantic-ui-react';
 
+/**
+ * Afhængig af valg kan vises en ekstra besked omkring antal af spørgsmål.
+ * @param {object} user     Brugeren. Logget ind? Defaults til null.
+ * @param {string} type     Hvilken quiz ønskes?
+ */
 const SelectionMessage = ({ user = null, type }) => {
     if (user && type !== 'set')
         return (

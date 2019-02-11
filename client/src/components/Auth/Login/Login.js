@@ -6,6 +6,9 @@ import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
 import LoginForm from './LoginForm';
 
+/**
+ * Component der kalder loginform.
+ */
 const Login = () => {
     return (
         <div className="flex-container">

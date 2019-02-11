@@ -11,6 +11,15 @@ import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
 
 // TODO: Autocomplete
+
+/**
+ * Component til at ændre profil.
+ * Props er
+ *  - history
+ *  - editProfile (der gemmer ændringerne)
+ *  - auth (brugeren)
+ *  - fetchUser (der tjekker login)
+ */
 class EditProfile extends Component {
     state = { message: null };
 

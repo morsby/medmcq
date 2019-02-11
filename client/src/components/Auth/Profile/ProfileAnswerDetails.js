@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import * as actions from '../../../actions';
@@ -7,6 +9,9 @@ import marked from 'marked';
 
 import { Table, Button, Divider } from 'semantic-ui-react';
 
+/**
+ * Component der viser detaljer omkring ens svar. Kaldes af ./Profile.js
+ */
 class ProfileAnswerDetails extends Component {
     state = {
         filter: null,
@@ -140,6 +145,23 @@ class ProfileAnswerDetails extends Component {
         );
     }
 }
+
+ProfileAnswerDetails.propTypes = {
+    /**
+     * Object indeholdende hvordan brugeren har klaret sig
+     */
+    performance: PropTypes.obj,
+
+    /**
+     * Func der starter quiz med de valgte spørgsmål
+     */
+    getQuestions: PropTypes.func,
+
+    /**
+     * Fra react router
+     */
+    history: ReactRouterPropTypes.history,
+};
 
 export default withRouter(
     connect(
