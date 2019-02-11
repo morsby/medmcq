@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { groupQuestions } from '../../../../utils/questions';
+import { groupQuestionsBySet } from '../../../../utils/questions';
 
 import SetRadioButton from './SetRadioButton';
 import { Form, Header } from 'semantic-ui-react';
@@ -33,7 +33,9 @@ const SelectionSetSelector = ({
                         key={set.api}
                         set={set}
                         answeredQuestions={answeredQuestions}
-                        groupedQuestions={groupQuestions(questions)[set.api]}
+                        groupedQuestions={
+                            groupQuestionsBySet(questions)[set.api]
+                        }
                         activeSet={activeSet}
                         onChange={onChange}
                     />

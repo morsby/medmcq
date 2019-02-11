@@ -112,6 +112,7 @@ class Question extends Component {
                 editingComment: '',
                 pristine: true,
                 selectedSpecialties: this.props.question.specialty,
+                editingSpecialties: false,
             });
             this.mouseMover();
         }
@@ -416,6 +417,12 @@ Question.propTypes = {
      * @type {func}
      */
     deleteComment: PropTypes.func,
+
+    /**
+     * Action der kaldes når der ændres specialer. Fra redux.
+     * @type {func}
+     */
+    editSpecialties: PropTypes.func,
 };
 
 export default connect(

@@ -8,7 +8,7 @@ import { superUserRoles } from '../../../utils/auth';
 
 /**
  * Viser metadata (speciale, sæt, mv.) for spørgsmålet
- * @param {object} question Spørgsmåls-objectet
+ * Alle props er fra Question.js, beskrivelse findes i bunden.
  */
 const QuestionMetadata = ({
     question,
@@ -84,7 +84,42 @@ const QuestionMetadata = ({
 };
 
 QuestionMetadata.propTypes = {
+    /**
+     * Spørgsmålsobjektet
+     */
     question: PropTypes.object.isRequired,
+
+    /**
+     * Func der kaldes og fremkalder dropdown-menu til ændring
+     * af specialer (via prop editingSpecialties)
+     */
+    onToggleSpecialties: PropTypes.func,
+
+    /**
+     * Boolean om hvorvidt der skal vises speciale-dropdown. Ændres af
+     * onToggleSpecialties
+     */
+    editingSpecialties: PropTypes.bool,
+
+    /**
+     * Func der kaldes, når valgte specialer ændres (ændrer selectedSpecialties)
+     */
+    onEditSpecialty: PropTypes.func,
+
+    /**
+     * Array af valgte specialer. Er state i Question.js, ændres via onEditSpecialty
+     */
+    selectedSpecialties: PropTypes.array,
+
+    /**
+     * Func der kaldes, når specialevalgene for spørgsmålet skal gemmes
+     */
+    onSaveSpecialties: PropTypes.func,
+
+    /**
+     * Brugerobjektet.
+     */
+    user: PropTypes.object,
 };
 
 export default QuestionMetadata;

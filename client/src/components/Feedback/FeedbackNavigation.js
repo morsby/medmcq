@@ -1,10 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
+
 import { withRouter } from 'react-router';
 import { urls } from '../../utils/common';
 
 import { Menu } from 'semantic-ui-react';
 
+/**
+ * Viser navigation under feedback.
+ */
 const FeedbackNavigation = ({
     id,
     title,
@@ -44,8 +49,25 @@ const FeedbackNavigation = ({
 };
 
 FeedbackNavigation.propTypes = {
+    /**
+     * ID på aktuelle forslag (hvis det er der)
+     */
     id: PropTypes.string,
+
+    /**
+     * Titel på aktuelle forslag (hvis det er der)
+     */
     title: PropTypes.string,
+
+    /**
+     * Fra ReactRouter. Bruges til navigation
+     */
+    history: ReactRouterPropTypes.history,
+
+    /**
+     * Fra ReactRouter. Bruges til conditional rendering af links
+     */
+    match: ReactRouterPropTypes.match,
 };
 
 export default withRouter(FeedbackNavigation);

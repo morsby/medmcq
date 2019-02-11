@@ -2,6 +2,9 @@ import React from 'react';
 
 import { List } from 'semantic-ui-react';
 
+/**
+ * Component der viser de "smarte/skjulte" funktioner. Kaldes af About.js
+ */
 const FancyFunctions = () => (
     <div>
         <h2>Smarte/skjulte funktioner</h2>
@@ -10,8 +13,8 @@ const FancyFunctions = () => (
             eksempelvis de spørgsmål, du er i gang med (hvis du har svaret på
             minimum ét spørgsmål), dit semester og andre valg, du foretager på
             siden – dette er så du nemt kan vende tilbage til siden. Hvis du
-            "stemmer" på feedback-forslag, bliver dette også gemt, så der ikke
-            kan stemmes mere end én gang per forslag.
+            &quot;stemmer&quot; på feedback-forslag, bliver dette også gemt, så
+            der ikke kan stemmes mere end én gang per forslag.
         </p>
         <List bulleted>
             <List.Item>

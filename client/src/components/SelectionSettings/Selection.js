@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
@@ -18,9 +20,10 @@ import {
 
 import SelectionNSelector from './SelectionSettings/SelectionNSelector';
 import SelectionSetSelector from './SelectionSettings/SelectionSetSelector/SelectionSetSelector';
-import SelectionSpecialtiesSelector from './SelectionSettings/SelectionSpecialtiesSelector';
+import SelectionSpecialtiesSelector from './SelectionSettings/SelectionSpecialtiesSelector/SelectionSpecialtiesSelector';
 import SelectionTypeSelector from './SelectionSettings/SelectionTypeSelector';
-import SelectionMessage from './SelectionMessage/SelectionMessage';
+import SelectionUniqueSelector from './SelectionSettings/SelectionUniqueSelector';
+import SelectionMessage from './SelectionMessage';
 
 import Footer from '../Layout/Footer';
 import { default as UIHeader } from '../Layout/Header';
@@ -28,6 +31,10 @@ import { default as UIHeader } from '../Layout/Header';
 import { semestre, urls } from '../../utils/common';
 import { specialer as specialerCommon } from '../../utils/common';
 
+/**
+ * Hovedsiden til at håndtere alle valg af spørgsmål.
+ * Props beskrives i bunden.
+ */
 class SelectionMain extends Component {
     state = { err: [] };
 
@@ -38,6 +45,9 @@ class SelectionMain extends Component {
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
+    /**
+     * Seeder data hvis det er første besøg.
+     */
     componentDidMount() {
         if (this.props.settings.questions.length === 0) {
             let name = 'semester';
@@ -48,6 +58,12 @@ class SelectionMain extends Component {
         }
     }
 
+    /**
+     * Func der ændrer settings i redux state.
+     * @param  {event} e         Event. Bruges ikke.
+     * @param  {string} value    Den værdi der sættes
+     * @param  {string} name     Den indstilling der ændres
+     */
     onSettingsChange(e, { value, name }) {
         this.setState({ err: [] });
 
@@ -56,9 +72,19 @@ class SelectionMain extends Component {
         this.props.changeSettings({ type: name, value });
     }
 
+    /**
+     * Func der (efter validering) henter spørgsmålene
+     * @param  {string} quizType Er der tale om en ny quiz eller fortsættelse
+     *                           af en gammeL?
+     */
     handleSubmit(quizType) {
         let err = [];
 
+        /**
+         * Alle de nedenstående variable kommer fra settingsReducer -- de har
+         * derfor IKKE noget med selve quiz-spørgsmålene at gøre, og hentes for
+         * at kunne tælle antal spørgsmål for hvert semester, speciale m.v.
+         */
         let {
             n,
             semester,
@@ -98,6 +124,7 @@ class SelectionMain extends Component {
             }
         }
 
+        // Antal
         if (!n) {
             err.push('Du skal vælge et antal spørgsmål.');
             if (semester === 11) {
@@ -123,9 +150,12 @@ class SelectionMain extends Component {
 
         // tjek for fejl, start eller ej
         if (err.length === 0) {
+            // Ny quiz? Hent spørgsmål
             if (quizType === 'new') {
                 this.props.getQuestions(this.props.settings);
             }
+
+            // Uanset om det er en ny quiz eller ej – skift url til quizzen.
             this.props.history.push(urls.quiz);
         } else {
             this.setState({ err });
@@ -133,6 +163,11 @@ class SelectionMain extends Component {
     }
 
     render() {
+        /**
+         * Alle de nedenstående variable kommer fra settingsReducer -- de har
+         * derfor IKKE noget med selve quiz-spørgsmålene at gøre, og hentes for
+         * at kunne tælle antal spørgsmål for hvert semester, speciale m.v.
+         */
         let {
             semester,
             specialer,
@@ -143,8 +178,11 @@ class SelectionMain extends Component {
             sets,
             set,
         } = this.props.settings;
+
         let { user } = this.props,
             answeredQuestions;
+
+        // Hvis brugeren har svaret på spørgsmål før, så hent disses id.
         if (
             this.props.user &&
             this.props.user.hasOwnProperty('answeredQuestions')
@@ -199,14 +237,17 @@ class SelectionMain extends Component {
                     {type !== 'set' && (
                         <SelectionNSelector
                             n={n}
-                            onlyNew={onlyNew}
                             onChange={this.onSettingsChange}
                             total={questions.length}
-                            user={user}
                             semester={semester}
                         />
                     )}
-
+                    {user && type !== 'set' && (
+                        <SelectionUniqueSelector
+                            onlyNew={onlyNew}
+                            onChange={this.onSettingsChange}
+                        />
+                    )}
                     {type === 'set' && (
                         <SelectionSetSelector
                             questions={questions}
@@ -221,7 +262,6 @@ class SelectionMain extends Component {
                     {type === 'specialer' && (
                         <SelectionSpecialtiesSelector
                             semester={semester}
-                            questions={questions}
                             valgteSpecialer={specialer}
                             antalPerSpeciale={questionsBySpecialty}
                             onChange={this.onSettingsChange}
@@ -262,12 +302,12 @@ class SelectionMain extends Component {
                                 (... eller i hvert fald burde gøre det). Så hvis
                                 du kører fulde eksamenssæt, må du foreløbig selv
                                 holde styr på, hvilke sæt, du har besvaret. Det
-                                betyder desværre også, at funktionen "
+                                betyder desværre også, at funktionen &quot;
                                 <em>
                                     Giv mig kun spørgsmål, jeg ikke har svaret
                                     på tidligere
                                 </em>
-                                " ikke helt holder det, den lover.
+                                &quot; ikke helt holder det, den lover.
                             </p>
                         </Message>
                     )}
@@ -277,6 +317,41 @@ class SelectionMain extends Component {
         );
     }
 }
+
+SelectionMain.propTypes = {
+    /**
+     * Indstillinger der styrer valg af spørgsmål.
+     * Bruges til at hente nye spørgsmål.
+     * Fra redux.
+     */
+    settings: PropTypes.object,
+
+    /**
+     * Func der kaldes, når der ændres indstillinger. Ændrer Redux state.
+     */
+    changeSettings: PropTypes.func,
+
+    /**
+     * Func der henter nye spørgsmål (ud fra settings) fra API'en.
+     */
+    getQuestions: PropTypes.func,
+
+    /**
+     * Fra ReactRouter.
+     */
+    history: ReactRouterPropTypes.history,
+
+    /**
+     * Brugeren. Bruges bl.a. til at holde styr på tidligere besvarelser.
+     */
+    user: PropTypes.object,
+
+    /**
+     * Evt. allerede hentede spørgsmål. Benyttes til at give muligheden for at
+     * fortsætte en tidligere quiz.
+     */
+    questions: PropTypes.array,
+};
 
 function mapStateToProps(state) {
     return {

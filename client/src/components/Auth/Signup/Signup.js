@@ -6,7 +6,10 @@ import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
 import SignupForm from './SignupForm';
 
-const Signup = props => {
+/**
+ * Component der viser info om registrering.
+ */
+const Signup = () => {
     return (
         <div className="flex-container">
             <Header />

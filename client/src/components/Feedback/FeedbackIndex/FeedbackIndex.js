@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
+
 import { connect } from 'react-redux';
 import * as actions from '../../../actions';
 import { withRouter } from 'react-router';
@@ -13,6 +16,11 @@ import FeedbackList from './FeedbackList/FeedbackList';
 import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
 
+/**
+ * Component der viser liste over de aktuelle feedbacks (og en henvisning til
+ * github)
+ * Props ses i bunden, stammer alle fra redux.
+ */
 class FeedbackIndex extends Component {
     constructor(props) {
         super(props);
@@ -57,6 +65,31 @@ class FeedbackIndex extends Component {
         );
     }
 }
+
+FeedbackIndex.propTypes = {
+    /**
+     * Array af feedback-forslag, passes til FeedbackList
+     * Fra redux
+     */
+    feedback: PropTypes.array,
+
+    /**
+     * Funktion der henter alle feedbackforslag (i grov form)
+     * Fra redux
+     */
+    fetchFeedback: PropTypes.func,
+
+    /**
+     * Funktion der henter kommentarer, tekst, m.v. til ét forslag
+     * Fra redux
+     */
+    fetchFeedbackSpecific: PropTypes.func,
+
+    /**
+     * Fra react-router-dom
+     */
+    history: ReactRouterPropTypes.history,
+};
 
 function mapStateToProps(state) {
     return {

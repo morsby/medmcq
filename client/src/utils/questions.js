@@ -1,5 +1,5 @@
 import _ from 'lodash';
-export const groupQuestions = questions =>
+export const groupQuestionsBySet = questions =>
     _.groupBy(questions, q => `${q.examYear}/${q.examSeason}`);
 
 export const getIds = objs => {

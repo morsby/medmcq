@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactRouterPropTypes from 'react-router-prop-types';
 
 import { urls } from '../../../../utils/common';
 
@@ -8,6 +9,9 @@ import Footer from '../../../Layout/Footer';
 
 import FancyFunctions from './FancyFunctions';
 
+/**
+ * Component til siden "Om-siden".
+ */
 const About = ({ history }) => {
     const handleClick = () => {
         history.push(urls.feedback);
@@ -99,6 +103,13 @@ const About = ({ history }) => {
             <Footer />
         </div>
     );
+};
+
+About.propTypes = {
+    /**
+     * History er fra ReactRouter
+     */
+    history: ReactRouterPropTypes.history,
 };
 
 export default About;

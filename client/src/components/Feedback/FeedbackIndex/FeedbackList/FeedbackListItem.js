@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 
 import { Card, Button, Icon, Label } from 'semantic-ui-react';
 
+/**
+ * Listitem for de enkelte forslag. Kaldes af ./FeedbackList.js
+ * Alle props er fra ./FeedbackList.js
+ */
 const FeedbackListItem = ({ feedback, handleClick }) => {
     return (
         <Card fluid>
@@ -29,7 +33,14 @@ const FeedbackListItem = ({ feedback, handleClick }) => {
 };
 
 FeedbackListItem.propTypes = {
+    /**
+     * Et enkelt feedback-object.
+     */
     feedback: PropTypes.object.isRequired,
+
+    /**
+     * Funktion der håndterer navigation ved klik på forslagstitel.
+     */
     handleClick: PropTypes.func.isRequired,
 };
 

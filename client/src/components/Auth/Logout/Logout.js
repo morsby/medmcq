@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
 
@@ -26,6 +27,12 @@ const Logout = ({ fetchUser }) => {
     );
 };
 
+Logout.propTypes = {
+    /**
+     * Funktion der opdaterer login-status via redux.
+     */
+    fetchUser: PropTypes.func,
+};
 export default connect(
     null,
     actions

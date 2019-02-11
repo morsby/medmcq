@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
 
 import { connect } from 'react-redux';
 import * as actions from '../../../actions';
@@ -13,6 +15,9 @@ import Footer from '../../Layout/Footer';
 
 import ProfileAnswerDetails from './ProfileAnswerDetails';
 
+/**
+ * Component der viser profilen.
+ */
 class Profile extends Component {
     constructor(props) {
         super(props);
@@ -164,6 +169,33 @@ class Profile extends Component {
         );
     }
 }
+
+Profile.propTypes = {
+    /**
+     * Settings object, fra redux
+     */
+    settings: PropTypes.obj,
+
+    /**
+     * Funktion der starter en quiz med de valgte spg. (kommentarer!). Fra redux
+     */
+    getQuestions: PropTypes.func,
+
+    /**
+     * Funktion der henter de spørgsmål, brugeren har svaret på. Fra redux
+     */
+    getAnsweredQuestions: PropTypes.func,
+
+    /**
+     * Fra react-router
+     */
+    history: ReactRouterPropTypes.history,
+
+    /**
+     * Brugeren. Fra redux
+     */
+    auth: PropTypes.obj,
+};
 
 function mapStateToProps(state) {
     return {

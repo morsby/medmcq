@@ -1,9 +1,14 @@
 import React from 'react';
+import ReactRouterPropTypes from 'react-router-prop-types';
+
 import { withRouter } from 'react-router';
 import { Icon, Menu } from 'semantic-ui-react';
 import { urls } from '../../utils/common';
 
-const Footer = props => {
+/**
+ * Footer component.
+ */
+const Footer = ({ history }) => {
     const paragraphStyle = {
         display: 'block',
         width: '65%',
@@ -15,7 +20,7 @@ const Footer = props => {
     };
 
     const handleClick = path => {
-        props.history.push(path);
+        history.push(path);
     };
     return (
         <footer style={footerStyle}>
@@ -32,7 +37,7 @@ const Footer = props => {
                             og Thomas Jensen</p> */}
                 </Menu.Item>
                 <Menu.Menu position="left">
-                    {props.history.location.pathname !== urls.about && (
+                    {history.location.pathname !== urls.about && (
                         <Menu.Item onClick={() => handleClick(urls.about)}>
                             <Icon name="question circle outline" />
                             <p>Om siden</p>
@@ -42,6 +47,13 @@ const Footer = props => {
             </Menu>
         </footer>
     );
+};
+
+Footer.propTypes = {
+    /**
+     * history er fra ReactRouter. Bruges til navigation.
+     */
+    history: ReactRouterPropTypes.history,
 };
 
 export default withRouter(Footer);

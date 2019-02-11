@@ -1,8 +1,13 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import marked from 'marked';
 import { imageURL } from '../../../../utils/common';
 import { subSupScript } from '../../../../utils/quiz';
 
+/**
+ * Selve den component, der viser de printervenlige udgaver af spørgsmålet.
+ * Kaldes af Print.js som også giver alle props.
+ */
 const PrintDisplayQuestion = props => {
     let {
             question,
@@ -41,6 +46,18 @@ const PrintDisplayQuestion = props => {
             </ol>
         </div>
     );
+};
+
+PrintDisplayQuestion.propTypes = {
+    /**
+     * Spørgsmålsobjektet
+     */
+    questionProp: PropTypes.obj,
+
+    /**
+     * Skal de rigtige svar være synlige?
+     */
+    showCorrect: PropTypes.bool,
 };
 
 export default PrintDisplayQuestion;

@@ -1,6 +1,10 @@
 import { Component } from 'react';
 import { withRouter } from 'react-router';
 
+/**
+ * Higher Order Component der bruges til at scrolle til toppen når der ændres
+ * spørgsmål i quizzen.
+ */
 class ScrollToTop extends Component {
     componentDidUpdate(prevProps) {
         if (this.props.location !== prevProps.location) {

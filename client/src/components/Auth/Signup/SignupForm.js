@@ -14,6 +14,13 @@ import { validationRegex } from '../../../utils/common';
 import { Form, Field } from 'react-final-form';
 import { Button, Divider, Message } from 'semantic-ui-react';
 
+/**
+ * Component der viser signup-form. Kaldes af ./Signup.js
+ * Props er:
+ *  - fetchUser (der ser om man er logget ind). Fra redux
+ *  - history (fra react-router)
+ *  - checkUserAvailability (der tjekker om email/brugernavn er ledigt). Fra redux
+ */
 const SignupForm = props => {
     let onSubmit = async values => {
         props

@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as actions from '../../../actions';
 
@@ -7,6 +8,10 @@ import { Container, Message, Form, Button } from 'semantic-ui-react';
 import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
 
+/**
+ * Component der viser formular til at bede om nyt password
+ * @extends Component
+ */
 class ForgotPassword extends Component {
     state = { email: '', message: null };
 
@@ -59,6 +64,13 @@ class ForgotPassword extends Component {
         );
     }
 }
+
+ForgotPassword.propTypes = {
+    /**
+     * Func der nulstiller kodeord og sender en email (via API). Fra redux
+     */
+    forgotPassword: PropTypes.func,
+};
 
 export default connect(
     null,

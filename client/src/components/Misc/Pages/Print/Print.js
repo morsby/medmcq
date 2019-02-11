@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
+
 import { connect } from 'react-redux';
 
 import { urls } from '../../../../utils/common';
@@ -8,6 +11,10 @@ import { Container, Button } from 'semantic-ui-react';
 import Header from '../../../Layout/Header';
 import PrintDisplayQuestion from './PrintDisplayQuestion';
 
+/**
+ * Component der viser printervenlig side med de aktuelle spørgsmål og håndterer
+ * hvorvidt svar er synlige eller ej.
+ */
 class Print extends Component {
     state = { showCorrect: false };
 
@@ -18,7 +25,7 @@ class Print extends Component {
     }
 
     toggleAnswers() {
-        this.setState((prevState, props) => {
+        this.setState(prevState => {
             return { showCorrect: !prevState.showCorrect };
         });
     }
@@ -75,6 +82,18 @@ class Print extends Component {
         );
     }
 }
+
+Print.propTypes = {
+    /**
+     * Array af spørgsmål. Fra redux (questionsReducer)
+     */
+    questions: PropTypes.array,
+
+    /**
+     * Fra ReactRouter
+     */
+    history: ReactRouterPropTypes.history,
+};
 
 function mapStateToProps(state) {
     return {
