@@ -1,0 +1,13 @@
+{
+    "static": {
+        "header": [
+            "MCQ-items fra medicin - Aarhus Universitet",
+            "MCQ-items from medicine - Aarhus University"
+        ],
+        "choose_semester": ["Vælg et semester", "Choose a semester"]
+    },
+
+    "errs": {
+        "bla": "bla"
+    }
+}

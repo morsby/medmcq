@@ -12,6 +12,7 @@ export default function(
         sets: [],
         isFetching: false,
         lastFetch: null,
+        language: 'dk',
     },
     action
 ) {
@@ -81,6 +82,9 @@ export default function(
 
                 case 'n':
                     return { ...state, n: value };
+
+                case 'language':
+                    return { ...state, language: value };
 
                 default:
                     return state;

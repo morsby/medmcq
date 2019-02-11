@@ -7,6 +7,9 @@ import * as actions from '../../actions';
 import { allowedNs } from '../../utils/common';
 import { calculateResults } from '../../utils/quiz';
 
+import selectionText from './selection.json';
+import { withLocalize, Translate } from 'react-localize-redux';
+
 import _ from 'lodash';
 
 import {
@@ -40,6 +43,8 @@ class SelectionMain extends Component {
 
     constructor(props) {
         super(props);
+
+        this.props.addTranslation(selectionText);
 
         this.onSettingsChange = this.onSettingsChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -214,9 +219,11 @@ class SelectionMain extends Component {
                 <UIHeader />
                 <Container className="content">
                     <Header as="h1">
-                        MCQ-items fra medicin - Aarhus Universitet
+                        <Translate id="static.header" />
                     </Header>
-                    <Header as="h3">Vælg semester</Header>
+                    <Header as="h3">
+                        <Translate id="static.choose_semester" />
+                    </Header>
                     <Dropdown
                         placeholder="Vælg semester"
                         fluid
@@ -361,7 +368,9 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(
-    mapStateToProps,
-    actions
-)(SelectionMain);
+export default withLocalize(
+    connect(
+        mapStateToProps,
+        actions
+    )(SelectionMain)
+);

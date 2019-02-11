@@ -12,10 +12,13 @@ import reducers from './reducers';
 
 import { PersistGate } from 'redux-persist/lib/integration/react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
-import ScrollToTop from './components/Misc/HOC/ScrollToTop';
 
+// Oversættelse
+import { LocalizeProvider } from 'react-localize-redux';
+
+// HOCs
 import PrivateRoute from './components/Misc/HOC/PrivateRoute';
-
+import ScrollToTop from './components/Misc/HOC/ScrollToTop';
 // Routes
 // Diverse
 import LoadingPage from './components/Misc/Pages/LoadingPage';
@@ -56,7 +59,7 @@ const persistConfig = {
 
 const pReducer = persistReducer(persistConfig, reducers);
 
-const store = createStore(pReducer, {}, applyMiddleware(reduxThunk));
+export const store = createStore(pReducer, {}, applyMiddleware(reduxThunk));
 export const persistor = persistStore(store);
 
 unregister();
@@ -64,43 +67,51 @@ unregister();
 ReactDOM.render(
     <Provider store={store}>
         <PersistGate loading={<LoadingPage />} persistor={persistor}>
-            <BrowserRouter>
-                <ScrollToTop>
-                    <Switch>
-                        <Route exact path="/" component={SelectionMain} />
-                        <Route
-                            path={`${urls.feedback}/new`}
-                            component={FeedbackPost}
-                        />
-                        <Route
-                            path={`${urls.feedback}/:id`}
-                            component={FeedbackSingle}
-                        />
-                        <Route path={urls.feedback} component={FeedbackIndex} />
-                        <Route path={urls.about} component={About} />
-                        <Route path={urls.quiz} component={Quiz} />
-                        <Route path={urls.signup} component={Signup} />
-                        <Route path={urls.login} component={Login} />
-                        <Route path={urls.logout} component={Logout} />
-                        <PrivateRoute
-                            isLoggedIn={true}
-                            path={urls.editProfile}
-                            component={EditProfile}
-                        />
-                        <PrivateRoute path={urls.profile} component={Profile} />
-                        <Route
-                            path={urls.forgotPassword}
-                            component={ForgotPassword}
-                        />
-                        <Route
-                            path={`${urls.resetPassword}/:token`}
-                            component={ResetPassword}
-                        />
-                        <Route path="/print" component={Print} />
-                        <Route component={ErrorPage} />
-                    </Switch>
-                </ScrollToTop>
-            </BrowserRouter>
+            <LocalizeProvider store={store}>
+                <BrowserRouter>
+                    <ScrollToTop>
+                        <Switch>
+                            <Route exact path="/" component={SelectionMain} />
+                            <Route
+                                path={`${urls.feedback}/new`}
+                                component={FeedbackPost}
+                            />
+                            <Route
+                                path={`${urls.feedback}/:id`}
+                                component={FeedbackSingle}
+                            />
+                            <Route
+                                path={urls.feedback}
+                                component={FeedbackIndex}
+                            />
+                            <Route path={urls.about} component={About} />
+                            <Route path={urls.quiz} component={Quiz} />
+                            <Route path={urls.signup} component={Signup} />
+                            <Route path={urls.login} component={Login} />
+                            <Route path={urls.logout} component={Logout} />
+                            <PrivateRoute
+                                isLoggedIn={true}
+                                path={urls.editProfile}
+                                component={EditProfile}
+                            />
+                            <PrivateRoute
+                                path={urls.profile}
+                                component={Profile}
+                            />
+                            <Route
+                                path={urls.forgotPassword}
+                                component={ForgotPassword}
+                            />
+                            <Route
+                                path={`${urls.resetPassword}/:token`}
+                                component={ResetPassword}
+                            />
+                            <Route path="/print" component={Print} />
+                            <Route component={ErrorPage} />
+                        </Switch>
+                    </ScrollToTop>
+                </BrowserRouter>
+            </LocalizeProvider>
         </PersistGate>
     </Provider>,
     document.querySelector('#root')

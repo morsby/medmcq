@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
+import { localizeReducer } from 'react-localize-redux';
 import questionsReducer from './questionsReducer';
 import settingsReducer from './settingsReducer';
 import feedbackReducer from './feedbackReducer';
@@ -9,4 +10,5 @@ export default combineReducers({
     settings: settingsReducer,
     feedback: feedbackReducer,
     auth: authReducer,
+    localize: localizeReducer,
 });
