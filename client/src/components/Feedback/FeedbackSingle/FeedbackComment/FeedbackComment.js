@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { Card, Button } from 'semantic-ui-react';
 import marked from 'marked';
 
+import { Translate } from 'react-localize-redux';
+
 const FeedbackComment = ({ comment, replyId, onReply }) => {
     let level = comment.slug.split('/').length - 1;
     let levels = [...Array(level).keys()];
@@ -26,7 +28,7 @@ const FeedbackComment = ({ comment, replyId, onReply }) => {
                         className="click"
                         onClick={() => onReply(comment._id, comment.slug)}
                     >
-                        SVAR
+                        <Translate id="feedbackComment.reply" />
                     </Button>
                     <p>{comment.slug}</p>
                 </Card.Meta>

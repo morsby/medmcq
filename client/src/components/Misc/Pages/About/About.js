@@ -1,11 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
 import { urls } from '../../../../utils/common';
 import { withLocalize, Translate } from 'react-localize-redux';
 import aboutTranslations from './aboutTranslations';
 
-import { Container, Message, List, Button, Divider } from 'semantic-ui-react';
+import { Container, Message, Button, Divider } from 'semantic-ui-react';
 import Header from '../../../Layout/Header';
 import Footer from '../../../Layout/Footer';
 
@@ -38,27 +39,21 @@ const About = ({ history, addTranslation }) => {
                 <FancyFunctions />
 
                 <Divider hidden />
-                <Button
-                    color="red"
-                    content="Giv noget feedback"
-                    icon="send"
-                    onClick={handleClick}
-                    className="click"
-                />
-                <h2>Privatliv og cookies</h2>
-                <p>
-                    Siden benytter open source tracking i form af Matomo. Denne
-                    er indstillet til at respektere browser-opt-out, ikke at
-                    sætte cookies og at anonymisere IP-adresser. Det vil sige,
-                    at du er fuldstændig anonym. Data gemmes i min egen database
-                    og deles ikke. Data bruges til at skabe et (dermed
-                    underestimeret) overslag over brugen af siden.
-                </p>
-                <p>
-                    Siden benytter ingen cookies, med mindre du opretter en
-                    bruger og logger ind. I dette tilfælde sættes en cookie, der
-                    husker, at du er logget ind til næste gang.
-                </p>
+                <Translate>
+                    {({ translate }) => (
+                        <Button
+                            color="red"
+                            content={translate('about.feedback_link')}
+                            icon="send"
+                            onClick={handleClick}
+                            className="click"
+                        />
+                    )}
+                </Translate>
+                <h2>
+                    <Translate id="about.privacy.header" />
+                </h2>
+                <Translate id="about.privacy.body" />
             </Container>
             <Footer />
         </div>
@@ -70,6 +65,12 @@ About.propTypes = {
      * History er fra ReactRouter
      */
     history: ReactRouterPropTypes.history,
+
+    /**
+     * Func til at tilføje oversættelse.
+     * Fra react-localize-redux
+     */
+    addTranslation: PropTypes.func,
 };
 
 export default withLocalize(About);

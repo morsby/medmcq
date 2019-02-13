@@ -75,6 +75,31 @@ export default {
         </p>`,
             ],
         },
+        privacy: {
+            header: ['Privatliv og cookies', 'Privacy and cookies'],
+            body: [
+                `<p>
+                Siden benytter open source tracking i form af Matomo. Denne
+                er indstillet til at respektere browser-opt-out, ikke at
+                sætte cookies og at anonymisere IP-adresser. Det vil sige,
+                at du er fuldstændig anonym. Data gemmes i min egen database
+                og deles ikke. Data bruges til at skabe et (dermed
+                underestimeret) overslag over brugen af siden.
+            </p>
+            <p>
+                Siden benytter ingen cookies, med mindre du opretter en
+                bruger og logger ind. I dette tilfælde sættes en cookie, der
+                husker, at du er logget ind til næste gang.
+            </p>`,
+                `<p>
+                The site uses open source tracking (Matomo). This is configured to respect browser-opt-out, not to set any cookies and to anonymize IP-addresses. This means that you are completely anonymous. Data is saved in my own database and is not shared. Data is used to create a (under)estimate of the site's usage.
+            </p>
+            <p>
+                The site uses no cookies unless you register for an account and log in. In this case, a cookie is set to remember you for your next visit.
+            </p>`,
+            ],
+        },
+        feedback_link: ['Giv noget feedback', 'Drop some feedback'],
     },
     fancyFunctions: {
         header: ['Smarte/skjulte funktioner', 'Fancy/hidden functions'],
@@ -142,44 +167,28 @@ export default {
                 </ul>
             </li>
             <li>
-                På en telefon kan du
+                On a phone you can 
                 <ul>
                     <li>
-                        navigere mellem spørgsmål ved at swipe (virker måske
-                        også på en touchskærms-pc?)
+                        navigate between questions by swiping (might also work on a touchscreen pc?)
                     </li>
                 </ul>
             </li>
             <li>
-                Opretter du en bruger
+                If you register for an account
                 <ul>
                     <li>
-                        holder systemet styr på, hvilke spørgsmål du har
-                        besvaret – og viser dig, når du har besvaret et fuldt
-                        eksamenssæt
+                        the system keeps track of which questions you have answered – and shows you when you have fully answered a set
                     </li>
                     <li>
-                        vil systemet gemme alle dine svar, så du kan se, hvor
-                        det går galt (og om der er systematik bag)
+                        the system saves all your answers so you can see if there are any areas you need to read up on
                     </li>
                     <li>
-                        kan du bede om kun at få spørgsmål, du <em>ikke</em>
-                        allerede har svaret på
+                        you can choose to solely request questions you have <em>not</em> previously answered
                     </li>
                 </ul>
             </li>
         </ul>`,
-            `<p>
-        The site saves many things locally on your devide (not as cookies) – for example the questions, you are currently answering (if you have answered at least one of them), your semester and other choices you make on the site. This is to make it more convenient for you on your next visit.
-        </p>
-        <ul>
-            <li>
-                On a computer you can
-                <ul>
-                    <li>
-                        navigate between questions using the arrow keys
-                    </li>
-                    `,
         ],
     },
 };

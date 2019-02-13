@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { withRouter } from 'react-router';
-
+import { Translate } from 'react-localize-redux';
 import _ from 'lodash';
 
-import { Icon, Message } from 'semantic-ui-react';
+import { Icon } from 'semantic-ui-react';
 
 import FeedbackListItem from './FeedbackListItem';
 
@@ -39,31 +39,23 @@ class FeedbackList extends Component {
 
         return (
             <div>
-                <h2>Feedback</h2>
-                <Message info>
-                    Der findes kun spørgsmål fra Inflammations- og
-                    Abdomensemestrene, da de kursusansvarlige for HLK- og
-                    GOP-semestrene ikke ønskede at deltage. Jeg kan derfor ikke
-                    tilføje disse sæt, før I får overbevist de ansvarlige om, at
-                    det er en god idé.
-                </Message>
                 <p>
-                    Sorter feedback efter{' '}
+                    <Translate id="feedbackList.sort_by" />{' '}
                     <span
                         style={{ fontWeight: 'bold' }}
                         className="click"
                         onClick={() => this.sortBy('date')}
                     >
-                        dato
+                        <Translate id="feedbackList.date" />
                     </span>{' '}
                     {sortBy === 'date' && icon}
-                    eller{' '}
+                    <Translate id="feedbackList.or" />{' '}
                     <span
                         style={{ fontWeight: 'bold' }}
                         className="click"
                         onClick={() => this.sortBy('votes')}
                     >
-                        popularitet
+                        <Translate id="feedbackList.popularity" />
                     </span>
                     {sortBy === 'votes' && icon}
                 </p>

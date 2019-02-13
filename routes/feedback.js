@@ -9,88 +9,90 @@ const Feedback = require('../models/feedback.js');
 const Comment = require('../models/comment.js');
 
 module.exports = app => {
-	// GET: feedback
-	app.get('/api/feedback', (req, res) => {
-		Feedback.find(function(err, feedback) {
-			if (err) res.send(err);
+    // GET: feedback
+    app.get('/api/feedback', (req, res) => {
+        Feedback.find(function(err, feedback) {
+            if (err) res.send(err);
 
-			res.json(feedback);
-		});
-	});
+            res.json(feedback);
+        });
+    });
 
-	// GET: feedback id
-	app.get('/api/feedback/:id', async (req, res) => {
-		feedback = await Feedback.findById(req.params.id)
-			.catch(err => console.log(err.message))
-    	if (!feedback) return res.status(400).send('ID not found')
-			
-		let comments = await Comment.find({ feedback_id: req.params.id })
-			.sort('full_slug')
+    // GET: feedback id
+    app.get('/api/feedback/:id', async (req, res) => {
+        feedback = await Feedback.findById(req.params.id).catch(err =>
+            console.log(err.message)
+        );
+        if (!feedback) return res.status(400).send('ID not found');
 
-		let ret = { feedback, comments }
-		res.json(ret)
-		});
+        let comments = await Comment.find({ feedback_id: req.params.id }).sort(
+            'full_slug'
+        );
 
-	// POST: feedback
-	app.post('/api/feedback', (req, res) => {
-		var feedback = new Feedback();
-		let q = req.body;
+        let ret = { feedback, comments };
+        res.json(ret);
+    });
 
-		feedback.title = q.title;
-		feedback.text = q.text;
-		feedback.author = q.author;
+    // POST: feedback
+    app.post('/api/feedback', (req, res) => {
+        var feedback = new Feedback();
+        let q = req.body;
 
-		feedback.save(err => {
-			if (err) res.send(err);
+        feedback.title = q.title;
+        feedback.text = q.text;
+        feedback.author = q.author;
 
-			res.json({ message: 'Question created!', id: feedback._id });
-		});
-	});
+        feedback.save(err => {
+            if (err) res.send(err);
 
-	//UPDATE: feedback
-	app.put('/api/feedback/:id', (req, res) => {
-		Feedback.findById(req.params.id, (err, feedback) => {
-			if (err) res.send(err);
-			let q = req.body;
-			// Opdater noget
-			feedback.title = q.title;
-			feedback.text = q.text;
-			feedback.edited = Date.now();
+            res.json({ message: 'Question created!', id: feedback._id });
+        });
+    });
 
-			feedback.save(err => {
-				if (err) res.send(err);
+    //UPDATE: feedback
+    app.put('/api/feedback/:id', (req, res) => {
+        Feedback.findById(req.params.id, (err, feedback) => {
+            if (err) res.send(err);
+            let q = req.body;
+            // Opdater noget
+            feedback.title = q.title;
+            feedback.text = q.text;
+            feedback.edited = Date.now();
 
-				res.json({ message: 'Feedback opdateret!' });
-			});
-		});
-	});
+            feedback.save(err => {
+                if (err) res.send(err);
 
-	// VOTE
-	app.put('/api/feedback/:id/vote', (req, res) => {
-		Feedback.findById(req.params.id, (err, feedback) => {
-			feedback.votes = feedback.votes + Number(req.body.val);
-			feedback.save(err => {
-				if (err) res.send(err);
+                res.json({ message: 'Feedback opdateret!' });
+            });
+        });
+    });
 
-				res.json({
-					message: 'Der er stemt!',
-					id: feedback._id,
-					val: req.body.val
-				});
-			});
-		});
-	});
+    // VOTE
+    app.put('/api/feedback/:id/vote', (req, res) => {
+        Feedback.findById(req.params.id, (err, feedback) => {
+            feedback.votes = feedback.votes + Number(req.body.val);
+            feedback.save(err => {
+                if (err) res.send(err);
 
-	//DELETE: feedback
-	app.delete('/api/feedback/:id', permit('admin'), (req, res) => {
-		Feedback.remove({ _id: req.params.id }, err => {
-			if (err) res.send(err);
+                res.json({
+                    message: 'Der er stemt!',
+                    id: feedback._id,
+                    val: req.body.val,
+                });
+            });
+        });
+    });
 
-			Comment.remove({ feedback_id: req.params.id }, err => {
-				if (err) res.send(err);
-			});
+    //DELETE: feedback
+    app.delete('/api/feedback/:id', permit('admin'), (req, res) => {
+        Feedback.remove({ _id: req.params.id }, err => {
+            if (err) res.send(err);
 
-			res.json({ message: 'Feedback (og kommentarer) er slettet!' });
-		});
-	});
+            Comment.remove({ feedback_id: req.params.id }, err => {
+                if (err) res.send(err);
+            });
+
+            res.json({ message: 'Feedback (og kommentarer) er slettet!' });
+        });
+    });
 };

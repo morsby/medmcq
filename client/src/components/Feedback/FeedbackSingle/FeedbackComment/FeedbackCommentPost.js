@@ -5,6 +5,7 @@ import * as actions from '../../../../actions';
 
 import { Button } from 'semantic-ui-react';
 import { Form, Field } from 'react-final-form';
+import { Translate } from 'react-localize-redux';
 
 const FeedbackCommentPost = ({
     feedbackId,
@@ -28,90 +29,101 @@ const FeedbackCommentPost = ({
 
     return (
         <div>
-            <Form
-                onSubmit={handleSubmit}
-                validate={values => {
-                    const errors = {};
+            <Translate>
+                {({ translate }) => (
+                    <Form
+                        onSubmit={handleSubmit}
+                        validate={values => {
+                            const errors = {};
 
-                    if (!values.text || values.text.length < 10) {
-                        errors.text = 'Teksten skal minimum være 10 tegn';
-                    }
-                    return errors;
-                }}
-                render={({
-                    handleSubmit,
-                    submitting,
-                    pristine,
-                    values,
-                    form,
-                    invalid,
-                }) => (
-                    <form
-                        onSubmit={event => {
-                            handleSubmit(event).then(form.reset());
+                            if (!values.text || values.text.length < 10) {
+                                errors.text = translate(
+                                    'feedbackPost.errs.text_too_short',
+                                    { min: 10 }
+                                );
+                            }
+                            return errors;
                         }}
-                        className="ui form"
-                    >
-                        <Field name="text">
-                            {({ input, meta }) => (
-                                <div
-                                    className={
-                                        'field ' +
-                                        (meta.error && meta.touched
-                                            ? 'error'
-                                            : '')
-                                    }
-                                >
-                                    <label>Kommentar</label>
-                                    {replyId && (
-                                        <p>
-                                            Du er ved at svare på kommentaren
-                                            med id: {replySlug}. Skriv i stedet
-                                            en{' '}
-                                            <span
-                                                style={{
-                                                    cursor: 'pointer',
-                                                    color: 'rgb(87, 138, 251)',
-                                                }}
-                                                onClick={() => replyReset()}
-                                            >
-                                                ny kommentar.
-                                            </span>
-                                        </p>
-                                    )}
-                                    <div className="ui info message mini form-explanation">
-                                        <a
-                                            href="https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet"
-                                            target="_blank"
-                                            rel="noopener noreferrer"
+                        render={({
+                            handleSubmit,
+                            submitting,
+                            pristine,
+                            form,
+                            invalid,
+                        }) => (
+                            <form
+                                onSubmit={event => {
+                                    handleSubmit(event).then(form.reset());
+                                }}
+                                className="ui form"
+                            >
+                                <Field name="text">
+                                    {({ input, meta }) => (
+                                        <div
+                                            className={
+                                                'field ' +
+                                                (meta.error && meta.touched
+                                                    ? 'error'
+                                                    : '')
+                                            }
                                         >
-                                            Markdown-formattering
-                                        </a>{' '}
-                                        er undersøttet
-                                    </div>
-                                    <textarea
-                                        {...input}
-                                        placeholder="Forslag"
-                                    />
+                                            <label>
+                                                {translate(
+                                                    'feedbackCommentPost.write_comment'
+                                                )}
+                                            </label>
+                                            {replyId && (
+                                                <p>
+                                                    <Translate
+                                                        id="feedbackCommentPost.replying_to"
+                                                        data={{ replySlug }}
+                                                    />
+                                                    <span
+                                                        style={{
+                                                            cursor: 'pointer',
+                                                            color:
+                                                                'rgb(87, 138, 251)',
+                                                        }}
+                                                        onClick={() =>
+                                                            replyReset()
+                                                        }
+                                                    >
+                                                        <Translate id="feedbackCommentPost.new_comment" />
+                                                    </span>
+                                                </p>
+                                            )}
+                                            <div className="ui info message mini form-explanation">
+                                                {translate(
+                                                    'feedbackPost.form_fields.markdown_supported'
+                                                )}
+                                            </div>
+                                            <textarea
+                                                {...input}
+                                                placeholder={translate(
+                                                    'feedbackCommentPost.write_comment'
+                                                )}
+                                            />
 
-                                    <div className="form-error">
-                                        {meta.error && meta.touched && (
-                                            <span>{meta.error}</span>
-                                        )}
-                                    </div>
-                                </div>
-                            )}
-                        </Field>
+                                            <div className="form-error">
+                                                {meta.error && meta.touched && (
+                                                    <span>{meta.error}</span>
+                                                )}
+                                            </div>
+                                        </div>
+                                    )}
+                                </Field>
 
-                        <Button
-                            type="submit"
-                            disabled={submitting || pristine || invalid}
-                        >
-                            Submit
-                        </Button>
-                    </form>
+                                <Button
+                                    type="submit"
+                                    disabled={submitting || pristine || invalid}
+                                >
+                                    {translate('feedbackCommentPost.submit')}
+                                </Button>
+                            </form>
+                        )}
+                    />
                 )}
-            />
+            </Translate>
         </div>
     );
 };
@@ -121,6 +133,7 @@ FeedbackCommentPost.propTypes = {
     replyId: PropTypes.string,
     replySlug: PropTypes.string,
     replyReset: PropTypes.func.isRequired,
+    postFeedbackComment: PropTypes.func,
 };
 
 export default connect(

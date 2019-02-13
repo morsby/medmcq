@@ -1,7 +1,11 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
+
 import * as actions from '../../../actions';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
+import { Translate } from 'react-localize-redux';
 
 import { Container, Segment } from 'semantic-ui-react';
 import FeedbackNavigation from '../FeedbackNavigation';
@@ -92,7 +96,9 @@ class FeedbackSingle extends Component {
                     />
 
                     <Segment>
-                        <h4>Kommentarer</h4>
+                        <h4>
+                            <Translate id="feedbackSingle.comments" />
+                        </h4>
                         {comments.map(comment => {
                             return (
                                 <FeedbackComment
@@ -116,6 +122,36 @@ class FeedbackSingle extends Component {
         );
     }
 }
+
+/**
+ * Alle props er fra redux
+ */
+FeedbackSingle.propTypes = {
+    /**
+     * Funktion der henter feedback-forslaget hvis der tilgås direkte url
+     */
+    fetchFeedbackSpecific: PropTypes.func,
+
+    /**
+     * Selve forslaget
+     */
+    feedbackSingle: PropTypes.object,
+
+    /**
+     * object der indeholder ids der er stemt på og hvad der er stemt
+     */
+    votedFor: PropTypes.object,
+
+    /**
+     * func der står for at stemme
+     */
+    voteFeedback: PropTypes.func,
+
+    /**
+     * Fra react router
+     */
+    match: ReactRouterPropTypes.match,
+};
 
 function mapStateToProps(state) {
     return {

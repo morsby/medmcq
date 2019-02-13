@@ -1,6 +1,5 @@
 import React from 'react';
 
-import { List } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 
 /**

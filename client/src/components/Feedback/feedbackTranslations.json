@@ -1,0 +1,63 @@
+{
+    "feedbackNavigation": {
+        "suggestion_link": ["Forslag: ${title}", "Suggestion: ${title}"],
+        "write_suggestion": ["Kom med et forslag", "Write a suggestion"]
+    },
+    "feedbackIndex": {
+        "help_wanted": {
+            "header": ["Vil du hjælpe?", "Want to help?"],
+            "body": [
+                "Har du lyst til at hjælpe med vedligehold af siden, kan du tage kontakt på sidens repository på <a href=\"https://github.com/Morsby/au-medicin-mcq\">GitHub</a>.",
+                "If you want to contribute to the maintenance of the site, please contact us at the site repository on  <a href=\"https://github.com/Morsby/au-medicin-mcq\">GitHub</a>."
+            ]
+        }
+    },
+    "feedbackList": {
+        "sort_by": ["Sorter feedback efter", "Sort feedback by"],
+        "date": ["dato", "date"],
+        "popularity": ["popularitet", "popularity"],
+        "or": ["eller", "or"]
+    },
+    "feedbackSingle": {
+        "comments": ["Kommentarer", "Comments"]
+    },
+    "feedbackComment": {
+        "reply": ["SVAR", "REPLY"]
+    },
+    "feedbackCommentPost": {
+        "write_comment": ["Skriv en kommentar", "Write a comment"],
+        "submit": ["Send kommentar", "Post comment"],
+        "replying_to": [
+            "Du er ved at svare på kommentaren med id: ${replySlug}. Vil du hellere skrive en ",
+            "You are replying to the comment with id ${replySlug}. Would you rather write a "
+        ],
+        "new_comment": ["ny kommentar?", "new comment?"]
+    },
+    "feedbackPost": {
+        "errs": {
+            "title_too_short": [
+                "Titlen skal være mindst ${min} tegn",
+                "The title must be at least ${min} characters"
+            ],
+            "text_too_short": [
+                "Teksten skal være mindst ${min} tegn",
+                "The text must be at least ${min} characters"
+            ]
+        },
+        "form_fields": {
+            "title": ["Titel", "Title"],
+            "suggestion": ["Forslag", "Suggestion"],
+            "submit": ["Send forslaget", "Send suggestion"],
+            "markdown_supported": [
+                "<a href=\"https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet\" target=\"_blank\" rel=\"noopener noreferrer\">Markdown-formattering</a> er undersøttet",
+                "<a href=\"https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet\" target=\"_blank\" rel=\"noopener noreferrer\">Markdown formatting</a> supported"
+            ]
+        },
+        "preview": {
+            "header": [
+                "Sådan kommer dit forslag til at se ud",
+                "This is how your suggestion will look"
+            ]
+        }
+    }
+}

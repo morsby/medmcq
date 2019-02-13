@@ -9,6 +9,7 @@ import { withRouter } from 'react-router';
 import { urls } from '../../../utils/common';
 
 import { Container } from 'semantic-ui-react';
+import { Translate } from 'react-localize-redux';
 
 import FeedbackNavigation from '../FeedbackNavigation';
 import FeedbackList from './FeedbackList/FeedbackList';
@@ -50,14 +51,11 @@ class FeedbackIndex extends Component {
                         getSpecificFeedback={this.getSpecificFeedback}
                     />
 
-                    <h2>Vil du hjælpe?</h2>
+                    <h2>
+                        <Translate id="feedbackIndex.help_wanted.header" />
+                    </h2>
                     <p>
-                        Har du lyst til at hjælpe med vedligehold af siden, kan
-                        du tage kontakt på sidens repository på{' '}
-                        <a href="https://github.com/Morsby/au-medicin-mcq">
-                            GitHub
-                        </a>
-                        .
+                        <Translate id="feedbackIndex.help_wanted.body" />
                     </p>
                 </Container>
                 <Footer />

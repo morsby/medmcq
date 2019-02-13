@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
 import { connect } from 'react-redux';
+import { withLocalize, Translate } from 'react-localize-redux';
 
 import { urls } from '../../../../utils/common';
 
@@ -10,6 +11,8 @@ import { Container, Button } from 'semantic-ui-react';
 
 import Header from '../../../Layout/Header';
 import PrintDisplayQuestion from './PrintDisplayQuestion';
+
+import printTranslations from './printTranslations.json';
 
 /**
  * Component der viser printervenlig side med de aktuelle spørgsmål og håndterer
@@ -20,6 +23,8 @@ class Print extends Component {
 
     constructor(props) {
         super(props);
+
+        this.props.addTranslation(printTranslations);
 
         this.toggleAnswers = this.toggleAnswers.bind(this);
     }
@@ -48,13 +53,17 @@ class Print extends Component {
                                 className="primary"
                                 onClick={this.toggleAnswers}
                             >
-                                {showCorrect ? 'Skjul' : 'Vis'} rigtige svar
+                                {showCorrect ? (
+                                    <Translate id="print.show_correct" />
+                                ) : (
+                                    <Translate id="print.hide_correct" />
+                                )}
                             </Button>
                             <Button
                                 className="hide-on-print"
                                 onClick={() => window.print()}
                             >
-                                Print spørgsmål
+                                <Translate id="print.print" />
                             </Button>
                         </Button.Group>
                         <Button
@@ -62,14 +71,19 @@ class Print extends Component {
                             floated="right"
                             onClick={() => this.handleNavigation('quiz')}
                         >
-                            Vend tilbage til quizzen
+                            <Translate id="print.return_to_quiz" />
                         </Button>
                     </div>
 
                     {questions.map((q, i) => {
                         return (
                             <div className="avoid-page-break" key={q._id}>
-                                <h3>Spørgsmål {i + 1}</h3>
+                                <h3>
+                                    <Translate
+                                        id="print.question"
+                                        data={{ n: i + 1 }}
+                                    />
+                                </h3>
                                 <PrintDisplayQuestion
                                     questionProp={q}
                                     showCorrect={showCorrect}
@@ -104,4 +118,4 @@ function mapStateToProps(state) {
 export default connect(
     mapStateToProps,
     null
-)(Print);
+)(withLocalize(Print));
