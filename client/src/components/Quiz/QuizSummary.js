@@ -6,6 +6,7 @@ import { calculateResults } from '../../utils/quiz';
 
 import { Card, List, Container, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import { Translate } from 'react-localize-redux';
 
 /**
  * Viser et overblik over alle spørgsmål i quizzen og fremgangen.
@@ -22,12 +23,15 @@ const QuizSummary = ({ questions, clickHandler }) => {
         <Container>
             <Card fluid>
                 <Card.Content>
-                    <Card.Header>Fremgang</Card.Header>
+                    <Card.Header>
+                        <Translate id="quizSummary.header" />
+                    </Card.Header>
                     {results.status === 'done' && (
                         <Card.Content>
-                            Du svarede rigtigt på {results.correct} af{' '}
-                            {results.n} spørgsmål. Det svarer til{' '}
-                            {results.percentage}
+                            <Translate
+                                id="quizSummary.results"
+                                data={{ ...results }}
+                            />
                         </Card.Content>
                     )}
                     <Card.Description style={{ columns: '250px 4' }}>
@@ -63,7 +67,9 @@ const QuizSummary = ({ questions, clickHandler }) => {
                 </Card.Content>
                 <Card.Content extra textAlign="center">
                     <Link to={urls.print}>
-                        <Button basic>Print disse spørgsmål</Button>
+                        <Button basic>
+                            <Translate id="quizSummary.print" />
+                        </Button>
                     </Link>
                 </Card.Content>
             </Card>

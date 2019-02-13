@@ -5,6 +5,8 @@ import _ from 'lodash';
 import { getIds } from '../../../../utils/questions';
 import { Form, Radio, Divider, Icon } from 'semantic-ui-react';
 
+import { Translate } from 'react-localize-redux';
+
 const SetRadioButton = ({
     set,
     answeredQuestions,
@@ -28,15 +30,30 @@ const SetRadioButton = ({
     return (
         <Form.Group key={set.api}>
             <Form.Field>
-                <Radio
-                    label={set.text}
-                    value={set.api}
-                    checked={set.api === activeSet}
-                    name="set"
-                    onChange={onChange}
-                />{' '}
-                {completed}
-                <Divider vertical hidden />
+                <Translate>
+                    {({ activeLanguage = { code: 'dk' } }) => {
+                        let label = set.text;
+                        if (activeLanguage.code === 'gb') {
+                            label = label.replace('Forår', 'Spring');
+                            label = label.replace('Efterår', 'Autumn');
+                            label = label.replace('(reeks)', '(re-ex)');
+                        }
+
+                        return (
+                            <>
+                                <Radio
+                                    label={label}
+                                    value={set.api}
+                                    checked={set.api === activeSet}
+                                    name="set"
+                                    onChange={onChange}
+                                />{' '}
+                                {completed}
+                                <Divider vertical hidden />
+                            </>
+                        );
+                    }}
+                </Translate>
             </Form.Field>
         </Form.Group>
     );

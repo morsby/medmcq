@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Message } from 'semantic-ui-react';
+import { Translate } from 'react-localize-redux';
 
 /**
  * Afhængig af valg kan vises en ekstra besked omkring antal af spørgsmål.
@@ -13,19 +14,14 @@ const SelectionMessage = ({ user = null, type }) => {
         return (
             <Message info>
                 <p>
-                    Bemærk, at såfremt de valgte indstillinger resulterer i
-                    færre spørgsmål end det ønskede antal, får du blot alle
-                    tilgængelige spørgsmål. Er antallet af spørgsmål 0, vælges
-                    ligeligt blandt alle.
+                    <Translate id="selectionMessage.available_lower_than_requested" />
                 </p>
             </Message>
         );
     if (!user && type === 'specialer')
         return (
             <p>
-                Bemærk, at såfremt de valgte specialer til sammen indeholder
-                færre spørgsmål end det ønskede antal, får du blot alle
-                tilgængelige.
+                <Translate id="selectionMessage.specialties_lower_than_requested" />
             </p>
         );
     return null;

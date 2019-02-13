@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import { unregister } from './registerServiceWorker';
 // Redux
-import { Provider } from 'react-redux';
+import { Provider, connect } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import reduxThunk from 'redux-thunk';
 import { persistStore, persistReducer } from 'redux-persist';
@@ -14,7 +14,8 @@ import { PersistGate } from 'redux-persist/lib/integration/react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 // Oversættelse
-import { LocalizeProvider } from 'react-localize-redux';
+import { LocalizeProvider, withLocalize } from 'react-localize-redux';
+import { renderToStaticMarkup } from 'react-dom/server'; // required to initialize react-localize-redux
 
 // HOCs
 import PrivateRoute from './components/Misc/HOC/PrivateRoute';
@@ -64,53 +65,79 @@ export const persistor = persistStore(store);
 
 unregister();
 
+class App extends Component {
+    constructor(props) {
+        super(props);
+
+        const languages = ['dk', 'gb'];
+        const defaultLanguage = this.props.defaultLanguage || languages[0];
+
+        this.props.initialize({
+            languages: [
+                { name: 'Danish', code: 'dk' },
+                { name: 'English', code: 'gb' },
+            ],
+            options: {
+                renderToStaticMarkup,
+                renderInnerHtml: true,
+                defaultLanguage,
+            },
+        });
+    }
+    render() {
+        return (
+            <BrowserRouter>
+                <ScrollToTop>
+                    <Switch>
+                        <Route exact path="/" component={SelectionMain} />
+                        <Route
+                            path={`${urls.feedback}/new`}
+                            component={FeedbackPost}
+                        />
+                        <Route
+                            path={`${urls.feedback}/:id`}
+                            component={FeedbackSingle}
+                        />
+                        <Route path={urls.feedback} component={FeedbackIndex} />
+                        <Route path={urls.about} component={About} />
+                        <Route path={urls.quiz} component={Quiz} />
+                        <Route path={urls.signup} component={Signup} />
+                        <Route path={urls.login} component={Login} />
+                        <Route path={urls.logout} component={Logout} />
+                        <PrivateRoute
+                            isLoggedIn={true}
+                            path={urls.editProfile}
+                            component={EditProfile}
+                        />
+                        <PrivateRoute path={urls.profile} component={Profile} />
+                        <Route
+                            path={urls.forgotPassword}
+                            component={ForgotPassword}
+                        />
+                        <Route
+                            path={`${urls.resetPassword}/:token`}
+                            component={ResetPassword}
+                        />
+                        <Route path="/print" component={Print} />
+                        <Route component={ErrorPage} />
+                    </Switch>
+                </ScrollToTop>
+            </BrowserRouter>
+        );
+    }
+}
+
+const mapStateToProps = state => ({
+    defaultLanguage: state.settings.language,
+});
+
+const LocalizedApp = withLocalize(connect(mapStateToProps)(App));
+
 ReactDOM.render(
     <Provider store={store}>
         <PersistGate loading={<LoadingPage />} persistor={persistor}>
             <LocalizeProvider store={store}>
-                <BrowserRouter>
-                    <ScrollToTop>
-                        <Switch>
-                            <Route exact path="/" component={SelectionMain} />
-                            <Route
-                                path={`${urls.feedback}/new`}
-                                component={FeedbackPost}
-                            />
-                            <Route
-                                path={`${urls.feedback}/:id`}
-                                component={FeedbackSingle}
-                            />
-                            <Route
-                                path={urls.feedback}
-                                component={FeedbackIndex}
-                            />
-                            <Route path={urls.about} component={About} />
-                            <Route path={urls.quiz} component={Quiz} />
-                            <Route path={urls.signup} component={Signup} />
-                            <Route path={urls.login} component={Login} />
-                            <Route path={urls.logout} component={Logout} />
-                            <PrivateRoute
-                                isLoggedIn={true}
-                                path={urls.editProfile}
-                                component={EditProfile}
-                            />
-                            <PrivateRoute
-                                path={urls.profile}
-                                component={Profile}
-                            />
-                            <Route
-                                path={urls.forgotPassword}
-                                component={ForgotPassword}
-                            />
-                            <Route
-                                path={`${urls.resetPassword}/:token`}
-                                component={ResetPassword}
-                            />
-                            <Route path="/print" component={Print} />
-                            <Route component={ErrorPage} />
-                        </Switch>
-                    </ScrollToTop>
-                </BrowserRouter>
+                <LocalizedApp />
             </LocalizeProvider>
         </PersistGate>
     </Provider>,

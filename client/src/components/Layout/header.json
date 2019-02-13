@@ -1,6 +1,0 @@
-{
-    "greeting": ["Velkommen, ${user}", "Welcome, ${user}"],
-    "profile": ["Profil", "Profile"],
-    "login": ["Log ind", "Login"],
-    "home": ["Forside", "Home"]
-}

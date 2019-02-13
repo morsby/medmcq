@@ -52,7 +52,7 @@ PrintDisplayQuestion.propTypes = {
     /**
      * Spørgsmålsobjektet
      */
-    questionProp: PropTypes.obj,
+    questionProp: PropTypes.object,
 
     /**
      * Skal de rigtige svar være synlige?

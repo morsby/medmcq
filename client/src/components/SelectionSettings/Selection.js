@@ -7,7 +7,7 @@ import * as actions from '../../actions';
 import { allowedNs } from '../../utils/common';
 import { calculateResults } from '../../utils/quiz';
 
-import selectionText from './selection.json';
+import selectionTranslations from './selectionTranslations.json';
 import { withLocalize, Translate } from 'react-localize-redux';
 
 import _ from 'lodash';
@@ -44,7 +44,7 @@ class SelectionMain extends Component {
     constructor(props) {
         super(props);
 
-        this.props.addTranslation(selectionText);
+        this.props.addTranslation(selectionTranslations);
 
         this.onSettingsChange = this.onSettingsChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -105,52 +105,35 @@ class SelectionMain extends Component {
         // Question.length = Antallet af spørgsmål for et semester eller speciale
         // Semester
         if (!semester) {
-            err.push('Du skal vælge et semester først!');
+            err.push(this.props.translate('selection.errs.no_semester'));
         }
 
         //Specialer
         if (type === 'specialer' && specialer.length === 0) {
-            err.push('Du skal vælge mindst ét speciale.');
+            err.push(this.props.translate('selection.errs.no_specialty'));
         }
 
         // Sæt
         if (type === 'set' && !set) {
-            err.push('Du skal vælge et sæt for at kunne starte!');
-            if (semester === 11) {
-                err.push('You have to select a set to start.');
-            }
+            err.push(this.props.translate('selection.errs.no_set'));
         }
 
         // Findes der spørgsmål?
         if (questions.length === 0) {
-            err.push('Der er ingen spørgsmål for det valgte semester.');
-            if (semester === 11) {
-                err.push('There are no questions for the selected semester.');
-            }
+            err.push(this.props.translate('selection.errs.no_questions'));
         }
 
         // Antal
         if (!n) {
-            err.push('Du skal vælge et antal spørgsmål.');
-            if (semester === 11) {
-                err.push('You must select a number of questions.');
-            }
+            err.push(this.props.translate('selection.errs.no_n'));
         }
 
-        if (n > 300) {
-            err.push('Du har valgt for mange spørgsmål');
-            if (semester === 11) {
-                err.push('You have picked too many questions');
-            }
+        if (n > allowedNs.max) {
+            err.push(this.props.translate('selection.errs.n_too_high'));
         }
 
-        if (n < 0) {
-            err.push('Antal spørgsmål kan ikke være negativt');
-            if (semester === 11) {
-                err.push(
-                    'The number of questions can not be a negative number'
-                );
-            }
+        if (n < allowedNs.min) {
+            err.push(this.props.translate('selection.errs.n_neg'));
         }
 
         // tjek for fejl, start eller ej
@@ -219,13 +202,15 @@ class SelectionMain extends Component {
                 <UIHeader />
                 <Container className="content">
                     <Header as="h1">
-                        <Translate id="static.header" />
+                        <Translate id="selection.static.header" />
                     </Header>
                     <Header as="h3">
-                        <Translate id="static.choose_semester" />
+                        <Translate id="selection.static.choose_semester" />
                     </Header>
                     <Dropdown
-                        placeholder="Vælg semester"
+                        placeholder={this.props.translate(
+                            'selection.static.choose_semester'
+                        )}
                         fluid
                         selection
                         options={semestre}
@@ -297,26 +282,8 @@ class SelectionMain extends Component {
                     {calculateResults(this.props.questions).status ===
                         'in_progress' && (
                         <Button onClick={() => this.handleSubmit('cont')}>
-                            Fortsæt med igangværende spørgsmål
+                            <Translate id="selection.static.continue_quiz" />
                         </Button>
-                    )}
-                    {user && (
-                        <Message warning>
-                            <Message.Header>Lidt ustabilitet...</Message.Header>
-                            <p>
-                                Der er desværre lidt ustabilitet i den funktion,
-                                der gemmer hvilke spørgsmål, du har besvaret
-                                (... eller i hvert fald burde gøre det). Så hvis
-                                du kører fulde eksamenssæt, må du foreløbig selv
-                                holde styr på, hvilke sæt, du har besvaret. Det
-                                betyder desværre også, at funktionen &quot;
-                                <em>
-                                    Giv mig kun spørgsmål, jeg ikke har svaret
-                                    på tidligere
-                                </em>
-                                &quot; ikke helt holder det, den lover.
-                            </p>
-                        </Message>
                     )}
                 </Container>
                 <Footer />
@@ -358,6 +325,13 @@ SelectionMain.propTypes = {
      * fortsætte en tidligere quiz.
      */
     questions: PropTypes.array,
+
+    /**
+     * Tilføjer hhv. står for oversættelser
+     * Fra react-localize-redux
+     */
+    addTranslation: PropTypes.func,
+    translate: PropTypes.func,
 };
 
 function mapStateToProps(state) {

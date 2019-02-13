@@ -28,16 +28,16 @@ class QuizLoader extends Component {
 
     render() {
         let longWait = '',
-            { handleRetry, handleAbort } = this.props;
+            { handleRetry, handleAbort, text } = this.props;
         if (this.state.seconds >= 2) {
             longWait = (
                 <div style={{ margin: '5px 0' }}>
-                    <p>Hm, det tager længere end vanligt...</p>
+                    <p>{text.long_wait}</p>
                     <Button basic color="blue" onClick={handleRetry}>
-                        Prøv igen!
+                        {text.retry}
                     </Button>
                     <Button basic color="yellow" onClick={handleAbort}>
-                        Til forsiden
+                        {text.abort}
                     </Button>
                 </div>
             );
@@ -45,7 +45,7 @@ class QuizLoader extends Component {
         return (
             <Dimmer active page>
                 <Loader>
-                    Henter spørgsmål ...
+                    {text.fetching}
                     {longWait}
                 </Loader>
             </Dimmer>
@@ -66,6 +66,12 @@ QuizLoader.propTypes = {
      * Navigerer tilbage til forsiden.
      */
     handleAbort: PropTypes.func,
+
+    /**
+     * Tekst indeholdende den oversatte tekst til hver knap/besked.
+     * Fra ./Quiz.js (via react-localize-redux) fordi oversættelsen drillede....
+     */
+    text: PropTypes.object,
 };
 
 export default QuizLoader;

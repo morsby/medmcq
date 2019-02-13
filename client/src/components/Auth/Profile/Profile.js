@@ -174,7 +174,7 @@ Profile.propTypes = {
     /**
      * Settings object, fra redux
      */
-    settings: PropTypes.obj,
+    settings: PropTypes.object,
 
     /**
      * Funktion der starter en quiz med de valgte spg. (kommentarer!). Fra redux
@@ -194,7 +194,7 @@ Profile.propTypes = {
     /**
      * Brugeren. Fra redux
      */
-    auth: PropTypes.obj,
+    auth: PropTypes.object,
 };
 
 function mapStateToProps(state) {

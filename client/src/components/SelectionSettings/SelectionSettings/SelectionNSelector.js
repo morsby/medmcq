@@ -5,6 +5,8 @@ import { allowedNs } from '../../../utils/common';
 
 import styles from './SelectionNSelector.module.css';
 
+import { Translate } from 'react-localize-redux';
+
 import {
     Label,
     Input,
@@ -25,14 +27,19 @@ const SelectionNSelector = ({ n, onChange, total }) => {
     if (n > allowedNs.max || n < allowedNs.min) {
         labelError = (
             <Label basic color="red" pointing>
-                Værdi skal være mellem {allowedNs.min} og {allowedNs.max}
+                <Translate
+                    id="selectionNSelector.err_n_range"
+                    data={{ min: allowedNs.min, max: allowedNs.max }}
+                />
             </Label>
         );
     }
 
     return (
         <Form>
-            <Header as="h3">Hvor mange spørgsmål vil du have?</Header>
+            <Header as="h3">
+                <Translate id="selectionNSelector.header" />
+            </Header>
             <div>
                 <Grid verticalAlign="top">
                     <Grid.Row>
@@ -123,17 +130,25 @@ const SelectionNSelector = ({ n, onChange, total }) => {
                             textAlign="center"
                         >
                             <Form.Field>
-                                <Input
-                                    fluid
-                                    label="Anden værdi"
-                                    name="n"
-                                    type="number"
-                                    min="1"
-                                    value={n}
-                                    labelPosition="left"
-                                    onChange={onChange}
-                                />
-                                {labelError}
+                                <Translate>
+                                    {({ translate }) => (
+                                        <>
+                                            <Input
+                                                fluid
+                                                label={translate(
+                                                    'selectionNSelector.other_value'
+                                                )}
+                                                name="n"
+                                                type="number"
+                                                min="1"
+                                                value={n}
+                                                labelPosition="left"
+                                                onChange={onChange}
+                                            />
+                                            {labelError}
+                                        </>
+                                    )}
+                                </Translate>
                             </Form.Field>
                         </Grid.Column>
                     </Grid.Row>
@@ -141,7 +156,7 @@ const SelectionNSelector = ({ n, onChange, total }) => {
             </div>
 
             <Divider hidden />
-            <div>Der er {total} spørgsmål for det valgte semester.</div>
+            <Translate id="selectionNSelector.total_n" data={{ n: total }} />
             <Divider hidden />
         </Form>
     );

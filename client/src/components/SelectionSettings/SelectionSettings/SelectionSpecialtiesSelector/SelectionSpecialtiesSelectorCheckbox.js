@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Form, Checkbox, Divider } from 'semantic-ui-react';
+import { Translate } from 'react-localize-redux';
 
 /**
  * Component der viser checkboxes for hvert speciale.
@@ -17,14 +18,24 @@ const SelectionSpecialtiesSelectorCheckbox = ({
     return (
         <Form.Group key={speciale.value}>
             <Form.Field>
-                <Checkbox
-                    label={`${speciale.text} (${antal} spørgsmål)`}
-                    value={speciale.value}
-                    checked={erValgt}
-                    name="specialer"
-                    onChange={onChange}
-                />
-                <Divider vertical hidden />
+                <Translate>
+                    {({ activeLanguage }) => (
+                        <>
+                            <Checkbox
+                                label={`${speciale.text} (${antal} ${
+                                    activeLanguage === 'dk'
+                                        ? 'spørgsmål'
+                                        : 'questions'
+                                })`}
+                                value={speciale.value}
+                                checked={erValgt}
+                                name="specialer"
+                                onChange={onChange}
+                            />
+                            <Divider vertical hidden />
+                        </>
+                    )}
+                </Translate>
             </Form.Field>
         </Form.Group>
     );

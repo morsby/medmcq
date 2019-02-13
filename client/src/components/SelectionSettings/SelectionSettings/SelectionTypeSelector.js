@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { Button } from 'semantic-ui-react';
+import { Translate } from 'react-localize-redux';
 
 /**
  * Buttons der tillader ændring af quiz-typen.
@@ -14,7 +15,7 @@ const SelectionTypeSelector = ({ type, handleClick }) => (
             active={type === 'random'}
             onClick={handleClick}
         >
-            Tilfældige spørgsmål
+            <Translate id="selectionTypeSelector.types.random" />
         </Button>
 
         <Button
@@ -23,7 +24,7 @@ const SelectionTypeSelector = ({ type, handleClick }) => (
             active={type === 'specialer'}
             onClick={handleClick}
         >
-            Specialer
+            <Translate id="selectionTypeSelector.types.specialties" />
         </Button>
         <Button
             name="type"
@@ -31,7 +32,7 @@ const SelectionTypeSelector = ({ type, handleClick }) => (
             active={type === 'set'}
             onClick={handleClick}
         >
-            Fulde eksamenssæt
+            <Translate id="selectionTypeSelector.types.sets" />
         </Button>
     </Button.Group>
 );

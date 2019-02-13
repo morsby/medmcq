@@ -16,6 +16,8 @@ import {
     Responsive,
 } from 'semantic-ui-react';
 
+import { Translate } from 'react-localize-redux';
+
 import QuestionAnswerButtons from './QuestionAnswerButtons';
 import QuestionImage from './QuestionImage';
 import QuestionMetadata from './QuestionMetadata';
@@ -352,8 +354,27 @@ class Question extends Component {
                     />
 
                     <Button basic onClick={this.onCommentsToggle}>
-                        {this.state.commentsOpen ? 'Skjul' : 'Vis'} kommentarer
-                        ({question.comments.length})
+                        <Translate>
+                            {({
+                                translate,
+                                activeLanguage = { code: 'dk' },
+                            }) => {
+                                let visSkjul = this.state.commentsOpen
+                                    ? 'Skjul'
+                                    : 'Vis';
+                                if (activeLanguage.code === 'gb') {
+                                    visSkjul = visSkjul.replace(
+                                        'Skjul',
+                                        'Hide'
+                                    );
+                                    visSkjul = visSkjul.replace('Vis', 'Show');
+                                }
+                                return translate('question.show_comments', {
+                                    visSkjul,
+                                    n: question.comments.length,
+                                });
+                            }}
+                        </Translate>
                     </Button>
                     {this.state.commentsOpen && (
                         <QuestionComments

@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
+import { withLocalize, Translate } from 'react-localize-redux';
+import quizTranslations from './quizTranslations.json';
+
 import Swipeable from 'react-swipeable';
 import QuizLoader from './QuizLoader';
 import Question from './Question/Question';
@@ -34,6 +37,8 @@ class QuizMain extends Component {
 
     constructor(props) {
         super(props);
+
+        this.props.addTranslation(quizTranslations);
 
         this.onChangeQuestion = this.onChangeQuestion.bind(this);
         this.navigateToPage = this.navigateToPage.bind(this);
@@ -126,16 +131,25 @@ class QuizMain extends Component {
 
         if (!questions || settings.isFetching)
             return (
-                <QuizLoader
-                    handleRetry={this.getQuestions}
-                    handleAbort={() => this.navigateToPage('root')}
-                />
+                <Translate>
+                    {({ translate }) => (
+                        <QuizLoader
+                            handleRetry={this.getQuestions}
+                            handleAbort={() => this.navigateToPage('root')}
+                            text={{
+                                retry: translate('quizLoader.retry'),
+                                fetching: translate('quizLoader.fetching'),
+                                abort: translate('quizLoader.abort'),
+                                long_wait: translate('quizLoader.long_wait'),
+                            }}
+                        />
+                    )}
+                </Translate>
             );
 
         return (
             <div className="flex-container">
                 <Header />
-
                 <div className="content">
                     <QuizNavigator
                         onNavigate={this.onChangeQuestion}
@@ -214,6 +228,11 @@ QuizMain.propTypes = {
      * Indeholder nuværende path m.v. - og mulighed for navigation.
      */
     history: PropTypes.object,
+
+    /**
+     * Tilføjer quizTranslations i hele app'en
+     */
+    addTranslation: PropTypes.func,
 };
 
 function mapStateToProps(state) {
@@ -225,7 +244,9 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(
-    mapStateToProps,
-    actions
-)(QuizMain);
+export default withLocalize(
+    connect(
+        mapStateToProps,
+        actions
+    )(QuizMain)
+);

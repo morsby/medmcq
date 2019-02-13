@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { specialer } from '../../../../utils/common';
+import { Translate } from 'react-localize-redux';
 
 import { Form, Header } from 'semantic-ui-react';
 import SelectionSpecialtiesSelectorCheckbox from './SelectionSpecialtiesSelectorCheckbox';
@@ -18,14 +19,16 @@ const SelectionSpecialtiesSelector = ({
     if (!semester)
         return (
             <Header as="h3">
-                Vælg et semester for at se tilgængelige specialer
+                <Translate id="selectionSpecialtiesSelector.choose_semester" />
             </Header>
         );
     return (
         <Form>
             <Header as="h3">
-                For {semester}. semester er der følgende specialer at vælge
-                mellem:
+                <Translate
+                    id="selectionSpecialtiesSelector.header"
+                    data={{ semester }}
+                />
             </Header>
 
             {specialer[semester].map(speciale => {

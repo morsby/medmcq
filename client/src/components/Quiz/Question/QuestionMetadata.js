@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { List, Dropdown, Button } from 'semantic-ui-react';
+import { Translate } from 'react-localize-redux';
 
 import { specialer } from '../../../utils/common';
 import { superUserRoles } from '../../../utils/auth';
@@ -65,17 +66,30 @@ const QuestionMetadata = ({
         <div>
             <List horizontal>
                 <List.Item>
-                    <List.Header>Sæt: </List.Header>
+                    <List.Header>
+                        <Translate id="questionMetadata.set" />
+                    </List.Header>
                 </List.Item>
                 <List.Item>
-                    {question.examSeason}
+                    <Translate>
+                        {({ activeLanguage = { code: 'dk' } }) => {
+                            let season = question.examSeason;
+                            if (activeLanguage.code === 'gb') {
+                                season = season.replace('E', 'Autumn ');
+                                season = season.replace('F', 'Spring ');
+                            }
+                            return season;
+                        }}
+                    </Translate>
                     {question.examYear}
                 </List.Item>
             </List>
             <br />
             <List horizontal>
                 <List.Item>
-                    <List.Header>Speciale: </List.Header>
+                    <List.Header>
+                        <Translate id="questionMetadata.specialty" />
+                    </List.Header>
                 </List.Item>
                 {specialtiesDisplay}
             </List>

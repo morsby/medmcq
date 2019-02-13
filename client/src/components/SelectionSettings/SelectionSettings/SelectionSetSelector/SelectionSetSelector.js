@@ -6,6 +6,8 @@ import { groupQuestionsBySet } from '../../../../utils/questions';
 import SetRadioButton from './SetRadioButton';
 import { Form, Header } from 'semantic-ui-react';
 
+import { Translate } from 'react-localize-redux';
+
 const SelectionSetSelector = ({
     semester,
     activeSet,
@@ -17,30 +19,28 @@ const SelectionSetSelector = ({
     if (!semester)
         return (
             <Header as="h3">
-                Vælg et semester for at se tilgængelige eksamenssæt
+                <Translate id="selectionSetSelector.choose_semester" />
             </Header>
         );
     return (
         <Form>
             <Header as="h3">
-                For {semester}. semester er der følgende eksamenssæt at vælge
-                mellem:
+                <Translate
+                    id="selectionSetSelector.header"
+                    data={{ semester }}
+                />
             </Header>
 
-            {sets.map(set => {
-                return (
-                    <SetRadioButton
-                        key={set.api}
-                        set={set}
-                        answeredQuestions={answeredQuestions}
-                        groupedQuestions={
-                            groupQuestionsBySet(questions)[set.api]
-                        }
-                        activeSet={activeSet}
-                        onChange={onChange}
-                    />
-                );
-            })}
+            {sets.map(set => (
+                <SetRadioButton
+                    key={set.api}
+                    set={set}
+                    answeredQuestions={answeredQuestions}
+                    groupedQuestions={groupQuestionsBySet(questions)[set.api]}
+                    activeSet={activeSet}
+                    onChange={onChange}
+                />
+            ))}
         </Form>
     );
 };

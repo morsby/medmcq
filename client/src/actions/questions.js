@@ -111,10 +111,7 @@ export const deleteComment = (question_id, comment_id) => async dispatch => {
 
     dispatch({
         type: types.QUESTION_COMMENT_UPDATE,
-        payload: {
-            questionId: question_id,
-            comments: res.data,
-        },
+        payload: res.data,
     });
 };
 

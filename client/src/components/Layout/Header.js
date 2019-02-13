@@ -7,8 +7,7 @@ import * as actions from '../../actions';
 import { withRouter } from 'react-router';
 
 import { withLocalize, Translate } from 'react-localize-redux';
-import { renderToStaticMarkup } from 'react-dom/server';
-import headerTranslations from './header.json';
+import layoutTranslations from './layoutTranslations.json';
 
 import { Flag, Menu, Icon, Responsive } from 'semantic-ui-react';
 import { urls, breakpoints } from '../../utils/common';
@@ -26,22 +25,7 @@ class Header extends Component {
     constructor(props) {
         super(props);
 
-        this.props.addTranslation(headerTranslations);
-
-        const languages = ['dk', 'gb'];
-        const defaultLanguage = this.props.defaultLanguage || languages[0];
-
-        this.props.initialize({
-            languages: [
-                { name: 'Danish', code: 'dk' },
-                { name: 'English', code: 'gb' },
-            ],
-            options: {
-                renderToStaticMarkup,
-                renderInnerHtml: true,
-                defaultLanguage,
-            },
-        });
+        this.props.addTranslation(layoutTranslations);
 
         this.changeLang = this.changeLang.bind(this);
     }
@@ -70,7 +54,7 @@ class Header extends Component {
                     <Responsive as={Menu.Item} minWidth={breakpoints.mobile}>
                         <strong>
                             <Translate
-                                id="greeting"
+                                id="header.greeting"
                                 data={{
                                     user:
                                         user.username[0].toUpperCase() +
@@ -86,14 +70,14 @@ class Header extends Component {
                             inverted
                             className="click"
                         />
-                        <Translate id="profile" />
+                        <Translate id="header.profile" />
                     </Menu.Item>
                 </>
             );
         } else {
             højreMenu = (
                 <Menu.Item onClick={() => handleClick('login')}>
-                    <Icon name="user md" /> <Translate id="login" />
+                    <Icon name="user md" /> <Translate id="header.login" />
                 </Menu.Item>
             );
         }
@@ -102,7 +86,8 @@ class Header extends Component {
             <header>
                 <Menu inverted color="blue" attached>
                     <Menu.Item onClick={() => handleClick('root')}>
-                        <Icon name="home" size="big" /> <Translate id="home" />
+                        <Icon name="home" size="big" />{' '}
+                        <Translate id="header.home" />
                     </Menu.Item>
                     <Menu.Menu position="right">
                         <Menu.Item>
@@ -163,6 +148,11 @@ Header.propTypes = {
      * Det gemte sprogvalg. Fra redux settings.
      */
     defaultLanguage: PropTypes.string,
+
+    /**
+     * addTranslation: Tilføjer layoutTranslations over hele appen
+     */
+    addTranslation: PropTypes.func,
 };
 
 function mapStateToProps(state) {

@@ -150,7 +150,7 @@ ProfileAnswerDetails.propTypes = {
     /**
      * Object indeholdende hvordan brugeren har klaret sig
      */
-    performance: PropTypes.obj,
+    performance: PropTypes.object,
 
     /**
      * Func der starter quiz med de valgte spørgsmål

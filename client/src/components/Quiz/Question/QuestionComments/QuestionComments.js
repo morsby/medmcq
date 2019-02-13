@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Form, TextArea, Button, Message } from 'semantic-ui-react';
 
+import { Translate } from 'react-localize-redux';
+
 import QuestionCommentSingle from './QuestionCommentSingle';
 
 /**
@@ -30,39 +32,52 @@ const QuestionComments = ({
 }) => {
     let form;
     if (user) {
-        let skrivRet = editingComment ? 'Ret' : 'Skriv';
+        let skrivRet = editingComment ? (
+            <Translate id="questionComments.edit_a_comment" />
+        ) : (
+            <Translate id="questionComments.write_a_comment" />
+        );
         form = (
             <div style={{ marginTop: '1em' }}>
-                <h5>{skrivRet} en kommentar</h5>
+                <h5>{skrivRet}</h5>
 
                 <Form>
-                    <TextArea
-                        name="comment"
-                        placeholder="Skriv en kommentar"
-                        onChange={onCommentType}
-                        value={newComment}
-                    />
+                    <Translate>
+                        {({ translate }) => (
+                            <TextArea
+                                name="comment"
+                                placeholder={translate(
+                                    'questionComments.write_a_comment'
+                                )}
+                                onChange={onCommentType}
+                                value={newComment}
+                            />
+                        )}
+                    </Translate>
                     <Message info>
-                        At skrive en kommentar vil vise dit brugernavn
-                        offentligt.
+                        <Translate id="questionComments.username_will_be_shown" />
                     </Message>
                     <Button
                         onClick={onCommentPost}
                         disabled={newComment.length < 3}
                         style={{ margin: '0.5em 1em 0.5em 0' }}
                     >
-                        Kommentér
+                        <Translate id="questionComments.comment" />
                     </Button>
                     {editingComment && (
                         <Button negative onClick={undoEditComment}>
-                            Fortryd ændring
+                            <Translate id="questionComments.undo_edit" />
                         </Button>
                     )}
                 </Form>
             </div>
         );
     } else {
-        form = <Message warning>Log ind for at skrive en kommentar</Message>;
+        form = (
+            <Message warning>
+                <Translate id="questionComments.login_to_write" />
+            </Message>
+        );
     }
     return (
         <div>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import marked from 'marked';
 import { Comment, Icon, Menu } from 'semantic-ui-react';
-
+import { Translate } from 'react-localize-redux';
 /**
  * Component der viser den enkelte kommentar
  * Props fra QuestionComments.js.
@@ -49,14 +49,14 @@ const QuestionCommentSingle = ({
                             style={{ cursor: 'pointer' }}
                         >
                             <Icon name="trash" color="red" />
-                            Slet!
+                            <Translate id="questionCommentSingle.delete" />
                         </Menu.Item>
                         <Menu.Item
                             style={{ cursor: 'pointer' }}
                             onClick={() => editComment(comment)}
                         >
                             <Icon name="edit" color="yellow" />
-                            Ret!
+                            <Translate id="questionCommentSingle.edit" />
                         </Menu.Item>
                     </Menu>
                 )}

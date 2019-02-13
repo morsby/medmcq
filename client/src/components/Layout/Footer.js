@@ -5,6 +5,8 @@ import { withRouter } from 'react-router';
 import { Icon, Menu } from 'semantic-ui-react';
 import { urls } from '../../utils/common';
 
+import { Translate } from 'react-localize-redux';
+
 /**
  * Footer component.
  */
@@ -27,20 +29,20 @@ const Footer = ({ history }) => {
             <Menu attached inverted color="blue">
                 <Menu.Item position="right" style={paragraphStyle}>
                     <p>
-                        Siden er lavet med tilladelse fra Institut for Klinisk
-                        Medicin, Health, Aarhus Universitet.
+                        <Translate id="footer.permission" />
                     </p>
                     <Icon name="heartbeat" />
-                    {/*Udviklet af*/} Sigurd Morsby Larsen
-                    {/* <p><Icon name='graduation cap' />Vedligeholdes og forbedres i samarbejde med 
-                            <strong><a href="https://cesu.au.dk"> CESU </a></strong>
-                            og Thomas Jensen</p> */}
+                    <Translate id="footer.developed_by" />
+                    {/*}<p>
+                        <Icon name="graduation cap" />
+                        <Translate id="footer.maintained_by" />
+                    </p> */}
                 </Menu.Item>
                 <Menu.Menu position="left">
                     {history.location.pathname !== urls.about && (
                         <Menu.Item onClick={() => handleClick(urls.about)}>
                             <Icon name="question circle outline" />
-                            <p>Om siden</p>
+                            <Translate id="footer.about_link" />
                         </Menu.Item>
                     )}
                 </Menu.Menu>

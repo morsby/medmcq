@@ -1,0 +1,52 @@
+{
+    "quizLoader": {
+        "fetching": ["Henter spørgsmål ...", "Fetching questions ..."],
+        "long_wait": [
+            "Hm, det tager længere end vanligt...",
+            "Hmm, this is taking longer than usual..."
+        ],
+        "retry": ["Prøv igen", "Retry"],
+        "abort": ["Tilbage til forsiden", "Back to the front page"]
+    },
+    "quizNavigator": {
+        "progress": ["Spørgsmål ${n} af ${total}", "Question ${n} of ${total}"],
+        "next": ["Næste", "Next"],
+        "previous": ["Forrige", "Previous"]
+    },
+    "quizSummary": {
+        "header": ["Fremgang", "Progress"],
+        "results": [
+            "Du svarede rigtigt på ${correct} af ${n} spørgsmål. Det svarer til ${percentage}",
+            "You answered ${correct} out of ${n} questions correctly. That is equivalent to ${percentage}."
+        ],
+        "print": ["Print disse spørgsmål", "Print these questions"]
+    },
+    "question": {
+        "show_comments": [
+            "${visSkjul} kommentarer (${n})",
+            "${visSkjul} comments (${n})"
+        ]
+    },
+    "questionMetadata": {
+        "set": ["Sæt:", "Set:"],
+        "specialty": ["Speciale:", "Specialty:"]
+    },
+    "questionComments": {
+        "write_a_comment": ["Skriv en kommentar", "Write a comment"],
+        "edit_a_comment": ["Ret en kommentar", "Edit a comment"],
+        "login_to_write": [
+            "Log ind for at skrive en kommentar.",
+            "Login to write a comment."
+        ],
+        "username_will_be_shown": [
+            "At skrive en kommentar vil vise dit brugernavn offentligt.",
+            "Writing a comment will publicly show your username."
+        ],
+        "comment": ["Kommentér", "Comment"],
+        "undo_edit": ["Fortryd ændring", "Undo edit"]
+    },
+    "questionCommentSingle": {
+        "edit": ["Ret", "Edit"],
+        "delete": ["Slet", "Delete"]
+    }
+}
