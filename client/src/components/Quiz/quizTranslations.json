@@ -29,6 +29,10 @@
     },
     "questionMetadata": {
         "set": ["Sæt:", "Set:"],
+        "set_season": {
+            "E": ["E", "Autumn "],
+            "F": ["F", "Spring "]
+        },
         "specialty": ["Speciale:", "Specialty:"]
     },
     "questionComments": {

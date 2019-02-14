@@ -1,4 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
+
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import * as actions from '../../../actions';
@@ -11,6 +14,7 @@ import {
 
 import { Form, Field } from 'react-final-form';
 import { Button, Divider, Message } from 'semantic-ui-react';
+import { Translate } from 'react-localize-redux';
 
 /**
  * Component der viser login-formularen.
@@ -38,101 +42,133 @@ class LoginForm extends Component {
     render() {
         return (
             <div>
-                <Form
-                    onSubmit={this.onSubmit}
-                    render={({ handleSubmit, pristine, invalid }) => (
-                        <form
-                            onSubmit={handleSubmit}
-                            className="ui form custom"
-                        >
-                            <Field
-                                name="username"
-                                validate={loginUsernameValid}
-                            >
-                                {({ input, meta }) => (
-                                    <div
-                                        className={
-                                            'field ' +
-                                            (meta.error && meta.touched
-                                                ? 'error'
-                                                : '')
-                                        }
+                <Translate>
+                    {({ translate }) => (
+                        <Form
+                            onSubmit={this.onSubmit}
+                            render={({ handleSubmit, pristine, invalid }) => (
+                                <form
+                                    onSubmit={handleSubmit}
+                                    className="ui form custom"
+                                >
+                                    <Field
+                                        name="username"
+                                        validate={loginUsernameValid}
                                     >
-                                        <label>Brugernavn</label>
-                                        <input
-                                            {...input}
-                                            type="text"
-                                            placeholder="Brugernavn"
-                                        />
-                                        {meta.error && meta.touched && (
-                                            <Message error visible={true}>
-                                                {meta.error}
-                                            </Message>
-                                        )}
-                                    </div>
-                                )}
-                            </Field>
-
-                            <Field
-                                name="password"
-                                validate={loginPasswordValid}
-                            >
-                                {({ input, meta }) => (
-                                    <div
-                                        className={
-                                            'field ' +
-                                            (meta.error && meta.touched
-                                                ? 'error'
-                                                : '')
-                                        }
-                                    >
-                                        <label>Kodeord</label>
-                                        <input
-                                            {...input}
-                                            type="password"
-                                            placeholder="Kodeord"
-                                        />
-                                        {meta.error && meta.touched && (
-                                            <Message
-                                                error
-                                                visible={true}
-                                                size="small"
+                                        {({ input, meta }) => (
+                                            <div
+                                                className={
+                                                    'field ' +
+                                                    (meta.error && meta.touched
+                                                        ? 'error'
+                                                        : '')
+                                                }
                                             >
-                                                {meta.error}
-                                            </Message>
+                                                <label>
+                                                    {translate(
+                                                        'loginForm.username'
+                                                    )}
+                                                </label>
+                                                <input
+                                                    {...input}
+                                                    type="text"
+                                                    placeholder={translate(
+                                                        'loginForm.username'
+                                                    )}
+                                                />
+                                                {meta.error && meta.touched && (
+                                                    <Message
+                                                        error
+                                                        visible={true}
+                                                    >
+                                                        {meta.error}
+                                                    </Message>
+                                                )}
+                                            </div>
                                         )}
-                                    </div>
-                                )}
-                            </Field>
-                            {this.state.error && (
-                                <Message negative>{this.state.error}</Message>
+                                    </Field>
+
+                                    <Field
+                                        name="password"
+                                        validate={loginPasswordValid}
+                                    >
+                                        {({ input, meta }) => (
+                                            <div
+                                                className={
+                                                    'field ' +
+                                                    (meta.error && meta.touched
+                                                        ? 'error'
+                                                        : '')
+                                                }
+                                            >
+                                                <label>
+                                                    {translate(
+                                                        'loginForm.password'
+                                                    )}
+                                                </label>
+                                                <input
+                                                    {...input}
+                                                    type="password"
+                                                    placeholder={translate(
+                                                        'loginForm.password'
+                                                    )}
+                                                />
+                                                {meta.error && meta.touched && (
+                                                    <Message
+                                                        error
+                                                        visible={true}
+                                                        size="small"
+                                                    >
+                                                        {meta.error}
+                                                    </Message>
+                                                )}
+                                            </div>
+                                        )}
+                                    </Field>
+                                    {this.state.error && (
+                                        <Message negative>
+                                            {translate(
+                                                'loginForm.errs.login_failed'
+                                            )}
+                                        </Message>
+                                    )}
+                                    <Divider hidden />
+                                    <Button
+                                        floated="left"
+                                        disabled={pristine || invalid}
+                                        positive
+                                    >
+                                        {translate('loginForm.login')}
+                                    </Button>
+                                </form>
                             )}
-                            <Divider hidden />
-                            <Button
-                                floated="left"
-                                disabled={pristine || invalid}
-                                positive
-                            >
-                                Log ind
-                            </Button>
-                        </form>
+                        />
                     )}
-                />
+                </Translate>
                 <div style={{ float: 'right' }}>
                     <Button
                         onClick={() => this.handleNavigation('forgotPassword')}
                         color="blue"
                     >
-                        Glemt kodeord?
+                        <Translate id="loginForm.forgot_password" />
                     </Button>
                     <Button onClick={() => this.handleNavigation('signup')}>
-                        Opret bruger
+                        <Translate id="loginForm.signup" />
                     </Button>
                 </div>
             </div>
         );
     }
 }
+
+LoginForm.propTypes = {
+    /**
+     * Func der kalder login via API'en
+     */
+    login: PropTypes.func,
+
+    history: ReactRouterPropTypes.history,
+};
 
 function mapStateToProps(state) {
     return {

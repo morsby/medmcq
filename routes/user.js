@@ -172,7 +172,7 @@ module.exports = app => {
                                 return res.send({
                                     type: 'error',
                                     data:
-                                        'Der blev ikke fundet en bruger med den angivne email',
+                                        'Der blev ikke fundet en bruger med den angivne email / No user was found with the provided email address',
                                 });
                             }
                             user.resetPasswordToken = token;
@@ -189,17 +189,28 @@ module.exports = app => {
                             to: user.email,
                             from: urls.emailFrom,
                             subject:
-                                'Nulstilling af kodeord ved AU Medicin MCQ-sitet',
-                            text:
-                                'Du modtager denne mail, fordi du (eller en anden!) har bedt om nulstilling af dit kodeord.\n\n' +
-                                'Klik på nedenstående link eller kopier det ind i den browser for at indstille et nyt kodeord. Du har en time til at gøre dette, før linket udløber\n\n' +
-                                'http://' +
-                                req.headers.host +
-                                urls.forgotPassword +
-                                token +
-                                '\n\n' +
-                                'Hvis du ikke har bedt om nulstilling af din kode, kan du blot ignorere denne mail, og din kode forbliver uændret. \n\n' +
-                                'Med venlig hilsen Sigurd\n',
+                                'Nulstilling af kodeord ved AU Medicin MCQ-sitet / Password reset at AU Medicine MCQ-site',
+                            text: `
+Du modtager denne mail, fordi du (eller en anden!) har bedt om nulstilling af dit kodeord. 
+
+Klik på nedenstående link eller kopier det ind i den browser for at indstille et nyt kodeord. Du har en time til at gøre dette, før linket udløber 
+
+http://${req.headers.host}${urls.forgotPassword}${token}
+                                 
+Hvis du ikke har bedt om nulstilling af din kode, kan du blot ignorere denne mail, og din kode forbliver uændret.  
+
+---
+
+You are receiving this email because you (or someone else!) has requested a password reset.
+
+Click the link below or copy it into your browser to set a new password. You have one hour to do this before the link expires.
+
+http://${req.headers.host}${urls.forgotPassword}${token}
+
+If you have not requested a password reset, feel free to ignore this email and your password will remain unchanged.
+
+Med venlig hilsen / Kind regards  
+Sigurd\n`,
                         };
                         sgMail.send(msg);
                         done();
@@ -209,7 +220,8 @@ module.exports = app => {
                     if (err) return next(err);
                     res.send({
                         type: 'success',
-                        data: 'En mail er blevet sendt med instruktioner!',
+                        data:
+                            'En mail er blevet sendt med instruktioner! / An email has been sent with instructions',
                     });
                 }
             );
@@ -232,7 +244,7 @@ module.exports = app => {
                                 return res.send({
                                     type: 'error',
                                     data:
-                                        'Reset-token er ikke gyldigt (længere?). Bed om et nyt via formularen "Glemt kodeord" og prøv igen.',
+                                        'Reset-token er ikke gyldigt (længere?). Bed om et nyt via formularen "Jeg har glemt min kode" og prøv igen. / Reset-token no (longer?) valid. Request a new one through the form "I forgot my password" and try again.',
                                 });
                             }
 
@@ -252,18 +264,35 @@ module.exports = app => {
                     );
                 },
                 function(user, done) {
+                    console.log(user, done);
                     var msg = {
                         to: user.email,
                         from: urls.emailFrom,
                         subject:
-                            'Dit kodeord er blevet ændret hos AU Medicin MCQ-sitet',
-                        text:
-                            'Hej,\n\n' +
-                            'Denne mail er for at konfirmere, at koden til AU Medicin MCQ-sitet for brugeren med email ' +
-                            user.email +
-                            ' er blevet ændret.\n\n' +
-                            'Har du ikke bedt om denne ændring, kan det skyldes at andre har adgang til din mail, eller en fejl i mit system - så kontakt mig gerne! \n\n' +
-                            'Med venlig hilsen Sigurd\n',
+                            'Dit kodeord er blevet ændret hos AU Medicin MCQ-sitet / Password changed at AU Medicine MCQ site',
+                        text: `
+Hej,
+
+
+Denne mail er for at konfirmere, at koden til AU Medicin MCQ-sitet for brugeren med email ${
+                            user.email
+                        } er blevet ændret.
+
+Har du ikke bedt om denne ændring, kan det skyldes at andre har adgang til din mail, eller en fejl i mit system - så kontakt mig gerne! 
+
+
+---
+
+Hi,
+
+This email is sent to confirm that the password for the AU Medicine MCQ site for the user with the email address ${
+                            user.email
+                        } has been changed.
+                        
+If you did not request this change, it may mean that others have access to your emails or an error in my system – so feel free to contact me!
+
+Med venlig hilsen / Kind regards
+Sigurd\n`,
                     };
                     sgMail.send(msg);
 
@@ -274,7 +303,7 @@ module.exports = app => {
                 return res.send({
                     type: 'success',
                     data:
-                        'Kodeordet er nulstillet. Der er sendt en mail til dig for at bekræfte dette (du skal ikke gøre noget).',
+                        'Kodeordet er ændret. Der er sendt en mail til dig for at bekræfte dette (du skal ikke gøre noget). / Password has been changed. An email has been sent to you to confirm this (no action required).',
                 });
             }
         );

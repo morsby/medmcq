@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { Container } from 'semantic-ui-react';
+import { Translate } from 'react-localize-redux';
 
 import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
@@ -14,7 +15,9 @@ const Login = () => {
         <div className="flex-container">
             <Header />
             <Container className="content">
-                <h3>Log ind</h3>
+                <h3>
+                    <Translate id="login.header" />
+                </h3>
                 <LoginForm />
             </Container>
             <Footer />

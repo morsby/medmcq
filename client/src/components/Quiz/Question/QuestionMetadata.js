@@ -18,7 +18,7 @@ const QuestionMetadata = ({
     onEditSpecialty,
     onSaveSpecialties,
     selectedSpecialties,
-    user,
+    user = {},
 }) => {
     // Grimt fix for at undgå "user is undefined"
     if (!user) user = {};
@@ -71,16 +71,11 @@ const QuestionMetadata = ({
                     </List.Header>
                 </List.Item>
                 <List.Item>
-                    <Translate>
-                        {({ activeLanguage = { code: 'dk' } }) => {
-                            let season = question.examSeason;
-                            if (activeLanguage.code === 'gb') {
-                                season = season.replace('E', 'Autumn ');
-                                season = season.replace('F', 'Spring ');
-                            }
-                            return season;
-                        }}
-                    </Translate>
+                    <Translate
+                        id={`questionMetadata.set_season.${
+                            question.examSeason
+                        }`}
+                    />
                     {question.examYear}
                 </List.Item>
             </List>

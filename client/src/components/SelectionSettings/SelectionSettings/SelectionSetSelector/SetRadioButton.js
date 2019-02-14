@@ -32,6 +32,10 @@ const SetRadioButton = ({
             <Form.Field>
                 <Translate>
                     {({ activeLanguage = { code: 'dk' } }) => {
+                        // TODO:
+                        /*flyt evt. disse replaces over i react-localize-redux 
+                        vha. dynamiske id's (se fx profileAnswerDetails og dets 
+                        Sæt-kolonne i tabellen) */
                         let label = set.text;
                         if (activeLanguage.code === 'gb') {
                             label = label.replace('Forår', 'Spring');

@@ -16,6 +16,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 // Oversættelse
 import { LocalizeProvider, withLocalize } from 'react-localize-redux';
 import { renderToStaticMarkup } from 'react-dom/server'; // required to initialize react-localize-redux
+import authTranslations from './components/Auth/authTranslations'; // fordi der ikke er en gennemgående component i dette regi
 
 // HOCs
 import PrivateRoute from './components/Misc/HOC/PrivateRoute';
@@ -68,6 +69,8 @@ unregister();
 class App extends Component {
     constructor(props) {
         super(props);
+
+        this.props.addTranslation(authTranslations);
 
         const languages = ['dk', 'gb'];
         const defaultLanguage = this.props.defaultLanguage || languages[0];

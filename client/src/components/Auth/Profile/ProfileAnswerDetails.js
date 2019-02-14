@@ -8,6 +8,7 @@ import _ from 'lodash';
 import marked from 'marked';
 
 import { Table, Button, Divider } from 'semantic-ui-react';
+import { Translate } from 'react-localize-redux';
 
 /**
  * Component der viser detaljer omkring ens svar. Kaldes af ./Profile.js
@@ -49,50 +50,60 @@ class ProfileAnswerDetails extends Component {
                 <Divider hidden />
                 {total > 0 && (
                     <Button onClick={this.startQuiz}>
-                        Start en quiz med {total > 1 ? 'alle' : ''} nedenstående{' '}
-                        {total} spørgsmål
+                        <Translate
+                            id="profileAnswerDetails.start_quiz_button"
+                            data={{ n: total }}
+                        />
                     </Button>
                 )}
                 <Divider hidden />
-                <h4>Filtrer spørgsmål:</h4>
+                <h4>
+                    <Translate id="profileAnswerDetails.filter.header" />
+                </h4>
                 <Button.Group widths="4">
                     <Button
                         basic
                         color="blue"
                         onClick={() => this.handleFilter(null)}
                     >
-                        Vis alle
+                        <Translate id="profileAnswerDetails.filter.show_all" />
                     </Button>
                     <Button
                         basic
                         positive
                         onClick={() => this.handleFilter('allRight')}
                     >
-                        Vis altid rigtige
+                        <Translate id="profileAnswerDetails.filter.show_correct" />
                     </Button>
                     <Button
                         basic
                         negative
                         onClick={() => this.handleFilter('allWrong')}
                     >
-                        Vis altid forkerte
+                        <Translate id="profileAnswerDetails.filter.show_wrong" />
                     </Button>
                     <Button
                         basic
                         color="yellow"
                         onClick={() => this.handleFilter('mixed')}
                     >
-                        Vis blandede
+                        <Translate id="profileAnswerDetails.filter.show_mixed" />
                     </Button>
                 </Button.Group>
                 <Table celled>
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell>Spørgsmål</Table.HeaderCell>
-                            <Table.HeaderCell>Speciale</Table.HeaderCell>
-                            <Table.HeaderCell>Sæt</Table.HeaderCell>
+                            <Table.HeaderCell>
+                                <Translate id="profileAnswerDetails.table_headers.question" />
+                            </Table.HeaderCell>
+                            <Table.HeaderCell>
+                                <Translate id="profileAnswerDetails.table_headers.specialty" />
+                            </Table.HeaderCell>
+                            <Table.HeaderCell>
+                                <Translate id="profileAnswerDetails.table_headers.set" />
+                            </Table.HeaderCell>
                             <Table.HeaderCell textAlign="right">
-                                Din svarprocent
+                                <Translate id="profileAnswerDetails.table_headers.performance" />
                             </Table.HeaderCell>
                         </Table.Row>
                     </Table.Header>
@@ -120,10 +131,14 @@ class ProfileAnswerDetails extends Component {
                                         />
                                     </Table.Cell>
                                     <Table.Cell collapsing>
-                                        {q.specialty.join()}
+                                        {q.specialty.join(', ')}
                                     </Table.Cell>
                                     <Table.Cell collapsing>
-                                        {q.examSeason}
+                                        <Translate
+                                            id={`profileAnswerDetails.${
+                                                q.examSeason
+                                            }`}
+                                        />
                                         {q.examYear}
                                     </Table.Cell>
                                     <Table.Cell collapsing textAlign="right">
@@ -151,6 +166,11 @@ ProfileAnswerDetails.propTypes = {
      * Object indeholdende hvordan brugeren har klaret sig
      */
     performance: PropTypes.object,
+
+    /**
+     * currentLanguage (passet fra ./Profile.js, bruges til at ændre sæt til engelsk)
+     */
+    currentLanguage: PropTypes.string,
 
     /**
      * Func der starter quiz med de valgte spørgsmål

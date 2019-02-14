@@ -1,4 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
+
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import * as actions from '../../../actions';
@@ -13,38 +16,29 @@ import { validationRegex } from '../../../utils/common';
 
 import { Form, Field } from 'react-final-form';
 import { Button, Divider, Message } from 'semantic-ui-react';
+import { Translate, getTranslate } from 'react-localize-redux';
 
 /**
  * Component der viser signup-form. Kaldes af ./Signup.js
- * Props er:
- *  - fetchUser (der ser om man er logget ind). Fra redux
- *  - history (fra react-router)
- *  - checkUserAvailability (der tjekker om email/brugernavn er ledigt). Fra redux
+ * Props ses i bunden.
  */
-const SignupForm = props => {
+const SignupForm = ({ checkUserAvailability, signup, translate, history }) => {
     let onSubmit = async values => {
-        props
-            .signup(values)
-            .then(props.fetchUser())
-            .then(props.history.push('/login'));
+        signup(values).then(history.push('/login'));
     };
 
     const userAvailable = async username => {
         if (!username) {
-            return 'Du skal udfylde et brugernavn!';
+            return translate('signup.errs.username_required');
         } else if (
             username.length < 3 ||
             !username.match(validationRegex.username)
         ) {
-            return `Ugyldigt brugernavn. Brugernavne skal være mindst 3 tegn og må ikke indeholde mellemrum. 
-            Gyldige brugernavne er f.eks. sigurd, sig_urd, sig.urd og sigurd123`;
+            return translate('signup.errs.username_invalid');
         } else {
-            let available = await props.checkUserAvailability(
-                'username',
-                username
-            );
+            let available = await checkUserAvailability('username', username);
 
-            return available ? null : 'Brugernavnet er taget';
+            return available ? null : translate('signup.errs.username_taken');
         }
     };
 
@@ -52,9 +46,9 @@ const SignupForm = props => {
         let error = emailValid(email);
         if (error) return error;
 
-        let available = await props.checkUserAvailability('email', email);
+        let available = await checkUserAvailability('email', email);
 
-        return available ? null : 'Emailen er allerede brugt';
+        return available ? null : translate('signup.errs.email_taken');
     };
 
     return (
@@ -73,11 +67,17 @@ const SignupForm = props => {
                                             : '')
                                     }
                                 >
-                                    <label>Brugernavn</label>
+                                    <label>
+                                        {translate(
+                                            'signup.form_fields.username'
+                                        )}
+                                    </label>
                                     <input
                                         {...input}
                                         type="text"
-                                        placeholder="Brugernavn"
+                                        placeholder={translate(
+                                            'signup.form_fields.username'
+                                        )}
                                     />
                                     {meta.error && meta.touched && (
                                         <Message error visible={true}>
@@ -102,11 +102,15 @@ const SignupForm = props => {
                                             : '')
                                     }
                                 >
-                                    <label>Email</label>
+                                    <label>
+                                        {translate('signup.form_fields.email')}
+                                    </label>
                                     <input
                                         {...input}
                                         type="email"
-                                        placeholder="Email"
+                                        placeholder={translate(
+                                            'signup.form_fields.email'
+                                        )}
                                     />
                                     {meta.error && meta.touched && (
                                         <Message error visible={true}>
@@ -115,10 +119,7 @@ const SignupForm = props => {
                                     )}
                                     {meta.touched && !meta.error && (
                                         <Message warning visible={true}>
-                                            Du behøver ikke indtaste en
-                                            email-adresse, men hvis du glemmer
-                                            dine loginoplysninger uden den, kan
-                                            du ikke få din bruger tilbage.
+                                            <Translate id="signup.form_fields.email_not_required_message" />
                                         </Message>
                                     )}
                                 </div>
@@ -139,11 +140,17 @@ const SignupForm = props => {
                                             : '')
                                     }
                                 >
-                                    <label>Kodeord</label>
+                                    <label>
+                                        {translate(
+                                            'signup.form_fields.password'
+                                        )}
+                                    </label>
                                     <input
                                         {...input}
                                         type="password"
-                                        placeholder="Kodeord"
+                                        placeholder={translate(
+                                            'signup.form_fields.password'
+                                        )}
                                     />
                                     {meta.error && meta.touched && (
                                         <Message
@@ -172,11 +179,17 @@ const SignupForm = props => {
                                             : '')
                                     }
                                 >
-                                    <label>Gentag kodeord</label>
+                                    <label>
+                                        {translate(
+                                            'signup.form_fields.password_repeat'
+                                        )}
+                                    </label>
                                     <input
                                         {...input}
                                         type="password"
-                                        placeholder="Gentag kodeord"
+                                        placeholder={translate(
+                                            'signup.form_fields.password_repeat'
+                                        )}
                                     />
                                     {meta.error && meta.touched && (
                                         <Message error visible={true}>
@@ -188,7 +201,7 @@ const SignupForm = props => {
                         </Field>
                         <Divider hidden />
                         <Button disabled={pristine || invalid}>
-                            Opret bruger
+                            <Translate id="signup.form_fields.submit" />
                         </Button>
                     </form>
                 );
@@ -197,9 +210,35 @@ const SignupForm = props => {
     );
 };
 
+SignupForm.propTypes = {
+    /**
+     * Func der tjekker om brugernavn/email er brugt allerede
+     * Fra redux
+     */
+    checkUserAvailability: PropTypes.func,
+
+    /**
+     * Func der opretter brugeren i DB
+     * Fra redux
+     */
+    signup: PropTypes.func,
+
+    /**
+     * Func der kan oversætte strenge uden for (og inde i) React components
+     * Fra react-localize-redux' Redux helpers
+     */
+    translate: PropTypes.func,
+
+    /**
+     * Fra react-router
+     */
+    history: ReactRouterPropTypes.history,
+};
+
 function mapStateToProps(state) {
     return {
-        auth: state.auth,
+        currentLanguage: state.settings.language,
+        translate: getTranslate(state.localize),
     };
 }
 

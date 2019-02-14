@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../../actions';
 
 import { Container, Message, Form, Button } from 'semantic-ui-react';
+import { Translate } from 'react-localize-redux';
 
 import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
@@ -32,11 +33,11 @@ class ForgotPassword extends Component {
             <div className="flex-container">
                 <Header />
                 <Container className="content">
-                    <h3>Glemt kodeord?</h3>
+                    <h3>
+                        <Translate id="forgotPassword.header" />
+                    </h3>
                     <p>
-                        Indtast din emailadresse nedenfor, og du vil modtage en
-                        mail med et link til nulstilling af dit kodeord. Du har
-                        1 time til at gøre dette – ellers må du prøve igen.
+                        <Translate id="forgotPassword.guide" />
                     </p>
                     <Form onSubmit={this.handleSubmit}>
                         <Form.Field>

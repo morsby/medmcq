@@ -7,7 +7,7 @@ export const emailValid = email => {
         "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
     );
     let res = validator.test(email);
-    return res ? '' : 'Ikke en gyldig adresse';
+    return res ? '' : 'Ikke en gyldig adresse / Not a valid address';
 };
 
 export const passwordValid = pwd => {
@@ -29,28 +29,28 @@ export const passwordValid = pwd => {
         });
 
         if (strength < 3 || !length) {
-            return 'Skal være mindst 8 tegn og kræver mindst tre af følgende: store bogstaver, små bogstaver, tal, specielle tegn.';
+            return 'Skal være mindst 8 tegn og kræver mindst tre af følgende: store bogstaver, små bogstaver, tal, specielle tegn. / Must be at least 8 characters and requires three of the following: capital letters, non-capital letters, numbers and special characters.';
         } else return null;
     }
 };
 
 export const passwordRepeatValid = (pwdRepeat, allValues) => {
     if (pwdRepeat !== allValues.password) {
-        return 'De to adgangskoder matcher ikke';
+        return 'De to adgangskoder matcher ikke / The two passwords do not match';
     } else return null;
 };
 
 // LOGIN
-export const loginUsernameValid = async username => {
+export const loginUsernameValid = username => {
     if (!username) {
-        return 'Du skal indtaste et brugernavn!';
+        return 'Du skal indtaste et brugernavn / You must provide a username';
     }
     return null;
 };
 
 export const loginPasswordValid = pwd => {
     if (!pwd) {
-        return 'Du skal indtaste en adgangskode';
+        return 'Du skal indtaste en adgangskode / You must enter a password';
     }
     return null;
 };

@@ -6,6 +6,7 @@ import { urls } from '../../../utils/common';
 import * as validation from '../../../utils/formValidation';
 import { Container, Message, Button, Divider } from 'semantic-ui-react';
 import { Form, Field } from 'react-final-form';
+import { Translate } from 'react-localize-redux';
 
 import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
@@ -39,173 +40,226 @@ class EditProfile extends Component {
             <div className="flex-container">
                 <Header />
                 <Container className="content">
-                    <h3>Herunder kan du ændre din email og dit kodeord</h3>
-                    <Form
-                        onSubmit={this.onSubmit}
-                        initialValues={{ email: this.props.auth.user.email }}
-                        render={({
-                            handleSubmit,
-                            pristine,
-                            invalid,
-                            values,
-                            form,
-                        }) => {
-                            return (
-                                <form
-                                    onSubmit={event => {
-                                        handleSubmit(event)
-                                            .then(
-                                                () =>
-                                                    new Promise(
-                                                        (resolve, reject) =>
-                                                            this.props
-                                                                .fetchUser()
-                                                                .then(resolve)
+                    <h3>
+                        <Translate id="editProfile.header" />
+                    </h3>
+                    <p>
+                        <Translate id="editProfile.subheader" />
+                    </p>
+                    <Translate>
+                        {({ translate }) => (
+                            <Form
+                                onSubmit={this.onSubmit}
+                                initialValues={{
+                                    email: this.props.auth.user.email,
+                                }}
+                                render={({
+                                    handleSubmit,
+                                    pristine,
+                                    invalid,
+                                    form,
+                                }) => {
+                                    return (
+                                        <form
+                                            onSubmit={event => {
+                                                handleSubmit(event)
+                                                    .then(
+                                                        () =>
+                                                            new Promise(
+                                                                resolve =>
+                                                                    this.props
+                                                                        .fetchUser()
+                                                                        .then(
+                                                                            resolve
+                                                                        )
+                                                            )
                                                     )
-                                            )
-                                            .then(() => form.reset());
-                                    }}
-                                    className="ui form custom"
-                                >
-                                    <Field
-                                        name="email"
-                                        validate={validation.emailValid}
-                                    >
-                                        {({ input, meta }) => (
-                                            <div
-                                                className={
-                                                    'field ' +
-                                                    (meta.error && meta.touched
-                                                        ? 'error'
-                                                        : '')
-                                                }
-                                            >
-                                                <label>Email</label>
-                                                <input
-                                                    {...input}
-                                                    type="email"
-                                                    placeholder="E-mail"
-                                                />
-                                                {meta.error && meta.touched && (
-                                                    <Message
-                                                        error
-                                                        visible={true}
-                                                    >
-                                                        {meta.error}
-                                                    </Message>
-                                                )}
-                                                {meta.touched && !meta.error && (
-                                                    <Message
-                                                        warning
-                                                        visible={true}
-                                                    >
-                                                        Du behøver ikke indtaste
-                                                        en email-adresse, men
-                                                        hvis du glemmer dine
-                                                        loginoplysninger uden
-                                                        den, kan du ikke få din
-                                                        bruger tilbage.
-                                                    </Message>
-                                                )}
-                                            </div>
-                                        )}
-                                    </Field>
-                                    <Field
-                                        name="password"
-                                        validate={validation.passwordValid}
-                                    >
-                                        {({ input, meta }) => (
-                                            <div
-                                                className={
-                                                    'field ' +
-                                                    (meta.error && meta.touched
-                                                        ? 'error'
-                                                        : '')
-                                                }
-                                            >
-                                                <label>Nyt kodeord</label>
-                                                <input
-                                                    {...input}
-                                                    type="password"
-                                                    placeholder="Efterlad blankt for at beholde koden"
-                                                />
-                                                {meta.error && meta.touched && (
-                                                    <Message
-                                                        error
-                                                        visible={true}
-                                                        size="small"
-                                                    >
-                                                        {meta.error}
-                                                    </Message>
-                                                )}
-                                            </div>
-                                        )}
-                                    </Field>
-                                    <Divider hidden />
-                                    <Field
-                                        name="password-repeat"
-                                        validate={
-                                            validation.passwordRepeatValid
-                                        }
-                                    >
-                                        {({ input, meta }) => (
-                                            <div
-                                                className={
-                                                    'field ' +
-                                                    (meta.error && meta.touched
-                                                        ? 'error'
-                                                        : '')
-                                                }
-                                            >
-                                                <label>
-                                                    Gentag nyt kodeord
-                                                </label>
-                                                <input
-                                                    {...input}
-                                                    type="password"
-                                                    placeholder="Gentag nyt kodeord"
-                                                />
-                                                {meta.error && meta.touched && (
-                                                    <Message
-                                                        error
-                                                        visible={true}
-                                                    >
-                                                        {meta.error}
-                                                    </Message>
-                                                )}
-                                            </div>
-                                        )}
-                                    </Field>
-                                    {message && (
-                                        <Message
-                                            negative={message.type === 'error'}
-                                            positive={
-                                                message.type === 'success'
-                                            }
+                                                    .then(() => form.reset());
+                                            }}
+                                            className="ui form custom"
                                         >
-                                            {message.data}
-                                        </Message>
-                                    )}
-                                    <Divider hidden />
+                                            <Field
+                                                name="email"
+                                                validate={validation.emailValid}
+                                            >
+                                                {({ input, meta }) => (
+                                                    <div
+                                                        className={
+                                                            'field ' +
+                                                            (meta.error &&
+                                                            meta.touched
+                                                                ? 'error'
+                                                                : '')
+                                                        }
+                                                    >
+                                                        <label>
+                                                            {translate(
+                                                                'editProfile.form_fields.email'
+                                                            )}
+                                                        </label>
+                                                        <input
+                                                            {...input}
+                                                            type="email"
+                                                            placeholder={translate(
+                                                                'editProfile.form_fields.email'
+                                                            )}
+                                                        />
+                                                        {meta.error &&
+                                                            meta.touched && (
+                                                                <Message
+                                                                    error
+                                                                    visible={
+                                                                        true
+                                                                    }
+                                                                >
+                                                                    {meta.error}
+                                                                </Message>
+                                                            )}
+                                                        {meta.touched &&
+                                                            !meta.error && (
+                                                                <Message
+                                                                    warning
+                                                                    visible={
+                                                                        true
+                                                                    }
+                                                                >
+                                                                    {translate(
+                                                                        'signup.form_fields.email_not_required_message'
+                                                                    )}
+                                                                </Message>
+                                                            )}
+                                                    </div>
+                                                )}
+                                            </Field>
+                                            <Field
+                                                name="password"
+                                                validate={
+                                                    validation.passwordValid
+                                                }
+                                            >
+                                                {({ input, meta }) => (
+                                                    <div
+                                                        className={
+                                                            'field ' +
+                                                            (meta.error &&
+                                                            meta.touched
+                                                                ? 'error'
+                                                                : '')
+                                                        }
+                                                    >
+                                                        <label>
+                                                            {translate(
+                                                                'editProfile.form_fields.new_password'
+                                                            )}
+                                                        </label>
+                                                        <input
+                                                            {...input}
+                                                            type="password"
+                                                            placeholder={translate(
+                                                                'editProfile.form_fields.new_password_placeholder'
+                                                            )}
+                                                        />
+                                                        {meta.error &&
+                                                            meta.touched && (
+                                                                <Message
+                                                                    error
+                                                                    visible={
+                                                                        true
+                                                                    }
+                                                                    size="small"
+                                                                >
+                                                                    {meta.error}
+                                                                </Message>
+                                                            )}
+                                                    </div>
+                                                )}
+                                            </Field>
+                                            <Divider hidden />
+                                            <Field
+                                                name="password-repeat"
+                                                validate={
+                                                    validation.passwordRepeatValid
+                                                }
+                                            >
+                                                {({ input, meta }) => (
+                                                    <div
+                                                        className={
+                                                            'field ' +
+                                                            (meta.error &&
+                                                            meta.touched
+                                                                ? 'error'
+                                                                : '')
+                                                        }
+                                                    >
+                                                        <label>
+                                                            {translate(
+                                                                'editProfile.form_fields.new_password_repeat'
+                                                            )}
+                                                        </label>
+                                                        <input
+                                                            {...input}
+                                                            type="password"
+                                                            placeholder={translate(
+                                                                'editProfile.form_fields.new_password_repeat'
+                                                            )}
+                                                        />
+                                                        {meta.error &&
+                                                            meta.touched && (
+                                                                <Message
+                                                                    error
+                                                                    visible={
+                                                                        true
+                                                                    }
+                                                                >
+                                                                    {meta.error}
+                                                                </Message>
+                                                            )}
+                                                    </div>
+                                                )}
+                                            </Field>
+                                            {message && (
+                                                <Message
+                                                    negative={
+                                                        message.type === 'error'
+                                                    }
+                                                    positive={
+                                                        message.type ===
+                                                        'success'
+                                                    }
+                                                >
+                                                    {message.data}
+                                                </Message>
+                                            )}
+                                            <Divider hidden />
 
-                                    <Button disabled={pristine || invalid}>
-                                        Rediger profil
-                                    </Button>
+                                            <Button
+                                                disabled={pristine || invalid}
+                                            >
+                                                {translate(
+                                                    'editProfile.form_fields.submit'
+                                                )}
+                                            </Button>
 
-                                    <Button
-                                        floated="right"
-                                        basic
-                                        color="yellow"
-                                        onClick={() =>
-                                            this.handleNavigation('profile')
-                                        }
-                                    >
-                                        Tilbage til din profil
-                                    </Button>
-                                </form>
-                            );
-                        }}
-                    />
+                                            <Button
+                                                floated="right"
+                                                basic
+                                                color="yellow"
+                                                onClick={() =>
+                                                    this.handleNavigation(
+                                                        'profile'
+                                                    )
+                                                }
+                                            >
+                                                {translate(
+                                                    'editProfile.form_fields.abort'
+                                                )}
+                                            </Button>
+                                        </form>
+                                    );
+                                }}
+                            />
+                        )}
+                    </Translate>
                 </Container>
                 <Footer />
             </div>

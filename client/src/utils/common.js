@@ -18,10 +18,10 @@ export const urls = {
 };
 
 export const semestre = [
-    { text: '7. semester (Inflammation)', value: 7 },
-    { text: '8. semester (Abdomen)', value: 8 },
-    /*{ text: "9. semester (Hjerte-lunge-kar)", value: 9 },
-    { text: "11. semester (Familie-samfund / GOP)", value: 11 } */
+    { text: '7. semester (Inflammation)', value: 7, name: 'Inflammation' },
+    { text: '8. semester (Abdomen)', value: 8, name: 'Abdomen' },
+    /*{ text: "9. semester (Hjerte-lunge-kar)", value: 9, name: "HLK" },
+    { text: "11. semester (Familie-samfund / GOP)", value: 11, name: "GOP" } */
 ];
 
 export const specialer = {

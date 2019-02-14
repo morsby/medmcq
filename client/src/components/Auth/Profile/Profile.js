@@ -8,7 +8,8 @@ import { urls, semestre } from '../../../utils/common';
 import { semesterIndices } from '../../../utils/auth';
 import _ from 'lodash';
 
-import { Container, Tab, List, Button, Divider } from 'semantic-ui-react';
+import { Container, Tab, Button, Divider } from 'semantic-ui-react';
+import { Translate } from 'react-localize-redux';
 
 import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
@@ -71,31 +72,47 @@ class Profile extends Component {
             <div>
                 <p>
                     <strong>
-                        Du har svaret på {totalAnswers} forskellige spørgsmål
+                        <Translate
+                            id="profile.activity.summary"
+                            data={{ total: totalAnswers }}
+                        />
                     </strong>
                 </p>
                 <div>
-                    <p>Af dem har du svaret</p>
-                    <List bulleted className="analysis">
-                        <List.Item>
-                            <span>rigtigt</span> <em>hver</em> gang på{' '}
-                            {allRight.length} spørgsmål
-                        </List.Item>
-                        <List.Item>
-                            <span>forkert</span> <em>hver</em> gang på{' '}
-                            {allWrong.length} spørgsmål
-                        </List.Item>
-                        <List.Item>
-                            <span>både</span> rigtigt <em>og</em> forkert på{' '}
-                            {mixed.length} spørgsmål
-                        </List.Item>
-                    </List>
+                    <p>
+                        <Translate id="profile.activity.answers.header" />
+                    </p>
+                    <ul className="ui list analysis">
+                        <li className="item">
+                            <Translate
+                                id="profile.activity.answers.correct"
+                                data={{ n: allRight.length }}
+                            />
+                        </li>
+                        <li className="item">
+                            <Translate
+                                id="profile.activity.answers.wrong"
+                                data={{ n: allWrong.length }}
+                            />
+                        </li>
+                        <li className="item">
+                            <Translate
+                                id="profile.activity.answers.mixed"
+                                data={{ n: mixed.length }}
+                            />
+                        </li>
+                    </ul>
                 </div>
                 <Divider hidden />
-                <p>Du har kommenteret på {user.comments.length} spørgsmål. </p>
+                <p>
+                    <Translate
+                        id="profile.activity.comments"
+                        data={{ n: user.comments.length }}
+                    />
+                </p>
                 {user.comments.length > 0 && (
                     <Button basic onClick={() => this.startQuiz(user.comments)}>
-                        Se om der er kommet nye kommentarer på disse spørgsmål.
+                        <Translate id="profile.activity.see_comments_link" />
                     </Button>
                 )}
 
@@ -104,7 +121,11 @@ class Profile extends Component {
                     onClick={this.toggleDetails}
                     disabled={totalAnswers === 0}
                 >
-                    {this.state.details ? 'Skjul' : 'Vis'} detaljer
+                    {this.state.details ? (
+                        <Translate id="profile.details.hide_details" />
+                    ) : (
+                        <Translate id="profile.details.show_details" />
+                    )}
                 </Button>
             </div>
         );
@@ -112,11 +133,13 @@ class Profile extends Component {
 
     render() {
         const { performance, user } = this.props.auth,
-            semesters = _.map(semestre, 'value');
-        let panes = [];
-        semesters.map(e =>
+            currentLanguage = this.props.settings.language,
+            panes = [];
+        _.map(semestre, e =>
             panes.push({
-                menuItem: `${e}. semester`,
+                menuItem: `${e.value}${
+                    currentLanguage === 'dk' ? '.' : 'th'
+                } semester (${e.name})`,
                 render: () => (
                     <Tab.Pane>
                         {this.generateTabContent(performance, user)}
@@ -135,7 +158,7 @@ class Profile extends Component {
                         color="yellow"
                         onClick={() => this.handleNavigation('editProfile')}
                     >
-                        Rediger profil
+                        <Translate id="profile.buttons.edit_profile" />
                     </Button>
                     <Button
                         floated="right"
@@ -144,12 +167,11 @@ class Profile extends Component {
                             (window.location.href = '/api/auth/logout')
                         }
                     >
-                        Log ud
+                        <Translate id="profile.buttons.logout" />
                     </Button>
                     <Divider hidden />
                     <p>
-                        Herunder kan du se, hvordan du har klaret dig for hvert
-                        semester
+                        <Translate id="profile.subheader" />
                     </p>
                     <Tab
                         panes={panes}
@@ -161,6 +183,7 @@ class Profile extends Component {
                         <ProfileAnswerDetails
                             performance={performance}
                             filter={this.state.filter}
+                            language={currentLanguage}
                         />
                     )}
                 </Container>

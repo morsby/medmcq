@@ -24,6 +24,7 @@ Hvis et punkt er tildelt en udvikler, vil det fremgå med navn og/eller `branch`
 - [ ] Oprydning (særligt `routes/questions.js`)
 - [ ] Brug Router module (Thomas - `api-cleaning`)
 - [ ] async/await syntax (Thomas - `api-cleaning`)
+- [ ] Flyt user/auth-validation meddelelser ud af API'en og ind i react (for bedre oversættelser)
 
 ### React
 

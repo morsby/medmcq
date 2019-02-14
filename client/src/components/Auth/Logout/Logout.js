@@ -7,6 +7,7 @@ import * as actions from '../../../actions';
 
 import { Container } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
+import { Translate } from 'react-localize-redux';
 
 import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
@@ -19,7 +20,16 @@ const Logout = ({ fetchUser }) => {
             <Container className="content">
                 <h3>Du er nu logget ud.</h3>
                 <p>
-                    Gå tilbage til <Link to="/">forsiden</Link>
+                    <Translate
+                        id="logout.return_to_front"
+                        data={{
+                            link: (
+                                <Link to="/">
+                                    <Translate id="logout.frontpage" />
+                                </Link>
+                            ),
+                        }}
+                    />
                 </p>
             </Container>
             <Footer />
