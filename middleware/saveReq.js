@@ -1,5 +1,5 @@
 // Lav logs-collection
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
@@ -22,47 +22,36 @@ var LogSchema = new Schema({
     logged_in: { type: Boolean, default: false }
 });
 
-let Logs = mongoose.model("Logs", LogSchema);
+let Logs = mongoose.model('Logs', LogSchema);
 
 const saveReq = function(req, res, next) {
     /// Fører statistik over: api/questions, /api/questions/ids/, /api/questions/answer
     if (
-        (req.path === "/api/questions/ids" &&
-            req.body.purpose !== "profile-stats") ||
-        req.path === "/api/questions" ||
-        req.path === "/api/questions/answer"
+        (req.path === '/api/questions/ids' && req.body.purpose !== 'profile-stats') ||
+        req.path === '/api/questions' ||
+        req.path === '/api/questions/answer'
     ) {
-        let {
-            n,
-            specialer,
-            unique,
-            semester,
-            examSeason,
-            examYear
-        } = req.query;
+        let { n, specialer, unique, semester, examSeason, examYear } = req.query;
         let log = new Logs();
 
         if (req.user) log.logged_in = true;
 
-        if (
-            req.path === "/api/questions/ids" ||
-            req.path === "/api/questions"
-        ) {
-            log.log_type = "fetch_question";
+        if (req.path === '/api/questions/ids' || req.path === '/api/questions') {
+            log.log_type = 'fetch_question';
             log.fetch_semester = semester;
             log.fetch_n = n;
-            log.fetch_specialty = specialer ? specialer.split(",") : undefined;
+            log.fetch_specialty = specialer ? specialer.split(',') : undefined;
 
             log.fetch_unique = unique;
 
             // Hvis der ikke er hverken antal, semester eller postes (for at bede om ids)
-            if (!n && !semester && req.method === "GET") {
-                log.fetch_type = "all";
+            if (!n && !semester && req.method === 'GET') {
+                log.fetch_type = 'all';
             } else if (semester && examSeason && examYear) {
                 // Hent det eksamenssæt der bedes om
-                log.fetch_type = "set";
+                log.fetch_type = 'set';
                 log.fetch_set = `${examYear}/${examSeason}`;
-            } else if (req.method === "GET") {
+            } else if (req.method === 'GET') {
                 /* Der ønskes hverken alle spg. eller et sæt; så vi skal udregne
                     hvilke, vi vil have, ud fra diverse parametre
                 */
@@ -76,24 +65,24 @@ const saveReq = function(req, res, next) {
 
                 // Beder der om specialer?
                 if (specialer) {
-                    log.fetch_type = "specialty";
+                    log.fetch_type = 'specialty';
                 } else {
-                    log.fetch_type = "random";
+                    log.fetch_type = 'random';
                 }
             }
 
-            if (req.path === "/api/questions/ids" && req.method === "POST") {
-                log.fetch_type = "ids";
+            if (req.path === '/api/questions/ids' && req.method === 'POST') {
+                log.fetch_type = 'ids';
             }
-        } else if (req.path === "/api/questions/answer") {
+        } else if (req.path === '/api/questions/answer') {
             log.fetch_specialty = undefined; // for at undgå tomt array
-            log.log_type = "answer";
+            log.log_type = 'answer';
             log.answer_question_id = req.body.questionId;
-            log.answer_correct = req.body.answer === "correct" ? true : false;
+            log.answer_correct = req.body.answer === 'correct' ? true : false;
             log.answer_answer = req.body.answerNo; // skal postes med
         }
         log.save(err => {
-            if (err) res.send(err);
+            if (err) res.status(400).send(err);
         });
     }
     next();
