@@ -1,10 +1,7 @@
 import axios from 'axios';
 import * as types from './types';
 
-export const getQuestions = (
-    settings,
-    requestedIds = null
-) => async dispatch => {
+export const getQuestions = (settings, requestedIds = null) => async dispatch => {
     let { type, semester, specialer, n, onlyNew, set } = settings;
 
     dispatch({ type: types.IS_FETCHING });
@@ -14,16 +11,14 @@ export const getQuestions = (
     switch (type) {
         case 'ids':
             res = await axios.post('/api/questions/ids', {
-                ids: requestedIds,
+                ids: requestedIds
             });
             break;
         case 'set':
             set = set.split('/');
 
             res = await axios.get(
-                `/api/questions?semester=${semester}&examYear=${
-                    set[0]
-                }&examSeason=${set[1]}`
+                `/api/questions?semester=${semester}&examYear=${set[0]}&examSeason=${set[1]}`
             );
             break;
         case 'random':
@@ -52,22 +47,16 @@ export const getQuestions = (
     dispatch({
         type: types.FETCH_QUESTIONS,
         payload: res.data,
-        questionType: type,
+        questionType: type
     });
 };
 
-export const answerQuestion = (
-    id,
-    answer,
-    correct,
-    semester,
-    user = null
-) => dispatch => {
+export const answerQuestion = (id, answer, correct, semester, user = null) => dispatch => {
     let post = {
         questionId: id,
         answer: correct.correct ? 'correct' : 'wrong',
         answerNo: answer,
-        semester,
+        semester
     };
     if (user) axios.post('/api/questions/answer', post);
 
@@ -96,53 +85,43 @@ export const postQuestion = post => async dispatch => {
 
 export const commentQuestion = (id, comment) => async dispatch => {
     const res = await axios.put(`/api/questions/${id}/comment`, {
-        comment,
+        comment
     });
     dispatch({
         type: types.QUESTION_COMMENT_UPDATE,
-        payload: res.data,
+        payload: res.data
     });
 };
 
 export const deleteComment = (question_id, comment_id) => async dispatch => {
-    const res = await axios.delete(
-        `/api/questions/${question_id}/comment/${comment_id}`
-    );
+    const res = await axios.delete(`/api/questions/${question_id}/comment/${comment_id}`);
 
     dispatch({
         type: types.QUESTION_COMMENT_UPDATE,
-        payload: res.data,
+        payload: res.data
     });
 };
 
-export const editComment = (
-    question_id,
-    comment_id,
-    comment
-) => async dispatch => {
-    const res = await axios.put(
-        `/api/questions/${question_id}/comment/${comment_id}`,
-        {
-            comment,
-        }
-    );
+export const editComment = (question_id, comment_id, comment) => async dispatch => {
+    const res = await axios.put(`/api/questions/${question_id}/comment/${comment_id}`, {
+        comment
+    });
+
+    console.log(res.data);
 
     dispatch({
         type: types.QUESTION_COMMENT_UPDATE,
-        payload: {
-            questionId: question_id,
-            comments: res.data,
-        },
+        payload: res.data
     });
 };
 
 export const editSpecialties = (questionId, specialty) => async dispatch => {
     const res = await axios.put(`/api/questions/${questionId}/specialty`, {
-        specialty,
+        specialty
     });
 
     dispatch({
         type: types.QUESTION_SPECIALTY_UPDATE,
-        payload: res.data,
+        payload: res.data
     });
 };

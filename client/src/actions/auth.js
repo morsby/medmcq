@@ -4,13 +4,13 @@ import * as types from './types';
 export const checkUserAvailability = (field, value) => async () => {
     let res = await axios.post(`/api/auth/check-availability`, {
         field,
-        value,
+        value
     });
     return res.data;
 };
 
 export const signup = post => async dispatch => {
-    let res = await axios.post('/api/signup', post);
+    let res = await axios.post('/api/user', post);
 
     //dispatch({ type: types.AUTH_SIGNUP, payload: res.data });
     return res.data;
@@ -54,7 +54,7 @@ export const getAnsweredQuestions = answers => async dispatch => {
     if (ids.length > 0) {
         const res = await axios.post('/api/questions/ids', {
             ids: ids,
-            purpose: 'profile-stats',
+            purpose: 'profile-stats'
         });
 
         questions = res.data;
@@ -62,7 +62,7 @@ export const getAnsweredQuestions = answers => async dispatch => {
     dispatch({
         type: types.AUTH_GET_ANSWERED_QUESTIONS,
         answers,
-        questions,
+        questions
     });
 };
 

@@ -1,18 +1,19 @@
 require('dotenv').config();
-
-// server.js
-const helmet = require('helmet');
-const comment = require('./routes/comment');
-
-// BASE SETUP
+const sslRedirect = require('heroku-ssl-redirect');
+const express = require('express');
+const app = express();
 const keys = require('./config/keys');
-
-// call the packages we need
-var sslRedirect = require('heroku-ssl-redirect');
-var express = require('express');
-var app = express();
-
-// Mandatory Middleware for secure HTTP headers
+const passport = require('passport');
+const cookieParser = require('cookie-parser');
+const session = require('cookie-session');
+const helmet = require('helmet');
+const port = process.env.PORT || 3001; // set our port
+// APIs
+const feedback = require('./routes/feedback');
+const question = require('./routes/question');
+const auth = require('./routes/auth');
+const user = require('./routes/user');
+// Third Party middleware
 app.use(helmet());
 
 // if heroku, force SSL
@@ -23,13 +24,14 @@ if (process.env.NODE_ENV === 'production') {
 // Database
 const mongoose = require('mongoose');
 mongoose.set('useCreateIndex', true);
-mongoose.connect(keys.mongoURI, { useNewUrlParser: true });
+mongoose
+    .connect(keys.mongoURI, { useNewUrlParser: true })
+    .then(console.log('Successfully connected to database'))
+    .catch(err => {
+        if (err) console.log('Could not connect to database', err);
+    });
 
 // For logins:
-var passport = require('passport');
-var cookieParser = require('cookie-parser');
-var session = require('cookie-session');
-
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(
     session({
@@ -45,29 +47,20 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 
 // bodyParser tillader JSON-posts
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
-// multer tillader filuploads (billeder til spørgsmål)
-const multer = require('multer');
-const cloudinary = require('cloudinary');
-
-var port = process.env.PORT || 3001; // set our port
-
-// ROUTES
-var router = express.Router();
 
 // log requests to DB
 const saveReq = require('./middleware/saveReq');
 
 app.use(saveReq);
 
-// more routes for our API will happen here
-require('./routes/question')(app);
-require('./routes/feedback')(app);
-require('./routes/comment')(app);
-require('./routes/user')(app);
+// APIs
+app.use('/api/questions', question);
+app.use('/api/feedback', feedback);
+app.use('/api/auth', auth);
+app.use('/api/user', user);
 
 // Registrer alle routes fra denne fil (prefixed '/api')
 //app.use('/api', router);

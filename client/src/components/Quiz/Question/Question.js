@@ -7,14 +7,7 @@ import marked from 'marked';
 import { imageURL, breakpoints } from '../../../utils/common';
 import { subSupScript } from '../../../utils/quiz';
 
-import {
-    Container,
-    Grid,
-    Divider,
-    Segment,
-    Button,
-    Responsive,
-} from 'semantic-ui-react';
+import { Container, Grid, Divider, Segment, Button, Responsive } from 'semantic-ui-react';
 
 import { Translate } from 'react-localize-redux';
 
@@ -72,7 +65,7 @@ class Question extends Component {
          * Defaults til allerede kendte værdier
          * @type {Array]
          */
-        selectedSpecialties: this.props.question.specialty,
+        selectedSpecialties: this.props.question.specialty
     };
 
     constructor(props) {
@@ -114,7 +107,7 @@ class Question extends Component {
                 editingComment: '',
                 pristine: true,
                 selectedSpecialties: this.props.question.specialty,
-                editingSpecialties: false,
+                editingSpecialties: false
             });
             this.mouseMover();
         }
@@ -138,18 +131,10 @@ class Question extends Component {
      * Tager højde for modifier keys (alt, ctrl, meta)
      */
     onKeydown(e) {
-        if (
-            !this.state.imgOpen &&
-            document.activeElement.tagName !== 'TEXTAREA'
-        ) {
+        if (!this.state.imgOpen && document.activeElement.tagName !== 'TEXTAREA') {
             let answer = Number(e.key),
                 keys = [1, 2, 3];
-            if (
-                keys.includes(answer) &&
-                !e.altKey &&
-                !e.ctrlKey &&
-                !e.metaKey
-            ) {
+            if (keys.includes(answer) && !e.altKey && !e.ctrlKey && !e.metaKey) {
                 this.onAnswer(answer);
             }
         }
@@ -167,9 +152,7 @@ class Question extends Component {
             // Er svaret korrekt? Tager højde for flere korrekte svarmuligheder
             let correct;
             if (Array.isArray(question.correctAnswer)) {
-                correct = question.correctAnswer.includes(answer)
-                    ? true
-                    : false;
+                correct = question.correctAnswer.includes(answer) ? true : false;
             } else {
                 correct = question.correctAnswer === answer;
             }
@@ -180,7 +163,7 @@ class Question extends Component {
                 answer,
                 {
                     qn: qn,
-                    correct: correct,
+                    correct: correct
                 },
                 question.semester,
                 user
@@ -234,10 +217,7 @@ class Question extends Component {
                 /**
                  *  Det er en ny kommentar
                  */
-                this.props.commentQuestion(
-                    this.props.question._id,
-                    this.state.newComment
-                );
+                this.props.commentQuestion(this.props.question._id, this.state.newComment);
             }
             this.setState({ newComment: '', editingComment: '' });
         }
@@ -258,7 +238,7 @@ class Question extends Component {
     onEditComment(comment) {
         this.setState({
             newComment: comment.comment,
-            editingComment: comment._id,
+            editingComment: comment._id
         });
     }
 
@@ -284,10 +264,7 @@ class Question extends Component {
     }
 
     onSaveSpecialties() {
-        this.props.editSpecialties(
-            this.props.question._id,
-            this.state.selectedSpecialties
-        );
+        this.props.editSpecialties(this.props.question._id, this.state.selectedSpecialties);
         this.setState({ editingSpecialties: false });
     }
 
@@ -305,15 +282,12 @@ class Question extends Component {
                                     style={{ fontSize: '18px' }}
                                     dangerouslySetInnerHTML={{
                                         __html: marked(text, {
-                                            smartypants: true,
-                                        }),
+                                            smartypants: true
+                                        })
                                     }}
                                     ref={ref => (this._div = ref)}
                                 />
-                                <Responsive
-                                    as="div"
-                                    minWidth={breakpoints.mobile + 1}
-                                >
+                                <Responsive as="div" minWidth={breakpoints.mobile + 1}>
                                     <Divider />
 
                                     <QuestionAnswerButtons
@@ -355,23 +329,15 @@ class Question extends Component {
 
                     <Button basic onClick={this.onCommentsToggle}>
                         <Translate>
-                            {({
-                                translate,
-                                activeLanguage = { code: 'dk' },
-                            }) => {
-                                let visSkjul = this.state.commentsOpen
-                                    ? 'Skjul'
-                                    : 'Vis';
+                            {({ translate, activeLanguage = { code: 'dk' } }) => {
+                                let visSkjul = this.state.commentsOpen ? 'Skjul' : 'Vis';
                                 if (activeLanguage.code === 'gb') {
-                                    visSkjul = visSkjul.replace(
-                                        'Skjul',
-                                        'Hide'
-                                    );
+                                    visSkjul = visSkjul.replace('Skjul', 'Hide');
                                     visSkjul = visSkjul.replace('Vis', 'Show');
                                 }
                                 return translate('question.show_comments', {
                                     visSkjul,
-                                    n: question.comments.length,
+                                    n: question.comments.length
                                 });
                             }}
                         </Translate>
@@ -443,7 +409,7 @@ Question.propTypes = {
      * Action der kaldes når der ændres specialer. Fra redux.
      * @type {func}
      */
-    editSpecialties: PropTypes.func,
+    editSpecialties: PropTypes.func
 };
 
 export default connect(

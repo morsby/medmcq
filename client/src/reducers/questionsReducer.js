@@ -17,10 +17,7 @@ export default createReducer(initialState, {
     [types.FETCH_QUESTIONS]: (state, action) => {
         let qs = action.payload;
         // Shuffle questions if not in set
-        if (
-            action.questionType === 'specialer' ||
-            action.questionType === 'random'
-        ) {
+        if (action.questionType === 'specialer' || action.questionType === 'random') {
             qs = _.shuffle(qs);
         }
         return qs || false;
@@ -54,5 +51,5 @@ export default createReducer(initialState, {
         const index = _.findIndex(state, { _id });
 
         state[index].specialty = specialty;
-    },
+    }
 });

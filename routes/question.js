@@ -1,128 +1,116 @@
+// Route for /api/questions
+
+const express = require('express');
+const router = express.Router();
 const permit = require('../permission'); // middleware for checking if user's role is permitted to make request
-
-var _ = require('lodash');
-
+const _ = require('lodash');
+// Middleware
+const auth = require('../middleware/auth');
 // MODELS
 const Question = require('../models/question.js');
 const User = require('../models/user.js');
 
 // TODO: Før statistik over get("/api/questions"), post("/api/questions/ids/"), post("/api/questions/answer")
 
-module.exports = app => {
-    // GET: spørgsmål
-    app.get('/api/questions', (req, res) => {
-        let {
-            n,
-            specialer,
-            unique,
-            semester,
-            examSeason,
-            examYear,
-        } = req.query;
+// GET: spørgsmål
+router.get('/', async (req, res) => {
+    let { n, specialer, unique, semester, examSeason, examYear } = req.query;
 
-        /* 
+    /* 
             Nedenfor er nogle lidt vilde if-else statements.     
             De omhandler hvilke spørgsmål der ønskes
         */
 
-        if (!n && !semester) {
-            // Hent alle spørgsmål hvis der ikke er query params
-            Question.find(function(err, questions) {
-                if (err) res.send(err);
-
-                res.json(questions);
-            });
-        } else if (semester && examSeason && examYear) {
-            // Hent det eksamenssæt der bedes om
-            Question.find({
+    if (!n && !semester) {
+        // Hent alle spørgsmål hvis der ikke er query params
+        try {
+            const questions = await Question.find();
+            res.json(questions);
+        } catch (err) {
+            res.send(err);
+        }
+    } else if (semester && examSeason && examYear) {
+        // Hent det eksamenssæt der bedes om
+        try {
+            const questions = await Question.find({
                 semester: semester,
                 examYear: examYear,
-                examSeason: examSeason,
-            })
-                .sort('n')
-                .exec((err, questions) => {
+                examSeason: examSeason
+            }).sort('n');
+            res.json(questions);
+        } catch (err) {
+            res.send(err);
+        }
+    } else {
+        /* Der ønskes hverken alle spg. eller et sæt; så vi skal udregne hvilke, vi vil have, ud fra diverse parametre
+         */
+
+        // Er der ikke givet ønske om antal? Så hent max 9999 spørgsmål
+        if (!n) n = 9999;
+
+        let answeredQuestions = []; // skal initieres tomt pga. filter
+
+        // Hvis logget ind OG beder om "kun nye spørgsmål"
+        if (req.user && unique) {
+            let userAnsweredQuestions = req.user.answeredQuestions;
+            _.map(userAnsweredQuestions, s => answeredQuestions.push(Object.keys(s)));
+            answeredQuestions = _.flatten(answeredQuestions);
+        }
+
+        // Mongoose filter
+        let filter = {
+            _id: { $nin: answeredQuestions },
+            semester: { $eq: semester }
+        };
+
+        if (specialer) {
+            filter.specialty = { $in: specialer.split(',') };
+        }
+
+        Question.findRandom(filter, {}, { limit: n }, (err, questions) => {
+            if (err) res.send(err);
+
+            // Hvis der ikke er nogen spørgsmål ud fra filteret
+            // (pga. alle spørgsmål der opfylder kriterierne ER besvarede)
+            if (!questions) {
+                let filter2 = { ...filter };
+                delete filter2._id;
+                Question.findRandom(filter2, {}, { limit: n }, (err, questions) => {
                     if (err) res.send(err);
                     res.json(questions);
                 });
-        } else {
-            /* Der ønskes hverken alle spg. eller et sæt; så vi skal udregne
-                hvilke, vi vil have, ud fra diverse parametre
-            */
-
-            // Er der ikke givet ønske om antal? Så hent max 9999 spørgsmål
-            if (!n) n = 9999;
-
-            let answeredQuestions = []; // skal initieres tomt pga. filter
-
-            // Hvis logget ind OG beder om "kun nye spørgsmål"
-            if (req.user && unique) {
-                let userAnsweredQuestions = req.user.answeredQuestions;
-                _.map(userAnsweredQuestions, s =>
-                    answeredQuestions.push(Object.keys(s))
-                );
-                answeredQuestions = _.flatten(answeredQuestions);
+            } else {
+                res.json(questions);
             }
-
-            // Mongoose filter
-            let filter = {
-                _id: { $nin: answeredQuestions },
-                semester: { $eq: semester },
-            };
-
-            if (specialer) {
-                filter.specialty = { $in: specialer.split(',') };
-            }
-
-            // Find spørgsmål baseret på filteret
-            Question.findRandom(filter, {}, { limit: n }, (err, questions) => {
-                if (err) res.send(err);
-
-                // Hvis der ikke er nogen spørgsmål ud fra filteret
-                // (pga. alle spørgsmål der opfylder kriterierne ER besvarede)
-                if (!questions) {
-                    let filter2 = { ...filter };
-                    delete filter2._id;
-                    Question.findRandom(
-                        filter2,
-                        {},
-                        { limit: n },
-                        (err, questions) => {
-                            if (err) res.send(err);
-                            res.json(questions);
-                        }
-                    );
-                } else {
-                    res.json(questions);
-                }
-            });
-        }
-    });
-
-    // GET: bestemte spørgsmål (kan kun håndtere få spg)
-    app.get('/api/questions/:id', (req, res) => {
-        let ids = req.params.id.split(',');
-
-        Question.find({ _id: { $in: ids } }, (err, question) => {
-            if (err) res.send(err);
-
-            res.json(question);
         });
-    });
+    }
+});
 
-    // POST: hent bestemt spørgsmål (skal være post af hensyn til URL-længde;)
-    // kan håndtere højt antal spg.
-    app.post('/api/questions/ids/', (req, res) => {
-        let ids = req.body.ids;
-        Question.find({ _id: { $in: ids } }, (err, question) => {
-            if (err) res.send(err);
+// Specifikt spørgsmål (post bruges ved større mængde spørgsmål)
+router.get('/:id', async (req, res) => {
+    try {
+        const question = await Question.find({ _id: req.params.id });
+        res.json(question);
+    } catch (err) {
+        res.send(err);
+    }
+});
 
-            res.json(question);
-        });
-    });
+// POST: hent bestemt spørgsmål (skal være post af hensyn til URL-længde)
+// kan håndtere højt antal spg.
+router.post('/ids', async (req, res) => {
+    const ids = req.body.ids;
+    try {
+        const question = await Question.find({ _id: { $in: ids } });
+        res.json(question);
+    } catch (err) {
+        res.send(err);
+    }
+});
 
-    // Bliver p.t. ikke brugt, da spørgsmål tilføjes direkte til databasen
-    /*// POST: Nyt spørgsmål
-    app.post("/api/questions", upload.single("image"), function(req, res) {
+// Bliver p.t. ikke brugt, da spørgsmål tilføjes direkte til databasen
+/*// POST: Nyt spørgsmål
+    router.post("/", upload.single("image"), function(req, res) {
         var question = new Question();
 
         let q = req.body;
@@ -166,197 +154,178 @@ module.exports = app => {
         }
     }); */
 
-    // put: Opdater et spørgsmåls specialer
-    app.put(
-        '/api/questions/:id/specialty',
-        permit('admin', 'editor'),
-        async (req, res) => {
-            let question = await Question.findById(req.params.id);
+// put: Opdater et spørgsmåls specialer
+router.put('/:id/specialty', permit('admin', 'editor'), async (req, res) => {
+    let question = await Question.findById(req.params.id);
 
-            question.specialty = req.body.specialty;
+    question.specialty = req.body.specialty;
 
-            await question.save();
+    await question.save();
 
-            res.send(question);
-        }
-    );
+    res.send(question);
+});
 
-    // PUT: kommentar til spørgsmål
-    app.put('/api/questions/:id/comment', (req, res) => {
-        if (!req.user) {
-            res.status(403);
-            res.send('Not logged in');
-        } else {
-            let id = req.params.id;
-            Question.findById(id, (err, question) => {
-                if (err) res.send(err);
+// PUT: kommentar til spørgsmål
+router.put('/:id/comment', (req, res) => {
+    const id = req.params.id;
+    Question.findById(id, (err, question) => {
+        if (err) res.send(err);
 
-                // Opdater spørgsmålet
-                // fx question.question = req.params.question;
-                if (!Array.isArray(question.comments)) question.comments = [];
+        // Opdater spørgsmålet
+        // fx question.question = req.params.question;
+        if (!Array.isArray(question.comments)) question.comments = [];
 
-                let comment = { ...req.body, user: req.user.username };
-                question.comments.push(comment);
+        let comment = { ...req.body, user: req.user.username };
+        question.comments.push(comment);
 
-                question.save(err => {
-                    if (err) res.send(err);
+        question.save(err => {
+            if (err) res.send(err);
 
-                    User.findById(req.user._id, (err, user) => {
-                        if (err) return res.send({ type: 'error', data: err });
-                        if (!Array.isArray(user.comments)) user.comments = [];
+            User.findById(req.user._id, (err, user) => {
+                if (err) return res.send({ type: 'error', data: err });
+                if (!Array.isArray(user.comments)) user.comments = [];
 
-                        if (user.comments.indexOf(id) === -1) {
-                            user.comments.push(id);
+                if (user.comments.indexOf(id) === -1) {
+                    user.comments.push(id);
 
-                            user.save(err => {
-                                if (err) res.send(err);
-                            });
-                        }
+                    user.save(err => {
+                        if (err) res.send(err);
                     });
-
-                    res.json({
-                        message: 'Kommentaren er tilføjet!',
-                        question,
-                    });
-                });
+                }
             });
-        }
+
+            res.json({
+                message: 'Kommentaren er tilføjet!',
+                question
+            });
+        });
     });
+});
 
-    // Opdater kommentar
-    app.put(
-        '/api/questions/:question_id/comment/:comment_id',
-        async (req, res) => {
-            let question = await Question.findById(req.params.question_id);
+// Opdater kommentar
+router.put('/:question_id/comment/:comment_id', auth, async (req, res) => {
+    const question = await Question.findById(req.params.question_id);
+    if (!question) return res.status(404).send('Spørgsmål blev ikke fundet');
 
-            let comment = await question.comments;
+    console.log(question);
 
-            let index = _.findIndex(comment, { id: req.params.comment_id });
+    const comments = await question.comments;
+    if (!comments) return res.status(404).send('Kommentar blev ikke fundet');
 
-            if (req.user.username === question.comments[index].user) {
-                question.comments[index].comment = req.body.comment;
-                question.save(err => {
-                    if (err) res.send(new Error(err));
+    const index = _.findIndex(comments, { id: req.params.comment_id });
 
-                    res.json({ message: 'kommentar ændret', question });
-                });
-            } else {
-                res.json({ message: 'ikke din kommentar', question });
-            }
+    // Tjek om brugeren ejer spørgsmålet
+    if (req.user.username === question.comments[index].user) {
+        question.comments[index].comment = req.body.comment;
+        try {
+            const updatedQuestion = await question.save();
+            console.log(updatedQuestion);
+            res.json({ question: updatedQuestion, message: 'Kommentar ændret' });
+        } catch (err) {
+            res.send(new Error(err));
         }
-    );
+    } else {
+        res.json({ message: 'Ikke din kommentar', question });
+    }
+});
 
-    // Slet kommentar
-    app.delete(
-        '/api/questions/:question_id/comment/:comment_id',
-        async (req, res) => {
-            let { question_id, comment_id } = req.params;
+// Slet kommentar
+router.delete('/:question_id/comment/:comment_id', async (req, res) => {
+    let { question_id, comment_id } = req.params;
 
-            let question = await Question.findById(question_id);
+    let question = await Question.findById(question_id);
 
-            let comment = await question.comments;
+    let comment = await question.comments;
 
-            let index = _.findIndex(comment, { id: comment_id });
+    let index = _.findIndex(comment, { id: comment_id });
 
-            if (req.user.username === question.comments[index].user) {
-                question.comments.splice(index, 1);
+    if (req.user.username === question.comments[index].user) {
+        question.comments.splice(index, 1);
 
-                /* Ikke så intuitivt: Hvis der ikke længere er en kommentar på
+        /* Ikke så intuitivt: Hvis der ikke længere er en kommentar på
                 spørgsmålet af brugeren, slettes spørgsmåls-id'et fra brugerens
                 profil, så det ikke fremgår af listen over kommenterede spørgsmål.
                 
                 Det er altså vigtigt, at dette komme EFTER at selve kommentaren 
                 er fjernet*/
-                if (_.findIndex(comment, { user: req.user.username }) === -1) {
-                    let user = await User.findById(req.user._id);
+        if (_.findIndex(comment, { user: req.user.username }) === -1) {
+            let user = await User.findById(req.user._id);
 
-                    let indexProfile = user.comments.indexOf(comment_id);
-                    user.comments.splice(indexProfile, 1);
-                    user.save(err => {
-                        if (err) res.send(err);
-                    });
-                }
-
-                question.save(err => {
-                    if (err) res.send(new Error(err));
-
-                    res.json({ message: 'kommentar slettet', question });
-                });
-            } else {
-                res.json({ message: 'ikke din kommentar', question });
-            }
+            let indexProfile = user.comments.indexOf(comment_id);
+            user.comments.splice(indexProfile, 1);
+            user.save(err => {
+                if (err) res.send(err);
+            });
         }
-    );
 
-    // DELETE: Slet et spørgsmål
-    app.delete('/api/questions/:id', permit('admin'), (req, res) => {
-        Question.remove({ _id: req.params.id }, (err, question) => {
+        question.save(err => {
+            if (err) res.send(new Error(err));
+
+            res.json({ message: 'kommentar slettet', question });
+        });
+    } else {
+        res.json({ message: 'ikke din kommentar', question });
+    }
+});
+
+// Slet et spørgsmål
+router.delete('/:id', permit('admin'), (req, res) => {
+    Question.remove({ _id: req.params.id }, (err, question) => {
+        if (err) res.send(err);
+
+        res.json({ message: 'Spørgsmålet er slettet!' });
+    });
+});
+
+// Bruges på quiz-vælger-siden til at vise hvor mange spørgsmål der er for hvert semester
+router.get('/count/:semester', (req, res) => {
+    Question.find({ semester: req.params.semester })
+        .select(['specialty', 'examSeason', 'examYear'])
+        .exec((err, questions) => {
             if (err) res.send(err);
 
-            res.json({ message: 'Spørgsmålet er slettet!' });
+            res.json(questions);
         });
-    });
+});
 
-    /**
-     * ======================================================================
-     * Fanger kun antal spørgsmål og fordeling af Specialer samt eksamenssæt
-     * ======================================================================
-     */
+// Besvar spørgsmål
+router.post('/answer', (req, res) => {
+    if (!req.user) {
+        res.status(403);
+        res.send('Not logged in');
+    } else {
+        let { questionId, semester, answer } = req.body;
 
-    // GET antal på semesteret
-    // Bruges på quiz-vælger-siden til at vise hvor mange spørgsmål der er for hvert semester
-    app.get('/api/count/:semester', (req, res) => {
-        Question.find({ semester: req.params.semester })
-            .select(['specialty', 'examSeason', 'examYear'])
-            .exec((err, questions) => {
+        if (!questionId || !semester || !answer) {
+            res.status(400);
+            res.send('Info lacking');
+        }
+        // Save the question to the user
+        User.findById(req.user._id, (err, user) => {
+            if (err) res.send(err);
+
+            let answeredQuestions = user.answeredQuestions || {},
+                values = _.get(answeredQuestions, [semester, questionId], {
+                    correct: 0,
+                    wrong: 0
+                });
+
+            values[answer] = values[answer] + 1;
+            _.set(answeredQuestions, [semester, questionId], values);
+
+            user.answeredQuestions = answeredQuestions;
+
+            user.markModified('answeredQuestions');
+            user.save(err => {
                 if (err) res.send(err);
 
-                res.json(questions);
-            });
-    });
-
-    /**
-     * ======================================================================
-     * Besvar et spørgsmål
-     * ======================================================================
-     */
-
-    app.post('/api/questions/answer', (req, res) => {
-        if (!req.user) {
-            res.status(403);
-            res.send('Not logged in');
-        } else {
-            let { questionId, semester, answer } = req.body;
-
-            if (!questionId || !semester || !answer) {
-                res.status(400);
-                res.send('Info lacking');
-            }
-            // Save the question to the user
-            User.findById(req.user._id, (err, user) => {
-                if (err) res.send(err);
-
-                let answeredQuestions = user.answeredQuestions || {},
-                    values = _.get(answeredQuestions, [semester, questionId], {
-                        correct: 0,
-                        wrong: 0,
-                    });
-
-                values[answer] = values[answer] + 1;
-                _.set(answeredQuestions, [semester, questionId], values);
-
-                user.answeredQuestions = answeredQuestions;
-
-                user.markModified('answeredQuestions');
-                user.save(err => {
-                    if (err) res.send(err);
-
-                    res.send({
-                        message: 'Question answered',
-                        user: user,
-                    });
+                res.send({
+                    message: 'Question answered',
+                    user: user
                 });
             });
-        }
-    });
-};
+        });
+    }
+});
+
+module.exports = router;

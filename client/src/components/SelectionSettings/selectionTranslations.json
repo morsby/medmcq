@@ -1,10 +1,7 @@
 {
     "selection": {
         "static": {
-            "header": [
-                "MCQ-items fra medicin - Aarhus Universitet",
-                "MCQ-items from medicine - Aarhus University"
-            ],
+            "header": ["medMCQ", "medMCQ"],
             "choose_semester": ["Vælg et semester", "Choose a semester"],
             "continue_quiz": [
                 "Fortsæt med igangværende spørgsmål",
@@ -71,10 +68,7 @@
         ]
     },
     "selectionNSelector": {
-        "header": [
-            "Hvor mange spørgsmål vil du have?",
-            "How many questions would you like?"
-        ],
+        "header": ["Hvor mange spørgsmål vil du have?", "How many questions would you like?"],
         "other_value": ["Anden værdi", "Other value"],
         "err_n_range": [
             "Værdi skal være mellem ${min} og ${max}.",

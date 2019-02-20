@@ -12,14 +12,7 @@ import { withLocalize, Translate } from 'react-localize-redux';
 
 import _ from 'lodash';
 
-import {
-    Container,
-    Header,
-    Dropdown,
-    Divider,
-    Button,
-    Message,
-} from 'semantic-ui-react';
+import { Container, Header, Dropdown, Divider, Button, Message } from 'semantic-ui-react';
 
 import SelectionNSelector from './SelectionSettings/SelectionNSelector';
 import SelectionSetSelector from './SelectionSettings/SelectionSetSelector/SelectionSetSelector';
@@ -90,14 +83,7 @@ class SelectionMain extends Component {
          * derfor IKKE noget med selve quiz-spørgsmålene at gøre, og hentes for
          * at kunne tælle antal spørgsmål for hvert semester, speciale m.v.
          */
-        let {
-            n,
-            semester,
-            type,
-            set,
-            questions,
-            specialer,
-        } = this.props.settings;
+        let { n, semester, type, set, questions, specialer } = this.props.settings;
 
         // Når den er tom modtager den fuldt antal
 
@@ -156,25 +142,13 @@ class SelectionMain extends Component {
          * derfor IKKE noget med selve quiz-spørgsmålene at gøre, og hentes for
          * at kunne tælle antal spørgsmål for hvert semester, speciale m.v.
          */
-        let {
-            semester,
-            specialer,
-            type,
-            n,
-            onlyNew,
-            questions,
-            sets,
-            set,
-        } = this.props.settings;
+        let { semester, specialer, type, n, onlyNew, questions, sets, set } = this.props.settings;
 
         let { user } = this.props,
             answeredQuestions;
 
         // Hvis brugeren har svaret på spørgsmål før, så hent disses id.
-        if (
-            this.props.user &&
-            this.props.user.hasOwnProperty('answeredQuestions')
-        ) {
+        if (this.props.user && this.props.user.hasOwnProperty('answeredQuestions')) {
             answeredQuestions = user.answeredQuestions[semester];
         }
 
@@ -208,9 +182,7 @@ class SelectionMain extends Component {
                         <Translate id="selection.static.choose_semester" />
                     </Header>
                     <Dropdown
-                        placeholder={this.props.translate(
-                            'selection.static.choose_semester'
-                        )}
+                        placeholder={this.props.translate('selection.static.choose_semester')}
                         fluid
                         selection
                         options={semestre}
@@ -219,10 +191,7 @@ class SelectionMain extends Component {
                         onChange={this.onSettingsChange}
                     />
                     <Divider hidden />
-                    <SelectionTypeSelector
-                        handleClick={this.onSettingsChange}
-                        type={type}
-                    />
+                    <SelectionTypeSelector handleClick={this.onSettingsChange} type={type} />
 
                     <Divider hidden />
 
@@ -279,8 +248,7 @@ class SelectionMain extends Component {
                         Start!
                     </Button>
                     <Divider hidden />
-                    {calculateResults(this.props.questions).status ===
-                        'in_progress' && (
+                    {calculateResults(this.props.questions).status === 'in_progress' && (
                         <Button onClick={() => this.handleSubmit('cont')}>
                             <Translate id="selection.static.continue_quiz" />
                         </Button>
@@ -331,14 +299,14 @@ SelectionMain.propTypes = {
      * Fra react-localize-redux
      */
     addTranslation: PropTypes.func,
-    translate: PropTypes.func,
+    translate: PropTypes.func
 };
 
 function mapStateToProps(state) {
     return {
         settings: state.settings,
         user: state.auth.user,
-        questions: state.questions,
+        questions: state.questions
     };
 }
 
