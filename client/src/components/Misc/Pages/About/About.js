@@ -5,11 +5,11 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import { withLocalize, Translate } from 'react-localize-redux';
 import aboutTranslations from './aboutTranslations';
 
-import { Container, Message } from 'semantic-ui-react';
+import { Container, Message, Divider } from 'semantic-ui-react';
 import Header from '../../../Layout/Header';
 import Footer from '../../../Layout/Footer';
 
-import FancyFunctions from './FancyFunctions';
+import FancyFeatures from './FancyFeatures';
 
 /**
  * Component til siden "Om-siden".
@@ -31,7 +31,7 @@ const About = ({ addTranslation }) => {
                     <Translate id="about.notice.body" />
                 </Message>
 
-                <FancyFunctions />
+                <FancyFeatures />
 
                 <h2>Feedback</h2>
 
@@ -42,6 +42,7 @@ const About = ({ addTranslation }) => {
                 </h2>
                 <Translate id="about.privacy.body" />
             </Container>
+            <Divider hidden />
             <Footer />
         </div>
     );

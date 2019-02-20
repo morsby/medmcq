@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { unregister } from './registerServiceWorker';
+import * as serviceWorker from './serviceWorker';
 // Redux
 import { Provider, connect } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
@@ -58,8 +58,6 @@ const pReducer = persistReducer(persistConfig, reducers);
 
 export const store = createStore(pReducer, {}, applyMiddleware(reduxThunk));
 export const persistor = persistStore(store);
-
-unregister();
 
 class App extends Component {
     constructor(props) {
@@ -123,3 +121,5 @@ ReactDOM.render(
     </Provider>,
     document.querySelector('#root')
 );
+
+serviceWorker.register();
