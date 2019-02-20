@@ -2,8 +2,8 @@ export default {
     about: {
         header: ['Om siden', 'About this site'],
         contactInfo: [
-            'Forbedringer, rettelser eller ideer bedes rettes til mailadressen: <a href="mailto:medmcq@morsby.dk">medmcq@morsby.dk</a>',
-            'For improvements, edits or ideas please contant us at the following email: <a href="mailto:medmcq@morsby.dk">medmcq@morsby.dk</a>'
+            'Forbedringer, rettelser eller ideer bedes rettes til mailadressen: <a href="mailto:medmcq@fire.fundersclub.com">medmcq@fire.fundersclub.com</a>.',
+            'For improvements, edits or ideas please contant us at the following email: <a href="mailto:medmcq@fire.fundersclub.com">medmcq@fire.fundersclub.com</a>'
         ],
         notice: {
             header: ['Bemærk', 'Notice'],
