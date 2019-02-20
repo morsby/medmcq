@@ -6,6 +6,10 @@
             "continue_quiz": [
                 "Fortsæt med igangværende spørgsmål",
                 "Continue with previous questions"
+            ],
+            "front-disclaimer": [
+                "<p>Velkommen til medMCQ. Her kan du teste dine færdigheder inden for diverse semestre og medicinske specialer. MCQ-testsiden består af MCQ-eksamenspørgsmål fra tidligere semestre og du bør derfor være opmærksom på:</p><ol><li>Nogle besvarelser kan være forældet ift. hvad vil være korrekt i dag.</li><li>Pensum kan siden være ændret, hvorfor du kan møde spørgsmål der ligger uden for pensum lige såvel som der kan være elementer af pensum som, der ikke er spørgsmål indenfor.</li><li>Flere af spørgsmålene er udviklet til MCQ-eksamener med hjælpemidler. Derfor kan du opleve at spørgsmålene har et højere kompleksitetsniveau.</li></ol><p>God fornøjelse!</p>",
+                "<p>Welcome to medMCQ. You can test your MCQ-abilities within different semesters and different medical specialties. Be aware that this site consist of MCQ examination question from earlier semester and you should therefore be aware of:</p><ol><li>Some answers might be outdated.</li><li>Curriculum might be different today. This means that some questions may be irrelevant for your examination today as well as some areas of relevance might not be covered in the question bank.</li><li>Some of the questions was for an examination where different kind of aid was permitted. Therefore you may experience a higher level of complexity in the question bank.</li></ol><p>Enjoy!</p>"
             ]
         },
         "errs": {
