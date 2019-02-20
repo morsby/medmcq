@@ -285,6 +285,11 @@ class SelectionMain extends Component {
                             <Translate id="selection.static.continue_quiz" />
                         </Button>
                     )}
+
+                    <Message warning>
+                        <Translate id="selection.static.front-disclaimer" />
+                    </Message>
+                    <Divider hidden />
                 </Container>
                 <Footer />
             </div>
