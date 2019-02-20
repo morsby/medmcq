@@ -9,7 +9,6 @@ const session = require('cookie-session');
 const helmet = require('helmet');
 const port = process.env.PORT || 3001; // set our port
 // APIs
-const feedback = require('./routes/feedback');
 const question = require('./routes/question');
 const auth = require('./routes/auth');
 const user = require('./routes/user');
@@ -37,7 +36,7 @@ app.use(
     session({
         secret: keys.session,
         resave: true,
-        saveUninitialized: true,
+        saveUninitialized: true
     })
 ); // session secret
 
@@ -58,17 +57,13 @@ app.use(saveReq);
 
 // APIs
 app.use('/api/questions', question);
-app.use('/api/feedback', feedback);
 app.use('/api/auth', auth);
 app.use('/api/user', user);
 
 // Registrer alle routes fra denne fil (prefixed '/api')
 //app.use('/api', router);
 
-if (
-    process.env.NODE_ENV === 'production' ||
-    process.env.NODE_ENV === 'au_server'
-) {
+if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'au_server') {
     // Express will serve prod. assets
     // (js, css files)
     app.use(express.static('client/build'));

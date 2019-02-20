@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const permit = require('../permission'); // middleware for checking if user's role is permitted to make request
+const permit = require('../middleware/permission'); // middleware for checking if user's role is permitted to make request
 const _ = require('lodash');
 // Middleware
 const auth = require('../middleware/auth');
@@ -12,7 +12,6 @@ const User = require('../models/user.js');
 
 // TODO: Før statistik over get("/api/questions"), post("/api/questions/ids/"), post("/api/questions/answer")
 
-// GET: spørgsmål
 router.get('/', async (req, res) => {
     let { n, specialer, unique, semester, examSeason, examYear } = req.query;
 
@@ -154,7 +153,7 @@ router.post('/ids', async (req, res) => {
         }
     }); */
 
-// put: Opdater et spørgsmåls specialer
+// Opdater et spørgsmåls specialer
 router.put('/:id/specialty', permit('admin', 'editor'), async (req, res) => {
     let question = await Question.findById(req.params.id);
 
@@ -165,7 +164,7 @@ router.put('/:id/specialty', permit('admin', 'editor'), async (req, res) => {
     res.send(question);
 });
 
-// PUT: kommentar til spørgsmål
+// Opret kommentar til spørgsmål
 router.put('/:id/comment', (req, res) => {
     const id = req.params.id;
     Question.findById(id, (err, question) => {
@@ -202,7 +201,7 @@ router.put('/:id/comment', (req, res) => {
     });
 });
 
-// Opdater kommentar
+// Rediger kommentar
 router.put('/:question_id/comment/:comment_id', auth, async (req, res) => {
     const question = await Question.findById(req.params.question_id);
     if (!question) return res.status(404).send('Spørgsmål blev ikke fundet');

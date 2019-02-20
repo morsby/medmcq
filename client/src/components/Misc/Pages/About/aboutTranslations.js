@@ -104,8 +104,8 @@ export default {
             ]
         }
     },
-    fancyFunctions: {
-        header: ['Smarte/skjulte funktioner', 'Fancy/hidden functions'],
+    fancyFeatures: {
+        header: ['Smarte/skjulte funktioner', 'Fancy/hidden features'],
         body: [
             `<p>
             Siden gemmer mange ting lokalt på din enhed (ikke som cookies) -

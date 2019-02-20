@@ -3,32 +3,31 @@
 const express = require('express');
 const router = express.Router();
 let randomstring = require('randomstring');
-let _ = require('lodash');
-const permit = require('../permission'); // middleware for checking if user's role is permitted to make request
+const permit = require('../../../permission'); // middleware for checking if user's role is permitted to make request
 // MODELS
-const Feedback = require('../models/feedback.js');
-const Comment = require('../models/comment.js');
+const Feedback = require('../../../models/feedback.js');
+const Comment = require('../../../models/comment.js');
 
 router.get('/', (req, res) => {
     Feedback.find(function(err, feedback) {
-        if (err) res.send(err);
+        if (err) res.status(400).send(err);
 
         res.json(feedback);
     });
 });
 
 router.get('/:id', async (req, res) => {
-    feedback = await Feedback.findById(req.params.id).catch(err =>
-        console.log(err.message)
-    );
-    if (!feedback) return res.status(400).send('ID not found');
+    try {
+        const feedback = await Feedback.findById(req.params.id);
+        if (!feedback) return res.status(404).send('ID not found');
 
-    let comments = await Comment.find({ feedback_id: req.params.id }).sort(
-        'full_slug'
-    );
+        let comments = await Comment.find({ feedback_id: req.params.id }).sort('full_slug');
 
-    let ret = { feedback, comments };
-    res.json(ret);
+        let ret = { feedback, comments };
+        res.json(ret);
+    } catch (err) {
+        console.log(err.message);
+    }
 });
 
 router.post('/', (req, res) => {
@@ -72,7 +71,7 @@ router.put('/:id/vote', (req, res) => {
             res.json({
                 message: 'Der er stemt!',
                 id: feedback._id,
-                val: req.body.val,
+                val: req.body.val
             });
         });
     });
@@ -100,7 +99,7 @@ router.post('/:f_id/comment', async (req, res) => {
     const date = Date.now();
     const slug_part = randomstring.generate({
         length: 4,
-        capitalization: 'lowercase',
+        capitalization: 'lowercase'
     });
     const full_slug_part = `${date}:${slug_part}`;
     comment.date = date;

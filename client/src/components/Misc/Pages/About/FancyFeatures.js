@@ -5,13 +5,13 @@ import { Translate } from 'react-localize-redux';
 /**
  * Component der viser de "smarte/skjulte" funktioner. Kaldes af About.js
  */
-const FancyFunctions = () => (
+const FancyFeatures = () => (
     <div>
         <h2>
-            <Translate id="fancyFunctions.header" />
+            <Translate id="fancyFeatures.header" />
         </h2>
-        <Translate id="fancyFunctions.body" />
+        <Translate id="fancyFeatures.body" />
     </div>
 );
 
-export default FancyFunctions;
+export default FancyFeatures;
