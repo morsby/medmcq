@@ -13,12 +13,8 @@
         ],
         "developed_by": ["Udviklet af Sigurd Morsby Larsen", "Developed by Sigurd Morsby Larsen"],
         "maintained_by": [
-            "Vedligeholdes og forbedres i samarbejde med Thomas Jensen",
-            "Maintained and improved in collaboration with Thomas Jensen"
-        ],
-        "naaah": [
-            "<strong><a href=\"https://cesu.au.dk\">CESU</a></strong> og",
-            "<strong><a href=\"https://cesu.au.dk\">CESU</a></strong> and "
+            "Vedligeholdes og forbedres i samarbejde med Thomas Jensen og <strong><a href=\"https://cesu.au.dk\">CESU</a></strong>",
+            "Is maintained and improved in collaboration with Thomas Jensen and <strong><a href=\"https://cesu.au.dk\">CESU</a></strong>"
         ]
     }
 }
