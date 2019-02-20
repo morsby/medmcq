@@ -9,8 +9,9 @@ import { withRouter } from 'react-router';
 import { withLocalize, Translate } from 'react-localize-redux';
 import layoutTranslations from './layoutTranslations.json';
 
-import { Flag, Menu, Icon, Responsive } from 'semantic-ui-react';
+import { Flag, Menu, Icon, Responsive, Image } from 'semantic-ui-react';
 import { urls, breakpoints } from '../../utils/common';
+import logo from './logo/aulogo_dk_var2_hvid.png';
 
 // TODO: Evt. fjern connect - men skal så modtage `user` via parents
 
@@ -19,7 +20,7 @@ import { urls, breakpoints } from '../../utils/common';
  */
 class Header extends Component {
     flagStyle = {
-        cursor: 'pointer',
+        cursor: 'pointer'
     };
 
     constructor(props) {
@@ -57,19 +58,13 @@ class Header extends Component {
                                 id="header.greeting"
                                 data={{
                                     user:
-                                        user.username[0].toUpperCase() +
-                                        user.username.substring(1),
+                                        user.username[0].toUpperCase() + user.username.substring(1)
                                 }}
                             />
                         </strong>
                     </Responsive>
                     <Menu.Item onClick={() => handleClick('profile')}>
-                        <Icon
-                            name="id card outline"
-                            size="big"
-                            inverted
-                            className="click"
-                        />
+                        <Icon name="id card outline" size="big" inverted className="click" />
                         <Translate id="header.profile" />
                     </Menu.Item>
                 </>
@@ -86,8 +81,7 @@ class Header extends Component {
             <header>
                 <Menu inverted color="blue" attached>
                     <Menu.Item onClick={() => handleClick('root')}>
-                        <Icon name="home" size="big" />{' '}
-                        <Translate id="header.home" />
+                        <Image src={logo} size="small" />
                     </Menu.Item>
                     <Menu.Menu position="right">
                         <Menu.Item>
@@ -152,13 +146,13 @@ Header.propTypes = {
     /**
      * addTranslation: Tilføjer layoutTranslations over hele appen
      */
-    addTranslation: PropTypes.func,
+    addTranslation: PropTypes.func
 };
 
 function mapStateToProps(state) {
     return {
         user: state.auth.user,
-        defaultLanguage: state.settings.language,
+        defaultLanguage: state.settings.language
     };
 }
 

@@ -197,7 +197,7 @@ class SelectionMain extends Component {
 
                     {type !== 'set' && (
                         <SelectionNSelector
-                            n={n}
+                            n={Number(n)}
                             onChange={this.onSettingsChange}
                             total={questions.length}
                             semester={semester}

@@ -1,6 +1,10 @@
 export default {
     about: {
         header: ['Om siden', 'About this site'],
+        contactInfo: [
+            'Forbedringer, rettelser eller ideer bedes rettes til mailadressen: <a href="mailto:medmcq@morsby.dk">medmcq@morsby.dk</a>',
+            'For improvements, edits or ideas please contant us at the following email: <a href="mailto:medmcq@morsby.dk">medmcq@morsby.dk</a>'
+        ],
         notice: {
             header: ['Bemærk', 'Notice'],
             body: [
@@ -72,8 +76,8 @@ export default {
         
         <p>
             It is always your responsibility to keep the above in mind and a potential examination complaint will not be sustained by referring to this site. Neither The Department of Clinical Medicine, Aarhus University or developer of the system, Sigurd Morsby Larsen, edit questions or answers. As such, questions and answers appear as when posed at the specific MCQ examination
-        </p>`,
-            ],
+        </p>`
+            ]
         },
         privacy: {
             header: ['Privatliv og cookies', 'Privacy and cookies'],
@@ -96,10 +100,10 @@ export default {
             </p>
             <p>
                 The site uses no cookies unless you register for an account and log in. In this case, a cookie is set to remember you for your next visit.
-            </p>`,
-            ],
+            </p>`
+            ]
         },
-        feedback_link: ['Giv noget feedback', 'Drop some feedback'],
+        feedback_link: ['Giv noget feedback', 'Drop some feedback']
     },
     fancyFunctions: {
         header: ['Smarte/skjulte funktioner', 'Fancy/hidden functions'],
@@ -188,7 +192,7 @@ export default {
                     </li>
                 </ul>
             </li>
-        </ul>`,
-        ],
-    },
+        </ul>`
+        ]
+    }
 };

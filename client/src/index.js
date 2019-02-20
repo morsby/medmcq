@@ -34,11 +34,6 @@ import Quiz from './components/Quiz/Quiz';
 
 import About from './components/Misc/Pages/About/About';
 
-// Feedback
-import FeedbackIndex from './components/Feedback/FeedbackIndex/FeedbackIndex';
-import FeedbackSingle from './components/Feedback/FeedbackSingle/FeedbackSingle';
-import FeedbackPost from './components/Feedback/FeedbackPost/FeedbackPost';
-
 // Auth
 import Signup from './components/Auth/Signup/Signup';
 import Login from './components/Auth/Login/Login';
@@ -56,7 +51,7 @@ import './semantic/dist/semantic.min.css';
 const persistConfig = {
     key: 'root',
     storage: storage,
-    stateReconciler: autoMergeLevel2, // see "Merge Process" section for details.
+    stateReconciler: autoMergeLevel2 // see "Merge Process" section for details.
 };
 
 const pReducer = persistReducer(persistConfig, reducers);
@@ -76,15 +71,12 @@ class App extends Component {
         const defaultLanguage = this.props.defaultLanguage || languages[0];
 
         this.props.initialize({
-            languages: [
-                { name: 'Danish', code: 'dk' },
-                { name: 'English', code: 'gb' },
-            ],
+            languages: [{ name: 'Danish', code: 'dk' }, { name: 'English', code: 'gb' }],
             options: {
                 renderToStaticMarkup,
                 renderInnerHtml: true,
-                defaultLanguage,
-            },
+                defaultLanguage
+            }
         });
     }
     render() {
@@ -93,15 +85,6 @@ class App extends Component {
                 <ScrollToTop>
                     <Switch>
                         <Route exact path="/" component={SelectionMain} />
-                        <Route
-                            path={`${urls.feedback}/new`}
-                            component={FeedbackPost}
-                        />
-                        <Route
-                            path={`${urls.feedback}/:id`}
-                            component={FeedbackSingle}
-                        />
-                        <Route path={urls.feedback} component={FeedbackIndex} />
                         <Route path={urls.about} component={About} />
                         <Route path={urls.quiz} component={Quiz} />
                         <Route path={urls.signup} component={Signup} />
@@ -113,14 +96,8 @@ class App extends Component {
                             component={EditProfile}
                         />
                         <PrivateRoute path={urls.profile} component={Profile} />
-                        <Route
-                            path={urls.forgotPassword}
-                            component={ForgotPassword}
-                        />
-                        <Route
-                            path={`${urls.resetPassword}/:token`}
-                            component={ResetPassword}
-                        />
+                        <Route path={urls.forgotPassword} component={ForgotPassword} />
+                        <Route path={`${urls.resetPassword}/:token`} component={ResetPassword} />
                         <Route path="/print" component={Print} />
                         <Route component={ErrorPage} />
                     </Switch>
@@ -131,7 +108,7 @@ class App extends Component {
 }
 
 const mapStateToProps = state => ({
-    defaultLanguage: state.settings.language,
+    defaultLanguage: state.settings.language
 });
 
 const LocalizedApp = withLocalize(connect(mapStateToProps)(App));

@@ -57,8 +57,7 @@ export const calculateResults = questions => {
             status: 'done',
             n: questions.length,
             correct,
-            percentage: `${Math.round((correct / answered.length) * 10000) /
-                100}%`,
+            percentage: `${Math.round((correct / answered.length) * 10000) / 100}%`
         };
     }
 
@@ -66,7 +65,5 @@ export const calculateResults = questions => {
 };
 
 export const subSupScript = text => {
-    return text
-        .replace(/\^(.+?)\^/g, '<sup>$1</sup>')
-        .replace(/~(.+?)~/g, '<sub>$1</sub>');
+    return text.replace(/\^(.+?)\^/g, '<sup>$1</sup>').replace(/~(.+?)~/g, '<sub>$1</sub>');
 };

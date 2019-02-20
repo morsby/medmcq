@@ -13,12 +13,12 @@ import { Translate } from 'react-localize-redux';
 const Footer = ({ history }) => {
     const paragraphStyle = {
         display: 'block',
-        width: '65%',
+        width: '65%'
     };
 
     const footerStyle = {
         margin: '10px 0 0 0',
-        width: '100%',
+        width: '100%'
     };
 
     const handleClick = path => {
@@ -33,10 +33,10 @@ const Footer = ({ history }) => {
                     </p>
                     <Icon name="heartbeat" />
                     <Translate id="footer.developed_by" />
-                    {/*}<p>
-                        <Icon name="graduation cap" />
+                    <p>
+                        <Icon name="hand peace" />
                         <Translate id="footer.maintained_by" />
-                    </p> */}
+                    </p>
                 </Menu.Item>
                 <Menu.Menu position="left">
                     {history.location.pathname !== urls.about && (
@@ -55,7 +55,7 @@ Footer.propTypes = {
     /**
      * history er fra ReactRouter. Bruges til navigation.
      */
-    history: ReactRouterPropTypes.history,
+    history: ReactRouterPropTypes.history
 };
 
 export default withRouter(Footer);

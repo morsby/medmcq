@@ -2,11 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
-import { urls } from '../../../../utils/common';
 import { withLocalize, Translate } from 'react-localize-redux';
 import aboutTranslations from './aboutTranslations';
 
-import { Container, Message, Button, Divider } from 'semantic-ui-react';
+import { Container, Message } from 'semantic-ui-react';
 import Header from '../../../Layout/Header';
 import Footer from '../../../Layout/Footer';
 
@@ -15,12 +14,8 @@ import FancyFunctions from './FancyFunctions';
 /**
  * Component til siden "Om-siden".
  */
-const About = ({ history, addTranslation }) => {
+const About = ({ addTranslation }) => {
     addTranslation(aboutTranslations);
-
-    const handleClick = () => {
-        history.push(urls.feedback);
-    };
 
     return (
         <div className="flex-container">
@@ -38,18 +33,10 @@ const About = ({ history, addTranslation }) => {
 
                 <FancyFunctions />
 
-                <Divider hidden />
-                <Translate>
-                    {({ translate }) => (
-                        <Button
-                            color="red"
-                            content={translate('about.feedback_link')}
-                            icon="send"
-                            onClick={handleClick}
-                            className="click"
-                        />
-                    )}
-                </Translate>
+                <h2>Feedback</h2>
+
+                <Translate id="about.contactInfo" />
+
                 <h2>
                     <Translate id="about.privacy.header" />
                 </h2>
@@ -70,7 +57,7 @@ About.propTypes = {
      * Func til at tilføje oversættelse.
      * Fra react-localize-redux
      */
-    addTranslation: PropTypes.func,
+    addTranslation: PropTypes.func
 };
 
 export default withLocalize(About);
