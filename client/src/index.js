@@ -33,6 +33,7 @@ import SelectionMain from './components/SelectionSettings/Selection';
 import Quiz from './components/Quiz/Quiz';
 
 import About from './components/Misc/Pages/About/About';
+import Feedback from './components/Misc/Pages/Feedback';
 
 // Auth
 import Signup from './components/Auth/Signup/Signup';
@@ -86,6 +87,7 @@ class App extends Component {
                     <Switch>
                         <Route exact path="/" component={SelectionMain} />
                         <Route path={urls.about} component={About} />
+                        <Route path={urls.feedback} component={Feedback} />
                         <Route path={urls.quiz} component={Quiz} />
                         <Route path={urls.signup} component={Signup} />
                         <Route path={urls.login} component={Login} />

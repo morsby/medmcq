@@ -7,6 +7,7 @@
     },
     "footer": {
         "about_link": ["Om siden", "About this site"],
+        "feedback_link": ["Kontakt", "Contact"],
         "permission": [
             "Siden er lavet med tilladelse fra Institut for Klinisk Medicin, Health, Aarhus Universitet.",
             "The site is developed with permission from The Department of Clinical Medicine, Health, Aarhus University"
