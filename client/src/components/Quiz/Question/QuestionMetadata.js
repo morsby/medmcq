@@ -5,6 +5,7 @@ import { List, Dropdown, Button } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 
 import { specialer } from '../../../utils/common';
+import { getSpecialtyName } from '../../../utils/quiz';
 import { superUserRoles } from '../../../utils/auth';
 
 /**
@@ -18,14 +19,16 @@ const QuestionMetadata = ({
     onEditSpecialty,
     onSaveSpecialties,
     selectedSpecialties,
-    user = {},
+    user = {}
 }) => {
     // Grimt fix for at undgå "user is undefined"
     if (!user) user = {};
 
     let specialtiesSelect = specialer[question.semester];
     let specialtiesDisplay = question.specialty.map(e => (
-        <List.Item key={e}>{e}</List.Item>
+        <List.Item key={e}>
+            {getSpecialtyName({ semester: question.semester, specialtyApiKey: e })}
+        </List.Item>
     ));
 
     if (superUserRoles.indexOf(user.role) > -1) {
@@ -43,20 +46,14 @@ const QuestionMetadata = ({
                         />
                     </List.Item>
                     <List.Item>
-                        <Button
-                            onClick={onSaveSpecialties}
-                            content="Opdater specialer"
-                        />
+                        <Button onClick={onSaveSpecialties} content="Opdater specialer" />
                     </List.Item>
                 </>
             );
         } else {
             specialtiesDisplay.push(
                 <List.Item key="ret">
-                    <Button
-                        onClick={onToggleSpecialties}
-                        content="Ret specialer"
-                    />
+                    <Button onClick={onToggleSpecialties} content="Ret specialer" />
                 </List.Item>
             );
         }
@@ -71,11 +68,7 @@ const QuestionMetadata = ({
                     </List.Header>
                 </List.Item>
                 <List.Item>
-                    <Translate
-                        id={`questionMetadata.set_season.${
-                            question.examSeason
-                        }`}
-                    />
+                    <Translate id={`questionMetadata.set_season.${question.examSeason}`} />
                     {question.examYear}
                 </List.Item>
             </List>
@@ -128,7 +121,7 @@ QuestionMetadata.propTypes = {
     /**
      * Brugerobjektet.
      */
-    user: PropTypes.object,
+    user: PropTypes.object
 };
 
 export default QuestionMetadata;
