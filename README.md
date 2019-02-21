@@ -22,8 +22,8 @@ Hvis et punkt er tildelt en udvikler, vil det fremgå med navn og/eller `branch`
 ### API
 
 - [ ] Oprydning (særligt `routes/questions.js`)
-- [ ] Brug Router module (Thomas - `api-cleaning`)
-- [ ] async/await syntax (Thomas - `api-cleaning`)
+- [ ] Brug Router module (Thomas)
+- [ ] async/await syntax (Thomas)
 - [ ] Flyt user/auth-validation meddelelser ud af API'en og ind i react (for bedre oversættelser)
 
 ### React
@@ -31,10 +31,10 @@ Hvis et punkt er tildelt en udvikler, vil det fremgå med navn og/eller `branch`
 - [ ] Ca. 10% af besvarede spørgsmål bliver ikke registreret i profilen? -- stadig?
 - [ ] Debounce checkUser ved signup
 - [ ] Autocomplete i profil-formularer
-- [ ] Få component til at opdatere selv ved dybt nested ny kommentar. (Klares nok i `immutable-redux`)
 - [ ] Undgå at Firefox åbner søge-dialogen, når der svares på spørgsmål med tal
 - [ ] Ryd op i Component-logik (større projekt ... - særligt formular-validation og Redux-connects)
 - [ ] Print virker ikke i alle browsers
+- [x] ~~Få component til at opdatere selv ved dybt nested ny kommentar. (Klares nok i `immutable-redux`)~~ (feedback udgået)
 - [x] Bedre immutability i Redux. Se [denne side](https://redux.js.org/recipes/structuring-reducers/immutable-update-patterns) (Sigurd - `immutable-redux`)
 - [x] Formindsk Swipe-følsomhed
 - [x] ~~Fix gammel SelectQuestions-funktion (utils/quiz)~~ (slettet)
@@ -44,11 +44,11 @@ Hvis et punkt er tildelt en udvikler, vil det fremgå med navn og/eller `branch`
 
 ## Planlagte projekter
 
-- [ ] Oversættelse til engelsk (Sigurd - `localize`)
 - [ ] Excel-ark?
 - [ ] Side hvor man kan følge med i ændringer
 - [ ] Udvikling af algoritme, så "tilfældige spørgsmål" fortrinsvist tager spørgsmål, der er svaret forkert tidligere/ikke tidligere besvaret
 - [ ] Mulighed for rettelse af spørgsmål
 - [ ] Mulighed for tilføjelse af personlige kommentarer
+- [x] Oversættelse til engelsk (Sigurd - `localize`)
 - [x] Mulighed for at tilføje/ændre specialer
 - [x] Mulighed for at kommentere spørgsmål
