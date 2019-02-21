@@ -20,11 +20,6 @@ import logo from './logo/aulogo_dk_var2_hvid.png';
  * Header-component. Viser headeren og tjekker at brugeren er logget ind.
  */
 class Header extends Component {
-    flagStyle = {
-        cursor: 'pointer',
-        marginRight: '3px'
-    };
-
     constructor(props) {
         super(props);
 
@@ -86,17 +81,12 @@ class Header extends Component {
                         <Image src={logo} size="small" />
                     </Menu.Item>
                     <Menu.Menu position="right">
-                        <Menu.Item>
-                            {languages.map(lang => (
-                                <Flag
-                                    key={lang.code}
-                                    country={lang.code.toUpperCase()}
-                                    role="button"
-                                    onClick={() => this.changeLang(lang.code)}
-                                    style={this.flagStyle}
-                                />
-                            ))}
-                        </Menu.Item>
+                        {languages.map(lang => (
+                            <Menu.Item onClick={() => this.changeLang(lang.code)} key={lang.code}>
+                                <Flag country={lang.code.toUpperCase()} size="16" />
+                            </Menu.Item>
+                        ))}
+
                         {højreMenu}
                     </Menu.Menu>
                 </Menu>
