@@ -22,7 +22,7 @@ export const getQuestions = (settings, requestedIds = null) => async dispatch =>
             );
             break;
         case 'random':
-        case 'specialer':
+        case 'specialer': {
             // Lav tomme strings til API-request
             let querySpecialer = '',
                 unique = '';
@@ -40,6 +40,7 @@ export const getQuestions = (settings, requestedIds = null) => async dispatch =>
                 `/api/questions?semester=${semester}&n=${n}${querySpecialer}${unique}`
             );
             break;
+        }
         default:
             return null;
     }
@@ -106,8 +107,6 @@ export const editComment = (question_id, comment_id, comment) => async dispatch 
     const res = await axios.put(`/api/questions/${question_id}/comment/${comment_id}`, {
         comment
     });
-
-    console.log(res.data);
 
     dispatch({
         type: types.QUESTION_COMMENT_UPDATE,

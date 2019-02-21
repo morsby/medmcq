@@ -6,7 +6,7 @@ export const urls = {
     quiz: '/quiz',
     add: '/add',
     about: '/om-siden',
-    feedback: '/feedback',
+    feedback: '/kontakt',
     signup: '/opret',
     login: '/login',
     logout: '/logout',
@@ -19,9 +19,9 @@ export const urls = {
 
 export const semestre = [
     { text: '7. semester (Inflammation)', value: 7, name: 'Inflammation' },
-    { text: '8. semester (Abdomen)', value: 8, name: 'Abdomen' }
-    /*{ text: "9. semester (Hjerte-lunge-kar)", value: 9, name: "HLK" },
-    { text: "11. semester (Familie-samfund / GOP)", value: 11, name: "GOP" } */
+    { text: '8. semester (Abdomen)', value: 8, name: 'Abdomen' },
+    /*{ text: "9. semester (Hjerte-lunge-kar)", value: 9, name: "HLK" }, */
+    { text: '11. semester (Familie-samfund / GOP)', value: 11, name: 'GOP' }
 ];
 
 export const specialer = {
@@ -52,7 +52,7 @@ export const specialer = {
         { value: 'socialmedicin', text: 'Socialmedicin' },
         //    { value: "almen_medicin", text: "Almen medicin" },
         { value: 'paraklinik', text: 'Paraklinik' }
-    ]
+    ],
     /*9: [
         { value: "anæstesiologi", text: "Anæstesiologi" },
         {
@@ -64,22 +64,22 @@ export const specialer = {
         { value: "thoraxkirurgi", text: "Thoraxkirurgi" },
         //{ value: "almen_medicin", text: "Almen medicin" },
         { value: "paraklinik", text: "Paraklinik" }
-    ],
+    ], */
     11: [
-        { value: "gyn", text: "Gynækologi/Gynaecology" },
-        { value: "obs", text: "Obstetrik/Obstetrics" },
-        { value: "pæd/ped", text: "Pædiatri/Pediatrics" },
+        { value: 'gyn', text: 'Gynækologi/Gynaecology' },
+        { value: 'obs', text: 'Obstetrik/Obstetrics' },
+        { value: 'pæd/ped', text: 'Pædiatri/Pediatrics' },
         {
-            value: "retsmedicin/forensic_medicine",
-            text: "Retsmedicin/Forensic medicine"
+            value: 'retsmedicin/forensic_medicine',
+            text: 'Retsmedicin/Forensic medicine'
         },
         {
-            value: "klinisk_genetik/clinical_genetics",
-            text: "Klinisk genetik/Clinical genetics"
+            value: 'klinisk_genetik/clinical_genetics',
+            text: 'Klinisk genetik/Clinical genetics'
         },
-        //{ value: "almen_medicin/gp", text: "Almen medicin/General practice" },
-        { value: "paraklinik/paraclinical", text: "Paraklinik/Paraclinical" }
-    ] */
+        { value: 'almen_medicin/gp', text: 'Almen medicin/General practice' },
+        { value: 'paraklinik/paraclinical', text: 'Paraklinik/Paraclinical' }
+    ]
 };
 
 export const breakpoints = {

@@ -45,9 +45,11 @@ class SelectionMain extends Component {
 
     /**
      * Seeder data hvis det er første besøg.
+     * Tager nu højde for evt. "tomme" semestre, da semester = 7 er default
      */
     componentDidMount() {
-        if (this.props.settings.questions.length === 0) {
+        let { questions, semester } = this.props.settings;
+        if (questions.length === 0 && semester === 7) {
             let name = 'semester';
             let value = 7;
             let e = null;
