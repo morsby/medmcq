@@ -124,4 +124,4 @@ ReactDOM.render(
     document.querySelector('#root')
 );
 
-serviceWorker.register();
+serviceWorker.unregister();
