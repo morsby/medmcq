@@ -221,7 +221,6 @@ router.post('/reset/:token', function(req, res) {
                 );
             },
             function(user, done) {
-                console.log(user, done);
                 const msg = {
                     to: user.email,
                     from: urls.emailFrom,
