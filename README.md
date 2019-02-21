@@ -29,13 +29,13 @@ Hvis et punkt er tildelt en udvikler, vil det fremgå med navn og/eller `branch`
 ### React
 
 - [ ] Ca. 10% af besvarede spørgsmål bliver ikke registreret i profilen? -- stadig?
-- [ ] Bedre immutability i Redux. Se [denne side](https://redux.js.org/recipes/structuring-reducers/immutable-update-patterns) (Sigurd - `immutable-redux`)
 - [ ] Debounce checkUser ved signup
 - [ ] Autocomplete i profil-formularer
 - [ ] Få component til at opdatere selv ved dybt nested ny kommentar. (Klares nok i `immutable-redux`)
 - [ ] Undgå at Firefox åbner søge-dialogen, når der svares på spørgsmål med tal
 - [ ] Ryd op i Component-logik (større projekt ... - særligt formular-validation og Redux-connects)
 - [ ] Print virker ikke i alle browsers
+- [x] Bedre immutability i Redux. Se [denne side](https://redux.js.org/recipes/structuring-reducers/immutable-update-patterns) (Sigurd - `immutable-redux`)
 - [x] Formindsk Swipe-følsomhed
 - [x] ~~Fix gammel SelectQuestions-funktion (utils/quiz)~~ (slettet)
 - [x] Check også for unik email? (Mongo vil smide en fejl)
