@@ -206,8 +206,6 @@ router.put('/:question_id/comment/:comment_id', auth, async (req, res) => {
     const question = await Question.findById(req.params.question_id);
     if (!question) return res.status(404).send('Spørgsmål blev ikke fundet');
 
-    console.log(question);
-
     const comments = await question.comments;
     if (!comments) return res.status(404).send('Kommentar blev ikke fundet');
 
@@ -218,7 +216,6 @@ router.put('/:question_id/comment/:comment_id', auth, async (req, res) => {
         question.comments[index].comment = req.body.comment;
         try {
             const updatedQuestion = await question.save();
-            console.log(updatedQuestion);
             res.json({ question: updatedQuestion, message: 'Kommentar ændret' });
         } catch (err) {
             res.send(new Error(err));
