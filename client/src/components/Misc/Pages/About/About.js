@@ -33,10 +33,6 @@ const About = ({ addTranslation }) => {
 
                 <FancyFeatures />
 
-                <h2>Feedback</h2>
-
-                <Translate id="about.contactInfo" />
-
                 <h2>
                     <Translate id="about.privacy.header" />
                 </h2>
@@ -50,10 +46,10 @@ const About = ({ addTranslation }) => {
 
 About.propTypes = {
     /**
-     * History er fra ReactRouter
+     * History
+     * fra react-router
      */
     history: ReactRouterPropTypes.history,
-
     /**
      * Func til at tilføje oversættelse.
      * Fra react-localize-redux

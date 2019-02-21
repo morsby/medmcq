@@ -2,7 +2,7 @@ import React from 'react';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
 import { withRouter } from 'react-router';
-import { Icon, Menu } from 'semantic-ui-react';
+import { Grid, Icon, Container, Menu } from 'semantic-ui-react';
 import { urls } from '../../utils/common';
 
 import { Translate } from 'react-localize-redux';
@@ -11,14 +11,17 @@ import { Translate } from 'react-localize-redux';
  * Footer component.
  */
 const Footer = ({ history }) => {
-    const paragraphStyle = {
-        display: 'block',
-        width: '65%'
+    const iconStyle = {
+        float: 'none',
+        marginRight: '3px'
     };
 
     const footerStyle = {
+        backgroundColor: 'rgb(0,61,115)',
         margin: '10px 0 0 0',
-        width: '100%'
+        padding: '1rem',
+        width: '100%',
+        color: '#fff'
     };
 
     const handleClick = path => {
@@ -26,27 +29,36 @@ const Footer = ({ history }) => {
     };
     return (
         <footer style={footerStyle}>
-            <Menu attached inverted color="blue">
-                <Menu.Item position="right" style={paragraphStyle}>
-                    <p>
-                        <Translate id="footer.permission" />
-                    </p>
-                    <Icon name="heartbeat" />
-                    <Translate id="footer.developed_by" />
-                    <p>
-                        <Icon name="hand peace" />
-                        <Translate id="footer.maintained_by" />
-                    </p>
-                </Menu.Item>
-                <Menu.Menu position="left">
-                    {history.location.pathname !== urls.about && (
-                        <Menu.Item onClick={() => handleClick(urls.about)}>
-                            <Icon name="question circle outline" />
-                            <Translate id="footer.about_link" />
-                        </Menu.Item>
-                    )}
-                </Menu.Menu>
-            </Menu>
+            <Container>
+                <Grid>
+                    <Grid.Row>
+                        <Grid.Column largeScreen={12} computer={12} tablet={10} mobile={16}>
+                            <p>
+                                <Translate id="footer.permission" />
+                            </p>
+                            <Icon name="heartbeat" />
+                            <Translate id="footer.developed_by" />
+                            <p>
+                                <Icon name="hand peace" />
+                                <Translate id="footer.maintained_by" />
+                            </p>
+                        </Grid.Column>
+                        <Grid.Column largeScreen={4} computer={4} tablet={6} mobile={16}>
+                            <Menu secondary vertical inverted fluid>
+                                <Menu.Item onClick={() => handleClick(urls.feedback)}>
+                                    <Icon name="send" style={iconStyle} />
+                                    <Translate id="footer.feedback_link" />
+                                </Menu.Item>
+
+                                <Menu.Item onClick={() => handleClick(urls.about)}>
+                                    <Icon name="question circle outline" style={iconStyle} />
+                                    <Translate id="footer.about_link" />
+                                </Menu.Item>
+                            </Menu>
+                        </Grid.Column>
+                    </Grid.Row>
+                </Grid>
+            </Container>
         </footer>
     );
 };

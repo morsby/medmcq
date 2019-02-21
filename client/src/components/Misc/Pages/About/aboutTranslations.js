@@ -102,8 +102,7 @@ export default {
                 The site uses no cookies unless you register for an account and log in. In this case, a cookie is set to remember you for your next visit.
             </p>`
             ]
-        },
-        feedback_link: ['Giv noget feedback', 'Drop some feedback']
+        }
     },
     fancyFeatures: {
         header: ['Smarte/skjulte funktioner', 'Fancy/hidden features'],
