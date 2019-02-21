@@ -9,7 +9,8 @@ import { withRouter } from 'react-router';
 import { withLocalize, Translate } from 'react-localize-redux';
 import layoutTranslations from './layoutTranslations.json';
 
-import { Flag, Menu, Icon, Responsive, Image } from 'semantic-ui-react';
+import { Menu, Icon, Responsive, Image } from 'semantic-ui-react';
+import Flag from 'react-flagkit';
 import { urls, breakpoints } from '../../utils/common';
 import logo from './logo/aulogo_dk_var2_hvid.png';
 
@@ -20,7 +21,8 @@ import logo from './logo/aulogo_dk_var2_hvid.png';
  */
 class Header extends Component {
     flagStyle = {
-        cursor: 'pointer'
+        cursor: 'pointer',
+        marginRight: '3px'
     };
 
     constructor(props) {
@@ -79,7 +81,7 @@ class Header extends Component {
 
         return (
             <header>
-                <Menu inverted color="blue" attached>
+                <Menu inverted color="blue" attached borderless={true}>
                     <Menu.Item onClick={() => handleClick('root')}>
                         <Image src={logo} size="small" />
                     </Menu.Item>
@@ -88,9 +90,10 @@ class Header extends Component {
                             {languages.map(lang => (
                                 <Flag
                                     key={lang.code}
-                                    style={this.flagStyle}
+                                    country={lang.code.toUpperCase()}
+                                    role="button"
                                     onClick={() => this.changeLang(lang.code)}
-                                    name={lang.code}
+                                    style={this.flagStyle}
                                 />
                             ))}
                         </Menu.Item>
@@ -139,11 +142,6 @@ Header.propTypes = {
     changeSettings: PropTypes.func,
 
     /**
-     * Det gemte sprogvalg. Fra redux settings.
-     */
-    defaultLanguage: PropTypes.string,
-
-    /**
      * addTranslation: Tilføjer layoutTranslations over hele appen
      */
     addTranslation: PropTypes.func
@@ -151,8 +149,7 @@ Header.propTypes = {
 
 function mapStateToProps(state) {
     return {
-        user: state.auth.user,
-        defaultLanguage: state.settings.language
+        user: state.auth.user
     };
 }
 
