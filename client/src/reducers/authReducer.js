@@ -23,7 +23,7 @@ const initialState = {
  */
 export default createReducer(initialState, {
     [types.AUTH_CURRENT_USER]: (state, action) => {
-        // Modtages en bruger? Ellers sender vi et tomt object
+        // Modtages en bruger? Ellers sender vi null
         let user = action.payload ? action.payload : null;
         state.user = user;
     },
