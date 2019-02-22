@@ -52,3 +52,7 @@ Hvis et punkt er tildelt en udvikler, vil det fremgå med navn og/eller `branch`
 - [x] Oversættelse til engelsk (Sigurd - `localize`)
 - [x] Mulighed for at tilføje/ændre specialer
 - [x] Mulighed for at kommentere spørgsmål
+
+## Ideer
+
+- [ ] MCQ system med CT billeder, røntgen billeder, EKG. Når man svarer skal man få feedback i form at pile, der pejer på hvad man skulle have set. Featuren kan indeholde muligheden for at flere svar er rigtige på samme tid.
