@@ -10,9 +10,10 @@
     "prettier": {
         "printWidth": 100,
         "trailingComma": "none",
-        "tabWidth": 4,
+        "tabWidth": 2,
         "semi": true,
-        "singleQuote": true
+        "singleQuote": true,
+        "arrowParens": "always"
     },
     "repository": "https://github.com/Morsby/au-medicin-mcq",
     "scripts": {
