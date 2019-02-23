@@ -13,6 +13,7 @@ import { Menu, Icon, Responsive, Image } from 'semantic-ui-react';
 import Flag from 'react-flagkit';
 import { urls, breakpoints } from '../../utils/common';
 import logo from './logo/aulogo_dk_var2_hvid.png';
+import logoNoText from './logo/aulogo_hvid.png';
 
 // TODO: Evt. fjern connect - men skal så modtage `user` via parents
 
@@ -20,134 +21,144 @@ import logo from './logo/aulogo_dk_var2_hvid.png';
  * Header-component. Viser headeren og tjekker at brugeren er logget ind.
  */
 class Header extends Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.props.addTranslation(layoutTranslations);
+    this.props.addTranslation(layoutTranslations);
 
-        this.changeLang = this.changeLang.bind(this);
+    this.changeLang = this.changeLang.bind(this);
+  }
+
+  componentDidMount() {
+    this.props.fetchUser();
+  }
+
+  changeLang(lang) {
+    this.props.setActiveLanguage(lang);
+    this.props.changeSettings({ type: 'language', value: lang });
+  }
+
+  generateFlag(lang) {
+    if (lang.code !== this.props.activeLanguage)
+      return (
+        <Menu.Item onClick={() => this.changeLang(lang.code)} key={lang.code}>
+          <Flag country={lang.code.toUpperCase()} size="14" />
+        </Menu.Item>
+      );
+  }
+
+  render() {
+    let { user, history, languages } = this.props;
+
+    const handleClick = (path) => {
+      history.push(urls[path]);
+    };
+
+    let højreMenu;
+
+    if (user) {
+      højreMenu = (
+        <>
+          <Responsive as={Menu.Item} minWidth={breakpoints.mobile}>
+            <strong>
+              <Translate
+                id="header.greeting"
+                data={{
+                  user: user.username[0].toUpperCase() + user.username.substring(1)
+                }}
+              />
+            </strong>
+          </Responsive>
+          <Menu.Item onClick={() => handleClick('profile')}>
+            <Icon name="id card outline" size="big" inverted className="click" />
+            <Translate id="header.profile" />
+          </Menu.Item>
+        </>
+      );
+    } else {
+      højreMenu = (
+        <Menu.Item onClick={() => handleClick('login')}>
+          <Icon name="user md" /> <Translate id="header.login" />
+        </Menu.Item>
+      );
     }
 
-    componentDidMount() {
-        this.props.fetchUser();
-    }
+    return (
+      <header>
+        <Menu inverted color="blue" attached borderless={true}>
+          <Menu.Item onClick={() => handleClick('root')}>
+            <Responsive minWidth={breakpoints.mobile + 1}>
+              <Image src={logo} size="small" style={{ height: '30px' }} />
+            </Responsive>
+            <Responsive maxWidth={breakpoints.mobile}>
+              <Image src={logoNoText} style={{ height: '30px' }} />
+            </Responsive>
+          </Menu.Item>
+          <Menu.Menu position="right">
+            {languages.map((lang) => this.generateFlag(lang))}
 
-    changeLang(lang) {
-        this.props.setActiveLanguage(lang);
-        this.props.changeSettings({ type: 'language', value: lang });
-    }
-
-    render() {
-        let { user, history, languages } = this.props;
-
-        const handleClick = path => {
-            history.push(urls[path]);
-        };
-
-        let højreMenu;
-
-        if (user) {
-            højreMenu = (
-                <>
-                    <Responsive as={Menu.Item} minWidth={breakpoints.mobile}>
-                        <strong>
-                            <Translate
-                                id="header.greeting"
-                                data={{
-                                    user:
-                                        user.username[0].toUpperCase() + user.username.substring(1)
-                                }}
-                            />
-                        </strong>
-                    </Responsive>
-                    <Menu.Item onClick={() => handleClick('profile')}>
-                        <Icon name="id card outline" size="big" inverted className="click" />
-                        <Translate id="header.profile" />
-                    </Menu.Item>
-                </>
-            );
-        } else {
-            højreMenu = (
-                <Menu.Item onClick={() => handleClick('login')}>
-                    <Icon name="user md" /> <Translate id="header.login" />
-                </Menu.Item>
-            );
-        }
-
-        return (
-            <header>
-                <Menu inverted color="blue" attached borderless={true}>
-                    <Menu.Item onClick={() => handleClick('root')}>
-                        <Image src={logo} size="small" />
-                    </Menu.Item>
-                    <Menu.Menu position="right">
-                        {languages.map(lang => (
-                            <Menu.Item onClick={() => this.changeLang(lang.code)} key={lang.code}>
-                                <Flag country={lang.code.toUpperCase()} size="16" />
-                            </Menu.Item>
-                        ))}
-
-                        {højreMenu}
-                    </Menu.Menu>
-                </Menu>
-            </header>
-        );
-    }
+            {højreMenu}
+          </Menu.Menu>
+        </Menu>
+      </header>
+    );
+  }
 }
 
 Header.propTypes = {
-    /**
-     * Func der henter den aktuelt indloggede bruger. Fra redux.
-     */
-    fetchUser: PropTypes.func,
+  /**
+   * Func der henter den aktuelt indloggede bruger. Fra redux.
+   */
+  fetchUser: PropTypes.func,
 
-    /**
-     * Brugeren fra fetchUser.
-     */
-    user: PropTypes.object,
+  /**
+   * Brugeren fra fetchUser.
+   */
+  user: PropTypes.object,
 
-    /**
-     * History fra ReactRouter. Bruges til navigation.
-     */
-    history: ReactRouterPropTypes.history,
+  /**
+   * History fra ReactRouter. Bruges til navigation.
+   */
+  history: ReactRouterPropTypes.history,
 
-    /**
-     * Mulige languages. Fra react-localize-redux
-     */
-    languages: PropTypes.array,
+  /**
+   * Mulige languages. Fra react-localize-redux
+   */
+  languages: PropTypes.array,
 
-    /**
-     * initialize. Fra react-localize-redux
-     */
-    initialize: PropTypes.func,
+  /**
+   * initialize. Fra react-localize-redux
+   */
+  initialize: PropTypes.func,
 
-    /**
-     * Func der ændrer active language. Fra react-localize-redux
-     */
-    setActiveLanguage: PropTypes.func,
+  /**
+   * Func der ændrer active language. Fra react-localize-redux
+   */
+  setActiveLanguage: PropTypes.func,
 
-    /**
-     * Funktion der ændrer settings for app'en (bruges til at gemme sprogvalg)
-     */
-    changeSettings: PropTypes.func,
+  /**
+   * Funktion der ændrer settings for app'en (bruges til at gemme sprogvalg)
+   */
+  changeSettings: PropTypes.func,
 
-    /**
-     * addTranslation: Tilføjer layoutTranslations over hele appen
-     */
-    addTranslation: PropTypes.func
+  /**
+   * addTranslation: Tilføjer layoutTranslations over hele appen
+   */
+  addTranslation: PropTypes.func
 };
 
 function mapStateToProps(state) {
-    return {
-        user: state.auth.user
-    };
+  return {
+    user: state.auth.user,
+    activeLanguage: state.settings.language
+  };
 }
 
 export default withRouter(
-    withLocalize(
-        connect(
-            mapStateToProps,
-            actions
-        )(Header)
-    )
+  withLocalize(
+    connect(
+      mapStateToProps,
+      actions
+    )(Header)
+  )
 );
