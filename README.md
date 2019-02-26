@@ -44,13 +44,14 @@ Hvis et punkt er tildelt en udvikler, vil det fremgå med navn og/eller `branch`
 
 ## Planlagte projekter
 
-- [ ] Route til eksport af statistik af brugen af siden.
+
 - [ ] Implementering af tracking der ikke benytter servere udefra.
 - [ ] "Rapporter en fejl"-funktion ved alle spørgsmål
 - [ ] Excel-ark?
 - [ ] Side hvor man kan følge med i ændringer
 - [ ] Udvikling af algoritme, så "tilfældige spørgsmål" fortrinsvist tager spørgsmål, der er svaret forkert tidligere/ikke tidligere besvaret
 - [ ] Mulighed for tilføjelse af personlige kommentarer
+- [x] Route til eksport af statistik af brugen af siden.
 - [x] Oversættelse til engelsk (Sigurd - `localize`)
 - [x] Mulighed for at tilføje/ændre specialer
 - [x] Mulighed for at kommentere spørgsmål
