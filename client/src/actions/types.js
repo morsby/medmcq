@@ -11,12 +11,6 @@ export const QUESTION_SPECIALTY_UPDATE = 'question_specialty_update';
 export const CHANGE_SETTINGS = 'change_settings';
 export const FETCH_SETTINGS_QUESTION = 'fetch_settings_question';
 
-/* export const FETCH_FEEDBACK = 'fetch_feedback';
-export const FETCH_FEEDBACK_SPECIFIC = 'FETCH_FEEDBACK_SPECIFIC';
-export const POST_FEEDBACK = 'post_feedback';
-export const POST_FEEDBACK_COMMENT = 'post_feedback_comment';
-export const VOTE_FEEDBACK = 'vote_feedback'; */
-
 export const AUTH_SIGNUP = 'auth_signup';
 export const AUTH_CURRENT_USER = 'auth_current_user';
 export const AUTH_GET_ANSWERED_QUESTIONS = 'auth_get_answered_questions';

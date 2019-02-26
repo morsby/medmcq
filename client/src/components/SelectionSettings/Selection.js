@@ -58,10 +58,10 @@ class SelectionMain extends Component {
   }
 
   /**
-   * Func der ændrer settings i redux state.
+   * Func der ændrer settings i redux state. Passes via Semantic UI (derfor navnene)
    * @param  {event} e         Event. Bruges ikke.
+   * @param  {string} name     Den indstilling der ændres
    * @param  {string} value    Den værdi der sættes
-   * @param  {string} type     Den indstilling der ændres
    */
   onSettingsChange(e, { name, value }) {
     let type = name;
@@ -74,7 +74,7 @@ class SelectionMain extends Component {
   /**
    * Func der (efter validering) henter spørgsmålene
    * @param  {string} quizType Er der tale om en ny quiz eller fortsættelse
-   *                           af en gammeL?
+   *                           af en gammel?
    */
   handleSubmit(quizType) {
     let err = [];
@@ -273,6 +273,11 @@ SelectionMain.propTypes = {
    * Func der kaldes, når der ændres indstillinger. Ændrer Redux state.
    */
   changeSettings: PropTypes.func,
+
+  /**
+   * Func der henter nye spørgsmål til semesteret. Ændrer redux state
+   */
+  fetchSettingsQuestions: PropTypes.func,
 
   /**
    * Func der henter nye spørgsmål (ud fra settings) fra API'en.

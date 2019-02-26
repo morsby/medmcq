@@ -51,6 +51,11 @@ const initialState = {
   language: 'dk',
 
   /**
+   * Hvornår blev der sidst hentet spørgsmål til SETTINGS?
+   */
+  lastSettingsQuestionFetch: 0,
+
+  /**
    * ========================================================
    * HER NEDENFOR HÅNDTERES DET IKKE AF types.CHANGE_SETTINGS
    */
@@ -63,12 +68,7 @@ const initialState = {
   /**
    * Hvornår blev sidst hentet spørgsmål til QUIZZEN?
    */
-  lastFetch: 0,
-
-  /**
-   * Hvornår blev der sidst hentet spørgsmål til SETTINGS?
-   */
-  lastSettingsQuestionFetch: 0
+  lastFetch: 0
 };
 /**
  * createReducer er en funktion fra redux-starter-kit, der laver en IMMUTABLE

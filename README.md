@@ -22,9 +22,9 @@ Hvis et punkt er tildelt en udvikler, vil det fremgå med navn og/eller `branch`
 ### API
 
 - [ ] Oprydning (særligt `routes/questions.js`)
-- [ ] Brug Router module (Thomas)
-- [ ] async/await syntax (Thomas)
 - [ ] Flyt user/auth-validation meddelelser ud af API'en og ind i react (for bedre oversættelser)
+- [x] Brug Router module (Thomas)
+- [x] async/await syntax (Thomas)
 
 ### React
 
@@ -44,15 +44,19 @@ Hvis et punkt er tildelt en udvikler, vil det fremgå med navn og/eller `branch`
 
 ## Planlagte projekter
 
+- [ ] Route til eksport af statistik af brugen af siden.
+- [ ] Implementering af tracking der ikke benytter servere udefra.
+- [ ] "Rapporter en fejl"-funktion ved alle spørgsmål
 - [ ] Excel-ark?
 - [ ] Side hvor man kan følge med i ændringer
 - [ ] Udvikling af algoritme, så "tilfældige spørgsmål" fortrinsvist tager spørgsmål, der er svaret forkert tidligere/ikke tidligere besvaret
-- [ ] Mulighed for rettelse af spørgsmål
 - [ ] Mulighed for tilføjelse af personlige kommentarer
 - [x] Oversættelse til engelsk (Sigurd - `localize`)
 - [x] Mulighed for at tilføje/ændre specialer
 - [x] Mulighed for at kommentere spørgsmål
+- [ ] ~~Mulighed for rettelse af spørgsmål~~
 
 ## Ideer
 
 - [ ] MCQ system med CT billeder, røntgen billeder, EKG. Når man svarer skal man få feedback i form at pile, der pejer på hvad man skulle have set. Featuren kan indeholde muligheden for at flere svar er rigtige på samme tid.
+- [ ] Et mindre admin-interface (ændring af spørgsmål m.v.)? Ikke full-blown, det vil blive for meget.
