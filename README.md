@@ -33,7 +33,7 @@ Hvis et punkt er tildelt en udvikler, vil det fremgå med navn og/eller `branch`
 - [ ] Autocomplete i profil-formularer
 - [ ] Undgå at Firefox åbner søge-dialogen, når der svares på spørgsmål med tal
 - [ ] Ryd op i Component-logik (større projekt ... - særligt formular-validation og Redux-connects)
-- [ ] Print virker ikke i alle browsers
+- [x] Print virker ikke i alle browsers
 - [x] ~~Få component til at opdatere selv ved dybt nested ny kommentar. (Klares nok i `immutable-redux`)~~ (feedback udgået)
 - [x] Bedre immutability i Redux. Se [denne side](https://redux.js.org/recipes/structuring-reducers/immutable-update-patterns) (Sigurd - `immutable-redux`)
 - [x] Formindsk Swipe-følsomhed
