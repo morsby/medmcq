@@ -58,9 +58,17 @@ const persistConfig = {
 
 const pReducer = persistReducer(persistConfig, reducers);
 
+let middleware = getDefaultMiddleware();
+
+/**
+ * removes createSerializableStateInvariantMiddleware which threw a bunch of errs
+ * over react-localize-redux and redux-persist.
+ */
+if (middleware.length > 1) middleware.pop();
+
 export const store = configureStore({
   reducer: pReducer,
-  middleware: getDefaultMiddleware(),
+  middleware,
   devTools: true
 });
 
