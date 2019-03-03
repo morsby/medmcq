@@ -46,6 +46,8 @@ import { urls } from './utils/common';
 
 import './styles/css/main.css';
 import './semantic/dist/semantic.min.css';
+// Lightbox css
+import 'react-image-lightbox/style.css'; // This only needs to be imported once in your app
 import { configureStore, getDefaultMiddleware } from 'redux-starter-kit';
 
 const persistConfig = {

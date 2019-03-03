@@ -84,7 +84,7 @@ class Header extends Component {
     }
 
     return (
-      <header>
+      <header className={this.props.noPrint ? 'hide-on-print' : ''}>
         <Menu inverted color="blue" attached borderless={true}>
           <Menu.Item onClick={() => handleClick('root')}>
             <Responsive minWidth={breakpoints.mobile + 1}>
@@ -106,6 +106,11 @@ class Header extends Component {
 }
 
 Header.propTypes = {
+  /**
+   * noPrint: Boolean (kaldt fra Print-component) for at skjule header ved udskrift
+   */
+  noPrint: PropTypes.bool,
+
   /**
    * Func der henter den aktuelt indloggede bruger. Fra redux.
    */

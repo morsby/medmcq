@@ -19,103 +19,92 @@ import printTranslations from './printTranslations.json';
  * hvorvidt svar er synlige eller ej.
  */
 class Print extends Component {
-    state = { showCorrect: false };
+  state = { showCorrect: false };
 
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.props.addTranslation(printTranslations);
+    this.props.addTranslation(printTranslations);
 
-        this.toggleAnswers = this.toggleAnswers.bind(this);
-    }
+    this.toggleAnswers = this.toggleAnswers.bind(this);
+  }
 
-    toggleAnswers() {
-        this.setState(prevState => {
-            return { showCorrect: !prevState.showCorrect };
-        });
-    }
+  toggleAnswers() {
+    this.setState((prevState) => {
+      return { showCorrect: !prevState.showCorrect };
+    });
+  }
 
-    handleNavigation(path) {
-        this.props.history.push(urls[path]);
-    }
+  handleNavigation(path) {
+    this.props.history.push(urls[path]);
+  }
 
-    render() {
-        let { showCorrect } = this.state;
-        let { questions } = this.props;
+  render() {
+    let { showCorrect } = this.state;
+    let { questions } = this.props;
 
-        return (
-            <div className="flex-container">
-                <Header noPrint />
-                <Container className="content print">
-                    <div className="hide-on-print">
-                        <Button.Group className="hide-on-print">
-                            <Button
-                                className="primary"
-                                onClick={this.toggleAnswers}
-                            >
-                                {showCorrect ? (
-                                    <Translate id="print.show_correct" />
-                                ) : (
-                                    <Translate id="print.hide_correct" />
-                                )}
-                            </Button>
-                            <Button
-                                className="hide-on-print"
-                                onClick={() => window.print()}
-                            >
-                                <Translate id="print.print" />
-                            </Button>
-                        </Button.Group>
-                        <Button
-                            color="yellow"
-                            floated="right"
-                            onClick={() => this.handleNavigation('quiz')}
-                        >
-                            <Translate id="print.return_to_quiz" />
-                        </Button>
-                    </div>
+    return (
+      <div className="flex-container">
+        <Header noPrint />
+        <Container className="content print">
+          <div className="hide-on-print">
+            <Button.Group className="hide-on-print">
+              <Button className="primary" onClick={this.toggleAnswers}>
+                {showCorrect ? (
+                  <Translate id="print.hide_correct" />
+                ) : (
+                  <Translate id="print.show_correct" />
+                )}
+              </Button>
+              <Button className="hide-on-print" onClick={() => window.print()}>
+                <Translate id="print.print" />
+              </Button>
+            </Button.Group>
+            <Button color="yellow" floated="right" onClick={() => this.handleNavigation('quiz')}>
+              <Translate id="print.return_to_quiz" />
+            </Button>
+          </div>
 
-                    {questions.map((q, i) => {
-                        return (
-                            <div className="avoid-page-break" key={q._id}>
-                                <h3>
-                                    <Translate
-                                        id="print.question"
-                                        data={{ n: i + 1 }}
-                                    />
-                                </h3>
-                                <PrintDisplayQuestion
-                                    questionProp={q}
-                                    showCorrect={showCorrect}
-                                />
-                            </div>
-                        );
-                    })}
-                </Container>
-            </div>
-        );
-    }
+          {questions.map((q, i) => {
+            return (
+              <div className="avoid-page-break" key={q._id}>
+                <h3>
+                  <Translate id="print.question" data={{ n: i + 1 }} />
+                </h3>
+                <PrintDisplayQuestion questionProp={q} showCorrect={showCorrect} />
+              </div>
+            );
+          })}
+        </Container>
+      </div>
+    );
+  }
 }
 
 Print.propTypes = {
-    /**
-     * Array af spørgsmål. Fra redux (questionsReducer)
-     */
-    questions: PropTypes.array,
+  /**
+   * Array af spørgsmål. Fra redux (questionsReducer)
+   */
+  questions: PropTypes.array,
 
-    /**
-     * Fra ReactRouter
-     */
-    history: ReactRouterPropTypes.history,
+  /**
+   * Fra ReactRouter
+   */
+  history: ReactRouterPropTypes.history,
+
+  /**
+   * Tilføjer oversættelsr. Fra react-localize-redux
+   */
+  addTranslation: PropTypes.func
 };
 
 function mapStateToProps(state) {
-    return {
-        questions: state.questions,
-    };
+  return {
+    questions: state.questions
+  };
 }
 
 export default connect(
-    mapStateToProps,
-    null
+  mapStateToProps,
+  null
 )(withLocalize(Print));

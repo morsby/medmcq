@@ -1,9 +1,20 @@
 {
-    "print": {
-        "show_correct": ["Vis rigtige svar", "Show correct answers"],
-        "hide_correct": ["Skjul rigtige svar", "Hide correct answers"],
-        "print": ["Print spørgsmål", "Print questions"],
-        "return_to_quiz": ["Vend tilbage til quizzen", "Return to the quiz"],
-        "question": ["Spørgsmål ${n}", "Question ${n}"]
+  "print": {
+    "show_correct": ["Vis rigtige svar", "Show correct answers"],
+    "hide_correct": ["Skjul rigtige svar", "Hide correct answers"],
+    "print": ["Print spørgsmål", "Print questions"],
+    "return_to_quiz": ["Vend tilbage til quizzen", "Return to the quiz"],
+    "question": ["Spørgsmål ${n}", "Question ${n}"],
+    "metadata": {
+      "from": ["Fra: ", "From: "],
+      "semester": ["${n}. semester", "${n}th semester"],
+      "specialties": ["Specialer", "Specialties"],
+      "seasons": {
+        "E": ["efterår", "autumn"],
+        "F": ["forår", "spring"],
+        "E-reeks": ["efterår (reeksamen)", "autumn (re-exam)"]
+      },
+      "question": ["spørgsmål ${n}.", "question ${n}."]
     }
+  }
 }
