@@ -41,6 +41,12 @@ class Question extends Component {
     report: '',
 
     /**
+     * Er der sendt en rapport?
+     * @type {Boolean}
+     */
+    reportSent: false,
+
+    /**
      * Er kommentarer vist?
      * @type {Boolean}
      */
@@ -115,6 +121,9 @@ class Question extends Component {
     if (this.props.question._id !== prevProps.question._id) {
       this.setState({
         imgOpen: false,
+        reportOpen: false,
+        reportSent: false,
+        report: '',
         commentsOpen: false,
         newComment: '',
         editingComment: '',
@@ -212,8 +221,8 @@ class Question extends Component {
   /** Håndter submit af rapport */
   onReportSubmit() {
     // TODO: CONNECT  TIL REDUX OG API
-    console.log(this.state.report);
-    this.setState({ report: '' });
+    this.props.questionReport(this.state.report, this.props.question);
+    this.setState({ report: '', reportSent: true });
   }
 
   /**
@@ -279,7 +288,6 @@ class Question extends Component {
 
   /**
    * Ændring af specialer
-   * @param {??}
    */
   onSpecialtiesEditToggle() {
     this.setState((prevState) => {
@@ -362,7 +370,7 @@ class Question extends Component {
               <Translate id="question.show_comments" data={{ n: question.comments.length }} />
             )}
           </Button>
-          <Button basic floated="right" onClick={this.onReportToggle}>
+          <Button basic color="orange" floated="right" onClick={this.onReportToggle}>
             <Translate id="question.report_question" />
           </Button>
           {this.state.reportOpen && (
@@ -370,6 +378,7 @@ class Question extends Component {
               report={this.state.report}
               handleChange={this.onTextType}
               handleSubmit={this.onReportSubmit}
+              reportSent={this.state.reportSent}
             />
           )}
           {this.state.commentsOpen && (
@@ -416,6 +425,12 @@ Question.propTypes = {
    * @type {func}
    */
   answerQuestion: PropTypes.func,
+
+  /**
+   * Action der kaldes ved indrapportering af en fejl i spørgsmålet
+   * @type {func}
+   */
+  questionReport: PropTypes.func,
 
   /**
    * Action der kaldes ved ændring af kommentar. Fra redux.

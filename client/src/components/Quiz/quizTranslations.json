@@ -24,7 +24,7 @@
   "question": {
     "show_comments": ["Vis kommentarer (${n})", "Show comments (${n})"],
     "hide_comments": ["Skjul kommentarer (${n})", "Hide comments (${n})"],
-    "report_question": ["Rapporter spørgsmål", "Report question"]
+    "report_question": ["Rapporter en fejl i spørgsmålet", "Report an error in the question"]
   },
   "questionMetadata": {
     "set": ["Sæt:", "Set:"],
@@ -33,6 +33,20 @@
       "F": ["F", "Spring "]
     },
     "specialty": ["Speciale:", "Specialty:"]
+  },
+  "questionReport": {
+    "label": ["Hvad er fejlen?", "What's the error?"],
+    "placeholder": [
+      "F.eks. \"der er en stavefejl i ordet blodpørve\", \"billede/tabel mangler\" eller \"det markerede svar stemmer ikke overens med det originale sæt\".",
+      "E.g. \"there is a spelling error in the word blood samlpe\", \"the picture/table is missing\" or \"the marked answer is not the same as in the original set\"."
+    ],
+    "message": {
+      "header": ["Tak for indberetning!", "Thanks for the heads up!"],
+      "body": [
+        "Vi ser på det og får det rettet hurtigst muligt!",
+        "We'll look into it and have it fixed ASAP!"
+      ]
+    }
   },
   "questionComments": {
     "write_a_comment": ["Skriv en kommentar", "Write a comment"],
