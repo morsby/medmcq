@@ -85,23 +85,26 @@ class Header extends Component {
     }
 
     return (
-      <header className={styles.noprint}>
-        <Menu inverted color="blue" attached borderless={true}>
-          <Menu.Item onClick={() => handleClick('root')}>
-            <Responsive minWidth={breakpoints.mobile + 1}>
-              <Image src={logo} size="small" style={{ height: '30px' }} />
-            </Responsive>
-            <Responsive maxWidth={breakpoints.mobile}>
-              <Image src={logoNoText} style={{ height: '30px' }} />
-            </Responsive>
-          </Menu.Item>
-          <Menu.Menu position="right">
-            {languages.map((lang) => this.generateFlag(lang))}
+      <>
+        <header>
+          <h2 className={styles.onprint}>Spørgsmål er hentet fra medMCQ</h2>
+          <Menu className={styles.noprint} inverted color="blue" attached borderless={true}>
+            <Menu.Item onClick={() => handleClick('root')}>
+              <Responsive minWidth={breakpoints.mobile + 1}>
+                <Image src={logo} size="small" style={{ height: '30px' }} />
+              </Responsive>
+              <Responsive maxWidth={breakpoints.mobile}>
+                <Image src={logoNoText} style={{ height: '30px' }} />
+              </Responsive>
+            </Menu.Item>
+            <Menu.Menu position="right">
+              {languages.map((lang) => this.generateFlag(lang))}
 
-            {højreMenu}
-          </Menu.Menu>
-        </Menu>
-      </header>
+              {højreMenu}
+            </Menu.Menu>
+          </Menu>
+        </header>
+      </>
     );
   }
 }

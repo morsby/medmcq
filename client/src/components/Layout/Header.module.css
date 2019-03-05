@@ -1,6 +1,14 @@
 @media print {
-  .noprint,
   .noprint * {
     display: none !important;
   }
+
+  .onprint {
+    display: block !important;
+  }
+}
+
+.onprint {
+  display: none;
+  color: black;
 }
