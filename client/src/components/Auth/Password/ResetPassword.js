@@ -13,7 +13,6 @@ import { Container, Message, Button, Divider } from 'semantic-ui-react';
 import { Form, Field } from 'react-final-form';
 import { Translate } from 'react-localize-redux';
 
-import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
 
 /**
@@ -35,7 +34,6 @@ class ResetPassword extends Component {
         let { message } = this.state;
         return (
             <div className="flex-container">
-                <Header />
                 <Container className="content">
                     <h3>
                         <Translate id="resetPassword.header" />

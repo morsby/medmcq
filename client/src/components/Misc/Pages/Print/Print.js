@@ -9,7 +9,6 @@ import { urls } from '../../../../utils/common';
 
 import { Container, Button } from 'semantic-ui-react';
 
-import Header from '../../../Layout/Header';
 import PrintDisplayQuestion from './PrintDisplayQuestion';
 
 import printTranslations from './printTranslations.json';
@@ -45,7 +44,6 @@ class Print extends Component {
 
     return (
       <div className="flex-container">
-        <Header noPrint />
         <Container className="content print">
           <div className="hide-on-print">
             <Button.Group className="hide-on-print">

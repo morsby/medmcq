@@ -7,7 +7,6 @@ import feedbackTranslations from './feedbackTranslations';
 import marked from 'marked';
 
 import { Container } from 'semantic-ui-react';
-import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
 
 /**
@@ -18,7 +17,6 @@ const Feedback = ({ addTranslation }) => {
 
     return (
         <div className="flex-container">
-            <Header />
             <Container className="content">
                 <h1>
                     <Translate id="feedback.header" />
