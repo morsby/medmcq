@@ -3,6 +3,7 @@ import React from 'react';
 import { Container, Message } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 
+import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
 import SignupForm from './SignupForm';
 
@@ -12,6 +13,7 @@ import SignupForm from './SignupForm';
 const Signup = () => {
     return (
         <div className="flex-container">
+            <Header />
             <Container className="content">
                 <h3>
                     <Translate id="signup.header" />

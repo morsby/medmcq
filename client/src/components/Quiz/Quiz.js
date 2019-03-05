@@ -12,6 +12,7 @@ import Question from './Question/Question';
 import QuizNavigator from './QuizNavigator';
 import QuizSummary from './QuizSummary';
 
+import Header from '../Layout/Header';
 import Footer from '../Layout/Footer';
 
 import { smoothScroll } from '../../utils/quiz';
@@ -148,6 +149,7 @@ class QuizMain extends Component {
 
         return (
             <div className="flex-container">
+                <Header />
                 <div className="content">
                     <QuizNavigator
                         onNavigate={this.onChangeQuestion}

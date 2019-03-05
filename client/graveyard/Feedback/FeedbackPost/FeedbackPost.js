@@ -12,6 +12,7 @@ import { Translate } from 'react-localize-redux';
 import FeedbackNavigation from '../FeedbackNavigation';
 // bruges til preview:
 import FeedbackSingleContent from '../FeedbackSingle/FeedbackSingleContent';
+import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
 
 /**
@@ -30,6 +31,7 @@ const FeedbackPost = ({ postFeedback, history }) => {
 
     return (
         <div className="flex-container">
+            <Header />
             <Container className="content">
                 <FeedbackNavigation />
                 <Translate>

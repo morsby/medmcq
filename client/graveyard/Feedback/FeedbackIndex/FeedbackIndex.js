@@ -14,6 +14,7 @@ import { Translate } from 'react-localize-redux';
 import FeedbackNavigation from '../FeedbackNavigation';
 import FeedbackList from './FeedbackList/FeedbackList';
 
+import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
 
 /**
@@ -22,80 +23,81 @@ import Footer from '../../Layout/Footer';
  * Props ses i bunden, stammer alle fra redux.
  */
 class FeedbackIndex extends Component {
-  constructor(props) {
-    super(props);
+    constructor(props) {
+        super(props);
 
-    this.getSpecificFeedback = this.getSpecificFeedback.bind(this);
-  }
+        this.getSpecificFeedback = this.getSpecificFeedback.bind(this);
+    }
 
-  componentDidMount() {
-    this.props.fetchFeedback();
-  }
+    componentDidMount() {
+        this.props.fetchFeedback();
+    }
 
-  getSpecificFeedback(id) {
-    this.props.fetchFeedbackSpecific(id);
-    this.props.history.push(`${urls.feedback}/${id}`);
-  }
+    getSpecificFeedback(id) {
+        this.props.fetchFeedbackSpecific(id);
+        this.props.history.push(`${urls.feedback}/${id}`);
+    }
 
-  render() {
-    return (
-      <div className="flex-container">
-        <Container className="content">
-          <FeedbackNavigation />
-          <h1>Feedback</h1>
+    render() {
+        return (
+            <div className="flex-container">
+                <Header />
+                <Container className="content">
+                    <FeedbackNavigation />
+                    <h1>Feedback</h1>
 
-          <FeedbackList
-            feedback={this.props.feedback}
-            getSpecificFeedback={this.getSpecificFeedback}
-          />
+                    <FeedbackList
+                        feedback={this.props.feedback}
+                        getSpecificFeedback={this.getSpecificFeedback}
+                    />
 
-          <h2>
-            <Translate id="feedbackIndex.help_wanted.header" />
-          </h2>
-          <p>
-            <Translate id="feedbackIndex.help_wanted.body" />
-          </p>
-        </Container>
-        <Footer />
-      </div>
-    );
-  }
+                    <h2>
+                        <Translate id="feedbackIndex.help_wanted.header" />
+                    </h2>
+                    <p>
+                        <Translate id="feedbackIndex.help_wanted.body" />
+                    </p>
+                </Container>
+                <Footer />
+            </div>
+        );
+    }
 }
 
 FeedbackIndex.propTypes = {
-  /**
-   * Array af feedback-forslag, passes til FeedbackList
-   * Fra redux
-   */
-  feedback: PropTypes.array,
+    /**
+     * Array af feedback-forslag, passes til FeedbackList
+     * Fra redux
+     */
+    feedback: PropTypes.array,
 
-  /**
-   * Funktion der henter alle feedbackforslag (i grov form)
-   * Fra redux
-   */
-  fetchFeedback: PropTypes.func,
+    /**
+     * Funktion der henter alle feedbackforslag (i grov form)
+     * Fra redux
+     */
+    fetchFeedback: PropTypes.func,
 
-  /**
-   * Funktion der henter kommentarer, tekst, m.v. til ét forslag
-   * Fra redux
-   */
-  fetchFeedbackSpecific: PropTypes.func,
+    /**
+     * Funktion der henter kommentarer, tekst, m.v. til ét forslag
+     * Fra redux
+     */
+    fetchFeedbackSpecific: PropTypes.func,
 
-  /**
-   * Fra react-router-dom
-   */
-  history: ReactRouterPropTypes.history
+    /**
+     * Fra react-router-dom
+     */
+    history: ReactRouterPropTypes.history,
 };
 
 function mapStateToProps(state) {
-  return {
-    feedback: state.feedback.feedback
-  };
+    return {
+        feedback: state.feedback.feedback,
+    };
 }
 
 export default withRouter(
-  connect(
-    mapStateToProps,
-    actions
-  )(FeedbackIndex)
+    connect(
+        mapStateToProps,
+        actions
+    )(FeedbackIndex)
 );

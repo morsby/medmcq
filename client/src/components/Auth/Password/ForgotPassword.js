@@ -6,6 +6,7 @@ import * as actions from '../../../actions';
 import { Container, Message, Form, Button } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 
+import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
 
 /**
@@ -30,6 +31,7 @@ class ForgotPassword extends Component {
         let { message } = this.state;
         return (
             <div className="flex-container">
+                <Header />
                 <Container className="content">
                     <h3>
                         <Translate id="forgotPassword.header" />

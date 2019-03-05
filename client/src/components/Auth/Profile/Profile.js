@@ -11,6 +11,7 @@ import _ from 'lodash';
 import { Container, Tab, Button, Divider } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 
+import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
 
 import ProfileAnswerDetails from './ProfileAnswerDetails';
@@ -149,6 +150,7 @@ class Profile extends Component {
 
         return (
             <div className="flex-container">
+                <Header />
                 <Container className="content">
                     <h2>{user.username}</h2>
                     <Button

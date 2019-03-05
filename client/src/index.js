@@ -49,7 +49,6 @@ import './semantic/dist/semantic.min.css';
 // Lightbox css
 import 'react-image-lightbox/style.css'; // This only needs to be imported once in your app
 import { configureStore, getDefaultMiddleware } from 'redux-starter-kit';
-import Header from './components/Layout/Header';
 
 const persistConfig = {
   key: 'root',
@@ -97,7 +96,6 @@ class App extends Component {
     return (
       <BrowserRouter>
         <ScrollToTop>
-          <Header />
           <Switch>
             <Route exact path="/" component={SelectionMain} />
             <Route path={urls.about} component={About} />
