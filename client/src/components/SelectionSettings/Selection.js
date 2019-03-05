@@ -47,15 +47,15 @@ class SelectionMain extends Component {
    * Henter også nye spørgsmål hvert mount (altså hver gang brugeren går til forsiden)
    */
   componentDidMount() {
-    let { questions, semester } = this.props.settings;
+    let { questions, semester, type } = this.props.settings;
     if (questions.length === 0 && semester === 7) {
-      let type = 'semester';
-      let value = 7;
-      let e = null;
+      const type = 'semester';
+      const value = 7;
+      const e = null;
 
       this.onSettingsChange(e, { type, value });
     } else {
-      this.onSettingsChange(null, { type: this.props.settings.type, value: semester });
+      this.onSettingsChange(null, { type: type, value: semester });
     }
   }
 
