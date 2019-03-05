@@ -14,6 +14,7 @@ import Flag from 'react-flagkit';
 import { urls, breakpoints } from '../../utils/common';
 import logo from './logo/aulogo_dk_var2_hvid.png';
 import logoNoText from './logo/aulogo_hvid.png';
+import styles from './Header.module.css';
 
 // TODO: Evt. fjern connect - men skal så modtage `user` via parents
 
@@ -84,7 +85,7 @@ class Header extends Component {
     }
 
     return (
-      <header className={this.props.noPrint ? 'hide-on-print' : ''}>
+      <header className={styles.noprint}>
         <Menu inverted color="blue" attached borderless={true}>
           <Menu.Item onClick={() => handleClick('root')}>
             <Responsive minWidth={breakpoints.mobile + 1}>
