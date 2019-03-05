@@ -49,7 +49,7 @@ class SelectionMain extends Component {
   componentDidMount() {
     let { questions, semester, type } = this.props.settings;
     if (questions.length === 0 && semester === 7) {
-      const type = 'semester';
+      type = 'semester';
       const value = 7;
       const e = null;
 
