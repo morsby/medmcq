@@ -6,7 +6,6 @@ import { withLocalize, Translate } from 'react-localize-redux';
 import aboutTranslations from './aboutTranslations';
 
 import { Container, Message, Divider } from 'semantic-ui-react';
-import Header from '../../../Layout/Header';
 import Footer from '../../../Layout/Footer';
 
 import FancyFeatures from './FancyFeatures';
@@ -19,7 +18,6 @@ const About = ({ addTranslation }) => {
 
     return (
         <div className="flex-container">
-            <Header />
             <Container className="content">
                 <h1>
                     <Translate id="about.header" />

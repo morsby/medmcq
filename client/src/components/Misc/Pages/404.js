@@ -5,7 +5,6 @@ import { Container } from 'semantic-ui-react';
 
 import { withLocalize, Translate } from 'react-localize-redux';
 import errorTranslation from './404Translation.json';
-import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
 
 /**
@@ -15,7 +14,6 @@ const ErrorPage = ({ addTranslation }) => {
     addTranslation(errorTranslation);
     return (
         <div className="flex-container">
-            <Header />
             <Container className="content">
                 <h3>
                     <Translate id="404.header" />

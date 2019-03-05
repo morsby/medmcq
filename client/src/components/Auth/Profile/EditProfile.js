@@ -38,7 +38,6 @@ class EditProfile extends Component {
         let { message } = this.state;
         return (
             <div className="flex-container">
-                <Header />
                 <Container className="content">
                     <h3>
                         <Translate id="editProfile.header" />

@@ -22,7 +22,6 @@ import SelectionUniqueSelector from './SelectionSettings/SelectionUniqueSelector
 import SelectionMessage from './SelectionMessage';
 
 import Footer from '../Layout/Footer';
-import { default as UIHeader } from '../Layout/Header';
 
 import { semestre, urls } from '../../utils/common';
 import { specialer as specialerCommon } from '../../utils/common';
@@ -45,6 +44,7 @@ class SelectionMain extends Component {
   /**
    * Seeder data hvis det er første besøg.
    * Tager nu højde for evt. "tomme" semestre, da semester = 7 er default
+   * Henter også nye spørgsmål hvert mount (altså hver gang brugeren går til forsiden)
    */
   componentDidMount() {
     let { questions, semester } = this.props.settings;
@@ -54,6 +54,8 @@ class SelectionMain extends Component {
       let e = null;
 
       this.onSettingsChange(e, { type, value });
+    } else {
+      this.onSettingsChange(null, { type: this.props.settings.type, value: semester });
     }
   }
 
@@ -174,7 +176,6 @@ class SelectionMain extends Component {
 
     return (
       <div className="flex-container">
-        <UIHeader />
         <Container className="content">
           <Header as="h1">
             <Translate id="selection.static.header" />

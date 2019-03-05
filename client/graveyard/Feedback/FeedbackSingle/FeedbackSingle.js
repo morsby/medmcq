@@ -15,7 +15,6 @@ import FeedbackCommentPost from './FeedbackComment/FeedbackCommentPost';
 import FeedbackSingleContent from './FeedbackSingleContent';
 
 import LoadingPage from '../../Misc/Pages/LoadingPage';
-import Header from '../../Layout/Header';
 import Footer from '../../Layout/Footer';
 
 import { smoothScroll } from '../../../utils/quiz';
@@ -83,7 +82,6 @@ class FeedbackSingle extends Component {
 
         return (
             <div className="flex-container">
-                <Header />
                 <Container className="content">
                     <FeedbackNavigation
                         id={feedback._id}
