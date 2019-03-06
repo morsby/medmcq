@@ -154,6 +154,7 @@ class Question extends Component {
    */
   onKeydown(e) {
     if (!this.state.imgOpen && document.activeElement.tagName !== 'TEXTAREA') {
+      e.preventDefault();
       let answer = Number(e.key),
         keys = [1, 2, 3];
       if (keys.includes(answer) && !e.altKey && !e.ctrlKey && !e.metaKey) {
