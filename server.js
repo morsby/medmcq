@@ -17,27 +17,27 @@ app.use(helmet());
 
 // if heroku, force SSL
 if (process.env.NODE_ENV === 'production') {
-    app.use(sslRedirect());
+  app.use(sslRedirect());
 }
 
 // Database
 const mongoose = require('mongoose');
 mongoose.set('useCreateIndex', true);
 mongoose
-    .connect(keys.mongoURI, { useNewUrlParser: true })
-    .then(console.log('Successfully connected to database'))
-    .catch(err => {
-        if (err) console.log('Could not connect to database', err);
-    });
+  .connect(keys.mongoURI, { useNewUrlParser: true })
+  .then(console.log('Successfully connected to database'))
+  .catch((err) => {
+    if (err) console.log('Could not connect to database', err);
+  });
 
 // For logins:
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(
-    session({
-        secret: keys.session,
-        resave: true,
-        saveUninitialized: true
-    })
+  session({
+    secret: keys.session,
+    resave: true,
+    saveUninitialized: true
+  })
 ); // session secret
 
 require('./config/passport')(passport); // pass passport for configuration
@@ -64,9 +64,9 @@ app.use('/api/user', user);
 //app.use('/api', router);
 
 if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'au_server') {
-    // Express will serve prod. assets
-    // (js, css files)
-    app.use(express.static('client/build'));
+  // Express will serve prod. assets
+  // (js, css files)
+  app.use(express.static('client/build'));
 }
 
 // Express will serve up index.html if
@@ -75,7 +75,7 @@ if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'au_server
 // failed
 const path = require('path');
 app.get('*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
+  res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
 });
 
 // START SERVEREN

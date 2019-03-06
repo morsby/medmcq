@@ -24,13 +24,7 @@ router.get('/', async (req, res) => {
         */
 
   if (!n && !semester) {
-    // Hent alle spørgsmål hvis der ikke er query params
-    try {
-      const questions = await Question.find();
-      res.json(questions);
-    } catch (err) {
-      res.send(err);
-    }
+    res.status(400).send('Status 400: Bad request');
   } else if (semester && examSeason && examYear) {
     // Hent det eksamenssæt der bedes om
     try {
