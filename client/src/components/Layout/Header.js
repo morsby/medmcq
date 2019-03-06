@@ -87,7 +87,9 @@ class Header extends Component {
     return (
       <>
         <header>
-          <h2 className={styles.onprint}>Spørgsmål er hentet fra medMCQ</h2>
+          <h2 className={styles.onprint}>
+            <Translate id="header.credit" />
+          </h2>
           <Menu className={styles.noprint} inverted color="blue" attached borderless={true}>
             <Menu.Item onClick={() => handleClick('root')}>
               <Responsive minWidth={breakpoints.mobile + 1}>
