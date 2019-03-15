@@ -211,6 +211,7 @@ router.put('/:question_id/comment/:comment_id', auth, async (req, res) => {
   // Tjek om brugeren ejer spørgsmålet
   if (req.user.username === question.comments[index].user) {
     question.comments[index].comment = req.body.comment;
+    question.comments[index].private = req.body.private;
     try {
       const updatedQuestion = await question.save();
       res.json({ question: updatedQuestion, message: 'Kommentar ændret' });

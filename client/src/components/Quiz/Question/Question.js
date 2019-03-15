@@ -50,7 +50,13 @@ class Question extends Component {
      * Er kommentarer vist?
      * @type {Boolean}
      */
-    commentsOpen: false,
+    publicCommentsOpen: false,
+
+    /**
+     * Er kommentarer vist?
+     * @type {Boolean}
+     */
+    privateCommentsOpen: false,
 
     /**
      * Evt. kommentartekst
@@ -80,7 +86,7 @@ class Question extends Component {
     /**
      * Selected specialties
      * Defaults til allerede kendte værdier
-     * @type {Array]
+     * @type {Array}
      */
     selectedSpecialties: this.props.question.specialty
   };
@@ -93,7 +99,8 @@ class Question extends Component {
     this.onTextType = this.onTextType.bind(this);
     this.onReportToggle = this.onReportToggle.bind(this);
     this.onReportSubmit = this.onReportSubmit.bind(this);
-    this.onCommentsToggle = this.onCommentsToggle.bind(this);
+    this.onPublicCommentsToggle = this.onPublicCommentsToggle.bind(this);
+    this.onPrivateCommentsToggle = this.onPrivateCommentsToggle.bind(this);
     this.onCommentPost = this.onCommentPost.bind(this);
     this.onDeleteComment = this.onDeleteComment.bind(this);
     this.onEditComment = this.onEditComment.bind(this);
@@ -226,12 +233,15 @@ class Question extends Component {
     this.setState({ report: '', reportSent: true });
   }
 
-  /**
-   * Håndtering af kommentarer. Er de synlige?
-   */
-  onCommentsToggle() {
+  onPublicCommentsToggle() {
     this.setState((prevState) => {
-      return { commentsOpen: !prevState.commentsOpen };
+      return { publicCommentsOpen: !prevState.publicCommentsOpen, privateCommentsOpen: false };
+    });
+  }
+
+  onPrivateCommentsToggle() {
+    this.setState((prevState) => {
+      return { privateCommentsOpen: !prevState.privateCommentsOpen, publicCommentsOpen: false };
     });
   }
 
@@ -239,7 +249,7 @@ class Question extends Component {
    * Poster en kommentar.
    * De brugte props (edit/commentQuestion) er fra redux.
    */
-  onCommentPost() {
+  onCommentPost(isPrivate) {
     if (this.state.newComment.length >= 3) {
       if (this.state.editingComment) {
         /**
@@ -249,13 +259,14 @@ class Question extends Component {
         this.props.editComment(
           this.props.question._id,
           this.state.editingComment,
-          this.state.newComment
+          this.state.newComment,
+          isPrivate
         );
       } else {
         /**
          *  Det er en ny kommentar
          */
-        this.props.commentQuestion(this.props.question._id, this.state.newComment);
+        this.props.commentQuestion(this.props.question._id, this.state.newComment, isPrivate);
       }
       this.setState({ newComment: '', editingComment: '' });
     }
@@ -306,8 +317,17 @@ class Question extends Component {
   }
 
   render() {
-    let { question, user } = this.props,
+    const { question, user } = this.props,
       text = subSupScript(question.question);
+    let privateComments = [];
+    let publicComments = [];
+    question.comments.forEach((comment) => {
+      if (comment.private && comment.user === user.username) {
+        privateComments.push(comment);
+      } else if (!comment.private) {
+        publicComments.push(comment);
+      }
+    });
 
     return (
       <Container className="question">
@@ -364,11 +384,26 @@ class Question extends Component {
             user={user}
           />
 
-          <Button basic onClick={this.onCommentsToggle}>
-            {this.state.commentsOpen ? (
-              <Translate id="question.hide_comments" data={{ n: question.comments.length }} />
+          <Button
+            color={this.state.publicCommentsOpen ? 'green' : null}
+            basic
+            onClick={this.onPublicCommentsToggle}
+          >
+            {this.state.publicCommentsOpen ? (
+              <Translate id="question.hide_public_comments" data={{ n: publicComments.length }} />
             ) : (
-              <Translate id="question.show_comments" data={{ n: question.comments.length }} />
+              <Translate id="question.show_public_comments" data={{ n: publicComments.length }} />
+            )}
+          </Button>
+          <Button
+            color={this.state.privateCommentsOpen ? 'green' : null}
+            basic
+            onClick={this.onPrivateCommentsToggle}
+          >
+            {this.state.privateCommentsOpen ? (
+              <Translate id="question.hide_private_comments" data={{ n: privateComments.length }} />
+            ) : (
+              <Translate id="question.show_private_comments" data={{ n: privateComments.length }} />
             )}
           </Button>
           <Button basic color="orange" floated="right" onClick={this.onReportToggle}>
@@ -382,12 +417,25 @@ class Question extends Component {
               reportSent={this.state.reportSent}
             />
           )}
-          {this.state.commentsOpen && (
+          {this.state.publicCommentsOpen && (
             <QuestionComments
-              comments={question.comments}
+              comments={publicComments}
               newComment={this.state.newComment}
               onCommentType={this.onTextType}
-              onCommentPost={this.onCommentPost}
+              onCommentPost={() => this.onCommentPost(false)}
+              onDeleteComment={this.onDeleteComment}
+              onEditComment={this.onEditComment}
+              editingComment={this.state.editingComment}
+              undoEditComment={this.undoEditComment}
+              user={user}
+            />
+          )}
+          {this.state.privateCommentsOpen && (
+            <QuestionComments
+              comments={privateComments}
+              newComment={this.state.newComment}
+              onCommentType={this.onTextType}
+              onCommentPost={() => this.onCommentPost(true)}
               onDeleteComment={this.onDeleteComment}
               onEditComment={this.onEditComment}
               editingComment={this.state.editingComment}
