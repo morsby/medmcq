@@ -357,7 +357,34 @@ C. ${question.answer3}
   };
   sgMail.send(msg);
 
-  res.json({ type: 'success', message: 'report_made' });
+  res.status(200).json({ type: 'success', message: 'report_made' });
+});
+
+// Stem på emne
+router.put('/:question_id/vote', async (req, res) => {
+  let question = await Question.findById(req.params.question_id);
+
+  // Tjek om brugeren allerede har voted, og hvis de har så træk én fra
+  const alreadyVotedIndex = _.findIndex(question.votes, req.user);
+  if (alreadyVotedIndex !== -1) {
+    question.votes[alreadyVotedIndex].value -= 1;
+    const usersIndex = _.findIndex(question.votes[alreadyVotedIndex].users, req.user);
+    question.votes[alreadyVotedIndex].users.splice(usersIndex, 1); // Slet brugeren fra brugere der har voted (fordi vi senere tilføjer dem igen uanset)
+  }
+
+  // Upvote speciale
+  const upvotedIndex = _.findIndex(question.votes, req.specialty);
+  question.votes[upvotedIndex].value += 1;
+  question.votes[upvotedIndex].users.push(req.user);
+
+  // Tjek hvilket speciale er højest voted
+  const highestvoted = _.maxBy(question.votes, (vote) => {
+    return vote.value;
+  });
+
+  question.specialty = highestvoted.specialty;
+
+  console.log(question);
 });
 
 module.exports = router;

@@ -15,11 +15,7 @@ var QuestionSchema = new Schema({
   semester: Number, // hvilket kandidatsemester?
   examYear: Number, // hvornår blev spørgsmålet stillet?
   examSeason: String, // forår el. efterår?
-  specialty: [
-    {
-      type: String
-    }
-  ],
+  specialty: String,
   tags: [
     {
       type: String
@@ -35,7 +31,8 @@ var QuestionSchema = new Schema({
       comment: String,
       private: { type: Boolean, default: false }
     }
-  ]
+  ],
+  votes: [{ value: Number, specialty: String, users: [String] }]
 });
 
 QuestionSchema.plugin(random);
