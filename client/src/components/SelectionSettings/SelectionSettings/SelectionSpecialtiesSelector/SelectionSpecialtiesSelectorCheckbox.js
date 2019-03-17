@@ -9,58 +9,59 @@ import { Translate } from 'react-localize-redux';
  * Alle prps fra SelectionSpecialtiesSelector.js
  */
 const SelectionSpecialtiesSelectorCheckbox = ({
-    speciale,
-    erValgt,
-    antalPerSpeciale,
-    onChange,
+  speciale,
+  erValgt,
+  antalPerSpeciale,
+  onChange
 }) => {
-    let antal = antalPerSpeciale === undefined ? 0 : antalPerSpeciale;
-    return (
-        <Form.Group key={speciale.value}>
-            <Form.Field>
-                <Translate>
-                    {({ activeLanguage }) => (
-                        <>
-                            <Checkbox
-                                label={`${speciale.text} (${antal} ${
-                                    activeLanguage === 'dk'
-                                        ? 'spørgsmål'
-                                        : 'questions'
-                                })`}
-                                value={speciale.value}
-                                checked={erValgt}
-                                name="specialer"
-                                onChange={onChange}
-                            />
-                            <Divider vertical hidden />
-                        </>
-                    )}
-                </Translate>
-            </Form.Field>
-        </Form.Group>
-    );
+  let antal = antalPerSpeciale === undefined ? 0 : antalPerSpeciale;
+  return (
+    <Form.Group key={speciale.value}>
+      <Form.Field>
+        <Translate>
+          {({ translate }) => {
+            return (
+              <>
+                <Checkbox
+                  label={translate('selectionSpecialtiesSelector.checkbox_labels', {
+                    speciale: speciale.text,
+                    n: antal
+                  })}
+                  value={speciale.value}
+                  checked={erValgt}
+                  name="specialer"
+                  onChange={onChange}
+                />
+                <Divider vertical hidden />
+              </>
+            );
+          }}
+        </Translate>
+      </Form.Field>
+    </Form.Group>
+  );
 };
 
 SelectionSpecialtiesSelectorCheckbox.propTypes = {
-    /**
-     * Speciale-objekt af form: {"text": "Navn", "value": "slug"}
-     */
-    speciale: PropTypes.object,
+  /**
+   * Speciale-objekt af form: {"text": "Navn", "value": "slug"}
+   */
+  speciale: PropTypes.object,
 
-    /**
-     * Boolean. Er specialet allerede valgt?
-     */
-    erValgt: PropTypes.bool,
+  /**
+   * Boolean. Er specialet allerede valgt?
+   */
+  erValgt: PropTypes.bool,
 
-    /**
-     * Hvor mange spg. per speciale?
-     */
-    antalPerSpeciale: PropTypes.number,
+  /**
+   * Hvor mange spg. per speciale?
+   */
+  antalPerSpeciale: PropTypes.number,
 
-    /**
-     * Func der ændrer valgene.
-     */
-    onChange: PropTypes.func,
+  /**
+   * Func der ændrer valgene.
+   */
+  onChange: PropTypes.func
 };
 
 export default SelectionSpecialtiesSelectorCheckbox;
