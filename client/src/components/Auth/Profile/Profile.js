@@ -30,6 +30,8 @@ class Profile extends Component {
       semester: semester,
       width: window.innerWidth
     };
+
+    this.handleResize = _.debounce(this.handleResize, 300);
   }
 
   componentDidMount() {
@@ -41,7 +43,7 @@ class Profile extends Component {
     window.removeEventListener('resize', this.handleResize);
   }
 
-  handleResize = () => _.debounce(this.setState({ width: window.innerWidth }), 150);
+  handleResize = () => this.setState({ width: window.innerWidth });
 
   getQuestions = (semester) => {
     let answeredQuestions = _.get(this.props, ['auth', 'user', 'answeredQuestions', semester], {});

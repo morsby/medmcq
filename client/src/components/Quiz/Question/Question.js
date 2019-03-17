@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import * as actions from '../../../actions';
 import marked from 'marked';
 
+import _ from 'lodash';
+
 import { imageURL, breakpoints } from '../../../utils/common';
 import { subSupScript } from '../../../utils/quiz';
 
@@ -88,7 +90,12 @@ class Question extends Component {
      * Defaults til allerede kendte værdier
      * @type {Array}
      */
-    selectedSpecialties: this.props.question.specialty
+    selectedSpecialties: this.props.question.specialty,
+
+    /**
+     * Current window width
+     */
+    width: window.innerWidth
   };
 
   constructor(props) {
@@ -110,14 +117,18 @@ class Question extends Component {
     this.onSpecialtiesEditToggle = this.onSpecialtiesEditToggle.bind(this);
     this.onEditSpecialty = this.onEditSpecialty.bind(this);
     this.onSaveSpecialties = this.onSaveSpecialties.bind(this);
+
+    this.handleResize = _.debounce(this.handleResize, 300);
   }
   componentDidMount() {
     document.addEventListener('keydown', this.onKeydown);
+    window.addEventListener('resize', this.handleResize);
     this.mouseMover();
   }
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.onKeydown);
+    window.removeEventListener('resize', this.handleResize);
   }
 
   /**
@@ -160,15 +171,23 @@ class Question extends Component {
    * Tager højde for modifier keys (alt, ctrl, meta)
    */
   onKeydown(e) {
-    if (!this.state.imgOpen && document.activeElement.tagName !== 'TEXTAREA') {
+    if (
+      !this.state.imgOpen &&
+      document.activeElement.tagName !== 'TEXTAREA' &&
+      !e.altKey &&
+      !e.ctrlKey &&
+      !e.metaKey
+    ) {
       e.preventDefault();
       let answer = Number(e.key),
         keys = [1, 2, 3];
-      if (keys.includes(answer) && !e.altKey && !e.ctrlKey && !e.metaKey) {
+      if (keys.includes(answer)) {
         this.onAnswer(answer);
       }
     }
   }
+
+  handleResize = () => this.setState({ width: window.innerWidth });
 
   /**
    * Ansvarlig for at fortælle redux at der er svaret
@@ -318,6 +337,7 @@ class Question extends Component {
 
   render() {
     const { question, user } = this.props,
+      { width } = this.state,
       text = subSupScript(question.question);
     let privateComments = [];
     let publicComments = [];
@@ -406,7 +426,13 @@ class Question extends Component {
               <Translate id="question.show_private_comments" data={{ n: privateComments.length }} />
             )}
           </Button>
-          <Button basic color="orange" floated="right" onClick={this.onReportToggle}>
+          {width <= 700 && <Divider hidden />}
+          <Button
+            basic
+            color="orange"
+            floated={width > 700 ? 'right' : null}
+            onClick={this.onReportToggle}
+          >
             <Translate id="question.report_question" />
           </Button>
           {this.state.reportOpen && (
