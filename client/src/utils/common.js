@@ -5,7 +5,7 @@ export const urls = {
   quiz: '/quiz',
   add: '/add',
   about: '/om-siden',
-  feedback: '/kontakt',
+  contact: '/kontakt',
   signup: '/opret',
   login: '/login',
   logout: '/logout',
