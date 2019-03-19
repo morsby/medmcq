@@ -142,7 +142,10 @@ class Question extends Component {
         reportOpen: false,
         reportSent: false,
         report: '',
-        commentsOpen: false,
+        // Luk comments efter spørgsmål skift
+        publicCommentsOpen: false,
+        privateCommentsOpen: false,
+        // ==================================
         newComment: '',
         editingComment: '',
         pristine: true,
