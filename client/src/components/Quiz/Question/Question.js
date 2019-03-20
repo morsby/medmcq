@@ -15,7 +15,7 @@ import { Translate } from 'react-localize-redux';
 
 import QuestionAnswerButtons from './QuestionAnswerButtons';
 import QuestionImage from './QuestionImage';
-import QuestionMetadata from './QuestionMetadata';
+import QuestionVoting from './QuestionVoting';
 import QuestionReport from './QuestionReport';
 import QuestionComments from './QuestionComments/QuestionComments';
 
@@ -397,7 +397,7 @@ class Question extends Component {
             />
           </Responsive>
           <Divider />
-          <QuestionMetadata
+          <QuestionVoting
             question={question}
             onToggleSpecialties={this.onSpecialtiesEditToggle}
             selectedSpecialties={this.state.selectedSpecialties}
@@ -406,7 +406,7 @@ class Question extends Component {
             onSaveSpecialties={this.onSaveSpecialties}
             user={user}
           />
-
+          <Divider />
           <Button
             color={this.state.publicCommentsOpen ? 'green' : null}
             basic
