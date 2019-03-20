@@ -8,7 +8,7 @@
   },
   "footer": {
     "about_link": ["Om siden", "About this site"],
-    "feedback_link": ["Kontakt", "Contact"],
+    "contact_link": ["Kontakt", "Contact"],
     "permission": [
       "Siden er lavet med tilladelse fra Institut for Klinisk Medicin, Health, Aarhus Universitet.",
       "The site is developed with permission from The Department of Clinical Medicine, Health, Aarhus University"
@@ -16,7 +16,7 @@
     "developed_by": ["Udviklet af Sigurd Morsby Larsen", "Developed by Sigurd Morsby Larsen"],
     "maintained_by": [
       "Vedligeholdes og forbedres i samarbejde med Thomas Jensen og <strong><a href=\"https://cesu.au.dk\">CESU</a></strong>",
-      "Is maintained and improved in collaboration with Thomas Jensen and <strong><a href=\"https://cesu.au.dk\">CESU</a></strong>"
+      "Maintained and improved in collaboration with Thomas Jensen and <strong><a href=\"https://cesu.au.dk\">CESU</a></strong>"
     ]
   }
 }

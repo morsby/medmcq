@@ -1,102 +1,91 @@
 {
-    "selection": {
-        "static": {
-            "header": ["medMCQ", "medMCQ"],
-            "choose_semester": ["Vælg et semester", "Choose a semester"],
-            "continue_quiz": [
-                "Fortsæt med igangværende spørgsmål",
-                "Continue with previous questions"
-            ],
-            "front-disclaimer": [
-                "<p>Velkommen til medMCQ. Her kan du teste dine færdigheder inden for diverse semestre og medicinske specialer. medMCQ besidder MCQ-eksamenspørgsmål fra tidligere semestre og du bør derfor være opmærksom på:</p><ol><li>Nogle besvarelser kan være forældet ift. hvad vil være korrekt i dag.</li><li>Pensum kan siden være ændret, hvorfor du kan møde spørgsmål der ligger uden for pensum. Der kan også være elementer af pensum, som der ikke er spørgsmål indenfor.</li><li>Flere af spørgsmålene er udviklet til MCQ-eksamener med hjælpemidler. Derfor kan du opleve at spørgsmålene har et højere kompleksitetsniveau.</li></ol><p>God fornøjelse!</p>",
-                "<p>Welcome to medMCQ. You can test your abilities within different semesters and different medical specialties. Since the site contains MCQ examination questions from earlier semesters, you should be aware that</p><ol><li>Some answers might be outdated.</li><li>The curriculum may be different today, which means that some questions may be irrelevant for your upcoming exam and some areas of relevance may not be covered by the questions.</li><li>Some of the questions were for an examination where aid was permitted, which means you may experience a higher level of complexity in the questions.</li></ol><p>Enjoy!</p>"
-            ]
-        },
-        "errs": {
-            "no_semester": [
-                "Du skal vælge et semester først.",
-                "You have to choose a semester first"
-            ],
-            "no_specialty": [
-                "Du skal vælge mindst ét speciale",
-                "You have to select at least one specialty."
-            ],
-            "no_set": [
-                "Du skal vælge et sæt for at kunne starte.",
-                "You have to select a set to start."
-            ],
-            "no_questions": [
-                "Der er ingen spørgsmål for det valgte semester.",
-                "There are no questions for the selected semester."
-            ],
-            "no_n": [
-                "Du skal vælge et antal spørgsmål.",
-                "You have to select a number of questions."
-            ],
-            "n_too_high": [
-                "Du har ønsket for mange spørgsmål.",
-                "You have requested too many questions."
-            ],
-            "n_neg": [
-                "Antal spørgsmål kan ikke være negativt.",
-                "The number of questions can not be a negative number."
-            ]
-        }
+  "selection": {
+    "static": {
+      "header": ["medMCQ", "medMCQ"],
+      "choose_semester": ["Vælg et semester", "Choose a semester"],
+      "continue_quiz": ["Fortsæt med igangværende spørgsmål", "Continue with previous questions"],
+      "front-disclaimer": [
+        "<p>Velkommen til medMCQ. Her kan du teste dine færdigheder inden for diverse semestre og medicinske specialer. medMCQ besidder MCQ-eksamenspørgsmål fra tidligere semestre og du bør derfor være opmærksom på:</p><ol><li>Nogle besvarelser kan være forældet ift. hvad vil være korrekt i dag.</li><li>Pensum kan siden være ændret, hvorfor du kan møde spørgsmål der ligger uden for pensum. Der kan også være elementer af pensum, som der ikke er spørgsmål indenfor.</li><li>Flere af spørgsmålene er udviklet til MCQ-eksamener med hjælpemidler. Derfor kan du opleve at spørgsmålene har et højere kompleksitetsniveau.</li></ol><p>God fornøjelse!</p>",
+        "<p>Welcome to medMCQ. You can test your abilities within different semesters and different medical specialties. Since the site contains MCQ examination questions from earlier semesters, you should be aware that</p><ol><li>Some answers might be outdated.</li><li>The curriculum may be different today, which means that some questions may be irrelevant for your upcoming exam and some areas of relevance may not be covered by the questions.</li><li>Some of the questions were for an examination where aid was permitted, which means you may experience a higher level of complexity in the questions.</li></ol><p>Enjoy!</p>"
+      ]
     },
-
-    "selectionTypeSelector": {
-        "types": {
-            "random": ["Tilfældige spørgsmål", "Random questions"],
-            "specialties": ["Specialer", "Specialties"],
-            "sets": ["Fulde eksamenssæt", "Complete exam sets"]
-        }
-    },
-    "selectionSetSelector": {
-        "choose_semester": [
-            "Vælg et semester for at se tilgængelige eksamenssæt",
-            "Choose a semester to see available exam sets"
-        ],
-        "header": [
-            "For ${semester}. semester er der følgende eksamenssæt at vælge mellem:",
-            "For the ${semester}th semester, the following exam sets can be selected:"
-        ]
-    },
-    "selectionSpecialtiesSelector": {
-        "choose_semester": [
-            "Vælg et semester for at se tilgængelige specialer",
-            "Choose a specialty to see available specialties"
-        ],
-        "header": [
-            "For ${semester}. semester er der følgende specialer at vælge mellem:",
-            "For the ${semester}th semester, the following specialties can be selected:"
-        ]
-    },
-    "selectionNSelector": {
-        "header": ["Hvor mange spørgsmål vil du have?", "How many questions would you like?"],
-        "other_value": ["Anden værdi", "Other value"],
-        "err_n_range": [
-            "Værdi skal være mellem ${min} og ${max}.",
-            "The value must be between ${min} and ${max}."
-        ],
-        "total_n": [
-            "Der er ${n} spørgsmål for det valgte semester.",
-            "There are ${n} questions for the selected semester."
-        ]
-    },
-    "selectionUniqueSelector": {
-        "label": [
-            "Giv mig kun spørgsmål, jeg ikke har svaret på tidligere.",
-            "Give me only questions that I have not previously answered."
-        ]
-    },
-    "selectionMessage": {
-        "available_lower_than_requested": [
-            "Bemærk, at såfremt de valgte indstillinger resulterer i færre spørgsmål end det ønskede antal, får du blot alle tilgængelige spørgsmål. Er antallet af spørgsmål 0, vælges ligeligt blandt alle.",
-            "Please note that if the selected settings result in fewer questions than requested, you will receive all available questions. If the number of questions is 0, questions are selected randomly."
-        ],
-        "specialties_lower_than_requested": [
-            "Bemærk, at såfremt de valgte specialer til sammen indeholder færre spørgsmål end det ønskede antal, får du blot alle tilgængelige.",
-            "Please note that if the selected specialties combined contain fewer than the requested number of questions, you will receieve all available questions."
-        ]
+    "errs": {
+      "no_semester": ["Du skal vælge et semester først.", "You have to choose a semester first"],
+      "no_specialty": [
+        "Du skal vælge mindst ét speciale",
+        "You have to select at least one specialty."
+      ],
+      "no_set": ["Du skal vælge et sæt for at kunne starte.", "You have to select a set to start."],
+      "no_questions": [
+        "Der er ingen spørgsmål for det valgte semester.",
+        "There are no questions for the selected semester."
+      ],
+      "no_n": ["Du skal vælge et antal spørgsmål.", "You have to select a number of questions."],
+      "n_too_high": [
+        "Du har ønsket for mange spørgsmål.",
+        "You have requested too many questions."
+      ],
+      "n_neg": [
+        "Antal spørgsmål kan ikke være negativt.",
+        "The number of questions can not be a negative number."
+      ]
     }
+  },
+
+  "selectionTypeSelector": {
+    "types": {
+      "random": ["Tilfældige spørgsmål", "Random questions"],
+      "specialties": ["Specialer", "Specialties"],
+      "sets": ["Fulde eksamenssæt", "Complete exam sets"]
+    }
+  },
+  "selectionSetSelector": {
+    "choose_semester": [
+      "Vælg et semester for at se tilgængelige eksamenssæt",
+      "Choose a semester to see available exam sets"
+    ],
+    "header": [
+      "For ${semester}. semester er der følgende eksamenssæt at vælge mellem:",
+      "For the ${semester}th semester, the following exam sets can be selected:"
+    ]
+  },
+  "selectionSpecialtiesSelector": {
+    "choose_semester": [
+      "Vælg et semester for at se tilgængelige specialer",
+      "Choose a specialty to see available specialties"
+    ],
+    "header": [
+      "For ${semester}. semester er der følgende specialer at vælge mellem:",
+      "For the ${semester}th semester, the following specialties can be selected:"
+    ],
+    "checkbox_labels": ["${speciale} (${n} spørgsmål)", "${speciale} (${n} questions)"]
+  },
+  "selectionNSelector": {
+    "header": ["Hvor mange spørgsmål vil du have?", "How many questions would you like?"],
+    "other_value": ["Anden værdi", "Other value"],
+    "err_n_range": [
+      "Værdi skal være mellem ${min} og ${max}.",
+      "The value must be between ${min} and ${max}."
+    ],
+    "total_n": [
+      "Der er ${n} spørgsmål for det valgte semester.",
+      "There are ${n} questions for the selected semester."
+    ]
+  },
+  "selectionUniqueSelector": {
+    "label": [
+      "Giv mig kun spørgsmål, jeg ikke har svaret på tidligere.",
+      "Give me only questions that I have not previously answered."
+    ]
+  },
+  "selectionMessage": {
+    "available_lower_than_requested": [
+      "Bemærk, at såfremt de valgte indstillinger resulterer i færre spørgsmål end det ønskede antal, får du blot alle tilgængelige spørgsmål. Er antallet af spørgsmål 0, vælges ligeligt blandt alle.",
+      "Please note that if the selected settings result in fewer questions than requested, you will receive all available questions. If the number of questions is 0, questions are selected randomly."
+    ],
+    "specialties_lower_than_requested": [
+      "Bemærk, at såfremt de valgte specialer til sammen indeholder færre spørgsmål end det ønskede antal, får du blot alle tilgængelige.",
+      "Please note that if the selected specialties combined contain fewer than the requested number of questions, you will receieve all available questions."
+    ]
+  }
 }

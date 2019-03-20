@@ -12,6 +12,8 @@ const port = process.env.PORT || 3001; // set our port
 const question = require('./routes/question');
 const auth = require('./routes/auth');
 const user = require('./routes/user');
+const contact = require('./routes/contact');
+
 // Third Party middleware
 app.use(helmet());
 
@@ -59,6 +61,7 @@ app.use(saveReq);
 app.use('/api/questions', question);
 app.use('/api/auth', auth);
 app.use('/api/user', user);
+app.use('/api/contact', contact);
 
 // Registrer alle routes fra denne fil (prefixed '/api')
 //app.use('/api', router);

@@ -5,7 +5,7 @@ export const urls = {
   quiz: '/quiz',
   add: '/add',
   about: '/om-siden',
-  feedback: '/kontakt',
+  contact: '/kontakt',
   signup: '/opret',
   login: '/login',
   logout: '/logout',
@@ -19,7 +19,7 @@ export const urls = {
 export const semestre = [
   { text: '7. semester (Inflammation)', value: 7, name: 'Inflammation' },
   { text: '8. semester (Abdomen)', value: 8, name: 'Abdomen' },
-  /*{ text: "9. semester (Hjerte-lunge-kar)", value: 9, name: "HLK" }, */
+  { text: '9. semester (Hjerte-lunge-kar)', value: 9, name: 'HLK' },
   { text: '11. semester (Familie-samfund / GOP)', value: 11, name: 'GOP' }
 ];
 
@@ -56,21 +56,21 @@ export const specialer = {
     },
     { value: 'onkologi', text: 'Onkologi' },
     { value: 'socialmedicin', text: 'Socialmedicin' },
-    //    { value: "almen_medicin", text: "Almen medicin" },
+    { value: 'almen_medicin', text: 'Almen medicin' },
     { value: 'paraklinik', text: 'Paraklinik' }
   ],
-  /*9: [
-        { value: "anæstesiologi", text: "Anæstesiologi" },
-        {
-            value: "kardiologi",
-            text: "Kardiologi"
-        },
-        { value: "lungemedicin", text: "Lungemedicin" },
-        { value: "karkirurgi", text: "Karkirurgi" },
-        { value: "thoraxkirurgi", text: "Thoraxkirurgi" },
-        //{ value: "almen_medicin", text: "Almen medicin" },
-        { value: "paraklinik", text: "Paraklinik" }
-    ], */
+  9: [
+    { value: 'anæstesiologi', text: 'Anæstesiologi' },
+    {
+      value: 'kardiologi',
+      text: 'Kardiologi'
+    },
+    { value: 'lungemedicin', text: 'Lungemedicin' },
+    { value: 'karkirurgi', text: 'Karkirurgi' },
+    { value: 'thoraxkirurgi', text: 'Thoraxkirurgi' },
+    { value: 'almen_medicin', text: 'Almen medicin' },
+    { value: 'paraklinik', text: 'Paraklinik' }
+  ],
   11: [
     { value: 'gyn', text: 'Gynækologi/Gynaecology' },
     { value: 'obs', text: 'Obstetrik/Obstetrics' },
