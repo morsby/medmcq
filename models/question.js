@@ -32,7 +32,7 @@ var QuestionSchema = new Schema({
       private: { type: Boolean, default: false }
     }
   ],
-  votes: [{ value: Number, specialty: String, users: [String] }]
+  votes: [{ specialty: String, users: [String] }]
 });
 
 QuestionSchema.plugin(random);
