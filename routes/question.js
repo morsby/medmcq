@@ -24,9 +24,11 @@ router.get('/convert', async (req, res) => {
     if (question.specialty.length !== 0) {
       question.specialty.forEach((specialty) => {
         if (specialty === 'paraklinik') {
-          question.tags.push({ specialty: specialty, users: ['Johanne'] });
+          question.tags.push(specialty);
+          question.tagVotes.push({ tag: specialty, users: ['Johanne'] });
         } else {
           question.votes.push({ specialty: specialty, users: ['Johanne'] });
+          question.specialty = [specialty];
         }
       });
       dummySave.push(question);
@@ -423,10 +425,10 @@ router.put('/:question_id/tags', async (req, res) => {
   let question = await Question.findById(req.params.question_id);
 
   // Tjek om brugeren allerede har tags, og hvis de har, så fjern brugeren fra disse tags (de bliver tilføjet senere igen)
-  question.tags.forEach((tag, i) => {
+  question.tagVotes.forEach((tag, i) => {
     const userIndex = _.indexOf(tag.users, req.body.user);
     if (userIndex !== -1) {
-      question.tags[i].users.splice(userIndex, 1);
+      question.tagVotes[i].users.splice(userIndex, 1);
     }
   });
 

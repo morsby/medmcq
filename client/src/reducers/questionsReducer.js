@@ -47,11 +47,12 @@ export default createReducer(initialState, {
     /**
      * Find det id i arrayet og erstat specialerne.
      */
-    const { _id, specialty, votes, tags } = action.payload;
+    const { _id, specialty, votes, tags, tagVotes } = action.payload;
     const index = _.findIndex(state, { _id });
 
     state[index].specialty = specialty;
     state[index].votes = votes;
     state[index].tags = tags;
+    state[index].tagVotes = tagVotes;
   }
 });

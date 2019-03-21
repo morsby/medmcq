@@ -397,16 +397,23 @@ class Question extends Component {
             />
           </Responsive>
           <Divider />
-          <QuestionVoting
-            question={question}
-            onToggleSpecialties={this.onSpecialtiesEditToggle}
-            selectedSpecialties={this.state.selectedSpecialties}
-            editingSpecialties={this.state.editingSpecialties}
-            onEditSpecialty={this.onEditSpecialty}
-            onSaveSpecialties={this.onSaveSpecialties}
-            user={user}
-          />
+          <p>Speciale: {question.specialty.join()}</p>
+          <p>Tags: {question.tags.join(', ')}</p>
           <Divider />
+          {user && (
+            <Responsive minWidth={600}>
+              <QuestionVoting
+                question={question}
+                onToggleSpecialties={this.onSpecialtiesEditToggle}
+                selectedSpecialties={this.state.selectedSpecialties}
+                editingSpecialties={this.state.editingSpecialties}
+                onEditSpecialty={this.onEditSpecialty}
+                onSaveSpecialties={this.onSaveSpecialties}
+                user={user}
+              />
+              <Divider />
+            </Responsive>
+          )}
           <Button
             color={this.state.publicCommentsOpen ? 'green' : null}
             basic

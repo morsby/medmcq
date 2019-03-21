@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { specialer, tags } from '../../../utils/common';
-import { Button } from 'semantic-ui-react';
+import { Button, Message } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Divider, Dropdown } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
@@ -9,6 +9,18 @@ import * as actions from '../../../actions';
 
 const QuestionVoting = (props) => {
   const [chosenTags, setChosenTags] = useState([]);
+  const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    let userTags = [];
+    props.question.tagVotes.forEach((tagVote) => {
+      if (_.includes(tagVote.users, props.user.username)) {
+        userTags.push(tagVote.tag);
+      }
+    });
+
+    setChosenTags(userTags);
+  }, [props.question]);
 
   const userVote = () => {
     let votedSpecialty = null;
@@ -46,10 +58,12 @@ const QuestionVoting = (props) => {
 
   const tagVote = async () => {
     await props.voteTags(chosenTags, props.user.username, props.question._id);
+    setMessage('Tags er tilføjet');
   };
 
   const onChange = async (e, { value }) => {
     setChosenTags(value);
+    setMessage('');
   };
 
   // Sigurd TODO med den der mailklient
@@ -57,16 +71,14 @@ const QuestionVoting = (props) => {
 
   return (
     <div>
-      <p>Speciale: {props.question.specialty.join()}</p>
-      <p>Tags: {props.question.tags.join(', ')}</p>
       <h5 style={{ color: 'grey', marginLeft: '3px' }}>
         Stem på speciale (Speciale med flest stemmer bliver vist)
       </h5>
       {specialties()}
+      <Divider />
       <h5 style={{ color: 'grey', marginLeft: '3px' }}>
         Tilføj tags (kun tags der er valg af mere end 5 brugere, bliver vist)
       </h5>
-      <Divider />
       <Dropdown
         fluid
         multiple
@@ -76,12 +88,14 @@ const QuestionVoting = (props) => {
         value={chosenTags}
         onChange={onChange}
       />
+      <Divider hidden />
       <Button basic color="green" onClick={tagVote}>
         Tilføj tags
       </Button>
       <Button basic color="yellow" onClick={addTag}>
         Foreslå nyt tag
       </Button>
+      {message && <Message color="green">{message}</Message>}
     </div>
   );
 };
