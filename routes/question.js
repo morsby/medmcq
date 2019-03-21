@@ -13,7 +13,23 @@ const auth = require('../middleware/auth');
 const Question = require('../models/question.js');
 const User = require('../models/user.js');
 
+const superUsers = ['johanne', 'thomasjensen1194', 'sigurd', 'testing1'];
+
 // TODO: Før statistik over get("/api/questions"), post("/api/questions/ids/"), post("/api/questions/answer")
+
+router.get('/convert', async (req, res) => {
+  const questions = await Question.find();
+  let dummySave = [];
+  questions.forEach((question) => {
+    if (question.specialty.length !== 0) {
+      question.specialty.forEach((specialty) => {
+        question.votes.push({ specialty: specialty, users: ['Johanne'] });
+      });
+      dummySave.push(question);
+    }
+  });
+  res.status(200).send(dummySave);
+});
 
 router.get('/', async (req, res) => {
   let { n, specialer, unique, semester, examSeason, examYear } = req.query;
@@ -360,31 +376,85 @@ C. ${question.answer3}
   res.status(200).json({ type: 'success', message: 'report_made' });
 });
 
-// Stem på emne
+// Stem på specialty
 router.put('/:question_id/vote', async (req, res) => {
   let question = await Question.findById(req.params.question_id);
 
-  // Tjek om brugeren allerede har voted, og hvis de har så træk én fra
-  const alreadyVotedIndex = _.findIndex(question.votes, req.user);
-  if (alreadyVotedIndex !== -1) {
-    question.votes[alreadyVotedIndex].value -= 1;
-    const usersIndex = _.findIndex(question.votes[alreadyVotedIndex].users, req.user);
-    question.votes[alreadyVotedIndex].users.splice(usersIndex, 1); // Slet brugeren fra brugere der har voted (fordi vi senere tilføjer dem igen uanset)
-  }
-
-  // Upvote speciale
-  const upvotedIndex = _.findIndex(question.votes, req.specialty);
-  question.votes[upvotedIndex].value += 1;
-  question.votes[upvotedIndex].users.push(req.user);
-
-  // Tjek hvilket speciale er højest voted
-  const highestvoted = _.maxBy(question.votes, (vote) => {
-    return vote.value;
+  // Tjek om brugeren allerede har voted, og hvis de har, så fjern brugeren
+  question.votes.forEach((vote, i) => {
+    const userIndex = _.indexOf(vote.users, req.body.user);
+    if (userIndex !== -1) {
+      question.votes[i].users.splice(userIndex, 1);
+    }
   });
 
-  question.specialty = highestvoted.specialty;
+  // Upvote speciale
+  const upvotedIndex = _.findIndex(question.votes, (vote) => {
+    return vote.specialty === req.body.specialty;
+  });
+  // Hvis speciale ikke eksisterer i votes, laves nyt speciale
+  if (upvotedIndex === -1) {
+    question.votes.push({ specialty: req.body.specialty, users: [req.body.user] });
+  } else {
+    question.votes[upvotedIndex].users.push(req.body.user);
+  }
 
-  console.log(question);
+  // Tjek hvorvidt brugeren har ret til at tælle mere
+  let voteValue = 1;
+  if (_.includes(superUsers, req.body.user)) {
+    voteValue = 10;
+  }
+
+  // Tjek hvilket speciale er højest voted, og sæt det som specialty
+  const highestVoted = _.maxBy(question.votes, (vote) => {
+    return vote.users.length + voteValue;
+  });
+  question.specialty = highestVoted.specialty;
+
+  const result = await question.save();
+  res.status(200).send(result);
+});
+
+router.put('/:question_id/tags', async (req, res) => {
+  let question = await Question.findById(req.params.question_id);
+
+  // Tjek om brugeren allerede har tags, og hvis de har, så fjern brugeren fra disse tags (de bliver tilføjet senere igen)
+  question.tags.forEach((tag, i) => {
+    const userIndex = _.indexOf(tag.users, req.body.user);
+    if (userIndex !== -1) {
+      question.tags[i].users.splice(userIndex, 1);
+    }
+  });
+
+  req.body.tags.forEach((tag) => {
+    // Upvote speciale
+    const upvotedIndex = _.findIndex(question.tagVotes, (vote) => {
+      return vote.tag === tag;
+    });
+    // Hvis tag ikke eksisterer, laves nyt
+    if (upvotedIndex === -1) {
+      question.tagVotes.push({ tag: tag, users: [req.body.user] });
+    } else {
+      question.tagVotes[upvotedIndex].users.push(req.body.user);
+    }
+  });
+
+  // Tjek om tagget har en voting over 5, og tilføj det til tags
+  let tags = [];
+  question.tagVotes.forEach((vote) => {
+    let included = false;
+    vote.users.forEach((user) => {
+      if (_.includes(superUsers, user)) included = true;
+    });
+
+    if (vote.users.length >= 5 || included) {
+      tags.push(vote.tag);
+    }
+  });
+  question.tags = tags;
+
+  const result = await question.save();
+  res.status(200).send(result);
 });
 
 module.exports = router;
