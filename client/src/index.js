@@ -76,6 +76,8 @@ export const store = configureStore({
 export const persistor = persistStore(store);
 
 class App extends Component {
+  state = { maintenance: true };
+
   constructor(props) {
     super(props);
 
@@ -94,6 +96,18 @@ class App extends Component {
     });
   }
   render() {
+    if (this.state.maintenance)
+      return (
+        <div style={{ textAlign: 'center', marginTop: '40vh' }}>
+          <h1>MedMCQ</h1>
+          <h2>
+            Vi er ved at arbejde på siden, og tilføjer spændende og nye funktioner, som du snart kan
+            nyde godt af.
+          </h2>
+          <h2>Vi er snart tilbage!</h2>
+          <h5>- Sigurd Morsby og Thomas Jensen</h5>
+        </div>
+      );
     return (
       <BrowserRouter>
         <ScrollToTop>

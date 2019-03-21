@@ -23,7 +23,11 @@ router.get('/convert', async (req, res) => {
   questions.forEach((question) => {
     if (question.specialty.length !== 0) {
       question.specialty.forEach((specialty) => {
-        question.votes.push({ specialty: specialty, users: ['Johanne'] });
+        if (specialty === 'paraklinik') {
+          question.tags.push({ specialty: specialty, users: ['Johanne'] });
+        } else {
+          question.votes.push({ specialty: specialty, users: ['Johanne'] });
+        }
       });
       dummySave.push(question);
     }
