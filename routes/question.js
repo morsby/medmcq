@@ -496,18 +496,22 @@ router.put('/:question_id/vote', async (req, res) => {
     return vote.users.length + voteValue;
   });
   const maxVotes = highestVoted.users.length;
-  question.specialty = [highestVoted.specialty];
+  if (highestVoted.users.length > 0) {
+    question.specialty = [highestVoted.specialty];
 
-  // Tjek hvorvidt de andre specialer er indenfor 50% af det
-  // øverste speciale, hvorved det også kommer med
-  question.votes.forEach((vote) => {
-    if (
-      vote.users.length + voteValue >= 0.5 * maxVotes &&
-      highestVoted.specialty !== vote.specialty
-    ) {
-      question.specialty.push(vote.specialty);
-    }
-  });
+    // Tjek hvorvidt de andre specialer er indenfor 50% af det
+    // øverste speciale, hvorved det også kommer med
+    question.votes.forEach((vote) => {
+      if (
+        vote.users.length + voteValue >= 0.5 * maxVotes &&
+        highestVoted.specialty !== vote.specialty
+      ) {
+        question.specialty.push(vote.specialty);
+      }
+    });
+  } else {
+    question.specialty = [];
+  }
 
   const result = await question.save();
   res.status(200).send(result);
