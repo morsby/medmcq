@@ -1,6 +1,9 @@
 # Hemmeligheder
 dev.js
 
+client/*/version.js
+client/*/CHANGELOG.md
+
 # Logs
 logs
 *.log

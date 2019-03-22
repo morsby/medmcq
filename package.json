@@ -20,12 +20,14 @@
     "format": "prettier-eslint \"client/src/**/*.js\" --write",
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "nodemon server.js",
-    "client": "cd client && npm start",
+    "client": "npm run genversion && npm run cp_changelog && cd client && npm start",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "start": "node server.js",
     "heroku-postbuild": "npm install --dev --prefix client && npm run build --prefix client",
     "update": "git pull && npm install && cd client && npm install",
-    "build": "npm run update && cd client && npm run build"
+    "build": "npm run update && npm run genversion && cd client && npm run build",
+    "genversion": "genversion -e client/src/version.js",
+    "cp_changelog": "cp ./CHANGELOG.md client/src/"
   },
   "author": "Morsby",
   "license": "MIT",
@@ -62,6 +64,7 @@
     "eslint-config-prettier": "^3.6.0",
     "eslint-plugin-prettier": "^3.0.1",
     "eslint-plugin-react": "^7.12.4",
+    "genversion": "^2.1.1",
     "nodemon": "^1.18.9",
     "prettier": "^1.16.0",
     "prettier-eslint-cli": "^4.7.1"

@@ -1,5 +1,14 @@
 @import '_colors';
 
-#root h1 {
-	color: $color-one;
+// Setup the function in your functions or helpers files, wherever you keep these bits.
+@function headings($from: 1, $to: 6) {
+  @if $from == $to {
+    @return 'h#{$from}';
+  } @else {
+    @return 'h#{$from},' + headings($from + 1, $to);
+  }
+}
+
+#{headings(1,6)} {
+  color: $color-one !important;
 }

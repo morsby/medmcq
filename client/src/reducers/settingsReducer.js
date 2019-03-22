@@ -56,6 +56,10 @@ const initialState = {
   lastSettingsQuestionFetch: 0,
 
   /**
+   * App version
+   */
+  version: '0.0.1',
+  /**
    * ========================================================
    * HER NEDENFOR HÅNDTERES DET IKKE AF types.CHANGE_SETTINGS
    */
