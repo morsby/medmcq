@@ -504,7 +504,8 @@ router.put('/:question_id/vote', async (req, res) => {
     question.votes.forEach((vote) => {
       if (
         vote.users.length + voteValue >= 0.5 * maxVotes &&
-        highestVoted.specialty !== vote.specialty
+        highestVoted.specialty !== vote.specialty &&
+        vote.users.length !== 0
       ) {
         question.specialty.push(vote.specialty);
       }
