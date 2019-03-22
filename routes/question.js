@@ -19,23 +19,57 @@ const superUsers = ['johanne', 'thomasjensen1194', 'sigurd', 'testing1'];
 
 router.get('/convert', async (req, res) => {
   const questions = await Question.find();
-  let dummySave = [];
-  questions.forEach((question) => {
+
+  questions.forEach(async (question) => {
     if (question.specialty.length !== 0) {
       question.specialty.forEach((specialty) => {
         if (specialty === 'paraklinik') {
           question.tags.push(specialty);
-          question.tagVotes.push({ tag: specialty, users: ['Johanne'] });
+          question.tagVotes.push({ tag: specialty, users: ['johanne'] });
         } else {
-          question.votes.push({ specialty: specialty, users: ['Johanne'] });
+          question.votes.push({ specialty: specialty, users: ['johanne'] });
           question.specialty = [specialty];
         }
       });
-      dummySave.push(question);
+      res.status(200).send(questions);
+
+      //     // Tjek hvorvidt brugeren har ret til at tælle mere
+      //     let voteValue = 1;
+      //     if (_.includes(superUsers, req.body.user)) {
+      //       voteValue = 10;
+      //     }
+
+      //     // Tjek hvilket speciale er højest voted, og sæt det som specialty
+      //     const highestVoted = _.maxBy(question.votes, (vote) => {
+      //       return vote.users.length + voteValue;
+      //     });
+      //     question.specialty = highestVoted.specialty;
+
+      //     // Tjek om tagget har en voting over 5, og tilføj det til tags
+      //     let tags = [];
+      //     question.tagVotes.forEach((vote) => {
+      //       let included = false;
+      //       vote.users.forEach((user) => {
+      //         if (_.includes(superUsers, user)) included = true;
+      //       });
+
+      //       if (vote.users.length >= 5 || included) {
+      //         tags.push(vote.tag);
+      //       }
+      //     });
+      //     question.tags = tags;
+      //   }
+      //   await question.save();
+      //   console.log('Saved Document');
+      // });
+      // res.status(200).send('Successfully updated');
     }
   });
-  res.status(200).send(dummySave);
 });
+
+// const questions = await Question.find();
+
+// res.status(200).send(questions);
 
 router.get('/', async (req, res) => {
   let { n, specialer, unique, semester, examSeason, examYear } = req.query;
