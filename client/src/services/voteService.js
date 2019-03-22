@@ -5,7 +5,7 @@ const apiEndpoint = '/api/questions/';
 export const specialtyVote = async (value, username, id) => {
   const api = apiEndpoint + id + '/vote';
 
-  const result = await axios.put(api, { specialty: value, user: username });
+  const result = await axios.put(api, { specialties: value, user: username });
 
   return result;
 };

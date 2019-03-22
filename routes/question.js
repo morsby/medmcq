@@ -13,63 +13,107 @@ const auth = require('../middleware/auth');
 const Question = require('../models/question.js');
 const User = require('../models/user.js');
 
-const superUsers = ['johanne', 'thomasjensen1194', 'sigurd', 'testing1'];
+const superUsers = [
+  '5c9238d0fc42c40504616066',
+  '5bf6d6659643d718e06953b5',
+  '5ba48b49bcdeff2820b0a686',
+  '5bfd496b95606811a0baef7d'
+];
 
 // TODO: Før statistik over get("/api/questions"), post("/api/questions/ids/"), post("/api/questions/answer")
 
-router.get('/convert', async (req, res) => {
-  const questions = await Question.find();
+// ======================================================
 
-  questions.forEach(async (question) => {
-    if (question.specialty.length !== 0) {
-      question.specialty.forEach((specialty) => {
-        if (specialty === 'paraklinik') {
-          question.tags.push(specialty);
-          question.tagVotes.push({ tag: specialty, users: ['johanne'] });
-        } else {
-          question.votes.push({ specialty: specialty, users: ['johanne'] });
-          question.specialty = [specialty];
-        }
-      });
-      res.status(200).send(questions);
+// SIGURD:
+// Inden du pusher fra masteren, så HUSK at sætte maintenance i index.js state til true
+// Kør først /api/questions/convert, derefter /api/questions/remove
+// Derefter kan du tjekke om det er gået igennem med /api/questions/all
+// Når du er færdig, så slet disse routes mellem "=====", så der ikke går ged i den.
+// Vigtigt at hver route kun køres én gang!
+// Alt herunder og til næste "====" streg må nu afkommenteres
+// Ændre nu state i index.js til maintenance = false
 
-      //     // Tjek hvorvidt brugeren har ret til at tælle mere
-      //     let voteValue = 1;
-      //     if (_.includes(superUsers, req.body.user)) {
-      //       voteValue = 10;
-      //     }
+// ========================================================
 
-      //     // Tjek hvilket speciale er højest voted, og sæt det som specialty
-      //     const highestVoted = _.maxBy(question.votes, (vote) => {
-      //       return vote.users.length + voteValue;
-      //     });
-      //     question.specialty = highestVoted.specialty;
+// router.get('/all', async (req, res) => {
+//   const questions = await Question.find();
 
-      //     // Tjek om tagget har en voting over 5, og tilføj det til tags
-      //     let tags = [];
-      //     question.tagVotes.forEach((vote) => {
-      //       let included = false;
-      //       vote.users.forEach((user) => {
-      //         if (_.includes(superUsers, user)) included = true;
-      //       });
+//   res.status(200).send(questions);
+// });
 
-      //       if (vote.users.length >= 5 || included) {
-      //         tags.push(vote.tag);
-      //       }
-      //     });
-      //     question.tags = tags;
-      //   }
-      //   await question.save();
-      //   console.log('Saved Document');
-      // });
-      // res.status(200).send('Successfully updated');
-    }
-  });
-});
+// router.get('/remove', async (req, res) => {
+//   const questions = await Question.find({ specialty: 'paraklinik' });
 
-// const questions = await Question.find();
+//   questions.forEach((question) => {
+//     question.specialty.length = 0;
+//     question.save();
+//   });
 
-// res.status(200).send(questions);
+//   res.status(200).send(questions);
+// });
+
+// router.get('/convert', async (req, res) => {
+//   const questions = await Question.find();
+
+//   questions.forEach(async (question) => {
+//     if (question.specialty.length !== 0) {
+//       let user;
+
+//       if (question.semester === 7) {
+//         user = '5bf6d6659643d718e06953b5';
+//       }
+//       if (question.semester === 8) {
+//         user = '5c9238d0fc42c40504616066';
+//       }
+
+//       question.specialty.forEach((specialty) => {
+//         if (specialty === 'paraklinik') {
+//           question.tags = specialty;
+//           question.tagVotes = { tag: specialty, users: [user] };
+//         } else {
+//           question.votes = { specialty: specialty, users: [user] };
+//           question.specialty = [specialty];
+//         }
+//       });
+
+//       if (question.specialty[0] === 'paraklinik') {
+//         question.specialty.length = 0;
+//       }
+
+//       // Tjek hvorvidt brugeren har ret til at tælle mere
+//       let voteValue = 1;
+//       if (_.includes(superUsers, req.body.user)) {
+//         voteValue = 10;
+//       }
+
+//       // Tjek hvilket speciale er højest voted, og sæt det som specialty
+//       const highestVoted = _.maxBy(question.votes, (vote) => {
+//         return vote.users.length + voteValue;
+//       });
+//       if (highestVoted !== undefined) {
+//         question.specialty = highestVoted.specialty;
+//       }
+
+//       // Tjek om tagget har en voting over 5, og tilføj det til tags
+//       let tags = [];
+//       question.tagVotes.forEach((vote) => {
+//         let included = false;
+//         vote.users.forEach((user) => {
+//           if (_.includes(superUsers, user)) included = true;
+//         });
+
+//         if (vote.users.length >= 5 || included) {
+//           tags.push(vote.tag);
+//         }
+//       });
+//       question.tags = tags;
+//     }
+//     await question.save();
+//   });
+//   res.status(200).send('Databasen er blevet konverteret');
+// });
+
+// =========================================================
 
 router.get('/', async (req, res) => {
   let { n, specialer, unique, semester, examSeason, examYear } = req.query;
@@ -420,7 +464,7 @@ C. ${question.answer3}
 router.put('/:question_id/vote', async (req, res) => {
   let question = await Question.findById(req.params.question_id);
 
-  // Tjek om brugeren allerede har voted, og hvis de har, så fjern brugeren
+  // Tjek om brugeren allerede har voted, og hvis de har, så fjern brugeren fra alle votes
   question.votes.forEach((vote, i) => {
     const userIndex = _.indexOf(vote.users, req.body.user);
     if (userIndex !== -1) {
@@ -428,28 +472,42 @@ router.put('/:question_id/vote', async (req, res) => {
     }
   });
 
-  // Upvote speciale
-  const upvotedIndex = _.findIndex(question.votes, (vote) => {
-    return vote.specialty === req.body.specialty;
+  req.body.specialties.forEach((specialty) => {
+    // Upvote speciale
+    const upvotedIndex = _.findIndex(question.votes, (vote) => {
+      return vote.specialty === specialty;
+    });
+    // Hvis speciale ikke eksisterer i votes, laves nyt speciale
+    if (upvotedIndex === -1) {
+      question.votes.push({ specialty: specialty, users: [req.body.user] });
+    } else {
+      question.votes[upvotedIndex].users.push(req.body.user);
+    }
   });
-  // Hvis speciale ikke eksisterer i votes, laves nyt speciale
-  if (upvotedIndex === -1) {
-    question.votes.push({ specialty: req.body.specialty, users: [req.body.user] });
-  } else {
-    question.votes[upvotedIndex].users.push(req.body.user);
-  }
 
   // Tjek hvorvidt brugeren har ret til at tælle mere
-  let voteValue = 1;
+  let voteValue = 0;
   if (_.includes(superUsers, req.body.user)) {
     voteValue = 10;
   }
 
-  // Tjek hvilket speciale er højest voted, og sæt det som specialty
+  // Tjek hvilket speciale er højest voted, og sæt det som specialty.
   const highestVoted = _.maxBy(question.votes, (vote) => {
     return vote.users.length + voteValue;
   });
-  question.specialty = highestVoted.specialty;
+  const maxVotes = highestVoted.users.length;
+  question.specialty = [highestVoted.specialty];
+
+  // Tjek hvorvidt de andre specialer er indenfor 50% af det
+  // øverste speciale, hvorved det også kommer med
+  question.votes.forEach((vote) => {
+    if (
+      vote.users.length + voteValue >= 0.5 * maxVotes &&
+      highestVoted.specialty !== vote.specialty
+    ) {
+      question.specialty.push(vote.specialty);
+    }
+  });
 
   const result = await question.save();
   res.status(200).send(result);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { specialer, tags } from '../../../utils/common';
-import { Button, Message } from 'semantic-ui-react';
+import { Button, Message, Input } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Divider, Dropdown } from 'semantic-ui-react';
 import PropTypes from 'prop-types';
@@ -9,61 +9,55 @@ import * as actions from '../../../actions';
 
 const QuestionVoting = (props) => {
   const [chosenTags, setChosenTags] = useState([]);
-  const [message, setMessage] = useState('');
+  const [chosenSpecialties, setChosenSpecialties] = useState([]);
+  const [tagMessage, setTagMessage] = useState('');
+  const [specialtyMessage, setSpecialtyMessage] = useState('');
+  const [newTag, setNewTag] = useState('');
+  const [addingNewTag, setAddingNewTag] = useState(false);
 
   useEffect(() => {
+    let userSpecialties = [];
+    props.question.votes.forEach((vote) => {
+      if (_.includes(vote.users, props.user._id)) {
+        userSpecialties.push(vote.specialty);
+      }
+    });
+    setChosenSpecialties(userSpecialties);
+
     let userTags = [];
     props.question.tagVotes.forEach((tagVote) => {
-      if (_.includes(tagVote.users, props.user.username)) {
+      if (_.includes(tagVote.users, props.user._id)) {
         userTags.push(tagVote.tag);
       }
     });
-
     setChosenTags(userTags);
+
+    setTagMessage('');
+    setSpecialtyMessage('');
   }, [props.question]);
 
-  const userVote = () => {
-    let votedSpecialty = null;
-    props.question.votes.forEach((vote) => {
-      const userIndex = _.indexOf(vote.users, props.user.username);
-      if (userIndex !== -1) {
-        votedSpecialty = vote.specialty;
-      }
-    });
-    return votedSpecialty;
-  };
-
-  const specialties = () => {
-    let specialties = [];
-    const votedSpecialty = userVote();
-    specialer[props.question.semester].forEach((speciale) => {
-      specialties.push(
-        <Button
-          key={speciale.value}
-          basic
-          onClick={() => specialeVote(speciale.value)}
-          color={votedSpecialty === speciale.value ? 'green' : null}
-        >
-          {speciale.text}
-        </Button>
-      );
-    });
-
-    return specialties;
-  };
-
-  const specialeVote = async (value) => {
-    await props.voteSpecialty(value, props.user.username, props.question._id);
+  const specialtyVote = async () => {
+    await props.voteSpecialty(chosenSpecialties, props.user._id, props.question._id);
+    setSpecialtyMessage('Du har stemt på specialerne');
   };
 
   const tagVote = async () => {
-    await props.voteTags(chosenTags, props.user.username, props.question._id);
-    setMessage('Tags er tilføjet');
+    await props.voteTags(chosenTags, props.user._id, props.question._id);
+    setTagMessage('Tags er tilføjet');
   };
 
-  const onChange = async (e, { value }) => {
+  const onChangeSpecialties = async (e, { value }) => {
+    setChosenSpecialties(value);
+    setSpecialtyMessage('');
+  };
+
+  const onChangeTags = async (e, { value }) => {
     setChosenTags(value);
-    setMessage('');
+    setTagMessage('');
+  };
+
+  const onAddingNewTag = () => {
+    setAddingNewTag(true);
   };
 
   // Sigurd TODO med den der mailklient
@@ -72,9 +66,23 @@ const QuestionVoting = (props) => {
   return (
     <div>
       <h5 style={{ color: 'grey', marginLeft: '3px' }}>
-        Stem på speciale (Speciale med flest stemmer bliver vist)
+        Stem på speciale (Specialet med flest stemmer bliver vist som det første. Specialer indenfor
+        50% af stemmerne fra det højst stemte speciale, bliver også talt med)
       </h5>
-      {specialties()}
+      <Dropdown
+        fluid
+        multiple
+        selection
+        search
+        options={specialer[props.question.semester]}
+        value={chosenSpecialties}
+        onChange={onChangeSpecialties}
+      />
+      <Divider hidden />
+      <Button basic color="green" onClick={specialtyVote}>
+        Stem på specialer
+      </Button>
+      {specialtyMessage && <Message color="green">{specialtyMessage}</Message>}
       <Divider />
       <h5 style={{ color: 'grey', marginLeft: '3px' }}>
         Tilføj tags (kun tags der er valg af mere end 5 brugere, bliver vist)
@@ -86,16 +94,27 @@ const QuestionVoting = (props) => {
         search
         options={tags[props.question.semester]}
         value={chosenTags}
-        onChange={onChange}
+        onChange={onChangeTags}
       />
       <Divider hidden />
       <Button basic color="green" onClick={tagVote}>
-        Tilføj tags
+        Stem på tags
       </Button>
-      <Button basic color="yellow" onClick={addTag}>
-        Foreslå nyt tag
-      </Button>
-      {message && <Message color="green">{message}</Message>}
+      {!addingNewTag && (
+        <Button basic color="yellow" onClick={onAddingNewTag}>
+          Foreslå nyt tag
+        </Button>
+      )}
+      {addingNewTag && (
+        <div>
+          <Divider hidden />
+          <Input width={5} />
+          <Button basic color="green" onClick={addTag}>
+            Foreslå tag
+          </Button>
+        </div>
+      )}
+      {tagMessage && <Message color="green">{tagMessage}</Message>}
     </div>
   );
 };

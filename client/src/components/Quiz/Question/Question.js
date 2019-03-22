@@ -401,7 +401,7 @@ class Question extends Component {
           <p>Tags: {question.tags.join(', ')}</p>
           <Divider />
           {user && (
-            <Responsive minWidth={600}>
+            <>
               <QuestionVoting
                 question={question}
                 onToggleSpecialties={this.onSpecialtiesEditToggle}
@@ -412,7 +412,7 @@ class Question extends Component {
                 user={user}
               />
               <Divider />
-            </Responsive>
+            </>
           )}
           <Button
             color={this.state.publicCommentsOpen ? 'green' : null}
