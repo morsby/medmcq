@@ -2,15 +2,11 @@
             Set-up
 *******************************/
 
-var
-  fs             = require('fs'),
-  path           = require('path'),
-  defaults       = require('../defaults'),
-  release        = require('./release'),
-
-  requireDotFile = require('require-dot-file')
-;
-
+var fs = require('fs'),
+  path = require('path'),
+  defaults = require('../defaults'),
+  release = require('./release'),
+  requireDotFile = require('require-dot-file');
 /*******************************
           When to Ask
 *******************************/
@@ -18,15 +14,14 @@ var
 /* Preconditions for install questions */
 
 var when = {
-
   // path
   changeRoot: function(questions) {
-    return (questions.useRoot !== undefined && questions.useRoot !== true);
+    return questions.useRoot !== undefined && questions.useRoot !== true;
   },
 
   // permissions
   changePermissions: function(questions) {
-    return (questions.changePermissions && questions.changePermissions === true);
+    return questions.changePermissions && questions.changePermissions === true;
   },
 
   // install
@@ -35,27 +30,36 @@ var when = {
   },
 
   allowOverwrite: function(questions) {
-    return (questions.overwrite === undefined || questions.overwrite == 'yes');
+    return questions.overwrite === undefined || questions.overwrite == 'yes';
   },
   notAuto: function(questions) {
-    return (questions.install !== 'auto' && (questions.overwrite === undefined || questions.overwrite == 'yes'));
+    return (
+      questions.install !== 'auto' &&
+      (questions.overwrite === undefined || questions.overwrite == 'yes')
+    );
   },
   custom: function(questions) {
-    return (questions.install === 'custom' && (questions.overwrite === undefined || questions.overwrite == 'yes'));
+    return (
+      questions.install === 'custom' &&
+      (questions.overwrite === undefined || questions.overwrite == 'yes')
+    );
   },
   express: function(questions) {
-    return (questions.install === 'express' && (questions.overwrite === undefined || questions.overwrite == 'yes'));
+    return (
+      questions.install === 'express' &&
+      (questions.overwrite === undefined || questions.overwrite == 'yes')
+    );
   },
 
   // customize
   customize: function(questions) {
-    return (questions.customize === true);
+    return questions.customize === true;
   },
   primaryColor: function(questions) {
-    return (questions.primaryColor);
+    return questions.primaryColor;
   },
   secondaryColor: function(questions) {
-    return (questions.secondaryColor);
+    return questions.secondaryColor;
   }
 };
 
@@ -67,7 +71,7 @@ var when = {
 
 var filter = {
   removeTrailingSlash: function(path) {
-    return path.replace(/(\/$|\\$)+/mg, '');
+    return path.replace(/(\/$|\\$)+/gm, '');
   }
 };
 
@@ -76,7 +80,6 @@ var filter = {
 *******************************/
 
 module.exports = {
-
   // check whether install is setup
   isSetup: function() {
     return when.hasConfig();
@@ -84,111 +87,93 @@ module.exports = {
 
   // detect whether there is a semantic.json configuration and that the auto-install option is set to true
   shouldAutoInstall: function() {
-    var
-      config = when.hasConfig()
-    ;
+    var config = when.hasConfig();
     return config['autoInstall'];
   },
 
   // checks if files are in a PM directory
   getPackageManager: function(directory) {
-    var
-      // returns last matching result (avoid sub-module detection)
+    var // returns last matching result (avoid sub-module detection)
       walk = function(directory) {
-        var
-          pathArray     = directory.split(path.sep),
-          folder        = pathArray[pathArray.length - 1],
-          nextDirectory = path.join(directory, path.sep, '..')
-        ;
-        if( folder == 'bower_components') {
+        var pathArray = directory.split(path.sep),
+          folder = pathArray[pathArray.length - 1],
+          nextDirectory = path.join(directory, path.sep, '..');
+        if (folder == 'bower_components') {
           return {
             name: 'Bower',
             root: nextDirectory
           };
-        }
-        else if(folder == 'node_modules') {
-         return {
+        } else if (folder == 'node_modules') {
+          return {
             name: 'NPM',
             root: nextDirectory
           };
-        }
-        else if(folder == 'composer') {
-         return {
+        } else if (folder == 'composer') {
+          return {
             name: 'Composer',
             root: nextDirectory
           };
         }
-        if(path.resolve(directory) == path.resolve(nextDirectory)) {
+        if (path.resolve(directory) == path.resolve(nextDirectory)) {
           return false;
         }
         // recurse downward
         return walk(nextDirectory);
-      }
-    ;
+      };
     // start walk from current directory if none specified
-    directory = directory || (__dirname + path.sep);
+    directory = directory || __dirname + path.sep;
     return walk(directory);
   },
 
   // checks if files is PMed submodule
   isSubModule: function(directory) {
-    var
-      moduleFolders = 0,
+    var moduleFolders = 0,
       walk = function(directory) {
-        var
-          pathArray     = directory.split(path.sep),
-          folder        = pathArray[pathArray.length - 2],
-          nextDirectory = path.join(directory, path.sep, '..')
-        ;
-        if( folder == 'bower_components') {
+        var pathArray = directory.split(path.sep),
+          folder = pathArray[pathArray.length - 2],
+          nextDirectory = path.join(directory, path.sep, '..');
+        if (folder == 'bower_components') {
+          moduleFolders++;
+        } else if (folder == 'node_modules') {
+          moduleFolders++;
+        } else if (folder == 'composer') {
           moduleFolders++;
         }
-        else if(folder == 'node_modules') {
-          moduleFolders++;
-        }
-        else if(folder == 'composer') {
-          moduleFolders++;
-        }
-        if(path.resolve(directory) == path.resolve(nextDirectory)) {
-          return (moduleFolders > 1);
+        if (path.resolve(directory) == path.resolve(nextDirectory)) {
+          return moduleFolders > 1;
         }
         // recurse downward
         return walk(nextDirectory);
-      }
-    ;
+      };
     // start walk from current directory if none specified
-    directory = directory || (__dirname + path.sep);
+    directory = directory || __dirname + path.sep;
     return walk(directory);
   },
 
-
   createJSON: function(answers) {
-    var
-      json = {
-        paths: {
-          source: {},
-          output: {}
-        }
+    var json = {
+      paths: {
+        source: {},
+        output: {}
       }
-    ;
-
+    };
     // add components
-    if(answers.components) {
+    if (answers.components) {
       json.components = answers.components;
     }
 
     // add rtl choice
-    if(answers.rtl) {
+    if (answers.rtl) {
       json.rtl = answers.rtl;
     }
 
     // add permissions
-    if(answers.permission) {
+    if (answers.permission) {
       json.permission = answers.permission;
     }
 
     // add path to semantic
-    if(answers.semanticRoot) {
+    if (answers.semanticRoot) {
       json.base = path.normalize(answers.semanticRoot);
     }
 
@@ -196,116 +181,110 @@ module.exports = {
     json.version = release.version;
 
     // add dist folder paths
-    if(answers.dist) {
+    if (answers.dist) {
       answers.dist = path.normalize(answers.dist);
 
       json.paths.output = {
-        packaged     : path.normalize(answers.dist + '/'),
-        uncompressed : path.normalize(answers.dist + '/components/'),
-        compressed   : path.normalize(answers.dist + '/components/'),
-        themes       : path.normalize(answers.dist + '/themes/')
+        packaged: path.normalize(answers.dist + '/'),
+        uncompressed: path.normalize(answers.dist + '/components/'),
+        compressed: path.normalize(answers.dist + '/components/'),
+        themes: path.normalize(answers.dist + '/themes/')
       };
     }
 
     // add site path
-    if(answers.site) {
+    if (answers.site) {
       json.paths.source.site = path.normalize(answers.site + '/');
     }
-    if(answers.packaged) {
+    if (answers.packaged) {
       json.paths.output.packaged = path.normalize(answers.packaged + '/');
     }
-    if(answers.compressed) {
+    if (answers.compressed) {
       json.paths.output.compressed = path.normalize(answers.compressed + '/');
     }
-    if(answers.uncompressed) {
+    if (answers.uncompressed) {
       json.paths.output.uncompressed = path.normalize(answers.uncompressed + '/');
     }
     return json;
   },
 
   // files cleaned up after install
-  setupFiles: [
-    './src/theme.config.example',
-    './semantic.json.example',
-    './src/_site'
-  ],
+  setupFiles: ['./src/theme.config.example', './semantic.json.example', './src/_site'],
 
   regExp: {
     // used to match siteFolder variable in theme.less
-    siteVariable: /@siteFolder .*\'(.*)/mg
+    siteVariable: /@siteFolder .*\'(.*)/gm
   },
 
   // source paths (when installing)
   source: {
-    config       : './semantic.json.example',
-    definitions  : './src/definitions',
-    gulpFile     : './gulpfile.js',
-    lessImport   : './src/semantic.less',
-    site         : './src/_site',
-    tasks        : './tasks',
-    themeConfig  : './src/theme.config.example',
-    themeImport  : './src/theme.less',
-    themes       : './src/themes',
-    defaultTheme : './src/themes/default',
-    userGulpFile : './tasks/config/npm/gulpfile.js'
+    config: './semantic.json.example',
+    definitions: './src/definitions',
+    gulpFile: './gulpfile.js',
+    lessImport: './src/semantic.less',
+    site: './src/_site',
+    tasks: './tasks',
+    themeConfig: './src/theme.config.example',
+    themeImport: './src/theme.less',
+    themes: './src/themes',
+    defaultTheme: './src/themes/default',
+    userGulpFile: './tasks/config/npm/gulpfile.js'
   },
 
   // expected final filenames
   files: {
-    config      : 'semantic.json',
-    lessImport  : 'src/semantic.less',
-    site        : 'src/site',
-    themeConfig : 'src/theme.config',
-    themeImport : 'src/theme.less'
+    config: 'semantic.json',
+    lessImport: 'src/semantic.less',
+    site: 'src/site',
+    themeConfig: 'src/theme.config',
+    themeImport: 'src/theme.less'
   },
 
   // folder paths to files relative to root
   folders: {
-    config       : './',
-    definitions  : 'src/definitions/',
-    lessImport   : 'src/',
-    modules      : 'node_modules/',
-    site         : 'src/site/',
-    tasks        : 'tasks/',
-    themeConfig  : 'src/',
-    themeImport  : 'src/',
-    themes       : 'src/themes/',
+    config: './',
+    definitions: 'src/definitions/',
+    lessImport: 'src/',
+    modules: 'node_modules/',
+    site: 'src/site/',
+    tasks: 'tasks/',
+    themeConfig: 'src/',
+    themeImport: 'src/',
+    themes: 'src/themes/',
 
-    defaultTheme : 'default/' // only path that is relative to another directory and not root
+    defaultTheme: 'default/' // only path that is relative to another directory and not root
   },
 
   // questions asked during install
   questions: {
-
     root: [
       {
-        type    : 'list',
-        name    : 'useRoot',
-        message :
-          '{packageMessage} Is this your project folder? {root}',
+        type: 'list',
+        name: 'useRoot',
+        message: '{packageMessage} Is this your project folder? {root}',
         choices: [
           {
-            name  : 'Yes',
-            value : true
+            name: 'Yes',
+            value: true
           },
           {
-            name  : 'No, let me specify',
-            value : false
+            name: 'No, let me specify',
+            value: false
           }
         ]
       },
       {
-        type    : 'input',
-        name    : 'customRoot',
-        message : 'Please enter the absolute path to your project root',
-        default : '/my/project/path',
-        when    : when.changeRoot
+        type: 'input',
+        name: 'customRoot',
+        message: 'Please enter the absolute path to your project root',
+        default: '/my/project/path',
+        when: when.changeRoot
       },
       {
-        type    : 'input',
-        name    : 'semanticRoot',
-        message : 'Where should we put Semantic UI inside your project?',
-        default : 'semantic/'
+        type: 'input',
+        name: 'semanticRoot',
+        message: 'Where should we put Semantic UI inside your project?',
+        default: 'semantic/'
       }
     ],
 
@@ -353,60 +332,60 @@ module.exports = {
 
         // duplicated manually from tasks/defaults.js with additional property
         choices: [
-          { name: "reset", checked: true },
-          { name: "site", checked: true },
-          { name: "button", checked: true },
-          { name: "container", checked: true },
-          { name: "divider", checked: true },
-          { name: "flag", checked: true },
-          { name: "header", checked: true },
-          { name: "icon", checked: true },
-          { name: "image", checked: true },
-          { name: "input", checked: true },
-          { name: "label", checked: true },
-          { name: "list", checked: true },
-          { name: "loader", checked: true },
-          { name: "rail", checked: true },
-          { name: "reveal", checked: true },
-          { name: "segment", checked: true },
-          { name: "step", checked: true },
-          { name: "breadcrumb", checked: true },
-          { name: "form", checked: true },
-          { name: "grid", checked: true },
-          { name: "menu", checked: true },
-          { name: "message", checked: true },
-          { name: "table", checked: true },
-          { name: "ad", checked: true },
-          { name: "card", checked: true },
-          { name: "comment", checked: true },
-          { name: "feed", checked: true },
-          { name: "item", checked: true },
-          { name: "statistic", checked: true },
-          { name: "accordion", checked: true },
-          { name: "calendar", checked: true },
-          { name: "checkbox", checked: true },
-          { name: "dimmer", checked: true },
-          { name: "dropdown", checked: true },
-          { name: "embed", checked: true },
-          { name: "modal", checked: true },
-          { name: "nag", checked: true },
-          { name: "placeholder", checked: true },
-          { name: "popup", checked: true },
-          { name: "progress", checked: true },
-          { name: "slider", checked: true },
-          { name: "rating", checked: true },
-          { name: "search", checked: true },
-          { name: "shape", checked: true },
-          { name: "sidebar", checked: true },
-          { name: "sticky", checked: true },
-          { name: "tab", checked: true },
-          { name: "text", checked: true },
-          { name: "toast", checked: true },
-          { name: "transition", checked: true },
-          { name: "api", checked: true },
-          { name: "form", checked: true },
-          { name: "state", checked: true },
-          { name: "visibility", checked: true }
+          { name: 'reset', checked: true },
+          { name: 'site', checked: true },
+          { name: 'button', checked: true },
+          { name: 'container', checked: true },
+          { name: 'divider', checked: true },
+          { name: 'flag', checked: true },
+          { name: 'header', checked: true },
+          { name: 'icon', checked: true },
+          { name: 'image', checked: true },
+          { name: 'input', checked: true },
+          { name: 'label', checked: true },
+          { name: 'list', checked: true },
+          { name: 'loader', checked: true },
+          { name: 'rail', checked: true },
+          { name: 'reveal', checked: true },
+          { name: 'segment', checked: true },
+          { name: 'step', checked: true },
+          { name: 'breadcrumb', checked: true },
+          { name: 'form', checked: true },
+          { name: 'grid', checked: true },
+          { name: 'menu', checked: true },
+          { name: 'message', checked: true },
+          { name: 'table', checked: true },
+          { name: 'ad', checked: true },
+          { name: 'card', checked: true },
+          { name: 'comment', checked: true },
+          { name: 'feed', checked: true },
+          { name: 'item', checked: true },
+          { name: 'statistic', checked: true },
+          { name: 'accordion', checked: true },
+          { name: 'calendar', checked: true },
+          { name: 'checkbox', checked: true },
+          { name: 'dimmer', checked: true },
+          { name: 'dropdown', checked: true },
+          { name: 'embed', checked: true },
+          { name: 'modal', checked: true },
+          { name: 'nag', checked: true },
+          { name: 'placeholder', checked: true },
+          { name: 'popup', checked: true },
+          { name: 'progress', checked: true },
+          { name: 'slider', checked: true },
+          { name: 'rating', checked: true },
+          { name: 'search', checked: true },
+          { name: 'shape', checked: true },
+          { name: 'sidebar', checked: true },
+          { name: 'sticky', checked: true },
+          { name: 'tab', checked: true },
+          { name: 'text', checked: true },
+          { name: 'toast', checked: true },
+          { name: 'transition', checked: true },
+          { name: 'api', checked: true },
+          { name: 'form', checked: true },
+          { name: 'state', checked: true },
+          { name: 'visibility', checked: true }
         ],
         when: when.notAuto
       },
@@ -495,7 +474,6 @@ module.exports = {
       }
     ],
 
-
     cleanup: [
       {
         type: 'list',
@@ -526,7 +504,7 @@ module.exports = {
             value: 'no'
           }
         ]
-      },
+      }
     ],
     site: [
       {
@@ -539,7 +517,7 @@ module.exports = {
             value: true
           },
           {
-            name: 'No I\'ll do it myself',
+            name: "No I'll do it myself",
             value: false
           }
         ]
@@ -570,7 +548,7 @@ module.exports = {
             value: 'Droid'
           },
           {
-            name: 'I\'ll choose on my own',
+            name: "I'll choose on my own",
             value: false
           }
         ],
@@ -602,7 +580,7 @@ module.exports = {
             value: 'Droid'
           },
           {
-            name: 'I\'ll choose on my own',
+            name: "I'll choose on my own",
             value: false
           }
         ],
@@ -615,23 +593,23 @@ module.exports = {
         default: '14px',
         choices: [
           {
-            name: '12px',
+            name: '12px'
           },
           {
-            name: '13px',
+            name: '13px'
           },
           {
             name: '14px (Recommended)',
             value: '14px'
           },
           {
-            name: '15px',
+            name: '15px'
           },
           {
-            name: '16px',
+            name: '16px'
           },
           {
-            name: 'I\'ll choose on my own',
+            name: "I'll choose on my own",
             value: false
           }
         ],
@@ -671,7 +649,7 @@ module.exports = {
             name: 'Black'
           },
           {
-            name: 'I\'ll choose on my own',
+            name: "I'll choose on my own",
             value: false
           }
         ],
@@ -717,7 +695,7 @@ module.exports = {
             name: 'Black'
           },
           {
-            name: 'I\'ll choose on my own',
+            name: "I'll choose on my own",
             value: false
           }
         ],
@@ -730,33 +708,29 @@ module.exports = {
         when: when.secondaryColor
       }
     ]
-
   },
 
   settings: {
-
     /* Rename Files */
     rename: {
-      json : { extname : '.json' }
+      json: { extname: '.json' }
     },
 
     /* Copy Install Folders */
     wrench: {
-
       // overwrite existing files update & install (default theme / definition)
       overwrite: {
-        forceDelete       : true,
-        excludeHiddenUnix : true,
-        preserveFiles     : false
+        forceDelete: true,
+        excludeHiddenUnix: true,
+        preserveFiles: false
       },
 
       // only create files that don't exist (site theme update)
       merge: {
-        forceDelete       : false,
-        excludeHiddenUnix : true,
-        preserveFiles     : true
+        forceDelete: false,
+        excludeHiddenUnix: true,
+        preserveFiles: true
       }
-
     }
   }
 };

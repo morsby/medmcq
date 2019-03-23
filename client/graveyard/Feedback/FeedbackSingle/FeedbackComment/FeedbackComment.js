@@ -7,43 +7,41 @@ import marked from 'marked';
 import { Translate } from 'react-localize-redux';
 
 const FeedbackComment = ({ comment, replyId, onReply }) => {
-    let level = comment.slug.split('/').length - 1;
-    let levels = [...Array(level).keys()];
-    return (
-        <Card className={`comment-level-${level}`} fluid>
-            <Card.Content>
-                <Card.Meta>
-                    {new Date(comment.date).toLocaleString('da-DK')}
-                </Card.Meta>
-                <p
-                    dangerouslySetInnerHTML={{
-                        __html: marked(comment.text),
-                    }}
-                />
+  let level = comment.slug.split('/').length - 1;
+  let levels = [...Array(level).keys()];
+  return (
+    <Card className={`comment-level-${level}`} fluid>
+      <Card.Content>
+        <Card.Meta>{new Date(comment.date).toLocaleString('da-DK')}</Card.Meta>
+        <p
+          dangerouslySetInnerHTML={{
+            __html: marked(comment.text)
+          }}
+        />
 
-                <Card.Meta>
-                    <Button
-                        basic={replyId !== comment._id}
-                        color="green"
-                        className="click"
-                        onClick={() => onReply(comment._id, comment.slug)}
-                    >
-                        <Translate id="feedbackComment.reply" />
-                    </Button>
-                    <p>{comment.slug}</p>
-                </Card.Meta>
-            </Card.Content>
-            {levels.map(i => (
-                <div className={`v${i}`} key={`line-${i}`} />
-            ))}
-        </Card>
-    );
+        <Card.Meta>
+          <Button
+            basic={replyId !== comment._id}
+            color="green"
+            className="click"
+            onClick={() => onReply(comment._id, comment.slug)}
+          >
+            <Translate id="feedbackComment.reply" />
+          </Button>
+          <p>{comment.slug}</p>
+        </Card.Meta>
+      </Card.Content>
+      {levels.map((i) => (
+        <div className={`v${i}`} key={`line-${i}`} />
+      ))}
+    </Card>
+  );
 };
 
 FeedbackComment.propTypes = {
-    comment: PropTypes.object.isRequired,
-    replyId: PropTypes.string,
-    onReply: PropTypes.func.isRequired,
+  comment: PropTypes.object.isRequired,
+  replyId: PropTypes.string,
+  onReply: PropTypes.func.isRequired
 };
 
 export default FeedbackComment;

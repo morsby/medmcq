@@ -1,33 +1,22 @@
 /*******************************
  Serve Docs
  *******************************/
-var
-  gulp        = require('gulp'),
-
+var gulp = require('gulp'),
   // node dependencies
-  console     = require('better-console'),
-
+  console = require('better-console'),
   // gulp dependencies
-  print       = require('gulp-print').default,
-
+  print = require('gulp-print').default,
   // user config
-  config      = require('../config/docs'),
-
+  config = require('../config/docs'),
   // task config
-  tasks       = require('../config/tasks'),
+  tasks = require('../config/tasks'),
   configSetup = require('../config/project/config'),
-
   // shorthand
-  log         = tasks.log,
-
-  css         = require('../build/css'),
-  js          = require('../build/javascript'),
-  assets      = require('../build/assets')
-;
-
-
-module.exports = function () {
-
+  log = tasks.log,
+  css = require('../build/css'),
+  js = require('../build/javascript'),
+  assets = require('../build/assets');
+module.exports = function() {
   // use a different config
   config = configSetup.addDerivedValues(config);
 
@@ -38,41 +27,35 @@ module.exports = function () {
      Copy Source
   ---------------*/
 
-  gulp
-    .watch(['src/**/*.*'])
-    .on('all', function (event, path) {
-      // We don't handle deleted files yet
-      if (event === 'unlink' || event === 'unlinkDir') {
-        return;
-      }
-      return gulp.src(path, {
+  gulp.watch(['src/**/*.*']).on('all', function(event, path) {
+    // We don't handle deleted files yet
+    if (event === 'unlink' || event === 'unlinkDir') {
+      return;
+    }
+    return gulp
+      .src(path, {
         base: 'src/'
       })
-        .pipe(gulp.dest(config.paths.output.less))
-        .pipe(print(log.created))
-        ;
-    })
-  ;
+      .pipe(gulp.dest(config.paths.output.less))
+      .pipe(print(log.created));
+  });
 
   /*--------------
     Copy Examples
   ---------------*/
 
-  gulp
-    .watch(['examples/**/*.*'])
-    .on('all', function (event, path) {
-      // We don't handle deleted files yet
-      if (event === 'unlink' || event === 'unlinkDir') {
-        return;
-      }
-      return gulp.src(path, {
+  gulp.watch(['examples/**/*.*']).on('all', function(event, path) {
+    // We don't handle deleted files yet
+    if (event === 'unlink' || event === 'unlinkDir') {
+      return;
+    }
+    return gulp
+      .src(path, {
         base: 'examples/'
       })
-        .pipe(gulp.dest(config.paths.output.examples))
-        .pipe(print(log.created))
-        ;
-    })
-  ;
+      .pipe(gulp.dest(config.paths.output.examples))
+      .pipe(print(log.created));
+  });
 
   /*--------------
       Watch CSS
@@ -91,5 +74,4 @@ module.exports = function () {
   ---------------*/
 
   assets.watch('docs', config);
-
 };

@@ -11,67 +11,67 @@ import { Dimmer, Loader, Button } from 'semantic-ui-react';
  */
 
 class QuizLoader extends Component {
-    state = { seconds: 0 };
+  state = { seconds: 0 };
 
-    componentDidMount() {
-        this.interval = setInterval(() => this.tick(), 5000);
-    }
-    componentWillUnmount() {
-        clearInterval(this.interval);
-    }
+  componentDidMount() {
+    this.interval = setInterval(() => this.tick(), 5000);
+  }
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
 
-    tick() {
-        this.setState(prevState => ({
-            seconds: prevState.seconds + 1,
-        }));
-    }
+  tick() {
+    this.setState((prevState) => ({
+      seconds: prevState.seconds + 1
+    }));
+  }
 
-    render() {
-        let longWait = '',
-            { handleRetry, handleAbort, text } = this.props;
-        if (this.state.seconds >= 2) {
-            longWait = (
-                <div style={{ margin: '5px 0' }}>
-                    <p>{text.long_wait}</p>
-                    <Button basic color="blue" onClick={handleRetry}>
-                        {text.retry}
-                    </Button>
-                    <Button basic color="yellow" onClick={handleAbort}>
-                        {text.abort}
-                    </Button>
-                </div>
-            );
-        }
-        return (
-            <Dimmer active page>
-                <Loader>
-                    {text.fetching}
-                    {longWait}
-                </Loader>
-            </Dimmer>
-        );
+  render() {
+    let longWait = '',
+      { handleRetry, handleAbort, text } = this.props;
+    if (this.state.seconds >= 2) {
+      longWait = (
+        <div style={{ margin: '5px 0' }}>
+          <p>{text.long_wait}</p>
+          <Button basic color="blue" onClick={handleRetry}>
+            {text.retry}
+          </Button>
+          <Button basic color="yellow" onClick={handleAbort}>
+            {text.abort}
+          </Button>
+        </div>
+      );
     }
+    return (
+      <Dimmer active page>
+        <Loader>
+          {text.fetching}
+          {longWait}
+        </Loader>
+      </Dimmer>
+    );
+  }
 }
 
 QuizLoader.propTypes = {
-    /**
-     * Fra Quiz.js
-     * Kalder getQuestions (fra redux) - hvis første request faldt ud pga. tabt
-     * forbindelse.
-     */
-    handleRetry: PropTypes.func,
+  /**
+   * Fra Quiz.js
+   * Kalder getQuestions (fra redux) - hvis første request faldt ud pga. tabt
+   * forbindelse.
+   */
+  handleRetry: PropTypes.func,
 
-    /**
-     * Fra Quiz.js
-     * Navigerer tilbage til forsiden.
-     */
-    handleAbort: PropTypes.func,
+  /**
+   * Fra Quiz.js
+   * Navigerer tilbage til forsiden.
+   */
+  handleAbort: PropTypes.func,
 
-    /**
-     * Tekst indeholdende den oversatte tekst til hver knap/besked.
-     * Fra ./Quiz.js (via react-localize-redux) fordi oversættelsen drillede....
-     */
-    text: PropTypes.object,
+  /**
+   * Tekst indeholdende den oversatte tekst til hver knap/besked.
+   * Fra ./Quiz.js (via react-localize-redux) fordi oversættelsen drillede....
+   */
+  text: PropTypes.object
 };
 
 export default QuizLoader;

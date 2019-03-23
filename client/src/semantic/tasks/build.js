@@ -2,16 +2,11 @@
  *         Build Task
  *******************************/
 
-var
-  // dependencies
-  gulp     = require('gulp'),
-
+var // dependencies
+  gulp = require('gulp'),
   // config
-  install  = require('./config/project/install')
-;
-
-module.exports = function (callback) {
-
+  install = require('./config/project/install');
+module.exports = function(callback) {
   console.info('Building Semantic');
 
   if (!install.isSetup()) {

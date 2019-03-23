@@ -5,8 +5,8 @@ import settingsReducer from './settingsReducer';
 import authReducer from './authReducer';
 
 export default combineReducers({
-    questions: questionsReducer,
-    settings: settingsReducer,
-    auth: authReducer,
-    localize: localizeReducer
+  questions: questionsReducer,
+  settings: settingsReducer,
+  auth: authReducer,
+  localize: localizeReducer
 });
