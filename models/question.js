@@ -28,8 +28,8 @@ var QuestionSchema = new Schema({
       private: { type: Boolean, default: false }
     }
   ],
-  votes: [{ specialty: String, users: [String] }],
-  tagVotes: [{ tag: String, users: [String] }]
+  votes: [{ specialty: String, users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] }],
+  tagVotes: [{ tag: String, users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] }]
 });
 
 QuestionSchema.plugin(random);
