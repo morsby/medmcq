@@ -23,8 +23,8 @@
 
 /* Checkmark */
 @checkboxCheckFontSize: 14px;
-@checkboxCheckTop: 0;
-@checkboxCheckLeft: 0;
+@checkboxCheckTop: 0px;
+@checkboxCheckLeft: 0px;
 @checkboxCheckSize: @checkboxSize;
 
 /* Label */
@@ -84,11 +84,11 @@
 
 @radioSize: 15px;
 @radioTop: 1px;
-@radioLeft: 0;
+@radioLeft: 0px;
 @radioLabelDistance: @labelDistance;
 
 @bulletTop: 1px;
-@bulletLeft: 0;
+@bulletLeft: 0px;
 @bulletScale: (7 / 15); /* 7px as unitless value from radio size */
 @bulletColor: @textColor;
 @bulletRadius: @circularRadius;
@@ -106,7 +106,7 @@
 @handleBackground: @white @subtleGradient;
 @handleBoxShadow:
   @subtleShadow,
-  0 0 0 1px @borderColor inset
+  0px 0px 0px 1px @borderColor inset
 ;
 
 /* Slider */
@@ -154,7 +154,7 @@
 @toggleHeight: @toggleHandleSize;
 
 @toggleHandleRadius: @circularRadius;
-@toggleHandleOffset: 0;
+@toggleHandleOffset: 0rem;
 @toggleHandleTransition:
   background @sliderTransitionDuration @defaultEasing,
   left @sliderTransitionDuration @defaultEasing
@@ -163,7 +163,7 @@
 @toggleLaneBackground: @transparentBlack;
 @toggleLaneHeight: @toggleHandleSize;
 @toggleLaneBoxShadow: none;
-@toggleLaneVerticalOffset: 0;
+@toggleLaneVerticalOffset: 0rem;
 @toggleOffOffset: -0.05rem;
 @toggleOnOffset: (@toggleLaneWidth - @toggleHandleSize) + 0.15rem;
 
@@ -191,6 +191,3 @@
 /*-------------------
       Variations
 --------------------*/
-
-/* Inverted */
-@checkboxInvertedHoverBackground: @black;

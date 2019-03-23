@@ -12,10 +12,6 @@
 
 'use strict';
 
-$.isFunction = $.isFunction || function(obj) {
-  return typeof obj === "function" && typeof obj.nodeType !== "number";
-};
-
 window = (typeof window != 'undefined' && window.Math == Math)
   ? window
   : (typeof self != 'undefined' && self.Math == Math)
@@ -71,7 +67,7 @@ $.fn.rating = function(parameters) {
             module.setup.layout();
           }
 
-          if(settings.interactive && !module.is.disabled()) {
+          if(settings.interactive) {
             module.enable();
           }
           else {
@@ -107,8 +103,7 @@ $.fn.rating = function(parameters) {
           layout: function() {
             var
               maxRating = module.get.maxRating(),
-              icon      = module.get.icon(),
-              html      = $.fn.rating.settings.templates.icon(maxRating, icon)
+              html      = $.fn.rating.settings.templates.icon(maxRating)
             ;
             module.debug('Generating icon html dynamically');
             $module
@@ -209,20 +204,10 @@ $.fn.rating = function(parameters) {
         is: {
           initialLoad: function() {
             return initialLoad;
-          },
-          disabled: function() {
-            return $module.hasClass(className.disabled);
           }
         },
 
         get: {
-          icon: function(){
-            var icon = $module.data(metadata.icon);
-            if (icon) {
-              $module.removeData(metadata.icon);
-            }
-            return icon || settings.icon;
-          },
           initialRating: function() {
             if($module.data(metadata.rating) !== undefined) {
               $module.removeData(metadata.rating);
@@ -430,7 +415,7 @@ $.fn.rating = function(parameters) {
           else if(found !== undefined) {
             response = found;
           }
-          if(Array.isArray(returnedValue)) {
+          if($.isArray(returnedValue)) {
             returnedValue.push(response);
           }
           else if(returnedValue !== undefined) {
@@ -468,9 +453,7 @@ $.fn.rating.settings = {
   name          : 'Rating',
   namespace     : 'rating',
 
-  icon          : 'star',
-
-  silent        : false,
+  slent         : false,
   debug         : false,
   verbose       : false,
   performance   : true,
@@ -492,8 +475,7 @@ $.fn.rating.settings = {
 
   metadata: {
     rating    : 'rating',
-    maxRating : 'maxRating',
-    icon      : 'icon'
+    maxRating : 'maxRating'
   },
 
   className : {
@@ -508,13 +490,13 @@ $.fn.rating.settings = {
   },
 
   templates: {
-    icon: function(maxRating, iconClass) {
+    icon: function(maxRating) {
       var
         icon = 1,
         html = ''
       ;
       while(icon <= maxRating) {
-        html += '<i class="'+iconClass+' icon"></i>';
+        html += '<i class="icon"></i>';
         icon++;
       }
       return html;

@@ -5,7 +5,7 @@
       "A new version has been released since your last visit"
     ],
     "body": [
-      "Du kan læse mere om, hvilke ændringer, der er sket, på denne ${nav}.",
+      "Du kan læse mere om hvilke ændringer, der er sket, på denne ${nav}.",
       "You can read more about what change we've made on this ${nav}."
     ],
     "aboutLink": ["side", "page"]

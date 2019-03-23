@@ -12,10 +12,6 @@
 
 'use strict';
 
-$.isFunction = $.isFunction || function(obj) {
-  return typeof obj === "function" && typeof obj.nodeType !== "number";
-};
-
 window = (typeof window != 'undefined' && window.Math == Math)
   ? window
   : (typeof self != 'undefined' && self.Math == Math)
@@ -32,6 +28,7 @@ $.fn.popup = function(parameters) {
 
     moduleSelector = $allModules.selector || '',
 
+    hasTouch       = (true),
     time           = new Date().getTime(),
     performance    = [],
 
@@ -188,7 +185,7 @@ $.fn.popup = function(parameters) {
                 : settings.delay
             ;
             clearTimeout(module.hideTimer);
-            if(!openedWithTouch || (openedWithTouch && settings.addTouchEvents) ) {
+            if(!openedWithTouch) {
               module.showTimer = setTimeout(module.show, delay);
             }
           },
@@ -203,9 +200,7 @@ $.fn.popup = function(parameters) {
           },
           touchstart: function(event) {
             openedWithTouch = true;
-            if(settings.addTouchEvents) {
-              module.show();
-            }
+            module.show();
           },
           resize: function() {
             if( module.is.visible() ) {
@@ -420,7 +415,7 @@ $.fn.popup = function(parameters) {
         },
         supports: {
           svg: function() {
-            return (typeof SVGGraphicsElement !== 'undefined');
+            return (typeof SVGGraphicsElement === 'undefined');
           }
         },
         animate: {
@@ -988,7 +983,7 @@ $.fn.popup = function(parameters) {
                 .on('click' + eventNamespace, module.toggle)
               ;
             }
-            if(settings.on == 'hover') {
+            if(settings.on == 'hover' && hasTouch) {
               $module
                 .on('touchstart' + eventNamespace, module.event.touchstart)
               ;
@@ -1295,7 +1290,7 @@ $.fn.popup = function(parameters) {
           else if(found !== undefined) {
             response = found;
           }
-          if(Array.isArray(returnedValue)) {
+          if($.isArray(returnedValue)) {
             returnedValue.push(response);
           }
           else if(returnedValue !== undefined) {

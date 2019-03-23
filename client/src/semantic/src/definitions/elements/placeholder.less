@@ -64,22 +64,18 @@
   background-color: @white;
 }
 
-.ui.placeholder.hidden {
-  display:none;
-}
-
 /* Image */
-.ui.placeholder .image:not(.header):not(.ui):not(.icon) {
+.ui.placeholder .image:not(.header):not(.ui) {
   height: @placeholderImageHeight;
 }
 .ui.placeholder .square.image:not(.header) {
-  height: 0;
+  height: 0px;
   overflow: hidden;
   /* 1/1 aspect ratio */
   padding-top: 100%;
 }
 .ui.placeholder .rectangular.image:not(.header) {
-  height: 0;
+  height: 0px;
   overflow: hidden;
   /* 4/3 aspect ratio */
   padding-top: 75%;
@@ -99,10 +95,10 @@
   background-color: inherit;
 }
 .ui.placeholder .line:before {
-  left: 0;
+  left: 0px;
 }
 .ui.placeholder .line:after {
-  right: 0;
+  right: 0px;
 }
 
 /* Any Lines */
@@ -234,5 +230,3 @@
 .ui.fluid.placeholder {
   max-width: none;
 }
-
-.loadUIOverrides();

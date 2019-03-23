@@ -40,10 +40,8 @@
   will-change: top, left, margin, transform, opacity;
 }
 
-.ui.modal > :first-child:not(.icon):not(.dimmer),
-.ui.modal > .icon:first-child + *,
-.ui.modal > .dimmer:first-child + *:not(.icon),
-.ui.modal > .dimmer:first-child + .icon + * {
+.ui.modal > :first-child:not(.icon),
+.ui.modal > .icon:first-child + * {
   border-top-left-radius: @borderRadius;
   border-top-right-radius: @borderRadius;
 }
@@ -116,7 +114,6 @@
 .ui.modal > .image.content {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
 }
 
 /* Image */
@@ -125,13 +122,12 @@
   flex: 0 1 auto;
   width: @imageWidth;
   align-self: @imageVerticalAlign;
-  max-width: 100%;
 }
 .ui.modal > [class*="top aligned"] {
-  align-self: start;
+  align-self: top;
 }
 .ui.modal > [class*="middle aligned"] {
-  align-self: center;
+  align-self: middle;
 }
 .ui.modal > [class*="stretched"] {
   align-self: stretch;
@@ -141,7 +137,7 @@
 .ui.modal > .content > .description {
   display: block;
   flex: 1 0 auto;
-  min-width: 0;
+  min-width: 0px;
   align-self: @descriptionVerticalAlign;
 }
 
@@ -155,7 +151,7 @@
 
 /*rtl:ignore*/
 .ui.modal > .content > .image > i.icon {
-  margin: 0;
+  margin: 0em;
   opacity: 1;
   width: auto;
   line-height: 1;
@@ -174,9 +170,6 @@
 }
 .ui.modal .actions > .button {
   margin-left: @buttonDistance;
-}
-.ui.basic.modal > .actions {
-  border-top:none;
 }
 
 /*-------------------
@@ -250,7 +243,7 @@
   .ui.modal .content > .image {
     display: block;
     max-width: 100%;
-    margin: 0 auto !important;
+    margin: 0em auto !important;
     text-align: center;
     padding: @mobileImagePadding !important;
   }
@@ -263,7 +256,7 @@
   .ui.modal .content > .description {
     display: block;
     width: 100% !important;
-    margin: 0 !important;
+    margin: 0em !important;
     padding: @mobileDescriptionPadding !important;
     box-shadow: none;
   }
@@ -293,7 +286,7 @@
 .ui.basic.modal {
   background-color: transparent;
   border: none;
-  border-radius: 0;
+  border-radius: 0em;
   box-shadow: none !important;
   color: @basicModalColor;
 }
@@ -308,7 +301,6 @@
 .ui.basic.modal > .close {
   top: @basicModalCloseTop;
   right: @basicModalCloseRight;
-  color: @basicInnerCloseColor;
 }
 
 .ui.inverted.dimmer > .basic.modal {
@@ -319,19 +311,25 @@
 }
 
 /* Resort to margin positioning if legacy */
-.ui.legacy.legacy.modal,
-.ui.legacy.legacy.page.dimmer > .ui.modal {
-  top: 50% !important;
-  left: 50% !important;
+.ui.legacy.modal,
+.ui.legacy.page.dimmer > .ui.modal {
+  top: 50%;
+  left: 50%;
 }
 
-.ui.legacy.legacy.page.dimmer > .ui.scrolling.modal,
-.ui.page.dimmer > .ui.scrolling.legacy.legacy.modal,
-.ui.top.aligned.legacy.legacy.page.dimmer > .ui.modal,
-.ui.top.aligned.dimmer > .ui.legacy.legacy.modal {
-  top: auto !important;
+.ui.legacy.page.dimmer > .ui.scrolling.modal,
+.ui.page.dimmer > .ui.scrolling.legacy.modal,
+.ui.top.aligned.legacy.page.dimmer > .ui.modal,
+.ui.top.aligned.dimmer > .ui.legacy.modal {
+  top: auto;
 }
 
+/* Tablet and Mobile */
+@media only screen and (max-width : @largestTabletScreen) {
+  .ui.basic.modal > .close {
+    color: @basicInnerCloseColor;
+  }
+}
 
 
 /*******************************
@@ -385,11 +383,13 @@
 }
 .scrolling.dimmable > .dimmer {
   justify-content: flex-start;
-  position: fixed;
 }
 .scrolling.dimmable.dimmed > .dimmer {
   overflow: auto;
   -webkit-overflow-scrolling: touch;
+}
+.scrolling.dimmable > .dimmer {
+  position: fixed;
 }
 .modals.dimmer .ui.scrolling.modal {
   margin: @scrollingMargin auto;
@@ -421,7 +421,6 @@
 
 .ui.fullscreen.modal {
   width: @fullScreenWidth !important;
-  left: @fullScreenOffset !important;
   margin: @fullScreenMargin;
 }
 .ui.fullscreen.modal > .header {
@@ -432,9 +431,8 @@
   right: @innerCloseRight;
   color: @innerCloseColor;
 }
-.ui.basic.fullscreen.modal > .close {
-  color: @basicInnerCloseColor;
-}
+
+
 /*--------------
       Size
 ---------------*/
@@ -480,9 +478,9 @@
   }
 }
 
-/* Tiny */
-.ui.tiny.modal > .header:not(.ui) {
-  font-size: @tinyHeaderSize;
+/* mini */
+.ui.small.modal > .header:not(.ui) {
+  font-size: @miniHeaderSize;
 }
 
 /* Tiny Modal Width */
@@ -588,43 +586,6 @@
     margin: @largeWidescreenMonitorMargin;
   }
 }
-
-/*****************************
-          Inverted
-*******************************/
-
-.ui.inverted.modal {
-  background: @invertedBackground;
-}
-
-.ui.inverted.modal > .header,
-.ui.inverted.modal > .content {
-  background: @invertedBackground;
-  color: @invertedHeaderColor;
-}
-
-.ui.inverted.modal > .actions {
-  background: @invertedActionBackground;
-  border-top: @invertedActionBorder;
-  color: @invertedActionColor;
-}
-
-.ui.inverted.dimmer > .modal > .close {
-  color: @invertedDimmerCloseColor;
-}
-
-
-@media only screen and (max-width: @largestTabletScreen) {
-  .ui.dimmer .inverted.modal > .close {
-    color: @invertedCloseColor;
-  }
-}
-
-.ui.inverted.fullscreen.modal > .close {
-  color: @invertedCloseColor;
-}
-
-
 
 
 .loadUIOverrides();

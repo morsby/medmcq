@@ -12,10 +12,6 @@
 
 'use strict';
 
-$.isFunction = $.isFunction || function(obj) {
-  return typeof obj === "function" && typeof obj.nodeType !== "number";
-};
-
 window = (typeof window != 'undefined' && window.Math == Math)
   ? window
   : (typeof self != 'undefined' && self.Math == Math)
@@ -160,7 +156,7 @@ $.fn.dimmer = function(parameters) {
               module.hide();
               event.stopImmediatePropagation();
             }
-          }
+          },
         },
 
         addContent: function(element) {
@@ -175,7 +171,7 @@ $.fn.dimmer = function(parameters) {
 
         create: function() {
           var
-            $element = $( settings.template.dimmer(settings) )
+            $element = $( settings.template.dimmer() )
           ;
           if(settings.dimmerName) {
             module.debug('Creating named dimmer', settings.dimmerName);
@@ -226,9 +222,7 @@ $.fn.dimmer = function(parameters) {
             module.show();
           }
           else {
-            if ( module.is.closable() ) {
-              module.hide();
-            }
+            module.hide();
           }
         },
 
@@ -626,7 +620,7 @@ $.fn.dimmer = function(parameters) {
           else if(found !== undefined) {
             response = found;
           }
-          if(Array.isArray(returnedValue)) {
+          if($.isArray(returnedValue)) {
             returnedValue.push(response);
           }
           else if(returnedValue !== undefined) {
@@ -701,10 +695,6 @@ $.fn.dimmer.settings = {
     show : 500,
     hide : 500
   },
-// whether the dynamically created dimmer should have a loader
-  displayLoader: false,
-  loaderText  : false,
-  loaderVariation : '',
 
   onChange    : function(){},
   onShow      : function(){},
@@ -724,8 +714,7 @@ $.fn.dimmer.settings = {
     hide       : 'hide',
     legacy     : 'legacy',
     pageDimmer : 'page',
-    show       : 'show',
-    loader     : 'ui loader'
+    show       : 'show'
   },
 
   selector: {
@@ -734,19 +723,8 @@ $.fn.dimmer.settings = {
   },
 
   template: {
-    dimmer: function(settings) {
-        var d = $('<div/>').addClass('ui dimmer'),l;
-        if(settings.displayLoader) {
-          l = $('<div/>')
-              .addClass(settings.className.loader)
-              .addClass(settings.loaderVariation);
-          if(!!settings.loaderText){
-            l.text(settings.loaderText);
-            l.addClass('text');
-          }
-          d.append(l);
-        }
-        return d;
+    dimmer: function() {
+     return $('<div />').attr('class', 'ui dimmer');
     }
   }
 

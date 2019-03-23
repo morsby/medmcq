@@ -12,10 +12,6 @@
 
 'use strict';
 
-$.isFunction = $.isFunction || function(obj) {
-  return typeof obj === "function" && typeof obj.nodeType !== "number";
-};
-
 window = (typeof window != 'undefined' && window.Math == Math)
   ? window
   : (typeof self != 'undefined' && self.Math == Math)
@@ -189,13 +185,12 @@ $.fn.accordion = function(parameters) {
               $activeContent
                 .children()
                   .transition({
-                    animation        : 'fade in',
-                    queue            : false,
-                    useFailSafe      : true,
-                    debug            : settings.debug,
-                    verbose          : settings.verbose,
-                    duration         : settings.duration,
-                    skipInlineHidden : true
+                    animation   : 'fade in',
+                    queue       : false,
+                    useFailSafe : true,
+                    debug       : settings.debug,
+                    verbose     : settings.verbose,
+                    duration    : settings.duration
                   })
               ;
             }
@@ -251,13 +246,12 @@ $.fn.accordion = function(parameters) {
                 $activeContent
                   .children()
                     .transition({
-                      animation        : 'fade out',
-                      queue            : false,
-                      useFailSafe      : true,
-                      debug            : settings.debug,
-                      verbose          : settings.verbose,
-                      duration         : settings.duration,
-                      skipInlineHidden : true
+                      animation   : 'fade out',
+                      queue       : false,
+                      useFailSafe : true,
+                      debug       : settings.debug,
+                      verbose     : settings.verbose,
+                      duration    : settings.duration
                     })
                 ;
               }
@@ -322,12 +316,11 @@ $.fn.accordion = function(parameters) {
                 $openContents
                   .children()
                     .transition({
-                      animation        : 'fade out',
-                      useFailSafe      : true,
-                      debug            : settings.debug,
-                      verbose          : settings.verbose,
-                      duration         : settings.duration,
-                      skipInlineHidden : true
+                      animation   : 'fade out',
+                      useFailSafe : true,
+                      debug       : settings.debug,
+                      verbose     : settings.verbose,
+                      duration    : settings.duration
                     })
                 ;
               }
@@ -529,7 +522,7 @@ $.fn.accordion = function(parameters) {
           else if(found !== undefined) {
             response = found;
           }
-          if(Array.isArray(returnedValue)) {
+          if($.isArray(returnedValue)) {
             returnedValue.push(response);
           }
           else if(returnedValue !== undefined) {
