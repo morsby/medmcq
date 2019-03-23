@@ -133,7 +133,6 @@ class Profile extends Component {
           })`;
         }
       };
-    console.log(generatePaneLabel(semestre[0]));
     _.map(semestre, (e) =>
       panes.push({
         menuItem: generatePaneLabel(e),

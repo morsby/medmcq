@@ -1,5 +1,6 @@
 import axios from 'axios';
 import * as types from './types';
+import * as voteService from '../services/voteService';
 
 export const getQuestions = (settings, requestedIds = null) => async (dispatch) => {
   let { type, semester, specialer, n, onlyNew, set } = settings;
@@ -114,18 +115,23 @@ export const editComment = (question_id, comment_id, comment, isPrivate) => asyn
   });
 };
 
-export const editSpecialties = (questionId, specialty) => async (dispatch) => {
-  const res = await axios.put(`/api/questions/${questionId}/specialty`, {
-    specialty
-  });
+export const questionReport = ({ type, data }) => (dispatch) => {
+  axios.post('/api/questions/report', { type, data });
+  dispatch({ type: types.QUESTION_REPORT });
+};
 
+export const voteSpecialty = (value, username, id) => async (dispatch) => {
+  const res = await voteService.specialtyVote(value, username, id);
   dispatch({
     type: types.QUESTION_SPECIALTY_UPDATE,
     payload: res.data
   });
 };
 
-export const questionReport = (report, question) => (dispatch) => {
-  axios.post('/api/questions/report', { question, report });
-  dispatch({ type: types.QUESTION_REPORT });
+export const voteTags = (value, username, id) => async (dispatch) => {
+  const res = await voteService.tagVote(value, username, id);
+  dispatch({
+    type: types.QUESTION_SPECIALTY_UPDATE,
+    payload: res.data
+  });
 };

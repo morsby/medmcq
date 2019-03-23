@@ -88,6 +88,13 @@ export const specialer = {
   ]
 };
 
+export const tags = {
+  7: [{ value: 'paraklinik', text: 'Paraklinik' }, { value: 'radiologi', text: 'Radiologi' }],
+  8: [{ value: 'paraklinik', text: 'Paraklinik' }],
+  9: [{ value: 'paraklinik', text: 'Paraklinik' }],
+  11: [{ value: 'paraklinik/paraclinical', text: 'Paraklinik/Paraclinical' }]
+};
+
 export const breakpoints = {
   mobile: 768
 };

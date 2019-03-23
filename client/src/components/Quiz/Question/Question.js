@@ -15,7 +15,7 @@ import { Translate } from 'react-localize-redux';
 
 import QuestionAnswerButtons from './QuestionAnswerButtons';
 import QuestionImage from './QuestionImage';
-import QuestionMetadata from './QuestionMetadata';
+import QuestionVoting from './QuestionVoting';
 import QuestionReport from './QuestionReport';
 import QuestionComments from './QuestionComments/QuestionComments';
 
@@ -176,7 +176,9 @@ class Question extends Component {
   onKeydown(e) {
     if (
       !this.state.imgOpen &&
-      document.activeElement.tagName !== 'TEXTAREA' &&
+      !(
+        document.activeElement.tagName === 'TEXTAREA' || document.activeElement.tagName === 'INPUT'
+      ) &&
       !e.altKey &&
       !e.ctrlKey &&
       !e.metaKey
@@ -251,7 +253,10 @@ class Question extends Component {
   /** Håndter submit af rapport */
   onReportSubmit() {
     // TODO: CONNECT  TIL REDUX OG API
-    this.props.questionReport(this.state.report, this.props.question);
+    this.props.questionReport({
+      type: 'error_report',
+      data: { report: this.state.report, question: this.props.question }
+    });
     this.setState({ report: '', reportSent: true });
   }
 
@@ -397,16 +402,9 @@ class Question extends Component {
             />
           </Responsive>
           <Divider />
-          <QuestionMetadata
-            question={question}
-            onToggleSpecialties={this.onSpecialtiesEditToggle}
-            selectedSpecialties={this.state.selectedSpecialties}
-            editingSpecialties={this.state.editingSpecialties}
-            onEditSpecialty={this.onEditSpecialty}
-            onSaveSpecialties={this.onSaveSpecialties}
-            user={user}
-          />
-
+          <p>Speciale: {question.specialty.join()}</p>
+          <p>Tags: {question.tags.join(', ')}</p>
+          <Divider />
           <Button
             color={this.state.publicCommentsOpen ? 'green' : null}
             basic
@@ -471,6 +469,20 @@ class Question extends Component {
               undoEditComment={this.undoEditComment}
               user={user}
             />
+          )}
+          <Divider />
+          {user && (
+            <>
+              <QuestionVoting
+                question={question}
+                onToggleSpecialties={this.onSpecialtiesEditToggle}
+                selectedSpecialties={this.state.selectedSpecialties}
+                editingSpecialties={this.state.editingSpecialties}
+                onEditSpecialty={this.onEditSpecialty}
+                onSaveSpecialties={this.onSaveSpecialties}
+                user={user}
+              />
+            </>
           )}
         </Segment>
         <Divider hidden />

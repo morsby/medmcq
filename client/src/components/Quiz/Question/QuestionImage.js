@@ -11,18 +11,18 @@ import Lightbox from 'react-image-lightbox';
  * @param {func}    onClick Func der åbner/lukker lightbox-popoveren
  */
 const QuestionImage = ({ img, imgOpen, onClick }) => {
-    return (
-        <div>
-            <Image src={img} onClick={onClick} className="click" />
-            {imgOpen && <Lightbox mainSrc={img} onCloseRequest={onClick} />}
-        </div>
-    );
+  return (
+    <div>
+      <Image src={img} onClick={onClick} className="click" />
+      {imgOpen && <Lightbox mainSrc={img} onCloseRequest={onClick} />}
+    </div>
+  );
 };
 
 QuestionImage.propTypes = {
-    img: PropTypes.string,
-    imgOpen: PropTypes.bool,
-    onClick: PropTypes.func,
+  img: PropTypes.string,
+  imgOpen: PropTypes.bool,
+  onClick: PropTypes.func
 };
 
 export default QuestionImage;

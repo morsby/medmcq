@@ -13,7 +13,107 @@ const auth = require('../middleware/auth');
 const Question = require('../models/question.js');
 const User = require('../models/user.js');
 
+const superUsers = [
+  '5c9238d0fc42c40504616066',
+  '5bf6d6659643d718e06953b5',
+  '5ba48b49bcdeff2820b0a686',
+  '5bfd496b95606811a0baef7d'
+];
+
 // TODO: Før statistik over get("/api/questions"), post("/api/questions/ids/"), post("/api/questions/answer")
+
+// ======================================================
+
+// SIGURD:
+// Inden du pusher fra masteren, så HUSK at sætte maintenance i index.js state til true
+// Kør først /api/questions/convert, derefter /api/questions/remove
+// Derefter kan du tjekke om det er gået igennem med /api/questions/all
+// Når du er færdig, så slet disse routes mellem "=====", så der ikke går ged i den.
+// Vigtigt at hver route kun køres én gang!
+// Alt herunder og til næste "====" streg må nu afkommenteres
+// Ændre nu state i index.js til maintenance = false
+
+// ========================================================
+
+// router.get('/all', async (req, res) => {
+//   const questions = await Question.find();
+
+//   res.status(200).send(questions);
+// });
+
+// router.get('/remove', async (req, res) => {
+//   const questions = await Question.find({ specialty: 'paraklinik' });
+
+//   questions.forEach((question) => {
+//     question.specialty.length = 0;
+//     question.save();
+//   });
+
+//   res.status(200).send(questions);
+// });
+
+// router.get('/convert', async (req, res) => {
+//   const questions = await Question.find();
+
+//   questions.forEach(async (question) => {
+//     if (question.specialty.length !== 0) {
+//       let user;
+
+//       if (question.semester === 7) {
+//         user = '5bf6d6659643d718e06953b5';
+//       }
+//       if (question.semester === 8) {
+//         user = '5c9238d0fc42c40504616066';
+//       }
+
+//       question.specialty.forEach((specialty) => {
+//         if (specialty === 'paraklinik') {
+//           question.tags = specialty;
+//           question.tagVotes = { tag: specialty, users: [user] };
+//         } else {
+//           question.votes = { specialty: specialty, users: [user] };
+//           question.specialty = [specialty];
+//         }
+//       });
+
+//       if (question.specialty[0] === 'paraklinik') {
+//         question.specialty.length = 0;
+//       }
+
+//       // Tjek hvorvidt brugeren har ret til at tælle mere
+//       let voteValue = 1;
+//       if (_.includes(superUsers, req.body.user)) {
+//         voteValue = 10;
+//       }
+
+//       // Tjek hvilket speciale er højest voted, og sæt det som specialty
+//       const highestVoted = _.maxBy(question.votes, (vote) => {
+//         return vote.users.length + voteValue;
+//       });
+//       if (highestVoted !== undefined) {
+//         question.specialty = highestVoted.specialty;
+//       }
+
+//       // Tjek om tagget har en voting over 5, og tilføj det til tags
+//       let tags = [];
+//       question.tagVotes.forEach((vote) => {
+//         let included = false;
+//         vote.users.forEach((user) => {
+//           if (_.includes(superUsers, user)) included = true;
+//         });
+
+//         if (vote.users.length >= 5 || included) {
+//           tags.push(vote.tag);
+//         }
+//       });
+//       question.tags = tags;
+//     }
+//     await question.save();
+//   });
+//   res.status(200).send('Databasen er blevet konverteret');
+// });
+
+// =========================================================
 
 router.get('/', async (req, res) => {
   let { n, specialer, unique, semester, examSeason, examYear } = req.query;
@@ -323,14 +423,22 @@ router.post('/answer', (req, res) => {
 });
 
 router.post('/report', (req, res) => {
-  let { report, question } = req.body;
-  report = report.replace(/(.)\n(.)/g, '$1<br>$2');
+  let { type, data } = req.body,
+    msg;
   sgMail.setApiKey(keys.sendgrid_api_key);
-  const msg = {
-    to: urls.email.issue,
-    from: `medMCQ-app <${urls.email.noreply}>`,
-    subject: `Fejl i spørgsmål med id ${question._id}`,
-    text: `
+
+  let to = urls.email.issue,
+    from = `medMCQ-app <${urls.email.noreply}>`;
+
+  if (type === 'error_report') {
+    let { report, question } = data;
+    report = report.replace(/(.)\n(.)/g, '$1<br>$2');
+
+    msg = {
+      to,
+      from,
+      subject: `Fejl i spørgsmål med id ${question._id}`,
+      text: `
 Der er blevet rapporteret en fejl i følgende spørgsmål:
 
 - ID: ${question._id}
@@ -354,10 +462,137 @@ A. ${question.answer1}<br>
 B. ${question.answer2}<br>
 C. ${question.answer3}
 `
-  };
+    };
+  } else if (type === 'suggest_tag') {
+    let { tag, question } = data;
+    msg = {
+      to,
+      from,
+      subject: `Nyt tag foreslået: ${tag}`,
+      text: `
+Der er blevet foreslået et nyt tag: ${tag}.
+
+Det blev foreslået til spørgsmålet: 
+
+
+- ID: ${question._id}
+- Semester: ${question.semester}
+- Sæt: ${question.examYear}/${question.examSeason}
+- Spørgsmålnummer: ${question.n}
+
+${question.question}
+
+A. ${question.answer1}<br>
+B. ${question.answer2}<br>
+C. ${question.answer3}
+`
+    };
+  } else {
+    res.status(400).json({ type: 'error', message: 'missing type' });
+  }
   sgMail.send(msg);
 
-  res.json({ type: 'success', message: 'report_made' });
+  res.status(200).json({ type: 'success', message: 'report_made' });
+});
+
+// Stem på specialty
+router.put('/:question_id/vote', async (req, res) => {
+  let question = await Question.findById(req.params.question_id);
+
+  // Tjek om brugeren allerede har voted, og hvis de har, så fjern brugeren fra alle votes
+  question.votes.forEach((vote, i) => {
+    const userIndex = _.indexOf(vote.users, req.body.user);
+    if (userIndex !== -1) {
+      question.votes[i].users.splice(userIndex, 1);
+    }
+  });
+
+  req.body.specialties.forEach((specialty) => {
+    // Upvote speciale
+    const upvotedIndex = _.findIndex(question.votes, (vote) => {
+      return vote.specialty === specialty;
+    });
+    // Hvis speciale ikke eksisterer i votes, laves nyt speciale
+    if (upvotedIndex === -1) {
+      question.votes.push({ specialty: specialty, users: [req.body.user] });
+    } else {
+      question.votes[upvotedIndex].users.push(req.body.user);
+    }
+  });
+
+  // Tjek hvorvidt brugeren har ret til at tælle mere
+  let voteValue = 0;
+  if (_.includes(superUsers, req.body.user)) {
+    voteValue = 10;
+  }
+
+  // Tjek hvilket speciale er højest voted, og sæt det som specialty.
+  const highestVoted = _.maxBy(question.votes, (vote) => {
+    return vote.users.length + voteValue;
+  });
+  const maxVotes = highestVoted.users.length;
+  if (highestVoted.users.length > 0) {
+    question.specialty = [highestVoted.specialty];
+
+    // Tjek hvorvidt de andre specialer er indenfor 50% af det
+    // øverste speciale, hvorved det også kommer med
+    question.votes.forEach((vote) => {
+      if (
+        vote.users.length + voteValue >= 0.5 * maxVotes &&
+        highestVoted.specialty !== vote.specialty &&
+        vote.users.length !== 0
+      ) {
+        question.specialty.push(vote.specialty);
+      }
+    });
+  } else {
+    question.specialty = [];
+  }
+
+  const result = await question.save();
+  res.status(200).send(result);
+});
+
+router.put('/:question_id/tags', async (req, res) => {
+  let question = await Question.findById(req.params.question_id);
+
+  // Tjek om brugeren allerede har tags, og hvis de har, så fjern brugeren fra disse tags (de bliver tilføjet senere igen)
+  question.tagVotes.forEach((tag, i) => {
+    const userIndex = _.indexOf(tag.users, req.body.user);
+    if (userIndex !== -1) {
+      question.tagVotes[i].users.splice(userIndex, 1);
+    }
+  });
+
+  req.body.tags.forEach((tag) => {
+    // Upvote speciale
+    const upvotedIndex = _.findIndex(question.tagVotes, (vote) => {
+      return vote.tag === tag;
+    });
+    // Hvis tag ikke eksisterer, laves nyt
+    if (upvotedIndex === -1) {
+      question.tagVotes.push({ tag: tag, users: [req.body.user] });
+    } else {
+      question.tagVotes[upvotedIndex].users.push(req.body.user);
+    }
+  });
+
+  // Tjek om tagget har en voting over 5, og tilføj det til tags
+  let tags = [];
+  question.tagVotes.forEach((vote) => {
+    let included = false;
+    vote.users.forEach((user) => {
+      if (_.includes(superUsers, user)) included = true;
+    });
+
+    if (vote.users.length >= 5 || included) {
+      tags.push(vote.tag);
+    }
+  });
+  question.tags = tags;
+
+  const result = await question.save();
+  res.status(200).send(result);
 });
 
 module.exports = router;

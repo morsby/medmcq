@@ -15,16 +15,8 @@ var QuestionSchema = new Schema({
   semester: Number, // hvilket kandidatsemester?
   examYear: Number, // hvornår blev spørgsmålet stillet?
   examSeason: String, // forår el. efterår?
-  specialty: [
-    {
-      type: String
-    }
-  ],
-  tags: [
-    {
-      type: String
-    }
-  ],
+  specialty: [String],
+  tags: [],
   image: String,
   image_id: String,
   comments: [
@@ -35,7 +27,9 @@ var QuestionSchema = new Schema({
       comment: String,
       private: { type: Boolean, default: false }
     }
-  ]
+  ],
+  votes: [{ specialty: String, users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] }],
+  tagVotes: [{ tag: String, users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }] }]
 });
 
 QuestionSchema.plugin(random);

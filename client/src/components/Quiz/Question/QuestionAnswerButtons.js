@@ -15,64 +15,64 @@ import { subSupScript } from '../../../utils/quiz';
  * @param {object}  question Selve spørgsmålet.
  */
 const QuestionAnswerButtons = ({ pristine, onAnswer, question }) => {
+  /**
+   * Func der prefixer svarmuligheder med A, B og C samt laver knappen.
+   * @param  {Number} answerNo Svarmulighed nr. 1, 2 el. 3
+   * @return {Comp}            Selve knappen.
+   */
+  const generateButton = (answerNo) => {
+    let answerText;
+    switch (answerNo) {
+      case 1:
+        answerText = 'A. ';
+        break;
+      case 2:
+        answerText = 'B. ';
+        break;
+      case 3:
+        answerText = 'C. ';
+        break;
+      default:
+        break;
+    }
+    answerText = answerText + question[`answer${answerNo}`];
     /**
-     * Func der prefixer svarmuligheder med A, B og C samt laver knappen.
-     * @param  {Number} answerNo Svarmulighed nr. 1, 2 el. 3
-     * @return {Comp}            Selve knappen.
+     * subSupScript tillader sub- og superscripts vha. markdown-syntaks.
      */
-    const generateButton = answerNo => {
-        let answerText;
-        switch (answerNo) {
-            case 1:
-                answerText = 'A. ';
-                break;
-            case 2:
-                answerText = 'B. ';
-                break;
-            case 3:
-                answerText = 'C. ';
-                break;
-            default:
-                break;
-        }
-        answerText = answerText + question[`answer${answerNo}`];
-        /**
-         * subSupScript tillader sub- og superscripts vha. markdown-syntaks.
-         */
-        answerText = subSupScript(answerText);
-        return (
-            <Button
-                style={{ textAlign: 'left' }}
-                onClick={() => onAnswer(answerNo)}
-                color={evalAnswer(question, answerNo)}
-                size="large"
-            >
-                <div
-                    dangerouslySetInnerHTML={{
-                        __html: marked(answerText),
-                    }}
-                />
-            </Button>
-        );
-    };
-
-    let pristineClass = pristine ? 'pristine' : '';
-
+    answerText = subSupScript(answerText);
     return (
-        <Button.Group vertical fluid className={pristineClass}>
-            {generateButton(1)}
-            <Divider hidden />
-            {generateButton(2)}
-            <Divider hidden />
-            {generateButton(3)}
-        </Button.Group>
+      <Button
+        style={{ textAlign: 'left' }}
+        onClick={() => onAnswer(answerNo)}
+        color={evalAnswer(question, answerNo)}
+        size="large"
+      >
+        <div
+          dangerouslySetInnerHTML={{
+            __html: marked(answerText)
+          }}
+        />
+      </Button>
     );
+  };
+
+  let pristineClass = pristine ? 'pristine' : '';
+
+  return (
+    <Button.Group vertical fluid className={pristineClass}>
+      {generateButton(1)}
+      <Divider hidden />
+      {generateButton(2)}
+      <Divider hidden />
+      {generateButton(3)}
+    </Button.Group>
+  );
 };
 
 QuestionAnswerButtons.propTypes = {
-    onAnswer: PropTypes.func.isRequired,
-    question: PropTypes.object.isRequired,
-    pristine: PropTypes.bool,
+  onAnswer: PropTypes.func.isRequired,
+  question: PropTypes.object.isRequired,
+  pristine: PropTypes.bool
 };
 
 export default QuestionAnswerButtons;

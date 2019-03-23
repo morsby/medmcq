@@ -17,69 +17,62 @@ import { Translate } from 'react-localize-redux';
  */
 
 const QuizSummary = ({ questions, clickHandler }) => {
-    let results = calculateResults(questions);
+  let results = calculateResults(questions);
 
-    return (
-        <Container>
-            <Card fluid>
-                <Card.Content>
-                    <Card.Header>
-                        <Translate id="quizSummary.header" />
-                    </Card.Header>
-                    {results.status === 'done' && (
-                        <Card.Content>
-                            <Translate
-                                id="quizSummary.results"
-                                data={{ ...results }}
-                            />
-                        </Card.Content>
-                    )}
-                    <Card.Description style={{ columns: '250px 4' }}>
-                        <List ordered>
-                            {questions.map((q, index) => {
-                                let svar;
-                                if (
-                                    q.answer &&
-                                    (q.answer === q.correctAnswer ||
-                                        (Array.isArray(q.correctAnswer) &&
-                                            q.correctAnswer.includes(q.answer)))
-                                ) {
-                                    svar = 'svar-korrekt';
-                                } else if (
-                                    q.answer &&
-                                    q.answer !== q.correctAnswer
-                                ) {
-                                    svar = 'svar-forkert';
-                                }
-                                return (
-                                    <List.Item
-                                        as="a"
-                                        className={svar}
-                                        onClick={() => clickHandler(index)}
-                                        key={q._id}
-                                    >
-                                        {truncateText(q.question)}
-                                    </List.Item>
-                                );
-                            })}
-                        </List>
-                    </Card.Description>
-                </Card.Content>
-                <Card.Content extra textAlign="center">
-                    <Link to={urls.print}>
-                        <Button basic>
-                            <Translate id="quizSummary.print" />
-                        </Button>
-                    </Link>
-                </Card.Content>
-            </Card>
-        </Container>
-    );
+  return (
+    <Container>
+      <Card fluid>
+        <Card.Content>
+          <Card.Header>
+            <Translate id="quizSummary.header" />
+          </Card.Header>
+          {results.status === 'done' && (
+            <Card.Content>
+              <Translate id="quizSummary.results" data={{ ...results }} />
+            </Card.Content>
+          )}
+          <Card.Description style={{ columns: '250px 4' }}>
+            <List ordered>
+              {questions.map((q, index) => {
+                let svar;
+                if (
+                  q.answer &&
+                  (q.answer === q.correctAnswer ||
+                    (Array.isArray(q.correctAnswer) && q.correctAnswer.includes(q.answer)))
+                ) {
+                  svar = 'svar-korrekt';
+                } else if (q.answer && q.answer !== q.correctAnswer) {
+                  svar = 'svar-forkert';
+                }
+                return (
+                  <List.Item
+                    as="a"
+                    className={svar}
+                    onClick={() => clickHandler(index)}
+                    key={q._id}
+                  >
+                    {truncateText(q.question)}
+                  </List.Item>
+                );
+              })}
+            </List>
+          </Card.Description>
+        </Card.Content>
+        <Card.Content extra textAlign="center">
+          <Link to={urls.print}>
+            <Button basic>
+              <Translate id="quizSummary.print" />
+            </Button>
+          </Link>
+        </Card.Content>
+      </Card>
+    </Container>
+  );
 };
 
 QuizSummary.propTypes = {
-    questions: PropTypes.array.isRequired,
-    clickHandler: PropTypes.func.isRequired,
+  questions: PropTypes.array.isRequired,
+  clickHandler: PropTypes.func.isRequired
 };
 
 export default QuizSummary;

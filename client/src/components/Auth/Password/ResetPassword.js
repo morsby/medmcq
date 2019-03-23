@@ -4,10 +4,7 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import { connect } from 'react-redux';
 import * as actions from '../../../actions';
 
-import {
-    passwordValid,
-    passwordRepeatValid,
-} from '../../../utils/formValidation';
+import { passwordValid, passwordRepeatValid } from '../../../utils/formValidation';
 
 import { Container, Message, Button, Divider } from 'semantic-ui-react';
 import { Form, Field } from 'react-final-form';
@@ -21,169 +18,108 @@ import Footer from '../../Layout/Footer';
  *
  */
 class ResetPassword extends Component {
-    state = { message: null };
+  state = { message: null };
 
-    onSubmit = async values => {
-        let token = this.props.match.params.token;
-        await this.props.resetPassword(token, values, data => {
-            this.setState({ message: data });
-        });
-    };
+  onSubmit = async (values) => {
+    let token = this.props.match.params.token;
+    await this.props.resetPassword(token, values, (data) => {
+      this.setState({ message: data });
+    });
+  };
 
-    render() {
-        let { message } = this.state;
-        return (
-            <div className="flex-container">
-                <Container className="content">
-                    <h3>
-                        <Translate id="resetPassword.header" />
-                    </h3>
-                    <Translate>
-                        {({ translate }) => (
-                            <Form
-                                onSubmit={this.onSubmit}
-                                render={({
-                                    handleSubmit,
-                                    pristine,
-                                    invalid,
-                                    form,
-                                }) => {
-                                    return (
-                                        <form
-                                            onSubmit={event => {
-                                                handleSubmit(event).then(
-                                                    form.reset()
-                                                );
-                                            }}
-                                            className="ui form custom"
-                                        >
-                                            <Field
-                                                name="password"
-                                                validate={passwordValid}
-                                            >
-                                                {({ input, meta }) => (
-                                                    <div
-                                                        className={
-                                                            'field ' +
-                                                            (meta.error &&
-                                                            meta.touched
-                                                                ? 'error'
-                                                                : '')
-                                                        }
-                                                    >
-                                                        <label>
-                                                            {translate(
-                                                                'resetPassword.password'
-                                                            )}
-                                                        </label>
-                                                        <input
-                                                            {...input}
-                                                            type="password"
-                                                            placeholder={translate(
-                                                                'resetPassword.password'
-                                                            )}
-                                                        />
-                                                        {meta.error &&
-                                                            meta.touched && (
-                                                                <Message
-                                                                    error
-                                                                    visible={
-                                                                        true
-                                                                    }
-                                                                    size="small"
-                                                                >
-                                                                    {meta.error}
-                                                                </Message>
-                                                            )}
-                                                    </div>
-                                                )}
-                                            </Field>
-                                            <Divider hidden />
-                                            <Field
-                                                name="password-repeat"
-                                                validate={passwordRepeatValid}
-                                            >
-                                                {({ input, meta }) => (
-                                                    <div
-                                                        className={
-                                                            'field ' +
-                                                            (meta.error &&
-                                                            meta.touched
-                                                                ? 'error'
-                                                                : '')
-                                                        }
-                                                    >
-                                                        <label>
-                                                            {translate(
-                                                                'resetPassword.password_repeat'
-                                                            )}
-                                                        </label>
-                                                        <input
-                                                            {...input}
-                                                            type="password"
-                                                            placeholder={translate(
-                                                                'resetPassword.password_repeat'
-                                                            )}
-                                                        />
-                                                        {meta.error &&
-                                                            meta.touched && (
-                                                                <Message
-                                                                    error
-                                                                    visible={
-                                                                        true
-                                                                    }
-                                                                >
-                                                                    {meta.error}
-                                                                </Message>
-                                                            )}
-                                                    </div>
-                                                )}
-                                            </Field>
-                                            {message && (
-                                                <Message
-                                                    negative={
-                                                        message.type === 'error'
-                                                    }
-                                                    positive={
-                                                        message.type ===
-                                                        'success'
-                                                    }
-                                                >
-                                                    {message.data}
-                                                </Message>
-                                            )}
-                                            <Divider hidden />
-                                            <Button
-                                                disabled={pristine || invalid}
-                                            >
-                                                <Translate id="resetPassword.submit" />
-                                            </Button>
-                                        </form>
-                                    );
-                                }}
+  render() {
+    let { message } = this.state;
+    return (
+      <div className="flex-container">
+        <Container className="content">
+          <h3>
+            <Translate id="resetPassword.header" />
+          </h3>
+          <Translate>
+            {({ translate }) => (
+              <Form
+                onSubmit={this.onSubmit}
+                render={({ handleSubmit, pristine, invalid, form }) => {
+                  return (
+                    <form
+                      onSubmit={(event) => {
+                        handleSubmit(event).then(form.reset());
+                      }}
+                      className="ui form custom"
+                    >
+                      <Field name="password" validate={passwordValid}>
+                        {({ input, meta }) => (
+                          <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
+                            <label>{translate('resetPassword.password')}</label>
+                            <input
+                              {...input}
+                              type="password"
+                              placeholder={translate('resetPassword.password')}
                             />
+                            {meta.error && meta.touched && (
+                              <Message error visible={true} size="small">
+                                {meta.error}
+                              </Message>
+                            )}
+                          </div>
                         )}
-                    </Translate>
-                </Container>
-                <Footer />
-            </div>
-        );
-    }
+                      </Field>
+                      <Divider hidden />
+                      <Field name="password-repeat" validate={passwordRepeatValid}>
+                        {({ input, meta }) => (
+                          <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
+                            <label>{translate('resetPassword.password_repeat')}</label>
+                            <input
+                              {...input}
+                              type="password"
+                              placeholder={translate('resetPassword.password_repeat')}
+                            />
+                            {meta.error && meta.touched && (
+                              <Message error visible={true}>
+                                {meta.error}
+                              </Message>
+                            )}
+                          </div>
+                        )}
+                      </Field>
+                      {message && (
+                        <Message
+                          negative={message.type === 'error'}
+                          positive={message.type === 'success'}
+                        >
+                          {message.data}
+                        </Message>
+                      )}
+                      <Divider hidden />
+                      <Button disabled={pristine || invalid}>
+                        <Translate id="resetPassword.submit" />
+                      </Button>
+                    </form>
+                  );
+                }}
+              />
+            )}
+          </Translate>
+        </Container>
+        <Footer />
+      </div>
+    );
+  }
 }
 
 ResetPassword.propTypes = {
-    /**
-     * Func der nulstiller koden
-     */
-    resetPassword: PropTypes.func,
+  /**
+   * Func der nulstiller koden
+   */
+  resetPassword: PropTypes.func,
 
-    /**
-     * fra react-router. Til at få token fra url
-     */
-    match: ReactRouterPropTypes.match,
+  /**
+   * fra react-router. Til at få token fra url
+   */
+  match: ReactRouterPropTypes.match
 };
 
 export default connect(
-    null,
-    actions
+  null,
+  actions
 )(ResetPassword);
