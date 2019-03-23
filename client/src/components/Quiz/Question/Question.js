@@ -400,20 +400,6 @@ class Question extends Component {
           <p>Speciale: {question.specialty.join()}</p>
           <p>Tags: {question.tags.join(', ')}</p>
           <Divider />
-          {user && (
-            <>
-              <QuestionVoting
-                question={question}
-                onToggleSpecialties={this.onSpecialtiesEditToggle}
-                selectedSpecialties={this.state.selectedSpecialties}
-                editingSpecialties={this.state.editingSpecialties}
-                onEditSpecialty={this.onEditSpecialty}
-                onSaveSpecialties={this.onSaveSpecialties}
-                user={user}
-              />
-              <Divider />
-            </>
-          )}
           <Button
             color={this.state.publicCommentsOpen ? 'green' : null}
             basic
@@ -478,6 +464,20 @@ class Question extends Component {
               undoEditComment={this.undoEditComment}
               user={user}
             />
+          )}
+          <Divider />
+          {user && (
+            <>
+              <QuestionVoting
+                question={question}
+                onToggleSpecialties={this.onSpecialtiesEditToggle}
+                selectedSpecialties={this.state.selectedSpecialties}
+                editingSpecialties={this.state.editingSpecialties}
+                onEditSpecialty={this.onEditSpecialty}
+                onSaveSpecialties={this.onSaveSpecialties}
+                user={user}
+              />
+            </>
           )}
         </Segment>
         <Divider hidden />

@@ -3,6 +3,8 @@ import { specialer, tags } from '../../../utils/common';
 import { Button, Message, Input } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { Divider, Dropdown } from 'semantic-ui-react';
+import { Translate } from 'react-localize-redux';
+import questionTranslations from '../quizTranslations.json';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import * as actions from '../../../actions';
@@ -66,8 +68,7 @@ const QuestionVoting = (props) => {
   return (
     <div>
       <h5 style={{ color: 'grey', marginLeft: '3px' }}>
-        Stem på speciale (Specialet med flest stemmer bliver vist som det første. Specialer indenfor
-        50% af stemmerne fra det højst stemte speciale, bliver også talt med)
+        <Translate id="voting.specialtyHeadline" />
       </h5>
       <Dropdown
         fluid
@@ -85,7 +86,7 @@ const QuestionVoting = (props) => {
       {specialtyMessage && <Message color="green">{specialtyMessage}</Message>}
       <Divider />
       <h5 style={{ color: 'grey', marginLeft: '3px' }}>
-        Tilføj tags (kun tags der er valg af mere end 5 brugere, bliver vist)
+        <Translate id="voting.tagsHeadline" />
       </h5>
       <Dropdown
         fluid
@@ -115,6 +116,10 @@ const QuestionVoting = (props) => {
         </div>
       )}
       {tagMessage && <Message color="green">{tagMessage}</Message>}
+      <Divider hidden />
+      <p style={{ color: 'grey' }}>
+        <Translate id="voting.notice" />
+      </p>
     </div>
   );
 };

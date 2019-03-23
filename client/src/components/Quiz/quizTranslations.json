@@ -65,5 +65,13 @@
   "questionCommentSingle": {
     "edit": ["Ret", "Edit"],
     "delete": ["Slet", "Delete"]
+  },
+  "voting": {
+    "specialtyHeadline": ["Stem på speciale", "Vote for specialty"],
+    "tagsHeadline": ["Tilføj tags", "Add tags"],
+    "notice": [
+      "Info omkring disse nye funktioner kan findes på om siden",
+      "Info about these new features can be found on the about page"
+    ]
   }
 }
