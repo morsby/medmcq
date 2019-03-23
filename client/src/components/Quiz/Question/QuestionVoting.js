@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { specialer, tags } from '../../../utils/common';
-import { Button, Message, Input } from 'semantic-ui-react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import * as actions from '../../../actions';
+import _ from 'lodash';
+
+import { specialer, tags } from '../../../utils/common';
+
+import { Button, Message, Input } from 'semantic-ui-react';
 import { Divider, Dropdown } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
-import questionTranslations from '../quizTranslations.json';
-import PropTypes from 'prop-types';
-import _ from 'lodash';
-import * as actions from '../../../actions';
 
 const QuestionVoting = (props) => {
   const [chosenTags, setChosenTags] = useState([]);
@@ -62,8 +63,20 @@ const QuestionVoting = (props) => {
     setAddingNewTag(true);
   };
 
+  const handleNewTag = (e, { value }) => {
+    setNewTag(value);
+  };
   // Sigurd TODO med den der mailklient
-  const addTag = () => {};
+  const suggestTag = () => {
+    props.questionReport({
+      type: 'suggest_tag',
+      data: {
+        tag: newTag,
+        question: props.question
+      }
+    });
+    setNewTag('');
+  };
 
   return (
     <div>
@@ -109,8 +122,8 @@ const QuestionVoting = (props) => {
       {addingNewTag && (
         <div>
           <Divider hidden />
-          <Input width={5} />
-          <Button basic color="green" onClick={addTag}>
+          <Input width={5} placeholder="Tag ..." value={newTag} onChange={handleNewTag} />
+          <Button basic color="green" onClick={suggestTag}>
             Foreslå tag
           </Button>
         </div>
@@ -128,7 +141,8 @@ QuestionVoting.propTypes = {
   voteSpecialty: PropTypes.func,
   user: PropTypes.object,
   question: PropTypes.object,
-  voteTags: PropTypes.func
+  voteTags: PropTypes.func,
+  questionReport: PropTypes.func
 };
 
 export default connect(

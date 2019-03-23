@@ -115,8 +115,8 @@ export const editComment = (question_id, comment_id, comment, isPrivate) => asyn
   });
 };
 
-export const questionReport = (report, question) => (dispatch) => {
-  axios.post('/api/questions/report', { question, report });
+export const questionReport = ({ type, data }) => (dispatch) => {
+  axios.post('/api/questions/report', { type, data });
   dispatch({ type: types.QUESTION_REPORT });
 };
 

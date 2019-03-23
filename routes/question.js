@@ -423,14 +423,22 @@ router.post('/answer', (req, res) => {
 });
 
 router.post('/report', (req, res) => {
-  let { report, question } = req.body;
-  report = report.replace(/(.)\n(.)/g, '$1<br>$2');
+  let { type, data } = req.body,
+    msg;
   sgMail.setApiKey(keys.sendgrid_api_key);
-  const msg = {
-    to: urls.email.issue,
-    from: `medMCQ-app <${urls.email.noreply}>`,
-    subject: `Fejl i spørgsmål med id ${question._id}`,
-    text: `
+
+  let to = urls.email.issue,
+    from = `medMCQ-app <${urls.email.noreply}>`;
+
+  if (type === 'error_report') {
+    let { report, question } = data;
+    report = report.replace(/(.)\n(.)/g, '$1<br>$2');
+
+    msg = {
+      to,
+      from,
+      subject: `Fejl i spørgsmål med id ${question._id}`,
+      text: `
 Der er blevet rapporteret en fejl i følgende spørgsmål:
 
 - ID: ${question._id}
@@ -454,7 +462,34 @@ A. ${question.answer1}<br>
 B. ${question.answer2}<br>
 C. ${question.answer3}
 `
-  };
+    };
+  } else if (type === 'suggest_tag') {
+    let { tag, question } = data;
+    msg = {
+      to,
+      from,
+      subject: `Nyt tag foreslået: ${tag}`,
+      text: `
+Der er blevet foreslået et nyt tag: ${tag}.
+
+Det blev foreslået til spørgsmålet: 
+
+
+- ID: ${question._id}
+- Semester: ${question.semester}
+- Sæt: ${question.examYear}/${question.examSeason}
+- Spørgsmålnummer: ${question.n}
+
+${question.question}
+
+A. ${question.answer1}<br>
+B. ${question.answer2}<br>
+C. ${question.answer3}
+`
+    };
+  } else {
+    res.status(400).json({ type: 'error', message: 'missing type' });
+  }
   sgMail.send(msg);
 
   res.status(200).json({ type: 'success', message: 'report_made' });

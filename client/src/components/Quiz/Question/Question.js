@@ -176,7 +176,9 @@ class Question extends Component {
   onKeydown(e) {
     if (
       !this.state.imgOpen &&
-      document.activeElement.tagName !== 'TEXTAREA' &&
+      !(
+        document.activeElement.tagName === 'TEXTAREA' || document.activeElement.tagName === 'INPUT'
+      ) &&
       !e.altKey &&
       !e.ctrlKey &&
       !e.metaKey
@@ -251,7 +253,10 @@ class Question extends Component {
   /** Håndter submit af rapport */
   onReportSubmit() {
     // TODO: CONNECT  TIL REDUX OG API
-    this.props.questionReport(this.state.report, this.props.question);
+    this.props.questionReport({
+      type: 'error_report',
+      data: { report: this.state.report, question: this.props.question }
+    });
     this.setState({ report: '', reportSent: true });
   }
 
