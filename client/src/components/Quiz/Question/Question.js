@@ -475,15 +475,7 @@ class Question extends Component {
           <Divider />
           {user && (
             <>
-              <QuestionVoting
-                question={question}
-                onToggleSpecialties={this.onSpecialtiesEditToggle}
-                selectedSpecialties={this.state.selectedSpecialties}
-                editingSpecialties={this.state.editingSpecialties}
-                onEditSpecialty={this.onEditSpecialty}
-                onSaveSpecialties={this.onSaveSpecialties}
-                user={user}
-              />
+              <QuestionVoting question={question} user={user} />
             </>
           )}
         </Segment>
