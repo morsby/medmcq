@@ -157,17 +157,6 @@ router.post('/ids', async (req, res) => {
         }
     }); */
 
-// Opdater et spørgsmåls specialer
-router.put('/:id/specialty', permit('admin', 'editor'), async (req, res) => {
-  let question = await Question.findById(req.params.id);
-
-  question.specialty = req.body.specialty;
-
-  await question.save();
-
-  res.send(question);
-});
-
 // Opret kommentar til spørgsmål
 router.put('/:id/comment', (req, res) => {
   const id = req.params.id;
