@@ -35,83 +35,83 @@ const superUsers = [
 
 // ========================================================
 
-// router.get('/all', async (req, res) => {
-//   const questions = await Question.find();
+router.get('/all', async (req, res) => {
+  const questions = await Question.find();
 
-//   res.status(200).send(questions);
-// });
+  res.status(200).send(questions);
+});
 
-// router.get('/remove', async (req, res) => {
-//   const questions = await Question.find({ specialty: 'paraklinik' });
+router.get('/remove', async (req, res) => {
+  const questions = await Question.find({ specialty: 'paraklinik' });
 
-//   questions.forEach((question) => {
-//     question.specialty.length = 0;
-//     question.save();
-//   });
+  questions.forEach((question) => {
+    question.specialty.length = 0;
+    question.save();
+  });
 
-//   res.status(200).send(questions);
-// });
+  res.status(200).send(questions);
+});
 
-// router.get('/convert', async (req, res) => {
-//   const questions = await Question.find();
+router.get('/convert', async (req, res) => {
+  const questions = await Question.find();
 
-//   questions.forEach(async (question) => {
-//     if (question.specialty.length !== 0) {
-//       let user;
+  questions.forEach(async (question) => {
+    if (question.specialty.length !== 0) {
+      let user;
 
-//       if (question.semester === 7) {
-//         user = '5bf6d6659643d718e06953b5';
-//       }
-//       if (question.semester === 8) {
-//         user = '5c9238d0fc42c40504616066';
-//       }
+      if (question.semester === 7) {
+        user = '5bf6d6659643d718e06953b5';
+      }
+      if (question.semester === 8) {
+        user = '5c9238d0fc42c40504616066';
+      }
 
-//       question.specialty.forEach((specialty) => {
-//         if (specialty === 'paraklinik') {
-//           question.tags = specialty;
-//           question.tagVotes = { tag: specialty, users: [user] };
-//         } else {
-//           question.votes = { specialty: specialty, users: [user] };
-//           question.specialty = [specialty];
-//         }
-//       });
+      question.specialty.forEach((specialty) => {
+        if (specialty === 'paraklinik') {
+          question.tags = specialty;
+          question.tagVotes = { tag: specialty, users: [user] };
+        } else {
+          question.votes = { specialty: specialty, users: [user] };
+          question.specialty = [specialty];
+        }
+      });
 
-//       if (question.specialty[0] === 'paraklinik') {
-//         question.specialty.length = 0;
-//       }
+      if (question.specialty[0] === 'paraklinik') {
+        question.specialty.length = 0;
+      }
 
-//       // Tjek hvorvidt brugeren har ret til at tælle mere
-//       let voteValue = 1;
-//       if (_.includes(superUsers, req.body.user)) {
-//         voteValue = 10;
-//       }
+      // Tjek hvorvidt brugeren har ret til at tælle mere
+      let voteValue = 1;
+      if (_.includes(superUsers, req.body.user)) {
+        voteValue = 10;
+      }
 
-//       // Tjek hvilket speciale er højest voted, og sæt det som specialty
-//       const highestVoted = _.maxBy(question.votes, (vote) => {
-//         return vote.users.length + voteValue;
-//       });
-//       if (highestVoted !== undefined) {
-//         question.specialty = highestVoted.specialty;
-//       }
+      // Tjek hvilket speciale er højest voted, og sæt det som specialty
+      const highestVoted = _.maxBy(question.votes, (vote) => {
+        return vote.users.length + voteValue;
+      });
+      if (highestVoted !== undefined) {
+        question.specialty = highestVoted.specialty;
+      }
 
-//       // Tjek om tagget har en voting over 5, og tilføj det til tags
-//       let tags = [];
-//       question.tagVotes.forEach((vote) => {
-//         let included = false;
-//         vote.users.forEach((user) => {
-//           if (_.includes(superUsers, user)) included = true;
-//         });
+      // Tjek om tagget har en voting over 5, og tilføj det til tags
+      let tags = [];
+      question.tagVotes.forEach((vote) => {
+        let included = false;
+        vote.users.forEach((user) => {
+          if (_.includes(superUsers, user)) included = true;
+        });
 
-//         if (vote.users.length >= 5 || included) {
-//           tags.push(vote.tag);
-//         }
-//       });
-//       question.tags = tags;
-//     }
-//     await question.save();
-//   });
-//   res.status(200).send('Databasen er blevet konverteret');
-// });
+        if (vote.users.length >= 5 || included) {
+          tags.push(vote.tag);
+        }
+      });
+      question.tags = tags;
+    }
+    await question.save();
+  });
+  res.status(200).send('Databasen er blevet konverteret');
+});
 
 // =========================================================
 
