@@ -28,7 +28,8 @@ const QuestionComments = ({
   onEditComment,
   editingComment,
   undoEditComment,
-  user
+  user,
+  privateComment
 }) => {
   let form;
   if (user) {
@@ -52,9 +53,16 @@ const QuestionComments = ({
               />
             )}
           </Translate>
-          <Message info>
-            <Translate id="questionComments.username_will_be_shown" />
-          </Message>
+          {!privateComment && (
+            <Message info>
+              <Translate id="questionComments.public_comment_info" />
+            </Message>
+          )}
+          {privateComment && (
+            <Message info>
+              <Translate id="questionComments.private_comment_info" />
+            </Message>
+          )}
           <Button
             onClick={onCommentPost}
             disabled={newComment.length < 3}
@@ -104,7 +112,8 @@ QuestionComments.propTypes = {
   onEditComment: PropTypes.func,
   editingComment: PropTypes.string,
   undoEditComment: PropTypes.func,
-  user: PropTypes.object
+  user: PropTypes.object,
+  privateComment: PropTypes.bool
 };
 
 export default QuestionComments;

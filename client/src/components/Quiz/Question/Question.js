@@ -455,6 +455,7 @@ class Question extends Component {
               editingComment={this.state.editingComment}
               undoEditComment={this.undoEditComment}
               user={user}
+              private={false}
             />
           )}
           {this.state.privateCommentsOpen && (
@@ -468,20 +469,13 @@ class Question extends Component {
               editingComment={this.state.editingComment}
               undoEditComment={this.undoEditComment}
               user={user}
+              privateComment={true}
             />
           )}
           <Divider />
           {user && (
             <>
-              <QuestionVoting
-                question={question}
-                onToggleSpecialties={this.onSpecialtiesEditToggle}
-                selectedSpecialties={this.state.selectedSpecialties}
-                editingSpecialties={this.state.editingSpecialties}
-                onEditSpecialty={this.onEditSpecialty}
-                onSaveSpecialties={this.onSaveSpecialties}
-                user={user}
-              />
+              <QuestionVoting question={question} user={user} />
             </>
           )}
         </Segment>

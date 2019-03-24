@@ -55,9 +55,13 @@
     "write_a_comment": ["Skriv en kommentar", "Write a comment"],
     "edit_a_comment": ["Ret en kommentar", "Edit a comment"],
     "login_to_write": ["Log ind for at skrive en kommentar.", "Login to write a comment."],
-    "username_will_be_shown": [
-      "At skrive en kommentar vil vise dit brugernavn offentligt.",
-      "Writing a comment will publicly show your username."
+    "public_comment_info": [
+      "Kommentarer du skriver her vil vise dit brugernavn og din kommentar for andre brugere.",
+      "Writing a comment here will show your username as well as your comment to other users."
+    ],
+    "private_comment_info": [
+      "Kommentarer du skriver her vil ikke blive vist for andre brugere.",
+      "Comments you write here will not be shown to other users."
     ],
     "comment": ["Kommentér", "Comment"],
     "undo_edit": ["Fortryd ændring", "Undo edit"]

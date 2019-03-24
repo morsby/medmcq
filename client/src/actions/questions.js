@@ -120,16 +120,16 @@ export const questionReport = ({ type, data }) => (dispatch) => {
   dispatch({ type: types.QUESTION_REPORT });
 };
 
-export const voteSpecialty = (value, username, id) => async (dispatch) => {
-  const res = await voteService.specialtyVote(value, username, id);
+export const voteSpecialty = (value, userId, id) => async (dispatch) => {
+  const res = await voteService.specialtyVote(value, userId, id);
   dispatch({
     type: types.QUESTION_SPECIALTY_UPDATE,
     payload: res.data
   });
 };
 
-export const voteTags = (value, username, id) => async (dispatch) => {
-  const res = await voteService.tagVote(value, username, id);
+export const voteTags = (value, userId, id) => async (dispatch) => {
+  const res = await voteService.tagVote(value, userId, id);
   dispatch({
     type: types.QUESTION_SPECIALTY_UPDATE,
     payload: res.data
