@@ -38,11 +38,9 @@ export const specialer = {
     { value: 'nefrologi', text: 'Nefrologi' },
     { value: 'reumatologi', text: 'Reumatologi' },
     { value: 'almen_medicin', text: 'Almen medicin' },
-    { value: 'paraklinik', text: 'Paraklinik' }
-    /*{ value: "klinisk_biokemi", text: "Klinisk biokemi" },
-        { value: "klinisk_mikrobiologi", text: "Klinisk mikrobiologi" },
-        { value: "klinisk_immunologi", text: "Klinisk immunologi" },
-        { value: "radiologi", text: "Radiologi" } */
+    { value: 'klinisk_biokemi', text: 'Klinisk biokemi' },
+    { value: 'klinisk_mikrobiologi', text: 'Klinisk mikrobiologi' },
+    { value: 'klinisk_immunologi', text: 'Klinisk immunologi' }
   ],
   8: [
     {
@@ -56,8 +54,7 @@ export const specialer = {
     },
     { value: 'onkologi', text: 'Onkologi' },
     { value: 'socialmedicin', text: 'Socialmedicin' },
-    { value: 'almen_medicin', text: 'Almen medicin' },
-    { value: 'paraklinik', text: 'Paraklinik' }
+    { value: 'almen_medicin', text: 'Almen medicin' }
   ],
   9: [
     { value: 'anæstesiologi', text: 'Anæstesiologi' },
@@ -68,8 +65,7 @@ export const specialer = {
     { value: 'lungemedicin', text: 'Lungemedicin' },
     { value: 'karkirurgi', text: 'Karkirurgi' },
     { value: 'thoraxkirurgi', text: 'Thoraxkirurgi' },
-    { value: 'almen_medicin', text: 'Almen medicin' },
-    { value: 'paraklinik', text: 'Paraklinik' }
+    { value: 'almen_medicin', text: 'Almen medicin' }
   ],
   11: [
     { value: 'gyn', text: 'Gynækologi/Gynaecology' },
@@ -83,8 +79,7 @@ export const specialer = {
       value: 'klinisk_genetik/clinical_genetics',
       text: 'Klinisk genetik/Clinical genetics'
     },
-    { value: 'almen_medicin/gp', text: 'Almen medicin/General practice' },
-    { value: 'paraklinik/paraclinical', text: 'Paraklinik/Paraclinical' }
+    { value: 'almen_medicin/gp', text: 'Almen medicin/General practice' }
   ]
 };
 
