@@ -76,7 +76,7 @@ export const store = configureStore({
 export const persistor = persistStore(store);
 
 class App extends Component {
-  state = { maintenance: false };
+  state = { maintenance: true };
 
   constructor(props) {
     super(props);
