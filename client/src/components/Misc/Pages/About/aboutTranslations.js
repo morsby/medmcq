@@ -104,96 +104,6 @@ export default {
       ]
     }
   },
-  fancyFeatures: {
-    header: ['Smarte/skjulte funktioner', 'Fancy/hidden features'],
-    body: [
-      `<p>
-            Siden gemmer mange ting lokalt på din enhed (ikke som cookies) -
-            eksempelvis de spørgsmål, du er i gang med (hvis du har svaret på
-            minimum ét spørgsmål), dit semester og andre valg, du foretager på
-            siden – dette er så du nemt kan vende tilbage til siden.
-        </p>
-        <ul>
-            <li>
-                På en computer kan du
-                <ul>
-                    <li>
-                        navigere mellem spørgsmål med piletasterne
-                    </li>
-                    <li>
-                        besvare spørgsmål ved brug af tallene 1, 2 og 3 for hhv.
-                        svarmulighed A, B og C.
-                    </li>
-                </ul>
-            </li>
-            <li>
-                På en telefon kan du
-                <ul>
-                    <li>
-                        navigere mellem spørgsmål ved at swipe (virker måske
-                        også på en touchskærms-pc?)
-                    </li>
-                </ul>
-            </li>
-            <li>
-                Opretter du en bruger
-                <ul>
-                    <li>
-                        holder systemet styr på, hvilke spørgsmål du har
-                        besvaret – og viser dig, når du har besvaret et fuldt
-                        eksamenssæt
-                    </li>
-                    <li>
-                        vil systemet gemme alle dine svar, så du kan se, hvor
-                        det går galt (og om der er systematik bag)
-                    </li>
-                    <li>
-                        kan du bede om kun at få spørgsmål, du <em>ikke</em>
-                        allerede har svaret på
-                    </li>
-                </ul>
-            </li>
-        </ul>`,
-      `<p>
-        The site saves many things locally on your devide (not as cookies) – for example the questions, you are currently answering (if you have answered at least one of them), your semester and other choices you make on the site. This is to make it more convenient for you on your next visit.
-        </p>
-        <ul>
-            <li>
-                On a computer you can
-                <ul>
-                    <li>
-                        navigate between questions using the arrow keys
-                    </li>
-                    <li>
-                        answer questions using the number keys 1, 2 and 3 to to answer A, B and C, respectively.
-                    </li>
-                </ul>
-            </li>
-            <li>
-                On a phone you can 
-                <ul>
-                    <li>
-                        navigate between questions by swiping (might also work on a touchscreen pc?)
-                    </li>
-                </ul>
-            </li>
-            <li>
-                If you register for an account
-                <ul>
-                    <li>
-                        the system keeps track of which questions you have answered – and shows you when you have fully answered a set
-                    </li>
-                    <li>
-                        the system saves all your answers so you can see if there are any areas you need to read up on
-                    </li>
-                    <li>
-                        you can choose to solely request questions you have <em>not</em> previously answered
-                    </li>
-                </ul>
-            </li>
-        </ul>`
-    ]
-  },
   voting: {
     header: ['Stemme systemet', 'The voting system'],
     body: [
@@ -223,6 +133,132 @@ export default {
           <p>
               The site uses no cookies unless you register for an account and log in. In this case, a cookie is set to remember you for your next visit.
           </p>`
+    ]
+  },
+  changelog: {
+    header: ['Hvad er der sket på siden?', 'What has happened to the site?'],
+    body: [
+      `
+<h3>v0.2.0 - 2019-03-25</h3>
+<ul>
+    <li>
+        Alle brugere kan nu stemme på specialer og tags til spørgsmål.
+    </li>
+    <li>
+        Brugere kan gemme private kommentarer.
+    </li>
+    <li>
+        Vi har tilføjet en kontaktformular (se bunden af siden), hvor udviklerne let kan kontaktes.
+    </li>
+    <li>
+        Forskellige bugfixes (layout, navigation m.v.).
+    </li>
+</ul>
+<h3>v0.1.0 - 2018-11-26</h3>
+<ul>
+    <li>
+    Siden gemmer mange ting lokalt på din enhed (ikke som cookies) -
+    eksempelvis de spørgsmål, du er i gang med (hvis du har svaret på
+    minimum ét spørgsmål), dit semester og andre valg, du foretager på
+    siden – dette er så du nemt kan vende tilbage til siden.
+    </li>
+    <li>
+      På en computer kan du
+      <ul>
+          <li>
+              navigere mellem spørgsmål med piletasterne
+          </li>
+          <li>
+              besvare spørgsmål ved brug af tallene 1, 2 og 3 for hhv.
+              svarmulighed A, B og C.
+          </li>
+      </ul>
+  </li>
+  <li>
+      På en telefon kan du
+      <ul>
+          <li>
+              navigere mellem spørgsmål ved at swipe (virker måske
+              også på en touchskærms-pc?)
+          </li>
+      </ul>
+  </li>
+  <li>
+      Opretter du en bruger
+      <ul>
+          <li>
+              holder systemet styr på, hvilke spørgsmål du har
+              besvaret – og viser dig, når du har besvaret et fuldt
+              eksamenssæt
+          </li>
+          <li>
+              vil systemet gemme alle dine svar, så du kan se, hvor
+              det går galt (og om der er systematik bag)
+          </li>
+          <li>
+              kan du bede om kun at få spørgsmål, du <em>ikke</em>
+              allerede har svaret på
+          </li>
+      </ul>
+  </li>
+</ul>`,
+      `
+  <h3>v0.2.0 - 2019-03-25</h3>
+  <ul>
+      <li>
+          All logged-in users can vote on specialties and tags for a question.
+      </li>
+      <li>
+          Logged-in users can save private comments.
+      </li>
+      <li>
+          We have add a contact form (see bottom of page), from which developers can easily be reached. 
+      </li>
+      <li>
+          Various bugfixes (layout, navigation etc.).
+      </li>
+  </ul>
+<h3>v0.1.0 - 2018-11-26</h3>
+<ul>
+  <li>
+    The site saves many things locally on your devide (not as cookies) – for example the questions, you are currently answering 
+    (if you have answered at least one of them), your semester and other choices you make on the site. This is to make it more convenient for you on your next visit.
+    </li>
+  <li>
+      On a computer you can
+      <ul>
+          <li>
+              navigate between questions using the arrow keys
+          </li>
+          <li>
+              answer questions using the number keys 1, 2 and 3 to to answer A, B and C, respectively.
+          </li>
+      </ul>
+  </li>
+  <li>
+      On a phone you can 
+      <ul>
+          <li>
+              navigate between questions by swiping (might also work on a touchscreen pc?)
+          </li>
+      </ul>
+  </li>
+  <li>
+      If you register for an account
+      <ul>
+          <li>
+              the system keeps track of which questions you have answered – and shows you when you have fully answered a set
+          </li>
+          <li>
+              the system saves all your answers so you can see if there are any areas you need to read up on
+          </li>
+          <li>
+              you can choose to solely request questions you have <em>not</em> previously answered
+          </li>
+      </ul>
+  </li>
+</ul>
+      `
     ]
   }
 };

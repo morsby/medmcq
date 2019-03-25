@@ -2,20 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
-import marked from 'marked';
-
 import { withLocalize, Translate } from 'react-localize-redux';
 import aboutTranslations from './aboutTranslations';
 
 import { Container, Message, Divider } from 'semantic-ui-react';
 import Footer from '../../../Layout/Footer';
-
-import raw from 'raw.macro';
-const changelog = raw('../../../../CHANGELOG.md');
-
-marked.setOptions({
-  headerPrefix: 'changelog-'
-});
 
 /**
  * Component til siden "Om-siden".
@@ -36,7 +27,10 @@ const About = ({ addTranslation }) => {
           <Translate id="about.notice.body" />
         </Message>
 
-        <div className="changelog" dangerouslySetInnerHTML={{ __html: marked(changelog) }} />
+        <h2>
+          <Translate id="changelog.header" />
+        </h2>
+        <Translate id="changelog.body" />
 
         <h2>
           <Translate id="about.privacy.header" />

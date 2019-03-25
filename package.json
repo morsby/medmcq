@@ -1,6 +1,6 @@
 {
   "name": "au-medicin-mcq",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "En webapp til visning af MCQ-opgaver fra kandidaten i medicin på AU",
   "main": "server.js",
   "engines": {
@@ -20,14 +20,13 @@
     "format": "prettier-eslint \"client/src/**/*.js\" --write",
     "test": "echo \"Error: no test specified\" && exit 1",
     "server": "nodemon server.js",
-    "client": "npm run genversion && npm run cp_changelog && cd client && npm start",
+    "client": "npm run genversion && cd client && npm start",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "start": "node server.js",
     "heroku-postbuild": "npm install --dev --prefix client && npm run build --prefix client",
     "update": "git pull && npm install && cd client && npm install",
     "build": "npm run update && npm run genversion && cd client && npm run build",
-    "genversion": "genversion -e version.js && mv version.js client/src/",
-    "cp_changelog": "cp ./CHANGELOG.md client/src/"
+    "genversion": "genversion -e version.js && mv version.js client/src/"
   },
   "author": "Morsby",
   "license": "MIT",
