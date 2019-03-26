@@ -350,9 +350,12 @@ class Question extends Component {
     let privateComments = [];
     let publicComments = [];
     question.comments.forEach((comment) => {
-      if (comment.private && comment.user === user.username) {
-        privateComments.push(comment);
-      } else if (!comment.private) {
+      if (user) {
+        if (comment.private && comment.user === user.username) {
+          privateComments.push(comment);
+        }
+      }
+      if (!comment.private) {
         publicComments.push(comment);
       }
     });
