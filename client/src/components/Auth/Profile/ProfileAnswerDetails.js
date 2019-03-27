@@ -35,6 +35,15 @@ class ProfileAnswerDetails extends Component {
     this.setState({ filter });
   };
 
+  gotoQuestion = (id) => {
+    const settings = {
+      type: 'specific',
+      id: id
+    };
+    this.props.getQuestions(settings);
+    this.props.history.push('/quiz');
+  };
+
   render() {
     let { answeredQuestions, summary } = this.props.performance;
     if (this.state.filter) {
@@ -92,11 +101,13 @@ class ProfileAnswerDetails extends Component {
             {_.map(answeredQuestions, (q) => {
               return (
                 <Table.Row
+                  style={{ cursor: 'pointer' }}
                   warning={summary.mixed.indexOf(q._id) !== -1}
                   positive={summary.allRight.indexOf(q._id) !== -1}
                   negative={summary.allWrong.indexOf(q._id) !== -1}
                   key={q._id}
                   verticalAlign="top"
+                  onClick={() => this.gotoQuestion(q._id)}
                 >
                   <Table.Cell>
                     <div

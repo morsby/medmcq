@@ -40,6 +40,10 @@ export const getQuestions = (settings, requestedIds = null) => async (dispatch) 
       res = await axios.get(`/api/questions?semester=${semester}&n=${n}${querySpecialer}${unique}`);
       break;
     }
+    case 'specific': {
+      res = await axios.get('/api/questions/' + settings.id);
+      break;
+    }
     default:
       return null;
   }

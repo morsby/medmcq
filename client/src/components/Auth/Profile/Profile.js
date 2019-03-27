@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
+import axios from 'axios';
 
 import { connect } from 'react-redux';
 import * as actions from '../../../actions';
@@ -35,7 +36,9 @@ class Profile extends Component {
   }
 
   componentDidMount() {
+    // const { user } = this.props.auth;
     this.getQuestions(this.state.semester);
+    // this.getComments(user.comments); // TODO: Find en måde at vise kommentarerne bedre på
     window.addEventListener('resize', this.handleResize);
   }
 
@@ -49,6 +52,13 @@ class Profile extends Component {
     let answeredQuestions = _.get(this.props, ['auth', 'user', 'answeredQuestions', semester], {});
 
     this.props.getAnsweredQuestions(answeredQuestions);
+  };
+
+  getComments = async () => {
+    const { data: comments } = await axios.post('/api/questions/ids', {
+      ids: this.props.auth.user.comments
+    });
+    this.setState({ comments: comments });
   };
 
   handleTabChange = (e, { activeIndex }) => {
@@ -94,17 +104,16 @@ class Profile extends Component {
             <li className="item">
               <Translate id="profile.activity.answers.mixed" data={{ n: mixed.length }} />
             </li>
+            <li className="item">
+              <Translate id="profile.activity.comments" data={{ n: user.comments.length }} />
+            </li>
           </ul>
+          {user.comments.length > 0 && (
+            <Button basic onClick={() => this.startQuiz(user.comments)}>
+              <Translate id="profile.activity.see_comments_link" />
+            </Button>
+          )}
         </div>
-        <Divider hidden />
-        <p>
-          <Translate id="profile.activity.comments" data={{ n: user.comments.length }} />
-        </p>
-        {user.comments.length > 0 && (
-          <Button basic onClick={() => this.startQuiz(user.comments)}>
-            <Translate id="profile.activity.see_comments_link" />
-          </Button>
-        )}
 
         <Divider hidden />
         <Button onClick={this.toggleDetails} disabled={totalAnswers === 0}>
@@ -169,6 +178,7 @@ class Profile extends Component {
               performance={performance}
               filter={this.state.filter}
               language={currentLanguage}
+              comments={this.state.comments}
             />
           )}
         </Container>
