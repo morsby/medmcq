@@ -6,9 +6,10 @@ import _ from 'lodash';
 
 import { specialer, tags } from '../../../utils/common';
 
-import { Button, Message, Input } from 'semantic-ui-react';
+import { Button, Message, Input, Grid } from 'semantic-ui-react';
 import { Divider, Dropdown } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
+import { withRouter } from 'react-router';
 
 const QuestionVoting = (props) => {
   const [chosenTags, setChosenTags] = useState([]);
@@ -17,6 +18,7 @@ const QuestionVoting = (props) => {
   const [specialtyMessage, setSpecialtyMessage] = useState('');
   const [newTag, setNewTag] = useState('');
   const [addingNewTag, setAddingNewTag] = useState(false);
+  const [suggestTagMessage, setSuggestTagMessage] = useState('');
 
   useEffect(() => {
     let userSpecialties = [];
@@ -59,14 +61,10 @@ const QuestionVoting = (props) => {
     setTagMessage('');
   };
 
-  const onAddingNewTag = () => {
-    setAddingNewTag(true);
-  };
-
   const handleNewTag = (e, { value }) => {
     setNewTag(value);
   };
-  // Sigurd TODO med den der mailklient
+
   const suggestTag = () => {
     props.questionReport({
       type: 'suggest_tag',
@@ -76,63 +74,91 @@ const QuestionVoting = (props) => {
       }
     });
     setNewTag('');
+    setAddingNewTag(false);
+    setSuggestTagMessage('Dit tag er blevet foreslået');
   };
 
   return (
     <div>
-      <h5 style={{ color: 'grey', marginLeft: '3px' }}>
-        <Translate id="voting.specialtyHeadline" />
-      </h5>
-      <Dropdown
-        fluid
-        multiple
-        selection
-        search
-        options={specialer[props.question.semester]}
-        value={chosenSpecialties}
-        onChange={onChangeSpecialties}
-      />
-      <Divider hidden />
-      <Button basic color="green" onClick={specialtyVote}>
-        Stem på specialer
-      </Button>
-      {specialtyMessage && <Message color="green">{specialtyMessage}</Message>}
-      <Divider />
-      <h5 style={{ color: 'grey', marginLeft: '3px' }}>
-        <Translate id="voting.tagsHeadline" />
-      </h5>
-      <Dropdown
-        fluid
-        multiple
-        selection
-        search
-        options={tags[props.question.semester]}
-        value={chosenTags}
-        onChange={onChangeTags}
-      />
-      <Divider hidden />
-      <Button basic color="green" onClick={tagVote}>
-        Stem på tags
-      </Button>
-      {!addingNewTag && (
-        <Button basic color="yellow" onClick={onAddingNewTag}>
-          Foreslå nyt tag
-        </Button>
-      )}
-      {addingNewTag && (
-        <div>
-          <Divider hidden />
-          <Input width={5} placeholder="Tag ..." value={newTag} onChange={handleNewTag} />
-          <Button basic color="green" onClick={suggestTag}>
-            Foreslå tag
-          </Button>
-        </div>
-      )}
-      {tagMessage && <Message color="green">{tagMessage}</Message>}
-      <Divider hidden />
-      <p style={{ color: 'grey' }}>
-        <Translate id="voting.notice" />
-      </p>
+      <Grid stackable divided columns="equal">
+        <Grid.Row>
+          <Grid.Column>
+            <h5 style={{ color: 'grey', marginLeft: '3px' }}>
+              <Translate id="voting.specialtyHeadline" />
+            </h5>
+            <Dropdown
+              fluid
+              multiple
+              selection
+              search
+              options={specialer[props.question.semester]}
+              value={chosenSpecialties}
+              onChange={onChangeSpecialties}
+            />
+            <Divider hidden />
+            <Button basic color="green" onClick={specialtyVote}>
+              <Translate id="voting.vote_specialty" />
+            </Button>
+            {specialtyMessage && <Message color="green">{specialtyMessage}</Message>}
+          </Grid.Column>
+          <Grid.Column>
+            <h5 style={{ color: 'grey', marginLeft: '3px' }}>
+              <Translate id="voting.tagsHeadline" />
+            </h5>
+            <Dropdown
+              fluid
+              multiple
+              selection
+              search
+              options={tags[props.question.semester]}
+              value={chosenTags}
+              onChange={onChangeTags}
+            />
+            <Divider hidden />
+            <Button basic color="green" onClick={tagVote}>
+              <Translate id="voting.vote_tags" />
+            </Button>
+            {!addingNewTag && (
+              <Button basic color="yellow" onClick={() => setAddingNewTag(true)}>
+                <Translate id="voting.suggest_tag" />
+              </Button>
+            )}
+            {addingNewTag && (
+              <div>
+                <Divider hidden />
+                <Input
+                  style={{ marginRight: '1rem' }}
+                  width={5}
+                  placeholder="Tag ..."
+                  value={newTag}
+                  onChange={handleNewTag}
+                />
+                <Button basic color="green" onClick={suggestTag}>
+                  <Translate id="voting.suggest_tag" />
+                </Button>
+                <Button basic color="red" onClick={() => setAddingNewTag(false)}>
+                  <Translate id="voting.cancel" />
+                </Button>
+              </div>
+            )}
+            {suggestTagMessage && <Message color="green">{suggestTagMessage}</Message>}
+            {tagMessage && <Message color="green">{tagMessage}</Message>}
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column align="center">
+            <p style={{ color: 'grey' }}>
+              <Translate id="voting.notice" />
+              <span
+                style={{ cursor: 'pointer', color: '#4183c4' }}
+                onClick={() => props.history.push('/om-siden')}
+              >
+                <Translate id="voting.about_page" />
+              </span>
+            </p>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     </div>
   );
 };
@@ -142,10 +168,13 @@ QuestionVoting.propTypes = {
   user: PropTypes.object,
   question: PropTypes.object,
   voteTags: PropTypes.func,
-  questionReport: PropTypes.func
+  questionReport: PropTypes.func,
+  history: PropTypes.object
 };
 
-export default connect(
-  null,
-  actions
-)(QuestionVoting);
+export default withRouter(
+  connect(
+    null,
+    actions
+  )(QuestionVoting)
+);
