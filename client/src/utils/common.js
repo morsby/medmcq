@@ -54,7 +54,8 @@ export const specialer = {
     },
     { value: 'onkologi', text: 'Onkologi' },
     { value: 'socialmedicin', text: 'Socialmedicin' },
-    { value: 'almen_medicin', text: 'Almen medicin' }
+    { value: 'almen_medicin', text: 'Almen medicin' },
+    { value: 'traumatologi', text: 'Traumatologi' }
   ],
   9: [
     { value: 'anæstesiologi', text: 'Anæstesiologi' },
@@ -85,7 +86,16 @@ export const specialer = {
 
 export const tags = {
   7: [{ value: 'paraklinik', text: 'Paraklinik' }, { value: 'radiologi', text: 'Radiologi' }],
-  8: [{ value: 'paraklinik', text: 'Paraklinik' }],
+  8: [
+    { value: 'paraklinik', text: 'Paraklinik' },
+    { value: 'oesophagus_ventrikel_duodenum', text: 'Øsophagus, ventrikel og duodenum' },
+    { value: 'duodenum_pancreas_milt', text: 'Duodenum, pancreas og milt' },
+    { value: 'leversygdomme', text: 'Leversygdomme' },
+    { value: 'tyndtarm_colon_rectum', text: 'Tyndtarm, colon og rectum' },
+    { value: 'børn', text: 'Børn' },
+    { value: 'anallidelser', text: 'Anallidelser' },
+    { value: 'hudlidelser_sår', text: 'Hudlidelser og sår' }
+  ],
   9: [{ value: 'paraklinik', text: 'Paraklinik' }],
   11: [{ value: 'paraklinik/paraclinical', text: 'Paraklinik/Paraclinical' }]
 };
