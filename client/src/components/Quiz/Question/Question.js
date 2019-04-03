@@ -405,8 +405,21 @@ class Question extends Component {
             />
           </Responsive>
           <Divider />
-          <p>Speciale: {question.specialty.join()}</p>
-          <p>Tags: {question.tags.join(', ')}</p>
+          <div>
+            <Translate id="questionMetadata.specialty" /> {question.specialty.join(', ')}
+          </div>
+          <div>
+            <Translate id="questionMetadata.tags" /> {question.tags.join(', ')}
+          </div>
+          <div>
+            <Translate id="questionMetadata.set" />{' '}
+            {question.examSeason === 'F' ? (
+              <Translate id="questionMetadata.set_season.F" />
+            ) : (
+              <Translate id="questionMetadata.set_season.E" />
+            )}{' '}
+            {question.examYear}
+          </div>
           <Divider />
           <Button
             color={this.state.publicCommentsOpen ? 'green' : null}

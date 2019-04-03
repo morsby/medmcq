@@ -32,10 +32,11 @@
   "questionMetadata": {
     "set": ["Sæt:", "Set:"],
     "set_season": {
-      "E": ["E", "Autumn "],
-      "F": ["F", "Spring "]
+      "E": ["Efterår", "Autumn "],
+      "F": ["Forår", "Spring "]
     },
-    "specialty": ["Speciale:", "Specialty:"]
+    "specialty": ["Speciale:", "Specialty:"],
+    "tags": ["Tags:", "Tags:"]
   },
   "questionReport": {
     "label": ["Hvad er fejlen?", "What's the error?"],
