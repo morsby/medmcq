@@ -88,6 +88,7 @@ export const tags = {
   7: [{ value: 'paraklinik', text: 'Paraklinik' }, { value: 'radiologi', text: 'Radiologi' }],
   8: [
     { value: 'paraklinik', text: 'Paraklinik' },
+    { value: 'teoretisk_spørgsmål', text: 'Teoretisk spørgsmål' },
     { value: 'oesophagus_ventrikel_duodenum', text: 'Øsophagus, ventrikel og duodenum' },
     { value: 'duodenum_pancreas_milt', text: 'Duodenum, pancreas og milt' },
     { value: 'leversygdomme', text: 'Leversygdomme' },
