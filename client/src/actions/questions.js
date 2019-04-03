@@ -89,8 +89,8 @@ export const postQuestion = (post) => async (dispatch) => {
 
 export const commentQuestion = (id, comment, isPrivate) => async (dispatch) => {
   const res = await axios.put(`/api/questions/${id}/comment`, {
-    comment: comment,
-    private: isPrivate
+    comment,
+    isPrivate
   });
   dispatch({
     type: types.QUESTION_COMMENT_UPDATE,
@@ -108,9 +108,9 @@ export const deleteComment = (question_id, comment_id) => async (dispatch) => {
 };
 
 export const editComment = (question_id, comment_id, comment, isPrivate) => async (dispatch) => {
-  comment.private = isPrivate; // Is true if comment is private
   const res = await axios.put(`/api/questions/${question_id}/comment/${comment_id}`, {
-    comment
+    comment,
+    isPrivate
   });
 
   dispatch({

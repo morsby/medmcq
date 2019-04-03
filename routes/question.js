@@ -167,7 +167,7 @@ router.put('/:id/comment', (req, res) => {
     // fx question.question = req.params.question;
     if (!Array.isArray(question.comments)) question.comments = [];
 
-    let comment = { ...req.body, user: req.user.username };
+    let comment = { ...req.body, user: req.user.username, private: req.body.isPrivate };
     question.comments.push(comment);
 
     question.save((err) => {
@@ -207,7 +207,6 @@ router.put('/:question_id/comment/:comment_id', auth, async (req, res) => {
   // Tjek om brugeren ejer spørgsmålet
   if (req.user.username === question.comments[index].user) {
     question.comments[index].comment = req.body.comment;
-    question.comments[index].private = req.body.private;
     try {
       const updatedQuestion = await question.save();
       res.json({ question: updatedQuestion, message: 'Kommentar ændret' });
