@@ -39,6 +39,7 @@ const QuestionVoting = (props) => {
 
     setTagMessage('');
     setSpecialtyMessage('');
+    setSuggestTagMessage('');
   }, [props.question]);
 
   const specialtyVote = async () => {
