@@ -1,5 +1,4 @@
 require('dotenv').config();
-const sslRedirect = require('heroku-ssl-redirect');
 const express = require('express');
 const app = express();
 const keys = require('./config/keys');
@@ -16,11 +15,6 @@ const contact = require('./routes/contact');
 
 // Third Party middleware
 app.use(helmet());
-
-// if heroku, force SSL
-if (process.env.NODE_ENV === 'production') {
-  app.use(sslRedirect());
-}
 
 // Database
 const mongoose = require('mongoose');
