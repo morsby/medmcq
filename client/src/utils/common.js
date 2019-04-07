@@ -97,7 +97,11 @@ export const tags = {
     { value: 'anallidelser', text: 'Anallidelser' },
     { value: 'hudlidelser_sår', text: 'Hudlidelser og sår' }
   ],
-  9: [{ value: 'paraklinik', text: 'Paraklinik' }],
+  9: [
+    { value: 'radiologi', text: 'Radiologi' },
+    { value: 'ekg', text: 'EKG' },
+    { value: 'lfu', text: 'Lungefunktionsundersøgelse' }
+  ],
   11: [{ value: 'paraklinik/paraclinical', text: 'Paraklinik/Paraclinical' }]
 };
 
