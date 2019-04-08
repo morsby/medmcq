@@ -480,7 +480,7 @@ router.put('/:question_id/tags', async (req, res) => {
       if (_.includes(superUsers, user)) included = true;
     });
 
-    if (vote.users.length >= 5 || included) {
+    if (vote.users.length >= 1 || included) {
       tags.push(vote.tag);
     }
   });
