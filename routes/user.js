@@ -57,8 +57,9 @@ router.put('/edit', auth, async (req, res) => {
 });
 
 router.delete('/delete', auth, async (req, res) => {
+  let user;
   try {
-    const user = await User.findById(req.user._id, 'password');
+    user = await User.findById(req.user._id, 'password');
     if (!req.body.password) {
       return res.status(401).send({
         type: 'error',
