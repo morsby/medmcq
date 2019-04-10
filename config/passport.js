@@ -25,6 +25,8 @@ module.exports = function(passport) {
   passport.use(
     'local',
     new LocalStrategy(function(username, password, done) {
+      // TODO: SLET NEDENSTÅENDE LINJE TIL SOMMER
+      username = username.replace(/ /g, '');
       User.findOne({ username: username }, 'username password', function(err, user) {
         if (err) {
           return done(err);
