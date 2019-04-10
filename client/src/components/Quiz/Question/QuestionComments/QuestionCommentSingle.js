@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import marked from 'marked';
@@ -13,6 +13,8 @@ import { Translate } from 'react-localize-redux';
  * @param {func}    editComment   Funktion at ændre kommentar
  */
 const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) => {
+  const [deleting, setDeleting] = useState(false);
+
   if (!user) user = {};
   return (
     <Comment
@@ -44,11 +46,33 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
         />
         {comment.user === user.username && (
           <Menu size="mini" icon="labeled" secondary>
-            <Menu.Item onClick={() => deleteComment(comment._id)} style={{ cursor: 'pointer' }}>
-              <Icon name="trash" color="red" />
-              <Translate id="questionCommentSingle.delete" />
-            </Menu.Item>
-            <Menu.Item style={{ cursor: 'pointer' }} onClick={() => editComment(comment)}>
+            {!deleting && (
+              <Menu.Item onClick={() => setDeleting(true)}>
+                <Icon name="trash" color="red" />
+                <Translate id="questionCommentSingle.delete" />
+              </Menu.Item>
+            )}
+            {deleting && (
+              <>
+                <Menu.Item>
+                  <p>Er du sikker på du vil slette kommentaren?</p>
+                </Menu.Item>
+                <Menu.Item onClick={() => setDeleting(false)}>
+                  <Icon name="close" />
+                  Nej
+                </Menu.Item>
+                <Menu.Item
+                  onClick={() => {
+                    deleteComment(comment._id);
+                    setDeleting(false);
+                  }}
+                >
+                  <Icon name="trash" color="red" />
+                  Ja
+                </Menu.Item>
+              </>
+            )}
+            <Menu.Item onClick={() => editComment(comment)}>
               <Icon name="edit" color="yellow" />
               <Translate id="questionCommentSingle.edit" />
             </Menu.Item>
