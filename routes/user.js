@@ -32,18 +32,6 @@ router.get('/me', function(req, res) {
   res.send(req.user);
 });
 
-// TODO: SLET
-router.get('/fix', async (req, res) => {
-  const oldUsers = await User.find().select('username');
-
-  oldUsers.forEach((user) => {
-    user.username = user.username.replace(/ /g, '');
-    user.save();
-  });
-
-  res.status(400).send('Removed spaces from usernames');
-});
-
 router.get('/:id', async (req, res) => {
   const user = await User.findById(req.params.id);
 
