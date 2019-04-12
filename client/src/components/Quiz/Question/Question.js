@@ -432,17 +432,25 @@ class Question extends Component {
               <Translate id="question.show_public_comments" data={{ n: publicComments.length }} />
             )}
           </Button>
-          <Button
-            color={this.state.privateCommentsOpen ? 'green' : null}
-            basic
-            onClick={this.onPrivateCommentsToggle}
-          >
-            {this.state.privateCommentsOpen ? (
-              <Translate id="question.hide_private_comments" data={{ n: privateComments.length }} />
-            ) : (
-              <Translate id="question.show_private_comments" data={{ n: privateComments.length }} />
-            )}
-          </Button>
+          {user && (
+            <Button
+              color={this.state.privateCommentsOpen ? 'green' : null}
+              basic
+              onClick={this.onPrivateCommentsToggle}
+            >
+              {this.state.privateCommentsOpen ? (
+                <Translate
+                  id="question.hide_private_comments"
+                  data={{ n: privateComments.length }}
+                />
+              ) : (
+                <Translate
+                  id="question.show_private_comments"
+                  data={{ n: privateComments.length }}
+                />
+              )}
+            </Button>
+          )}
           {width <= 700 && <Divider hidden />}
           <Button
             basic
@@ -488,7 +496,7 @@ class Question extends Component {
               privateComment={true}
             />
           )}
-          <Divider />
+          {user && <Divider />}
           {user && (
             <>
               <QuestionVoting question={question} user={user} />
