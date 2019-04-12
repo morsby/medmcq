@@ -27,7 +27,7 @@ export const getQuestions = (settings, requestedIds = null) => async (dispatch) 
       // Lav tomme strings til API-request
       let querySpecialer = '',
         unique = '',
-        queryTags;
+        queryTags = '';
 
       // Spcialeønsker? Lav det til en streng!
       if (type === 'specialer') {
