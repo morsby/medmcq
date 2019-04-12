@@ -105,10 +105,21 @@ export default {
     }
   },
   voting: {
-    header: ['Stemme systemet', 'The voting system'],
+    header: ['Stemmesystemet', 'The voting system'],
     body: [
-      `<p>Når du stemmer på et speciale, gælder det at specialet med flest stemmer bliver vist som det første. De specialer med 50% af stemmerne for det højst bedømte specialer bliver også tilføjet. Dvs. hvis et speciale har 6 stemmer, vil alle andre specialer med 3 eller flere stemmer også blive talt med. Vi gør det på denne måde, da vi ved at nogle spørgsmål kan referere til flere specialer på én gang </p><p>For tags gælder det, at kun tags, der er valg af mere end 5 brugere, bliver vist</p><p>Hver bruger tæller kun én gang per tag eller speciale.</p>`,
-      `<p>When you vote for a specialty, the system makes the specialty with the most amount of uservotes the primary specialty. If another specialty has 50% or more of the votes of the primary specialty, this specialty is also added to the question. For example, if the highest voted specialty is hæmatologi with 6 votes, but paraklinik also has 3 votes, both hæmatologi and paraklinik will be added to the question. It is made this way, to make it possible for questions to have multiple specialties.</p><p>For tags, only the tags that have been voted for by 5 users or more are counted</p><p>Each user can only count once per specialty or tag.</p>`
+      `
+<p>Når du stemmer på et speciale, gælder det, at specialet med flest stemmer bliver vist som det første. 
+    Andre specialer med mindst 50% af stemmerne af det højst bedømte speciale bliver også tilføjet. 
+    Dvs. hvis et speciale har 6 stemmer, vil alle andre specialer med 3 eller flere stemmer også blive talt med. 
+</p>
+<p>Hver bruger tæller kun én gang per tag eller speciale, og du kan ændre dine stemmer for et spørgsmål ved at stemme påny.</p>`,
+      `
+<p>When you vote for a specialty, the system makes the specialty with the most amount of uservotes the primary specialty. 
+   If another specialty has at least 50% of the votes of the primary specialty, this specialty is also added to the question. 
+   For example, if the highest voted specialty is pediatrics with 6 votes, but clinical genetics also has 3 votes, both pediatrics 
+   and clinical genetics will be added to the question. 
+</p>
+<p>Each user can only count once per specialty or tag. You can change your votes for a question by simply voting again.</p>`
     ]
   },
   privacy: {
@@ -139,6 +150,12 @@ export default {
     header: ['Hvad er der sket på siden?', 'What has happened to the site?'],
     body: [
       `
+<h3>v.0.2.1 - 2019-04-12</h3>
+<ul>
+    <li>
+        Der kan nu også vælges spørgsmål efter tag.
+    </li>
+</ul>
 <h3>v0.2.0 - 2019-03-25</h3>
 <ul>
     <li>
@@ -203,6 +220,12 @@ export default {
   </li>
 </ul>`,
       `
+  <h3>v.0.2.1 - 2019-04-12</h3>
+  <ul>
+      <li>
+          Questions can also be filtered by tag.
+      </li>
+  </ul>
   <h3>v0.2.0 - 2019-03-25</h3>
   <ul>
       <li>

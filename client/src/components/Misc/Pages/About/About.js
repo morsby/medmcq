@@ -33,6 +33,11 @@ const About = ({ addTranslation }) => {
         <Translate id="changelog.body" />
 
         <h2>
+          <Translate id="voting.header" />
+        </h2>
+        <Translate id="voting.body" />
+
+        <h2>
           <Translate id="about.privacy.header" />
         </h2>
         <Translate id="about.privacy.body" />
