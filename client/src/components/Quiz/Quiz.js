@@ -34,7 +34,7 @@ class QuizMain extends Component {
    * state:
    * - qn : Indeholder navigationen (spørgsmålsindeks)
    */
-  state = { qn: 0 };
+  state = { qn: 0, imgOpen: false };
 
   constructor(props) {
     super(props);
@@ -46,6 +46,7 @@ class QuizMain extends Component {
     this.getQuestions = this.getQuestions.bind(this);
     this.swiped = this.swiped.bind(this);
     this.onKeydown = this.onKeydown.bind(this);
+    this.onImgClick = this.onImgClick.bind(this);
   }
 
   componentDidMount() {
@@ -82,36 +83,42 @@ class QuizMain extends Component {
    * Navigation mellem spørgsmål
    */
   onKeydown(e) {
-    /**
-     * Navigation ved piletaster
-     * Tjekker om det aktive element er et TEXTAREA (kommentarfeltet) og
-     * navigerer i så fald IKKE
-     */
-    let qn = this.state.qn,
-      max = this.props.questions.length;
-    if (document.activeElement.tagName === 'TEXTAREA') return;
+    if (!this.state.imgOpen) {
+      /**
+       * Navigation ved piletaster
+       * Tjekker om det aktive element er et TEXTAREA (kommentarfeltet) og
+       * navigerer i så fald IKKE
+       */
+      let qn = this.state.qn,
+        max = this.props.questions.length;
+      if (document.activeElement.tagName === 'TEXTAREA') return;
 
-    if (e.key === 'ArrowLeft') {
-      if (qn > 0) this.onChangeQuestion(this.state.qn - 1);
-    } else if (e.key === 'ArrowRight') {
-      if (qn < max - 1) this.onChangeQuestion(this.state.qn + 1);
+      if (e.key === 'ArrowLeft') {
+        if (qn > 0) this.onChangeQuestion(this.state.qn - 1);
+      } else if (e.key === 'ArrowRight') {
+        if (qn < max - 1) this.onChangeQuestion(this.state.qn + 1);
+      }
     }
   }
 
   swiped(e, deltaX) {
-    // Navigation ved swipes
-    let min = 0,
-      max = this.props.questions.length,
-      move;
+    if (!this.state.imgOpen) {
+      // Navigation ved swipes
+      let min = 0,
+        max = this.props.questions.length,
+        move;
 
-    if (deltaX > 75) {
-      move = this.state.qn + 1;
-    }
+      if (deltaX > 75) {
+        move = this.state.qn + 1;
+      }
 
-    if (deltaX < -75) {
-      move = this.state.qn - 1;
+      if (deltaX < -75) {
+        move = this.state.qn - 1;
+      }
+      if (move >= min && move < max) this.onChangeQuestion(move);
+    } else {
+      return;
     }
-    if (move >= min && move < max) this.onChangeQuestion(move);
   }
 
   /**
@@ -124,6 +131,13 @@ class QuizMain extends Component {
     });
 
     smoothScroll();
+  }
+
+  /** Håndtering af pop-up af billeder **/
+  onImgClick() {
+    this.setState((prevState) => {
+      return { imgOpen: !prevState.imgOpen };
+    });
   }
 
   render() {
@@ -177,7 +191,13 @@ class QuizMain extends Component {
             flickThreshold={flickNumber}
             // onSwiped={this.swipeChecker}
           >
-            <Question question={questions[qn]} user={user} qn={qn} />
+            <Question
+              onImgClick={this.onImgClick}
+              imgOpen={this.state.imgOpen}
+              question={questions[qn]}
+              user={user}
+              qn={qn}
+            />
           </Swipeable>
 
           <QuizNavigator onNavigate={this.onChangeQuestion} qn={qn} qmax={questions.length} />

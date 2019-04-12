@@ -27,12 +27,6 @@ import QuestionComments from './QuestionComments/QuestionComments';
 class Question extends Component {
   state = {
     /**
-     * Er lightbox åben?
-     * @type {Boolean}
-     */
-    imgOpen: false,
-
-    /**
      * Er report-formen åben?
      */
     reportOpen: false,
@@ -102,7 +96,6 @@ class Question extends Component {
     super(props);
 
     this.onKeydown = this.onKeydown.bind(this);
-    this.onImgClick = this.onImgClick.bind(this);
     this.onTextType = this.onTextType.bind(this);
     this.onReportToggle = this.onReportToggle.bind(this);
     this.onReportSubmit = this.onReportSubmit.bind(this);
@@ -138,7 +131,6 @@ class Question extends Component {
   componentDidUpdate(prevProps) {
     if (this.props.question._id !== prevProps.question._id) {
       this.setState({
-        imgOpen: false,
         reportOpen: false,
         reportSent: false,
         report: '',
@@ -175,7 +167,7 @@ class Question extends Component {
    */
   onKeydown(e) {
     if (
-      !this.state.imgOpen &&
+      !this.props.imgOpen &&
       !(
         document.activeElement.tagName === 'TEXTAREA' || document.activeElement.tagName === 'INPUT'
       ) &&
@@ -223,13 +215,6 @@ class Question extends Component {
         user
       );
     }
-  }
-
-  /** Håndtering af pop-up af billeder **/
-  onImgClick() {
-    this.setState((prevState) => {
-      return { imgOpen: !prevState.imgOpen };
-    });
   }
 
   /**
@@ -389,8 +374,8 @@ class Question extends Component {
                 <Grid.Column>
                   <QuestionImage
                     img={imageURL(question.image)}
-                    onClick={this.onImgClick}
-                    imgOpen={this.state.imgOpen}
+                    onClick={this.props.onImgClick}
+                    imgOpen={this.props.imgOpen}
                   />
                 </Grid.Column>
               )}
@@ -562,7 +547,10 @@ Question.propTypes = {
    * Action der kaldes når der ændres specialer. Fra redux.
    * @type {func}
    */
-  editSpecialties: PropTypes.func
+  editSpecialties: PropTypes.func,
+
+  imgOpen: PropTypes.bool,
+  onImgClick: PropTypes.func
 };
 
 export default connect(
