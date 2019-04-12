@@ -24,7 +24,7 @@ import SelectionMessage from './SelectionMessage';
 import Footer from '../Layout/Footer';
 
 import { semestre, urls } from '../../utils/common';
-import { specialer as specialerCommon } from '../../utils/common';
+import { specialer as specialerCommon, tags as tagsCommon } from '../../utils/common';
 
 /**
  * Hovedsiden til at håndtere alle valg af spørgsmål.
@@ -62,10 +62,11 @@ class SelectionMain extends Component {
    * @param  {string} name     Den indstilling der ændres
    * @param  {string} value    Den værdi der sættes
    */
-  onSettingsChange(e, { name, value }) {
+  onSettingsChange(e, { value, name, checked }) {
     let type = name;
     this.setState({ err: [] });
     if (type === 'n' && value) value = Number(value);
+    if (type === 'onlyNew') value = checked;
     let { lastSettingsQuestionFetch } = this.props.settings;
     this.props.changeSettings({ type, value, lastSettingsQuestionFetch });
   }
@@ -83,7 +84,7 @@ class SelectionMain extends Component {
      * derfor IKKE noget med selve quiz-spørgsmålene at gøre, og hentes for
      * at kunne tælle antal spørgsmål for hvert semester, speciale m.v.
      */
-    let { n, semester, type, set, questions, specialer } = this.props.settings;
+    let { n, semester, type, set, questions, specialer, tags } = this.props.settings;
 
     // Når den er tom modtager den fuldt antal
 
@@ -95,7 +96,7 @@ class SelectionMain extends Component {
     }
 
     //Specialer
-    if (type === 'specialer' && specialer.length === 0) {
+    if (type === 'specialer' && specialer.length === 0 && tags.length === 0) {
       err.push(this.props.translate('selection.errs.no_specialty'));
     }
 
@@ -142,7 +143,7 @@ class SelectionMain extends Component {
      * derfor IKKE noget med selve quiz-spørgsmålene at gøre, og hentes for
      * at kunne tælle antal spørgsmål for hvert semester, speciale m.v.
      */
-    let { semester, specialer, type, n, onlyNew, questions, sets, set } = this.props.settings;
+    let { semester, specialer, tags, type, n, onlyNew, questions, sets, set } = this.props.settings;
 
     let { user } = this.props,
       answeredQuestions;
@@ -153,14 +154,26 @@ class SelectionMain extends Component {
     }
 
     // Laver et array af specialer for semesteret
-    let uniques = specialerCommon[semester].map((s) => s.value);
+    let uniques = {
+      specialer: specialerCommon[semester].map((s) => s.value),
+      tags: tagsCommon[semester].map((t) => t.value)
+    };
 
     // Grupperer de fundne spørgsmål efter specialer
     let questionsBySpecialty = _.countBy(
       // Laver et flat array af alle i spg indeholdte specialer
       _.flattenDeep(questions.map((a) => a.specialty)),
       (e) => {
-        return uniques[uniques.indexOf(e)];
+        return uniques.specialer[uniques.specialer.indexOf(e)];
+      }
+    );
+
+    // Grupperer de fundne spørgsmål efter tags
+    let questionsByTag = _.countBy(
+      // Laver et flat array af alle i spg indeholdte tags
+      _.flattenDeep(questions.map((a) => a.tags)),
+      (e) => {
+        return uniques.tags[uniques.tags.indexOf(e)];
       }
     );
 
@@ -168,7 +181,14 @@ class SelectionMain extends Component {
     let antalValgte = 0;
     specialer.map((s) => {
       let n = questionsBySpecialty[s] ? questionsBySpecialty[s] : 0;
-      return (antalValgte = antalValgte + n);
+      antalValgte = antalValgte + n;
+      return;
+    });
+
+    tags.map((t) => {
+      let n = questionsByTag[t] ? questionsByTag[t] : 0;
+      antalValgte = antalValgte + n;
+      return;
     });
 
     return (
@@ -221,6 +241,8 @@ class SelectionMain extends Component {
               semester={semester}
               valgteSpecialer={specialer}
               antalPerSpeciale={questionsBySpecialty}
+              valgteTags={tags}
+              antalPerTag={questionsByTag}
               onChange={this.onSettingsChange}
             />
           )}

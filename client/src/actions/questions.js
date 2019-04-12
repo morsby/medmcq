@@ -3,7 +3,7 @@ import * as types from './types';
 import * as voteService from '../services/voteService';
 
 export const getQuestions = (settings, requestedIds = null) => async (dispatch) => {
-  let { type, semester, specialer, n, onlyNew, set } = settings;
+  let { type, semester, specialer, tags, n, onlyNew, set } = settings;
 
   dispatch({ type: types.IS_FETCHING });
   let res = { data: [] };
@@ -26,18 +26,22 @@ export const getQuestions = (settings, requestedIds = null) => async (dispatch) 
     case 'specialer': {
       // Lav tomme strings til API-request
       let querySpecialer = '',
-        unique = '';
+        unique = '',
+        queryTags;
 
       // Spcialeønsker? Lav det til en streng!
       if (type === 'specialer') {
         querySpecialer = '&specialer=' + specialer.join(',');
+        queryTags = '&tags=' + tags.join(',');
       }
 
       // Nye spørgsmål? lav det til en streng!
       if (onlyNew) unique = '&unique=t';
 
       // Generer den samlede query-streng
-      res = await axios.get(`/api/questions?semester=${semester}&n=${n}${querySpecialer}${unique}`);
+      res = await axios.get(
+        `/api/questions?semester=${semester}&n=${n}${querySpecialer}${queryTags}${unique}`
+      );
       break;
     }
     case 'specific': {

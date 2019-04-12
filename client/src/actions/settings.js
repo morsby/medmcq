@@ -23,6 +23,7 @@ export const fetchSettingsQuestions = (semester) => async (dispatch) => {
   let questions = res.data;
   dispatch({
     type: types.FETCH_SETTINGS_QUESTION,
-    questions
+    questions,
+    semester
   });
 };

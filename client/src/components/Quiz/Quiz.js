@@ -6,6 +6,8 @@ import * as actions from '../../actions';
 import { withLocalize, Translate } from 'react-localize-redux';
 import quizTranslations from './quizTranslations.json';
 
+import { Container } from 'semantic-ui-react';
+
 import Swipeable from 'react-swipeable';
 import QuizLoader from './QuizLoader';
 import Question from './Question/Question';
@@ -145,6 +147,19 @@ class QuizMain extends Component {
           )}
         </Translate>
       );
+
+    if (questions.length === 0) {
+      return (
+        <div className="flex-container">
+          <div className="content">
+            <Container>
+              <h1>Der var desværre ingen spørgsmål, der opfylder kriterierne.</h1>
+              <p>Vend tilbage til forsiden og prøv igen.</p>
+            </Container>
+          </div>
+        </div>
+      );
+    }
 
     return (
       <div className="flex-container">

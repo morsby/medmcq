@@ -23,7 +23,7 @@ const superUsers = [
 // TODO: Før statistik over get("/api/questions"), post("/api/questions/ids/"), post("/api/questions/answer")
 
 router.get('/', async (req, res) => {
-  let { n, specialer, unique, semester, examSeason, examYear } = req.query;
+  let { n, specialer, tags, unique, semester, examSeason, examYear } = req.query;
 
   /* 
             Nedenfor er nogle lidt vilde if-else statements.     
@@ -68,6 +68,10 @@ router.get('/', async (req, res) => {
 
     if (specialer) {
       filter.specialty = { $in: specialer.split(',') };
+    }
+
+    if (tags) {
+      filter.tags = { $in: tags.split(',') };
     }
 
     Question.findRandom(filter, {}, { limit: n }, (err, questions) => {
@@ -269,7 +273,7 @@ router.delete('/:id', permit('admin'), (req, res) => {
 // Bruges på quiz-vælger-siden til at vise hvor mange spørgsmål der er for hvert semester
 router.get('/count/:semester', (req, res) => {
   Question.find({ semester: req.params.semester })
-    .select(['specialty', 'examSeason', 'examYear'])
+    .select(['specialty', 'tags', 'examSeason', 'examYear'])
     .exec((err, questions) => {
       if (err) res.send(err);
 

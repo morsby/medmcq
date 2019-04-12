@@ -12,6 +12,7 @@ const SelectionSpecialtiesSelectorCheckbox = ({
   speciale,
   erValgt,
   antalPerSpeciale,
+  type,
   onChange
 }) => {
   let antal = antalPerSpeciale === undefined ? 0 : antalPerSpeciale;
@@ -29,7 +30,7 @@ const SelectionSpecialtiesSelectorCheckbox = ({
                   })}
                   value={speciale.value}
                   checked={erValgt}
-                  name="specialer"
+                  name={type}
                   onChange={onChange}
                 />
                 <Divider vertical hidden />
@@ -43,6 +44,11 @@ const SelectionSpecialtiesSelectorCheckbox = ({
 };
 
 SelectionSpecialtiesSelectorCheckbox.propTypes = {
+  /**
+   * Type: Ændrer vi specialer eller tags?
+   */
+  type: PropTypes.string,
+
   /**
    * Speciale-objekt af form: {"text": "Navn", "value": "slug"}
    */

@@ -14,10 +14,6 @@ import { Label, Input, Form, Radio, Divider, Header, Grid } from 'semantic-ui-re
  * Alle props kommer fra ../Selection.js
  */
 class SelectionNSelector extends Component {
-  componentWillUnmount() {
-    this.props.onChange(null, { value: 20, name: 'n' });
-  }
-
   render() {
     const { onChange, n, total } = this.props;
 

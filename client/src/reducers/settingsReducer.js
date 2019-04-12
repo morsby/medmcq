@@ -36,6 +36,11 @@ const initialState = {
   specialer: [],
 
   /**
+   * Hvilke tags er valgt?
+   */
+  tags: [],
+
+  /**
    * Hvilke spørgsmål er der for semesteret?
    * Benyttes til bl.a. at beregne hvor mange spg. i hvert speciale.
    */
@@ -88,13 +93,14 @@ export default createReducer(initialState, {
      * Hvilken indstilling ændrer vi?
      */
     switch (type) {
-      case 'specialer': {
+      case 'specialer':
+      case 'tags': {
         /**
          * specialer = allerede valgte specialer
          * alreadySelected = er det speciale, brugeren klikkede på, allerede valgt?
          */
-        let specialer = state.specialer,
-          alreadySelected = state.specialer.indexOf(value);
+        let currentSelection = state[type],
+          alreadySelected = state[type].indexOf(value);
 
         /**
          * Er specialet allerede valgt?
@@ -102,11 +108,18 @@ export default createReducer(initialState, {
          * - Nej: Tilføj det!
          */
         if (alreadySelected > -1) {
-          specialer.splice(alreadySelected, 1);
+          currentSelection.splice(alreadySelected, 1);
         } else {
-          specialer.push(value);
+          currentSelection.push(value);
         }
-        state.specialer = specialer;
+        state[type] = currentSelection;
+        break;
+      }
+      case 'semester': {
+        // Skal være sin egen for at cleare specialer/tags
+        state.specialer = [];
+        state.tags = [];
+        state.semester = value;
         break;
       }
       default:
@@ -118,7 +131,7 @@ export default createReducer(initialState, {
    * types.FETCH_SETTINGS_QUESTION
    */
   [types.FETCH_SETTINGS_QUESTION]: (state, action) => {
-    let { questions } = action;
+    let { questions, semester } = action;
     /**
      * API'en ved egentlig ikke hvilke sæt, der findes. Det beregnes
      * her ud fra hvilke spørgsmål, der hentes ned (alle fra et
@@ -183,7 +196,10 @@ export default createReducer(initialState, {
 
     state.sets = sets;
     state.questions = questions;
-    state.specialer = [];
+    if (state.semester !== semester) {
+      state.specialer = [];
+      state.tags = [];
+    }
     state.lastSettingsQuestionFetch = Date.now();
   },
   /**
