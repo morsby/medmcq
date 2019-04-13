@@ -129,6 +129,7 @@ export const tags = {
     { value: 'sedation_og_anæstesi', text: 'Sedation og anæstesi' },
     { value: 'væske_og_elektrolytbehandling', text: 'Væske og elektrolytbehandling' },
     { value: 'postoperative_smerter', text: 'Postoperative smerter' },
+    { value: 'a-gas', text: 'A-gas' },
     { value: 'radiologi', text: 'Radiologi' },
     { value: 'ekg', text: 'EKG' },
     { value: 'lfu', text: 'Lungefunktionsundersøgelse' }
