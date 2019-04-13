@@ -106,7 +106,7 @@ export const tags = {
     { value: 'pneumoni', text: 'Pneumoni' },
     { value: 'pneumothorax', text: 'Pneumothorax' },
     { value: 'sarkoidose', text: 'Sarkoidose' },
-    { value: 'sllergi', text: 'Allergi' },
+    { value: 'allergi', text: 'Allergi' },
     { value: 'medfødte_hjertesygdomme', text: 'Medfødte hjertesygdomme' },
     { value: 'aks', text: 'Akut koronart syndrom' },
     { value: 'angina_pectoris', text: 'Angina pectoris' },
