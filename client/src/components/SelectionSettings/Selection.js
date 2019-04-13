@@ -182,13 +182,13 @@ class SelectionMain extends Component {
     specialer.map((s) => {
       let n = questionsBySpecialty[s] ? questionsBySpecialty[s] : 0;
       antalValgte = antalValgte + n;
-      return;
+      return null;
     });
 
     tags.map((t) => {
       let n = questionsByTag[t] ? questionsByTag[t] : 0;
       antalValgte = antalValgte + n;
-      return;
+      return null;
     });
 
     return (
