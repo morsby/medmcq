@@ -8,6 +8,7 @@ const cookieParser = require('cookie-parser');
 const session = require('cookie-session');
 const helmet = require('helmet');
 const port = process.env.PORT || 3001; // set our port
+
 // APIs
 const question = require('./routes/question');
 const auth = require('./routes/auth');
@@ -36,9 +37,10 @@ mongoose
 app.use(cookieParser()); // read cookies (needed for auth)
 app.use(
   session({
-    secret: keys.session,
-    resave: true,
-    saveUninitialized: true
+    name: 'medmcqSession',
+    //secret: keys.session,
+    keys: keys.keys,
+    maxAge: 24 * 60 * 60 * 1000 * 14 // 24*14 hours
   })
 ); // session secret
 
