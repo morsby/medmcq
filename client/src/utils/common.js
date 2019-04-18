@@ -98,15 +98,17 @@ export const tags = {
     // Abdominalkirurgi
     { value: 'akut_abdomen', text: 'Akut abdomen' },
     { value: 'oesophagus_ventrikel_duodenum', text: 'Øsophagus, ventrikel og duodenum' },
-    { value: 'duodenum_pancreas_milt', text: 'Duodenum, pancreas og milt' },
-    { value: 'leversygdomme', text: 'Leversygdomme' },
     { value: 'tyndtarm_colon_rectum', text: 'Tyndtarm, colon og rectum' },
+    { value: 'pancreas', text: 'Pancreas' },
+    { value: 'leversygdomme', text: 'Lever og galdeveje' },
+    { value: 'milt', text: 'Milt' },
     { value: 'anallidelser', text: 'Anallidelser' },
     { value: 'mamma', text: 'Mamma' },
     { value: 'hernier', text: 'Hernier' },
 
     // Urologi
     { value: 'nyrer', text: 'Nyrer' },
+    { value: 'urinveje', text: 'Urinveje' },
     { value: 'blære', text: 'Blære' },
     { value: 'prostata', text: 'Prostata' },
     { value: 'testis', text: 'Testis' },
@@ -116,7 +118,21 @@ export const tags = {
     { value: 'børn', text: 'Børn' },
 
     // Plastikkirurgi
-    { value: 'hudlidelser_sår', text: 'Hudlidelser og sår' }
+    { value: 'hudens_tumorer', text: 'Hudens tumorer' },
+    { value: 'plastikkirurgisk_teknik', text: 'Plastikkirurgisk teknik' },
+    { value: 'forbrændinger', text: 'Forbrændinger, forfrysninger og kemiske skader' },
+    { value: 'kosmetisk_kirurgi', text: 'Kosmetisk kirurgi' },
+
+    // Onkologi
+    { value: 'strålebehandling', text: 'Strålebehandling' },
+    { value: 'onkologiske_bivirkninger', text: 'Onkologiske bivirkninger' },
+
+    // Almen medicin / Symptomkomplekser
+    { value: 'blod_i_afføringen', text: 'Blod i afføringen' },
+    { value: 'hæmaturi', text: 'Hæmaturi' },
+    { value: 'luts', text: 'LUTS' },
+
+    { value: 'duodenum_pancreas_milt', text: 'Duodenum, pancreas og milt (skal udfases)' }
   ],
   9: [
     // Paraklinik
