@@ -1,5 +1,6 @@
 # Hemmeligheder
 dev.js
+secretKeys.json
 
 client/*/version.js
 client/*/CHANGELOG.md

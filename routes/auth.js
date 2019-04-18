@@ -23,6 +23,7 @@ router.post('/', (req, res, next) => {
 
 router.get('/logout', auth, function(req, res) {
   req.logout();
+  req.session = null;
   res.redirect('/logout');
 });
 
