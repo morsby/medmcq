@@ -85,19 +85,70 @@ export const specialer = {
 };
 
 export const tags = {
-  7: [{ value: 'paraklinik', text: 'Paraklinik' }, { value: 'radiologi', text: 'Radiologi' }],
+  7: [
+    { value: 'paraklinik', text: 'Paraklinik' },
+    { value: 'radiologi', text: 'Radiologi' },
+    { value: 'journaloptagelse', text: 'Journaloptagelse' }
+  ],
   8: [
     { value: 'paraklinik', text: 'Paraklinik' },
-    { value: 'teoretisk_spørgsmål', text: 'Teoretisk spørgsmål' },
+    { value: 'radiologi', text: 'Radiologi' },
+    { value: 'farmakologi', text: 'Farmakologi' },
+
+    // Abdominalkirurgi
+    { value: 'akut_abdomen', text: 'Akut abdomen' },
     { value: 'oesophagus_ventrikel_duodenum', text: 'Øsophagus, ventrikel og duodenum' },
     { value: 'duodenum_pancreas_milt', text: 'Duodenum, pancreas og milt' },
     { value: 'leversygdomme', text: 'Leversygdomme' },
     { value: 'tyndtarm_colon_rectum', text: 'Tyndtarm, colon og rectum' },
-    { value: 'børn', text: 'Børn' },
     { value: 'anallidelser', text: 'Anallidelser' },
+    { value: 'mamma', text: 'Mamma' },
+    { value: 'hernier', text: 'Hernier' },
+
+    // Urologi
+    { value: 'nyrer', text: 'Nyrer' },
+    { value: 'blære', text: 'Blære' },
+    { value: 'prostata', text: 'Prostata' },
+    { value: 'testis', text: 'Testis' },
+    { value: 'penis', text: 'Penis' },
+
+    // Andet
+    { value: 'børn', text: 'Børn' },
+
+    // Plastikkirurgi
     { value: 'hudlidelser_sår', text: 'Hudlidelser og sår' }
   ],
   9: [
+    // Paraklinik
+    { value: 'a-gas', text: 'A-gas' },
+    { value: 'ekg', text: 'EKG' },
+    { value: 'lfu', text: 'Lungefunktionsundersøgelse' },
+    { value: 'radiologi', text: 'Radiologi' },
+    { value: 'farmakologi', text: 'Farmakologi' },
+
+    // Anæstesi
+    { value: 'ABCD', text: 'ABCD' },
+    { value: 'sedation_og_anæstesi', text: 'Sedation og anæstesi' },
+    { value: 'væske_og_elektrolytbehandling', text: 'Væske og elektrolytbehandling' },
+    { value: 'postoperative_smerter', text: 'Postoperative smerter' },
+
+    // Hjertemedicin
+    { value: 'aks', text: 'Akut koronart syndrom' },
+    { value: 'angina_pectoris', text: 'Angina pectoris' },
+    { value: 'hypertension', text: 'Hypertension' },
+    { value: 'lungeemboli', text: 'Lungeemboli' },
+    { value: 'hjerteinsufficiens', text: 'Hjerteinsufficiens' },
+    { value: 'klapsygdomme', text: 'Klapsygdomme' },
+    { value: 'arytmier', text: 'Arytmier' },
+    { value: 'aortaaneurisme', text: 'Aortaaneurisme' },
+    { value: 'medfødte_hjertesygdomme', text: 'Medfødte hjertesygdomme' },
+    { value: 'kardiomyopatier', text: 'Kardiomyopatier' },
+    { value: 'pulmonal hypertension', text: 'Pulmonal hypertension' },
+    { value: 'endokarditis', text: 'Endokarditis' },
+    { value: 'perikarditis', text: 'Perikarditis og tamponade' },
+    { value: 'synkope', text: 'Synkope' },
+
+    // Lungemedicin
     { value: 'lungecancer', text: 'Lungecancer' },
     { value: 'kol', text: 'KOL' },
     { value: 'astma', text: 'Astma' },
@@ -107,32 +158,17 @@ export const tags = {
     { value: 'pneumothorax', text: 'Pneumothorax' },
     { value: 'sarkoidose', text: 'Sarkoidose' },
     { value: 'allergi', text: 'Allergi' },
-    { value: 'medfødte_hjertesygdomme', text: 'Medfødte hjertesygdomme' },
-    { value: 'aks', text: 'Akut koronart syndrom' },
-    { value: 'angina_pectoris', text: 'Angina pectoris' },
-    { value: 'hypertension', text: 'Hypertension' },
-    { value: 'lungeemboli', text: 'Lungeemboli' },
-    { value: 'hjerteinsufficiens', text: 'Hjerteinsufficiens' },
-    { value: 'klapsygdomme', text: 'Klapsygdomme' },
-    { value: 'arytmier', text: 'Arytmier' },
-    { value: 'aortaaneurisme', text: 'Aortaaneurisme' },
-    { value: 'kardiomyopatier', text: 'Kardiomyopatier' },
-    { value: 'pulmonal hypertension', text: 'Pulmonal hypertension' },
-    { value: 'endokarditis', text: 'Endokarditis' },
-    { value: 'perikarditis', text: 'Perikarditis' },
-    { value: 'synkope', text: 'Synkope' },
+
+    // Karkirurgi
     { value: 'underekstremitets-iskæmi', text: 'Underekstremitets-iskæmi' },
     { value: 'specielle_karsygdomme', text: 'Specielle karsygdomme' },
+
+    // Thoraxkirurgi
     { value: 'pectus_carinatum_og_excavatum', text: 'Pectus carinatum og excavatum' },
     { value: 'Thoraxtraumer', text: 'Thoraxtraumer' },
-    { value: 'ABCD', text: 'ABCD' },
-    { value: 'sedation_og_anæstesi', text: 'Sedation og anæstesi' },
-    { value: 'væske_og_elektrolytbehandling', text: 'Væske og elektrolytbehandling' },
-    { value: 'postoperative_smerter', text: 'Postoperative smerter' },
-    { value: 'a-gas', text: 'A-gas' },
-    { value: 'radiologi', text: 'Radiologi' },
-    { value: 'ekg', text: 'EKG' },
-    { value: 'lfu', text: 'Lungefunktionsundersøgelse' }
+
+    // AP / Symptomkomplekser
+    { value: 'dyspnø', text: 'Dyspnø' }
   ],
   11: [{ value: 'paraklinik/paraclinical', text: 'Paraklinik/Paraclinical' }]
 };
