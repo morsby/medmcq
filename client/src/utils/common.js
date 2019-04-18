@@ -88,7 +88,8 @@ export const tags = {
   7: [
     { value: 'paraklinik', text: 'Paraklinik' },
     { value: 'radiologi', text: 'Radiologi' },
-    { value: 'journaloptagelse', text: 'Journaloptagelse' }
+    { value: 'journaloptagelse', text: 'Journaloptagelse' },
+    { value: 'forskning', text: 'Forskning' }
   ],
   8: [
     { value: 'radiologi', text: 'Radiologi' },
@@ -123,6 +124,8 @@ export const tags = {
     { value: 'forbrændinger', text: 'Forbrændinger, forfrysninger og kemiske skader' },
     { value: 'kosmetisk_kirurgi', text: 'Kosmetisk kirurgi' },
     { value: 'decubitus', text: 'Decubitus' },
+    { value: 'ar', text: 'Ar' },
+    { value: 'nerveskader', text: 'Nerveskader' },
 
     // Onkologi
     { value: 'strålebehandling', text: 'Strålebehandling' },
