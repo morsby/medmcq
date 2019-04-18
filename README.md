@@ -1,4 +1,4 @@
-# AU Medicin MCQ
+# AU medMCQ
 
 Dette er en webapp bygget som en Express-server med React ovenpå.
 
