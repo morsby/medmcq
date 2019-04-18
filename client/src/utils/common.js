@@ -40,7 +40,8 @@ export const specialer = {
     { value: 'almen_medicin', text: 'Almen medicin' },
     { value: 'klinisk_biokemi', text: 'Klinisk biokemi' },
     { value: 'klinisk_mikrobiologi', text: 'Klinisk mikrobiologi' },
-    { value: 'klinisk_immunologi', text: 'Klinisk immunologi' }
+    { value: 'klinisk_immunologi', text: 'Klinisk immunologi' },
+    { value: 'paraklinik', text: '' }
   ],
   8: [
     {
