@@ -38,9 +38,8 @@ app.use(cookieParser()); // read cookies (needed for auth)
 app.use(
   session({
     name: 'medmcqSession',
-    //secret: keys.session,
     keys: keys.keys,
-    maxAge: 24 * 60 * 60 * 1000 * 14 // 24*14 hours
+    maxAge: 14 * 24 * 60 * 60 * 1000 // 14 days
   })
 ); // session secret
 
