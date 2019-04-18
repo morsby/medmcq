@@ -5,6 +5,7 @@ import * as actions from '../../../actions';
 import marked from 'marked';
 
 import _ from 'lodash';
+import { specialer, tags } from '../../../utils/common';
 
 import { imageURL, breakpoints } from '../../../utils/common';
 import { subSupScript } from '../../../utils/quiz';
@@ -391,10 +392,16 @@ class Question extends Component {
           </Responsive>
           <Divider />
           <div>
-            <Translate id="questionMetadata.specialty" /> {question.specialty.join(', ')}
+            <Translate id="questionMetadata.specialty" />{' '}
+            {question.specialty
+              .map((spec) => _.find(specialer[question.semester], { value: spec }).text)
+              .join(' | ')}
           </div>
           <div>
-            <Translate id="questionMetadata.tags" /> {question.tags.join(', ')}
+            <Translate id="questionMetadata.tags" />{' '}
+            {question.tags
+              .map((tag) => _.find(tags[question.semester], { value: tag }).text)
+              .join(' | ')}
           </div>
           <div>
             <Translate id="questionMetadata.set" />{' '}
