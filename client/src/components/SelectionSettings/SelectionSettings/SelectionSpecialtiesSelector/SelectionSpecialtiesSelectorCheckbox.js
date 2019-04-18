@@ -16,6 +16,7 @@ const SelectionSpecialtiesSelectorCheckbox = ({
   onChange
 }) => {
   let antal = antalPerSpeciale === undefined ? 0 : antalPerSpeciale;
+  if (!speciale.text) return null;
   return (
     <Form.Group key={speciale.value}>
       <Form.Field>
