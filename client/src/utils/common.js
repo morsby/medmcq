@@ -91,7 +91,6 @@ export const tags = {
     { value: 'journaloptagelse', text: 'Journaloptagelse' }
   ],
   8: [
-    { value: 'paraklinik', text: 'Paraklinik' },
     { value: 'radiologi', text: 'Radiologi' },
     { value: 'farmakologi', text: 'Farmakologi' },
 
@@ -132,7 +131,7 @@ export const tags = {
     { value: 'hæmaturi', text: 'Hæmaturi' },
     { value: 'luts', text: 'LUTS' },
 
-    { value: 'duodenum_pancreas_milt', text: 'Duodenum, pancreas og milt (skal udfases)' }
+    { value: 'paraklinik', text: 'Paraklinik' }
   ],
   9: [
     // Paraklinik
