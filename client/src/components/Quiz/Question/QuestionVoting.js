@@ -37,9 +37,13 @@ const QuestionVoting = (props) => {
     });
     setChosenTags(userTags);
 
-    setTagMessage('');
-    setSpecialtyMessage('');
-    setSuggestTagMessage('');
+    return function cleanup() {
+      setTagMessage('');
+      setSpecialtyMessage('');
+      setSuggestTagMessage('');
+      setNewTag('');
+      setAddingNewTag('');
+    };
   }, [props.question]);
 
   const specialtyVote = async () => {
