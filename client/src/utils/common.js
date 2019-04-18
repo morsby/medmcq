@@ -104,6 +104,7 @@ export const tags = {
     { value: 'anallidelser', text: 'Anallidelser' },
     { value: 'mamma', text: 'Mamma' },
     { value: 'hernier', text: 'Hernier' },
+    { value: 'fedmekirurgi', text: 'Fedmekirurgi' },
 
     // Urologi
     { value: 'nyrer', text: 'Nyrer' },
@@ -121,6 +122,7 @@ export const tags = {
     { value: 'plastikkirurgisk_teknik', text: 'Plastikkirurgisk teknik' },
     { value: 'forbrændinger', text: 'Forbrændinger, forfrysninger og kemiske skader' },
     { value: 'kosmetisk_kirurgi', text: 'Kosmetisk kirurgi' },
+    { value: 'decubitus', text: 'Decubitus' },
 
     // Onkologi
     { value: 'strålebehandling', text: 'Strålebehandling' },
