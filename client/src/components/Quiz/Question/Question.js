@@ -392,18 +392,6 @@ class Question extends Component {
           </Responsive>
           <Divider />
           <div>
-            <Translate id="questionMetadata.specialty" />{' '}
-            {question.specialty
-              .map((spec) => _.find(specialer[question.semester], { value: spec }).text)
-              .join(' | ')}
-          </div>
-          <div>
-            <Translate id="questionMetadata.tags" />{' '}
-            {question.tags
-              .map((tag) => _.find(tags[question.semester], { value: tag }).text)
-              .join(' | ')}
-          </div>
-          <div>
             <Translate id="questionMetadata.set" />{' '}
             {question.examSeason === 'F' ? (
               <Translate id="questionMetadata.set_season.F" />
@@ -412,6 +400,23 @@ class Question extends Component {
             )}{' '}
             {question.examYear}
           </div>
+          {question.answer && (
+            <div>
+              <div>
+                <Translate id="questionMetadata.specialty" />{' '}
+                {question.specialty
+                  .map((spec) => _.find(specialer[question.semester], { value: spec }).text)
+                  .join(' | ')}
+              </div>
+              <div>
+                <Translate id="questionMetadata.tags" />{' '}
+                {question.tags
+                  .map((tag) => _.find(tags[question.semester], { value: tag }).text)
+                  .join(' | ')}
+              </div>
+            </div>
+          )}
+
           <Divider />
           <Button
             color={this.state.publicCommentsOpen ? 'green' : null}
