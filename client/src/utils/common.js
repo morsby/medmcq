@@ -125,6 +125,7 @@ export const tags = {
     // Onkologi
     { value: 'strålebehandling', text: 'Strålebehandling' },
     { value: 'onkologiske_bivirkninger', text: 'Onkologiske bivirkninger' },
+    { value: 'metastaser', text: 'Metastaser' },
     { value: 'stadieinddeling', text: 'Stadieinddeling' },
 
     // Almen medicin / Symptomkomplekser
@@ -132,7 +133,10 @@ export const tags = {
     { value: 'hæmaturi', text: 'Hæmaturi' },
     { value: 'luts', text: 'LUTS' },
 
-    { value: 'paraklinik', text: 'Paraklinik' }
+    // Gamle tags -- må ikke slettes
+    { value: 'paraklinik', text: '' },
+    { value: 'hudlidelser_sår', text: '' },
+    { value: 'duodenum_pancreas_milt', text: '' }
   ],
   9: [
     // Paraklinik
