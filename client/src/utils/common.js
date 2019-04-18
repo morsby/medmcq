@@ -125,6 +125,7 @@ export const tags = {
     // Onkologi
     { value: 'strålebehandling', text: 'Strålebehandling' },
     { value: 'onkologiske_bivirkninger', text: 'Onkologiske bivirkninger' },
+    { value: 'stadieinddeling', text: 'Stadieinddeling' },
 
     // Almen medicin / Symptomkomplekser
     { value: 'blod_i_afføringen', text: 'Blod i afføringen' },
