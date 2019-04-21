@@ -12,7 +12,7 @@ import { withLocalize, Translate } from 'react-localize-redux';
 
 import _ from 'lodash';
 
-import { Container, Header, Dropdown, Divider, Button, Message } from 'semantic-ui-react';
+import { Container, Header, Dropdown, Divider, Button, Message, Input } from 'semantic-ui-react';
 
 import SelectionNSelector from './SelectionSettings/SelectionNSelector';
 import SelectionSetSelector from './SelectionSettings/SelectionSetSelector/SelectionSetSelector';
@@ -25,18 +25,20 @@ import Footer from '../Layout/Footer';
 
 import { semestre, urls } from '../../utils/common';
 import { specialer as specialerCommon, tags as tagsCommon } from '../../utils/common';
+import { superUserRoles } from '../../utils/auth';
 
 /**
  * Hovedsiden til at håndtere alle valg af spørgsmål.
  * Props beskrives i bunden.
  */
 class SelectionMain extends Component {
-  state = { err: [] };
+  state = { err: [], search: '' };
 
   constructor(props) {
     super(props);
     this.props.fetchSettingsQuestions(this.props.settings.semester);
     this.props.addTranslation(selectionTranslations);
+    this.searchHandler = this.searchHandler.bind(this);
     this.onSettingsChange = this.onSettingsChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
@@ -76,6 +78,11 @@ class SelectionMain extends Component {
    * @param  {string} quizType Er der tale om en ny quiz eller fortsættelse
    *                           af en gammel?
    */
+
+  searchHandler(e, { value }) {
+    this.setState({ search: value });
+  }
+
   handleSubmit(quizType) {
     let err = [];
 
@@ -121,6 +128,12 @@ class SelectionMain extends Component {
 
     if (n < allowedNs.min) {
       err.push(this.props.translate('selection.errs.n_neg'));
+    }
+
+    // Hvis vi er ved at søge
+    if (this.state.search !== '') {
+      this.props.searchQuestion(this.props.settings.semester, this.state.search);
+      return this.props.history.push(urls.quiz);
     }
 
     // tjek for fejl, start eller ej
@@ -225,6 +238,19 @@ class SelectionMain extends Component {
           {user && type !== 'set' && (
             <SelectionUniqueSelector onlyNew={onlyNew} onChange={this.onSettingsChange} />
           )}
+
+          {user &&
+            _.indexOf(superUserRoles, user.role) !== -1 &&
+            type !== 'specialer' &&
+            type !== 'set' && (
+              <Input
+                value={this.state.search}
+                onChange={this.searchHandler}
+                fluid
+                placeholder="Søg... (Kun 1 ord!)"
+              />
+            )}
+
           {type === 'set' && (
             <SelectionSetSelector
               questions={questions}
@@ -325,7 +351,8 @@ SelectionMain.propTypes = {
    * Fra react-localize-redux
    */
   addTranslation: PropTypes.func,
-  translate: PropTypes.func
+  translate: PropTypes.func,
+  searchQuestion: PropTypes.func
 };
 
 function mapStateToProps(state) {

@@ -143,3 +143,13 @@ export const voteTags = (value, userId, id) => async (dispatch) => {
     payload: res.data
   });
 };
+
+export const searchQuestion = (semester, search) => async (dispatch) => {
+  const res = await axios.post('/api/questions/search', { search, semester });
+
+  dispatch({
+    type: types.FETCH_QUESTIONS,
+    payload: res.data,
+    questionType: 'random'
+  });
+};

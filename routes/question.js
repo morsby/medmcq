@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // Route for /api/questions
 
 const express = require('express');
@@ -99,6 +100,29 @@ router.get('/:id', async (req, res) => {
     const question = await Question.find({ _id: req.params.id });
     res.json(question);
   } catch (err) {
+    res.send(err);
+  }
+});
+
+router.post('/search', async (req, res) => {
+  const regex = new RegExp('(' + req.body.search + ')', 'i');
+  try {
+    const questions = await Question.find({
+      $and: [
+        {
+          $or: [
+            { question: { $in: [regex] } },
+            { answer1: { $in: [regex] } },
+            { answer2: { $in: [regex] } },
+            { answer3: { $in: [regex] } }
+          ]
+        },
+        { semester: req.body.semester }
+      ]
+    });
+    res.status(200).send(questions);
+  } catch (err) {
+    console.log('Error in question search', new Error(err));
     res.send(err);
   }
 });
