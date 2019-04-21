@@ -173,6 +173,7 @@ export const tags = {
     { value: 'endokarditis', text: 'Endokarditis' },
     { value: 'perikarditis', text: 'Perikarditis og tamponade' },
     { value: 'synkope', text: 'Synkope' },
+    { value: 'aortadissektion', text: 'Aortadissektion' },
 
     // Lungemedicin
     { value: 'lungecancer', text: 'Lungecancer' },
@@ -188,6 +189,7 @@ export const tags = {
     // Karkirurgi
     { value: 'underekstremitets-iskæmi', text: 'Underekstremitets-iskæmi' },
     { value: 'specielle_karsygdomme', text: 'Specielle karsygdomme' },
+    { value: 'venesygdomme', text: 'Venesygdomme' },
 
     // Thoraxkirurgi
     { value: 'pectus_carinatum_og_excavatum', text: 'Pectus carinatum og excavatum' },
