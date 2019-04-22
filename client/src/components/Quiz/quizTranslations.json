@@ -61,8 +61,8 @@
       "Writing a comment here will show your username as well as your comment to other users."
     ],
     "private_comment_info": [
-      "Kommentarer du skriver her vil ikke blive vist for andre brugere.",
-      "Comments you write here will not be shown to other users."
+      "Kommentarer du skriver her vil ikke blive vist for andre brugere. Vi opfordrer dog til, at du deler ud af din viden, så andre studerende kan få glæde af dine kommentarer. Hvis du kan, så skriv venligst en offentlig kommentar.",
+      "Comments you write here will not be shown to other users. However, we suggest that you share your knowledge with other students, in order for them to benefit from your comments. If possible, please write a public comment instead."
     ],
     "comment": ["Kommentér", "Comment"],
     "undo_edit": ["Fortryd ændring", "Undo edit"]
