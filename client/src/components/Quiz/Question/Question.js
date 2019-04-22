@@ -494,7 +494,7 @@ class Question extends Component {
             />
           )}
           {user && <Divider />}
-          {user && (
+          {user && question.answer && (
             <>
               <QuestionVoting question={question} user={user} />
             </>
