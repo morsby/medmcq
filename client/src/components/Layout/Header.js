@@ -85,7 +85,7 @@ class Header extends Component {
     }
 
     return (
-      <>
+      <Responsive minWidth={breakpoints.mobile}>
         <header>
           <h2 className={styles.onprint}>
             <Translate id="header.credit" />
@@ -106,7 +106,7 @@ class Header extends Component {
             </Menu.Menu>
           </Menu>
         </header>
-      </>
+      </Responsive>
     );
   }
 }
