@@ -5,7 +5,6 @@ import { Container } from 'semantic-ui-react';
 
 import { withLocalize, Translate } from 'react-localize-redux';
 import errorTranslation from './404Translation.json';
-import Footer from '../../Layout/Footer';
 
 /**
  * 404-page.
@@ -22,7 +21,6 @@ const ErrorPage = ({ addTranslation }) => {
           <Translate id="404.text" />
         </p>
       </Container>
-      <Footer />
     </div>
   );
 };

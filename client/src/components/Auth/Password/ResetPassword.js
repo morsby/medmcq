@@ -10,8 +10,6 @@ import { Container, Message, Button, Divider } from 'semantic-ui-react';
 import { Form, Field } from 'react-final-form';
 import { Translate } from 'react-localize-redux';
 
-import Footer from '../../Layout/Footer';
-
 /**
  * Component der nulstiller kodeordet hvis URL'ens token er gyldigt.
  * Props er resetPassword (fra redux) og token der hentes via URL.
@@ -101,7 +99,6 @@ class ResetPassword extends Component {
             )}
           </Translate>
         </Container>
-        <Footer />
       </div>
     );
   }

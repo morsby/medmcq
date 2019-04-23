@@ -1,16 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
 import { withRouter } from 'react-router';
 import { Grid, Icon, Container, Menu } from 'semantic-ui-react';
 import { urls } from '../../utils/common';
 
-import { Translate } from 'react-localize-redux';
+import { Translate, withLocalize } from 'react-localize-redux';
+import layoutTranslations from './layoutTranslations.json';
 
 /**
  * Footer component.
  */
-const Footer = ({ history }) => {
+const Footer = (props) => {
+  useEffect(() => {
+    props.addTranslation(layoutTranslations);
+  });
+
   const iconStyle = {
     float: 'none',
     marginRight: '3px'
@@ -25,8 +30,9 @@ const Footer = ({ history }) => {
   };
 
   const handleClick = (path) => {
-    history.push(path);
+    props.history.push(path);
   };
+
   return (
     <footer style={footerStyle}>
       <Container>
@@ -70,4 +76,4 @@ Footer.propTypes = {
   history: ReactRouterPropTypes.history
 };
 
-export default withRouter(Footer);
+export default withRouter(withLocalize(Footer));

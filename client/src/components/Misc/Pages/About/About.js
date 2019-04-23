@@ -6,7 +6,6 @@ import { withLocalize, Translate } from 'react-localize-redux';
 import aboutTranslations from './aboutTranslations';
 
 import { Container, Message, Divider } from 'semantic-ui-react';
-import Footer from '../../../Layout/Footer';
 
 /**
  * Component til siden "Om-siden".
@@ -43,7 +42,6 @@ const About = ({ addTranslation }) => {
         <Translate id="about.privacy.body" />
       </Container>
       <Divider hidden />
-      <Footer />
     </div>
   );
 };
