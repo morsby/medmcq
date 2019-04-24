@@ -87,10 +87,25 @@ export const specialer = {
 
 export const tags = {
   7: [
-    { value: 'paraklinik', text: 'Paraklinik' },
     { value: 'radiologi', text: 'Radiologi' },
+    { value: 'a-gas', text: 'A-gas' },
+
+    // Klinisk immunologi
+    { value: 'blodtransfusion', text: 'Blodtransfusion' },
+    { value: 'Transplantation', text: 'Transplantation' },
+    { value: 'Immundefekt', text: 'Immundefekter' },
+
+    // Klinisk biokemi
+    { value: 'blodprøvetolkning', text: 'Blodprøvetolkning' },
+    { value: 'koagulopati', text: 'Koagulopati' },
+
+    // Diverse
     { value: 'journaloptagelse', text: 'Journaloptagelse' },
-    { value: 'forskning', text: 'Forskning' }
+    { value: 'farmakologi', text: 'Farmakologi' },
+    { value: 'statistik', text: 'Statistik' },
+    { value: 'forskning', text: 'Forskning' },
+    { value: 'molekylærbiologisk_metode', text: 'Molekylærbiologisk metode' },
+    { value: 'paraklinik', text: 'Paraklinik' }
   ],
   8: [
     { value: 'radiologi', text: 'Radiologi' },
