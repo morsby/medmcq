@@ -17,7 +17,7 @@ const Sidebar = (props) => {
     });
 
     return window.removeEventListener('resize', setWidth(window.innerWidth));
-  });
+  }, [window.innerWidth]);
 
   useEffect(() => {
     setVisible(false);
