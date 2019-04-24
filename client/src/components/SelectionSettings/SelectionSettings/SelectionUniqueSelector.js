@@ -8,10 +8,11 @@ import { Translate } from 'react-localize-redux';
  * Component der giver mulighed for at vælge om der ønskes kun nye spørgsmål.
  */
 const SelectionUniqueSelector = ({ onlyNew, onChange }) => (
-  <div>
+  <>
     <Translate>
       {({ translate }) => (
         <Checkbox
+          style={{ marginLeft: '1rem' }}
           name="onlyNew"
           checked={onlyNew}
           onClick={onChange}
@@ -20,7 +21,7 @@ const SelectionUniqueSelector = ({ onlyNew, onChange }) => (
       )}
     </Translate>
     <Divider hidden />
-  </div>
+  </>
 );
 
 SelectionUniqueSelector.propTypes = {
