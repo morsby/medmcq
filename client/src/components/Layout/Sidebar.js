@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Sidebar as SemanticSidebar, Menu, Icon, Responsive, Image } from 'semantic-ui-react';
+import { Sidebar as SemanticSidebar, Menu, Icon, Image } from 'semantic-ui-react';
 import { breakpoints } from '../../utils/common';
 import styles from './Header.module.css';
 import logo from './logo/aulogo_hvid.png';
@@ -32,49 +32,46 @@ const Sidebar = (props) => {
   };
 
   return (
-    <>
-      <Responsive maxWidth={breakpoints.mobile}>
-        <SemanticSidebar.Pushable>
-          <SemanticSidebar
-            as={Menu}
-            animation="overlay"
-            icon="labeled"
-            inverted
-            color="blue"
-            onHide={() => setVisible(false)}
-            vertical
-            visible={visible}
-            width="thin"
-          >
-            <Menu.Item onClick={() => setVisible(false)}>
-              <Icon name="close" inverted size="large" />
-              <Translate id="header.close" />
-            </Menu.Item>
-            <Menu.Item onClick={() => props.history.push('/')}>
-              <Icon name="home" />
-              <Translate id="header.home" />
-            </Menu.Item>
-            <RightMenu />
-          </SemanticSidebar>
+    <SemanticSidebar.Pushable>
+      <SemanticSidebar
+        as={Menu}
+        animation="overlay"
+        icon="labeled"
+        inverted
+        color="blue"
+        onHide={() => setVisible(false)}
+        vertical
+        visible={visible}
+        width="thin"
+      >
+        <Menu.Item onClick={() => setVisible(false)}>
+          <Icon name="close" inverted size="large" />
+          <Translate id="header.close" />
+        </Menu.Item>
+        <Menu.Item onClick={() => props.history.push('/')}>
+          <Icon name="home" />
+          <Translate id="header.home" />
+        </Menu.Item>
+        <RightMenu />
+      </SemanticSidebar>
 
-          <SemanticSidebar.Pusher onClick={handlePusher} dimmed={visible}>
-            <Menu className={styles.noprint} inverted color="blue" attached borderless={true}>
-              <Menu.Item disabled={visible} onClick={() => setVisible(!visible)}>
-                <Icon name="bars" inverted size="large" />
+      <SemanticSidebar.Pusher onClick={handlePusher} dimmed={visible}>
+        {width < breakpoints.mobile && (
+          <Menu className={styles.noprint} inverted color="blue" attached borderless={true}>
+            <Menu.Item disabled={visible} onClick={() => setVisible(!visible)}>
+              <Icon name="bars" inverted size="large" />
+            </Menu.Item>
+            <Menu.Menu position="right">
+              <Menu.Item onClick={() => props.history.push('/')}>
+                <Image src={logo} style={{ height: '30px' }} />
               </Menu.Item>
-              <Menu.Menu position="right">
-                <Menu.Item onClick={() => props.history.push('/')}>
-                  <Image src={logo} style={{ height: '30px' }} />
-                </Menu.Item>
-              </Menu.Menu>
-            </Menu>
+            </Menu.Menu>
+          </Menu>
+        )}
 
-            {props.children}
-          </SemanticSidebar.Pusher>
-        </SemanticSidebar.Pushable>
-      </Responsive>
-      {width > breakpoints.mobile && <>{props.children}</>}
-    </>
+        {props.children}
+      </SemanticSidebar.Pusher>
+    </SemanticSidebar.Pushable>
   );
 };
 

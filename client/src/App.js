@@ -66,11 +66,11 @@ class App extends Component {
     return (
       <BrowserRouter>
         <ScrollToTop>
-          <div id="container">
+          <div style={{ minHeight: '100vh', display: 'flex', flexFlow: 'column nowrap' }}>
             <Header />
-            <Sidebar>
-              <NewVersionMessage />
-              <div id="main-content">
+            <div style={{ flex: 1 }}>
+              <Sidebar>
+                <NewVersionMessage />
                 <Switch>
                   <Route path={urls.about} component={About} />
                   <Route path={urls.contact} component={Contact} />
@@ -86,9 +86,9 @@ class App extends Component {
                   <Route exact path="/" component={Selection} />
                   <Route component={ErrorPage} />
                 </Switch>
-              </div>
-              <Footer />
-            </Sidebar>
+              </Sidebar>
+            </div>
+            <Footer />
           </div>
         </ScrollToTop>
       </BrowserRouter>
