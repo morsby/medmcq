@@ -45,7 +45,7 @@ const RightMenu = (props) => {
           </strong>
         </Menu.Item>
         <Menu.Item>
-          <Button inverted onClick={() => onNavigation('logout')}>
+          <Button inverted onClick={() => (window.location.href = '/api/auth/logout')}>
             <Translate id="header.logout" />
           </Button>
         </Menu.Item>
