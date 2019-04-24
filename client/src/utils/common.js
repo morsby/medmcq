@@ -106,14 +106,16 @@ export const tags = {
     { value: 'anallidelser', text: 'Anallidelser' },
     { value: 'mamma', text: 'Mamma' },
     { value: 'hernier', text: 'Hernier' },
-    { value: 'fedmekirurgi', text: 'Fedmekirurgi' },
+    { value: 'fedmekirurgi', text: 'Bariatrisk kirurgi' },
+    { value: 'endokrinologi', text: 'Endokrinologi' },
 
     // Urologi
     { value: 'nyrer', text: 'Nyrer' },
     { value: 'urinveje', text: 'Urinveje' },
     { value: 'blære', text: 'Blære' },
+    { value: 'neuromuskulær_blæredysfunktion', text: 'Neuromuskulær blæredysfunktion' },
     { value: 'prostata', text: 'Prostata' },
-    { value: 'testis', text: 'Testis' },
+    { value: 'testis', text: 'Testis, epididymis og scrotum' },
     { value: 'penis', text: 'Penis' },
 
     // Andet
@@ -127,6 +129,7 @@ export const tags = {
     { value: 'decubitus', text: 'Decubitus' },
     { value: 'ar', text: 'Ar' },
     { value: 'nerveskader', text: 'Nerveskader' },
+    { value: 'kraniofaciale_misdannelser', text: 'Kraniofaciale misdannelser' },
 
     // Onkologi
     { value: 'strålebehandling', text: 'Strålebehandling' },
@@ -136,6 +139,7 @@ export const tags = {
 
     // Almen medicin / Symptomkomplekser
     { value: 'blod_i_afføringen', text: 'Blod i afføringen' },
+    { value: 'gi_blødning', text: 'GI-blødning' },
     { value: 'hæmaturi', text: 'Hæmaturi' },
     { value: 'luts', text: 'LUTS' },
 
@@ -186,6 +190,7 @@ export const tags = {
     { value: 'pneumothorax', text: 'Pneumothorax' },
     { value: 'sarkoidose', text: 'Sarkoidose' },
     { value: 'allergi', text: 'Allergi' },
+    { value: 'allergisk_alveolitis', text: 'Allergisk alveolitis' },
 
     // Karkirurgi
     { value: 'underekstremitets-iskæmi', text: 'Underekstremitets-iskæmi' },
@@ -195,6 +200,7 @@ export const tags = {
     // Thoraxkirurgi
     { value: 'pectus_carinatum_og_excavatum', text: 'Pectus carinatum og excavatum' },
     { value: 'Thoraxtraumer', text: 'Thoraxtraumer' },
+    { value: 'oesophagus', text: 'Oesophagus' },
 
     // AP / Symptomkomplekser
     { value: 'dyspnø', text: 'Dyspnø' }
