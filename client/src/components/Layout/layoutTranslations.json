@@ -5,7 +5,8 @@
     "login": ["Log ind", "Login"],
     "logout": ["Log ud", "Logout"],
     "home": ["Forside", "Home"],
-    "credit": ["Spørgsmål er printet fra medMCQ", "Questions have been printed using medMCQ"]
+    "credit": ["Spørgsmål er printet fra medMCQ", "Questions have been printed using medMCQ"],
+    "close": ["Luk", "Close"]
   },
   "footer": {
     "about_link": ["Om siden", "About this site"],

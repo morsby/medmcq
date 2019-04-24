@@ -5,6 +5,7 @@ import styles from './Header.module.css';
 import logo from './logo/aulogo_hvid.png';
 import RightMenu from './Menus/RightMenu';
 import { withRouter } from 'react-router';
+import { Translate } from 'react-localize-redux';
 
 const Sidebar = (props) => {
   const [visible, setVisible] = useState(false);
@@ -39,7 +40,7 @@ const Sidebar = (props) => {
             animation="overlay"
             icon="labeled"
             inverted
-            color="cyan"
+            color="blue"
             onHide={() => setVisible(false)}
             vertical
             visible={visible}
@@ -47,9 +48,11 @@ const Sidebar = (props) => {
           >
             <Menu.Item onClick={() => setVisible(false)}>
               <Icon name="close" inverted size="large" />
+              <Translate id="header.close" />
             </Menu.Item>
             <Menu.Item onClick={() => props.history.push('/')}>
               <Icon name="home" />
+              <Translate id="header.home" />
             </Menu.Item>
             <RightMenu />
           </SemanticSidebar>
