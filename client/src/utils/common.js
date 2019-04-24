@@ -142,7 +142,8 @@ export const tags = {
     // Gamle tags -- må ikke slettes
     { value: 'paraklinik', text: '' },
     { value: 'hudlidelser_sår', text: '' },
-    { value: 'duodenum_pancreas_milt', text: '' }
+    { value: 'duodenum_pancreas_milt', text: '' },
+    { value: 'teoretisk_spørgsmål', text: '' }
   ],
   9: [
     // Paraklinik
