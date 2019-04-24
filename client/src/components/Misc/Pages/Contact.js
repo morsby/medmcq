@@ -9,7 +9,6 @@ import contactTranslations from './contactTranslations';
 import marked from 'marked';
 
 import { Container, Form, Message, Divider } from 'semantic-ui-react';
-import Footer from '../../Layout/Footer';
 
 /**
  * Component til siden "Kontakt".
@@ -137,7 +136,6 @@ class Contact extends Component {
             </Translate>
           )}
         </Container>
-        <Footer />
       </div>
     );
   }

@@ -6,8 +6,6 @@ import * as actions from '../../../actions';
 import { Container, Message, Form, Button } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 
-import Footer from '../../Layout/Footer';
-
 /**
  * Component der viser formular til at bede om nyt password
  * @extends Component
@@ -52,7 +50,6 @@ class ForgotPassword extends Component {
             <Button type="submit">Send email</Button>
           </Form>
         </Container>
-        <Footer />
       </div>
     );
   }

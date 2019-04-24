@@ -3,7 +3,6 @@ import React from 'react';
 import { Container } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 
-import Footer from '../../Layout/Footer';
 import LoginForm from './LoginForm';
 
 /**
@@ -18,7 +17,6 @@ const Login = () => {
         </h3>
         <LoginForm />
       </Container>
-      <Footer />
     </div>
   );
 };

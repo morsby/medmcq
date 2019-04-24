@@ -3,6 +3,7 @@
     "greeting": ["Velkommen, ${user}", "Welcome, ${user}"],
     "profile": ["Profil", "Profile"],
     "login": ["Log ind", "Login"],
+    "logout": ["Log ud", "Logout"],
     "home": ["Forside", "Home"],
     "credit": ["Spørgsmål er printet fra medMCQ", "Questions have been printed using medMCQ"]
   },
