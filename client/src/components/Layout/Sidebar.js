@@ -22,20 +22,17 @@ const Sidebar = (props) => {
     setVisible(false);
   }, [window.location.href]);
 
+  const handlePusher = () => {
+    if (visible) {
+      return setVisible(false);
+    } else {
+      return null;
+    }
+  };
+
   return (
     <>
       <Responsive maxWidth={breakpoints.mobile}>
-        <Menu className={styles.noprint} inverted color="blue" attached borderless={true}>
-          <Menu.Item disabled={visible} onClick={() => setVisible(!visible)}>
-            <Icon name="bars" inverted size="large" />
-          </Menu.Item>
-          <Menu.Menu position="right">
-            <Menu.Item onClick={() => props.history.push('/')}>
-              <Image src={logo} style={{ height: '30px' }} />
-            </Menu.Item>
-          </Menu.Menu>
-        </Menu>
-
         <SemanticSidebar.Pushable>
           <SemanticSidebar
             as={Menu}
@@ -48,13 +45,27 @@ const Sidebar = (props) => {
             visible={visible}
             width="thin"
           >
+            <Menu.Item onClick={() => setVisible(false)}>
+              <Icon name="close" inverted size="large" />
+            </Menu.Item>
             <Menu.Item onClick={() => props.history.push('/')}>
               <Icon name="home" />
             </Menu.Item>
             <RightMenu />
           </SemanticSidebar>
 
-          <SemanticSidebar.Pusher onClick={() => setVisible(false)} dimmed={visible}>
+          <SemanticSidebar.Pusher onClick={handlePusher} dimmed={visible}>
+            <Menu className={styles.noprint} inverted color="blue" attached borderless={true}>
+              <Menu.Item disabled={visible} onClick={() => setVisible(!visible)}>
+                <Icon name="bars" inverted size="large" />
+              </Menu.Item>
+              <Menu.Menu position="right">
+                <Menu.Item onClick={() => props.history.push('/')}>
+                  <Image src={logo} style={{ height: '30px' }} />
+                </Menu.Item>
+              </Menu.Menu>
+            </Menu>
+
             {props.children}
           </SemanticSidebar.Pusher>
         </SemanticSidebar.Pushable>
