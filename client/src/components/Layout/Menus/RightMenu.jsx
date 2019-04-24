@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { withLocalize, Translate } from 'react-localize-redux';
 import { Menu, Icon, Button } from 'semantic-ui-react';
 import { withRouter } from 'react-router';
@@ -6,7 +6,6 @@ import { urls } from '../../../utils/common';
 import { connect } from 'react-redux';
 import * as actions from '../../../actions';
 import Flag from 'react-flagkit';
-import layoutTranslations from '../layoutTranslations.json';
 
 const RightMenu = (props) => {
   const { user, history, languages } = props;

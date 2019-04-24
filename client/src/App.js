@@ -40,8 +40,7 @@ import ResetPassword from './components/Auth/Password/ResetPassword';
 import NewVersionMessage from './components/Misc/Pages/About/NewVersion/NewVersionMessage';
 
 import * as actions from './actions';
-import { urls, breakpoints } from './utils/common';
-import { Responsive } from 'semantic-ui-react';
+import { urls } from './utils/common';
 import Sidebar from './components/Layout/Sidebar';
 import Footer from './components/Layout/Footer';
 
