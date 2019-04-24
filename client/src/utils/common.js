@@ -105,7 +105,7 @@ export const tags = {
     { value: 'statistik', text: 'Statistik' },
     { value: 'forskning', text: 'Forskning' },
     { value: 'molekylærbiologisk_metode', text: 'Molekylærbiologisk metode' },
-    { value: 'paraklinik', text: 'Paraklinik' }
+    { value: 'paraklinik', text: '' }
   ],
   8: [
     { value: 'radiologi', text: 'Radiologi' },
