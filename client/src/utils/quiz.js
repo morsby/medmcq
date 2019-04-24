@@ -45,8 +45,6 @@ export const calculateResults = (questions) => {
 
   if (answered.length === 0) {
     res = { status: false };
-  } else if (answered.length > 0 && answered.length < questions.length) {
-    res = { status: 'in_progress' };
   } else {
     let correct = 0;
     answered.map((question) => {
@@ -55,8 +53,8 @@ export const calculateResults = (questions) => {
     });
 
     res = {
-      status: 'done',
-      n: questions.length,
+      status: true,
+      n: answered.length,
       correct,
       percentage: `${Math.round((correct / answered.length) * 10000) / 100}%`
     };
