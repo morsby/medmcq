@@ -405,13 +405,13 @@ class Question extends Component {
               <div>
                 <Translate id="questionMetadata.specialty" />{' '}
                 {question.specialty
-                  .map((spec) => _.find(specialer[question.semester], { value: spec }).text)
+                  .map((spec) => (_.find(specialer[question.semester], { value: spec }) || {}).text)
                   .join(' | ')}
               </div>
               <div>
                 <Translate id="questionMetadata.tags" />{' '}
                 {question.tags
-                  .map((tag) => _.find(tags[question.semester], { value: tag }).text)
+                  .map((tag) => (_.find(tags[question.semester], { value: tag }) || {}).text)
                   .join(' | ')}
               </div>
             </div>
