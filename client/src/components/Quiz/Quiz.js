@@ -14,8 +14,6 @@ import Question from './Question/Question';
 import QuizNavigator from './QuizNavigator';
 import QuizSummary from './QuizSummary';
 
-import Footer from '../Layout/Footer';
-
 import { smoothScroll } from '../../utils/quiz';
 import { urls } from '../../utils/common';
 
@@ -208,7 +206,6 @@ class QuizMain extends Component {
             clickHandler={this.onChangeQuestion}
           />
         </div>
-        <Footer />
       </div>
     );
   }

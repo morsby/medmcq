@@ -3,7 +3,6 @@ import React from 'react';
 import { Container, Message } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 
-import Footer from '../../Layout/Footer';
 import SignupForm from './SignupForm';
 
 /**
@@ -26,7 +25,6 @@ const Signup = () => {
           </Message.Content>
         </Message>
       </Container>
-      <Footer />
     </div>
   );
 };

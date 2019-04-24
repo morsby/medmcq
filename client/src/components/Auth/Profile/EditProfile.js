@@ -8,8 +8,6 @@ import { Container, Message, Button, Divider } from 'semantic-ui-react';
 import { Form, Field } from 'react-final-form';
 import { Translate } from 'react-localize-redux';
 
-import Footer from '../../Layout/Footer';
-
 // TODO: Autocomplete
 
 /**
@@ -153,7 +151,6 @@ class EditProfile extends Component {
             )}
           </Translate>
         </Container>
-        <Footer />
       </div>
     );
   }

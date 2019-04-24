@@ -21,8 +21,6 @@ import SelectionTypeSelector from './SelectionSettings/SelectionTypeSelector';
 import SelectionUniqueSelector from './SelectionSettings/SelectionUniqueSelector';
 import SelectionMessage from './SelectionMessage';
 
-import Footer from '../Layout/Footer';
-
 import { semestre, urls } from '../../utils/common';
 import { specialer as specialerCommon, tags as tagsCommon } from '../../utils/common';
 import { superUserRoles } from '../../utils/auth';
@@ -301,7 +299,6 @@ class SelectionMain extends Component {
           </Message>
           <Divider hidden />
         </Container>
-        <Footer />
       </div>
     );
   }

@@ -12,8 +12,6 @@ import _ from 'lodash';
 import { Container, Tab, Button, Divider } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 
-import Footer from '../../Layout/Footer';
-
 import ProfileAnswerDetails from './ProfileAnswerDetails';
 
 /**
@@ -182,7 +180,6 @@ class Profile extends Component {
             />
           )}
         </Container>
-        <Footer />
       </div>
     );
   }
