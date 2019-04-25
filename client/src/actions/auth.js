@@ -18,6 +18,7 @@ export const signup = (post) => async (dispatch) => {
 
 export const login = (post) => async (dispatch) => {
   let response;
+
   await axios
     .post('/api/auth', post)
     .then(function(res) {
@@ -35,7 +36,7 @@ export const login = (post) => async (dispatch) => {
 };
 
 export const fetchUser = () => async (dispatch) => {
-  let res = await axios.get('/api/user/me');
+  let res = await axios.get('/api/auth');
 
   dispatch({ type: types.AUTH_CURRENT_USER, payload: res.data });
 };

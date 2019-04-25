@@ -13,14 +13,15 @@
     "server": "cd server && npm run dev",
     "client": "npm run genversion && cd client && npm start",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "install": "git pull && npm install && cd client && npm install",
-    "build": "npm run install && npm run genversion && cd client && npm run build",
+    "update": "git pull && npm install && cd client && npm install",
+    "build": "npm run update && npm run genversion && cd client && npm run build",
     "genversion": "genversion -e version.js && mv version.js client/src/"
   },
   "author": "Morsby",
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
-    "concurrently": "^3.6.1"
+    "concurrently": "^3.6.1",
+    "genversion": "^2.1.1"
   }
 }
