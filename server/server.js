@@ -64,8 +64,10 @@ app.use(
   })
 );
 
-app.get("/", function(req, res) {
-  res.send("../client/build/index.html");
+/* Catch all */
+const path = require("path");
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "..", "client", "build", "index.html"));
 });
 
 // START SERVEREN
