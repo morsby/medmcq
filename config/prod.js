@@ -5,6 +5,6 @@ module.exports = {
   cloudinary_api_key: process.env.CLOUDINARY_API_KEY,
   cloudinary_api_secret: process.env.CLOUDINARY_API_SECRET,
   session: process.env.SESSION,
-  keys: Keygrip(process.env.SESSION_SECRETS),
+  keys: Keygrip(process.env.SESSION_SECRETS.split(' ')),
   sendgrid_api_key: process.env.SENDGRID_API_KEY
 };
