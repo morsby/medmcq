@@ -7,7 +7,6 @@
 --------------------*/
 
 @fontName          : 'Lato';
-@fontSmoothing     : antialiased;
 
 @headerFont        : @fontName, 'Helvetica Neue', Arial, Helvetica, sans-serif;
 @pageFont          : @fontName, 'Helvetica Neue', Arial, Helvetica, sans-serif;
@@ -231,7 +230,7 @@
 @olive            : #B5CC18;
 @green            : #21BA45;
 @teal             : #00B5AD;
-@blue             : #003d73;
+@blue             : #2185D0;
 @violet           : #6435C9;
 @purple           : #A333C8;
 @pink             : #E03997;
@@ -781,10 +780,10 @@
 
 
 /* Responsive */
-@largestMobileScreen : (@tabletBreakpoint - 1px);
-@largestTabletScreen : (@computerBreakpoint - 1px);
-@largestSmallMonitor : (@largeMonitorBreakpoint - 1px);
-@largestLargeMonitor : (@widescreenMonitorBreakpoint - 1px);
+@largestMobileScreen : (@tabletBreakpoint - 0.01px);
+@largestTabletScreen : (@computerBreakpoint - 0.01px);
+@largestSmallMonitor : (@largeMonitorBreakpoint - 0.01px);
+@largestLargeMonitor : (@widescreenMonitorBreakpoint - 0.01px);
 
 
 /*-------------------

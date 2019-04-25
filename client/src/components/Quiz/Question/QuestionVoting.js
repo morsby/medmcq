@@ -44,7 +44,7 @@ const QuestionVoting = (props) => {
       setNewTag('');
       setAddingNewTag('');
     };
-  }, [props.question]);
+  }, [props.question, props.user]);
 
   const specialtyVote = async () => {
     await props.voteSpecialty(chosenSpecialties, props.user._id, props.question._id);

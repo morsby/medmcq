@@ -150,6 +150,14 @@ export default {
     header: ['Hvad er der sket på siden?', 'What has happened to the site?'],
     body: [
       `
+  <h3>v.0.2.2 - 2019-04-25</h3>
+  <ul>
+      <li>
+          Der kan nu søges efter spørgsmål (med én frase). Søg efter 
+          ordstammen for at få flest resultater ("hjerte" vil også matche 
+          "hjerte<em>r</em>" og "hjerte<em>sygdomme</em>").
+      </li>
+  </ul>
 <h3>v.0.2.1 - 2019-04-12</h3>
 <ul>
     <li>
@@ -220,6 +228,13 @@ export default {
   </li>
 </ul>`,
       `
+  <h3>v.0.2.2 - 2019-04-25</h3>
+  <ul>
+    <li>
+        You can search for questions (by one phrase). Search for the base of the 
+        word for most results ("child" will also match "child<em>ren</em>").
+    </li>
+  </ul>
   <h3>v.0.2.1 - 2019-04-12</h3>
   <ul>
       <li>

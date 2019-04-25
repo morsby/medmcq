@@ -4,7 +4,7 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
-import { allowedNs } from '../../utils/common';
+import { allowedNs, breakpoints } from '../../utils/common';
 import { calculateResults } from '../../utils/quiz';
 
 import selectionTranslations from './selectionTranslations.json';
@@ -23,7 +23,6 @@ import SelectionMessage from './SelectionMessage';
 
 import { semestre, urls } from '../../utils/common';
 import { specialer as specialerCommon, tags as tagsCommon } from '../../utils/common';
-import { superUserRoles } from '../../utils/auth';
 
 /**
  * Hovedsiden til at håndtere alle valg af spørgsmål.
@@ -205,9 +204,10 @@ class SelectionMain extends Component {
     return (
       <div className="flex-container">
         <Container className="content">
-          <Header as="h1">
-            <Translate id="selection.static.header" />
+          <Header as="h1" style={{ textAlign: 'center' }}>
+            MedMcq
           </Header>
+          <Divider />
           <Header as="h3">
             <Translate id="selection.static.choose_semester" />
           </Header>
@@ -226,28 +226,33 @@ class SelectionMain extends Component {
           <Divider hidden />
 
           {type !== 'set' && (
-            <SelectionNSelector
-              n={Number(n)}
-              onChange={this.onSettingsChange}
-              total={questions.length}
-              semester={semester}
-            />
-          )}
-          {user && type !== 'set' && (
-            <SelectionUniqueSelector onlyNew={onlyNew} onChange={this.onSettingsChange} />
+            <>
+              <SelectionNSelector
+                n={Number(n)}
+                onChange={this.onSettingsChange}
+                total={questions.length}
+                semester={semester}
+              />
+              <Divider hidden />
+              <Translate id="selectionNSelector.total_n" data={{ n: questions.length }} />
+              <Divider />
+            </>
           )}
 
-          {user &&
-            _.indexOf(superUserRoles, user.role) !== -1 &&
-            type !== 'specialer' &&
-            type !== 'set' && (
+          {type !== 'specialer' && type !== 'set' && (
+            <>
+              <h3>
+                <Translate id="search.title" />
+              </h3>
               <Input
                 value={this.state.search}
                 onChange={this.searchHandler}
                 fluid
-                placeholder="Søg... (Kun 1 ord!)"
+                placeholder={this.props.translate('search.placeholder')}
               />
-            )}
+              <Divider />
+            </>
+          )}
 
           {type === 'set' && (
             <SelectionSetSelector
@@ -261,14 +266,17 @@ class SelectionMain extends Component {
           )}
 
           {type === 'specialer' && (
-            <SelectionSpecialtiesSelector
-              semester={semester}
-              valgteSpecialer={specialer}
-              antalPerSpeciale={questionsBySpecialty}
-              valgteTags={tags}
-              antalPerTag={questionsByTag}
-              onChange={this.onSettingsChange}
-            />
+            <>
+              <SelectionSpecialtiesSelector
+                semester={semester}
+                valgteSpecialer={specialer}
+                antalPerSpeciale={questionsBySpecialty}
+                valgteTags={tags}
+                antalPerTag={questionsByTag}
+                onChange={this.onSettingsChange}
+              />
+              <Divider hidden />
+            </>
           )}
 
           {this.state.err.length > 0 && (
@@ -278,8 +286,9 @@ class SelectionMain extends Component {
               })}
             </Message>
           )}
-          <SelectionMessage user={user} type={type} />
           <Button
+            color="green"
+            basic
             onClick={() => this.handleSubmit('new')}
             disabled={
               (antalValgte < 1 && type === 'specialer') || n < allowedNs.min || n > allowedNs.max
@@ -287,7 +296,13 @@ class SelectionMain extends Component {
           >
             Start!
           </Button>
-          <Divider hidden />
+          {window.innerWidth < breakpoints.mobile && <Divider hidden />}
+          {user && type !== 'set' && (
+            <SelectionUniqueSelector onlyNew={onlyNew} onChange={this.onSettingsChange} />
+          )}
+
+          <SelectionMessage user={user} type={type} />
+
           {calculateResults(this.props.questions).status === 'in_progress' && (
             <Button onClick={() => this.handleSubmit('cont')}>
               <Translate id="selection.static.continue_quiz" />

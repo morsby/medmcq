@@ -87,10 +87,6 @@ class SelectionNSelector extends Component {
             </Grid.Row>
           </Grid>
         </div>
-
-        <Divider hidden />
-        <Translate id="selectionNSelector.total_n" data={{ n: total }} />
-        <Divider hidden />
       </Form>
     );
   }

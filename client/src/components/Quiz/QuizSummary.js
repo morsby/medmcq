@@ -26,7 +26,7 @@ const QuizSummary = ({ questions, clickHandler }) => {
           <Card.Header>
             <Translate id="quizSummary.header" />
           </Card.Header>
-          {results.status === 'done' && (
+          {results.status && (
             <Card.Content>
               <Translate id="quizSummary.results" data={{ ...results }} />
             </Card.Content>

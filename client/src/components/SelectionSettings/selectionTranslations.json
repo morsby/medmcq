@@ -1,7 +1,6 @@
 {
   "selection": {
     "static": {
-      "header": ["medMCQ", "medMCQ"],
       "choose_semester": ["Vælg et semester", "Choose a semester"],
       "continue_quiz": ["Fortsæt med igangværende spørgsmål", "Continue with previous questions"],
       "front-disclaimer": [
@@ -95,5 +94,9 @@
       "Bemærk, at såfremt de valgte specialer til sammen indeholder færre spørgsmål end det ønskede antal, får du blot alle tilgængelige.",
       "Please note that if the selected specialties combined contain fewer than the requested number of questions, you will receieve all available questions."
     ]
+  },
+  "search": {
+    "title": ["Søg", "Search"],
+    "placeholder": ["Ét ord eller sammenhængende sætning.", "One word or combined sentence."]
   }
 }

@@ -150,21 +150,22 @@ class Profile extends Component {
     return (
       <div className="flex-container">
         <Container className="content">
-          <h2>{user.username}</h2>
-          <Button basic color="yellow" onClick={() => this.handleNavigation('editProfile')}>
-            <Translate id="profile.buttons.edit_profile" />
-          </Button>
-          <Button
-            floated="right"
-            negative
-            onClick={() => (window.location.href = '/api/auth/logout')}
-          >
-            <Translate id="profile.buttons.logout" />
-          </Button>
+          <h2 style={{ textAlign: 'center' }}>
+            <Translate
+              id="profile.header"
+              data={{ username: user.username[0].toUpperCase() + user.username.substring(1) }}
+            />
+          </h2>
+          <Divider />
+          <div style={{ textAlign: 'center' }}>
+            <Button basic color="yellow" onClick={() => this.handleNavigation('editProfile')}>
+              <Translate id="profile.buttons.edit_profile" />
+            </Button>
+          </div>
           <Divider hidden />
-          <p>
+          <h3 style={{ textAlign: 'center' }}>
             <Translate id="profile.subheader" />
-          </p>
+          </h3>
           <Tab
             panes={panes}
             activeIndex={this.state.activeTab}
