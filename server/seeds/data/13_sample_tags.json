@@ -1,0 +1,20 @@
+[
+  { "name": "Paraklinik", "semester_name": "Inf" },
+  { "name": "Radiologi", "semester_name": "Inf" },
+  { "name": "Paraklinik", "semester_name": "Abd" },
+  { "name": "Teoretisk spørgsmål", "semester_name": "Abd" },
+  {
+    "name": "Øsophagus, ventrikel og duodenum",
+    "semester_name": "Abd"
+  },
+  { "name": "Duodenum, pancreas og milt", "semester_name": "Abd" },
+  { "name": "Leversygdomme", "semester_name": "Abd" },
+  { "name": "Tyndtarm, colon og rectum", "semester_name": "Abd" },
+  { "name": "Børn", "semester_name": "Abd" },
+  { "name": "Anallidelser", "semester_name": "Abd" },
+  { "name": "Hudlidelser og sår", "semester_name": "Abd" },
+  { "name": "Paraklinik", "semester_name": "HLK" },
+  { "name": "EKG", "semester_name": "HLK" },
+  { "name": "Lungefunktionsundersøgelse", "semester_name": "HLK" },
+  { "name": "Paraklinik/Paraclinical", "semester_name": "GOP" }
+]

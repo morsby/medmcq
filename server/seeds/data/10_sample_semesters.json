@@ -1,0 +1,14 @@
+[
+  { "value": 7, "name": "Inflammation", "short_name": "Inf" },
+  { "value": 8, "name": "Abdomen", "short_name": "Abd" },
+  {
+    "value": 9,
+    "name": "Hjerte-lunge-kar",
+    "short_name": "HLK"
+  },
+  {
+    "value": 11,
+    "name": "Familie-samfund / GOP",
+    "short_name": "GOP"
+  }
+]

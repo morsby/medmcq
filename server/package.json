@@ -1,0 +1,70 @@
+{
+  "name": "medmcq-sql",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "babel-watch server.js",
+    "lint": "eslint . --color",
+    "lint:f": "eslint --fix . --color",
+    "p": "prettier --write **/*.js",
+    "test": "NODE_ENV=test jest",
+    "test:w": "jest --watch-all",
+    "reset": "knex migrate:rollback --env=test && knex migrate:latest --env=test && knex seed:run --env=test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/morsby/medmcq.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/morsby/medmcq/issues"
+  },
+  "homepage": "https://github.com/morsby/medmcq#readme",
+  "dependencies": {
+    "@babel/runtime": "^7.4.3",
+    "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.4",
+    "cookie-session": "^1.3.3",
+    "express": "^4.16.4",
+    "express-graphql": "^0.8.0",
+    "graphql": "^14.2.1",
+    "helmet": "^3.16.0",
+    "keygrip": "^1.0.3",
+    "knex": "^0.16.5",
+    "knex-migrate": "^1.7.2",
+    "lodash": "^4.17.11",
+    "mysql": "^2.17.0",
+    "objection": "^1.6.8",
+    "objection-db-errors": "^1.1.1",
+    "objection-graphql": "^0.4.4",
+    "objection-password": "^2.0.0",
+    "objection-visibility": "^0.4.0",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "supertest": "^4.0.2",
+    "swagger-jsdoc": "^3.2.9"
+  },
+  "devDependencies": {
+    "@babel/plugin-transform-runtime": "^7.4.3",
+    "@babel/preset-env": "^7.4.3",
+    "babel-core": "^6.26.3",
+    "babel-watch": "^7.0.0",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.1.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-promise": "^4.1.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "jest": "^24.7.1",
+    "prettier": "^1.17.0",
+    "webpack": "^4.30.0"
+  },
+  "jest": {
+    "testEnvironment": "node"
+  }
+}
