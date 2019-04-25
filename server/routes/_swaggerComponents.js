@@ -135,6 +135,39 @@
  *          $ref: "#/components/schemas/UserTagVote"
  */
 
+// UserAnswers
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *      UserAnswer:
+ *        required:
+ *          - id
+ *          - userId
+ *          - questionId
+ *          - answer
+ *          - correctAnswers
+ *        properties:
+ *          id:
+ *            type: integer
+ *          userId:
+ *            type: integer
+ *          questionId:
+ *            type: integer
+ *          answer:
+ *            type: integer
+ *            example: 1
+ *          correctAnswers:
+ *            type: array
+ *            items:
+ *              type: integer
+ *              example: 1
+ *      UserAnswers:
+ *        type: array
+ *        items:
+ *          $ref: "#/components/schemas/UserAnswer"
+ */
+
 /**
  * Function to create a reponse matching the API spec
  * @param  {string} type      A short description for the response, e.g. LoginSuccess

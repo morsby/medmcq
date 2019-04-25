@@ -8,7 +8,7 @@ const router = express.Router();
  * /auth:
  *   get:
  *     summary: Get the authenticated user
- *     description: Returns the currently authencitaced user
+ *     description: Returns the currently authenciticated user or `null`.
  *     tags:
  *       - Auth
  *     responses:
@@ -25,8 +25,8 @@ const router = express.Router();
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.get("/", permit(), async (req, res) => {
-  res.json(req.user);
+router.get("/", async (req, res) => {
+  res.json(req.user || null);
 });
 
 /**

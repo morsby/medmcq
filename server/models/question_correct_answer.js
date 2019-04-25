@@ -30,6 +30,14 @@ class QuestionCorrectAnswer extends BaseModel {
       }
     };
   }
+  $formatJson(json) {
+    json = super.$formatJson(json);
+
+    // Flattens correctAnswers (omits id and questionId)
+    json = json.answer;
+
+    return json;
+  }
 }
 
 module.exports = QuestionCorrectAnswer;

@@ -138,6 +138,7 @@ describe("users route: user", () => {
     expect(body).toHaveProperty("bookmarks");
     expect(body).toHaveProperty("privateComments");
     expect(body).toHaveProperty("publicComments");
+    expect(body).toHaveProperty("answers");
   });
 
   test("PATCH '/:id' -- should fail (not owner)", async () => {

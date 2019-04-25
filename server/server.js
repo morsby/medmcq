@@ -52,18 +52,6 @@ app.use(passport.session()); // persistent login sessions
 const routes = require("./routes");
 app.use("/api", routes);
 
-// For graphQL
-const graphQlSchema = require("./graphql");
-const graphqlHTTP = require("express-graphql");
-
-app.use(
-  "/api/graphql",
-  graphqlHTTP({
-    schema: graphQlSchema,
-    graphiql: true
-  })
-);
-
 /* Catch all */
 const path = require("path");
 app.get("*", (req, res) => {

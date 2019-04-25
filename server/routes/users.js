@@ -135,8 +135,8 @@ router.get(
  *   get:
  *     summary: Fetch one user by id including activity
  *     description: >
- *       Returns a specific user, associated comments (private and public)
- *       and bookmarked questions.
+ *       Returns a specific user, associated comments (private and public),
+ *       answers and bookmarked questions.
  *
  *       Requires admin permissions or the logged in
  *       user to request itself.
@@ -165,7 +165,9 @@ router.get(
     try {
       let user = await User.query()
         .findById(id)
-        .eager("[publicComments, privateComments, bookmarks]");
+        .eager(
+          "[publicComments, privateComments, bookmarks, answers.correctAnswers]"
+        );
 
       if (!user) throw new NotFoundError();
       res.status(200).json(user);
@@ -320,6 +322,8 @@ router.delete(
  *            $ref: "#/components/schemas/Comments"
  *          bookmarks:
  *            $ref: "#/components/schemas/Bookmarks"
+ *          answers:
+ *            $ref: "#/components/schemas/UserAnswers"
  *      Users:
  *        type: array
  *        items:

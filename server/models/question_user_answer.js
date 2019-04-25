@@ -22,6 +22,7 @@ class QuestionUserAnswer extends BaseModel {
 
   static get relationMappings() {
     const Question = require("./question");
+    const QuestionCorrectAnswer = require("./question_correct_answer");
     const User = require("./user");
 
     return {
@@ -39,6 +40,14 @@ class QuestionUserAnswer extends BaseModel {
         join: {
           from: "questionUserAnswer.questionId",
           to: "question.id"
+        }
+      },
+      correctAnswers: {
+        relation: Model.HasManyRelation,
+        modelClass: QuestionCorrectAnswer,
+        join: {
+          from: "questionUserAnswer.questionId",
+          to: "questionCorrectAnswer.questionId"
         }
       }
     };

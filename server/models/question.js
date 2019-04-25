@@ -134,16 +134,6 @@ class Question extends BaseModel {
   static get defaultEager() {
     return "[examSet.semester, correctAnswers, publicComments, specialties(active), tags(active)]";
   }
-
-  $formatJson(json) {
-    json = super.$formatJson(json);
-
-    // Flattens correctAnswers (omits id and questionId)
-    if (json.correctAnswers) {
-      json.correctAnswers = json.correctAnswers.map(answer => answer.answer);
-    }
-    return json;
-  }
 }
 
 module.exports = Question;
