@@ -13,18 +13,24 @@
  *            Tasks
  *******************************/
 
-module.exports = function(gulp) {
-  var // less/css distributions
-    initComponents = require('../admin/components/init'),
-    createComponents = require('../admin/components/create'),
-    updateComponents = require('../admin/components/update'),
+
+module.exports = function (gulp) {
+  var
+    // less/css distributions
+    initComponents      = require('../admin/components/init'),
+    createComponents    = require('../admin/components/create'),
+    updateComponents    = require('../admin/components/update'),
+
     // single component releases
-    initDistributions = require('../admin/distributions/init'),
+    initDistributions   = require('../admin/distributions/init'),
     createDistributions = require('../admin/distributions/create'),
     updateDistributions = require('../admin/distributions/update'),
-    release = require('../admin/release'),
-    publish = require('../admin/publish'),
-    register = require('../admin/register');
+
+    release             = require('../admin/release'),
+    publish             = require('../admin/publish'),
+    register            = require('../admin/register')
+  ;
+
   /* Release */
   gulp.task('init distributions', initDistributions);
   gulp.task('init distributions').description = 'Grabs each component from GitHub';
@@ -54,4 +60,5 @@ module.exports = function(gulp) {
 
   gulp.task('register', register);
   gulp.task('register').description = 'Registers all packages with NPM';
+
 };

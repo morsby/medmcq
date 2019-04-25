@@ -2,19 +2,27 @@
  *          Watch Task
  *******************************/
 
-var gulp = require('gulp'),
+var
+  gulp       = require('gulp'),
+
   // node dependencies
-  console = require('better-console'),
+  console    = require('better-console'),
+
   // user config
-  config = require('./config/user'),
+  config     = require('./config/user'),
+
   // task config
-  install = require('./config/project/install'),
-  css = require('./build/css'),
-  js = require('./build/javascript'),
-  assets = require('./build/assets');
+  install    = require('./config/project/install'),
+
+  css        = require('./build/css'),
+  js         = require('./build/javascript'),
+  assets     = require('./build/assets')
+
+;
 
 // export task
-module.exports = function() {
+module.exports = function () {
+
   if (!install.isSetup()) {
     console.error('Cannot watch files. Run "gulp install" to set-up Semantic');
     return;
@@ -39,4 +47,5 @@ module.exports = function() {
   ---------------*/
 
   assets.watch('default', config);
+
 };

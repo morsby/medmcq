@@ -9,11 +9,16 @@
 
 */
 
-var gulp = require('gulp');
+var
+  gulp = require('gulp')
+;
+
 /* Release All */
-module.exports = function(callback) {
+module.exports = function (callback) {
+
   gulp.series(
     'update distributions', // commit less/css versions to github
-    'update components' // commit components to github
+    'update components', // commit components to github
   )(callback);
+
 };
