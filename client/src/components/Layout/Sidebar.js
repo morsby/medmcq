@@ -55,7 +55,11 @@ const Sidebar = (props) => {
         <RightMenu />
       </SemanticSidebar>
 
-      <SemanticSidebar.Pusher onClick={handlePusher} dimmed={visible}>
+      <SemanticSidebar.Pusher
+        onClick={handlePusher}
+        dimmed={visible}
+        style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
+      >
         {width < breakpoints.mobile && (
           <Menu className={styles.noprint} inverted color="blue" attached borderless={true}>
             <Menu.Item disabled={visible} onClick={() => setVisible(!visible)}>
