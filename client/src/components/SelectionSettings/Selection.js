@@ -301,13 +301,13 @@ class SelectionMain extends Component {
             <SelectionUniqueSelector onlyNew={onlyNew} onChange={this.onSettingsChange} />
           )}
 
-          <SelectionMessage user={user} type={type} />
-
-          {calculateResults(this.props.questions).status === 'in_progress' && (
-            <Button onClick={() => this.handleSubmit('cont')}>
+          {calculateResults(this.props.questions).status && (
+            <Button basic color="orange" onClick={() => this.handleSubmit('cont')}>
               <Translate id="selection.static.continue_quiz" />
             </Button>
           )}
+
+          <SelectionMessage user={user} type={type} />
 
           <Message warning>
             <Translate id="selection.static.front-disclaimer" />
