@@ -2,15 +2,21 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Translate } from 'react-localize-redux';
 
-import { Accordion, Icon } from 'semantic-ui-react';
+import { Accordion } from 'semantic-ui-react';
 import ProfileActivityAccordionElem from './ProfileActivityAccordionElem';
 
 import Answers from './Answers/Answers';
+import Comments from './Comments/Comments';
 
 /**
- * A Component that displays profile activities.
+ * A Component that displays profile activities for a single semester.
  */
-const ProfileActivity = ({ answers = [] }) => {
+const ProfileActivity = ({
+  answers = [],
+  publicComments = [],
+  privateComments = [],
+  bookmarks = []
+}) => {
   const [activeIndex, setActiveIndex] = useState(0);
   return (
     <Accordion fluid styled>
@@ -26,13 +32,42 @@ const ProfileActivity = ({ answers = [] }) => {
           </ProfileActivityAccordionElem>
         )}
       </Translate>
-      <Accordion.Title active={activeIndex === 1} index={1} onClick={() => setActiveIndex(1)}>
-        <Icon name="dropdown" />
-        ....
-      </Accordion.Title>
-      <Accordion.Content active={activeIndex === 1}>
-        <p>Placeholder</p>
-      </Accordion.Content>
+      <Translate>
+        {({ translate }) => (
+          <ProfileActivityAccordionElem
+            title={translate('profileActivity.accordionElements.publicComments')}
+            index={1}
+            active={activeIndex === 1}
+            handleClick={setActiveIndex}
+          >
+            <Comments comments={publicComments} />
+          </ProfileActivityAccordionElem>
+        )}
+      </Translate>
+      <Translate>
+        {({ translate }) => (
+          <ProfileActivityAccordionElem
+            title={translate('profileActivity.accordionElements.privateComments')}
+            index={2}
+            active={activeIndex === 2}
+            handleClick={setActiveIndex}
+          >
+            <Comments comments={privateComments} type="private" />
+          </ProfileActivityAccordionElem>
+        )}
+      </Translate>
+      <Translate>
+        {({ translate }) => (
+          <ProfileActivityAccordionElem
+            title={translate('profileActivity.accordionElements.bookmarks')}
+            index={3}
+            active={activeIndex === 3}
+            handleClick={setActiveIndex}
+          >
+            <h3>Placeholder for bookmarks</h3>
+          </ProfileActivityAccordionElem>
+        )}
+      </Translate>
     </Accordion>
   );
 };
@@ -41,7 +76,21 @@ ProfileActivity.propTypes = {
   /**
    * An array containing answers for the semester.
    */
-  answers: PropTypes.array
+  answers: PropTypes.array,
+
+  /**
+   * An arary of public comments
+   */
+  publicComments: PropTypes.array,
+  /**
+   * An arary of private comments
+   */
+  privateComments: PropTypes.array,
+
+  /**
+   * An arary of bookmarked questions comments
+   */
+  bookmarks: PropTypes.array
 };
 
 export default ProfileActivity;

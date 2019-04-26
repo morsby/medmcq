@@ -18,7 +18,6 @@ import ProfileActivity from './ProfileActivity/ProfileActivity';
 class Profile extends Component {
   constructor(props) {
     super(props);
-    this.props.getProfile(this.props.auth.user.id);
     let { semester } = props.settings;
 
     this.state = {
@@ -31,6 +30,7 @@ class Profile extends Component {
   }
 
   componentDidMount() {
+    this.props.getProfile(this.props.auth.user.id);
     window.addEventListener('resize', this.handleResize);
   }
 
@@ -70,7 +70,12 @@ class Profile extends Component {
         menuItem: generatePaneLabel(e),
         render: () => (
           <Tab.Pane>
-            <ProfileActivity answers={profile.answers[e.value]} />
+            <ProfileActivity
+              answers={profile.answers[e.value]}
+              publicComments={profile.publicComments[e.value]}
+              privateComments={profile.privateComments[e.value]}
+              bookmarks={profile.bookmarks[e.value]}
+            />
           </Tab.Pane>
         )
       })

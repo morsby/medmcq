@@ -45,7 +45,10 @@
   },
   "profileActivity": {
     "accordionElements": {
-      "answers": ["Besvarede spørgsmål", "Answered questions"]
+      "answers": ["Besvarede spørgsmål", "Answered questions"],
+      "publicComments": ["Offentlige kommentarer", "Public comments"],
+      "privateComments": ["Private kommentarer", "Private comments"],
+      "bookmarks": ["Bogmærkede spørgsmål", "Bookmarked questions"]
     }
   },
   "profileAnswers": {

@@ -11,7 +11,7 @@ class QuestionComment extends BaseModel {
   }
 
   static get hidden() {
-    return [...hiddenCols, "private"];
+    return ["oldId", "private"];
   }
 
   static get QueryBuilder() {
