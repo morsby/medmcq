@@ -166,7 +166,12 @@ router.get(
       let user = await User.query()
         .findById(id)
         .eager(
-          "[publicComments, privateComments, bookmarks, answers.correctAnswers]"
+          "[publicComments.question.semester, privateComments.question.semester, bookmarks.question.semester, answers(summary).question]"
+        )
+        .modifyEager("answers(summary).question", builder =>
+          builder.eager(
+            "[correctAnswers, examSet, semester, specialties(active), tags(active)]"
+          )
         );
 
       if (!user) throw new NotFoundError();

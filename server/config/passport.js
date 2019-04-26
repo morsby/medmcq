@@ -15,13 +15,13 @@ module.exports = function(passport) {
   });
 
   // used to deserialize the user
-  passport.deserializeUser((id, done) => {
+  passport.deserializeUser(async (id, done) => {
     User.query()
       .findById(id)
       .joinRelation("role")
       .select("user.*", "role.name as role")
       .then((user, err) => {
-        done(err, user);
+        done(err, user || null);
       });
   });
 

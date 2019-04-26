@@ -35,55 +35,54 @@
   "profile": {
     "header": ["Profil for ${username}", "Profile for ${username}"],
     "subheader": [
-      "Herunder kan du se, hvordan du har klaret dig for hvert semester.",
-      "Below you can see your results for each semester"
+      "Herunder kan du se dine aktiviteter for hvert semester.",
+      "Below you can see your activities for each semester"
     ],
-    "activity": {
-      "summary": [
-        "Du har svaret på ${total} forskellige spørgsmål",
-        "You have answered a total of ${total} different questions"
-      ],
-      "semester": ["${n}. semester (${name})", "${n}th semester (${name})"],
-      "answers": {
-        "header": ["Af dem har du svaret", "Of these, you have answered"],
-        "correct": [
-          "<span class=\"correct\">rigtigt</span> <em>hver</em> gang på ${n} spørgsmål",
-          "<span class=\"correct\">correctly</span> <em>every</em> time on ${n} questions"
-        ],
-        "wrong": [
-          "<span class=\"wrong\">forkert</span> <em>hver</em> gang på ${n} spørgsmål",
-          "<span class=\"wrong\">incorrectly</span> <em>every</em> time on ${n} questions"
-        ],
-        "mixed": [
-          "<span class=\"mixed\">både</span> rigtigt <em>og</em> forkert på ${n} spørgsmål",
-          "<span class=\"mixed\">both</span> right <em>and</em> wrong on ${n} questions"
-        ]
-      },
-      "comments": [
-        "Du har kommenteret på ${n} spørgsmål.",
-        "You have commented on ${n} questions."
-      ],
-      "see_comments_link": [
-        "Se om der er kommet nye kommentarer på disse spørgsmål.",
-        "See if there are new comments on these questions."
-      ]
-    },
-    "details": {
-      "show_details": ["Vis detaljer", "Show details"],
-      "hide_details": ["Skjul detaljer", "Hide details"]
-    },
     "buttons": {
       "edit_profile": ["Redigér profil", "Edit profile"],
       "logout": ["Log ud", "Log out"]
     }
   },
+  "profileActivity": {
+    "accordionElements": {
+      "answers": ["Besvarede spørgsmål", "Answered questions"]
+    }
+  },
+  "profileAnswers": {
+    "summary": [
+      "Du har svaret på ${total} forskellige spørgsmål",
+      "You have answered a total of ${total} different questions"
+    ],
+    "semester": ["${n}. semester (${name})", "${n}th semester (${name})"],
+    "answers": {
+      "header": ["Af dem har du svaret", "Of these, you have answered"],
+      "correct": [
+        "<span class=\"correct\">rigtigt</span> <em>hver</em> gang på ${n} spørgsmål",
+        "<span class=\"correct\">correctly</span> <em>every</em> time on ${n} questions"
+      ],
+      "wrong": [
+        "<span class=\"wrong\">forkert</span> <em>hver</em> gang på ${n} spørgsmål",
+        "<span class=\"wrong\">incorrectly</span> <em>every</em> time on ${n} questions"
+      ],
+      "mixed": [
+        "<span class=\"mixed\">både</span> rigtigt <em>og</em> forkert på ${n} spørgsmål",
+        "<span class=\"mixed\">both</span> right <em>and</em> wrong on ${n} questions"
+      ]
+    },
+    "buttons": {
+      "details": {
+        "show_details": ["Vis detaljer", "Show details"],
+        "hide_details": ["Skjul detaljer", "Hide details"]
+      }
+    }
+  },
   "profileAnswerDetails": {
     "start_quiz_button": [
-      "Start en quiz med nedenstående ${n} spørgsmål",
-      "Start a quiz with the ${n} questions below"
+      "Start en quiz med de valgte spørgsmål (${n})",
+      "Start a quiz with the selected questions (${n})"
     ],
     "filter": {
-      "header": ["Filtrer spørgsmål:", "Filter questions:"],
+      "header": ["Filtrer svar:", "Filter answers:"],
       "show_all": ["Vis alle", "Show all"],
       "show_correct": ["Vis altid rigtige", "Show always correct"],
       "show_wrong": ["Vis altid forkerte", "Show always incorrect"],

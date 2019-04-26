@@ -1,5 +1,5 @@
-// Update with your config settings.
 const { knexSnakeCaseMappers } = require("objection");
+const { devConnection } = require("./config/keys");
 
 let baseConfig = {
   client: "mysql",
@@ -11,12 +11,7 @@ let baseConfig = {
 module.exports = {
   development: {
     ...baseConfig,
-    connection: {
-      host: "localhost",
-      user: "root",
-      password: "example",
-      database: "medmcq"
-    }
+    connection: devConnection
   },
   test: {
     ...baseConfig,

@@ -1,5 +1,5 @@
 import BaseModel from "./_base_model";
-const { Model } = require("objection");
+const { Model, ref } = require("objection");
 
 class QuestionUserAnswer extends BaseModel {
   static get tableName() {
@@ -50,6 +50,20 @@ class QuestionUserAnswer extends BaseModel {
           to: "questionCorrectAnswer.questionId"
         }
       }
+    };
+  }
+  static get modifiers() {
+    return {
+      summary: builder =>
+        builder.select(
+          "*",
+          builder
+            .modelClass()
+            .relatedQuery("correctAnswers")
+            .where("correctAnswers.answer", ref("questionUserAnswer.answer"))
+            .count("*")
+            .as("correct")
+        )
     };
   }
 }

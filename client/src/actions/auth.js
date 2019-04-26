@@ -28,21 +28,36 @@ export const login = (post) => async (dispatch) => {
       return res.data;
     })
     .catch(function(error) {
-      // handle error
-      //console.log(error);
+      alert(error);
     });
 
   return response;
 };
 
 export const fetchUser = () => async (dispatch) => {
-  let res = await axios.get('/api/auth');
+  let res;
+  try {
+    res = await axios.get('/api/auth');
+  } catch (err) {
+    console.log(err.response);
+  }
 
   dispatch({ type: types.AUTH_CURRENT_USER, payload: res.data });
 };
 
+export const getProfile = (userId) => async (dispatch) => {
+  let res;
+  try {
+    res = await axios.get(`/api/users/${userId}/profile`);
+  } catch (err) {
+    console.log(err.response);
+  }
+
+  dispatch({ type: types.AUTH_PROFILE, payload: res.data });
+};
+
 export const editProfile = (values, callback) => async (dispatch) => {
-  let res = await axios.put('/api/user/edit', values);
+  let res = await axios.patch('/api/user', values);
 
   return callback(res.data);
 };

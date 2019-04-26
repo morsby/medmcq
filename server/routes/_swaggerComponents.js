@@ -146,7 +146,7 @@
  *          - userId
  *          - questionId
  *          - answer
- *          - correctAnswers
+ *          - question
  *        properties:
  *          id:
  *            type: integer
@@ -157,11 +157,8 @@
  *          answer:
  *            type: integer
  *            example: 1
- *          correctAnswers:
- *            type: array
- *            items:
- *              type: integer
- *              example: 1
+ *          question:
+ *            $ref: "#/components/schemas/Question"
  *      UserAnswers:
  *        type: array
  *        items:

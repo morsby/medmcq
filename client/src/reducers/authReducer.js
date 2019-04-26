@@ -1,7 +1,5 @@
 import * as types from '../actions/types';
-
 import _ from 'lodash';
-
 import { createReducer } from 'redux-starter-kit';
 
 /**
@@ -11,9 +9,11 @@ import { createReducer } from 'redux-starter-kit';
  */
 const initialState = {
   user: null,
-  performance: {
-    answeredQuestions: {},
-    summary: { allRight: [], allWrong: [], mixed: [] }
+  profile: {
+    answers: {},
+    bookmarks: {},
+    publicComments: {},
+    privateComments: {}
   }
 };
 
@@ -25,51 +25,18 @@ export default createReducer(initialState, {
   [types.AUTH_CURRENT_USER]: (state, action) => {
     // Modtages en bruger? Ellers sender vi null
     let user = action.payload ? action.payload : null;
+
     state.user = user;
+    if (!user) state.profile = initialState.profile;
   },
-  [types.AUTH_GET_ANSWERED_QUESTIONS]: (state, action) => {
+  [types.AUTH_PROFILE]: (state, action) => {
     // GETs full questions (from API) and the user's answers:
-    let { questions, answers } = action;
-
-    /**
-     * Laver et object af spørgsmål, hvor key er question._id.
-     * Hvert spørgsmål tillægges derudover en ny key, `userAnswers`,
-     * der indeholder brugeres svar i formen
-     *   userAnswers: {
-     *      correct: n,
-     *      wrong: m
-     *   }
-     */
-    let answeredQuestions = {};
-    questions.map((e) => {
-      answeredQuestions[e._id] = e;
-      _.set(answeredQuestions, [e._id], {
-        ...answeredQuestions[e._id],
-        userAnswers: answers[e._id]
-      });
-      return null;
-    });
-
-    // Loops over all answers, generating a summary
-    let summary = { allRight: [], allWrong: [], mixed: [] };
-
-    // Få de question._ids, som brugeren har svaret på
-    let ids = Object.keys(answers);
-
-    ids.map((id) => {
-      let answer = answers[id];
-
-      if (answer.correct > 0 && answer.wrong === 0) {
-        summary.allRight.push(id);
-      } else if (answer.correct === 0 && answer.wrong > 0) {
-        summary.allWrong.push(id);
-      } else if (answer.correct > 0 && answer.wrong > 0) {
-        summary.mixed.push(id);
-      }
-      return null;
-    });
-
-    state.performance.summary = summary;
-    state.performance.answeredQuestions = answeredQuestions;
+    let { privateComments, publicComments, bookmarks, answers } = action.payload;
+    state.profile = {
+      answers: _.groupBy(answers, (a) => a.question.semester[0].value),
+      bookmarks: _.groupBy(bookmarks, (a) => a.question.semester[0].value),
+      publicComments: _.groupBy(publicComments, (a) => a.question.semester[0].value),
+      privateComments: _.groupBy(privateComments, (a) => a.question.semester[0].value)
+    };
   }
 });
