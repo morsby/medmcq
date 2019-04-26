@@ -16,7 +16,7 @@ router.post('/', async (req, res) => {
   if (!q.username.match(validationRegex.username))
     return res.status(400).json({ type: 'error', message: 'Invalid username' });
 
-  user.username = q.username;
+  user.username = q.username.toLowerCase();
   user.password = q.password;
   user.email = q.email;
 
@@ -26,6 +26,17 @@ router.post('/', async (req, res) => {
   } catch (err) {
     return res.send(err);
   }
+});
+
+router.get('/tolowercase', async (req, res) => {
+  const users = await User.find();
+
+  users.forEach((user) => {
+    user.username = user.username.toLowerCase();
+    user.save();
+  });
+
+  res.status(200).send('Successfully converted all users');
 });
 
 router.get('/me', function(req, res) {
