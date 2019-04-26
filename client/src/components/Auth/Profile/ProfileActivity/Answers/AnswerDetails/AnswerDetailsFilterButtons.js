@@ -5,9 +5,9 @@ import { Translate } from 'react-localize-redux';
 import { Button } from 'semantic-ui-react';
 
 /**
- * A component that shows the filter buttons on the ProfileAnswerDetails-component.
+ * A component that shows the filter buttons on the AnswerDetails-component.
  */
-const ProfileAnswerDetailsFilterButtons = ({ handleClick }) => (
+const AnswerDetailsFilterButtons = ({ handleClick }) => (
   <Button.Group widths="4">
     <Button basic color="blue" onClick={() => handleClick(null)}>
       <Translate id="profileAnswerDetails.filter.show_all" />
@@ -24,11 +24,11 @@ const ProfileAnswerDetailsFilterButtons = ({ handleClick }) => (
   </Button.Group>
 );
 
-ProfileAnswerDetailsFilterButtons.propTypes = {
+AnswerDetailsFilterButtons.propTypes = {
   /**
    * Sets state in parent component to the clicked filter
    */
   handleClick: PropTypes.func
 };
 
-export default ProfileAnswerDetailsFilterButtons;
+export default AnswerDetailsFilterButtons;

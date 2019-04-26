@@ -8,7 +8,7 @@ import { Table, Checkbox } from 'semantic-ui-react';
 /**
  * Component that shows details of a single answered question
  */
-const ProfileAnswerDetailsRow = ({ answer, handleClick, checked }) => {
+const AnswerDetailsRow = ({ answer, handleClick, checked }) => {
   let { question } = answer;
 
   return (
@@ -44,7 +44,7 @@ const ProfileAnswerDetailsRow = ({ answer, handleClick, checked }) => {
   );
 };
 
-ProfileAnswerDetailsRow.propTypes = {
+AnswerDetailsRow.propTypes = {
   /**
    * The answer (including props `question` and `performance`)
    */
@@ -59,4 +59,4 @@ ProfileAnswerDetailsRow.propTypes = {
   checked: PropTypes.bool
 };
 
-export default ProfileAnswerDetailsRow;
+export default AnswerDetailsRow;

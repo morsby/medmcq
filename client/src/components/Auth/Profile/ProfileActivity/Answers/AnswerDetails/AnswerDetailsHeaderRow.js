@@ -4,9 +4,9 @@ import { Translate } from 'react-localize-redux';
 import { Table } from 'semantic-ui-react';
 
 /**
- * The header row for the ProfileAnswerDetails table
+ * The header row for the AnswerDetails table
  */
-const ProfileAnswerDetailsHeaderRow = () => (
+const AnswerDetailsHeaderRow = () => (
   <Table.Header>
     <Table.Row>
       <Table.HeaderCell />
@@ -26,4 +26,4 @@ const ProfileAnswerDetailsHeaderRow = () => (
   </Table.Header>
 );
 
-export default ProfileAnswerDetailsHeaderRow;
+export default AnswerDetailsHeaderRow;

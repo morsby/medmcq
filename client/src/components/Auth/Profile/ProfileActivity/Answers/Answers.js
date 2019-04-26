@@ -4,12 +4,12 @@ import _ from 'lodash';
 
 import { Button, Divider } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
-import ProfileAnswerDetails from './ProfileAnswerDetails/ProfileAnswerDetails';
+import AnswerDetails from './AnswerDetails/AnswerDetails';
 
 /**
  * Component that displays a summary of the answered questions.
  */
-const ProfileAnswers = ({ answers = [] }) => {
+const Answers = ({ answers = [] }) => {
   // Declare a new state variable, which we'll call "count"
   const [details, toggleDetails] = useState(false);
 
@@ -52,16 +52,16 @@ const ProfileAnswers = ({ answers = [] }) => {
           <Translate id="profileAnswers.buttons.details.show_details" />
         )}
       </Button>
-      {details && totalAnswers > 0 && <ProfileAnswerDetails answers={answers} />}
+      {details && totalAnswers > 0 && <AnswerDetails answers={answers} />}
     </div>
   );
 };
 
-ProfileAnswers.propTypes = {
+Answers.propTypes = {
   /**
    * The answers, unfiltered
    */
   answers: PropTypes.array
 };
 
-export default ProfileAnswers;
+export default Answers;

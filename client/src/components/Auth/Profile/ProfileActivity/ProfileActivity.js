@@ -5,7 +5,7 @@ import { Translate } from 'react-localize-redux';
 import { Accordion, Icon } from 'semantic-ui-react';
 import ProfileActivityAccordionElem from './ProfileActivityAccordionElem';
 
-import ProfileAnswers from './ProfileAnswers/ProfileAnswers';
+import Answers from './Answers/Answers';
 
 /**
  * A Component that displays profile activities.
@@ -22,7 +22,7 @@ const ProfileActivity = ({ answers = [] }) => {
             active={activeIndex === 0}
             handleClick={setActiveIndex}
           >
-            <ProfileAnswers answers={answers} />
+            <Answers answers={answers} />
           </ProfileActivityAccordionElem>
         )}
       </Translate>

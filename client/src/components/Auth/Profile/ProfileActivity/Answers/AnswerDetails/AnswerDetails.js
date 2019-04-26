@@ -5,14 +5,14 @@ import _ from 'lodash';
 import { Table, Button, Divider } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 
-import ProfileAnswerDetailsHeaderRow from './ProfileAnswerDetailsHeaderRow';
-import ProfileAnswerDetailsRow from './ProfileAnswerDetailsRow';
-import ProfileAnswerDetailsFilterButtons from './ProfileAnswerDetailsFilterButtons';
+import AnswerDetailsHeaderRow from './AnswerDetailsHeaderRow';
+import AnswerDetailsRow from './AnswerDetailsRow';
+import AnswerDetailsFilterButtons from './AnswerDetailsFilterButtons';
 
 /**
  * Component showing answer details.  Any filtering occurs in this component.
  */
-const ProfileAnswerDetails = ({ answers }) => {
+const AnswerDetails = ({ answers }) => {
   const [filter, setFilter] = useState(undefined);
   const [selected, setSelected] = useState([]);
 
@@ -53,12 +53,12 @@ const ProfileAnswerDetails = ({ answers }) => {
         <Translate id="profileAnswerDetails.filter.header" />
       </h4>
 
-      <ProfileAnswerDetailsFilterButtons handleClick={setFilter} />
+      <AnswerDetailsFilterButtons handleClick={setFilter} />
       <Table celled>
-        <ProfileAnswerDetailsHeaderRow />
+        <AnswerDetailsHeaderRow />
         <Table.Body>
           {_.map(answers, (answer) => (
-            <ProfileAnswerDetailsRow
+            <AnswerDetailsRow
               key={answer.question.id}
               answer={answer}
               handleClick={toggleCheckbox}
@@ -71,11 +71,11 @@ const ProfileAnswerDetails = ({ answers }) => {
   );
 };
 
-ProfileAnswerDetails.propTypes = {
+AnswerDetails.propTypes = {
   /**
    * Array indeholdende besvarede spørgsmål for semesteret
    */
   answers: PropTypes.array
 };
 
-export default ProfileAnswerDetails;
+export default AnswerDetails;
