@@ -134,7 +134,6 @@ describe("users route: user", () => {
   test("GET '/:id/profile' -- should get one user profile (owner)", async () => {
     let { body } = await user.get(`${userApi}/${userIds[0]}/profile`);
 
-    expect(body.username).toEqual("TestPost");
     expect(body).toHaveProperty("bookmarks");
     expect(body).toHaveProperty("privateComments");
     expect(body).toHaveProperty("publicComments");
@@ -196,7 +195,6 @@ describe("users route: admin", () => {
   test("GET '/:id/profile' -- should get another user profile", async () => {
     let { body } = await admin.get(`${userApi}/${userIds[1]}/profile`);
 
-    expect(body.username).toEqual("TestPost2");
     expect(body).toHaveProperty("bookmarks");
     expect(body).toHaveProperty("privateComments");
     expect(body).toHaveProperty("publicComments");

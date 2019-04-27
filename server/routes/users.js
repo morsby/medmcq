@@ -4,6 +4,7 @@ import { ValidationError, NotFoundError } from "objection";
 import { errorHandler } from "../middleware/errorHandling";
 import { permit } from "../middleware/permission";
 import Question from "../models/question";
+import QuestionUserAnswer from "../models/question_user_answer";
 import QuestionBookmark from "../models/question_bookmark";
 import QuestionComment from "../models/question_comment";
 import User from "../models/user";
@@ -136,22 +137,51 @@ router.get(
  * @swagger
  * /users/:id/profile:
  *   get:
- *     summary: Fetch one user by id including activity
+ *     summary: Fetch one user's activity by id
  *     description: >
- *       Returns a specific user, associated comments (private and public),
+ *       Returns a single user's associated comments (private and public),
  *       answers and bookmarked questions.
  *
  *       Requires admin permissions or the logged in
  *       user to request itself.
+ *
+ *       Only the `publicComments` property's questions contains public comments,
+ *       and the `privateComments` do not contain public comments.
  *     tags:
  *       - Users
  *     responses:
  *       200:
- *         description: The user
+ *         description: The activity.
  *         content:
  *            application/json:
  *              schema:
- *                $ref: "#/components/schemas/UserEagerLoaded"
+ *                type: object
+ *                properties:
+ *                  answers:
+ *                    type: object
+ *                    properties:
+ *                      question:
+ *                        $ref: "#/components/schemas/Question"
+ *                      performance:
+ *                        type: object
+ *                        properties:
+ *                          tries:
+ *                            type: integer
+ *                            description: Number of times the user has answered the question
+ *                          correct:
+ *                            type: integer
+ *                            description: Number of times the user has answered correctly
+ *                          answers:
+ *                            type: array
+ *                            items:
+ *                              type: integer
+ *                            description: The individual answers
+ *                  publicComments:
+ *                    $ref: "#/components/schemas/Questions"
+ *                  privateComments:
+ *                    $ref: "#/components/schemas/Questions"
+ *                  bookmarks:
+ *                    $ref: "#/components/schemas/Questions"
  *       default:
  *         description: unexpected error
  *         content:
@@ -166,12 +196,16 @@ router.get(
     let { id } = req.params;
 
     try {
-      let userAndAnswers = User.query()
+      // We load the user including answers.
+      // TODO: Find en måde at undgå at kalde hente brugeren men i stedet
+      // direkte finde svar. Husk parseJson i Models/User.
+      let answers = User.query()
         .findById(id)
         .eager(
           "answers(summary).question.[correctAnswers,examSet.semester,specialties(active),tags(active)]"
         );
 
+      // Find questions the user has commented publicly, fetches including other public comments
       let publicComments = Question.query()
         .whereIn(
           "id",
@@ -182,6 +216,7 @@ router.get(
         )
         .eager(Question.defaultEager);
 
+      // Find questions the usrer has commented privately, ...
       let privateComments = Question.query()
         .whereIn(
           "id",
@@ -195,6 +230,7 @@ router.get(
           userId: id
         });
 
+      // Find questions the user has bookmarked
       let bookmarks = Question.query()
         .whereIn(
           "id",
@@ -204,22 +240,14 @@ router.get(
         )
         .eager(Question.defaultEager.replace("publicComments.user, ", ""));
 
-      [
-        userAndAnswers,
-        publicComments,
-        privateComments,
-        bookmarks
-      ] = await Promise.all([
-        userAndAnswers,
-        publicComments,
-        privateComments,
-        bookmarks
-      ]);
+      // Perform all queries.
+      [answers, publicComments, privateComments, bookmarks] = await Promise.all(
+        [answers, publicComments, privateComments, bookmarks]
+      );
 
-      if (!userAndAnswers) throw new NotFoundError();
+      let profile = {};
 
-      let profile = userAndAnswers;
-
+      profile.answers = answers.toJSON().answers;
       profile.publicComments = publicComments;
       profile.privateComments = privateComments;
       profile.bookmarks = bookmarks;
