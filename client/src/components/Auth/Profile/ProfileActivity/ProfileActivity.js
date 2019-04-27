@@ -40,7 +40,7 @@ const ProfileActivity = ({
             active={activeIndex === 1}
             handleClick={setActiveIndex}
           >
-            <Comments comments={publicComments} />
+            <Comments questions={publicComments} />
           </ProfileActivityAccordionElem>
         )}
       </Translate>
@@ -52,7 +52,7 @@ const ProfileActivity = ({
             active={activeIndex === 2}
             handleClick={setActiveIndex}
           >
-            <Comments comments={privateComments} type="private" />
+            <Comments questions={privateComments} type="private" />
           </ProfileActivityAccordionElem>
         )}
       </Translate>

@@ -230,7 +230,6 @@ class SelectionMain extends Component {
               <SelectionNSelector
                 n={Number(n)}
                 onChange={this.onSettingsChange}
-                total={questions.length}
                 semester={semester}
               />
               <Divider hidden />

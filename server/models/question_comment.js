@@ -44,7 +44,8 @@ class QuestionComment extends BaseModel {
         join: {
           from: "questionComment.userId",
           to: "user.id"
-        }
+        },
+        modify: builder => builder.select("username", "id")
       },
       question: {
         relation: Model.BelongsToOneRelation,

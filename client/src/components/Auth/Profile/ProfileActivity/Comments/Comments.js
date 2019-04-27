@@ -1,35 +1,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 
 import ProfileActivityAccordionElem from '../ProfileActivityAccordionElem';
 import CommentsQuestion from './CommentsQuestion';
 
-const Comments = ({ comments = [], type = 'public' }) => {
+const Comments = ({ questions = [], type = 'public' }) => {
   let [activeIndex, setActiveIndex] = useState(null);
 
-  if (comments.length === 0) return <strong>Du har ingen kommentarer på dette semester.</strong>;
-  let questions = [];
-
-  // Select unique questions (because we load other user comments as well), remove unncessary nesting
-  questions = _.uniqBy(comments, (comment) => comment.question.id).map((q) => q.question);
-
-  if (type === 'private') {
-    comments.map((comment) => {
-      let questionIndex = _.findIndex(questions, { id: comment.questionId });
-      comment = {
-        id: comment.id,
-        text: comment.text,
-        createdAt: comment.createdAt,
-        updatedAt: comment.updatedAt
-      };
-      if (!questions[questionIndex].privateComments) {
-        questions[questionIndex].privateComments = [comment];
-      } else if (questions[questionIndex].privateComments.length < comments.length) {
-        questions[questionIndex].privateComments.push(comment);
-      }
-    });
-  }
+  if (questions.length === 0) return <strong>Du har ingen kommentarer på dette semester.</strong>;
 
   return (
     <div>
@@ -43,7 +21,7 @@ const Comments = ({ comments = [], type = 'public' }) => {
         return (
           <ProfileActivityAccordionElem
             key={question.id}
-            title={question.text.substr(0, 80) + '...'}
+            title={question.text}
             active={i === activeIndex}
             index={i}
             handleClick={setActiveIndex}
@@ -58,9 +36,9 @@ const Comments = ({ comments = [], type = 'public' }) => {
 
 Comments.propTypes = {
   /**
-   * An array of comments
+   * An array of questions that are commented by the user.
    */
-  comments: PropTypes.array,
+  questions: PropTypes.array,
 
   /**
    * Om der vises offentlige eller private kommentarer

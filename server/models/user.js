@@ -145,6 +145,7 @@ class User extends Password(BaseModel) {
         }
       }));
     }
+
     return json;
   }
 }

@@ -3,6 +3,9 @@ import { ValidationError, NotFoundError } from "objection";
 
 import { errorHandler } from "../middleware/errorHandling";
 import { permit } from "../middleware/permission";
+import Question from "../models/question";
+import QuestionBookmark from "../models/question_bookmark";
+import QuestionComment from "../models/question_comment";
 import User from "../models/user";
 const router = express.Router();
 
@@ -163,19 +166,65 @@ router.get(
     let { id } = req.params;
 
     try {
-      let user = await User.query()
+      let userAndAnswers = User.query()
         .findById(id)
         .eager(
-          "publicComments.question.[semester,correctAnswers,publicComments.user]"
-        )
-        .mergeEager("privateComments.question.[semester, correctAnswers]")
-        .mergeEager("bookmarks.question.semester")
-        .mergeEager(
-          "answers(summary).question.[correctAnswers,examSet,semester,specialties(active),tags(active)]"
+          "answers(summary).question.[correctAnswers,examSet.semester,specialties(active),tags(active)]"
         );
 
-      if (!user) throw new NotFoundError();
-      res.status(200).json(user);
+      let publicComments = Question.query()
+        .whereIn(
+          "id",
+          QuestionComment.query()
+            .where("userId", id)
+            .andWhere("private", false)
+            .distinct("questionId")
+        )
+        .eager(Question.defaultEager);
+
+      let privateComments = Question.query()
+        .whereIn(
+          "id",
+          QuestionComment.query()
+            .where("userId", id)
+            .andWhere("private", true)
+            .distinct("questionId")
+        )
+        .eager(Question.defaultEager.replace("publicComments.user, ", ""))
+        .mergeEager("privateComments(own).user", {
+          userId: id
+        });
+
+      let bookmarks = Question.query()
+        .whereIn(
+          "id",
+          QuestionBookmark.query()
+            .where("userId", id)
+            .distinct("questionId")
+        )
+        .eager(Question.defaultEager.replace("publicComments.user, ", ""));
+
+      [
+        userAndAnswers,
+        publicComments,
+        privateComments,
+        bookmarks
+      ] = await Promise.all([
+        userAndAnswers,
+        publicComments,
+        privateComments,
+        bookmarks
+      ]);
+
+      if (!userAndAnswers) throw new NotFoundError();
+
+      let profile = userAndAnswers;
+
+      profile.publicComments = publicComments;
+      profile.privateComments = privateComments;
+      profile.bookmarks = bookmarks;
+
+      res.status(200).json(profile);
     } catch (err) {
       errorHandler(err, res);
     }
@@ -322,13 +371,30 @@ router.delete(
  *          role:
  *            type: string
  *          publicComments:
- *            $ref: "#/components/schemas/Comments"
+ *            $ref: "#/components/schemas/Questions"
  *          privateComments:
- *            $ref: "#/components/schemas/Comments"
+ *            $ref: "#/components/schemas/Questions"
  *          bookmarks:
- *            $ref: "#/components/schemas/Bookmarks"
+ *            $ref: "#/components/schemas/Questions"
  *          answers:
- *            $ref: "#/components/schemas/UserAnswers"
+ *            type: object
+ *            properties:
+ *              question:
+ *                $ref: "#/components/schemas/Question"
+ *              performance:
+ *                type: object
+ *                properties:
+ *                  tries:
+ *                    type: integer
+ *                    description: Number of times the question has been answered
+ *                  correct:
+ *                    type: integer
+ *                    description: Number of times answered correctly
+ *                  answers:
+ *                    type: array
+ *                    items:
+ *                      type: integer
+ *                    description: Array of answers
  *      Users:
  *        type: array
  *        items:

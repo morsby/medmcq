@@ -32,11 +32,12 @@ export default createReducer(initialState, {
   [types.AUTH_PROFILE]: (state, action) => {
     // GETs full questions (from API) and the user's answers:
     let { privateComments, publicComments, bookmarks, answers } = action.payload;
+
     state.profile = {
-      answers: _.groupBy(answers, (a) => a.question.semester[0].value),
-      bookmarks: _.groupBy(bookmarks, (a) => a.question.semester[0].value),
-      publicComments: _.groupBy(publicComments, (a) => a.question.semester[0].value),
-      privateComments: _.groupBy(privateComments, (a) => a.question.semester[0].value)
+      answers: _.groupBy(answers, (a) => a.question.examSet.semester.value),
+      bookmarks: _.groupBy(bookmarks, (a) => a.examSet.semester.value),
+      publicComments: _.groupBy(publicComments, (a) => a.examSet.semester.value),
+      privateComments: _.groupBy(privateComments, (a) => a.examSet.semester.value)
     };
   }
 });

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Accordion, Icon } from 'semantic-ui-react';
+import marked from 'marked';
 
 /**
  * An accordion element.
@@ -13,7 +14,7 @@ const ProfileActivityAccordionElem = ({ title, children, index, active, handleCl
       onClick={() => (active ? handleClick(null) : handleClick(index))}
     >
       <Icon name="dropdown" />
-      {title}
+      <div dangerouslySetInnerHTML={{ __html: marked(title) }} />
     </Accordion.Title>
     <Accordion.Content active={active}>{children}</Accordion.Content>
   </>
