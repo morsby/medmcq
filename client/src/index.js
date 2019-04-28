@@ -24,15 +24,16 @@ import 'react-image-lightbox/style.css'; // This only needs to be imported once 
 
 // redux
 import { configureStore, getDefaultMiddleware } from 'redux-starter-kit';
+
 const migrations = {
-  1: (state) => ({ settings: state.settings })
+  0: () => ({})
 };
 const persistConfig = {
   key: 'medMCQ',
-  version: 0,
   storage: storage,
+  version: 0,
   stateReconciler: autoMergeLevel2, // see "Merge Process" section for details.
-  migrations: createMigrate(migrations, { debug: true })
+  migrate: createMigrate(migrations)
 };
 
 const pReducer = persistReducer(persistConfig, reducers);

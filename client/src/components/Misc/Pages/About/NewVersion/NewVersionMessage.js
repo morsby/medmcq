@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { withLocalize, Translate } from 'react-localize-redux';
 
@@ -19,7 +19,9 @@ const LinkToAbout = () => (
 );
 
 const NewVersionMessage = ({ addTranslation, prev_version, changeSettings }) => {
-  addTranslation(newVersionMessageTranslations);
+  useEffect(() => {
+    addTranslation(newVersionMessageTranslations);
+  });
 
   const handleDismiss = () => {
     changeSettings({ type: 'version', value: version });

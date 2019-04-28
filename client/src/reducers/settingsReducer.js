@@ -47,7 +47,7 @@ const initialState = {
   questions: [],
 
   /**
-   * Hvilke sæt findes for specialet?
+   * Hvilke sæt findes for semesteret?
    */
   sets: [],
   /**
@@ -95,14 +95,14 @@ export default createReducer(initialState, {
     switch (type) {
       case 'specialer':
       case 'tags': {
-        /**
+        /*
          * specialer = allerede valgte specialer
          * alreadySelected = er det speciale, brugeren klikkede på, allerede valgt?
          */
         let currentSelection = state[type],
           alreadySelected = state[type].indexOf(value);
 
-        /**
+        /*
          * Er specialet allerede valgt?
          * - Ja: Fjern det!
          * - Nej: Tilføj det!
@@ -132,7 +132,7 @@ export default createReducer(initialState, {
    */
   [types.FETCH_SETTINGS_QUESTION]: (state, action) => {
     let { questions, semester } = action;
-    /**
+    /*
      * API'en ved egentlig ikke hvilke sæt, der findes. Det beregnes
      * her ud fra hvilke spørgsmål, der hentes ned (alle fra et
      * semester hentes hver gang).
@@ -141,7 +141,7 @@ export default createReducer(initialState, {
      */
     let sets = [];
 
-    /**
+    /*
      * Vi looper over alle spørgsmål.
      * Ud fra spørgsmålenes metadata, beregner vi så hvilke sæt,
      * der findes.
@@ -156,13 +156,13 @@ export default createReducer(initialState, {
         reex = ' (reeks)';
       }
 
-      /**
+      /*
        *  Hvad er det menneskelige navn for sættet
        * (fx Forår 2018 (reeks))
        */
       let text = `${season} ${q.examYear}${reex}`;
 
-      /**
+      /*
        * Den mere API-venlige udgave:
        * (fx 2018/E)
        */

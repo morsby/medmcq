@@ -56,7 +56,7 @@ const RightMenu = (props) => {
       <>
         {languages.map((lang) => generateFlag(lang))}
         <Menu.Item onClick={() => onNavigation('login')}>
-          <Icon name="user md" /> <Translate id="header.login" />
+          <Icon name="doctor" /> <Translate id="header.login" />
         </Menu.Item>
       </>
     );

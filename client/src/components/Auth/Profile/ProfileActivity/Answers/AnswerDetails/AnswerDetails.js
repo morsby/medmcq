@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import * as actions from '../../../../../../actions';
 import _ from 'lodash';
 
 import { Table, Button, Divider } from 'semantic-ui-react';
@@ -12,7 +14,7 @@ import AnswerDetailsFilterButtons from './AnswerDetailsFilterButtons';
 /**
  * Component showing answer details.  Any filtering occurs in this component.
  */
-const AnswerDetails = ({ answers }) => {
+const AnswerDetails = ({ answers, getQuestions }) => {
   const [filter, setFilter] = useState(undefined);
   const [selected, setSelected] = useState([]);
 
@@ -24,6 +26,10 @@ const AnswerDetails = ({ answers }) => {
    */
   const toggleCheckbox = (id, checked) => {
     checked ? setSelected(_.filter(selected, (el) => el !== id)) : setSelected([...selected, id]);
+  };
+
+  const startQuiz = () => {
+    getQuestions({ type: 'ids', ids: selected });
   };
 
   if (filter) {
@@ -46,7 +52,7 @@ const AnswerDetails = ({ answers }) => {
   return (
     <div>
       <Divider hidden />
-      <Button onClick={() => alert('Implement startQuiz')} disabled={selected.length === 0}>
+      <Button onClick={startQuiz} disabled={selected.length === 0}>
         <Translate id="profileAnswerDetails.start_quiz_button" data={{ n: selected.length }} />
       </Button>
       <h4>
@@ -78,4 +84,7 @@ AnswerDetails.propTypes = {
   answers: PropTypes.array
 };
 
-export default AnswerDetails;
+export default connect(
+  null,
+  actions
+)(AnswerDetails);

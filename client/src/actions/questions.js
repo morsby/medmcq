@@ -2,54 +2,42 @@ import axios from 'axios';
 import * as types from './types';
 import * as voteService from '../services/voteService';
 
-export const getQuestions = (settings, requestedIds = null) => async (dispatch) => {
-  let { type, semester, specialer, tags, n, onlyNew, set } = settings;
+const questionApi = `/api/questions`;
+
+export const getQuestions = (query) => async (dispatch) => {
+  let { type, ids, semester, specialer, tags, n, onlyNew, set } = query;
 
   dispatch({ type: types.IS_FETCHING });
   let res = { data: [] };
 
   // Hvilke spøgsmål bedes der om?
   switch (type) {
+    /*
+      types:
+        - ids
+        - set
+        - random
+        - specialer/tags
+       */
+
     case 'ids':
-      res = await axios.post('/api/questions/ids', {
-        ids: requestedIds
-      });
+    case 'specific':
+      res = await axios.get(questionApi, { params: { ids: ids.join(',') } });
       break;
     case 'set':
-      set = set.split('/');
-
-      res = await axios.get(
-        `/api/questions?semester=${semester}&examYear=${set[0]}&examSeason=${set[1]}`
-      );
+      alert('Implement sets');
+      res = res;
       break;
-    case 'random':
-    case 'specialer': {
-      // Lav tomme strings til API-request
-      let querySpecialer = '',
-        unique = '',
-        queryTags = '';
-
-      // Spcialeønsker? Lav det til en streng!
-      if (type === 'specialer') {
-        querySpecialer = '&specialer=' + specialer.join(',');
-        queryTags = '&tags=' + tags.join(',');
-      }
-
-      // Nye spørgsmål? lav det til en streng!
-      if (onlyNew) unique = '&unique=t';
-
-      // Generer den samlede query-streng
-      res = await axios.get(
-        `/api/questions?semester=${semester}&n=${n}${querySpecialer}${queryTags}${unique}`
-      );
-      break;
-    }
-    case 'specific': {
-      res = await axios.get('/api/questions/' + settings.id);
-      break;
-    }
     default:
-      return null;
+      res = await axios.get(questionApi, {
+        params: {
+          semesters: semester,
+          specialties: (specialer || []).join(','),
+          tags: (tags || []).join(','),
+          n,
+          onlyNew
+        }
+      });
   }
 
   dispatch({
