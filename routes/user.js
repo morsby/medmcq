@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
+const Question = require('../models/question');
 const validationRegex = require('../utils/validation');
 const auth = require('../middleware/auth');
 const keys = require('../config/keys');
@@ -36,7 +37,16 @@ router.get('/tolowercase', async (req, res) => {
     user.save();
   });
 
-  res.status(200).send('Successfully converted all users');
+  const questions = await Question.find();
+
+  questions.forEach((question) => {
+    question.comments.forEach((comment) => {
+      comment.user.toLowerCase();
+    });
+    question.save();
+  });
+
+  res.status(200).send('Successfully converted to lowercase');
 });
 
 router.get('/me', function(req, res) {
