@@ -11,8 +11,12 @@ const CommentsQuestion = ({ question, comments = [] }) => {
         <li className={question.correctAnswers.indexOf(1) > -1 ? 'svar-korrekt' : ''}>
           {question.answer1}
         </li>
-        <li>{question.answer2}</li>
-        <li>{question.answer3}</li>
+        <li className={question.correctAnswers.indexOf(2) > -1 ? 'svar-korrekt' : ''}>
+          {question.answer2}
+        </li>
+        <li className={question.correctAnswers.indexOf(3) > -1 ? 'svar-korrekt' : ''}>
+          {question.answer3}
+        </li>
       </ol>
 
       <Comment.Group>

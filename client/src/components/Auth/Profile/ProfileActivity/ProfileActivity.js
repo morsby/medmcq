@@ -6,6 +6,7 @@ import { Accordion } from 'semantic-ui-react';
 import ProfileActivityAccordionElem from './ProfileActivityAccordionElem';
 
 import Answers from './Answers/Answers';
+import Bookmarks from './Bookmarks/Bookmarks';
 import Comments from './Comments/Comments';
 
 /**
@@ -64,7 +65,7 @@ const ProfileActivity = ({
             active={activeIndex === 3}
             handleClick={setActiveIndex}
           >
-            <h3>Placeholder for bookmarks</h3>
+            <Bookmarks bookmarks={bookmarks} />
           </ProfileActivityAccordionElem>
         )}
       </Translate>
