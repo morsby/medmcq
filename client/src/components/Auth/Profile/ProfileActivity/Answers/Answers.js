@@ -23,9 +23,7 @@ const Answers = ({ answers = [] }) => {
   return (
     <div>
       <p>
-        <strong>
-          <Translate id="profileAnswers.summary" data={{ total: totalAnswers }} />
-        </strong>
+        <Translate id="profileAnswers.summary" data={{ total: totalAnswers }} />
       </p>
       <div>
         <p>

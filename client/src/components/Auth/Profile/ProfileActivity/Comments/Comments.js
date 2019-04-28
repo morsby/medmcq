@@ -7,12 +7,10 @@ import CommentsQuestion from './CommentsQuestion';
 const Comments = ({ questions = [], type = 'public' }) => {
   let [activeIndex, setActiveIndex] = useState(null);
 
-  if (questions.length === 0) return <strong>Du har ingen kommentarer på dette semester.</strong>;
+  if (questions.length === 0) return <div>Du har ingen kommentarer på dette semester.</div>;
 
   return (
     <div>
-      {questions.length > 0 && <strong>Du har kommenteret følgende spørgsmål:</strong>}
-
       {questions.map((question, i) => {
         let questionComments;
         if (type === 'public') questionComments = question.publicComments;

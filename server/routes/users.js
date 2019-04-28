@@ -158,16 +158,18 @@ router.get(
  *                type: object
  *                properties:
  *                  answers:
- *                    type: object
- *                    properties:
- *                      question:
- *                        $ref: "#/components/schemas/Question"
- *                      answers:
- *                        type: array
- *                        items:
- *                          $ref: "#/components/schemas/UserAnswer"
- *                        description: >
- *                          Also includes `correct` property (1 if true; 0 if false)
+ *                    type: array
+ *                    items:
+ *                      type: object
+ *                      properties:
+ *                        question:
+ *                          $ref: "#/components/schemas/Question"
+ *                        answers:
+ *                          type: array
+ *                          items:
+ *                            $ref: "#/components/schemas/UserAnswer"
+ *                          description: >
+ *                            Also includes `correct` property (1 if true; 0 if false)
  *                  publicComments:
  *                    $ref: "#/components/schemas/Questions"
  *                  privateComments:

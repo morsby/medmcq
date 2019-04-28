@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 // Redux
 import { Provider } from 'react-redux';
-import { persistStore, persistReducer } from 'redux-persist';
+import { createMigrate, persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import { PersistGate } from 'redux-persist/lib/integration/react';
@@ -24,11 +24,15 @@ import 'react-image-lightbox/style.css'; // This only needs to be imported once 
 
 // redux
 import { configureStore, getDefaultMiddleware } from 'redux-starter-kit';
-
+const migrations = {
+  1: (state) => ({ settings: state.settings })
+};
 const persistConfig = {
-  key: 'root',
+  key: 'medMCQ',
+  version: 0,
   storage: storage,
-  stateReconciler: autoMergeLevel2 // see "Merge Process" section for details.
+  stateReconciler: autoMergeLevel2, // see "Merge Process" section for details.
+  migrations: createMigrate(migrations, { debug: true })
 };
 
 const pReducer = persistReducer(persistConfig, reducers);
