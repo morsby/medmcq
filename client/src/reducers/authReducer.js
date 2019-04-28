@@ -33,6 +33,15 @@ export default createReducer(initialState, {
     // GETs full questions (from API) and the user's answers:
     let { privateComments, publicComments, bookmarks, answers } = action.payload;
 
+    answers = answers.map(({ question, answers }) => ({
+      question,
+      performance: {
+        tries: answers.length,
+        correct: _.sumBy(answers, (answer) => answer.correct),
+        answers: answers.map((answer) => answer.answer)
+      }
+    }));
+
     state.profile = {
       answers: _.groupBy(answers, (a) => a.question.examSet.semester.value),
       bookmarks: _.groupBy(bookmarks, (a) => a.examSet.semester.value),

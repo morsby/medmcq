@@ -1,4 +1,3 @@
-import _ from "lodash";
 import BaseModel, { hiddenCols } from "./_base_model";
 
 const { Model } = require("objection");
@@ -122,31 +121,6 @@ class User extends Password(BaseModel) {
         }
       }
     };
-  }
-
-  // TODO: Flyt dette ud af formatJson og ind i SQL?
-  $formatJson(json) {
-    json = super.$formatJson(json);
-    if (json.answers) {
-      let grouped = _.groupBy(json.answers, "questionId");
-
-      json.answers = _.uniqBy(json.answers, "questionId");
-
-      json.answers = json.answers.map(question => ({
-        question: question.question,
-        performance: {
-          tries: grouped[question.questionId].length,
-          correct: (
-            _.filter(grouped[question.questionId], { correct: 1 }) || []
-          ).length,
-          answers: (question.answers || []).concat(
-            grouped[question.questionId].map(ans => ans.answer)
-          )
-        }
-      }));
-    }
-
-    return json;
   }
 }
 

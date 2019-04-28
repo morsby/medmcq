@@ -1,6 +1,6 @@
 import express from "express";
 import { ValidationError, NotFoundError } from "objection";
-
+import _ from "lodash";
 import { errorHandler } from "../middleware/errorHandling";
 import { permit } from "../middleware/permission";
 import Question from "../models/question";
@@ -162,20 +162,12 @@ router.get(
  *                    properties:
  *                      question:
  *                        $ref: "#/components/schemas/Question"
- *                      performance:
- *                        type: object
- *                        properties:
- *                          tries:
- *                            type: integer
- *                            description: Number of times the user has answered the question
- *                          correct:
- *                            type: integer
- *                            description: Number of times the user has answered correctly
- *                          answers:
- *                            type: array
- *                            items:
- *                              type: integer
- *                            description: The individual answers
+ *                      answers:
+ *                        type: array
+ *                        items:
+ *                          $ref: "#/components/schemas/UserAnswer"
+ *                        description: >
+ *                          Also includes `correct` property (1 if true; 0 if false)
  *                  publicComments:
  *                    $ref: "#/components/schemas/Questions"
  *                  privateComments:
@@ -199,11 +191,18 @@ router.get(
       // We load the user including answers.
       // TODO: Find en måde at undgå at kalde hente brugeren men i stedet
       // direkte finde svar. Husk parseJson i Models/User.
-      let answers = User.query()
-        .findById(id)
-        .eager(
-          "answers(summary).question.[correctAnswers,examSet.semester,specialties(active),tags(active)]"
-        );
+      let answers = QuestionUserAnswer.query()
+        .where("userId", id)
+        .modify("summary");
+
+      let answeredQuestions = Question.query()
+        .whereIn(
+          "id",
+          QuestionUserAnswer.query()
+            .where("userId", id)
+            .distinct("questionId")
+        )
+        .eager(Question.defaultEager.replace("publicComments.user, ", ""));
 
       // Find questions the user has commented publicly, fetches including other public comments
       let publicComments = Question.query()
@@ -241,13 +240,30 @@ router.get(
         .eager(Question.defaultEager.replace("publicComments.user, ", ""));
 
       // Perform all queries.
-      [answers, publicComments, privateComments, bookmarks] = await Promise.all(
-        [answers, publicComments, privateComments, bookmarks]
-      );
+      [
+        answers,
+        answeredQuestions,
+        publicComments,
+        privateComments,
+        bookmarks
+      ] = await Promise.all([
+        answers,
+        answeredQuestions,
+        publicComments,
+        privateComments,
+        bookmarks
+      ]);
 
       let profile = {};
 
-      profile.answers = answers.toJSON().answers;
+      answers = _.groupBy(answers, "questionId");
+
+      answeredQuestions = answeredQuestions.map(question => ({
+        question,
+        answers: answers[question.id]
+      }));
+
+      profile.answers = answeredQuestions;
       profile.publicComments = publicComments;
       profile.privateComments = privateComments;
       profile.bookmarks = bookmarks;

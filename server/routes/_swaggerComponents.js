@@ -146,7 +146,6 @@
  *          - userId
  *          - questionId
  *          - answer
- *          - question
  *        properties:
  *          id:
  *            type: integer
@@ -159,6 +158,9 @@
  *            example: 1
  *          question:
  *            $ref: "#/components/schemas/Question"
+ *          correct:
+ *            type: boolean
+ *            description: Included in user profiles
  *      UserAnswers:
  *        type: array
  *        items:
