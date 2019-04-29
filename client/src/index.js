@@ -32,7 +32,7 @@ const persistConfig = {
   key: 'medMCQ',
   storage: storage,
   version: 0,
-  stateReconciler: autoMergeLevel2, // see "Merge Process" section for details.
+  stateReconciler: autoMergeLevel2,
   migrate: createMigrate(migrations)
 };
 

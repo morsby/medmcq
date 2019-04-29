@@ -10,7 +10,12 @@ export const QUESTION_SPECIALTY_UPDATE = 'question_specialty_update';
 export const QUESTION_REPORT = 'question_report';
 
 export const CHANGE_SETTINGS = 'change_settings';
-export const FETCH_SETTINGS_QUESTION = 'fetch_settings_question';
+
+export const CHANGE_SELECTION = 'change_selection';
+export const INVALIDATE_SEMESTERS = 'invalidate_semesters';
+export const FETCH_SEMESTERS_REQUEST = 'fetch_semesters_request';
+export const FETCH_SEMESTERS_SUCCESS = 'fetch_semesters_success';
+export const FETCH_SEMESTERS_FAILURE = 'fetch_semesters_failure';
 
 export const AUTH_SIGNUP = 'auth_signup';
 export const AUTH_CURRENT_USER = 'auth_current_user';

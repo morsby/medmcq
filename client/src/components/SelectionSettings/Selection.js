@@ -10,8 +10,6 @@ import { calculateResults } from '../../utils/quiz';
 import selectionTranslations from './selectionTranslations.json';
 import { withLocalize, Translate } from 'react-localize-redux';
 
-import _ from 'lodash';
-
 import { Container, Header, Dropdown, Divider, Button, Message, Input } from 'semantic-ui-react';
 
 import SelectionNSelector from './SelectionSettings/SelectionNSelector';
@@ -21,8 +19,7 @@ import SelectionTypeSelector from './SelectionSettings/SelectionTypeSelector';
 import SelectionUniqueSelector from './SelectionSettings/SelectionUniqueSelector';
 import SelectionMessage from './SelectionMessage';
 
-import { semestre, urls } from '../../utils/common';
-import { specialer as specialerCommon, tags as tagsCommon } from '../../utils/common';
+import { urls } from '../../utils/common';
 
 /**
  * Hovedsiden til at håndtere alle valg af spørgsmål.
@@ -33,7 +30,6 @@ class SelectionMain extends Component {
 
   constructor(props) {
     super(props);
-    this.props.fetchSettingsQuestions(this.props.settings.semester);
     this.props.addTranslation(selectionTranslations);
     this.searchHandler = this.searchHandler.bind(this);
     this.onSettingsChange = this.onSettingsChange.bind(this);
@@ -45,14 +41,7 @@ class SelectionMain extends Component {
    * Tager nu højde for evt. "tomme" semestre, da semester = 7 er default
    */
   componentDidMount() {
-    let { questions, semester, type } = this.props.settings;
-    if (questions.length === 0 && semester === 7) {
-      type = 'semester';
-      const value = 7;
-      const e = null;
-
-      this.onSettingsChange(e, { type, value });
-    }
+    this.props.fetchSemesters();
   }
 
   /**
@@ -153,59 +142,27 @@ class SelectionMain extends Component {
      * derfor IKKE noget med selve quiz-spørgsmålene at gøre, og hentes for
      * at kunne tælle antal spørgsmål for hvert semester, speciale m.v.
      */
-    let { semester, specialer, tags, type, n, onlyNew, questions, sets, set } = this.props.settings;
 
-    let { user } = this.props,
-      answeredQuestions;
-
-    // Hvis brugeren har svaret på spørgsmål før, så hent disses id.
-    if (this.props.user && this.props.user.hasOwnProperty('answeredQuestions')) {
-      answeredQuestions = user.answeredQuestions[semester];
-    }
-
-    // Laver et array af specialer for semesteret
-    let uniques = {
-      specialer: specialerCommon[semester].map((s) => s.value),
-      tags: tagsCommon[semester].map((t) => t.value)
-    };
-
-    // Grupperer de fundne spørgsmål efter specialer
-    let questionsBySpecialty = _.countBy(
-      // Laver et flat array af alle i spg indeholdte specialer
-      _.flattenDeep(questions.map((a) => a.specialty)),
-      (e) => {
-        return uniques.specialer[uniques.specialer.indexOf(e)];
-      }
-    );
-
-    // Grupperer de fundne spørgsmål efter tags
-    let questionsByTag = _.countBy(
-      // Laver et flat array af alle i spg indeholdte tags
-      _.flattenDeep(questions.map((a) => a.tags)),
-      (e) => {
-        return uniques.tags[uniques.tags.indexOf(e)];
-      }
-    );
-
-    // Tjekker hvor mange der er valgt
-    let antalValgte = 0;
-    specialer.map((s) => {
-      let n = questionsBySpecialty[s] ? questionsBySpecialty[s] : 0;
-      antalValgte = antalValgte + n;
-      return null;
-    });
-
-    tags.map((t) => {
-      let n = questionsByTag[t] ? questionsByTag[t] : 0;
-      antalValgte = antalValgte + n;
-      return null;
-    });
-
+    let semestre = [],
+      semester,
+      type,
+      n,
+      questions = [],
+      sets = [],
+      set,
+      answeredQuestions = [],
+      specialer = [],
+      tags = [],
+      user,
+      questionsBySpecialty,
+      questionsByTag,
+      antalValgte,
+      onlyNew;
     return (
       <div className="flex-container">
         <Container className="content">
           <Header as="h1" style={{ textAlign: 'center' }}>
-            MedMcq
+            medMcq
           </Header>
           <Divider />
           <Header as="h3">
@@ -370,7 +327,8 @@ function mapStateToProps(state) {
   return {
     settings: state.settings,
     user: state.auth.user,
-    questions: state.questions
+    questions: state.questions,
+    selection: state.selection
   };
 }
 

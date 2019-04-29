@@ -5,7 +5,6 @@ import { createReducer } from 'redux-starter-kit';
 /**
  * user defaulter til null; burde måske være et tomt object (men så vil mange
  * Component-auth checks skulle skrives om, da user vil være === true)
- * Performance udregnes lidt kringlet nedenfor.
  */
 const initialState = {
   user: null,
