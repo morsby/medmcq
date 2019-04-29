@@ -4,14 +4,17 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 
+import _ from 'lodash';
+
 import { allowedNs, breakpoints } from '../../utils/common';
 import { calculateResults } from '../../utils/quiz';
 
 import selectionTranslations from './selectionTranslations.json';
 import { withLocalize, Translate } from 'react-localize-redux';
 
-import { Container, Header, Dropdown, Divider, Button, Message, Input } from 'semantic-ui-react';
+import { Container, Header, Divider, Button, Message, Input } from 'semantic-ui-react';
 
+import SelectionSemesterSelector from './SelectionSettings/SelectionSemesterSelector';
 import SelectionNSelector from './SelectionSettings/SelectionNSelector';
 import SelectionSetSelector from './SelectionSettings/SelectionSetSelector/SelectionSetSelector';
 import SelectionSpecialtiesSelector from './SelectionSettings/SelectionSpecialtiesSelector/SelectionSpecialtiesSelector';
@@ -37,8 +40,7 @@ class SelectionMain extends Component {
   }
 
   /**
-   * Seeder data hvis det er første besøg.
-   * Tager nu højde for evt. "tomme" semestre, da semester = 7 er default
+   * Henter nye data, hvis det er længe siden sidst.
    */
   componentDidMount() {
     this.props.fetchSemesters();
@@ -55,8 +57,7 @@ class SelectionMain extends Component {
     this.setState({ err: [] });
     if (type === 'n' && value) value = Number(value);
     if (type === 'onlyNew') value = checked;
-    let { lastSettingsQuestionFetch } = this.props.settings;
-    this.props.changeSettings({ type, value, lastSettingsQuestionFetch });
+    this.props.changeSelection(type, value);
   }
 
   /**
@@ -143,11 +144,10 @@ class SelectionMain extends Component {
      * at kunne tælle antal spørgsmål for hvert semester, speciale m.v.
      */
 
-    let semestre = [],
-      semester,
-      type,
-      n,
-      questions = [],
+    let { items: semesters, selectedSemester } = this.props.selection.semesters;
+    let { type, n } = this.props.selection.quizSelection;
+
+    let questions = [],
       sets = [],
       set,
       answeredQuestions = [],
@@ -165,32 +165,30 @@ class SelectionMain extends Component {
             medMcq
           </Header>
           <Divider />
-          <Header as="h3">
-            <Translate id="selection.static.choose_semester" />
-          </Header>
-          <Dropdown
-            placeholder={this.props.translate('selection.static.choose_semester')}
-            fluid
-            selection
-            options={semestre}
-            name="semester"
-            value={semester}
-            onChange={this.onSettingsChange}
+          <SelectionSemesterSelector
+            label={this.props.translate('selection.static.choose_semester')}
+            name="selectedSemester"
+            semesters={_.map(semesters, ({ id, value, name }) => ({
+              value: id,
+              text: `${value}. semester (${name})`
+            }))}
+            selectedSemester={selectedSemester}
+            handleChange={this.onSettingsChange}
           />
           <Divider hidden />
+
           <SelectionTypeSelector handleClick={this.onSettingsChange} type={type} />
 
           <Divider hidden />
 
           {type !== 'set' && (
             <>
-              <SelectionNSelector
-                n={Number(n)}
-                onChange={this.onSettingsChange}
-                semester={semester}
-              />
+              <SelectionNSelector n={Number(n)} onChange={this.onSettingsChange} />
               <Divider hidden />
-              <Translate id="selectionNSelector.total_n" data={{ n: questions.length }} />
+              <Translate
+                id="selectionNSelector.total_n"
+                data={{ n: (semesters[selectedSemester] || {}).questionCount }}
+              />
               <Divider />
             </>
           )}
@@ -215,7 +213,7 @@ class SelectionMain extends Component {
               questions={questions}
               sets={sets}
               activeSet={set}
-              semester={semester}
+              semester={semesters[selectedSemester]}
               answeredQuestions={answeredQuestions}
               onChange={this.onSettingsChange}
             />
@@ -224,7 +222,7 @@ class SelectionMain extends Component {
           {type === 'specialer' && (
             <>
               <SelectionSpecialtiesSelector
-                semester={semester}
+                semester={semesters[selectedSemester]}
                 valgteSpecialer={specialer}
                 antalPerSpeciale={questionsBySpecialty}
                 valgteTags={tags}

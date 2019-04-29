@@ -48,6 +48,9 @@ class App extends Component {
   constructor(props) {
     super(props);
 
+    // Force refresh af semestre på reload:
+    this.props.invalidateSemesters();
+
     this.props.addTranslation(authTranslations);
 
     const languages = ['dk', 'gb'];

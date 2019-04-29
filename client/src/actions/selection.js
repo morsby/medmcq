@@ -8,6 +8,7 @@ export const changeSelection = (type, value) => (dispatch) => {
 
 export const invalidateSemesters = () => (dispatch) => {
   dispatch({ type: types.INVALIDATE_SEMESTERS });
+  dispatch(fetchSemesters());
 };
 
 const shouldFetchSemesters = (state) => {
@@ -17,7 +18,7 @@ const shouldFetchSemesters = (state) => {
   } else if (semesters.info.isFetching === true) {
     return false;
   } else {
-    return false;
+    return semesters.info.didInvalidate;
   }
 };
 
