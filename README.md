@@ -1,8 +1,8 @@
 # AU medMCQ
 
-Dette er en webapp bygget som en Express-server med React ovenpå.
+Dette er en webapp bygget som en Express-server med React ovenpå. Den bruges af medicinstuderende på Aarhus Universitet til repetition af multiple choice question (MCQ) eksaminer.
 
-Den er skabt som en direkte erstatning for StringLearning, da de har indført betalingsmur.
+Siden er lavet med tilladelse fra Institut for Klinisk Medicin, Health, Aarhus Universitet.
 
 ## For de teknisk interesserede
 
