@@ -21,7 +21,9 @@ const router = express.Router();
  *         content:
  *           application/json:
  *             schema:
- *               $ref: "#/components/schemas/Semesters"
+ *               type: array
+ *               items:
+ *                 $ref: "#/components/schemas/SemesterEagerLoaded"
  *       default:
  *         description: unexpected error
  *         content:
@@ -31,7 +33,15 @@ const router = express.Router();
  */
 router.get("/", async (req, res) => {
   try {
-    let semesters = await Semester.query().orderBy("value");
+    let semesters = await Semester.query()
+      .select([
+        "semester.*",
+        Semester.relatedQuery("questions")
+          .count()
+          .as("question_count")
+      ])
+      .eager(Semester.defaultEager)
+      .orderBy("value");
 
     res.status(200).json(semesters);
   } catch (err) {
@@ -128,6 +138,7 @@ router.get("/:id", async (req, res) => {
       .eager(Semester.defaultEager);
 
     if (!semester) throw new NotFoundError();
+
     res.status(200).json(semester);
   } catch (err) {
     errorHandler(err, res);

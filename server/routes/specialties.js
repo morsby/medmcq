@@ -256,6 +256,9 @@ router.delete(
  *            type: integer
  *          questions:
  *            $ref: "#/components/schemas/ActiveSpecialtyVotes"
+ *          questionCount:
+ *            type: integer
+ *            description: Number of questions with the selected specialty
  *      Specialties:
  *        type: array
  *        items:

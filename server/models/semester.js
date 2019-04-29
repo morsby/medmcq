@@ -69,6 +69,28 @@ class Semester extends BaseModel {
   static get defaultEager() {
     return "[examSets, specialties.questions(active), tags.questions(active)]";
   }
+
+  $formatJson(json) {
+    json = super.$formatJson(json);
+
+    // Vi tjekker om specialties er et array (og nester en masse for at undgå undefined errs)
+    if (Array.isArray(((json.specialties || [{}])[0] || {}).questions)) {
+      json.specialties = json.specialties.map(specialty => ({
+        ...specialty,
+        questionCount: specialty.questions.length,
+        questions: undefined
+      }));
+    }
+    // Vi tjekker om tags er et array (og nester en masse for at undgå undefined errs)
+    if (Array.isArray(((json.tags || [{}])[0] || {}).questions)) {
+      json.tags = json.tags.map(specialty => ({
+        ...specialty,
+        questionCount: specialty.questions.length,
+        questions: undefined
+      }));
+    }
+    return json;
+  }
 }
 
 module.exports = Semester;

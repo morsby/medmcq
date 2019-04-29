@@ -255,6 +255,9 @@ router.delete(
  *            type: integer
  *          questions:
  *            $ref: "#/components/schemas/ActiveTagVotes"
+ *          questionCount:
+ *            type: integer
+ *            description: Number of questions with the selected tag
  *      Tags:
  *        type: array
  *        items:
