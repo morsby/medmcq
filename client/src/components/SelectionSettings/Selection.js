@@ -80,6 +80,12 @@ class SelectionMain extends Component {
     this.setState({ search: value });
   }
 
+  handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      this.handleSubmit('new');
+    }
+  };
+
   handleSubmit(quizType) {
     let err = [];
 
@@ -249,6 +255,7 @@ class SelectionMain extends Component {
                 onChange={this.searchHandler}
                 fluid
                 placeholder={this.props.translate('search.placeholder')}
+                onKeyPress={(e) => this.handleKeyPress(e)}
               />
               <Divider />
             </>
