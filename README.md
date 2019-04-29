@@ -10,7 +10,7 @@ I `/server` findes en RESTful api og forbindelsen til en MongoDB-database.
 
 I `/client` findes React-layoutet, der henter data fra api'en og viser spørgsmålene.
 
-## Client struktur
+### Client struktur
 
 I `/pages` findes de store components, som vises på hjemmesiden. Disse er hvad brugeren ser, og de indeholder adskillige andre containers eller components.
 
