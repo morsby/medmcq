@@ -13,5 +13,7 @@ I `/client` findes React-layoutet, der henter data fra api'en og viser spørgsm�
 ## Client struktur
 
 I `/pages` findes de store components, som vises på hjemmesiden. Disse er hvad brugeren ser, og de indeholder andre components.
+
 I `/containers` findes store byggeklodser, som indeholder mange mindre components.
+
 I `/components` findes de mindste byggeklodser, som indgår i én eller flere andre components eller containers. Disse indeholder enten meget få eller ingen andre components.
