@@ -31,7 +31,7 @@ router.post('/', async (req, res) => {
 
 // Skift Thomas' brugernavn
 router.get('/thomas', async (req, res) => {
-  const user = await User.find({ username: 'thomasjensen1194' });
+  const user = await User.findOne({ username: 'thomasjensen1194' });
   user.username = 'thjen';
   user.save();
 
@@ -45,7 +45,7 @@ router.get('/thomas', async (req, res) => {
     question.save();
   });
 
-  res.status(200).send('Brugernavnet er ændret');
+  res.status(200).send('brugeren er opdateret');
 });
 
 router.get('/tolowercase', async (req, res) => {
