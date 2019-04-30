@@ -85,7 +85,7 @@ class Question extends Component {
      * Defaults til allerede kendte værdier
      * @type {Array}
      */
-    selectedSpecialties: this.props.question.specialty,
+    selectedSpecialties: this.props.question.specialties,
 
     /**
      * Current window width
@@ -130,7 +130,7 @@ class Question extends Component {
    * af specialer nulstilles
    */
   componentDidUpdate(prevProps) {
-    if (this.props.question._id !== prevProps.question._id) {
+    if (this.props.question.id !== prevProps.question.id) {
       this.setState({
         reportOpen: false,
         reportSent: false,
@@ -206,7 +206,7 @@ class Question extends Component {
 
       // Call answerQuestion fra redux
       answerQuestion(
-        question._id,
+        question.id,
         answer,
         {
           qn: qn,
@@ -270,7 +270,7 @@ class Question extends Component {
          *  (dvs. editingComment = dennes id.)
          */
         this.props.editComment(
-          this.props.question._id,
+          this.props.question.id,
           this.state.editingComment,
           this.state.newComment,
           isPrivate
@@ -279,7 +279,7 @@ class Question extends Component {
         /**
          *  Det er en ny kommentar
          */
-        this.props.commentQuestion(this.props.question._id, this.state.newComment, isPrivate);
+        this.props.commentQuestion(this.props.question.id, this.state.newComment, isPrivate);
       }
       this.setState({ newComment: '', editingComment: '' });
     }
@@ -289,7 +289,7 @@ class Question extends Component {
    * Slet kommentar. Fra redux
    */
   onDeleteComment(comment_id) {
-    this.props.deleteComment(this.props.question._id, comment_id);
+    this.props.deleteComment(this.props.question.id, comment_id);
   }
 
   /**
@@ -300,7 +300,7 @@ class Question extends Component {
   onEditComment(comment) {
     this.setState({
       newComment: comment.comment,
-      editingComment: comment._id
+      editingComment: comment.id
     });
   }
 
@@ -325,7 +325,7 @@ class Question extends Component {
   }
 
   onSaveSpecialties() {
-    this.props.editSpecialties(this.props.question._id, this.state.selectedSpecialties);
+    this.props.editSpecialties(this.props.question.id, this.state.selectedSpecialties);
     this.setState({ editingSpecialties: false });
   }
 
@@ -392,15 +392,11 @@ class Question extends Component {
             <div>
               <div>
                 <Translate id="questionMetadata.specialty" />{' '}
-                {question.specialty
-                  .map((spec) => (_.find(specialer[question.semester], { value: spec }) || {}).text)
-                  .join(' | ')}
+                {question.specialties.map((spec) => spec.specialtyName).join(' | ')}
               </div>
               <div>
                 <Translate id="questionMetadata.tags" />{' '}
-                {question.tags
-                  .map((tag) => (_.find(tags[question.semester], { value: tag }) || {}).text)
-                  .join(' | ')}
+                {question.tags.map((tag) => tag.tagName).join(' | ')}
               </div>
             </div>
           )}

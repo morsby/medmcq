@@ -31,8 +31,8 @@ export default createReducer(initialState, {
     /**
      * Find det spørgsmål i array'et der har det rette id, opdater svaret
      */
-    const index = _.findIndex(state, { _id: action.payload.id });
-    const q = state[index];
+    const index = _.findIndex(state.questions, { id: action.payload.id });
+    const q = state.questions[index];
     q.answer = action.payload.answer;
   },
 
@@ -44,21 +44,21 @@ export default createReducer(initialState, {
      *
      * Virker ved at API'en returnerer det opdaterede spørgsmål.
      */
-    const { _id, comments } = action.payload.question;
-    const index = _.findIndex(state, { _id });
+    const { id, comments } = action.payload.question;
+    const index = _.findIndex(state.questions, { id });
 
-    state[index].comments = comments;
+    state.questions[index].comments = comments;
   },
   [types.QUESTION_SPECIALTY_UPDATE]: (state, action) => {
     /**
      * Find det id i arrayet og erstat specialerne.
      */
-    const { _id, specialty, votes, tags, tagVotes } = action.payload;
-    const index = _.findIndex(state, { _id });
+    const { id, specialty, votes, tags, tagVotes } = action.payload;
+    const index = _.findIndex(state.questions, { id });
 
-    state[index].specialty = specialty;
-    state[index].votes = votes;
-    state[index].tags = tags;
-    state[index].tagVotes = tagVotes;
+    state.questions[index].specialty = specialty;
+    state.questions[index].votes = votes;
+    state.questions[index].tags = tags;
+    state.questions[index].tagVotes = tagVotes;
   }
 });

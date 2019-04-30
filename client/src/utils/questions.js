@@ -4,7 +4,7 @@ export const groupQuestionsBySet = (questions) =>
 
 export const getIds = (objs) => {
   if (Array.isArray(objs)) {
-    if (objs[0]._id) {
+    if (objs[0].id) {
       return _.map(objs, '_id');
     } else
       throw new Error({

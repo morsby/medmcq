@@ -90,7 +90,7 @@ const QuestionComments = ({
       <div>
         {comments.map((c) => (
           <QuestionCommentSingle
-            key={c._id}
+            key={c.id}
             comment={c}
             user={user}
             deleteComment={onDeleteComment}

@@ -49,7 +49,7 @@ const QuizSummary = ({ questions, clickHandler }) => {
                     as="a"
                     className={svar}
                     onClick={() => clickHandler(index)}
-                    key={q._id}
+                    key={q.id}
                   >
                     {truncateText(q.question)}
                   </List.Item>

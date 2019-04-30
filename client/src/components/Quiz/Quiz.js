@@ -83,7 +83,7 @@ class QuizMain extends Component {
        * navigerer i så fald IKKE
        */
       let qn = this.state.qn,
-        max = this.props.questions.length;
+        max = this.props.quiz.questions.length;
       if (document.activeElement.tagName === 'TEXTAREA') return;
 
       if (e.key === 'ArrowLeft') {
@@ -134,10 +134,12 @@ class QuizMain extends Component {
   }
 
   render() {
-    let { questions, settings, answers, user } = this.props,
+    let { quiz, answers, user } = this.props,
       { qn } = this.state;
 
-    if (!questions || settings.isFetching)
+    let { questions } = quiz;
+
+    if (!questions || quiz.isFetching)
       return (
         <Translate>
           {({ translate }) => (
@@ -254,7 +256,7 @@ QuizMain.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    questions: state.quiz.questions,
+    quiz: state.quiz,
     answers: state.answers,
     settings: state.settings,
     user: state.auth.user

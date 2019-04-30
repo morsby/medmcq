@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 
 import { Button, Divider } from 'semantic-ui-react';
 
-import { evalAnswer } from '../../../utils/quiz';
+import { evalAnswer, subSupScript } from '../../../utils/quiz';
 import marked from 'marked';
-import { subSupScript } from '../../../utils/quiz';
 
 /**
  * Component der viser svarmuligheder.

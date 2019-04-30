@@ -18,7 +18,7 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
   if (!user) user = {};
   return (
     <Comment
-      key={comment._id}
+      key={comment.id}
       style={{
         border: '1px solid rgb(140,140,140)',
         borderRadius: '5px',
@@ -63,7 +63,7 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
                 </Menu.Item>
                 <Menu.Item
                   onClick={() => {
-                    deleteComment(comment._id);
+                    deleteComment(comment.id);
                     setDeleting(false);
                   }}
                 >

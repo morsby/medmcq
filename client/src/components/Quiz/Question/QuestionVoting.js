@@ -23,7 +23,7 @@ const QuestionVoting = (props) => {
   useEffect(() => {
     let userSpecialties = [];
     props.question.votes.forEach((vote) => {
-      if (_.includes(vote.users, props.user._id)) {
+      if (_.includes(vote.users, props.user.id)) {
         userSpecialties.push(vote.specialty);
       }
     });
@@ -31,7 +31,7 @@ const QuestionVoting = (props) => {
 
     let userTags = [];
     props.question.tagVotes.forEach((tagVote) => {
-      if (_.includes(tagVote.users, props.user._id)) {
+      if (_.includes(tagVote.users, props.user.id)) {
         userTags.push(tagVote.tag);
       }
     });
@@ -47,12 +47,12 @@ const QuestionVoting = (props) => {
   }, [props.question, props.user]);
 
   const specialtyVote = async () => {
-    await props.voteSpecialty(chosenSpecialties, props.user._id, props.question._id);
+    await props.voteSpecialty(chosenSpecialties, props.user.id, props.question.id);
     setSpecialtyMessage('Du har stemt på specialerne');
   };
 
   const tagVote = async () => {
-    await props.voteTags(chosenTags, props.user._id, props.question._id);
+    await props.voteTags(chosenTags, props.user.id, props.question.id);
     setTagMessage('Tags er tilføjet');
   };
 

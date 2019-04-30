@@ -65,7 +65,7 @@ class Print extends Component {
 
           {questions.map((q, i) => {
             return (
-              <div className="avoid-page-break" key={q._id}>
+              <div className="avoid-page-break" key={q.id}>
                 <h3>
                   <Translate id="print.question" data={{ n: i + 1 }} />
                 </h3>

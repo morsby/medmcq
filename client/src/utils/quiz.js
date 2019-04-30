@@ -30,13 +30,13 @@ export const smoothScroll = (h, dir = 'up') => {
 export const evalAnswer = (question, answer) => {
   if (!question.answer) return null; // hvis ikke svaret
 
-  if (Array.isArray(question.correctAnswer)) {
-    if (question.correctAnswer.includes(answer)) return 'green';
+  if (question.correctAnswers.includes(answer)) {
+    return 'green';
+  } else if (answer === question.answer) {
+    return 'red'; // hvis forkert svar
   } else {
-    if (answer === question.correctAnswer) return 'green'; // hvis korrekt svar
+    return 'grey'; // ikke valgt mulighed
   }
-  if (answer === question.answer) return 'red'; // hvis forkert svar
-  return 'grey'; // ikke valgt mulighed
 };
 
 export const calculateResults = (questions) => {
