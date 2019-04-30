@@ -4,7 +4,7 @@ import { Form, Message } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 
 // TODO: TRANSLATION
-const QuestionReport = ({ report, handleChange, handleSubmit, reportSent, semester }) => {
+const QuestionReport = ({ report, handleChange, handleSubmit, reportSent, question }) => {
   if (reportSent)
     return (
       <Message success>
@@ -19,11 +19,12 @@ const QuestionReport = ({ report, handleChange, handleSubmit, reportSent, semest
       <Translate>
         {({ translate }) => (
           <Form onSubmit={handleSubmit}>
-            {semester == 11 && (
+            {question.semester == 11 && (
               <Message color="yellow">
                 <Translate id="questionReport.pictureMissing11" />
               </Message>
             )}
+            {question.disclaimer && <Message color="yellow">{question.disclaimer}</Message>}
             <Form.Field>
               <Form.TextArea
                 name="report"

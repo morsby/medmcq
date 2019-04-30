@@ -465,7 +465,7 @@ class Question extends Component {
                 handleChange={this.onTextType}
                 handleSubmit={this.onReportSubmit}
                 reportSent={this.state.reportSent}
-                semester={question.semester}
+                question={question}
               />
             </>
           )}
@@ -499,7 +499,7 @@ class Question extends Component {
           )}
           {user && question.answer && (
             <>
-            <Divider />
+              <Divider />
               <QuestionVoting question={question} user={user} />
             </>
           )}

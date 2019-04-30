@@ -29,7 +29,8 @@ var QuestionSchema = new Schema({
     }
   ],
   votes: [{ specialty: String, users: [String] }],
-  tagVotes: [{ tag: String, users: [String] }]
+  tagVotes: [{ tag: String, users: [String] }],
+  disclaimer: String
 });
 
 QuestionSchema.plugin(random);
