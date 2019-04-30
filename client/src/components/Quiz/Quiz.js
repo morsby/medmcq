@@ -139,7 +139,7 @@ class QuizMain extends Component {
 
     let { questions } = quiz;
 
-    if (!questions || quiz.isFetching)
+    if (quiz.isFetching)
       return (
         <Translate>
           {({ translate }) => (

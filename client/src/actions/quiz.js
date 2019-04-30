@@ -15,7 +15,7 @@ export const getQuestions = (ids) => async (dispatch, getState) => {
     onlyNew
   } = state.selection.quizSelection;
   let { selectedSemester } = state.selection.semesters;
-  console.log(selectedSemester);
+
   dispatch({ type: types.FETCH_QUESTIONS_REQUEST });
   let res;
   // Hvilke spøgsmål bedes der om?
@@ -50,7 +50,7 @@ export const getQuestions = (ids) => async (dispatch, getState) => {
   dispatch({
     type: types.FETCH_QUESTIONS_SUCCESS,
     payload: res.data,
-    questionType: type
+    createdAt: Date.now()
   });
 };
 

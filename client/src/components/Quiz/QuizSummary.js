@@ -35,23 +35,14 @@ const QuizSummary = ({ questions, clickHandler }) => {
             <List ordered>
               {questions.map((q, index) => {
                 let svar;
-                if (
-                  q.answer &&
-                  (q.answer === q.correctAnswer ||
-                    (Array.isArray(q.correctAnswer) && q.correctAnswer.includes(q.answer)))
-                ) {
+                if (q.correctAnswers.includes(q.answer)) {
                   svar = 'svar-korrekt';
-                } else if (q.answer && q.answer !== q.correctAnswer) {
+                } else if (q.answer && !q.correctAnswers.includes(q.answer)) {
                   svar = 'svar-forkert';
                 }
                 return (
-                  <List.Item
-                    as="a"
-                    className={svar}
-                    onClick={() => clickHandler(index)}
-                    key={q.id}
-                  >
-                    {truncateText(q.question)}
+                  <List.Item as="a" className={svar} onClick={() => clickHandler(index)} key={q.id}>
+                    {truncateText(q.text)}
                   </List.Item>
                 );
               })}

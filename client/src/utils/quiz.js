@@ -48,7 +48,7 @@ export const calculateResults = (questions) => {
   } else {
     let correct = 0;
     answered.map((question) => {
-      if (question.answer === question.correctAnswer) correct++;
+      if (question.correctAnswers.includes(question.answer)) correct++;
       return correct;
     });
 
