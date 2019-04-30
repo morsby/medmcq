@@ -28,7 +28,9 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
       }}
     >
       <Comment.Content>
-        <Comment.Author as="strong">{comment.user}</Comment.Author>
+        <Comment.Author as="strong">
+          {comment.user[0].toUpperCase() + comment.user.substring(1)}
+        </Comment.Author>
         <Comment.Metadata style={{ color: 'rgb(140, 140, 140)' }}>
           {new Date(comment.date).toLocaleString('da-DK')}
         </Comment.Metadata>
