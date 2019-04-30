@@ -37,7 +37,7 @@ const SelectionSpecialtiesSelector = ({
               return (
                 <SelectionSpecialtiesSelectorCheckbox
                   key={speciale.id}
-                  type="specialty"
+                  type="selectedSpecialtyIds"
                   speciale={speciale}
                   erValgt={erValgt}
                   onChange={onChange}
@@ -59,7 +59,7 @@ const SelectionSpecialtiesSelector = ({
               return (
                 <SelectionSpecialtiesSelectorCheckbox
                   key={tag.id}
-                  type="tag"
+                  type="selectedTagIds"
                   speciale={tag}
                   erValgt={erValgt}
                   onChange={onChange}

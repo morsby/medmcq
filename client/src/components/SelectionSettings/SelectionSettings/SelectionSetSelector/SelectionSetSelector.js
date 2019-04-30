@@ -8,14 +8,7 @@ import { Form, Header } from 'semantic-ui-react';
 
 import { Translate } from 'react-localize-redux';
 
-const SelectionSetSelector = ({
-  semester,
-  activeSet,
-  sets,
-  questions,
-  answeredQuestions,
-  onChange
-}) => {
+const SelectionSetSelector = ({ semester, selectedSet, onChange }) => {
   if (!semester)
     return (
       <Header as="h3">
@@ -25,29 +18,19 @@ const SelectionSetSelector = ({
   return (
     <Form>
       <Header as="h3">
-        <Translate id="selectionSetSelector.header" data={{ semester }} />
+        <Translate id="selectionSetSelector.header" data={{ semester: semester.value }} />
       </Header>
 
-      {sets.map((set) => (
-        <SetRadioButton
-          key={set.api}
-          set={set}
-          answeredQuestions={answeredQuestions}
-          groupedQuestions={groupQuestionsBySet(questions)[set.api]}
-          activeSet={activeSet}
-          onChange={onChange}
-        />
+      {semester.examSets.map((set) => (
+        <SetRadioButton key={set.id} set={set} selectedSet={selectedSet} onChange={onChange} />
       ))}
     </Form>
   );
 };
 
 SelectionSetSelector.propTypes = {
-  semester: PropTypes.number,
-  activeSet: PropTypes.string,
-  sets: PropTypes.array,
-  questions: PropTypes.array,
-  answeredQuestions: PropTypes.object,
+  semester: PropTypes.object,
+  selectedSetId: PropTypes.number,
   onChange: PropTypes.func
 };
 

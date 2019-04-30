@@ -18,7 +18,7 @@ const initialState = {
     type: 'random',
     n: 10,
     onlyNew: false,
-    setId: null,
+    selectedSetId: null,
     selectedSpecialtyIds: [],
     selectedTagIds: []
   }
@@ -37,18 +37,16 @@ export default createReducer(initialState, {
 
     // Vi nulstill
     if (type === 'selectedSemester') {
-      state.quizSelection.setId = null;
+      state.quizSelection.selectedSetId = null;
       state.quizSelection.selectedSpecialtyIds = [];
       state.quizSelection.selectedTagIds = [];
       state.semesters.selectedSemester = value;
-    } else if (['specialty', 'tag'].indexOf(type) > -1) {
-      type = type.substring(0, 1).toUpperCase() + type.substring(1, type.length);
-      let path = `selected${type}Ids`;
-
-      let selection = Array.isArray(state.quizSelection[path]) ? state.quizSelection[path] : [];
-
-      state.quizSelection[path] = insertOrRemove(selection, value);
     } else {
+      // Hvis vi ændrer specialer/tags, opdaterer vi array'et
+      if (['selectedSpecialtyIds', 'selectedTagIds'].indexOf(type) > -1) {
+        let selection = Array.isArray(state.quizSelection[type]) ? state.quizSelection[type] : [];
+        value = insertOrRemove(selection, value);
+      }
       state.quizSelection[type] = value;
     }
   },

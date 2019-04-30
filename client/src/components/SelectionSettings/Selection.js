@@ -151,6 +151,7 @@ class SelectionMain extends Component {
       n,
       selectedSpecialtyIds,
       selectedTagIds,
+      selectedSetId,
       onlyNew
     } = this.props.selection.quizSelection;
 
@@ -211,11 +212,8 @@ class SelectionMain extends Component {
 
           {type === 'set' && (
             <SelectionSetSelector
-              questions={questions}
-              sets={sets}
-              activeSet={set}
+              selectedSet={selectedSetId}
               semester={semesters[selectedSemester]}
-              answeredQuestions={answeredQuestions}
               onChange={this.onSettingsChange}
             />
           )}

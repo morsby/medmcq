@@ -1,22 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 
-import { getIds } from '../../../../utils/questions';
-import { Form, Radio, Divider, Icon } from 'semantic-ui-react';
+import { Form, Radio, Divider } from 'semantic-ui-react';
 
 import { Translate } from 'react-localize-redux';
 
-const SetRadioButton = ({ set, answeredQuestions, groupedQuestions, activeSet, onChange }) => {
-  let completed = '';
-
-  // Tjekker hvilke spg. i sættet der ikke er besvaret allerede
-  if (answeredQuestions) {
-    let missingQuestions = _.difference(getIds(groupedQuestions), getIds(answeredQuestions));
-
-    if (missingQuestions.length === 0) completed = <Icon name="check" color="green" />;
-  }
-
+const SetRadioButton = ({ set, selectedSet, onChange }) => {
   return (
     <Form.Group key={set.api}>
       <Form.Field>
@@ -26,7 +15,7 @@ const SetRadioButton = ({ set, answeredQuestions, groupedQuestions, activeSet, o
             /*flyt evt. disse replaces over i react-localize-redux 
                         vha. dynamiske id's (se fx profileAnswerDetails og dets 
                         Sæt-kolonne i tabellen) */
-            let label = set.text;
+            let label = `${set.season} ${set.year}`;
             if (activeLanguage.code === 'gb') {
               label = label.replace('Forår', 'Spring');
               label = label.replace('Efterår', 'Autumn');
@@ -37,12 +26,11 @@ const SetRadioButton = ({ set, answeredQuestions, groupedQuestions, activeSet, o
               <>
                 <Radio
                   label={label}
-                  value={set.api}
-                  checked={set.api === activeSet}
-                  name="set"
+                  value={set.id}
+                  checked={set.id === selectedSet}
+                  name="selectedSetId"
                   onChange={onChange}
-                />{' '}
-                {completed}
+                />
                 <Divider vertical hidden />
               </>
             );
@@ -57,7 +45,7 @@ SetRadioButton.propTypes = {
   set: PropTypes.object,
   answeredQuestions: PropTypes.object,
   groupedQuestions: PropTypes.array,
-  activeSet: PropTypes.string,
+  selectedSetId: PropTypes.string,
   onChange: PropTypes.func
 };
 
