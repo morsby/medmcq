@@ -29,45 +29,6 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Skift Thomas' brugernavn
-router.get('/thomas', async (req, res) => {
-  const user = await User.findOne({ username: 'thomasjensen1194' });
-  user.username = 'thjen';
-  user.save();
-
-  const questions = await Question.find({ 'comments.user': 'thomasjensen1194' });
-  questions.forEach((question) => {
-    question.comments.forEach((comment) => {
-      if (comment.user === 'thomasjensen1194') {
-        comment.user = 'thjen';
-      }
-    });
-    question.save();
-  });
-
-  res.status(200).send('brugeren er opdateret');
-});
-
-router.get('/tolowercase', async (req, res) => {
-  const users = await User.find();
-
-  users.forEach((user) => {
-    user.username = user.username.toLowerCase();
-    user.save();
-  });
-
-  const questions = await Question.find();
-
-  questions.forEach((question) => {
-    question.comments.forEach((comment) => {
-      comment.user.toLowerCase();
-    });
-    question.save();
-  });
-
-  res.status(200).send('Successfully converted to lowercase');
-});
-
 router.get('/me', function(req, res) {
   res.send(req.user);
 });
