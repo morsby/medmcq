@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { specialer, tags } from '../../../../utils/common';
+import { tags } from '../../../../utils/common';
 import { Translate } from 'react-localize-redux';
 
 import { Form, Header, Message, Grid } from 'semantic-ui-react';
@@ -11,12 +11,10 @@ import SelectionSpecialtiesSelectorCheckbox from './SelectionSpecialtiesSelector
  * Laver en checkbox for hvert speciale.
  */
 const SelectionSpecialtiesSelector = ({
-  semester = 7,
+  semester = {},
   valgteSpecialer = [],
   valgteTags = [],
-  onChange,
-  antalPerSpeciale,
-  antalPerTag
+  onChange
 }) => {
   if (!semester)
     return (
@@ -30,17 +28,19 @@ const SelectionSpecialtiesSelector = ({
         <Grid.Column>
           <Grid.Row>
             <Header as="h3">
-              <Translate id="selectionSpecialtiesSelector.header" data={{ semester }} />
+              <Translate
+                id="selectionSpecialtiesSelector.header"
+                data={{ semester: semester.value }}
+              />
             </Header>
-            {specialer[semester].map((speciale) => {
-              let erValgt = valgteSpecialer.includes(speciale.value);
+            {semester.specialties.map((speciale) => {
+              let erValgt = valgteSpecialer.includes(speciale.id);
               return (
                 <SelectionSpecialtiesSelectorCheckbox
-                  key={speciale.value}
-                  type="specialer"
+                  key={speciale.id}
+                  type="specialty"
                   speciale={speciale}
                   erValgt={erValgt}
-                  antalPerSpeciale={antalPerSpeciale[speciale.value]}
                   onChange={onChange}
                 />
               );
@@ -50,17 +50,19 @@ const SelectionSpecialtiesSelector = ({
         <Grid.Column>
           <Grid.Row>
             <Header as="h3">
-              <Translate id="selectionSpecialtiesSelector.tags" data={{ semester }} />
+              <Translate
+                id="selectionSpecialtiesSelector.tags"
+                data={{ semester: semester.value }}
+              />
             </Header>
-            {tags[semester].map((tag) => {
-              let erValgt = valgteTags.includes(tag.value);
+            {semester.tags.map((tag) => {
+              let erValgt = valgteTags.includes(tag.id);
               return (
                 <SelectionSpecialtiesSelectorCheckbox
-                  key={tag.value}
-                  type="tags"
+                  key={tag.id}
+                  type="tag"
                   speciale={tag}
                   erValgt={erValgt}
-                  antalPerSpeciale={antalPerTag[tag.value]}
                   onChange={onChange}
                 />
               );

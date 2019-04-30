@@ -250,3 +250,13 @@ export const validationRegex = {
   // username validation stammer fra https://stackoverflow.com/questions/12018245/regular-expression-to-validate-username
   username: /^[a-zA-ZæøåÆØÅ0-9]+([._]?[a-zA-Z0-9]+)*$/
 };
+
+export const insertOrRemove = (array, elem) => {
+  const index = array.indexOf(elem);
+  if (index > -1) {
+    array.splice(index, 1);
+  } else {
+    array.push(elem);
+  }
+  return array;
+};

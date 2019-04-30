@@ -1,6 +1,7 @@
 import * as types from '../actions/types';
 import { createReducer } from 'redux-starter-kit';
 import _ from 'lodash';
+import { insertOrRemove } from '../utils/common';
 
 const initialState = {
   semesters: {
@@ -18,8 +19,8 @@ const initialState = {
     n: 10,
     onlyNew: false,
     setId: null,
-    specialtyIds: [],
-    tagIds: []
+    selectedSpecialtyIds: [],
+    selectedTagIds: []
   }
 };
 
@@ -34,11 +35,19 @@ export default createReducer(initialState, {
   [types.CHANGE_SELECTION]: (state, action) => {
     let { type, value } = action.payload;
 
+    // Vi nulstill
     if (type === 'selectedSemester') {
       state.quizSelection.setId = null;
-      state.quizSelection.specialtyIds = [];
-      state.quizSelection.tagIds = [];
+      state.quizSelection.selectedSpecialtyIds = [];
+      state.quizSelection.selectedTagIds = [];
       state.semesters.selectedSemester = value;
+    } else if (['specialty', 'tag'].indexOf(type) > -1) {
+      type = type.substring(0, 1).toUpperCase() + type.substring(1, type.length);
+      let path = `selected${type}Ids`;
+
+      let selection = Array.isArray(state.quizSelection[path]) ? state.quizSelection[path] : [];
+
+      state.quizSelection[path] = insertOrRemove(selection, value);
     } else {
       state.quizSelection[type] = value;
     }

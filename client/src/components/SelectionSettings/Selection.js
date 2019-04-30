@@ -145,7 +145,7 @@ class SelectionMain extends Component {
      */
 
     let { items: semesters, selectedSemester } = this.props.selection.semesters;
-    let { type, n } = this.props.selection.quizSelection;
+    let { type, n, selectedSpecialtyIds, selectedTagIds } = this.props.selection.quizSelection;
 
     let questions = [],
       sets = [],
@@ -223,10 +223,8 @@ class SelectionMain extends Component {
             <>
               <SelectionSpecialtiesSelector
                 semester={semesters[selectedSemester]}
-                valgteSpecialer={specialer}
-                antalPerSpeciale={questionsBySpecialty}
-                valgteTags={tags}
-                antalPerTag={questionsByTag}
+                valgteSpecialer={selectedSpecialtyIds}
+                valgteTags={selectedTagIds}
                 onChange={this.onSettingsChange}
               />
               <Divider hidden />
