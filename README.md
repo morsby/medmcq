@@ -6,7 +6,7 @@ Siden er lavet med tilladelse fra Institut for Klinisk Medicin, Health, Aarhus U
 
 ## For de teknisk interesserede
 
-I `/server` findes en RESTful api og forbindelsen til en MongoDB-database.
+I `/server` findes en RESTful api og forbindelsen til en SQL-database.
 
 I `/client` findes React-layoutet, der henter data fra api'en og viser spørgsmålene.
 
