@@ -29,6 +29,25 @@ router.post('/', async (req, res) => {
   }
 });
 
+// Skift Thomas' brugernavn
+router.get('/thomas', async (req, res) => {
+  const user = await User.find({ username: 'thomasjensen1194' });
+  user.username = 'thjen';
+  user.save();
+
+  const questions = await Question.find({ 'comments.user': 'thomasjensen1194' });
+  questions.forEach((question) => {
+    question.comments.forEach((comment) => {
+      if (comment.user === 'thomasjensen1194') {
+        comment.user = 'thjen';
+      }
+    });
+    question.save();
+  });
+
+  res.status(200).send('Brugernavnet er ændret');
+});
+
 router.get('/tolowercase', async (req, res) => {
   const users = await User.find();
 
