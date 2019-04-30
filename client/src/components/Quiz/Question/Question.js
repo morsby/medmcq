@@ -5,7 +5,6 @@ import * as actions from '../../../actions';
 import marked from 'marked';
 
 import _ from 'lodash';
-import { specialer, tags } from '../../../utils/common';
 
 import { imageURL, breakpoints } from '../../../utils/common';
 import { subSupScript } from '../../../utils/quiz';
