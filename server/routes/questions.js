@@ -55,8 +55,8 @@ const router = express.Router();
  *         name: semesters
  *         schema:
  *           type: string
- *           description: A comma separated list of `semester.value`s to draw questions from.
- *           example: 7,8
+ *           description: A comma separated list of `semester.ids`s to draw questions from.
+ *           example: 1,2
  *       - in: query
  *         name: specialties
  *         schema:
@@ -103,7 +103,7 @@ router.get("/", async (req, res) => {
     }
 
     let query = Question.query()
-      .select("question.*", "semester.value as semester")
+      .select("question.*", "semester.id as semester")
       .joinRelation("semester")
       .eager(Question.defaultEager)
       .orderByRaw("rand()");
@@ -116,8 +116,7 @@ router.get("/", async (req, res) => {
       );
     } else {
       // Otherwise, filter by results
-      if (semesters)
-        query = query.whereIn("semester.value", semesters.split(","));
+      if (semesters) query = query.whereIn("semester.id", semesters.split(","));
 
       if (n) query = query.limit(n);
 

@@ -1,4 +1,4 @@
-import BaseModel, { CustomQueryBuilder } from "./_base_model";
+import BaseModel, { CustomQueryBuilder, modifiers } from "./_base_model";
 const { Model } = require("objection");
 
 class Question extends BaseModel {
@@ -128,6 +128,12 @@ class Question extends BaseModel {
           to: "question.id"
         }
       }
+    };
+  }
+
+  static get modifiers() {
+    return {
+      filterOnMetadata: builder => modifiers.filterOnMetadata(builder)
     };
   }
 
