@@ -84,7 +84,7 @@ class Question extends Component {
      * Defaults til allerede kendte værdier
      * @type {Array}
      */
-    selectedSpecialties: this.props.question.specialties,
+    selectedSpecialties: (this.props.question || {}).specialties,
 
     /**
      * Current window width

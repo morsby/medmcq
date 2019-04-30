@@ -261,7 +261,7 @@ router.get("/:id/questions", async (req, res) => {
   try {
     let questions = Question.query()
       .where({ examSetId: id })
-      .eager("[specialties(active), tags(active), publicComments]")
+      .eager(Question.defaultEager)
       .orderBy("examSetQno");
 
     if (req.user) {

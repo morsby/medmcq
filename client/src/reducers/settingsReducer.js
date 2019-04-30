@@ -21,7 +21,7 @@ export default createReducer(initialState, {
    * Opdaterer settings
    * */
   [types.CHANGE_SETTINGS]: (state, action) => {
-    let { type, value } = action;
+    let { type, value } = action.payload;
     state[type] = value;
   }
 });

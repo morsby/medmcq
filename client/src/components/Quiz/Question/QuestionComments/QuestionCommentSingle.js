@@ -28,9 +28,9 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
       }}
     >
       <Comment.Content>
-        <Comment.Author as="strong">{comment.user}</Comment.Author>
+        <Comment.Author as="strong">{comment.user.username}</Comment.Author>
         <Comment.Metadata style={{ color: 'rgb(140, 140, 140)' }}>
-          {new Date(comment.date).toLocaleString('da-DK')}
+          {new Date(comment.createdAt).toLocaleString('da-DK')}
         </Comment.Metadata>
         {comment.private ? (
           <Comment.Metadata style={{ color: 'rgb(140, 140, 140)' }}>
@@ -41,10 +41,10 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
         <Comment.Text
           style={{ marginTop: '1em', fontSize: '18px' }}
           dangerouslySetInnerHTML={{
-            __html: marked(comment.comment)
+            __html: marked(comment.text)
           }}
         />
-        {comment.user === user.username && (
+        {comment.userId === user.id && (
           <Menu size="mini" icon="labeled" secondary>
             {!deleting && (
               <Menu.Item onClick={() => setDeleting(true)}>

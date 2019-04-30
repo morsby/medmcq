@@ -33,16 +33,16 @@ export const getQuestions = (ids) => async (dispatch, getState) => {
       res = await axios.get(questionApi, { params: { ids: ids.join(',') } });
       break;
     case 'set':
-      res = await axios.get(`/api/exam_sets/${selectedSetId}`);
+      res = await axios.get(`/api/exam_sets/${selectedSetId}/questions`);
       break;
     default:
       res = await axios.get(questionApi, {
         params: {
           semesters: selectedSemester,
-          specialties: (selectedSpecialtyIds || []).join(','),
-          tags: (selectedTagIds || []).join(','),
-          n,
-          onlyNew
+          specialties: (selectedSpecialtyIds || []).join(',') || undefined,
+          tags: (selectedTagIds || []).join(',') || undefined,
+          n: n || undefined,
+          onlyNew: onlyNew || undefined
         }
       });
   }
