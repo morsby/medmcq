@@ -497,9 +497,9 @@ class Question extends Component {
               privateComment={true}
             />
           )}
-          {user && <Divider />}
           {user && question.answer && (
             <>
+            <Divider />
               <QuestionVoting question={question} user={user} />
             </>
           )}
