@@ -1,5 +1,4 @@
 import * as types from '../actions/types';
-import _ from 'lodash';
 import { createReducer } from 'redux-starter-kit';
 
 const initialState = {

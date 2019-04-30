@@ -78,7 +78,8 @@ class SelectionMain extends Component {
      * derfor IKKE noget med selve quiz-spørgsmålene at gøre, og hentes for
      * at kunne tælle antal spørgsmål for hvert semester, speciale m.v.
      */
-    let { n, semester, type, set, questions, specialer, tags } = this.props.settings;
+    // TODO: Ny validation
+    let { n, semester, type, set, questions, specialer, tags } = this.props.selection;
 
     // Når den er tom modtager den fuldt antal
 
@@ -119,7 +120,7 @@ class SelectionMain extends Component {
 
     // Hvis vi er ved at søge
     if (this.state.search !== '') {
-      this.props.searchQuestion(this.props.settings.semester, this.state.search);
+      this.props.searchQuestion(this.props.selection.semester.selectedSemester, this.state.search);
       return this.props.history.push(urls.quiz);
     }
 
@@ -127,7 +128,7 @@ class SelectionMain extends Component {
     if (err.length === 0) {
       // Ny quiz? Hent spørgsmål
       if (quizType === 'new') {
-        this.props.getQuestions(this.props.settings);
+        this.props.getQuestions();
       }
 
       // Uanset om det er en ny quiz eller ej – skift url til quizzen.
@@ -139,7 +140,7 @@ class SelectionMain extends Component {
 
   render() {
     /**
-     * Alle de nedenstående variable kommer fra settingsReducer -- de har
+     * Alle de nedenstående variable kommer fra selectionReducer -- de har
      * derfor IKKE noget med selve quiz-spørgsmålene at gøre, og hentes for
      * at kunne tælle antal spørgsmål for hvert semester, speciale m.v.
      */
@@ -155,11 +156,7 @@ class SelectionMain extends Component {
       onlyNew
     } = this.props.selection.quizSelection;
 
-    let questions = [],
-      sets = [],
-      set,
-      answeredQuestions = [],
-      antalValgte;
+    let antalValgte;
     return (
       <div className="flex-container">
         <Container className="content">
@@ -273,20 +270,19 @@ class SelectionMain extends Component {
 SelectionMain.propTypes = {
   /**
    * Indstillinger der styrer valg af spørgsmål.
-   * Bruges til at hente nye spørgsmål.
-   * Fra redux.
+   * Fra redux
    */
-  settings: PropTypes.object,
+  selection: PropTypes.object,
 
   /**
    * Func der kaldes, når der ændres indstillinger. Ændrer Redux state.
    */
-  changeSettings: PropTypes.func,
+  changeSelection: PropTypes.func,
 
   /**
-   * Func der henter nye spørgsmål til semesteret. Ændrer redux state
+   * Func der opdaterer semestre (med antal spørgsmål, specialer, tags m.v.)
    */
-  fetchSettingsQuestions: PropTypes.func,
+  fetchSemesters: PropTypes.func,
 
   /**
    * Func der henter nye spørgsmål (ud fra settings) fra API'en.
@@ -320,7 +316,6 @@ SelectionMain.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    settings: state.settings,
     user: state.auth.user,
     questions: state.questions,
     selection: state.selection

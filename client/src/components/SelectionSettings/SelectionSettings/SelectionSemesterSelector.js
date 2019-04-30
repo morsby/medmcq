@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Header, Dropdown } from 'semantic-ui-react';
 
-const SelectionSemesterSelector = ({ label, name, semesters, selectedSemester, handleChange }) => (
+const SelectionSemesterSelector = ({ label, semesters, selectedSemester, handleChange }) => (
   <>
     <Header as="h3">{label}</Header>
     <Dropdown
@@ -17,5 +17,12 @@ const SelectionSemesterSelector = ({ label, name, semesters, selectedSemester, h
     />
   </>
 );
+
+SelectionSemesterSelector.propTypes = {
+  label: PropTypes.string,
+  semesters: PropTypes.array,
+  selectedSemester: PropTypes.number,
+  handleChange: PropTypes.func
+};
 
 export default SelectionSemesterSelector;

@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { groupQuestionsBySet } from '../../../../utils/questions';
-
 import SetRadioButton from './SetRadioButton';
 import { Form, Header } from 'semantic-ui-react';
 
@@ -30,7 +28,7 @@ const SelectionSetSelector = ({ semester, selectedSet, onChange }) => {
 
 SelectionSetSelector.propTypes = {
   semester: PropTypes.object,
-  selectedSetId: PropTypes.number,
+  selectedSet: PropTypes.number,
   onChange: PropTypes.func
 };
 
