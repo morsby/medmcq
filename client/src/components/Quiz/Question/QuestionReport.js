@@ -4,7 +4,7 @@ import { Form, Message } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 
 // TODO: TRANSLATION
-const QuestionReport = ({ report, handleChange, handleSubmit, reportSent }) => {
+const QuestionReport = ({ report, handleChange, handleSubmit, reportSent, semester }) => {
   if (reportSent)
     return (
       <Message success>
@@ -19,6 +19,11 @@ const QuestionReport = ({ report, handleChange, handleSubmit, reportSent }) => {
       <Translate>
         {({ translate }) => (
           <Form onSubmit={handleSubmit}>
+            {semester == 11 && (
+              <Message color="yellow">
+                <Translate id="questionReport.pictureMissing11" />
+              </Message>
+            )}
             <Form.Field>
               <Form.TextArea
                 name="report"

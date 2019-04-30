@@ -44,6 +44,10 @@
       "F.eks. \"der er en stavefejl i ordet blodpørve\", \"billede/tabel mangler\" eller \"det markerede svar stemmer ikke overens med det originale sæt\".",
       "E.g. \"there is a spelling error in the word blood samlpe\", \"the picture/table is missing\" or \"the marked answer is not the same as in the original set\"."
     ],
+    "pictureMissing11": [
+      "11. semester har valgt ikke at frigøre billeder til deres spørgsmål, grundet ophavsrettigheder og personfølsomme data",
+      "11th semester has chosen not to distribute pictures in the question, due to sensitive data and copyright"
+    ],
     "message": {
       "header": ["Tak for indberetning!", "Thanks for the heads up!"],
       "body": [

@@ -458,12 +458,16 @@ class Question extends Component {
             <Translate id="question.report_question" />
           </Button>
           {this.state.reportOpen && (
-            <QuestionReport
-              report={this.state.report}
-              handleChange={this.onTextType}
-              handleSubmit={this.onReportSubmit}
-              reportSent={this.state.reportSent}
-            />
+            <>
+              <Divider hidden />
+              <QuestionReport
+                report={this.state.report}
+                handleChange={this.onTextType}
+                handleSubmit={this.onReportSubmit}
+                reportSent={this.state.reportSent}
+                semester={question.semester}
+              />
+            </>
           )}
           {this.state.publicCommentsOpen && (
             <QuestionComments
