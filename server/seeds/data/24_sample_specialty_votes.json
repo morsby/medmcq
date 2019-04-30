@@ -1,16 +1,16 @@
 [
   {
-    "question_id": "5bf6e2c182ad7772c64bf51e",
+    "question_id": "5c586e06e914bbe68ded3c91",
     "user_id": "TestBruger",
     "specialty_id": "Hæmatologi"
   },
   {
-    "question_id": "5bf6e2c182ad7772c64bf51e",
+    "question_id": "5c586e06e914bbe68ded3c91",
     "user_id": "TestBruger",
     "specialty_id": "Infektionsmedicin"
   },
   {
-    "question_id": "5bf6e2c182ad7772c64bf51e",
+    "question_id": "5c586e06e914bbe68ded3c91",
     "user_id": "TestAdmin",
     "specialty_id": "Hæmatologi"
   },
@@ -30,7 +30,7 @@
     "specialty_id": "Abdominalkirurgi"
   },
   {
-    "question_id": "5bf6e2c182ad7772c64bf51e",
+    "question_id": "5c586e06e914bbe68ded3c91",
     "user_id": "TestEditor",
     "specialty_id": "Hæmatologi"
   }
