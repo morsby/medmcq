@@ -19,7 +19,7 @@ const QuestionReport = ({ report, handleChange, handleSubmit, reportSent, questi
       <Translate>
         {({ translate }) => (
           <Form onSubmit={handleSubmit}>
-            {question.semester == 11 && (
+            {question.semester === 11 && (
               <Message color="yellow">
                 <Translate id="questionReport.pictureMissing11" />
               </Message>
