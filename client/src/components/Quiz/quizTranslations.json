@@ -16,8 +16,8 @@
   "quizSummary": {
     "header": ["Fremgang", "Progress"],
     "results": [
-      "Du svarede rigtigt på ${correct} af ${n} spørgsmål. Det svarer til ${percentage}",
-      "You answered ${correct} out of ${n} questions correctly. That is equivalent to ${percentage}."
+      "Du har svaret rigtigt på ${correct} af ${n} spørgsmål. Dette svarer til ${percentage}",
+      "You have answered ${correct} out of ${n} questions correctly. This is equivalent to ${percentage}."
     ],
     "print": ["Print disse spørgsmål", "Print these questions"]
   },
