@@ -18,23 +18,10 @@ const initialState = {
  */
 export default createReducer(initialState, {
   /**
-   * Bliver kaldt i starten af et API-request til serveren efter spørgsmål til
-   * quizzen.
-   *
-   * Her tjekkes, om vi LIGE har hentet spørgsmål (og dette dispatch blev
-   * overhalet indenom af selve FETCH_QUESTIONS).
-   */
-  [types.IS_FETCHING]: (state) => {
-    state.isFetching = Date.now() - state.lastFetch > 1000 ? true : false;
-  },
-
-  /**
-   * Bliver kaldt, når der er modtaget spørgsmål fra API'en.
-   * Fortæller siden, at nu er spørgsmålene hentet.
-   * Selve spørgsmålene behandles i questionsReducer.js
-   */
-  [types.FETCH_QUESTIONS]: (state) => {
-    state.isFetching = false;
-    state.lastFetch = Date.now();
+   * Opdaterer settings
+   * */
+  [types.CHANGE_SETTINGS]: (state, action) => {
+    let { type, value } = action;
+    state[type] = value;
   }
 });

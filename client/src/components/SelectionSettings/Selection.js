@@ -79,7 +79,7 @@ class SelectionMain extends Component {
      * at kunne tælle antal spørgsmål for hvert semester, speciale m.v.
      */
     // TODO: Ny validation
-    let { n, semester, type, set, questions, specialer, tags } = this.props.selection;
+    /*let { n, semester, type, set, questions, specialer, tags } = this.props.selection;
 
     // Når den er tom modtager den fuldt antal
 
@@ -122,7 +122,7 @@ class SelectionMain extends Component {
     if (this.state.search !== '') {
       this.props.searchQuestion(this.props.selection.semester.selectedSemester, this.state.search);
       return this.props.history.push(urls.quiz);
-    }
+  }*/
 
     // tjek for fejl, start eller ej
     if (err.length === 0) {

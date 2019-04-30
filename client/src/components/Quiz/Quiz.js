@@ -49,11 +49,6 @@ class QuizMain extends Component {
 
   componentDidMount() {
     document.addEventListener('keydown', this.onKeydown);
-
-    // Hvis man går ind på quizzen uden spørgsmål
-    if (this.props.settings.questions.length === 0) {
-      this.navigateToPage('root');
-    }
   }
   componentWillUnmount() {
     document.removeEventListener('keydown', this.onKeydown);
@@ -259,7 +254,7 @@ QuizMain.propTypes = {
 
 function mapStateToProps(state) {
   return {
-    questions: state.questions,
+    questions: state.quiz.questions,
     answers: state.answers,
     settings: state.settings,
     user: state.auth.user

@@ -332,19 +332,7 @@ class Question extends Component {
   render() {
     const { question, user } = this.props,
       { width } = this.state,
-      text = subSupScript(question.question);
-    let privateComments = [];
-    let publicComments = [];
-    question.comments.forEach((comment) => {
-      if (user) {
-        if (comment.private && comment.user === user.username) {
-          privateComments.push(comment);
-        }
-      }
-      if (!comment.private) {
-        publicComments.push(comment);
-      }
-    });
+      text = subSupScript(question.text);
 
     return (
       <Container className="question">
@@ -424,9 +412,15 @@ class Question extends Component {
             onClick={this.onPublicCommentsToggle}
           >
             {this.state.publicCommentsOpen ? (
-              <Translate id="question.hide_public_comments" data={{ n: publicComments.length }} />
+              <Translate
+                id="question.hide_public_comments"
+                data={{ n: question.publicComments.length }}
+              />
             ) : (
-              <Translate id="question.show_public_comments" data={{ n: publicComments.length }} />
+              <Translate
+                id="question.show_public_comments"
+                data={{ n: question.publicComments.length }}
+              />
             )}
           </Button>
           {user && (
@@ -438,12 +432,12 @@ class Question extends Component {
               {this.state.privateCommentsOpen ? (
                 <Translate
                   id="question.hide_private_comments"
-                  data={{ n: privateComments.length }}
+                  data={{ n: question.privateComments.length }}
                 />
               ) : (
                 <Translate
                   id="question.show_private_comments"
-                  data={{ n: privateComments.length }}
+                  data={{ n: question.privateComments.length }}
                 />
               )}
             </Button>
@@ -467,7 +461,7 @@ class Question extends Component {
           )}
           {this.state.publicCommentsOpen && (
             <QuestionComments
-              comments={publicComments}
+              comments={question.publicComments}
               newComment={this.state.newComment}
               onCommentType={this.onTextType}
               onCommentPost={() => this.onCommentPost(false)}
@@ -481,7 +475,7 @@ class Question extends Component {
           )}
           {this.state.privateCommentsOpen && (
             <QuestionComments
-              comments={privateComments}
+              comments={question.privateComments}
               newComment={this.state.newComment}
               onCommentType={this.onTextType}
               onCommentPost={() => this.onCommentPost(true)}

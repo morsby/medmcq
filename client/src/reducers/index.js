@@ -1,12 +1,12 @@
 import { combineReducers } from 'redux';
 import { localizeReducer } from 'react-localize-redux';
-import questionsReducer from './questionsReducer';
+import quizReducer from './quizReducer';
 import settingsReducer from './settingsReducer';
 import selectionReducer from './selectionReducer';
 import authReducer from './authReducer';
 
 export default combineReducers({
-  questions: questionsReducer,
+  quiz: quizReducer,
   settings: settingsReducer,
   selection: selectionReducer,
   auth: authReducer,

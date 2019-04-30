@@ -4,12 +4,20 @@ import * as voteService from '../services/voteService';
 
 const questionApi = `/api/questions`;
 
-export const getQuestions = (query) => async (dispatch) => {
-  let { type, ids, semester, specialer, tags, n, onlyNew, set } = query;
-
-  dispatch({ type: types.IS_FETCHING });
-  let res = { data: [] };
-
+export const getQuestions = (ids) => async (dispatch, getState) => {
+  let state = getState();
+  let {
+    type,
+    selectedSpecialtyIds,
+    selectedTagIds,
+    selectedSetId,
+    n,
+    onlyNew
+  } = state.selection.quizSelection;
+  let { selectedSemester } = state.selection.semesters;
+  console.log(selectedSemester);
+  dispatch({ type: types.FETCH_QUESTIONS_REQUEST });
+  let res;
   // Hvilke spøgsmål bedes der om?
   switch (type) {
     /*
@@ -25,15 +33,14 @@ export const getQuestions = (query) => async (dispatch) => {
       res = await axios.get(questionApi, { params: { ids: ids.join(',') } });
       break;
     case 'set':
-      alert('Implement sets');
-      res = res;
+      res = await axios.get(`/api/exam_sets/${selectedSetId}`);
       break;
     default:
       res = await axios.get(questionApi, {
         params: {
-          semesters: semester,
-          specialties: (specialer || []).join(','),
-          tags: (tags || []).join(','),
+          semesters: selectedSemester,
+          specialties: (selectedSpecialtyIds || []).join(','),
+          tags: (selectedTagIds || []).join(','),
           n,
           onlyNew
         }
@@ -41,7 +48,7 @@ export const getQuestions = (query) => async (dispatch) => {
   }
 
   dispatch({
-    type: types.FETCH_QUESTIONS,
+    type: types.FETCH_QUESTIONS_SUCCESS,
     payload: res.data,
     questionType: type
   });
@@ -136,7 +143,7 @@ export const searchQuestion = (semester, search) => async (dispatch) => {
   const res = await axios.post('/api/questions/search', { search, semester });
 
   dispatch({
-    type: types.FETCH_QUESTIONS,
+    type: types.FETCH_QUESTIONS_SUCCESS,
     payload: res.data,
     questionType: 'random'
   });
