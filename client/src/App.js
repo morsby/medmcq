@@ -50,6 +50,8 @@ class App extends Component {
 
     // Force refresh af semestre på reload:
     this.props.invalidateSemesters();
+    // Tjek om brugeren er logget ind på reload (kan være logget ud af serveren/invalid cookie m.v.)
+    this.props.fetchUser();
 
     this.props.addTranslation(authTranslations);
 

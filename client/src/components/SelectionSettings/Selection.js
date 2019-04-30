@@ -144,20 +144,21 @@ class SelectionMain extends Component {
      * at kunne tælle antal spørgsmål for hvert semester, speciale m.v.
      */
 
+    let { user } = this.props;
     let { items: semesters, selectedSemester } = this.props.selection.semesters;
-    let { type, n, selectedSpecialtyIds, selectedTagIds } = this.props.selection.quizSelection;
+    let {
+      type,
+      n,
+      selectedSpecialtyIds,
+      selectedTagIds,
+      onlyNew
+    } = this.props.selection.quizSelection;
 
     let questions = [],
       sets = [],
       set,
       answeredQuestions = [],
-      specialer = [],
-      tags = [],
-      user,
-      questionsBySpecialty,
-      questionsByTag,
-      antalValgte,
-      onlyNew;
+      antalValgte;
     return (
       <div className="flex-container">
         <Container className="content">

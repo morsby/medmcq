@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { tags } from '../../../../utils/common';
 import { Translate } from 'react-localize-redux';
 
 import { Form, Header, Message, Grid } from 'semantic-ui-react';
