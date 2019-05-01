@@ -6,7 +6,7 @@ import * as actions from '../../actions';
 import { withLocalize, Translate } from 'react-localize-redux';
 import quizTranslations from './quizTranslations.json';
 
-import { Container } from 'semantic-ui-react';
+import { Container, Button } from 'semantic-ui-react';
 
 import Swipeable from 'react-swipeable';
 import QuizLoader from './QuizLoader';
@@ -16,6 +16,7 @@ import QuizSummary from './QuizSummary';
 
 import { smoothScroll } from '../../utils/quiz';
 import { urls } from '../../utils/common';
+import { withRouter } from 'react-router';
 
 const flickNumber = 0.1;
 
@@ -165,8 +166,12 @@ class QuizMain extends Component {
         <div className="flex-container">
           <div className="content">
             <Container>
-              <h1>Der var desværre ingen spørgsmål, der opfylder kriterierne.</h1>
-              <p>Vend tilbage til forsiden og prøv igen.</p>
+              <h1>
+                <Translate id="quizLoader.noresultsHeader" />
+              </h1>
+              <Button onClick={() => this.props.history.push('/')} basic color="blue">
+                <Translate id="quizLoader.noresults" />
+              </Button>
             </Container>
           </div>
         </div>
@@ -266,9 +271,11 @@ function mapStateToProps(state) {
   };
 }
 
-export default withLocalize(
-  connect(
-    mapStateToProps,
-    actions
-  )(QuizMain)
+export default withRouter(
+  withLocalize(
+    connect(
+      mapStateToProps,
+      actions
+    )(QuizMain)
+  )
 );

@@ -14,6 +14,7 @@
     "react": "^16.8.1",
     "react-dom": "^16.8.1",
     "react-final-form": "^3.7.0",
+    "react-flagkit": "^1.0.2",
     "react-image-lightbox": "^5.1.0",
     "react-localize-redux": "^3.5.2",
     "react-redux": "^5.1.1",
@@ -23,10 +24,9 @@
     "react-swipeable": "^4.3.2",
     "redux": "^4.0.1",
     "redux-persist": "^5.10.0",
+    "redux-starter-kit": "^0.4.3",
     "redux-thunk": "^2.3.0",
-    "semantic-ui-react": "^0.80.2",
-    "react-flagkit": "^1.0.2",
-    "redux-starter-kit": "^0.4.3"
+    "semantic-ui-react": "^0.86.0"
   },
   "scripts": {
     "start": "concurrently \"react-scripts start\" \"npm run sass\"",

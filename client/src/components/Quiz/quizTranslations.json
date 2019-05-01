@@ -6,7 +6,15 @@
       "Hmm, this is taking longer than usual..."
     ],
     "retry": ["Prøv igen", "Retry"],
-    "abort": ["Tilbage til forsiden", "Back to the front page"]
+    "abort": ["Tilbage til forsiden", "Back to the front page"],
+    "noresultsHeader": [
+      "Der var desværre ingen spørgsmål, der opfylder kriterierne.",
+      "Unfortunately your criteria does not match any questions."
+    ],
+    "noresults": [
+      "Vend tilbage til forsiden og prøv igen.",
+      "Return to the frontpage and try again"
+    ]
   },
   "quizNavigator": {
     "progress": ["Spørgsmål ${n} af ${total}", "Question ${n} of ${total}"],
