@@ -62,7 +62,15 @@
         "Vi ser på det og får det rettet hurtigst muligt!",
         "We'll look into it and have it fixed ASAP!"
       ]
-    }
+    },
+    "checkIssue": [
+      "Inden du rapporterer spørgsmålet, så tjek venligst om andre har sendt samme problem til os. <br /> Du er velkommen til at kommentere på problemer magen til dit eget. <a target='_blank' href='https://github.com/morsby/medmcq/issues?utf8=%E2%9C%93&q=${link}'>Tjek ved at klikke her</a>.",
+      "Please check if the issue has already been sent to us, before submitting. <br /> You are welcome to comment on identical issues. <a target='_blank' href='https://github.com/morsby/medmcq/issues?utf8=%E2%9C%93&q=${link}'>Click here to check.</a>"
+    ],
+    "checkbox": [
+      "Jeg har tjekket for lignende problemer <a target='_blank' href='https://github.com/morsby/medmcq/issues?utf8=%E2%9C%93&q=${link}'>her.</a>",
+      "I have checked for similar issues <a target='_blank' href='https://github.com/morsby/medmcq/issues?utf8=%E2%9C%93&q=${link}'>here.</a>"
+    ]
   },
   "questionComments": {
     "write_a_comment": ["Skriv en kommentar", "Write a comment"],
