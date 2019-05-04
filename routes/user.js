@@ -29,6 +29,28 @@ router.post('/', async (req, res) => {
   }
 });
 
+router.post('/usernamechange', async (req, res) => {
+  const { oldName, newName } = req.body;
+  const user = await User.findOne({ username: oldName });
+  if (!user) return res.status(400).send('Bruger blev ikke fundet');
+  user.username = newName;
+  user.save();
+
+  const questions = await Question.find({ 'comments.user': oldName });
+  questions.forEach((question) => {
+    question.comments.forEach((comment) => {
+      if (comment.user === oldName) {
+        comment.user = newName;
+      }
+    });
+    question.save();
+  });
+
+  res
+    .status(200)
+    .send({ message: `Brugernavnet er ændret fra ${oldName} til ${newName}`, user: user });
+});
+
 router.get('/me', function(req, res) {
   res.send(req.user);
 });
