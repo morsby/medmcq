@@ -77,19 +77,27 @@
     "edit_a_comment": ["Ret en kommentar", "Edit a comment"],
     "login_to_write": ["Log ind for at skrive en kommentar.", "Login to write a comment."],
     "public_comment_info": [
-      "Kommentarer du skriver her vil vise dit brugernavn og din kommentar for andre brugere.",
-      "Writing a comment here will show your username as well as your comment to other users."
+      "Kommentarer du skriver her vil vise dit brugernavn (hvis det ikke fravælges) og din kommentar for andre brugere.",
+      "Writing a comment here will show your username (unless you have chosen not to) as well as your comment to other users."
     ],
     "private_comment_info": [
       "Kommentarer du skriver her vil ikke blive vist for andre brugere. Vi opfordrer dog til, at du deler ud af din viden, så andre studerende kan få glæde af dine kommentarer. Hvis du kan, så skriv venligst en offentlig kommentar.",
       "Comments you write here will not be shown to other users. However, we suggest that you share your knowledge with other students, in order for them to benefit from your comments. If possible, please write a public comment instead."
     ],
     "comment": ["Kommentér", "Comment"],
-    "undo_edit": ["Fortryd ændring", "Undo edit"]
+    "undo_edit": ["Fortryd ændring", "Undo edit"],
+    "hide_username": ["Skjul dit brugernavn", "Hide your usernname"]
   },
   "questionCommentSingle": {
     "edit": ["Ret", "Edit"],
-    "delete": ["Slet", "Delete"]
+    "delete": ["Slet", "Delete"],
+    "anonymous": ["Anonym", "Anonymous"],
+    "delete_confirmation": [
+      "Er du sikker på du vil slette kommentaren?",
+      "Are you sure you want to delete this comment?"
+    ],
+    "no": ["Nej", "No"],
+    "yes": ["Ja", "Yes"]
   },
   "voting": {
     "specialtyHeadline": ["Stem på speciale", "Vote for specialty"],

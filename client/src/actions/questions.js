@@ -91,10 +91,11 @@ export const postQuestion = (post) => async (dispatch) => {
   dispatch({ type: types.POST_QUESTION, payload: res.data });
 };
 
-export const commentQuestion = (id, comment, isPrivate) => async (dispatch) => {
+export const commentQuestion = (id, comment, isPrivate, anonymous) => async (dispatch) => {
   const res = await axios.put(`/api/questions/${id}/comment`, {
     comment,
-    isPrivate
+    isPrivate,
+    anonymous
   });
   dispatch({
     type: types.QUESTION_COMMENT_UPDATE,
@@ -111,10 +112,13 @@ export const deleteComment = (question_id, comment_id) => async (dispatch) => {
   });
 };
 
-export const editComment = (question_id, comment_id, comment, isPrivate) => async (dispatch) => {
+export const editComment = (question_id, comment_id, comment, isPrivate, anonymous) => async (
+  dispatch
+) => {
   const res = await axios.put(`/api/questions/${question_id}/comment/${comment_id}`, {
     comment,
-    isPrivate
+    isPrivate,
+    anonymous
   });
 
   dispatch({

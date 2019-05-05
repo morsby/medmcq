@@ -28,9 +28,16 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
       }}
     >
       <Comment.Content>
-        <Comment.Author as="strong">
-          {comment.user[0].toUpperCase() + comment.user.substring(1)}
-        </Comment.Author>
+        {!comment.anonymous && (
+          <Comment.Author as="strong">
+            {comment.user[0].toUpperCase() + comment.user.substring(1)}
+          </Comment.Author>
+        )}
+        {comment.anonymous && (
+          <Comment.Author as="strong">
+            <Translate id="questionCommentSingle.anonymous" />
+          </Comment.Author>
+        )}
         <Comment.Metadata style={{ color: 'rgb(140, 140, 140)' }}>
           {new Date(comment.date).toLocaleString('da-DK')}
         </Comment.Metadata>
@@ -57,11 +64,11 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
             {deleting && (
               <>
                 <Menu.Item>
-                  <p>Er du sikker på du vil slette kommentaren?</p>
+                  <Translate id="questionCommentSingle.delete_confirmation" />
                 </Menu.Item>
                 <Menu.Item onClick={() => setDeleting(false)}>
                   <Icon name="close" />
-                  Nej
+                  <Translate id="questionCommentSingle.no" />
                 </Menu.Item>
                 <Menu.Item
                   onClick={() => {
@@ -70,7 +77,7 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
                   }}
                 >
                   <Icon name="trash" color="red" />
-                  Ja
+                  <Translate id="questionCommentSingle.yes" />
                 </Menu.Item>
               </>
             )}

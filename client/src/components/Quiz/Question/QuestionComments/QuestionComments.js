@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Form, TextArea, Button, Message } from 'semantic-ui-react';
+import { Form, TextArea, Button, Message, Checkbox } from 'semantic-ui-react';
 
 import { Translate } from 'react-localize-redux';
 
@@ -29,7 +29,9 @@ const QuestionComments = ({
   editingComment,
   undoEditComment,
   user,
-  privateComment
+  privateComment,
+  setAnonymous,
+  anonymous
 }) => {
   let form;
   if (user) {
@@ -75,6 +77,18 @@ const QuestionComments = ({
               <Translate id="questionComments.undo_edit" />
             </Button>
           )}
+          {!privateComment && (
+            <Checkbox
+              style={{ marginLeft: '1rem' }}
+              label={
+                <label>
+                  <Translate id="questionComments.hide_username" />
+                </label>
+              }
+              onChange={setAnonymous}
+              checked={anonymous}
+            />
+          )}
         </Form>
       </div>
     );
@@ -95,6 +109,7 @@ const QuestionComments = ({
             user={user}
             deleteComment={onDeleteComment}
             editComment={onEditComment}
+            anonymous={anonymous}
           />
         ))}
       </div>
@@ -113,7 +128,9 @@ QuestionComments.propTypes = {
   editingComment: PropTypes.string,
   undoEditComment: PropTypes.func,
   user: PropTypes.object,
-  privateComment: PropTypes.bool
+  privateComment: PropTypes.bool,
+  setAnonymous: PropTypes.func,
+  anonymous: PropTypes.bool
 };
 
 export default QuestionComments;

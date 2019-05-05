@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as actions from '../../../actions';
@@ -90,7 +90,9 @@ class Question extends Component {
     /**
      * Current window width
      */
-    width: window.innerWidth
+    width: window.innerWidth,
+
+    anonymous: false
   };
 
   constructor(props) {
@@ -143,7 +145,8 @@ class Question extends Component {
         editingComment: '',
         pristine: true,
         selectedSpecialties: this.props.question.specialty,
-        editingSpecialties: false
+        editingSpecialties: false,
+        anonymous: false
       });
       this.mouseMover();
     }
@@ -184,6 +187,12 @@ class Question extends Component {
       }
     }
   }
+
+  setAnonymous = () => {
+    this.setState((prevState) => {
+      return { anonymous: !prevState.anonymous };
+    });
+  };
 
   handleResize = () => this.setState({ width: window.innerWidth });
 
@@ -273,15 +282,21 @@ class Question extends Component {
           this.props.question._id,
           this.state.editingComment,
           this.state.newComment,
-          isPrivate
+          isPrivate,
+          this.state.anonymous
         );
       } else {
         /**
          *  Det er en ny kommentar
          */
-        this.props.commentQuestion(this.props.question._id, this.state.newComment, isPrivate);
+        this.props.commentQuestion(
+          this.props.question._id,
+          this.state.newComment,
+          isPrivate,
+          this.state.anonymous
+        );
       }
-      this.setState({ newComment: '', editingComment: '' });
+      this.setState({ newComment: '', editingComment: '', anonymous: false });
     }
   }
 
@@ -300,7 +315,8 @@ class Question extends Component {
   onEditComment(comment) {
     this.setState({
       newComment: comment.comment,
-      editingComment: comment._id
+      editingComment: comment._id,
+      anonymous: comment.anonymous
     });
   }
 
@@ -308,7 +324,7 @@ class Question extends Component {
    * Fortryder ændring af kommentar
    */
   undoEditComment() {
-    this.setState({ newComment: '', editingComment: '' });
+    this.setState({ newComment: '', editingComment: '', anonymous: false });
   }
 
   /**
@@ -481,6 +497,8 @@ class Question extends Component {
               undoEditComment={this.undoEditComment}
               user={user}
               private={false}
+              setAnonymous={this.setAnonymous}
+              anonymous={this.state.anonymous}
             />
           )}
           {this.state.privateCommentsOpen && (

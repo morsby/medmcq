@@ -25,7 +25,8 @@ var QuestionSchema = new Schema({
       user_id: mongoose.Schema.Types.ObjectId,
       date: { type: Date, default: Date.now },
       comment: String,
-      private: { type: Boolean, default: false }
+      private: { type: Boolean, default: false },
+      anonymous: { type: Boolean, default: false }
     }
   ],
   votes: [{ specialty: String, users: [String] }],
