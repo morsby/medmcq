@@ -30,9 +30,13 @@ router.post('/', async (req, res) => {
 });
 
 router.post('/usernamechange', async (req, res) => {
-  const { oldName, newName } = req.body;
+  let { oldName, newName } = req.body;
+  oldName = oldName.toLowerCase();
+  newName = newName.toLowerCase();
   const user = await User.findOne({ username: oldName });
+  const newUser = await User.findOne({ username: newName });
   if (!user) return res.status(400).send('Bruger blev ikke fundet');
+  if (newUser) return res.status(400).send('Det nye brugernavn findes allerede');
   user.username = newName;
   user.save();
 
