@@ -29,8 +29,9 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.post('/usernamechange', async (req, res) => {
-  let { oldName, newName } = req.body;
+router.get('/usernamechange', async (req, res) => {
+  let { oldName, newName } = req.query;
+  if (!oldName || !newName) return res.status(400).send('Du mangler query params');
   oldName = oldName.toLowerCase();
   newName = newName.toLowerCase();
   const user = await User.findOne({ username: oldName });
