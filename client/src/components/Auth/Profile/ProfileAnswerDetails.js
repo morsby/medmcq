@@ -80,59 +80,63 @@ class ProfileAnswerDetails extends Component {
             <Translate id="profileAnswerDetails.filter.show_mixed" />
           </Button>
         </Button.Group>
-        <Table celled>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>
-                <Translate id="profileAnswerDetails.table_headers.question" />
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                <Translate id="profileAnswerDetails.table_headers.specialty" />
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                <Translate id="profileAnswerDetails.table_headers.set" />
-              </Table.HeaderCell>
-              <Table.HeaderCell textAlign="right">
-                <Translate id="profileAnswerDetails.table_headers.performance" />
-              </Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {_.map(answeredQuestions, (q) => {
-              return (
-                <Table.Row
-                  style={{ cursor: 'pointer' }}
-                  warning={summary.mixed.indexOf(q._id) !== -1}
-                  positive={summary.allRight.indexOf(q._id) !== -1}
-                  negative={summary.allWrong.indexOf(q._id) !== -1}
-                  key={q._id}
-                  verticalAlign="top"
-                  onClick={() => this.gotoQuestion(q._id)}
-                >
-                  <Table.Cell>
-                    <div
-                      dangerouslySetInnerHTML={{
-                        __html: marked(q.question)
-                      }}
-                    />
-                  </Table.Cell>
-                  <Table.Cell collapsing>{q.specialty.join(', ')}</Table.Cell>
-                  <Table.Cell collapsing>
-                    <Translate id={`profileAnswerDetails.${q.examSeason}`} />
-                    {q.examYear}
-                  </Table.Cell>
-                  <Table.Cell collapsing textAlign="right">
-                    {Math.round(
-                      (q.userAnswers.correct / (q.userAnswers.correct + q.userAnswers.wrong)) * 100,
-                      2
-                    )}
-                    %
-                  </Table.Cell>
-                </Table.Row>
-              );
-            })}
-          </Table.Body>
-        </Table>
+        <Divider hidden />
+        <div style={{ overflowX: 'auto' }}>
+          <Table unstackable celled>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>
+                  <Translate id="profileAnswerDetails.table_headers.question" />
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  <Translate id="profileAnswerDetails.table_headers.specialty" />
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  <Translate id="profileAnswerDetails.table_headers.set" />
+                </Table.HeaderCell>
+                <Table.HeaderCell textAlign="right">
+                  <Translate id="profileAnswerDetails.table_headers.performance" />
+                </Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {_.map(answeredQuestions, (q) => {
+                return (
+                  <Table.Row
+                    style={{ cursor: 'pointer' }}
+                    warning={summary.mixed.indexOf(q._id) !== -1}
+                    positive={summary.allRight.indexOf(q._id) !== -1}
+                    negative={summary.allWrong.indexOf(q._id) !== -1}
+                    key={q._id}
+                    verticalAlign="top"
+                    onClick={() => this.gotoQuestion(q._id)}
+                  >
+                    <Table.Cell>
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: marked(q.question)
+                        }}
+                      />
+                    </Table.Cell>
+                    <Table.Cell collapsing>{q.specialty.join(', ')}</Table.Cell>
+                    <Table.Cell collapsing>
+                      <Translate id={`profileAnswerDetails.${q.examSeason}`} />
+                      {q.examYear}
+                    </Table.Cell>
+                    <Table.Cell collapsing textAlign="right">
+                      {Math.round(
+                        (q.userAnswers.correct / (q.userAnswers.correct + q.userAnswers.wrong)) *
+                          100,
+                        2
+                      )}
+                      %
+                    </Table.Cell>
+                  </Table.Row>
+                );
+              })}
+            </Table.Body>
+          </Table>
+        </div>
       </div>
     );
   }
