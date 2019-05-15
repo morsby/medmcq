@@ -29,7 +29,7 @@ class LoginForm extends Component {
     let login = await this.props.login(values);
 
     if (login.type === 'success') {
-      return this.handleNavigation('profile');
+      return this.handleNavigation('root');
     } else {
       this.setState({ error: 'Login mislykkedes' });
     }
