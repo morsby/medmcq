@@ -151,6 +151,7 @@ export const tags = {
     { value: 'penis', text: 'Penis' },
     { value: 'hæmaturi', text: 'Hæmaturi' },
     { value: 'luts', text: 'LUTS' },
+    { value: 'blære', text: 'Blære' },
 
     // Andet
     { value: 'børn', text: 'Børn' },
@@ -180,8 +181,7 @@ export const tags = {
     { value: 'hudlidelser_sår', text: '' },
     { value: 'duodenum_pancreas_milt', text: '' },
     { value: 'teoretisk_spørgsmål', text: '' },
-    { value: 'blod_i_afføringen', text: '' },
-    { value: 'blære', text: '' }
+    { value: 'blod_i_afføringen', text: '' }
   ],
   9: [
     // Paraklinik
