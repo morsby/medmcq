@@ -87,8 +87,13 @@ export const specialer = {
 
 export const tags = {
   7: [
+    // Paraklinik
     { value: 'radiologi', text: 'Radiologi' },
     { value: 'a-gas', text: 'A-gas' },
+    { value: 'patologi', text: 'Patologi' },
+
+    // Organer
+    { value: 'lever', text: 'Lever' },
 
     // Klinisk immunologi
     { value: 'blodtransfusion', text: 'Blodtransfusion' },
@@ -99,6 +104,9 @@ export const tags = {
     { value: 'blodprøvetolkning', text: 'Blodprøvetolkning' },
     { value: 'koagulopati', text: 'Koagulopati' },
 
+    // Specifikke sygdomme
+    { value: 'syfilis', text: 'Syfilis' },
+
     // Diverse
     { value: 'journaloptagelse', text: 'Journaloptagelse' },
     { value: 'farmakologi', text: 'Farmakologi' },
@@ -108,6 +116,7 @@ export const tags = {
     { value: 'paraklinik', text: '' }
   ],
   8: [
+    // Paraklinik
     { value: 'radiologi', text: 'Radiologi' },
     { value: 'farmakologi', text: 'Farmakologi' },
 
@@ -123,21 +132,32 @@ export const tags = {
     { value: 'hernier', text: 'Hernier' },
     { value: 'fedmekirurgi', text: 'Bariatrisk kirurgi' },
     { value: 'endokrinologi', text: 'Endokrinologi' },
+    { value: 'ulcus', text: 'Ulcus' },
+    { value: 'urininkontinens', text: 'Urininkontinens' },
+    { value: 'divertikel', text: 'Divertikel' },
+    { value: 'stomi', text: 'Stomi' },
+    { value: 'gi_blødning', text: 'GI-blødning' },
+    { value: 'infektion', text: 'Infektion' },
+
+    // Andre organer
+    { value: 'lunge', text: 'Lunge' },
 
     // Urologi
     { value: 'nyrer', text: 'Nyrer' },
     { value: 'urinveje', text: 'Urinveje' },
-    { value: 'blære', text: 'Blære' },
     { value: 'neuromuskulær_blæredysfunktion', text: 'Neuromuskulær blæredysfunktion' },
     { value: 'prostata', text: 'Prostata' },
     { value: 'testis', text: 'Testis, epididymis og scrotum' },
     { value: 'penis', text: 'Penis' },
+    { value: 'hæmaturi', text: 'Hæmaturi' },
+    { value: 'luts', text: 'LUTS' },
 
     // Andet
     { value: 'børn', text: 'Børn' },
 
     // Plastikkirurgi
     { value: 'hudens_tumorer', text: 'Hudens tumorer' },
+    { value: 'lap_plastik', text: 'Lap plastik' },
     { value: 'plastikkirurgisk_teknik', text: 'Plastikkirurgisk teknik' },
     { value: 'forbrændinger', text: 'Forbrændinger, forfrysninger og kemiske skader' },
     { value: 'kosmetisk_kirurgi', text: 'Kosmetisk kirurgi' },
@@ -145,24 +165,23 @@ export const tags = {
     { value: 'ar', text: 'Ar' },
     { value: 'nerveskader', text: 'Nerveskader' },
     { value: 'kraniofaciale_misdannelser', text: 'Kraniofaciale misdannelser' },
+    { value: 'exfoliative_hudsygdomme', text: 'Exfoliative hudsygdomme' },
+    { value: 'brysthypertrofi_og_brystanomalier', text: 'Brysthypertrofi og brystanomalier' },
 
     // Onkologi
     { value: 'strålebehandling', text: 'Strålebehandling' },
     { value: 'onkologiske_bivirkninger', text: 'Onkologiske bivirkninger' },
     { value: 'metastaser', text: 'Metastaser' },
     { value: 'stadieinddeling', text: 'Stadieinddeling' },
-
-    // Almen medicin / Symptomkomplekser
-    { value: 'blod_i_afføringen', text: 'Blod i afføringen' },
-    { value: 'gi_blødning', text: 'GI-blødning' },
-    { value: 'hæmaturi', text: 'Hæmaturi' },
-    { value: 'luts', text: 'LUTS' },
+    { value: 'akutte_onkologiske_tilstande', text: 'Akutte onkologiske tilstande' },
 
     // Gamle tags -- må ikke slettes
     { value: 'paraklinik', text: '' },
     { value: 'hudlidelser_sår', text: '' },
     { value: 'duodenum_pancreas_milt', text: '' },
-    { value: 'teoretisk_spørgsmål', text: '' }
+    { value: 'teoretisk_spørgsmål', text: '' },
+    { value: 'blod_i_afføringen', text: '' },
+    { value: 'blære', text: '' }
   ],
   9: [
     // Paraklinik
@@ -220,7 +239,11 @@ export const tags = {
     // AP / Symptomkomplekser
     { value: 'dyspnø', text: 'Dyspnø' }
   ],
-  11: [{ value: 'paraklinik/paraclinical', text: 'Paraklinik/Paraclinical' }]
+  11: [
+    { value: 'paraklinik/paraclinical', text: 'Paraklinik/Paraclinical' },
+    { value: 'farmakologi/pharmacology', text: 'Farmakologi/Pharmacology' },
+    { value: 'radiologi/radiology', text: 'Radiologi/Radiology' }
+  ]
 };
 
 export const breakpoints = {
