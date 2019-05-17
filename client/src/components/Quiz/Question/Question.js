@@ -461,7 +461,7 @@ class Question extends PureComponent {
                       .join(' | ')}
                   </Grid.Row>
                   <Grid.Row>
-                    <Translate id="questionMetadata.tags" />
+                    <Translate id="questionMetadata.tags" />{' '}
                     {question.tags
                       .map((tag) => (_.find(tags[question.semester], { value: tag }) || {}).text)
                       .join(' | ')}
