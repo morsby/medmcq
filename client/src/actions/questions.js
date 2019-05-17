@@ -69,6 +69,7 @@ export const answerQuestion = (id, answer, correct, semester, user = null) => (d
   if (user) axios.post('/api/questions/answer', post);
 
   dispatch({ type: types.ANSWER_QUESTION, payload: { id, answer, correct } });
+  dispatch({ type: types.AUTH_UPDATE_USER_ANSWERS, payload: { semester, id, correct } });
 };
 
 export const postQuestion = (post) => async (dispatch) => {

@@ -44,7 +44,11 @@
       "F": ["Forår", "Spring "]
     },
     "specialty": ["Speciale:", "Specialty:"],
-    "tags": ["Tags:", "Tags:"]
+    "tags": ["Tags:", "Tags:"],
+    "answered": [
+      "Du har svaret rigtigt ${correct} ud af ${wrong} gange",
+      "You have answered correctly ${correct} out of ${wrong} times"
+    ]
   },
   "questionReport": {
     "label": ["Hvad er fejlen?", "What's the error?"],

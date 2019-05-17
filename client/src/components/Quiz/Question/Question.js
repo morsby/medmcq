@@ -1,4 +1,4 @@
-import React, { Component, useState } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as actions from '../../../actions';
@@ -25,7 +25,7 @@ import QuestionComments from './QuestionComments/QuestionComments';
  * og svar.
  */
 
-class Question extends Component {
+class Question extends PureComponent {
   state = {
     /**
      * Er report-formen åben?
@@ -345,6 +345,38 @@ class Question extends Component {
     this.setState({ editingSpecialties: false });
   }
 
+  // Udregner hvor mange rigtige brugeren har svaret på
+  calculateAnswered = () => {
+    const { question, user } = this.props;
+
+    if (!user.answeredQuestions) return null;
+    const answered = user.answeredQuestions;
+
+    if (
+      !answered ||
+      !answered[question.semester] ||
+      !answered[question.semester][String(question._id)]
+    )
+      return null;
+
+    return (
+      <Grid.Column textAlign="right">
+        {/* En ret verbose måde at udregne besvarede spørgsmål på, men det fungerer. Muligvis lidt refactor er nyttigt, men jeg har ikke kunnet regne en bedre måde ud, en alle de IFs. */}
+        <Grid.Row>
+          <Translate
+            id="questionMetadata.answered"
+            data={{
+              correct: answered[question.semester][String(question._id)].correct,
+              wrong:
+                answered[question.semester][String(question._id)].correct +
+                answered[question.semester][String(question._id)].wrong
+            }}
+          />
+        </Grid.Row>
+      </Grid.Column>
+    );
+  };
+
   render() {
     const { question, user } = this.props,
       { width } = this.state,
@@ -407,32 +439,38 @@ class Question extends Component {
             />
           </Responsive>
           <Divider />
-          <div>
-            <Translate id="questionMetadata.set" />{' '}
-            {question.examSeason === 'F' ? (
-              <Translate id="questionMetadata.set_season.F" />
-            ) : (
-              <Translate id="questionMetadata.set_season.E" />
-            )}{' '}
-            {question.examYear}
-          </div>
-          {question.answer && (
-            <div>
-              <div>
-                <Translate id="questionMetadata.specialty" />{' '}
-                {question.specialty
-                  .map((spec) => (_.find(specialer[question.semester], { value: spec }) || {}).text)
-                  .join(' | ')}
-              </div>
-              <div>
-                <Translate id="questionMetadata.tags" />{' '}
-                {question.tags
-                  .map((tag) => (_.find(tags[question.semester], { value: tag }) || {}).text)
-                  .join(' | ')}
-              </div>
-            </div>
-          )}
-
+          <Grid divided columns="equal">
+            <Grid.Column>
+              <Grid.Row>
+                <Translate id="questionMetadata.set" />{' '}
+                {question.examSeason === 'F' ? (
+                  <Translate id="questionMetadata.set_season.F" />
+                ) : (
+                  <Translate id="questionMetadata.set_season.E" />
+                )}{' '}
+                {question.examYear}
+              </Grid.Row>
+              {question.answer && (
+                <>
+                  <Grid.Row>
+                    <Translate id="questionMetadata.specialty" />{' '}
+                    {question.specialty
+                      .map(
+                        (spec) => (_.find(specialer[question.semester], { value: spec }) || {}).text
+                      )
+                      .join(' | ')}
+                  </Grid.Row>
+                  <Grid.Row>
+                    <Translate id="questionMetadata.tags" />
+                    {question.tags
+                      .map((tag) => (_.find(tags[question.semester], { value: tag }) || {}).text)
+                      .join(' | ')}
+                  </Grid.Row>
+                </>
+              )}
+            </Grid.Column>
+            {question.answer && this.calculateAnswered()}
+          </Grid>
           <Divider />
           <Button
             color={this.state.publicCommentsOpen ? 'green' : null}

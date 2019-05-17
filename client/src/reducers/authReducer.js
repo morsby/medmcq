@@ -71,5 +71,22 @@ export default createReducer(initialState, {
 
     state.performance.summary = summary;
     state.performance.answeredQuestions = answeredQuestions;
+  },
+  [types.AUTH_UPDATE_USER_ANSWERS]: (state, action) => {
+    const { semester, id, correct } = action.payload;
+    const { user } = state;
+    const answer = correct.correct ? 'correct' : 'wrong';
+    if (!user) return;
+
+    let answeredQuestions = user.answeredQuestions || {},
+      values = _.get(answeredQuestions, [semester, id], {
+        correct: 0,
+        wrong: 0
+      });
+
+    values[answer] = values[answer] + 1;
+    _.set(answeredQuestions, [semester, id], values);
+
+    user.answeredQuestions = answeredQuestions;
   }
 });
