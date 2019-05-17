@@ -18,6 +18,8 @@ import ProfileAnswerDetails from './ProfileAnswerDetails';
  * Component der viser profilen.
  */
 class Profile extends Component {
+  state = {};
+
   constructor(props) {
     super(props);
     let { semester } = props.settings;
@@ -27,16 +29,23 @@ class Profile extends Component {
       details: true,
       hidden: null,
       semester: semester,
-      width: window.innerWidth
+      width: window.innerWidth,
+      comments: []
     };
 
     this.handleResize = _.debounce(this.handleResize, 300);
   }
 
-  componentDidMount() {
-    // const { user } = this.props.auth;
+  async componentDidMount() {
     this.getQuestions(this.state.semester);
-    // this.getComments(user.comments); // TODO: Find en måde at vise kommentarerne bedre på
+
+    // Get questions from comment IDs
+    const { user } = this.props.auth;
+    const { data: commentQuestions } = await axios.post('/api/questions/ids', {
+      ids: user.comments
+    });
+    this.setState({ comments: commentQuestions });
+
     window.addEventListener('resize', this.handleResize);
   }
 
@@ -50,6 +59,18 @@ class Profile extends Component {
     let answeredQuestions = _.get(this.props, ['auth', 'user', 'answeredQuestions', semester], {});
 
     this.props.getAnsweredQuestions(answeredQuestions);
+  };
+
+  countComments = () => {
+    const { comments, semester } = this.state;
+    let countedComments = [];
+    comments.forEach((comment) => {
+      if (comment.semester === semester) {
+        countedComments.push(comment);
+      }
+    });
+
+    return countedComments.length;
   };
 
   getComments = async () => {
@@ -103,7 +124,7 @@ class Profile extends Component {
               <Translate id="profile.activity.answers.mixed" data={{ n: mixed.length }} />
             </li>
             <li className="item">
-              <Translate id="profile.activity.comments" data={{ n: user.comments.length }} />
+              <Translate id="profile.activity.comments" data={{ n: this.countComments() }} />
             </li>
           </ul>
           {user.comments.length > 0 && (
