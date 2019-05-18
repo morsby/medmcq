@@ -347,7 +347,8 @@ class Question extends PureComponent {
 
   // Udregner hvor mange rigtige brugeren har svaret på
   calculateAnswered = () => {
-    const { question, user } = this.props;
+    const { question } = this.props;
+    const user = this.props.user || {};
 
     if (!user.answeredQuestions) return null;
     const answered = user.answeredQuestions;
