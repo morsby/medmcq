@@ -165,35 +165,6 @@ class Question extends PureComponent {
     }
   };
 
-  /**
-   * Styrer input fra både kommentarer og rapport
-   * Kaldes fra QuestionComments.js og QuestionReport.js
-   * @param  {[type]} e     fra Semantic UI onClick
-   * @param  {string} value teksten
-   * @param  {string} name  navnet på input-feltet
-   */
-  onTextType = (e, { value, name }) => {
-    this.setState({ [name]: value });
-  };
-
-  /**
-   * Ændring af specialer
-   */
-  onSpecialtiesEditToggle = () => {
-    this.setState((prevState) => {
-      return { editingSpecialties: !prevState.editingSpecialties };
-    });
-  };
-
-  onEditSpecialty = (e, { value }) => {
-    this.setState({ selectedSpecialties: value });
-  };
-
-  onSaveSpecialties = () => {
-    this.props.editSpecialties(this.props.question._id, this.state.selectedSpecialties);
-    this.setState({ editingSpecialties: false });
-  };
-
   render() {
     const { question, user } = this.props,
       text = subSupScript(question.question);
