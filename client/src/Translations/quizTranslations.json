@@ -46,8 +46,8 @@
     "specialty": ["Speciale:", "Specialty:"],
     "tags": ["Tags:", "Tags:"],
     "answered": [
-      "Du har svaret rigtigt ${correct} ud af ${wrong} gange",
-      "You have answered correctly ${correct} out of ${wrong} times"
+      "Du har svaret rigtigt ${correct} ud af ${wrong} gange (${percent}%)",
+      "You have answered correctly ${correct} out of ${wrong} times (${percent}%)"
     ]
   },
   "questionReport": {

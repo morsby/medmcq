@@ -17,6 +17,7 @@ const QuestionAnsweredCounter = (props) => {
   )
     return null;
 
+  const { correct, wrong } = answered[question.semester][String(question._id)];
   return (
     <Grid.Column textAlign="right">
       {/* En ret verbose måde at udregne besvarede spørgsmål på, men det fungerer. Muligvis lidt refactor er nyttigt, men jeg har ikke kunnet regne en bedre måde ud, en alle de IFs. */}
@@ -24,10 +25,9 @@ const QuestionAnsweredCounter = (props) => {
         <Translate
           id="questionMetadata.answered"
           data={{
-            correct: answered[question.semester][String(question._id)].correct,
-            wrong:
-              answered[question.semester][String(question._id)].correct +
-              answered[question.semester][String(question._id)].wrong
+            correct,
+            wrong: correct + wrong,
+            percent: Math.round((correct / (wrong + correct)) * 100)
           }}
         />
       </Grid.Row>
