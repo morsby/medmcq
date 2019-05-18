@@ -98,6 +98,7 @@ export const commentQuestion = (id, comment, isPrivate, anonymous) => async (dis
     isPrivate,
     anonymous
   });
+  console.log(res);
   dispatch({
     type: types.QUESTION_COMMENT_UPDATE,
     payload: res.data

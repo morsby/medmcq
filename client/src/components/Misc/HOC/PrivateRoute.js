@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../../actions';
 import { urls } from '../../../utils/common';
 
-import LoadingPage from '../Pages/LoadingPage';
+import LoadingPage from '../Utility-pages/LoadingPage';
 
 /**
  * Higher Order Component der blokerer visse URLS for brugere der ikke er logget ind

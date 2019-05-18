@@ -2,27 +2,27 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import { connect } from 'react-redux';
-import * as actions from '../../actions';
+import * as actions from '../actions';
 
-import { allowedNs, breakpoints } from '../../utils/common';
-import { calculateResults } from '../../utils/quiz';
+import { allowedNs, breakpoints } from '../utils/common';
+import { calculateResults } from '../utils/quiz';
 
-import selectionTranslations from './selectionTranslations.json';
+import selectionTranslations from '../Translations/selectionTranslations.json';
 import { withLocalize, Translate } from 'react-localize-redux';
 
 import _ from 'lodash';
 
 import { Container, Header, Dropdown, Divider, Button, Message, Input } from 'semantic-ui-react';
 
-import SelectionNSelector from './SelectionSettings/SelectionNSelector';
-import SelectionSetSelector from './SelectionSettings/SelectionSetSelector/SelectionSetSelector';
-import SelectionSpecialtiesSelector from './SelectionSettings/SelectionSpecialtiesSelector/SelectionSpecialtiesSelector';
-import SelectionTypeSelector from './SelectionSettings/SelectionTypeSelector';
-import SelectionUniqueSelector from './SelectionSettings/SelectionUniqueSelector';
-import SelectionMessage from './SelectionMessage';
+import SelectionNSelector from '../components/Selection/SelectionSettings/SelectionNSelector';
+import SelectionSetSelector from '../components/Selection/SelectionSettings/SelectionSetSelector/SelectionSetSelector';
+import SelectionSpecialtiesSelector from '../components/Selection/SelectionSettings/SelectionSpecialtiesSelector/SelectionSpecialtiesSelector';
+import SelectionTypeSelector from '../components/Selection/SelectionSettings/SelectionTypeSelector';
+import SelectionUniqueSelector from '../components/Selection/SelectionSettings/SelectionUniqueSelector';
+import SelectionMessage from '../components/Selection/SelectionMessage';
 
-import { semestre, urls } from '../../utils/common';
-import { specialer as specialerCommon, tags as tagsCommon } from '../../utils/common';
+import { semestre, urls } from '../utils/common';
+import { specialer as specialerCommon, tags as tagsCommon } from '../utils/common';
 
 /**
  * Hovedsiden til at håndtere alle valg af spørgsmål.

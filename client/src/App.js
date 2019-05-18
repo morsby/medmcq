@@ -11,19 +11,19 @@ import { renderToStaticMarkup } from 'react-dom/server'; // required to initiali
 import authTranslations from './components/Auth/authTranslations'; // fordi der ikke er en gennemgående component i dette regi
 
 // HOCs
-import PrivateRoute from './components/Misc/HOC/PrivateRoute';
-import ScrollToTop from './components/Misc/HOC/ScrollToTop';
+import PrivateRoute from './components/misc/HOC/PrivateRoute';
+import ScrollToTop from './components/misc/HOC/ScrollToTop';
 // Routes
 // Diverse
-import ErrorPage from './components/Misc/Pages/404';
-import Print from './components/Misc/Pages/Print/Print';
+import ErrorPage from './components/misc/Utility-pages/404';
+import Print from './components/misc/Utility-pages/Print/Print';
 // Selections
-import Selection from './components/SelectionSettings/Selection';
+import Selection from './pages/Selection';
 
 // Selve quizzen
-import Quiz from './components/Quiz/Quiz';
-import About from './components/Misc/Pages/About/About';
-import Contact from './components/Misc/Pages/Contact';
+import Quiz from './pages/Quiz';
+import About from './components/misc/Utility-pages/About/About';
+import Contact from './components/misc/Utility-pages/Contact';
 
 import Header from './components/Layout/Header';
 
@@ -37,7 +37,7 @@ import ForgotPassword from './components/Auth/Password/ForgotPassword';
 import ResetPassword from './components/Auth/Password/ResetPassword';
 
 // NewVersionMessage
-import NewVersionMessage from './components/Misc/Pages/About/NewVersion/NewVersionMessage';
+import NewVersionMessage from './components/misc/Utility-pages/About/NewVersion/NewVersionMessage';
 
 import * as actions from './actions';
 import { urls } from './utils/common';

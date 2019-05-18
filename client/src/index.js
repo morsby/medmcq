@@ -14,7 +14,7 @@ import { LocalizeProvider } from 'react-localize-redux';
 
 // Components
 import LocalizedApp from './App';
-import LoadingPage from './components/Misc/Pages/LoadingPage';
+import LoadingPage from './components/misc/Utility-pages/LoadingPage';
 
 // STYLING
 import './styles/css/main.css';

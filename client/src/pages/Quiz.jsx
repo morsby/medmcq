@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as actions from '../../actions';
+import * as actions from '../actions';
 
 import { withLocalize, Translate } from 'react-localize-redux';
-import quizTranslations from './quizTranslations.json';
+import quizTranslations from '../Translations/quizTranslations.json';
 
 import { Container, Button } from 'semantic-ui-react';
 
 import Swipeable from 'react-swipeable';
-import QuizLoader from './QuizLoader';
-import Question from './Question/Question';
-import QuizNavigator from './QuizNavigator';
-import QuizSummary from './QuizSummary';
+import QuizLoader from '../components/Quiz/QuizLoader';
+import Question from '../containers/Question';
+import QuizNavigator from '../components/Quiz/QuizNavigator';
+import QuizSummary from '../components/Quiz/QuizSummary';
 
-import { smoothScroll } from '../../utils/quiz';
-import { urls } from '../../utils/common';
+import { smoothScroll } from '../utils/quiz';
+import { urls } from '../utils/common';
 import { withRouter } from 'react-router';
 
 const flickNumber = 0.1;

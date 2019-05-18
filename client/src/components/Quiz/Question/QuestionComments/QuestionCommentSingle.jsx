@@ -48,7 +48,7 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
         ) : null}
 
         <Comment.Text
-          style={{ marginTop: '1em', fontSize: '18px' }}
+          style={{ marginTop: '1em', fontSize: '15px' }}
           dangerouslySetInnerHTML={{
             __html: marked(comment.comment)
           }}

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Placeholder, Segment, Container } from 'semantic-ui-react';
+import { Placeholder, Container } from 'semantic-ui-react';
 
 /**
  * Loading page. Bruges mens data hentes på visse sider, fx profil, feedback.
