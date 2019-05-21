@@ -13,15 +13,12 @@ const auth = require('../middleware/auth');
 // MODELS
 const Question = require('../models/question.js');
 const User = require('../models/user.js');
-
-const superUsers = [
-  '5c9238d0fc42c40504616066',
-  '5bf6d6659643d718e06953b5',
-  '5ba48b49bcdeff2820b0a686',
-  '5bfd496b95606811a0baef7d'
-];
+const mongoose = require('mongoose');
 
 // TODO: Før statistik over get("/api/questions"), post("/api/questions/ids/"), post("/api/questions/answer")
+
+// Subroutes
+router.use('/metadata', require('./Question/metadata'));
 
 router.get('/', async (req, res) => {
   let { n, specialer, tags, unique, semester, examSeason, examYear } = req.query;
@@ -68,11 +65,25 @@ router.get('/', async (req, res) => {
     };
 
     if (specialer) {
-      filter.specialty = { $in: specialer.split(',') };
+      const specialtyArray = specialer.split(',');
+      let specFilter = [];
+
+      for (let spec of specialtyArray) {
+        specFilter.push(mongoose.Types.ObjectId(spec));
+      }
+
+      Object.assign(filter, { 'newSpecialties.specialty': { $in: specFilter } });
     }
 
     if (tags) {
-      filter.tags = { $in: tags.split(',') };
+      const tagArray = tags.split(',');
+      let tagFilter = [];
+
+      for (let tag of tagArray) {
+        tagFilter.push(mongoose.Types.ObjectId(tag));
+      }
+
+      Object.assign(filter, { 'newTags.tag': { $in: tagFilter } });
     }
 
     Question.findRandom(filter, {}, { limit: n }, (err, questions) => {
@@ -80,7 +91,7 @@ router.get('/', async (req, res) => {
 
       // Hvis der ikke er nogen spørgsmål ud fra filteret
       // (pga. alle spørgsmål der opfylder kriterierne ER besvarede)
-      if (!questions) {
+      if (!questions && (!tags || !specialer)) {
         let filter2 = { ...filter };
         delete filter2._id;
         Question.findRandom(filter2, {}, { limit: n }, (err, questions) => {
@@ -294,7 +305,7 @@ router.delete('/:question_id/comment/:comment_id', async (req, res) => {
 
 // Slet et spørgsmål
 router.delete('/:id', permit('admin'), (req, res) => {
-  Question.remove({ _id: req.params.id }, (err, question) => {
+  Question.remove({ _id: req.params.id }, (err) => {
     if (err) res.send(err);
 
     res.json({ message: 'Spørgsmålet er slettet!' });
@@ -303,13 +314,11 @@ router.delete('/:id', permit('admin'), (req, res) => {
 
 // Bruges på quiz-vælger-siden til at vise hvor mange spørgsmål der er for hvert semester
 router.get('/count/:semester', (req, res) => {
-  Question.find({ semester: req.params.semester })
-    .select(['specialty', 'tags', 'examSeason', 'examYear'])
-    .exec((err, questions) => {
-      if (err) res.send(err);
+  Question.find({ semester: req.params.semester }).exec((err, questions) => {
+    if (err) res.send(err);
 
-      res.json(questions);
-    });
+    res.json(questions);
+  });
 });
 
 // Besvar spørgsmål
@@ -423,106 +432,6 @@ C. ${question.answer3}
   sgMail.send(msg);
 
   res.status(200).json({ type: 'success', message: 'report_made' });
-});
-
-// Stem på specialty
-router.put('/:question_id/vote', async (req, res) => {
-  let question = await Question.findById(req.params.question_id);
-
-  // Tjek om brugeren allerede har voted, og hvis de har, så fjern brugeren fra alle votes
-  question.votes.forEach((vote, i) => {
-    const userIndex = _.indexOf(vote.users, req.body.user);
-    if (userIndex !== -1) {
-      question.votes[i].users.splice(userIndex, 1);
-    }
-  });
-
-  req.body.specialties.forEach((specialty) => {
-    // Upvote speciale
-    const upvotedIndex = _.findIndex(question.votes, (vote) => {
-      return vote.specialty === specialty;
-    });
-    // Hvis speciale ikke eksisterer i votes, laves nyt speciale
-    if (upvotedIndex === -1) {
-      question.votes.push({ specialty: specialty, users: [req.body.user] });
-    } else {
-      question.votes[upvotedIndex].users.push(req.body.user);
-    }
-  });
-
-  // Tjek hvorvidt brugeren har ret til at tælle mere
-  let voteValue = 0;
-  if (_.includes(superUsers, req.body.user)) {
-    voteValue = 10;
-  }
-
-  // Tjek hvilket speciale er højest voted, og sæt det som specialty.
-  const highestVoted = _.maxBy(question.votes, (vote) => {
-    return vote.users.length + voteValue;
-  });
-  const maxVotes = highestVoted.users.length;
-  if (highestVoted.users.length > 0) {
-    question.specialty = [highestVoted.specialty];
-
-    // Tjek hvorvidt de andre specialer er indenfor 50% af det
-    // øverste speciale, hvorved det også kommer med
-    question.votes.forEach((vote) => {
-      if (
-        vote.users.length + voteValue >= 0.5 * maxVotes &&
-        highestVoted.specialty !== vote.specialty &&
-        vote.users.length !== 0
-      ) {
-        question.specialty.push(vote.specialty);
-      }
-    });
-  } else {
-    question.specialty = [];
-  }
-
-  const result = await question.save();
-  res.status(200).send(result);
-});
-
-router.put('/:question_id/tags', async (req, res) => {
-  let question = await Question.findById(req.params.question_id);
-
-  // Tjek om brugeren allerede har tags, og hvis de har, så fjern brugeren fra disse tags (de bliver tilføjet senere igen)
-  question.tagVotes.forEach((tag, i) => {
-    const userIndex = _.indexOf(tag.users, req.body.user);
-    if (userIndex !== -1) {
-      question.tagVotes[i].users.splice(userIndex, 1);
-    }
-  });
-
-  req.body.tags.forEach((tag) => {
-    // Upvote speciale
-    const upvotedIndex = _.findIndex(question.tagVotes, (vote) => {
-      return vote.tag === tag;
-    });
-    // Hvis tag ikke eksisterer, laves nyt
-    if (upvotedIndex === -1) {
-      question.tagVotes.push({ tag: tag, users: [req.body.user] });
-    } else {
-      question.tagVotes[upvotedIndex].users.push(req.body.user);
-    }
-  });
-
-  // Tjek om tagget har en voting over 5, og tilføj det til tags
-  let tags = [];
-  question.tagVotes.forEach((vote) => {
-    let included = false;
-    vote.users.forEach((user) => {
-      if (_.includes(superUsers, user)) included = true;
-    });
-
-    if (vote.users.length >= 1 || included) {
-      tags.push(vote.tag);
-    }
-  });
-  question.tags = tags;
-
-  const result = await question.save();
-  res.status(200).send(result);
 });
 
 module.exports = router;

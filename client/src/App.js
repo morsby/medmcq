@@ -43,8 +43,11 @@ import * as actions from './actions';
 import { urls } from './utils/common';
 import Sidebar from './components/Layout/Sidebar';
 import Footer from './components/Layout/Footer';
+import MaintenancePage from './components/misc/Utility-pages/MaintenancePage';
 
 class App extends Component {
+  state = { maintenance: false };
+
   constructor(props) {
     super(props);
 
@@ -63,6 +66,7 @@ class App extends Component {
     });
   }
   render() {
+    if (this.state.maintenance) return <MaintenancePage />;
     return (
       <BrowserRouter>
         <ScrollToTop>

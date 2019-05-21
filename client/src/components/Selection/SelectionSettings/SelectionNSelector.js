@@ -7,7 +7,7 @@ import styles from './SelectionNSelector.module.css';
 
 import { Translate } from 'react-localize-redux';
 
-import { Label, Input, Form, Radio, Divider, Header, Grid } from 'semantic-ui-react';
+import { Label, Input, Form, Radio, Header, Grid } from 'semantic-ui-react';
 
 /**
  * Component der giver mulighed for ændring af antal ønskede spørgsmål.
@@ -15,7 +15,7 @@ import { Label, Input, Form, Radio, Divider, Header, Grid } from 'semantic-ui-re
  */
 class SelectionNSelector extends Component {
   render() {
-    const { onChange, n, total } = this.props;
+    const { onChange, n } = this.props;
 
     let labelError;
 

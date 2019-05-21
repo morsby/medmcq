@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as actions from '../../../actions';
+import * as actions from '../../src/actions';
 import _ from 'lodash';
 
-import { specialer, tags } from '../../../utils/common';
+import { specialer, tags } from '../../src/utils/common';
 
 import { Button, Message, Input, Grid } from 'semantic-ui-react';
 import { Divider, Dropdown } from 'semantic-ui-react';

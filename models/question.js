@@ -15,8 +15,20 @@ var QuestionSchema = new Schema({
   semester: Number, // hvilket kandidatsemester?
   examYear: Number, // hvornår blev spørgsmålet stillet?
   examSeason: String, // forår el. efterår?
-  specialty: [String],
-  tags: [],
+  newSpecialties: [
+    {
+      specialty: { type: Schema.Types.ObjectId, ref: 'Specialty', autopopulate: true },
+      votes: Number,
+      users: [{ user: { type: Schema.Types.ObjectId, ref: 'User' }, vote: Number }]
+    }
+  ],
+  newTags: [
+    {
+      tag: { type: Schema.Types.ObjectId, ref: 'Tag', autopopulate: true },
+      votes: Number,
+      users: [{ user: { type: Schema.Types.ObjectId, ref: 'User' }, vote: Number }]
+    }
+  ],
   image: String,
   image_id: String,
   comments: [
@@ -29,11 +41,14 @@ var QuestionSchema = new Schema({
       anonymous: { type: Boolean, default: false }
     }
   ],
+  specialty: [String],
+  tags: [],
   votes: [{ specialty: String, users: [String] }],
   tagVotes: [{ tag: String, users: [String] }],
   disclaimer: String
 });
 
+QuestionSchema.plugin(require('mongoose-autopopulate'));
 QuestionSchema.plugin(random);
 
 module.exports = mongoose.model('Question', QuestionSchema);

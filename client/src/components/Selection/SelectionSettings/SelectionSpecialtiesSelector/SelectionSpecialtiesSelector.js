@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import { specialer, tags } from '../../../../utils/common';
 import { Translate } from 'react-localize-redux';
 
 import { Form, Header, Message, Grid } from 'semantic-ui-react';
 import SelectionSpecialtiesSelectorCheckbox from './SelectionSpecialtiesSelectorCheckbox';
+import LoadingPage from './../../../misc/Utility-pages/LoadingPage';
 
 /**
  * Laver en checkbox for hvert speciale.
@@ -15,9 +14,11 @@ const SelectionSpecialtiesSelector = ({
   valgteSpecialer = [],
   valgteTags = [],
   onChange,
-  antalPerSpeciale,
-  antalPerTag
+  specialties,
+  tags,
+  loading
 }) => {
+  if (loading || !specialties || !tags) return <LoadingPage />;
   if (!semester)
     return (
       <Header as="h3">
@@ -32,15 +33,14 @@ const SelectionSpecialtiesSelector = ({
             <Header as="h3">
               <Translate id="selectionSpecialtiesSelector.header" data={{ semester }} />
             </Header>
-            {specialer[semester].map((speciale) => {
-              let erValgt = valgteSpecialer.includes(speciale.value);
+            {specialties.map((s) => {
               return (
                 <SelectionSpecialtiesSelectorCheckbox
-                  key={speciale.value}
+                  key={s._id}
                   type="specialer"
-                  speciale={speciale}
-                  erValgt={erValgt}
-                  antalPerSpeciale={antalPerSpeciale[speciale.value]}
+                  speciale={s}
+                  erValgt={valgteSpecialer.includes(s._id)}
+                  antal={s.count}
                   onChange={onChange}
                 />
               );
@@ -52,15 +52,14 @@ const SelectionSpecialtiesSelector = ({
             <Header as="h3">
               <Translate id="selectionSpecialtiesSelector.tags" data={{ semester }} />
             </Header>
-            {tags[semester].map((tag) => {
-              let erValgt = valgteTags.includes(tag.value);
+            {tags.map((t) => {
               return (
                 <SelectionSpecialtiesSelectorCheckbox
-                  key={tag.value}
+                  key={t._id}
                   type="tags"
-                  speciale={tag}
-                  erValgt={erValgt}
-                  antalPerSpeciale={antalPerTag[tag.value]}
+                  speciale={t}
+                  erValgt={valgteTags.includes(t._id)}
+                  antal={t.count}
                   onChange={onChange}
                 />
               );
