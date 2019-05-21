@@ -226,97 +226,115 @@ const tags = {
 };
 
 const postMetadata = async () => {
-  for (let key in specialer) {
-    specialer[key].forEach(async (speciale) => {
-      await axios.post('http://localhost:3001/api/questions/metadata', {
-        type: 'specialty',
-        value: speciale.value,
-        text: speciale.text,
-        semester: Number(key)
+  try {
+    for (let key in specialer) {
+      specialer[key].forEach(async (speciale) => {
+        await axios.post('http://localhost:3001/api/questions/metadata', {
+          type: 'specialty',
+          value: speciale.value,
+          text: speciale.text,
+          semester: Number(key)
+        });
       });
-    });
-  }
+    }
 
-  for (let key in tags) {
-    tags[key].forEach(async (tag) => {
-      await axios.post('http://localhost:3001/api/questions/metadata', {
-        type: 'specialty',
-        value: tag.value,
-        text: tag.text,
-        semester: Number(key)
+    for (let key in tags) {
+      tags[key].forEach(async (tag) => {
+        await axios.post('http://localhost:3001/api/questions/metadata', {
+          type: 'tag',
+          value: tag.value,
+          text: tag.text,
+          semester: Number(key)
+        });
       });
-    });
+    }
+  } catch (error) {
+    console.log(new Error(error));
   }
 };
 
 router.get('/convert', async (req, res) => {
-  postMetadata();
-
-  // convertQuestions();
+  try {
+    // await postMetadata();
+    convertQuestions();
+    res.status(200).send('Det gik vel nok fint?');
+  } catch (error) {
+    console.log(new Error(error));
+  }
 });
 
 // Opret nyt speciale eller tag
 router.post('/', async (req, res) => {
-  const { type, value, text, semester } = req.body; // Disse parametre skal alle opgives i post requesten
-  if (!type || !value || !text || !semester)
-    return res.status(400).send('Du mangler at opgive alle parametre');
+  try {
+    const { type, value, text, semester } = req.body; // Disse parametre skal alle opgives i post requesten
+    if (!type || !value || !text || !semester)
+      return res.status(400).send('Du mangler at opgive alle parametre');
 
-  if (type === 'specialty') {
-    let specialty = await Specialty.findOne({ value: value, semester: semester });
-    if (specialty) return res.status(404).send('Speciale findes allerede');
+    if (type === 'specialty') {
+      let specialty = await Specialty.findOne({ value: value, semester: semester });
+      if (specialty) return res.status(404).send('Speciale findes allerede');
 
-    specialty = new Specialty();
+      specialty = new Specialty();
 
-    specialty.votes = 0;
-    specialty.value = value;
-    specialty.text = text;
-    specialty.semester = semester;
+      specialty.value = value;
+      specialty.text = text;
+      specialty.semester = semester;
 
-    await specialty.save();
-    res.status(200).send({ message: 'Oprettet speciale', specialty: specialty });
-  }
+      await specialty.save();
+      res.status(200).send({ message: 'Oprettet speciale', specialty: specialty });
+    }
 
-  if (type === 'tag') {
-    let tag = await Tag.find({ value: value, semester: semester });
-    if (tag) return res.status(404).send('Tag findes allerede');
+    if (type === 'tag') {
+      let tag = await Tag.findOne({ value: value, semester: semester });
+      if (tag) return res.status(404).send('Tag findes allerede');
 
-    tag = new Tag();
+      tag = new Tag();
 
-    tag.votes = 0;
-    tag.value = value;
-    tag.text = text;
-    tag.semester = semester;
+      tag.value = value;
+      tag.text = text;
+      tag.semester = semester;
 
-    await tag.save();
-    res.status(200).send({ message: 'Oprettet tag', tag: tag });
+      await tag.save();
+      res.status(200).send({ message: 'Oprettet tag', tag: tag });
+    }
+  } catch (error) {
+    console.log(new Error(error));
   }
 });
 
+router.get('/all', async (req, res) => {
+  const questions = await Question.find().populate('newTags');
+
+  res.send(JSON.stringify(questions));
+});
+
 // Konvertering af gammelt tagsystem
-const convertQuestions = () => {
-  const questions = Question.find();
+const convertQuestions = async () => {
+  const questions = await Question.find();
 
-  questions.forEach((q) => {
-    q.votes.forEach((vote) => {
-      const specialty = Specialty.findOne(vote.specialty);
+  await questions.forEach(async (q) => {
+    q.votes.forEach(async (vote) => {
+      const specialty = await Specialty.findOne({ value: vote.specialty });
+      if (!specialty) return console.log('Du mangler specialet ' + vote.specialty);
 
-      specialty.votes = 1;
-      specialty.users = vote.users;
-
-      q.newSpecialties.push(specialty);
+      q.newSpecialties.push({
+        specialty: specialty._id,
+        votes: vote.users.length,
+        users: vote.users
+      });
     });
 
-    q.tagVotes.forEach((tagVote) => {
-      const tag = Tag.findOne(tagVote.tag);
+    q.tagVotes.forEach(async (tagVote) => {
+      const tag = await Tag.findOne({ value: tagVote.tag });
+      if (!tag) return console.log('Du mangler tagget ' + tagVote.tag);
 
-      tag.votes = 1;
-      tag.users = tagVote.users;
-
-      q.newTags.push(tag);
+      q.newTags.push({ tag: tag._id, votes: tagVote.users.length, users: tagVote.users });
     });
 
-    q.save();
+    const result = await q.save();
+    console.log(result);
   });
+  console.log('Done converting?');
 };
 
 // Stem på metadata

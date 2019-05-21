@@ -17,8 +17,20 @@ var QuestionSchema = new Schema({
   examSeason: String, // forår el. efterår?
   specialty: [String],
   tags: [],
-  newSpecialties: [{ type: Schema.Types.ObjectId, ref: 'Specialty' }],
-  newTags: [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
+  newSpecialties: [
+    {
+      specialty: { type: Schema.Types.ObjectId, ref: 'Specialty' },
+      votes: Number,
+      users: [{ type: Schema.Types.ObjectId, ref: 'User' }]
+    }
+  ],
+  newTags: [
+    {
+      tag: { type: Schema.Types.ObjectId, ref: 'Tag' },
+      votes: Number,
+      users: [{ type: Schema.Types.ObjectId, ref: 'User' }]
+    }
+  ],
   image: String,
   image_id: String,
   comments: [
