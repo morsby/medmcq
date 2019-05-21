@@ -30,9 +30,14 @@ const QuestionMetadata = (props) => {
             </Grid.Row>
             <Grid.Row>
               <Translate id="questionMetadata.tags" />{' '}
-              {question.tags
-                .map((tag) => (_.find(tags[question.semester], { value: tag }) || {}).text)
-                .join(' | ')}
+              {_.filter(
+                question.tags.map(
+                  (tag) => (_.find(tags[question.semester], { value: tag }) || {}).text
+                ),
+                (t) => {
+                  return t;
+                }
+              ).join(' | ')}
             </Grid.Row>
           </>
         )}
