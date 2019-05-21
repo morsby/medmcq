@@ -113,6 +113,9 @@ export const tags = {
     { value: 'statistik', text: 'Statistik' },
     { value: 'forskning', text: 'Forskning' },
     { value: 'molekylærbiologisk_metode', text: 'Molekylærbiologisk metode' },
+    { value: 'børn', text: 'Børn' },
+    
+    // Slettet
     { value: 'paraklinik', text: '' }
   ],
   8: [
