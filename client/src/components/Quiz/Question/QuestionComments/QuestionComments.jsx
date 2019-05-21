@@ -21,7 +21,7 @@ const QuestionComments = ({
   useEffect(() => {
     setAnonymous(false);
     setComment('');
-  }, [user, isPrivateComment, comments]);
+  }, [question]);
 
   /**
    * Poster en kommentar.
