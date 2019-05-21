@@ -96,7 +96,11 @@ const QuestionVoting = (props) => {
               multiple
               selection
               search
-              options={specialer[props.question.semester]}
+              options={_.sortBy(specialer[props.question.semester], [
+                (s) => {
+                  return s.text;
+                }
+              ])}
               value={chosenSpecialties}
               onChange={onChangeSpecialties}
             />
@@ -115,7 +119,16 @@ const QuestionVoting = (props) => {
               multiple
               selection
               search
-              options={tags[props.question.semester]}
+              options={_.filter(
+                _.sortBy(tags[props.question.semester], [
+                  (t) => {
+                    if (t.text) return t.text;
+                  }
+                ]),
+                (t) => {
+                  return t.text;
+                }
+              )}
               value={chosenTags}
               onChange={onChangeTags}
             />
