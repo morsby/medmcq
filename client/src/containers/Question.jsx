@@ -224,6 +224,7 @@ class Question extends PureComponent {
             width={this.state.width}
             question={question}
             user={user}
+            qn={this.props.qn}
           />
         </Segment>
         <Divider hidden />

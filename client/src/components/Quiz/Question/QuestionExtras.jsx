@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Divider } from 'semantic-ui-react';
 import QuestionReport from './QuestionExtras/QuestionReport';
 import QuestionComments from './QuestionComments/QuestionComments';
@@ -13,7 +13,8 @@ const QuestionExtras = ({
   questionReport,
   deleteComment,
   commentQuestion,
-  editComment
+  editComment,
+  qn
 }) => {
   const [privateCommentsOpen, setPrivateCommentsOpen] = useState(false);
   const [publicCommentsOpen, setPublicCommentsOpen] = useState(false);
@@ -33,6 +34,14 @@ const QuestionExtras = ({
       sortedComments.publicComments.push(comment);
     }
   });
+
+  useEffect(() => {
+    setPrivateCommentsOpen(false);
+    setPublicCommentsOpen(false);
+    setReportOpen(false);
+    setReportSent(false);
+    setReport('');
+  }, [qn]);
 
   /** Vis/skjul formular til rapportering af spørgsmål */
   const onReportToggle = () => {
@@ -115,8 +124,9 @@ QuestionExtras.propTypes = {
   width: PropTypes.number,
   questionReport: PropTypes.func, // Redux
   deleteComment: PropTypes.func, // Redux
-  commentQuestion: PropTypes.func, // Redux,
-  editComment: PropTypes.func // Redux
+  commentQuestion: PropTypes.func, // Redux
+  editComment: PropTypes.func, // Redux
+  qn: PropTypes.number
 };
 
 export default QuestionExtras;
