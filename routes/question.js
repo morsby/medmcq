@@ -13,15 +13,12 @@ const auth = require('../middleware/auth');
 // MODELS
 const Question = require('../models/question.js');
 const User = require('../models/user.js');
-
-const superUsers = [
-  '5c9238d0fc42c40504616066',
-  '5bf6d6659643d718e06953b5',
-  '5ba48b49bcdeff2820b0a686',
-  '5bfd496b95606811a0baef7d'
-];
+const superUsers = require('../utils/superUsers');
 
 // TODO: Før statistik over get("/api/questions"), post("/api/questions/ids/"), post("/api/questions/answer")
+
+// Subroutes
+router.use('/metadata', require('./Question/metadata'));
 
 router.get('/', async (req, res) => {
   let { n, specialer, tags, unique, semester, examSeason, examYear } = req.query;

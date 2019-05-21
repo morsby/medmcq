@@ -17,6 +17,8 @@ var QuestionSchema = new Schema({
   examSeason: String, // forår el. efterår?
   specialty: [String],
   tags: [],
+  newSpecialties: [{ type: Schema.Types.ObjectId, ref: 'Specialty' }],
+  newTags: [{ type: Schema.Types.ObjectId, ref: 'Tag' }],
   image: String,
   image_id: String,
   comments: [
