@@ -169,44 +169,6 @@ class SelectionMain extends Component {
       answeredQuestions = user.answeredQuestions[semester];
     }
 
-    // Laver et array af specialer for semesteret
-    let uniques = {
-      specialer: specialerCommon[semester].map((s) => s.value),
-      tags: tagsCommon[semester].map((t) => t.value)
-    };
-
-    // Grupperer de fundne spørgsmål efter specialer
-    let questionsBySpecialty = _.countBy(
-      // Laver et flat array af alle i spg indeholdte specialer
-      _.flattenDeep(questions.map((a) => a.specialty)),
-      (e) => {
-        return uniques.specialer[uniques.specialer.indexOf(e)];
-      }
-    );
-
-    // Grupperer de fundne spørgsmål efter tags
-    let questionsByTag = _.countBy(
-      // Laver et flat array af alle i spg indeholdte tags
-      _.flattenDeep(questions.map((a) => a.tags)),
-      (e) => {
-        return uniques.tags[uniques.tags.indexOf(e)];
-      }
-    );
-
-    // Tjekker hvor mange der er valgt
-    let antalValgte = 0;
-    specialer.map((s) => {
-      let n = questionsBySpecialty[s] ? questionsBySpecialty[s] : 0;
-      antalValgte = antalValgte + n;
-      return null;
-    });
-
-    tags.map((t) => {
-      let n = questionsByTag[t] ? questionsByTag[t] : 0;
-      antalValgte = antalValgte + n;
-      return null;
-    });
-
     return (
       <div className="flex-container">
         <Container className="content">
@@ -277,9 +239,7 @@ class SelectionMain extends Component {
               <SelectionSpecialtiesSelector
                 semester={semester}
                 valgteSpecialer={specialer}
-                antalPerSpeciale={questionsBySpecialty}
                 valgteTags={tags}
-                antalPerTag={questionsByTag}
                 onChange={this.onSettingsChange}
               />
               <Divider hidden />
@@ -293,14 +253,7 @@ class SelectionMain extends Component {
               })}
             </Message>
           )}
-          <Button
-            color="green"
-            basic
-            onClick={() => this.handleSubmit('new')}
-            disabled={
-              (antalValgte < 1 && type === 'specialer') || n < allowedNs.min || n > allowedNs.max
-            }
-          >
+          <Button color="green" basic onClick={() => this.handleSubmit('new')}>
             Start!
           </Button>
           {window.innerWidth < breakpoints.mobile && <Divider hidden />}

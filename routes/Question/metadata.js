@@ -225,6 +225,40 @@ const tags = {
   ]
 };
 
+// Konvertering af gammelt tagsystem
+const convertQuestions = async () => {
+  const questions = await Question.find().populate('Specialty Tag User');
+
+  for (let q of questions) {
+    let newTags = [];
+    let newSpecialties = [];
+
+    for (let vote of q.votes) {
+      const specialty = await Specialty.findOne({ value: vote.specialty });
+      if (!specialty) return console.log('Du mangler specialet ' + vote.specialty);
+
+      newSpecialties.push({
+        specialty: specialty._id,
+        votes: vote.users.length,
+        users: vote.users
+      });
+    }
+
+    for (let tagVote of q.tagVotes) {
+      const tag = await Tag.findOne({ value: tagVote.tag });
+      if (!tag) return console.log('Du mangler tagget ' + tagVote.tag);
+
+      newTags.push({ tag: tag._id, votes: tagVote.users.length, users: tagVote.users });
+    }
+
+    q.newSpecialties = newSpecialties;
+    q.newTags = newTags;
+    const result = await q.save();
+    console.log(JSON.stringify(result, null, 2));
+  }
+  console.log('Done converting?');
+};
+
 const postMetadata = async () => {
   try {
     for (let key in specialer) {
@@ -253,10 +287,35 @@ const postMetadata = async () => {
   }
 };
 
+router.get('/convert4', async (req, res) => {});
+
+router.get('/convert3', async (req, res) => {
+  const questions = await Question.find();
+
+  for (let q of questions) {
+    q.tags = undefined;
+    q.votes = undefined;
+    q.tagVotes = undefined;
+    q.specialty = undefined;
+
+    await q.save();
+  }
+
+  res.status(200).send('Success');
+});
+
+router.get('/convert2', async (req, res) => {
+  try {
+    await convertQuestions();
+    res.status(200).send('Det gik vel nok fint?');
+  } catch (error) {
+    console.log(new Error(error));
+  }
+});
+
 router.get('/convert', async (req, res) => {
   try {
-    // await postMetadata();
-    convertQuestions();
+    await postMetadata();
     res.status(200).send('Det gik vel nok fint?');
   } catch (error) {
     console.log(new Error(error));
@@ -302,40 +361,27 @@ router.post('/', async (req, res) => {
   }
 });
 
-router.get('/all', async (req, res) => {
-  const questions = await Question.find().populate('newTags');
+// Todo - make count on backend
+router.get('/', async (req, res) => {
+  const specialties = await Specialty.find();
+  const tags = await Tag.find();
+  const questions = await Question.find();
+  let count = { specialties, tags };
 
-  res.send(JSON.stringify(questions));
+  for (let q of questions) {
+    count.specialties[q.newSpecialties.specialty];
+  }
+
+  const metadata = { specialties, tags };
+
+  res.status(200).send(metadata);
 });
 
-// Konvertering af gammelt tagsystem
-const convertQuestions = async () => {
+router.get('/all', async (req, res) => {
   const questions = await Question.find();
 
-  await questions.forEach(async (q) => {
-    q.votes.forEach(async (vote) => {
-      const specialty = await Specialty.findOne({ value: vote.specialty });
-      if (!specialty) return console.log('Du mangler specialet ' + vote.specialty);
-
-      q.newSpecialties.push({
-        specialty: specialty._id,
-        votes: vote.users.length,
-        users: vote.users
-      });
-    });
-
-    q.tagVotes.forEach(async (tagVote) => {
-      const tag = await Tag.findOne({ value: tagVote.tag });
-      if (!tag) return console.log('Du mangler tagget ' + tagVote.tag);
-
-      q.newTags.push({ tag: tag._id, votes: tagVote.users.length, users: tagVote.users });
-    });
-
-    const result = await q.save();
-    console.log(result);
-  });
-  console.log('Done converting?');
-};
+  res.status(200).send({ questions });
+});
 
 // Stem på metadata
 router.put('/vote/:question_id', async (req, res) => {
