@@ -41,14 +41,14 @@ var QuestionSchema = new Schema({
       anonymous: { type: Boolean, default: false }
     }
   ],
-  // specialty: [String],
-  // tags: [],
-  // votes: [{ specialty: String, users: [String] }],
-  // tagVotes: [{ tag: String, users: [String] }],
+  specialty: [String],
+  tags: [],
+  votes: [{ specialty: String, users: [String] }],
+  tagVotes: [{ tag: String, users: [String] }],
   disclaimer: String
 });
 
-QuestionSchema.plugin(random);
 QuestionSchema.plugin(require('mongoose-autopopulate'));
+QuestionSchema.plugin(random);
 
 module.exports = mongoose.model('Question', QuestionSchema);

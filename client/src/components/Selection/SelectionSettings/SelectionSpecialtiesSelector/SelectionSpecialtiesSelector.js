@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-import { specialer, tags } from '../../../../utils/common';
 import { Translate } from 'react-localize-redux';
 
 import { Form, Header, Message, Grid } from 'semantic-ui-react';
 import SelectionSpecialtiesSelectorCheckbox from './SelectionSpecialtiesSelectorCheckbox';
+import LoadingPage from './../../../misc/Utility-pages/LoadingPage';
 
 /**
  * Laver en checkbox for hvert speciale.
@@ -15,9 +14,50 @@ const SelectionSpecialtiesSelector = ({
   valgteSpecialer = [],
   valgteTags = [],
   onChange,
-  antalPerSpeciale,
-  antalPerTag
+  specialties,
+  tags
 }) => {
+  const createSpecialtiesList = () => {
+    let specialtiesList = [];
+
+    for (let key in specialties) {
+      let erValgt = valgteSpecialer.includes(key);
+      specialtiesList.push(
+        <SelectionSpecialtiesSelectorCheckbox
+          key={key}
+          type="specialer"
+          speciale={key}
+          erValgt={erValgt}
+          antal={specialties[key]}
+          onChange={onChange}
+        />
+      );
+    }
+
+    return specialtiesList;
+  };
+
+  const createTagList = () => {
+    let tagsList = [];
+
+    for (let key in tags) {
+      let erValgt = valgteTags.includes(key);
+      tagsList.push(
+        <SelectionSpecialtiesSelectorCheckbox
+          key={key}
+          type="tags"
+          speciale={key}
+          erValgt={erValgt}
+          antal={tags[key]}
+          onChange={onChange}
+        />
+      );
+    }
+
+    return tagsList;
+  };
+
+  if (!specialties || !tags) return <LoadingPage />;
   if (!semester)
     return (
       <Header as="h3">
@@ -32,19 +72,7 @@ const SelectionSpecialtiesSelector = ({
             <Header as="h3">
               <Translate id="selectionSpecialtiesSelector.header" data={{ semester }} />
             </Header>
-            {specialer[semester].map((speciale) => {
-              let erValgt = valgteSpecialer.includes(speciale.value);
-              return (
-                <SelectionSpecialtiesSelectorCheckbox
-                  key={speciale.value}
-                  type="specialer"
-                  speciale={speciale}
-                  erValgt={erValgt}
-                  antalPerSpeciale={antalPerSpeciale[speciale.value]}
-                  onChange={onChange}
-                />
-              );
-            })}
+            {createSpecialtiesList()}
           </Grid.Row>
         </Grid.Column>
         <Grid.Column>
@@ -52,19 +80,7 @@ const SelectionSpecialtiesSelector = ({
             <Header as="h3">
               <Translate id="selectionSpecialtiesSelector.tags" data={{ semester }} />
             </Header>
-            {tags[semester].map((tag) => {
-              let erValgt = valgteTags.includes(tag.value);
-              return (
-                <SelectionSpecialtiesSelectorCheckbox
-                  key={tag.value}
-                  type="tags"
-                  speciale={tag}
-                  erValgt={erValgt}
-                  antalPerSpeciale={antalPerTag[tag.value]}
-                  onChange={onChange}
-                />
-              );
-            })}
+            {createTagList()}
           </Grid.Row>
         </Grid.Column>
       </Grid>

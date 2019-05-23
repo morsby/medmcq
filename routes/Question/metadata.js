@@ -225,17 +225,56 @@ const tags = {
   ]
 };
 
+const postMetadata = async () => {
+  console.log('Starting posting...');
+  try {
+    for (let key in specialer) {
+      for (let speciale of specialer[key]) {
+        if (!speciale.text) continue;
+
+        await axios.post('http://localhost:3001/api/questions/metadata', {
+          type: 'specialty',
+          value: speciale.value,
+          text: speciale.text,
+          semester: Number(key)
+        });
+      }
+    }
+
+    for (let key in tags) {
+      for (let tag of tags[key]) {
+        if (!tag.text) continue;
+
+        await axios.post('http://localhost:3001/api/questions/metadata', {
+          type: 'tag',
+          value: tag.value,
+          text: tag.text,
+          semester: Number(key)
+        });
+      }
+    }
+
+    console.log('Done posting');
+  } catch (error) {
+    console.log(new Error(error));
+  }
+};
+
 // Konvertering af gammelt tagsystem
 const convertQuestions = async () => {
-  const questions = await Question.find().populate('Specialty Tag User');
+  let counting = 1;
+  const questions = await Question.find();
+  const specialties = await Specialty.find();
+  const tags = await Tag.find();
 
   for (let q of questions) {
+    console.log('Converting question ' + counting);
     let newTags = [];
     let newSpecialties = [];
 
     for (let vote of q.votes) {
-      const specialty = await Specialty.findOne({ value: vote.specialty });
-      if (!specialty) return console.log('Du mangler specialet ' + vote.specialty);
+      const specialty = _.find(specialties, { value: vote.specialty });
+      if (!specialty) continue;
 
       newSpecialties.push({
         specialty: specialty._id,
@@ -245,77 +284,47 @@ const convertQuestions = async () => {
     }
 
     for (let tagVote of q.tagVotes) {
-      const tag = await Tag.findOne({ value: tagVote.tag });
-      if (!tag) return console.log('Du mangler tagget ' + tagVote.tag);
+      const tag = _.find(tags, { value: tagVote.tag });
+      if (!tag) continue;
 
       newTags.push({ tag: tag._id, votes: tagVote.users.length, users: tagVote.users });
     }
 
     q.newSpecialties = newSpecialties;
     q.newTags = newTags;
-    const result = await q.save();
-    console.log(JSON.stringify(result, null, 2));
+    counting++;
+    await q.save();
   }
-  console.log('Done converting?');
+  console.log('Done converting!');
 };
 
-const postMetadata = async () => {
-  try {
-    for (let key in specialer) {
-      specialer[key].forEach(async (speciale) => {
-        await axios.post('http://localhost:3001/api/questions/metadata', {
-          type: 'specialty',
-          value: speciale.value,
-          text: speciale.text,
-          semester: Number(key)
-        });
-      });
-    }
-
-    for (let key in tags) {
-      tags[key].forEach(async (tag) => {
-        await axios.post('http://localhost:3001/api/questions/metadata', {
-          type: 'tag',
-          value: tag.value,
-          text: tag.text,
-          semester: Number(key)
-        });
-      });
-    }
-  } catch (error) {
-    console.log(new Error(error));
-  }
-};
-
-router.get('/convert4', async (req, res) => {});
-
-router.get('/convert3', async (req, res) => {
+const cleanupQuestions = async () => {
+  console.log('Starting cleanup ...');
   const questions = await Question.find();
+  let count = 1;
 
   for (let q of questions) {
+    console.log('Cleaning question ' + count);
     q.tags = undefined;
     q.votes = undefined;
     q.tagVotes = undefined;
     q.specialty = undefined;
 
     await q.save();
+    count++;
   }
 
-  res.status(200).send('Success');
-});
-
-router.get('/convert2', async (req, res) => {
-  try {
-    await convertQuestions();
-    res.status(200).send('Det gik vel nok fint?');
-  } catch (error) {
-    console.log(new Error(error));
-  }
-});
+  console.log('... Done cleanup');
+};
 
 router.get('/convert', async (req, res) => {
   try {
-    await postMetadata();
+    // await postMetadata();
+    await convertQuestions();
+    // await cleanupQuestions();
+
+    console.log('All done!');
+
     res.status(200).send('Det gik vel nok fint?');
   } catch (error) {
     console.log(new Error(error));
@@ -361,20 +370,31 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Todo - make count on backend
 router.get('/', async (req, res) => {
-  const specialties = await Specialty.find();
+  const questions = await Question.find({ semester: req.query.sem });
   const tags = await Tag.find();
-  const questions = await Question.find();
-  let count = { specialties, tags };
+  const specialities = await Specialty.find();
+  let returnedTags = [];
+  let returnedSpecialities = [];
 
-  for (let q of questions) {
-    count.specialties[q.newSpecialties.specialty];
+  for (let s of specialities) {
+    const count = await Question.find({ 'newTags.tag': { $in: s._id } });
+
+    returnedSpecialities.push({
+      value: s.value,
+      id: s._id,
+      semester: s.semester,
+      count
+    });
   }
 
-  const metadata = { specialties, tags };
+  const tagCount = _.countBy(_.flattenDeep(questions.map((q) => q.newTags)), (q) => {
+    return q.tag.text;
+  });
 
-  res.status(200).send(metadata);
+  const count = { returnedSpecialities, tagCount };
+
+  res.status(200).send(count);
 });
 
 router.get('/all', async (req, res) => {

@@ -22,7 +22,7 @@ import SelectionUniqueSelector from '../components/Selection/SelectionSettings/S
 import SelectionMessage from '../components/Selection/SelectionMessage';
 
 import { semestre, urls } from '../utils/common';
-import { specialer as specialerCommon, tags as tagsCommon } from '../utils/common';
+import axios from 'axios';
 
 /**
  * Hovedsiden til at håndtere alle valg af spørgsmål.
@@ -53,7 +53,25 @@ class SelectionMain extends Component {
 
       this.onSettingsChange(e, { type, value });
     }
+
+    this.getMetadata();
   }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.settings.semester !== prevProps.settings.semester) {
+      this.getMetadata();
+    }
+  }
+
+  getMetadata = async () => {
+    const { data: metadata } = await axios.get(
+      '/api/questions/metadata?sem=' + this.props.settings.semester
+    );
+    const { returnedSpecialities, tagCount } = metadata;
+    if (!returnedSpecialities || !tagCount) return;
+    this.setState({ returnedSpecialities, tagCount });
+    console.log(returnedSpecialities);
+  };
 
   /**
    * Func der ændrer settings i redux state. Passes via Semantic UI (derfor navnene)
@@ -241,6 +259,8 @@ class SelectionMain extends Component {
                 valgteSpecialer={specialer}
                 valgteTags={tags}
                 onChange={this.onSettingsChange}
+                specialties={this.state.specialtyCount}
+                tags={this.state.tagCount}
               />
               <Divider hidden />
             </>

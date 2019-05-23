@@ -64,14 +64,15 @@ router.get('/', async (req, res) => {
       semester: { $eq: semester }
     };
 
-    if (specialer) {
-      filter.specialty = { $in: specialer.split(',') };
-    }
+    // if (specialer) {
+    //   filter.newSpecialties = { specialty: { text: { $in: specialer.split(',') } } };
+    // }
 
     if (tags) {
-      filter.tags = { $in: tags.split(',') };
+      filter.newTags = { $in: tags.split(',') };
     }
 
+    console.log(filter);
     Question.findRandom(filter, {}, { limit: n }, (err, questions) => {
       if (err) res.send(err);
 
@@ -300,13 +301,11 @@ router.delete('/:id', permit('admin'), (req, res) => {
 
 // Bruges på quiz-vælger-siden til at vise hvor mange spørgsmål der er for hvert semester
 router.get('/count/:semester', (req, res) => {
-  Question.find({ semester: req.params.semester })
-    .select(['specialty', 'tags', 'examSeason', 'examYear'])
-    .exec((err, questions) => {
-      if (err) res.send(err);
+  Question.find({ semester: req.params.semester }).exec((err, questions) => {
+    if (err) res.send(err);
 
-      res.json(questions);
-    });
+    res.json(questions);
+  });
 });
 
 // Besvar spørgsmål
