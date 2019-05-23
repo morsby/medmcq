@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
+
+import { specialer, tags } from '../../../../utils/common';
 import { Translate } from 'react-localize-redux';
-import _ from 'lodash';
 
 import { Form, Header, Message, Grid } from 'semantic-ui-react';
 import SelectionSpecialtiesSelectorCheckbox from './SelectionSpecialtiesSelectorCheckbox';
-import axios from 'axios';
-import LoadingPage from './../../../misc/Utility-pages/LoadingPage';
 
 /**
  * Laver en checkbox for hvert speciale.
@@ -15,27 +14,10 @@ const SelectionSpecialtiesSelector = ({
   semester = 7,
   valgteSpecialer = [],
   valgteTags = [],
-  onChange
+  onChange,
+  antalPerSpeciale,
+  antalPerTag
 }) => {
-  const [loading, setLoading] = useState(true);
-  const [specialties, setSpecialties] = useState('');
-  const [tags, setTags] = useState('');
-
-  useEffect(() => {
-    const getMetadata = async () => {
-      const { data: metadata } = await axios.get('/api/questions/metadata');
-      console.log(metadata);
-      const { specialties, tags } = metadata;
-      if (!specialties || !tags) return;
-      setSpecialties(specialties);
-      setTags(tags);
-      setLoading(false);
-    };
-
-    getMetadata();
-  }, []);
-
-  if (loading) return <LoadingPage />;
   if (!semester)
     return (
       <Header as="h3">
@@ -50,7 +32,7 @@ const SelectionSpecialtiesSelector = ({
             <Header as="h3">
               <Translate id="selectionSpecialtiesSelector.header" data={{ semester }} />
             </Header>
-            {_.filter(specialties, { semester: semester }).map((speciale) => {
+            {specialer[semester].map((speciale) => {
               let erValgt = valgteSpecialer.includes(speciale.value);
               return (
                 <SelectionSpecialtiesSelectorCheckbox
@@ -70,7 +52,7 @@ const SelectionSpecialtiesSelector = ({
             <Header as="h3">
               <Translate id="selectionSpecialtiesSelector.tags" data={{ semester }} />
             </Header>
-            {_.filter(tags, { semester: semester }).map((tag) => {
+            {tags[semester].map((tag) => {
               let erValgt = valgteTags.includes(tag.value);
               return (
                 <SelectionSpecialtiesSelectorCheckbox
