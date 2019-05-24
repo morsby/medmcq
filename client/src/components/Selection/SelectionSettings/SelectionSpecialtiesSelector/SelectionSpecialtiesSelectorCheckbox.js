@@ -19,10 +19,10 @@ const SelectionSpecialtiesSelectorCheckbox = ({ speciale, erValgt, antal, type, 
               <>
                 <Checkbox
                   label={translate('selectionSpecialtiesSelector.checkbox_labels', {
-                    speciale: speciale,
+                    speciale: speciale.text,
                     n: antal
                   })}
-                  value={speciale}
+                  value={speciale._id}
                   checked={erValgt}
                   name={type}
                   onChange={onChange}

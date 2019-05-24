@@ -108,12 +108,6 @@ const QuestionExtras = ({
           editComment={editComment}
         />
       )}
-      {user && question.answer && (
-        <>
-          <Divider />
-          <QuestionVoting question={question} user={user} />
-        </>
-      )}
     </>
   );
 };

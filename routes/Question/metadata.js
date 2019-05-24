@@ -6,6 +6,13 @@ const Question = require('../../models/question');
 const Specialty = require('../../models/specialty');
 const Tag = require('../../models/tag');
 const axios = require('axios');
+const mongoose = require('mongoose');
+
+String.prototype.toObjectId = function() {
+  var ObjectId = require('mongoose').Types.ObjectId;
+  return new ObjectId(this.toString());
+};
+
 const specialer = {
   7: [
     { value: 'gastroenterologi', text: 'Gastroenterologi' },
@@ -16,8 +23,7 @@ const specialer = {
     { value: 'almen_medicin', text: 'Almen medicin' },
     { value: 'klinisk_biokemi', text: 'Klinisk biokemi' },
     { value: 'klinisk_mikrobiologi', text: 'Klinisk mikrobiologi' },
-    { value: 'klinisk_immunologi', text: 'Klinisk immunologi' },
-    { value: 'paraklinik', text: '' }
+    { value: 'klinisk_immunologi', text: 'Klinisk immunologi' }
   ],
   8: [
     {
@@ -89,10 +95,7 @@ const tags = {
     { value: 'statistik', text: 'Statistik' },
     { value: 'forskning', text: 'Forskning' },
     { value: 'molekylærbiologisk_metode', text: 'Molekylærbiologisk metode' },
-    { value: 'børn', text: 'Børn' },
-
-    // Slettet
-    { value: 'paraklinik', text: '' }
+    { value: 'børn', text: 'Børn' }
   ],
   8: [
     // Paraklinik
@@ -153,14 +156,7 @@ const tags = {
     { value: 'onkologiske_bivirkninger', text: 'Onkologiske bivirkninger' },
     { value: 'metastaser', text: 'Metastaser' },
     { value: 'stadieinddeling', text: 'Stadieinddeling' },
-    { value: 'akutte_onkologiske_tilstande', text: 'Akutte onkologiske tilstande' },
-
-    // Gamle tags -- må ikke slettes
-    { value: 'paraklinik', text: '' },
-    { value: 'hudlidelser_sår', text: '' },
-    { value: 'duodenum_pancreas_milt', text: '' },
-    { value: 'teoretisk_spørgsmål', text: '' },
-    { value: 'blod_i_afføringen', text: '' }
+    { value: 'akutte_onkologiske_tilstande', text: 'Akutte onkologiske tilstande' }
   ],
   9: [
     // Paraklinik
@@ -234,8 +230,8 @@ const postMetadata = async () => {
 
         await axios.post('http://localhost:3001/api/questions/metadata', {
           type: 'specialty',
-          value: speciale.value,
           text: speciale.text,
+          value: speciale.value,
           semester: Number(key)
         });
       }
@@ -247,8 +243,8 @@ const postMetadata = async () => {
 
         await axios.post('http://localhost:3001/api/questions/metadata', {
           type: 'tag',
-          value: tag.value,
           text: tag.text,
+          value: tag.value,
           semester: Number(key)
         });
       }
@@ -273,21 +269,31 @@ const convertQuestions = async () => {
     let newSpecialties = [];
 
     for (let vote of q.votes) {
-      const specialty = _.find(specialties, { value: vote.specialty });
+      const specialty = _.find(specialties, { value: vote.specialty, semester: q.semester });
       if (!specialty) continue;
+
+      let users = [];
+      for (let user of vote.users) {
+        users.push({ user, vote: 1 });
+      }
 
       newSpecialties.push({
         specialty: specialty._id,
         votes: vote.users.length,
-        users: vote.users
+        users
       });
     }
 
     for (let tagVote of q.tagVotes) {
-      const tag = _.find(tags, { value: tagVote.tag });
+      const tag = _.find(tags, { value: tagVote.tag, semester: q.semester });
       if (!tag) continue;
 
-      newTags.push({ tag: tag._id, votes: tagVote.users.length, users: tagVote.users });
+      let users = [];
+      for (let user of tagVote.users) {
+        users.push({ user, vote: 1 });
+      }
+
+      newTags.push({ tag: tag._id, votes: tagVote.users.length, users });
     }
 
     q.newSpecialties = newSpecialties;
@@ -319,33 +325,55 @@ const cleanupQuestions = async () => {
 
 router.get('/convert', async (req, res) => {
   try {
-    // await postMetadata();
+    res
+      .status(200)
+      .send('Started conversion, this will take a while... DO NOT REFRESH THIS PAGE EVER!');
+    await postMetadata();
     await convertQuestions();
     // await cleanupQuestions();
 
     console.log('All done!');
-
-    res.status(200).send('Det gik vel nok fint?');
   } catch (error) {
     console.log(new Error(error));
   }
 });
 
+router.post('/question/:id', async (req, res) => {
+  const { user, value, type } = req.body;
+  const question = await Question.findById(req.params.id);
+
+  if (type === 'specialty') {
+    const specialty = await Specialty.findOne({ value: value });
+    question.newSpecialties.push({
+      specialty: specialty,
+      votes: 1,
+      users: [{ user: user, vote: 1 }]
+    });
+  }
+  if (type === 'tag') {
+    const tag = await Tag.findOne({ value: value });
+    question.newTags.push({ tag: tag, votes: 1, users: [{ user: user, vote: 1 }] });
+  }
+
+  const result = await question.save();
+  res.status(200).send(result);
+});
+
 // Opret nyt speciale eller tag
 router.post('/', async (req, res) => {
   try {
-    const { type, value, text, semester } = req.body; // Disse parametre skal alle opgives i post requesten
-    if (!type || !value || !text || !semester)
+    const { type, text, value, semester } = req.body; // Disse parametre skal alle opgives i post requesten
+    if (!type || !text || !semester)
       return res.status(400).send('Du mangler at opgive alle parametre');
 
     if (type === 'specialty') {
-      let specialty = await Specialty.findOne({ value: value, semester: semester });
+      let specialty = await Specialty.findOne({ semester: semester, text: text });
       if (specialty) return res.status(404).send('Speciale findes allerede');
 
       specialty = new Specialty();
 
-      specialty.value = value;
       specialty.text = text;
+      specialty.value = value;
       specialty.semester = semester;
 
       await specialty.save();
@@ -353,13 +381,13 @@ router.post('/', async (req, res) => {
     }
 
     if (type === 'tag') {
-      let tag = await Tag.findOne({ value: value, semester: semester });
+      let tag = await Tag.findOne({ text: text, semester: semester });
       if (tag) return res.status(404).send('Tag findes allerede');
 
       tag = new Tag();
 
-      tag.value = value;
       tag.text = text;
+      tag.value = value;
       tag.semester = semester;
 
       await tag.save();
@@ -371,28 +399,49 @@ router.post('/', async (req, res) => {
 });
 
 router.get('/', async (req, res) => {
-  const questions = await Question.find({ semester: req.query.sem });
-  const tags = await Tag.find();
-  const specialities = await Specialty.find();
-  let returnedTags = [];
-  let returnedSpecialities = [];
+  const { sem } = req.query;
 
+  const tags = await Tag.find({ semester: sem });
+  const specialties = await Specialty.find({ semester: sem });
+
+  res.status(200).send({ tags, specialties });
+});
+
+router.get('/count', async (req, res) => {
+  const tags = await Tag.find({ semester: req.query.sem });
+  const specialities = await Specialty.find({ semester: req.query.sem });
+  let tagCount = [];
+  let specialtyCount = [];
+
+  // Count specialties
   for (let s of specialities) {
-    const count = await Question.find({ 'newTags.tag': { $in: s._id } });
+    const count = await Question.find({
+      'newSpecialties.specialty': s._id
+    }).countDocuments();
 
-    returnedSpecialities.push({
-      value: s.value,
-      id: s._id,
+    specialtyCount.push({
+      _id: s._id,
       semester: s.semester,
+      text: s.text,
       count
     });
   }
 
-  const tagCount = _.countBy(_.flattenDeep(questions.map((q) => q.newTags)), (q) => {
-    return q.tag.text;
-  });
+  // Count tags
+  for (let t of tags) {
+    const count = await Question.find({
+      'newTags.tag': t._id
+    }).countDocuments();
 
-  const count = { returnedSpecialities, tagCount };
+    tagCount.push({
+      _id: t._id,
+      semester: t.semester,
+      text: t.text,
+      count
+    });
+  }
+
+  const count = { specialtyCount, tagCount };
 
   res.status(200).send(count);
 });
@@ -404,10 +453,58 @@ router.get('/all', async (req, res) => {
 });
 
 // Stem på metadata
-router.put('/vote/:question_id', async (req, res) => {
-  const { type, value, vote, user } = req.body; // Vote er et tal, enten 1 eller -1 (for upvote eller downvote)
+router.put('/vote', async (req, res) => {
+  const { type, questionId, metadataId, vote, user } = req.body; // Vote er et tal, enten 1 eller -1 (for upvote eller downvote)
 
-  let question = await Question.findById(req.params.question_id);
+  if (!user) return res.status(404).send('Not logged in');
+
+  let question = await Question.findById(questionId);
+  if (type === 'specialty') {
+    let metadata = _.find(question.newSpecialties, { _id: mongoose.Types.ObjectId(metadataId) });
+    let currentUser = _.findIndex(metadata.users, { user: mongoose.Types.ObjectId(user) });
+    if (currentUser === -1) {
+      metadata.users.push({ user: user, vote: vote });
+    } else {
+      // User already voted
+      metadata.votes -= metadata.users[currentUser].vote;
+      metadata.users[currentUser].vote = vote;
+    }
+
+    metadata.votes += vote;
+    // Hvis vote kommer under 1, så fjern specialet
+    if (metadata.votes < 1) {
+      let metadataIndex = _.findIndex(question.newSpecialties, {
+        _id: mongoose.Types.ObjectId(metadataId)
+      });
+      question.newSpecialties.splice(metadataIndex, 1);
+    }
+  }
+
+  // Similar to the above, but with tags
+  if (type === 'tag') {
+    let metadata = _.find(question.newTags, { _id: mongoose.Types.ObjectId(metadataId) });
+    let currentUser = _.findIndex(metadata.users, { user: mongoose.Types.ObjectId(user) });
+    if (currentUser === -1) {
+      metadata.users.push({ user: user, vote: vote });
+    } else {
+      // User already voted
+      metadata.votes -= metadata.users[currentUser].vote;
+      metadata.users[currentUser].vote = vote;
+    }
+
+    metadata.votes += vote;
+    // Hvis vote kommer under 1, så fjern tagget
+    if (metadata.votes < 1) {
+      let metadataIndex = _.findIndex(question.newTags, {
+        _id: mongoose.Types.ObjectId(metadataId)
+      });
+
+      question.newTags.splice(metadataIndex, 1);
+    }
+  }
+
+  const result = await question.save();
+  res.status(200).send(result);
 });
 
 module.exports = router;

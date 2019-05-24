@@ -19,14 +19,14 @@ var QuestionSchema = new Schema({
     {
       specialty: { type: Schema.Types.ObjectId, ref: 'Specialty', autopopulate: true },
       votes: Number,
-      users: [{ type: Schema.Types.ObjectId, ref: 'User' }]
+      users: [{ user: { type: Schema.Types.ObjectId, ref: 'User' }, vote: Number }]
     }
   ],
   newTags: [
     {
       tag: { type: Schema.Types.ObjectId, ref: 'Tag', autopopulate: true },
       votes: Number,
-      users: [{ type: Schema.Types.ObjectId, ref: 'User' }]
+      users: [{ user: { type: Schema.Types.ObjectId, ref: 'User' }, vote: Number }]
     }
   ],
   image: String,

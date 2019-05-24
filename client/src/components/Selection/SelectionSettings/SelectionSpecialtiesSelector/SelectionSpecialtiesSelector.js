@@ -15,49 +15,10 @@ const SelectionSpecialtiesSelector = ({
   valgteTags = [],
   onChange,
   specialties,
-  tags
+  tags,
+  loading
 }) => {
-  const createSpecialtiesList = () => {
-    let specialtiesList = [];
-
-    for (let key in specialties) {
-      let erValgt = valgteSpecialer.includes(key);
-      specialtiesList.push(
-        <SelectionSpecialtiesSelectorCheckbox
-          key={key}
-          type="specialer"
-          speciale={key}
-          erValgt={erValgt}
-          antal={specialties[key]}
-          onChange={onChange}
-        />
-      );
-    }
-
-    return specialtiesList;
-  };
-
-  const createTagList = () => {
-    let tagsList = [];
-
-    for (let key in tags) {
-      let erValgt = valgteTags.includes(key);
-      tagsList.push(
-        <SelectionSpecialtiesSelectorCheckbox
-          key={key}
-          type="tags"
-          speciale={key}
-          erValgt={erValgt}
-          antal={tags[key]}
-          onChange={onChange}
-        />
-      );
-    }
-
-    return tagsList;
-  };
-
-  if (!specialties || !tags) return <LoadingPage />;
+  if (loading || !specialties || !tags) return <LoadingPage />;
   if (!semester)
     return (
       <Header as="h3">
@@ -72,7 +33,18 @@ const SelectionSpecialtiesSelector = ({
             <Header as="h3">
               <Translate id="selectionSpecialtiesSelector.header" data={{ semester }} />
             </Header>
-            {createSpecialtiesList()}
+            {specialties.map((s) => {
+              return (
+                <SelectionSpecialtiesSelectorCheckbox
+                  key={s._id}
+                  type="specialer"
+                  speciale={s}
+                  erValgt={valgteSpecialer.includes(s._id)}
+                  antal={s.count}
+                  onChange={onChange}
+                />
+              );
+            })}
           </Grid.Row>
         </Grid.Column>
         <Grid.Column>
@@ -80,7 +52,18 @@ const SelectionSpecialtiesSelector = ({
             <Header as="h3">
               <Translate id="selectionSpecialtiesSelector.tags" data={{ semester }} />
             </Header>
-            {createTagList()}
+            {tags.map((t) => {
+              return (
+                <SelectionSpecialtiesSelectorCheckbox
+                  key={t._id}
+                  type="tags"
+                  speciale={t}
+                  erValgt={valgteTags.includes(t._id)}
+                  antal={t.count}
+                  onChange={onChange}
+                />
+              );
+            })}
           </Grid.Row>
         </Grid.Column>
       </Grid>

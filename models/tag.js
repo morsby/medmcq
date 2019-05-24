@@ -1,10 +1,10 @@
 const mongoose = require('mongoose');
 
 const tagSchema = mongoose.Schema({
-  value: String,
   text: String,
   semester: Number,
-  category: String
+  category: String,
+  value: String
 });
 
 const Tag = mongoose.model('Tag', tagSchema);

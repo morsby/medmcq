@@ -29,7 +29,7 @@ import axios from 'axios';
  * Props beskrives i bunden.
  */
 class SelectionMain extends Component {
-  state = { err: [], search: '' };
+  state = { err: [], search: '', loading: true };
 
   constructor(props) {
     super(props);
@@ -44,7 +44,7 @@ class SelectionMain extends Component {
    * Seeder data hvis det er første besøg.
    * Tager nu højde for evt. "tomme" semestre, da semester = 7 er default
    */
-  componentDidMount() {
+  async componentDidMount() {
     let { questions, semester, type } = this.props.settings;
     if (questions.length === 0 && semester === 7) {
       type = 'semester';
@@ -54,23 +54,23 @@ class SelectionMain extends Component {
       this.onSettingsChange(e, { type, value });
     }
 
-    this.getMetadata();
+    await this.getMetadata();
   }
 
-  componentDidUpdate(prevProps) {
+  async componentDidUpdate(prevProps) {
     if (this.props.settings.semester !== prevProps.settings.semester) {
-      this.getMetadata();
+      await this.getMetadata();
     }
   }
 
   getMetadata = async () => {
+    this.setState({ loading: true });
     const { data: metadata } = await axios.get(
-      '/api/questions/metadata?sem=' + this.props.settings.semester
+      '/api/questions/metadata/count?sem=' + this.props.settings.semester
     );
-    const { returnedSpecialities, tagCount } = metadata;
-    if (!returnedSpecialities || !tagCount) return;
-    this.setState({ returnedSpecialities, tagCount });
-    console.log(returnedSpecialities);
+    const { specialtyCount, tagCount } = metadata;
+    if (!specialtyCount || !tagCount) return;
+    this.setState({ specialtyCount, tagCount, loading: false });
   };
 
   /**
@@ -261,6 +261,7 @@ class SelectionMain extends Component {
                 onChange={this.onSettingsChange}
                 specialties={this.state.specialtyCount}
                 tags={this.state.tagCount}
+                loading={this.state.loading}
               />
               <Divider hidden />
             </>
