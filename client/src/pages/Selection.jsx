@@ -10,8 +10,6 @@ import { calculateResults } from '../utils/quiz';
 import selectionTranslations from '../Translations/selectionTranslations.json';
 import { withLocalize, Translate } from 'react-localize-redux';
 
-import _ from 'lodash';
-
 import { Container, Header, Dropdown, Divider, Button, Message, Input } from 'semantic-ui-react';
 
 import SelectionNSelector from '../components/Selection/SelectionSettings/SelectionNSelector';
@@ -22,14 +20,14 @@ import SelectionUniqueSelector from '../components/Selection/SelectionSettings/S
 import SelectionMessage from '../components/Selection/SelectionMessage';
 
 import { semestre, urls } from '../utils/common';
-import { specialer as specialerCommon, tags as tagsCommon } from '../utils/common';
+import axios from 'axios';
 
 /**
  * Hovedsiden til at håndtere alle valg af spørgsmål.
  * Props beskrives i bunden.
  */
 class SelectionMain extends Component {
-  state = { err: [], search: '' };
+  state = { err: [], search: '', loading: true };
 
   constructor(props) {
     super(props);
@@ -44,7 +42,7 @@ class SelectionMain extends Component {
    * Seeder data hvis det er første besøg.
    * Tager nu højde for evt. "tomme" semestre, da semester = 7 er default
    */
-  componentDidMount() {
+  async componentDidMount() {
     let { questions, semester, type } = this.props.settings;
     if (questions.length === 0 && semester === 7) {
       type = 'semester';
@@ -53,7 +51,25 @@ class SelectionMain extends Component {
 
       this.onSettingsChange(e, { type, value });
     }
+
+    await this.getMetadata();
   }
+
+  async componentDidUpdate(prevProps) {
+    if (this.props.settings.semester !== prevProps.settings.semester) {
+      await this.getMetadata();
+    }
+  }
+
+  getMetadata = async () => {
+    this.setState({ loading: true });
+    const { data: metadata } = await axios.get(
+      '/api/questions/metadata/count?sem=' + this.props.settings.semester
+    );
+    const { specialtyCount, tagCount } = metadata;
+    if (!specialtyCount || !tagCount) return;
+    this.setState({ specialtyCount, tagCount, loading: false });
+  };
 
   /**
    * Func der ændrer settings i redux state. Passes via Semantic UI (derfor navnene)
@@ -169,44 +185,6 @@ class SelectionMain extends Component {
       answeredQuestions = user.answeredQuestions[semester];
     }
 
-    // Laver et array af specialer for semesteret
-    let uniques = {
-      specialer: specialerCommon[semester].map((s) => s.value),
-      tags: tagsCommon[semester].map((t) => t.value)
-    };
-
-    // Grupperer de fundne spørgsmål efter specialer
-    let questionsBySpecialty = _.countBy(
-      // Laver et flat array af alle i spg indeholdte specialer
-      _.flattenDeep(questions.map((a) => a.specialty)),
-      (e) => {
-        return uniques.specialer[uniques.specialer.indexOf(e)];
-      }
-    );
-
-    // Grupperer de fundne spørgsmål efter tags
-    let questionsByTag = _.countBy(
-      // Laver et flat array af alle i spg indeholdte tags
-      _.flattenDeep(questions.map((a) => a.tags)),
-      (e) => {
-        return uniques.tags[uniques.tags.indexOf(e)];
-      }
-    );
-
-    // Tjekker hvor mange der er valgt
-    let antalValgte = 0;
-    specialer.map((s) => {
-      let n = questionsBySpecialty[s] ? questionsBySpecialty[s] : 0;
-      antalValgte = antalValgte + n;
-      return null;
-    });
-
-    tags.map((t) => {
-      let n = questionsByTag[t] ? questionsByTag[t] : 0;
-      antalValgte = antalValgte + n;
-      return null;
-    });
-
     return (
       <div className="flex-container">
         <Container className="content">
@@ -277,10 +255,11 @@ class SelectionMain extends Component {
               <SelectionSpecialtiesSelector
                 semester={semester}
                 valgteSpecialer={specialer}
-                antalPerSpeciale={questionsBySpecialty}
                 valgteTags={tags}
-                antalPerTag={questionsByTag}
                 onChange={this.onSettingsChange}
+                specialties={this.state.specialtyCount}
+                tags={this.state.tagCount}
+                loading={this.state.loading}
               />
               <Divider hidden />
             </>
@@ -293,14 +272,7 @@ class SelectionMain extends Component {
               })}
             </Message>
           )}
-          <Button
-            color="green"
-            basic
-            onClick={() => this.handleSubmit('new')}
-            disabled={
-              (antalValgte < 1 && type === 'specialer') || n < allowedNs.min || n > allowedNs.max
-            }
-          >
+          <Button color="green" basic onClick={() => this.handleSubmit('new')}>
             Start!
           </Button>
           {window.innerWidth < breakpoints.mobile && <Divider hidden />}
