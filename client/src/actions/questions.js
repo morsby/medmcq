@@ -1,6 +1,5 @@
 import axios from 'axios';
 import * as types from './types';
-import * as voteService from '../services/voteService';
 
 export const getQuestions = (settings, requestedIds = null) => async (dispatch) => {
   let { type, semester, specialer, tags, n, onlyNew, set } = settings;

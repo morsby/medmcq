@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon, Label, Dropdown } from 'semantic-ui-react';
+import { Icon, Label } from 'semantic-ui-react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
 import * as actions from '../../../../actions/questions';

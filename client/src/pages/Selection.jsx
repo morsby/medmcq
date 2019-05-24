@@ -10,8 +10,6 @@ import { calculateResults } from '../utils/quiz';
 import selectionTranslations from '../Translations/selectionTranslations.json';
 import { withLocalize, Translate } from 'react-localize-redux';
 
-import _ from 'lodash';
-
 import { Container, Header, Dropdown, Divider, Button, Message, Input } from 'semantic-ui-react';
 
 import SelectionNSelector from '../components/Selection/SelectionSettings/SelectionNSelector';

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Divider } from 'semantic-ui-react';
 import QuestionReport from './QuestionExtras/QuestionReport';
 import QuestionComments from './QuestionComments/QuestionComments';
-import QuestionVoting from './QuestionVoting';
 import { PropTypes } from 'prop-types';
 import QuestionExtraButtons from './QuestionExtras/QuestionExtraButtons';
 
