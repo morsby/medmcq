@@ -68,8 +68,8 @@
       ]
     },
     "checkIssue": [
-      "Inden du rapporterer spørgsmålet, så tjek venligst om andre har sendt samme problem til os. <br /> Du er velkommen til at kommentere på problemer magen til dit eget. <a target='_blank' href='https://github.com/morsby/medmcq/issues?utf8=%E2%9C%93&q=${link}'>Tjek ved at klikke her</a>.",
-      "Please check if the issue has already been sent to us, before submitting. <br /> You are welcome to comment on identical issues. <a target='_blank' href='https://github.com/morsby/medmcq/issues?utf8=%E2%9C%93&q=${link}'>Click here to check.</a>"
+      "<b>Vi retter kun uoverensstemmelser mellem de officielle eksamenssæt og MedMcq's spørgsmål. Vi retter ikke dårlige opgaver, outdatede retningslinjer o.lign. </b> <br /> Inden du rapporterer spørgsmålet, så tjek venligst om andre har sendt samme problem til os. <br /> Du er velkommen til at kommentere på problemer magen til dit eget. <a target='_blank' href='https://github.com/morsby/medmcq/issues?utf8=%E2%9C%93&q=${link}'>Tjek ved at klikke her</a>.",
+      "<b>We only fix inconsistencies between the official exams and MedMcq's questions. We do not fix badly formulated questions, outdated guidelines, etc. </b> <br />Please check if the issue has already been sent to us, before submitting. <br /> You are welcome to comment on identical issues. <a target='_blank' href='https://github.com/morsby/medmcq/issues?utf8=%E2%9C%93&q=${link}'>Click here to check.</a>"
     ],
     "checkbox": [
       "Jeg har tjekket for lignende problemer <a target='_blank' href='https://github.com/morsby/medmcq/issues?utf8=%E2%9C%93&q=${link}'>her.</a>",
