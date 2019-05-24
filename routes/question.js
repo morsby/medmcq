@@ -13,7 +13,6 @@ const auth = require('../middleware/auth');
 // MODELS
 const Question = require('../models/question.js');
 const User = require('../models/user.js');
-const superUsers = require('../utils/superUsers');
 const mongoose = require('mongoose');
 
 // TODO: Før statistik over get("/api/questions"), post("/api/questions/ids/"), post("/api/questions/answer")
@@ -306,7 +305,7 @@ router.delete('/:question_id/comment/:comment_id', async (req, res) => {
 
 // Slet et spørgsmål
 router.delete('/:id', permit('admin'), (req, res) => {
-  Question.remove({ _id: req.params.id }, (err, question) => {
+  Question.remove({ _id: req.params.id }, (err) => {
     if (err) res.send(err);
 
     res.json({ message: 'Spørgsmålet er slettet!' });
