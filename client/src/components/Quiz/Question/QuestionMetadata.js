@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { Translate } from 'react-localize-redux';
-import { Grid, Dropdown } from 'semantic-ui-react';
+import { Grid, Dropdown, Divider } from 'semantic-ui-react';
 import QuestionAnsweredCounter from './QuestionMetadata/QuestionAnsweredCounter';
 import { PropTypes } from 'prop-types';
 import QuestionMetadataLabel from './QuestionMetadata/QuestionMetadataLabel';
 import axios from 'axios';
 import { connect } from 'react-redux';
 import * as actions from '../../../actions/questions';
+import { withRouter } from 'react-router';
 
 const QuestionMetadata = (props) => {
   const { question, user } = props;
@@ -127,7 +128,24 @@ const QuestionMetadata = (props) => {
           </>
         )}
       </Grid.Column>
-      {user && question.answer && <QuestionAnsweredCounter user={user} question={question} />}
+      {user && question.answer && (
+        <>
+          <QuestionAnsweredCounter user={user} question={question} />
+          <Grid.Row>
+            <Grid.Column align="center">
+              <p style={{ color: 'grey' }}>
+                <Translate id="voting.notice" />
+                <span
+                  style={{ cursor: 'pointer', color: '#4183c4' }}
+                  onClick={() => props.history.push('/om-siden')}
+                >
+                  <Translate id="voting.about_page" />
+                </span>
+              </p>
+            </Grid.Column>
+          </Grid.Row>
+        </>
+      )}
     </Grid>
   );
 };
@@ -139,7 +157,9 @@ QuestionMetadata.propTypes = {
   tags: PropTypes.object
 };
 
-export default connect(
-  null,
-  actions
-)(QuestionMetadata);
+export default withRouter(
+  connect(
+    null,
+    actions
+  )(QuestionMetadata)
+);

@@ -472,7 +472,7 @@ router.put('/vote', async (req, res) => {
 
     metadata.votes += vote;
     // Hvis vote kommer under 1, så fjern specialet
-    if (metadata.votes < 1) {
+    if (metadata.votes < 0 || metadata.users.length < 2) {
       let metadataIndex = _.findIndex(question.newSpecialties, {
         _id: mongoose.Types.ObjectId(metadataId)
       });
@@ -494,7 +494,7 @@ router.put('/vote', async (req, res) => {
 
     metadata.votes += vote;
     // Hvis vote kommer under 1, så fjern tagget
-    if (metadata.votes < 1) {
+    if (metadata.votes < 0 || metadata.users.length < 2) {
       let metadataIndex = _.findIndex(question.newTags, {
         _id: mongoose.Types.ObjectId(metadataId)
       });

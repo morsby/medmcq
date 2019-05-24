@@ -104,15 +104,10 @@
     "yes": ["Ja", "Yes"]
   },
   "voting": {
-    "specialtyHeadline": ["Stem på speciale", "Vote for specialty"],
-    "tagsHeadline": ["Tilføj tags", "Add tags"],
     "notice": [
-      "Info om disse nye funktioner kan findes på ",
-      "Info about these new features can be found on the "
+      "Info om det nye stemmesystem kan findes på ",
+      "Info about the new votingsystem can be found on the "
     ],
-    "vote_specialty": ["Stem på specialer", "Vote for specialties"],
-    "vote_tags": ["Stem på tags", "Vote for tags"],
-    "suggest_tag": ["Foreslå nyt tag", "Suggest new tag"],
     "cancel": ["Fortryd", "Cancel"],
     "about_page": ["om siden", "about page"]
   }
