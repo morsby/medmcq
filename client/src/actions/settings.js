@@ -21,6 +21,7 @@ export const changeSettings = (settings) => (dispatch) => {
 export const fetchSettingsQuestions = (semester) => async (dispatch) => {
   const res = await axios.get('/api/questions/count/' + semester);
   let questions = res.data;
+  if (!questions) return;
   dispatch({
     type: types.FETCH_SETTINGS_QUESTION,
     questions,

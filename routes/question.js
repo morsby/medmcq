@@ -315,8 +315,6 @@ router.delete('/:id', permit('admin'), (req, res) => {
 // Bruges på quiz-vælger-siden til at vise hvor mange spørgsmål der er for hvert semester
 router.get('/count/:semester', (req, res) => {
   Question.find({ semester: req.params.semester }).exec((err, questions) => {
-    if (err) res.send(err);
-
     res.json(questions);
   });
 });

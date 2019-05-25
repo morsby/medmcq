@@ -26,10 +26,12 @@ import { semestre, urls } from '../utils/common';
  * Props beskrives i bunden.
  */
 class SelectionMain extends Component {
-  state = { err: [], search: '', loading: true };
+  state = { err: [], search: '', loading: false };
 
   constructor(props) {
     super(props);
+    if (this.props.specialties.length === 0 || this.props.tags.length === 0)
+      this.state.loading = true;
     this.props.fetchSettingsQuestions(this.props.settings.semester);
     this.props.addTranslation(selectionTranslations);
     this.searchHandler = this.searchHandler.bind(this);
@@ -62,7 +64,6 @@ class SelectionMain extends Component {
   }
 
   getMetadata = async () => {
-    if (!this.props.specialties || !this.props.tags) this.setState({ loading: true });
     await this.props.fetchMetadata(this.props.settings.semester);
     this.setState({ loading: false });
   };
@@ -347,8 +348,8 @@ function mapStateToProps(state) {
     settings: state.settings,
     user: state.auth.user,
     questions: state.questions,
-    specialties: state.settings.specialties,
-    tags: state.settings.tags
+    specialties: state.settings.metadata.specialties,
+    tags: state.settings.metadata.tags
   };
 }
 

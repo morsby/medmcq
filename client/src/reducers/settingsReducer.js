@@ -79,8 +79,8 @@ const initialState = {
    */
   lastFetch: 0,
 
-  specialties: [],
-  tags: []
+  metadata: {specialties: [], tags: []},
+  
 };
 /**
  * createReducer er en funktion fra redux-starter-kit, der laver en IMMUTABLE
@@ -226,7 +226,6 @@ export default createReducer(initialState, {
     state.lastFetch = Date.now();
   },
   [types.FETCH_METADATA]: (state, action) => {
-    state.specialties = action.payload.specialties;
-    state.tags = action.payload.tags;
+    state.metadata = action.payload;
   }
 });
