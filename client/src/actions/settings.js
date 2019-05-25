@@ -1,5 +1,6 @@
 import axios from 'axios';
 import * as types from './types';
+import _ from 'lodash';
 
 export const changeSettings = (settings) => (dispatch) => {
   /**
@@ -31,8 +32,11 @@ export const fetchSettingsQuestions = (semester) => async (dispatch) => {
 
 export const fetchMetadata = (semester) => async (dispatch) => {
   const { data: metadata } = await axios.get('/api/questions/metadata/count?sem=' + semester);
-  const { specialtyCount: specialties, tagCount: tags } = metadata;
+  let { specialtyCount: specialties, tagCount: tags } = metadata;
   if (!specialties || !tags) return;
+  specialties = _.sortBy(specialties, (s) => s.text);
+  tags = _.sortBy(tags, (t) => t.text);
+
   dispatch({
     type: types.FETCH_METADATA,
     payload: { specialties, tags }

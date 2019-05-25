@@ -8,6 +8,7 @@ import axios from 'axios';
 import { connect } from 'react-redux';
 import * as actions from '../../../actions/questions';
 import { withRouter } from 'react-router';
+import _ from 'lodash';
 
 const QuestionMetadata = (props) => {
   const { question, user } = props;
@@ -23,14 +24,16 @@ const QuestionMetadata = (props) => {
       const { data: metadata } = await axios.get(
         '/api/questions/metadata?sem=' + question.semester
       );
-      const { tags, specialties } = metadata;
+      let { tags, specialties } = metadata;
       if (!tags || !specialties) return;
+      specialties = _.sortBy(specialties, (s) => s.text);
+      tags = _.sortBy(tags, (t) => t.text);
 
       // Filter the specialty array, so that you can't vote for existing specialties
       let spliceArray = [];
 
       specialties.forEach((spec, i) => {
-        question.newSpecialties.forEach((s, k) => {
+        question.newSpecialties.forEach((s) => {
           if (spec._id === s.specialty._id) {
             spliceArray.push(i);
           }
