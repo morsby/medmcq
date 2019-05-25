@@ -77,7 +77,10 @@ const initialState = {
   /**
    * Hvornår blev sidst hentet spørgsmål til QUIZZEN?
    */
-  lastFetch: 0
+  lastFetch: 0,
+
+  specialties: [],
+  tags: []
 };
 /**
  * createReducer er en funktion fra redux-starter-kit, der laver en IMMUTABLE
@@ -221,5 +224,9 @@ export default createReducer(initialState, {
   [types.FETCH_QUESTIONS]: (state) => {
     state.isFetching = false;
     state.lastFetch = Date.now();
+  },
+  [types.FETCH_METADATA]: (state, action) => {
+    state.specialties = action.payload.specialties;
+    state.tags = action.payload.tags;
   }
 });

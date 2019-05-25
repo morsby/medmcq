@@ -20,7 +20,6 @@ import SelectionUniqueSelector from '../components/Selection/SelectionSettings/S
 import SelectionMessage from '../components/Selection/SelectionMessage';
 
 import { semestre, urls } from '../utils/common';
-import axios from 'axios';
 
 /**
  * Hovedsiden til at håndtere alle valg af spørgsmål.
@@ -57,18 +56,15 @@ class SelectionMain extends Component {
 
   async componentDidUpdate(prevProps) {
     if (this.props.settings.semester !== prevProps.settings.semester) {
+      this.setState({ loading: true });
       await this.getMetadata();
     }
   }
 
   getMetadata = async () => {
-    this.setState({ loading: true });
-    const { data: metadata } = await axios.get(
-      '/api/questions/metadata/count?sem=' + this.props.settings.semester
-    );
-    const { specialtyCount, tagCount } = metadata;
-    if (!specialtyCount || !tagCount) return;
-    this.setState({ specialtyCount, tagCount, loading: false });
+    if (!this.props.specialties || !this.props.tags) this.setState({ loading: true });
+    await this.props.fetchMetadata(this.props.settings.semester);
+    this.setState({ loading: false });
   };
 
   /**
@@ -257,8 +253,8 @@ class SelectionMain extends Component {
                 valgteSpecialer={specialer}
                 valgteTags={tags}
                 onChange={this.onSettingsChange}
-                specialties={this.state.specialtyCount}
-                tags={this.state.tagCount}
+                specialties={this.props.specialties}
+                tags={this.props.tags}
                 loading={this.state.loading}
               />
               <Divider hidden />
@@ -350,7 +346,9 @@ function mapStateToProps(state) {
   return {
     settings: state.settings,
     user: state.auth.user,
-    questions: state.questions
+    questions: state.questions,
+    specialties: state.settings.specialties,
+    tags: state.settings.tags
   };
 }
 

@@ -11,6 +11,7 @@ export const QUESTION_REPORT = 'question_report';
 
 export const CHANGE_SETTINGS = 'change_settings';
 export const FETCH_SETTINGS_QUESTION = 'fetch_settings_question';
+export const FETCH_METADATA = 'FETCH_METADATA';
 
 export const AUTH_SIGNUP = 'auth_signup';
 export const AUTH_CURRENT_USER = 'auth_current_user';

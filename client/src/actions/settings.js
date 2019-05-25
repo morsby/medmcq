@@ -27,3 +27,13 @@ export const fetchSettingsQuestions = (semester) => async (dispatch) => {
     semester
   });
 };
+
+export const fetchMetadata = (semester) => async (dispatch) => {
+  const { data: metadata } = await axios.get('/api/questions/metadata/count?sem=' + semester);
+  const { specialtyCount: specialties, tagCount: tags } = metadata;
+  if (!specialties || !tags) return;
+  dispatch({
+    type: types.FETCH_METADATA,
+    payload: { specialties, tags }
+  });
+};
