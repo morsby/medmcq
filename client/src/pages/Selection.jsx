@@ -30,7 +30,11 @@ class SelectionMain extends Component {
 
   constructor(props) {
     super(props);
-    if (this.props.specialties.length === 0 || this.props.tags.length === 0)
+    if (
+      this.props.specialties.length === 0 ||
+      this.props.tags.length === 0 ||
+      Date.now() - this.props.lastMetadataFetch > 3.6 * Math.pow(10, 6)
+    )
       this.state.loading = true;
     this.props.fetchSettingsQuestions(this.props.settings.semester);
     this.props.addTranslation(selectionTranslations);
@@ -44,6 +48,7 @@ class SelectionMain extends Component {
    * Tager nu højde for evt. "tomme" semestre, da semester = 7 er default
    */
   async componentDidMount() {
+    console.log(Date.now() - this.props.lastMetadataFetch);
     let { questions, semester, type } = this.props.settings;
     if (questions.length === 0 && semester === 7) {
       type = 'semester';
@@ -349,7 +354,8 @@ function mapStateToProps(state) {
     user: state.auth.user,
     questions: state.questions,
     specialties: state.settings.metadata.specialties,
-    tags: state.settings.metadata.tags
+    tags: state.settings.metadata.tags,
+    lastMetadataFetch: state.settings.metadata.date
   };
 }
 

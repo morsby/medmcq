@@ -39,6 +39,6 @@ export const fetchMetadata = (semester) => async (dispatch) => {
 
   dispatch({
     type: types.FETCH_METADATA,
-    payload: { specialties, tags }
+    payload: { specialties, tags, date: Date.now() }
   });
 };
