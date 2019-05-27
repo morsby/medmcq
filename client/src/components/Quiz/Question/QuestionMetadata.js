@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Translate } from 'react-localize-redux';
-import { Grid, Dropdown, Divider } from 'semantic-ui-react';
+import { Grid, Dropdown } from 'semantic-ui-react';
 import QuestionAnsweredCounter from './QuestionMetadata/QuestionAnsweredCounter';
 import { PropTypes } from 'prop-types';
 import QuestionMetadataLabel from './QuestionMetadata/QuestionMetadataLabel';

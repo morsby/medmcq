@@ -70,154 +70,210 @@ const specialer = {
 const tags = {
   7: [
     // Paraklinik
-    { value: 'radiologi', text: 'Radiologi' },
-    { value: 'a-gas', text: 'A-gas' },
-    { value: 'patologi', text: 'Patologi' },
+    { value: 'radiologi', text: 'Radiologi', category: 'paraklinik' },
+    { value: 'a-gas', text: 'A-gas', category: 'paraklinik' },
+    { value: 'patologi', text: 'Patologi', category: 'paraklinik' },
+    { value: 'farmakologi', text: 'Farmakologi', category: 'paraklinik' },
 
     // Organer
-    { value: 'lever', text: 'Lever' },
+    { value: 'lever', text: 'Lever', category: 'organer' },
 
     // Klinisk immunologi
-    { value: 'blodtransfusion', text: 'Blodtransfusion' },
-    { value: 'Transplantation', text: 'Transplantation' },
-    { value: 'Immundefekt', text: 'Immundefekter' },
+    { value: 'blodtransfusion', text: 'Blodtransfusion', category: 'klinisk immunologi' },
+    { value: 'Transplantation', text: 'Transplantation', category: 'klinisk immunologi' },
+    { value: 'Immundefekt', text: 'Immundefekter', category: 'klinisk immunologi' },
 
     // Klinisk biokemi
-    { value: 'blodprøvetolkning', text: 'Blodprøvetolkning' },
-    { value: 'koagulopati', text: 'Koagulopati' },
+    { value: 'blodprøvetolkning', text: 'Blodprøvetolkning', category: 'klinisk biokemi' },
+    { value: 'koagulopati', text: 'Koagulopati', category: 'klinisk biokemi' },
 
     // Specifikke sygdomme
-    { value: 'syfilis', text: 'Syfilis' },
+    { value: 'syfilis', text: 'Syfilis', category: 'sygdomme' },
 
     // Diverse
-    { value: 'journaloptagelse', text: 'Journaloptagelse' },
-    { value: 'farmakologi', text: 'Farmakologi' },
-    { value: 'statistik', text: 'Statistik' },
-    { value: 'forskning', text: 'Forskning' },
-    { value: 'molekylærbiologisk_metode', text: 'Molekylærbiologisk metode' },
-    { value: 'børn', text: 'Børn' }
+    { value: 'journaloptagelse', text: 'Journaloptagelse', category: 'diverse' },
+    { value: 'statistik', text: 'Statistik', category: 'diverse' },
+    { value: 'forskning', text: 'Forskning', category: 'diverse' },
+    { value: 'molekylærbiologisk_metode', text: 'Molekylærbiologisk metode', category: 'diverse' },
+    { value: 'børn', text: 'Børn', category: 'diverse' }
   ],
   8: [
     // Paraklinik
-    { value: 'radiologi', text: 'Radiologi' },
-    { value: 'farmakologi', text: 'Farmakologi' },
+    { value: 'radiologi', text: 'Radiologi', category: 'paraklinik' },
+    { value: 'farmakologi', text: 'Farmakologi', category: 'paraklinik' },
 
     // Abdominalkirurgi
-    { value: 'akut_abdomen', text: 'Akut abdomen' },
-    { value: 'oesophagus_ventrikel_duodenum', text: 'Øsophagus, ventrikel og duodenum' },
-    { value: 'tyndtarm_colon_rectum', text: 'Tyndtarm, colon og rectum' },
-    { value: 'pancreas', text: 'Pancreas' },
-    { value: 'leversygdomme', text: 'Lever og galdeveje' },
-    { value: 'milt', text: 'Milt' },
-    { value: 'anallidelser', text: 'Anallidelser' },
-    { value: 'mamma', text: 'Mamma' },
-    { value: 'hernier', text: 'Hernier' },
-    { value: 'fedmekirurgi', text: 'Bariatrisk kirurgi' },
-    { value: 'endokrinologi', text: 'Endokrinologi' },
-    { value: 'ulcus', text: 'Ulcus' },
-    { value: 'urininkontinens', text: 'Urininkontinens' },
-    { value: 'divertikel', text: 'Divertikel' },
-    { value: 'stomi', text: 'Stomi' },
-    { value: 'gi_blødning', text: 'GI-blødning' },
-    { value: 'infektion', text: 'Infektion' },
+    { value: 'akut_abdomen', text: 'Akut abdomen', category: 'abdominalkirurgi' },
+    {
+      value: 'oesophagus_ventrikel_duodenum',
+      text: 'Øsophagus, ventrikel og duodenum',
+      category: 'abdominalkirurgi'
+    },
+    {
+      value: 'tyndtarm_colon_rectum',
+      text: 'Tyndtarm, colon og rectum',
+      category: 'abdominalkirurgi'
+    },
+    { value: 'pancreas', text: 'Pancreas', category: 'abdominalkirurgi' },
+    { value: 'leversygdomme', text: 'Lever og galdeveje', category: 'abdominalkirurgi' },
+    { value: 'milt', text: 'Milt', category: 'abdominalkirurgi' },
+    { value: 'anallidelser', text: 'Anallidelser', category: 'abdominalkirurgi' },
+    { value: 'mamma', text: 'Mamma', category: 'abdominalkirurgi' },
+    { value: 'hernier', text: 'Hernier', category: 'abdominalkirurgi' },
+    { value: 'fedmekirurgi', text: 'Bariatrisk kirurgi', category: 'abdominalkirurgi' },
+    { value: 'endokrinologi', text: 'Endokrinologi', category: 'abdominalkirurgi' },
+    { value: 'ulcus', text: 'Ulcus', category: 'abdominalkirurgi' },
+    { value: 'urininkontinens', text: 'Urininkontinens', category: 'abdominalkirurgi' },
+    { value: 'divertikel', text: 'Divertikel', category: 'abdominalkirurgi' },
+    { value: 'stomi', text: 'Stomi', category: 'abdominalkirurgi' },
+    { value: 'gi_blødning', text: 'GI-blødning', category: 'abdominalkirurgi' },
+    { value: 'infektion', text: 'Infektion', category: 'abdominalkirurgi' },
 
     // Andre organer
-    { value: 'lunge', text: 'Lunge' },
+    { value: 'lunge', text: 'Lunge', category: 'organer' },
+    { value: 'nyrer', text: 'Nyrer', category: 'organer' },
 
     // Urologi
-    { value: 'nyrer', text: 'Nyrer' },
-    { value: 'urinveje', text: 'Urinveje' },
-    { value: 'neuromuskulær_blæredysfunktion', text: 'Neuromuskulær blæredysfunktion' },
-    { value: 'prostata', text: 'Prostata' },
-    { value: 'testis', text: 'Testis, epididymis og scrotum' },
-    { value: 'penis', text: 'Penis' },
-    { value: 'hæmaturi', text: 'Hæmaturi' },
-    { value: 'luts', text: 'LUTS' },
-    { value: 'blære', text: 'Blære' },
+    { value: 'urinveje', text: 'Urinveje', category: 'urologi' },
+    {
+      value: 'neuromuskulær_blæredysfunktion',
+      text: 'Neuromuskulær blæredysfunktion',
+      category: 'urologi'
+    },
+    { value: 'prostata', text: 'Prostata', category: 'urologi' },
+    { value: 'testis', text: 'Testis, epididymis og scrotum', category: 'urologi' },
+    { value: 'penis', text: 'Penis', category: 'urologi' },
+    { value: 'hæmaturi', text: 'Hæmaturi', category: 'urologi' },
+    { value: 'luts', text: 'LUTS', category: 'urologi' },
+    { value: 'blære', text: 'Blære', category: 'urologi' },
 
     // Andet
-    { value: 'børn', text: 'Børn' },
+    { value: 'børn', text: 'Børn', category: 'andet' },
 
     // Plastikkirurgi
-    { value: 'hudens_tumorer', text: 'Hudens tumorer' },
-    { value: 'lap_plastik', text: 'Lap plastik' },
-    { value: 'plastikkirurgisk_teknik', text: 'Plastikkirurgisk teknik' },
-    { value: 'forbrændinger', text: 'Forbrændinger, forfrysninger og kemiske skader' },
-    { value: 'kosmetisk_kirurgi', text: 'Kosmetisk kirurgi' },
-    { value: 'decubitus', text: 'Decubitus' },
-    { value: 'ar', text: 'Ar' },
-    { value: 'nerveskader', text: 'Nerveskader' },
-    { value: 'kraniofaciale_misdannelser', text: 'Kraniofaciale misdannelser' },
-    { value: 'exfoliative_hudsygdomme', text: 'Exfoliative hudsygdomme' },
-    { value: 'brysthypertrofi_og_brystanomalier', text: 'Brysthypertrofi og brystanomalier' },
+    { value: 'hudens_tumorer', text: 'Hudens tumorer', category: 'plastikkirurgi' },
+    { value: 'lap_plastik', text: 'Lap plastik', category: 'plastikkirurgi' },
+    {
+      value: 'plastikkirurgisk_teknik',
+      text: 'Plastikkirurgisk teknik',
+      category: 'plastikkirurgi'
+    },
+    {
+      value: 'forbrændinger',
+      text: 'Forbrændinger, forfrysninger og kemiske skader',
+      category: 'plastikkirurgi'
+    },
+    { value: 'kosmetisk_kirurgi', text: 'Kosmetisk kirurgi', category: 'plastikkirurgi' },
+    { value: 'decubitus', text: 'Decubitus', category: 'plastikkirurgi' },
+    { value: 'ar', text: 'Ar', category: 'plastikkirurgi' },
+    { value: 'nerveskader', text: 'Nerveskader', category: 'plastikkirurgi' },
+    {
+      value: 'kraniofaciale_misdannelser',
+      text: 'Kraniofaciale misdannelser',
+      category: 'plastikkirurgi'
+    },
+    {
+      value: 'exfoliative_hudsygdomme',
+      text: 'Exfoliative hudsygdomme',
+      category: 'plastikkirurgi'
+    },
+    {
+      value: 'brysthypertrofi_og_brystanomalier',
+      text: 'Brysthypertrofi og brystanomalier',
+      category: 'plastikkirurgi'
+    },
 
     // Onkologi
-    { value: 'strålebehandling', text: 'Strålebehandling' },
-    { value: 'onkologiske_bivirkninger', text: 'Onkologiske bivirkninger' },
-    { value: 'metastaser', text: 'Metastaser' },
-    { value: 'stadieinddeling', text: 'Stadieinddeling' },
-    { value: 'akutte_onkologiske_tilstande', text: 'Akutte onkologiske tilstande' }
+    { value: 'strålebehandling', text: 'Strålebehandling', category: 'onkologi' },
+    { value: 'onkologiske_bivirkninger', text: 'Onkologiske bivirkninger', category: 'onkologi' },
+    { value: 'metastaser', text: 'Metastaser', category: 'onkologi' },
+    { value: 'stadieinddeling', text: 'Stadieinddeling', category: 'onkologi' },
+    {
+      value: 'akutte_onkologiske_tilstande',
+      text: 'Akutte onkologiske tilstande',
+      category: 'onkologi'
+    }
   ],
   9: [
     // Paraklinik
-    { value: 'a-gas', text: 'A-gas' },
-    { value: 'ekg', text: 'EKG' },
-    { value: 'lfu', text: 'Lungefunktionsundersøgelse' },
-    { value: 'radiologi', text: 'Radiologi' },
-    { value: 'farmakologi', text: 'Farmakologi' },
+    { value: 'a-gas', text: 'A-gas', category: 'paraklinik' },
+    { value: 'ekg', text: 'EKG', category: 'paraklinik' },
+    { value: 'lfu', text: 'Lungefunktionsundersøgelse', category: 'paraklinik' },
+    { value: 'radiologi', text: 'Radiologi', category: 'paraklinik' },
+    { value: 'farmakologi', text: 'Farmakologi', category: 'paraklinik' },
 
     // Anæstesi
-    { value: 'ABCD', text: 'ABCD' },
-    { value: 'sedation_og_anæstesi', text: 'Sedation og anæstesi' },
-    { value: 'væske_og_elektrolytbehandling', text: 'Væske og elektrolytbehandling' },
-    { value: 'postoperative_smerter', text: 'Postoperative smerter' },
+    { value: 'ABCD', text: 'ABCD', category: 'anæstesi' },
+    { value: 'sedation_og_anæstesi', text: 'Sedation og anæstesi', category: 'anæstesi' },
+    {
+      value: 'væske_og_elektrolytbehandling',
+      text: 'Væske og elektrolytbehandling',
+      category: 'anæstesi'
+    },
+    { value: 'postoperative_smerter', text: 'Postoperative smerter', category: 'anæstesi' },
 
     // Hjertemedicin
-    { value: 'aks', text: 'Akut koronart syndrom' },
-    { value: 'angina_pectoris', text: 'Angina pectoris' },
-    { value: 'hypertension', text: 'Hypertension' },
-    { value: 'lungeemboli', text: 'Lungeemboli' },
-    { value: 'hjerteinsufficiens', text: 'Hjerteinsufficiens' },
-    { value: 'klapsygdomme', text: 'Klapsygdomme' },
-    { value: 'arytmier', text: 'Arytmier' },
-    { value: 'aortaaneurisme', text: 'Aortaaneurisme' },
-    { value: 'medfødte_hjertesygdomme', text: 'Medfødte hjertesygdomme' },
-    { value: 'kardiomyopatier', text: 'Kardiomyopatier' },
-    { value: 'pulmonal hypertension', text: 'Pulmonal hypertension' },
-    { value: 'endokarditis', text: 'Endokarditis' },
-    { value: 'perikarditis', text: 'Perikarditis og tamponade' },
-    { value: 'synkope', text: 'Synkope' },
-    { value: 'aortadissektion', text: 'Aortadissektion' },
+    { value: 'aks', text: 'Akut koronart syndrom', category: 'kardiologi' },
+    { value: 'angina_pectoris', text: 'Angina pectoris', category: 'kardiologi' },
+    { value: 'hypertension', text: 'Hypertension', category: 'kardiologi' },
+    { value: 'lungeemboli', text: 'Lungeemboli', category: 'kardiologi' },
+    { value: 'hjerteinsufficiens', text: 'Hjerteinsufficiens', category: 'kardiologi' },
+    { value: 'klapsygdomme', text: 'Klapsygdomme', category: 'kardiologi' },
+    { value: 'arytmier', text: 'Arytmier', category: 'kardiologi' },
+    { value: 'aortaaneurisme', text: 'Aortaaneurisme', category: 'kardiologi' },
+    { value: 'medfødte_hjertesygdomme', text: 'Medfødte hjertesygdomme', category: 'kardiologi' },
+    { value: 'kardiomyopatier', text: 'Kardiomyopatier', category: 'kardiologi' },
+    { value: 'pulmonal hypertension', text: 'Pulmonal hypertension', category: 'kardiologi' },
+    { value: 'endokarditis', text: 'Endokarditis', category: 'kardiologi' },
+    { value: 'perikarditis', text: 'Perikarditis og tamponade', category: 'kardiologi' },
+    { value: 'synkope', text: 'Synkope', category: 'kardiologi' },
+    { value: 'aortadissektion', text: 'Aortadissektion', category: 'kardiologi' },
 
     // Lungemedicin
-    { value: 'lungecancer', text: 'Lungecancer' },
-    { value: 'kol', text: 'KOL' },
-    { value: 'astma', text: 'Astma' },
-    { value: 'restriktiv_lungesygdom', text: 'Restriktiv lungesygdom' },
-    { value: 'tuberkulose', text: 'Tuberkulose' },
-    { value: 'pneumoni', text: 'Pneumoni' },
-    { value: 'pneumothorax', text: 'Pneumothorax' },
-    { value: 'sarkoidose', text: 'Sarkoidose' },
-    { value: 'allergi', text: 'Allergi' },
-    { value: 'allergisk_alveolitis', text: 'Allergisk alveolitis' },
+    { value: 'lungecancer', text: 'Lungecancer', category: 'lungemedicinsk' },
+    { value: 'kol', text: 'KOL', category: 'lungemedicinsk' },
+    { value: 'astma', text: 'Astma', category: 'lungemedicinsk' },
+    { value: 'restriktiv_lungesygdom', text: 'Restriktiv lungesygdom', category: 'lungemedicinsk' },
+    { value: 'tuberkulose', text: 'Tuberkulose', category: 'lungemedicinsk' },
+    { value: 'pneumoni', text: 'Pneumoni', category: 'lungemedicinsk' },
+    { value: 'pneumothorax', text: 'Pneumothorax', category: 'lungemedicinsk' },
+    { value: 'sarkoidose', text: 'Sarkoidose', category: 'lungemedicinsk' },
+    { value: 'allergi', text: 'Allergi', category: 'lungemedicinsk' },
+    { value: 'allergisk_alveolitis', text: 'Allergisk alveolitis', category: 'lungemedicinsk' },
 
     // Karkirurgi
-    { value: 'underekstremitets-iskæmi', text: 'Underekstremitets-iskæmi' },
-    { value: 'specielle_karsygdomme', text: 'Specielle karsygdomme' },
-    { value: 'venesygdomme', text: 'Venesygdomme' },
+    { value: 'underekstremitets-iskæmi', text: 'Underekstremitets-iskæmi', category: 'karkirurgi' },
+    { value: 'specielle_karsygdomme', text: 'Specielle karsygdomme', category: 'karkirurgi' },
+    { value: 'venesygdomme', text: 'Venesygdomme', category: 'karkirurgi' },
 
     // Thoraxkirurgi
-    { value: 'pectus_carinatum_og_excavatum', text: 'Pectus carinatum og excavatum' },
-    { value: 'Thoraxtraumer', text: 'Thoraxtraumer' },
-    { value: 'oesophagus', text: 'Oesophagus' },
+    {
+      value: 'pectus_carinatum_og_excavatum',
+      text: 'Pectus carinatum og excavatum',
+      category: 'thoraxkirurgi'
+    },
+    { value: 'Thoraxtraumer', text: 'Thoraxtraumer', category: 'thoraxkirurgi' },
+    { value: 'oesophagus', text: 'Oesophagus', category: 'thoraxkirurgi' },
 
     // AP / Symptomkomplekser
-    { value: 'dyspnø', text: 'Dyspnø' }
+    { value: 'dyspnø', text: 'Dyspnø', category: 'symptomkomplekser' }
   ],
   11: [
-    { value: 'paraklinik/paraclinical', text: 'Paraklinik/Paraclinical' },
-    { value: 'farmakologi/pharmacology', text: 'Farmakologi/Pharmacology' },
-    { value: 'radiologi/radiology', text: 'Radiologi/Radiology' }
+    {
+      value: 'paraklinik/paraclinical',
+      text: 'Paraklinik/Paraclinical',
+      category: 'paraklinik/paraclinical'
+    },
+    {
+      value: 'farmakologi/pharmacology',
+      text: 'Farmakologi/Pharmacology',
+      category: 'paraklinik/paraclinical'
+    },
+    {
+      value: 'radiologi/radiology',
+      text: 'Radiologi/Radiology',
+      category: 'paraklinik/paraclinical'
+    }
   ]
 };
 
@@ -228,11 +284,12 @@ const postMetadata = async () => {
       for (let speciale of specialer[key]) {
         if (!speciale.text) continue;
 
-        await axios.post('http://localhost:3001/api/questions/metadata', {
+        await axios.post(`http://localhost:${process.env.PORT || 3001}/api/questions/metadata`, {
           type: 'specialty',
           text: speciale.text,
           value: speciale.value,
-          semester: Number(key)
+          semester: Number(key),
+          category: speciale.category
         });
       }
     }
@@ -241,11 +298,12 @@ const postMetadata = async () => {
       for (let tag of tags[key]) {
         if (!tag.text) continue;
 
-        await axios.post('http://localhost:3001/api/questions/metadata', {
+        await axios.post(`http://localhost:${process.env.PORT || 3001}/api/questions/metadata`, {
           type: 'tag',
           text: tag.text,
           value: tag.value,
-          semester: Number(key)
+          semester: Number(key),
+          category: tag.category
         });
       }
     }
@@ -362,7 +420,7 @@ router.post('/question/:id', async (req, res) => {
 // Opret nyt speciale eller tag
 router.post('/', async (req, res) => {
   try {
-    const { type, text, value, semester } = req.body; // Disse parametre skal alle opgives i post requesten
+    const { type, text, value, semester, category } = req.body; // Disse parametre skal alle opgives i post requesten
     if (!type || !text || !semester)
       return res.status(400).send('Du mangler at opgive alle parametre');
 
@@ -375,6 +433,7 @@ router.post('/', async (req, res) => {
       specialty.text = text;
       specialty.value = value;
       specialty.semester = semester;
+      specialty.category = category;
 
       await specialty.save();
       res.status(200).send({ message: 'Oprettet speciale', specialty: specialty });
@@ -389,6 +448,7 @@ router.post('/', async (req, res) => {
       tag.text = text;
       tag.value = value;
       tag.semester = semester;
+      tag.category = category;
 
       await tag.save();
       res.status(200).send({ message: 'Oprettet tag', tag: tag });
@@ -437,6 +497,7 @@ router.get('/count', async (req, res) => {
       _id: t._id,
       semester: t.semester,
       text: t.text,
+      category: t.category,
       count
     });
   }

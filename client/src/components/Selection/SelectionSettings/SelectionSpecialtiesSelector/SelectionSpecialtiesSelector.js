@@ -5,6 +5,7 @@ import { Translate } from 'react-localize-redux';
 import { Form, Header, Message, Grid } from 'semantic-ui-react';
 import SelectionSpecialtiesSelectorCheckbox from './SelectionSpecialtiesSelectorCheckbox';
 import LoadingPage from './../../../misc/Utility-pages/LoadingPage';
+import _ from 'lodash';
 
 /**
  * Laver en checkbox for hvert speciale.
@@ -18,6 +19,38 @@ const SelectionSpecialtiesSelector = ({
   tags,
   loading
 }) => {
+  const tagsList = () => {
+    let tagCategories = {};
+    let returned = [];
+
+    for (let t of _.sortBy(tags, (t) => t.category)) {
+      if (!tagCategories[t.category]) tagCategories[t.category] = [];
+      tagCategories[t.category].push(
+        <SelectionSpecialtiesSelectorCheckbox
+          key={t._id}
+          type="tags"
+          speciale={t}
+          erValgt={valgteTags.includes(t._id)}
+          antal={t.count}
+          onChange={onChange}
+        />
+      );
+    }
+
+    for (let key in tagCategories) {
+      returned.push(
+        <>
+          <h5>{key[0].toUpperCase() + key.substring(1)}</h5>
+          {tagCategories[key]}
+        </>
+      );
+    }
+
+    return returned;
+  };
+
+  tagsList();
+
   if (loading || !specialties || !tags) return <LoadingPage />;
   if (!semester)
     return (
@@ -52,18 +85,7 @@ const SelectionSpecialtiesSelector = ({
             <Header as="h3">
               <Translate id="selectionSpecialtiesSelector.tags" data={{ semester }} />
             </Header>
-            {tags.map((t) => {
-              return (
-                <SelectionSpecialtiesSelectorCheckbox
-                  key={t._id}
-                  type="tags"
-                  speciale={t}
-                  erValgt={valgteTags.includes(t._id)}
-                  antal={t.count}
-                  onChange={onChange}
-                />
-              );
-            })}
+            {tagsList()}
           </Grid.Row>
         </Grid.Column>
       </Grid>
