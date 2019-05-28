@@ -51,6 +51,7 @@ export const getQuestions = (settings, requestedIds = null) => async (dispatch) 
       return null;
   }
 
+  dispatch({ type: types.CHANGE_QUIZ_TO_SPECIFIC_NUMBER, payload: 0 });
   dispatch({
     type: types.FETCH_QUESTIONS,
     payload: res.data,

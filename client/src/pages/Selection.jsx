@@ -48,7 +48,6 @@ class SelectionMain extends Component {
    * Tager nu højde for evt. "tomme" semestre, da semester = 7 er default
    */
   async componentDidMount() {
-    console.log(Date.now() - this.props.lastMetadataFetch);
     let { questions, semester, type } = this.props.settings;
     if (questions.length === 0 && semester === 7) {
       type = 'semester';

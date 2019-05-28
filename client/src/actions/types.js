@@ -17,3 +17,5 @@ export const AUTH_SIGNUP = 'auth_signup';
 export const AUTH_CURRENT_USER = 'auth_current_user';
 export const AUTH_GET_ANSWERED_QUESTIONS = 'auth_get_answered_questions';
 export const AUTH_UPDATE_USER_ANSWERS = 'AUTH_UPDATE_USER_ANSWERS';
+export const CHANGE_QUESTION_BY_STEP = 'CHANGE_QUESTION_BY_STEP';
+export const CHANGE_QUIZ_TO_SPECIFIC_NUMBER = 'CHANGE_QUIZ_TO_SPECIFIC_NUMBER';
