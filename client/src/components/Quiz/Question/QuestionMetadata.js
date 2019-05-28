@@ -21,10 +21,7 @@ const QuestionMetadata = (props) => {
 
   useEffect(() => {
     const getMetadata = async () => {
-      const { data: metadata } = await axios.get(
-        '/api/questions/metadata?sem=' + question.semester
-      );
-      let { tags, specialties } = metadata;
+      let { tags, specialties } = props.metadata;
       if (!tags || !specialties) return;
       specialties = _.sortBy(specialties, (s) => s.text);
       tags = _.sortBy(tags, (t) => t.text);
@@ -153,6 +150,12 @@ const QuestionMetadata = (props) => {
   );
 };
 
+const mapStateToProps = (state) => {
+  return {
+    metadata: state.settings.metadata
+  };
+};
+
 QuestionMetadata.propTypes = {
   question: PropTypes.object,
   user: PropTypes.object,
@@ -162,7 +165,7 @@ QuestionMetadata.propTypes = {
 
 export default withRouter(
   connect(
-    null,
+    mapStateToProps,
     actions
   )(QuestionMetadata)
 );

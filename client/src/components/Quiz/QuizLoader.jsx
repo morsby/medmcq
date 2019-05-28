@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { Divider, Button } from 'semantic-ui-react';
-import LoadingPage from '../misc/Utility-pages/LoadingPage';
+import LoadingPage from '../Misc/Utility-pages/LoadingPage';
 
 /**
  * Loading-screen component ved start af quiz.

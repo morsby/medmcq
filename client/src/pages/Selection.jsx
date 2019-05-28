@@ -57,7 +57,13 @@ class SelectionMain extends Component {
       this.onSettingsChange(e, { type, value });
     }
 
-    await this.getMetadata();
+    if (
+      this.props.specialties.length === 0 ||
+      this.props.tags.length === 0 ||
+      Date.now() - this.props.lastMetadataFetch > 3.6 * Math.pow(10, 6)
+    ) {
+      await this.getMetadata();
+    }
   }
 
   async componentDidUpdate(prevProps) {
