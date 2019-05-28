@@ -14,7 +14,7 @@ import FeedbackComment from './FeedbackComment/FeedbackComment';
 import FeedbackCommentPost from './FeedbackComment/FeedbackCommentPost';
 import FeedbackSingleContent from './FeedbackSingleContent';
 
-import LoadingPage from '../../misc/Utility-pages/LoadingPage';
+import LoadingPage from '../../Misc/Utility-pages/LoadingPage';
 import Footer from '../../Layout/Footer';
 
 import { smoothScroll } from '../../../utils/quiz';
