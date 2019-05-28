@@ -11,19 +11,19 @@ import { renderToStaticMarkup } from 'react-dom/server'; // required to initiali
 import authTranslations from './components/Auth/authTranslations'; // fordi der ikke er en gennemgående component i dette regi
 
 // HOCs
-import PrivateRoute from './components/misc/HOC/PrivateRoute';
-import ScrollToTop from './components/misc/HOC/ScrollToTop';
+import PrivateRoute from './components/Misc/HOC/PrivateRoute';
+import ScrollToTop from './components/Misc/HOC/ScrollToTop';
 // Routes
 // Diverse
-import ErrorPage from './components/misc/Utility-pages/404';
-import Print from './components/misc/Utility-pages/Print/Print';
+import ErrorPage from './components/Misc/Utility-pages/404';
+import Print from './components/Misc/Utility-pages/Print/Print';
 // Selections
 import Selection from './pages/Selection';
 
 // Selve quizzen
 import Quiz from './pages/Quiz';
-import About from './components/misc/Utility-pages/About/About';
-import Contact from './components/misc/Utility-pages/Contact';
+import About from './components/Misc/Utility-pages/About/About';
+import Contact from './components/Misc/Utility-pages/Contact';
 
 import Header from './components/Layout/Header';
 
@@ -37,13 +37,13 @@ import ForgotPassword from './components/Auth/Password/ForgotPassword';
 import ResetPassword from './components/Auth/Password/ResetPassword';
 
 // NewVersionMessage
-import NewVersionMessage from './components/misc/Utility-pages/About/NewVersion/NewVersionMessage';
+import NewVersionMessage from './components/Misc/Utility-pages/About/NewVersion/NewVersionMessage';
 
 import * as actions from './actions';
 import { urls } from './utils/common';
 import Sidebar from './components/Layout/Sidebar';
 import Footer from './components/Layout/Footer';
-import MaintenancePage from './components/misc/Utility-pages/MaintenancePage';
+import MaintenancePage from './components/Misc/Utility-pages/MaintenancePage';
 
 class App extends Component {
   state = { maintenance: false };

@@ -4,7 +4,7 @@ import { Translate } from 'react-localize-redux';
 
 import { Form, Header, Message, Grid } from 'semantic-ui-react';
 import SelectionSpecialtiesSelectorCheckbox from './SelectionSpecialtiesSelectorCheckbox';
-import LoadingPage from './../../../misc/Utility-pages/LoadingPage';
+import LoadingPage from './../../../Misc/Utility-pages/LoadingPage';
 import _ from 'lodash';
 
 /**
