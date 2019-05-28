@@ -114,7 +114,7 @@ export const tags = {
     { value: 'forskning', text: 'Forskning' },
     { value: 'molekylærbiologisk_metode', text: 'Molekylærbiologisk metode' },
     { value: 'børn', text: 'Børn' },
-    
+
     // Slettet
     { value: 'paraklinik', text: '' }
   ],
@@ -148,6 +148,7 @@ export const tags = {
     // Urologi
     { value: 'nyrer', text: 'Nyrer' },
     { value: 'urinveje', text: 'Urinveje' },
+    { value: 'sten_i_urinvejene', text: 'Sten i urinvejene' },
     { value: 'neuromuskulær_blæredysfunktion', text: 'Neuromuskulær blæredysfunktion' },
     { value: 'prostata', text: 'Prostata' },
     { value: 'testis', text: 'Testis, epididymis og scrotum' },
@@ -171,6 +172,7 @@ export const tags = {
     { value: 'kraniofaciale_misdannelser', text: 'Kraniofaciale misdannelser' },
     { value: 'exfoliative_hudsygdomme', text: 'Exfoliative hudsygdomme' },
     { value: 'brysthypertrofi_og_brystanomalier', text: 'Brysthypertrofi og brystanomalier' },
+    { value: 'postbariatrisk_kirurgi', text: 'Postbariatrisk kirurgi' },
 
     // Onkologi
     { value: 'strålebehandling', text: 'Strålebehandling' },
@@ -216,6 +218,7 @@ export const tags = {
     { value: 'perikarditis', text: 'Perikarditis og tamponade' },
     { value: 'synkope', text: 'Synkope' },
     { value: 'aortadissektion', text: 'Aortadissektion' },
+    { value: 'aterosklerose', text: 'Aterosklerose' },
 
     // Lungemedicin
     { value: 'lungecancer', text: 'Lungecancer' },
@@ -228,6 +231,7 @@ export const tags = {
     { value: 'sarkoidose', text: 'Sarkoidose' },
     { value: 'allergi', text: 'Allergi' },
     { value: 'allergisk_alveolitis', text: 'Allergisk alveolitis' },
+    { value: 'pleuraeffusion', text: 'Pleuraeffusion' },
 
     // Karkirurgi
     { value: 'underekstremitets-iskæmi', text: 'Underekstremitets-iskæmi' },
@@ -235,6 +239,7 @@ export const tags = {
     { value: 'venesygdomme', text: 'Venesygdomme' },
 
     // Thoraxkirurgi
+    { value: 'pci_og_cabg', text: 'PCI og CABG' },
     { value: 'pectus_carinatum_og_excavatum', text: 'Pectus carinatum og excavatum' },
     { value: 'Thoraxtraumer', text: 'Thoraxtraumer' },
     { value: 'oesophagus', text: 'Oesophagus' },
