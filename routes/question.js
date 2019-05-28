@@ -375,6 +375,7 @@ Der er blevet rapporteret en fejl i følgende spørgsmål:
 - Semester: ${question.semester}
 - Sæt: ${question.examYear}/${question.examSeason}
 - Spørgsmålnummer: ${question.n}
+- Korrekte svar: ${JSON.stringify(question.correctAnswer)}
 
 <hr>
 
@@ -409,6 +410,7 @@ Det blev foreslået til spørgsmålet:
 - Semester: ${question.semester}
 - Sæt: ${question.examYear}/${question.examSeason}
 - Spørgsmålnummer: ${question.n}
+- Korrekte svar: ${JSON.stringify(question.correctAnswer)}
 
 ${question.question}
 
