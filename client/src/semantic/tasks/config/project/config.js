@@ -103,13 +103,11 @@ module.exports = {
 
     if(config.permission) {
       config.hasPermissions = true;
-      config.parsedPermissions = typeof config.permission === 'string' ? parseInt(config.permission, 8) : config.permission;
     }
     else {
       // pass blank object to avoid causing errors
       config.permission     = {};
       config.hasPermissions = false;
-      config.parsedPermissions = {};
     }
 
     /*--------------

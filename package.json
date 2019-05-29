@@ -4,7 +4,7 @@
   "description": "En webapp til visning af MCQ-opgaver fra kandidaten i medicin på AU",
   "main": "server/server.js",
   "engines": {
-    "node": "11.14.0",
+    "node": "10.16.0",
     "npm": "6.9.0"
   },
   "repository": "https://github.com/Morsby/medmcq",
@@ -13,7 +13,7 @@
     "server": "cd server && npm run dev",
     "client": "npm run genversion && cd client && npm start",
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "update": "git pull && npm install && cd client && npm install",
+    "update": "git pull && cd server && npm install && cd ../client && npm install",
     "build": "npm run update && npm run genversion && cd client && npm run build",
     "genversion": "genversion -e version.js && mv version.js client/src/"
   },

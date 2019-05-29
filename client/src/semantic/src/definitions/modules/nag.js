@@ -12,10 +12,6 @@
 
 'use strict';
 
-$.isFunction = $.isFunction || function(obj) {
-  return typeof obj === "function" && typeof obj.nodeType !== "number";
-};
-
 window = (typeof window != 'undefined' && window.Math == Math)
   ? window
   : (typeof self != 'undefined' && self.Math == Math)
@@ -43,6 +39,7 @@ $.fn.nag = function(parameters) {
           ? $.extend(true, {}, $.fn.nag.settings, parameters)
           : $.extend({}, $.fn.nag.settings),
 
+        className       = settings.className,
         selector        = settings.selector,
         error           = settings.error,
         namespace       = settings.namespace,
@@ -52,6 +49,7 @@ $.fn.nag = function(parameters) {
 
         $module         = $(this),
 
+        $close          = $module.find(selector.close),
         $context        = (settings.context)
           ? $(settings.context)
           : $('body'),
@@ -59,7 +57,24 @@ $.fn.nag = function(parameters) {
         element         = this,
         instance        = $module.data(moduleNamespace),
 
-        module
+        moduleOffset,
+        moduleHeight,
+
+        contextWidth,
+        contextHeight,
+        contextOffset,
+
+        yOffset,
+        yPosition,
+
+        timer,
+        module,
+
+        requestAnimationFrame = window.requestAnimationFrame
+          || window.mozRequestAnimationFrame
+          || window.webkitRequestAnimationFrame
+          || window.msRequestAnimationFrame
+          || function(callback) { setTimeout(callback, 0); }
       ;
       module = {
 
@@ -390,7 +405,7 @@ $.fn.nag = function(parameters) {
           else if(found !== undefined) {
             response = found;
           }
-          if(Array.isArray(returnedValue)) {
+          if($.isArray(returnedValue)) {
             returnedValue.push(response);
           }
           else if(returnedValue !== undefined) {

@@ -12,10 +12,6 @@
 
 'use strict';
 
-$.isFunction = $.isFunction || function(obj) {
-  return typeof obj === "function" && typeof obj.nodeType !== "number";
-};
-
 window = (typeof window != 'undefined' && window.Math == Math)
   ? window
   : (typeof self != 'undefined' && self.Math == Math)
@@ -265,13 +261,13 @@ $.fn.form = function(parameters) {
           },
           // duck type rule test
           shorthandRules: function(rules) {
-            return (typeof rules == 'string' || Array.isArray(rules));
+            return (typeof rules == 'string' || $.isArray(rules));
           },
           empty: function($field) {
             if(!$field || $field.length === 0) {
               return true;
             }
-            else if($field.is(selector.checkbox)) {
+            else if($field.is('input[type="checkbox"]')) {
               return !$field.is(':checked');
             }
             else {
@@ -473,7 +469,8 @@ $.fn.form = function(parameters) {
                 keys     = Object.keys(parameters),
                 isLegacySettings = (keys.length > 0)
                   ? (parameters[keys[0]].identifier !== undefined && parameters[keys[0]].rules !== undefined)
-                  : false
+                  : false,
+                ruleKeys
               ;
               if(isLegacySettings) {
                 // 1.x (ducktyped)
@@ -517,18 +514,17 @@ $.fn.form = function(parameters) {
           field: function(identifier) {
             module.verbose('Finding field with identifier', identifier);
             identifier = module.escape.string(identifier);
-            var t;
-            if((t=$field.filter('#' + identifier)).length > 0 ) {
-              return t;
+            if($field.filter('#' + identifier).length > 0 ) {
+              return $field.filter('#' + identifier);
             }
-            if((t=$field.filter('[name="' + identifier +'"]')).length > 0 ) {
-              return t;
+            else if( $field.filter('[name="' + identifier +'"]').length > 0 ) {
+              return $field.filter('[name="' + identifier +'"]');
             }
-            if((t=$field.filter('[name="' + identifier +'[]"]')).length > 0 ) {
-              return t;
+            else if( $field.filter('[name="' + identifier +'[]"]').length > 0 ) {
+              return $field.filter('[name="' + identifier +'[]"]');
             }
-            if((t=$field.filter('[data-' + metadata.validate + '="'+ identifier +'"]')).length > 0 ) {
-              return t;
+            else if( $field.filter('[data-' + metadata.validate + '="'+ identifier +'"]').length > 0 ) {
+              return $field.filter('[data-' + metadata.validate + '="'+ identifier +'"]');
             }
             return $('<input/>');
           },
@@ -551,13 +547,10 @@ $.fn.form = function(parameters) {
             }
             $.each(validation, function(fieldName, field) {
               identifier = field.identifier || fieldName;
-              $.each(module.get.field(identifier), function(index, groupField) {
-                if(groupField == $field[0]) {
-                  field.identifier = identifier;
-                  fieldValidation = field;
-                  return false;
-                }
-              });
+              if( module.get.field(identifier)[0] == $field[0] ) {
+                field.identifier = identifier;
+                fieldValidation = field;
+              }
             });
             return fieldValidation || false;
           },
@@ -572,7 +565,7 @@ $.fn.form = function(parameters) {
           },
           values: function (fields) {
             var
-              $fields = Array.isArray(fields)
+              $fields = $.isArray(fields)
                 ? module.get.fields(fields)
                 : $field,
               values = {}
@@ -580,6 +573,7 @@ $.fn.form = function(parameters) {
             $fields.each(function(index, field) {
               var
                 $field     = $(field),
+                type       = $field.prop('type'),
                 name       = $field.prop('name'),
                 value      = $field.val(),
                 isCheckbox = $field.is(selector.checkbox),
@@ -673,7 +667,7 @@ $.fn.form = function(parameters) {
               newValidation = {}
             ;
             if(module.is.shorthandRules(rules)) {
-              rules = Array.isArray(rules)
+              rules = $.isArray(rules)
                 ? rules
                 : [rules]
               ;
@@ -702,7 +696,7 @@ $.fn.form = function(parameters) {
             }
             validation = $.extend({}, validation, newValidation);
           },
-          prompt: function(identifier, errors, internal) {
+          prompt: function(identifier, errors) {
             var
               $field       = module.get.field(identifier),
               $fieldGroup  = $field.closest($group),
@@ -714,11 +708,9 @@ $.fn.form = function(parameters) {
               : errors
             ;
             module.verbose('Adding field error state', identifier);
-            if(!internal) {
-              $fieldGroup
-                  .addClass(className.error)
-              ;
-            }
+            $fieldGroup
+              .addClass(className.error)
+            ;
             if(settings.inline) {
               if(!promptExists) {
                 $prompt = settings.templates.prompt(errors);
@@ -758,16 +750,16 @@ $.fn.form = function(parameters) {
         remove: {
           rule: function(field, rule) {
             var
-              rules = Array.isArray(rule)
+              rules = $.isArray(rule)
                 ? rule
                 : [rule]
             ;
-            if(validation[field] === undefined || !Array.isArray(validation[field].rules)) {
-              return;
-            }
-            if(rule === undefined) {
+            if(rule == undefined) {
               module.debug('Removed all rules');
               validation[field].rules = [];
+              return;
+            }
+            if(validation[field] == undefined || !$.isArray(validation[field].rules)) {
               return;
             }
             $.each(validation[field].rules, function(index, rule) {
@@ -779,7 +771,7 @@ $.fn.form = function(parameters) {
           },
           field: function(field) {
             var
-              fields = Array.isArray(field)
+              fields = $.isArray(field)
                 ? field
                 : [field]
             ;
@@ -789,8 +781,8 @@ $.fn.form = function(parameters) {
           },
           // alias
           rules: function(field, rules) {
-            if(Array.isArray(field)) {
-              $.each(field, function(index, field) {
+            if($.isArray(field)) {
+              $.each(fields, function(index, field) {
                 module.remove.rule(field, rules);
               });
             }
@@ -870,7 +862,7 @@ $.fn.form = function(parameters) {
               var
                 $field      = module.get.field(key),
                 $element    = $field.parent(),
-                isMultiple  = Array.isArray(value),
+                isMultiple  = $.isArray(value),
                 isCheckbox  = $element.is(selector.uiCheckbox),
                 isDropdown  = $element.is(selector.uiDropdown),
                 isRadio     = ($field.is(selector.radio) && isCheckbox),
@@ -922,7 +914,8 @@ $.fn.form = function(parameters) {
 
           form: function(event, ignoreCallbacks) {
             var
-              values = module.get.values()
+              values = module.get.values(),
+              apiRequest
             ;
 
             // input keydown event will fire submit repeatedly by browser default
@@ -979,35 +972,24 @@ $.fn.form = function(parameters) {
               module.debug('Using field name as identifier', identifier);
               field.identifier = identifier;
             }
-            var isDisabled = true;
-            $.each($field, function(){
-                if(!$(this).prop('disabled')) {
-                  isDisabled = false;
-                  return false;
-                }
-            });
-            if(isDisabled) {
+            if($field.prop('disabled')) {
               module.debug('Field is disabled. Skipping', identifier);
+              fieldValid = true;
             }
             else if(field.optional && module.is.blank($field)){
               module.debug('Field is optional and blank. Skipping', identifier);
+              fieldValid = true;
             }
             else if(field.depends && module.is.empty($dependsField)) {
               module.debug('Field depends on another value that is not present or empty. Skipping', $dependsField);
+              fieldValid = true;
             }
             else if(field.rules !== undefined) {
-              $field.closest($group).removeClass(className.error);
               $.each(field.rules, function(index, rule) {
-                if( module.has.field(identifier)) {
-                  var invalidFields = module.validate.rule(field, rule,true) || [];
-                  if (invalidFields.length>0){
-                    module.debug('Field is invalid', identifier, rule.type);
-                    fieldErrors.push(module.get.prompt(rule, field));
-                    fieldValid = false;
-                    if(showErrors){
-                      $(invalidFields).closest($group).addClass(className.error);
-                    }
-                  }
+                if( module.has.field(identifier) && !( module.validate.rule(field, rule) ) ) {
+                  module.debug('Field is invalid', identifier, rule.type);
+                  fieldErrors.push(module.get.prompt(rule, field));
+                  fieldValid = false;
                 }
               });
             }
@@ -1020,7 +1002,7 @@ $.fn.form = function(parameters) {
             else {
               if(showErrors) {
                 formErrors = formErrors.concat(fieldErrors);
-                module.add.prompt(identifier, fieldErrors, true);
+                module.add.prompt(identifier, fieldErrors);
                 settings.onInvalid.call($field, fieldErrors);
               }
               return false;
@@ -1029,40 +1011,26 @@ $.fn.form = function(parameters) {
           },
 
           // takes validation rule and returns whether field passes rule
-          rule: function(field, rule, internal) {
+          rule: function(field, rule) {
             var
               $field       = module.get.field(field.identifier),
+              type         = rule.type,
+              value        = $field.val(),
+              isValid      = true,
               ancillary    = module.get.ancillaryValue(rule),
               ruleName     = module.get.ruleName(rule),
-              ruleFunction = settings.rules[ruleName],
-              invalidFields = [],
-              isCheckbox = $field.is(selector.checkbox),
-              isValid = function(field){
-                var value = (isCheckbox ? $(field).filter(':checked').val() : $(field).val());
-                // cast to string avoiding encoding special values
-                value = (value === undefined || value === '' || value === null)
-                    ? ''
-                    : (settings.shouldTrim) ? $.trim(value + '') : String(value + '')
-                ;
-                return ruleFunction.call(field, value, ancillary);
-              }
+              ruleFunction = settings.rules[ruleName]
             ;
             if( !$.isFunction(ruleFunction) ) {
               module.error(error.noRule, ruleName);
               return;
             }
-            if(isCheckbox) {
-              if (!isValid($field)) {
-                invalidFields = $field;
-              }
-            } else {
-              $.each($field, function (index, field) {
-                if (!isValid(field)) {
-                  invalidFields.push(field);
-                }
-              });
-            }
-            return internal ? invalidFields : !(invalidFields.length>0);
+            // cast to string avoiding encoding special values
+            value = (value === undefined || value === '' || value === null)
+              ? ''
+              : $.trim(value + '')
+            ;
+            return ruleFunction.call($field, value, ancillary);
           }
         },
 
@@ -1212,7 +1180,7 @@ $.fn.form = function(parameters) {
           else if(found !== undefined) {
             response = found;
           }
-          if(Array.isArray(returnedValue)) {
+          if($.isArray(returnedValue)) {
             returnedValue.push(response);
           }
           else if(returnedValue !== undefined) {
@@ -1251,7 +1219,6 @@ $.fn.form.settings = {
 
   delay             : 200,
   revalidate        : true,
-  shouldTrim        : true,
 
   transition        : 'scale',
   duration          : 200,
@@ -1271,7 +1238,7 @@ $.fn.form.settings = {
     bracket : /\[(.*)\]/i,
     decimal : /^\d+\.?\d*$/,
     email   : /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i,
-    escape  : /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|:,=@]/g,
+    escape  : /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g,
     flags   : /^\/(.*)\/(.*)?/,
     integer : /^\-?\d+$/,
     number  : /^\-?\d*(\.\d+)?$/,
@@ -1368,7 +1335,7 @@ $.fn.form.settings = {
 
     // is not empty or blank string
     empty: function(value) {
-      return !(value === undefined || '' === value || Array.isArray(value) && value.length === 0);
+      return !(value === undefined || '' === value || $.isArray(value) && value.length === 0);
     },
 
     // checkbox checked
@@ -1550,6 +1517,7 @@ $.fn.form.settings = {
     // matches another field
     match: function(value, identifier) {
       var
+        $form = $(this),
         matchingValue
       ;
       if( $('[data-validate="'+ identifier +'"]').length > 0 ) {
@@ -1574,6 +1542,7 @@ $.fn.form.settings = {
     different: function(value, identifier) {
       // use either id or name of field
       var
+        $form = $(this),
         matchingValue
       ;
       if( $('[data-validate="'+ identifier +'"]').length > 0 ) {

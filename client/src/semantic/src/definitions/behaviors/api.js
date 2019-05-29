@@ -12,10 +12,6 @@
 
 'use strict';
 
-$.isWindow = $.isWindow || function(obj) {
-  return obj != null && obj === obj.window;
-};
-
 var
   window = (typeof window != 'undefined' && window.Math == Math)
     ? window
@@ -485,7 +481,7 @@ $.api = $.fn.api = function(parameters) {
                 elapsedTime        = (new Date().getTime() - requestStartTime),
                 timeLeft           = (settings.loadingDuration - elapsedTime),
                 translatedResponse = ( $.isFunction(settings.onResponse) )
-                  ? module.is.expectingJSON() && !settings.rawResponse
+                  ? module.is.expectingJSON()
                     ? settings.onResponse.call(context, $.extend(true, {}, response))
                     : settings.onResponse.call(context, response)
                   : false
@@ -577,7 +573,7 @@ $.api = $.fn.api = function(parameters) {
                 if(xhr !== undefined) {
                   module.debug('XHR produced a server error', status, httpMessage);
                   // make sure we have an error to display to console
-                  if( (xhr.status < 200 || xhr.status >= 300) && httpMessage !== undefined && httpMessage !== '') {
+                  if( xhr.status != 200 && httpMessage !== undefined && httpMessage !== '') {
                     module.error(error.statusMessage + httpMessage, ajaxSettings.url);
                   }
                   settings.onError.call(context, errorMessage, $module, xhr);
@@ -994,7 +990,7 @@ $.api = $.fn.api = function(parameters) {
           else if(found !== undefined) {
             response = found;
           }
-          if(Array.isArray(returnedValue)) {
+          if($.isArray(returnedValue)) {
             returnedValue.push(response);
           }
           else if(returnedValue !== undefined) {
@@ -1100,9 +1096,6 @@ $.api.settings = {
   // aliases for mock
   response          : false,
   responseAsync     : false,
-
-// whether onResponse should work with response value without force converting into an object
-  rawResponse       : false,
 
   // callbacks before request
   beforeSend  : function(settings) { return settings; },
