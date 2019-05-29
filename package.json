@@ -18,6 +18,11 @@
     "genversion": "genversion -e version.js && mv version.js client/src/",
     "validate": "concurrently \"cd server && npm run validate\" \"cd client && npm run validate\""
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run validate"
+    }
+  },
   "author": "Morsby",
   "license": "MIT",
   "dependencies": {},
