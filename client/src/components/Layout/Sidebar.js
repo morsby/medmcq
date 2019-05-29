@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { PropTypes } from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
 import { Sidebar as SemanticSidebar, Menu, Icon, Responsive, Image } from 'semantic-ui-react';
 import { breakpoints } from '../../utils/common';
 import styles from './Header.module.css';
@@ -76,6 +78,11 @@ const Sidebar = (props) => {
       {width > breakpoints.mobile && <>{props.children}</>}
     </>
   );
+};
+
+Sidebar.propTypes = {
+  history: ReactRouterPropTypes.history,
+  children: PropTypes.node
 };
 
 export default withRouter(Sidebar);

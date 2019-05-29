@@ -114,7 +114,13 @@ App.propTypes = {
   addTranslation: PropTypes.func,
 
   // Initialize the translation, seeding into redux state
-  initialize: PropTypes.func
+  initialize: PropTypes.func,
+
+  // determines if it's time to reload semester
+  invalidateSemesters: PropTypes.func,
+
+  // fetches the user
+  fetchUser: PropTypes.func
 };
 
 const LocalizedApp = withLocalize(

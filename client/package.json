@@ -36,8 +36,8 @@
     "sass": "node-sass --watch --output src/styles/css --output-style compressed --source-map true --source-map-contents src/styles/scss/main.scss",
     "lint": "eslint . --color",
     "lint:f": "eslint --fix . --color",
-    "p": "prettier --write './**/*.js'",
-    "validate": "npm run lint && npm run p"
+    "p": "prettier --write 'src/**/*.js'",
+    "validate": "npm run lint:f && npm run p"
   },
   "devDependencies": {
     "case-sensitive-paths-webpack-plugin": "^2.2.0",

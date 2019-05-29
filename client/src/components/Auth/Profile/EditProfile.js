@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
 import { connect } from 'react-redux';
 import * as actions from '../../../actions';
 
@@ -155,6 +157,20 @@ class EditProfile extends Component {
     );
   }
 }
+
+EditProfile.propTypes = {
+  // React router -- til navigation
+  history: ReactRouterPropTypes,
+
+  // Til at gemme ændringer
+  editProfile: PropTypes.func,
+
+  // Brugerens info
+  auth: PropTypes.object,
+
+  // Til at tjekke login
+  fetchUser: PropTypes.func
+};
 
 function mapStateToProps(state) {
   return { auth: state.auth };

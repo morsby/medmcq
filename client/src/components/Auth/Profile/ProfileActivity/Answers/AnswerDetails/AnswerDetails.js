@@ -81,7 +81,12 @@ AnswerDetails.propTypes = {
   /**
    * Array indeholdende besvarede spørgsmål for semesteret
    */
-  answers: PropTypes.array
+  answers: PropTypes.array,
+
+  /**
+   * Henter spørgsmål
+   */
+  getQuestions: PropTypes.func
 };
 
 export default connect(

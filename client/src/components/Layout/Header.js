@@ -12,7 +12,7 @@ import LeftMenu from './Menus/LeftMenu';
 /**
  * Header-component. Viser headeren og tjekker at brugeren er logget ind.
  */
-const Header = (props) => {
+const Header = () => {
   return (
     <Responsive as="header" minWidth={breakpoints.mobile}>
       <h2 className={styles.onprint}>

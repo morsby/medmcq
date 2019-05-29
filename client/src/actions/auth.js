@@ -9,7 +9,7 @@ export const checkUserAvailability = (field, value) => async () => {
   return res.data;
 };
 
-export const signup = (post) => async (dispatch) => {
+export const signup = (post) => async () => {
   let res = await axios.post('/api/user', post);
 
   //dispatch({ type: types.AUTH_SIGNUP, payload: res.data });
@@ -39,6 +39,7 @@ export const fetchUser = () => async (dispatch) => {
   try {
     res = await axios.get('/api/auth');
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.log(err.response);
   }
 
@@ -50,13 +51,14 @@ export const getProfile = (userId) => async (dispatch) => {
   try {
     res = await axios.get(`/api/users/${userId}/profile`);
   } catch (err) {
+    // eslint-disable-next-line no-console
     console.log(err.response);
   }
 
   dispatch({ type: types.AUTH_PROFILE, payload: res.data });
 };
 
-export const editProfile = (values, callback) => async (dispatch) => {
+export const editProfile = (values, callback) => async () => {
   let res = await axios.patch('/api/user', values);
 
   return callback(res.data);
@@ -82,12 +84,12 @@ export const getAnsweredQuestions = (answers) => async (dispatch) => {
   });
 };
 
-export const forgotPassword = (email, callback) => async (dispatch) => {
+export const forgotPassword = (email, callback) => async () => {
   let res = await axios.post('/api/user/forgot', { email: email });
   return callback(res.data);
 };
 
-export const resetPassword = (token, values, callback) => async (dispatch) => {
+export const resetPassword = (token, values, callback) => async () => {
   let res = await axios.post(`/api/user/reset/${token}`, values);
   return callback(res.data);
 };

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { PropTypes } from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
 import { withRouter } from 'react-router';
@@ -73,7 +74,10 @@ Footer.propTypes = {
   /**
    * history er fra ReactRouter. Bruges til navigation.
    */
-  history: ReactRouterPropTypes.history
+  history: ReactRouterPropTypes.history,
+
+  // Til at tilføje oversættelser
+  addTranslation: PropTypes.func
 };
 
 export default withRouter(withLocalize(Footer));

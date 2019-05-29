@@ -216,6 +216,12 @@ QuizMain.propTypes = {
   questions: PropTypes.array,
 
   /**
+   * fra redux
+   *
+   */
+  quiz: PropTypes.object,
+
+  /**
    * Fra Redux
    * Den funktion, der henter spørgsmålene fra API'en
    */

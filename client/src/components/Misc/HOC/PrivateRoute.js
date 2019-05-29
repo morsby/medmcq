@@ -1,4 +1,5 @@
 import React from 'react';
+import { PropTypes } from 'prop-types';
 import { Route, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as actions from '../../../actions';
@@ -25,6 +26,14 @@ class PrivateRoute extends React.Component {
     return <Route {...this.props} />;
   }
 }
+
+PrivateRoute.propTypes = {
+  // Tjekker brugeren
+  fetchUser: PropTypes.func,
+
+  // brugeren (fra redux)
+  user: PropTypes.object
+};
 
 function mapStateToProps(state) {
   return { user: state.auth.user };
