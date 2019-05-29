@@ -9,6 +9,7 @@
     "lint": "eslint . --color",
     "lint:f": "eslint --fix . --color",
     "p": "prettier --write **/*.js",
+    "validate": "npm run lint && npm run p",
     "test": "NODE_ENV=test jest",
     "test:w": "jest --watch-all",
     "reset": "knex migrate:rollback --env=test && knex migrate:latest --env=test && knex seed:run --env=test"
