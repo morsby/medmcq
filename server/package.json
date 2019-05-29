@@ -8,7 +8,7 @@
     "dev": "babel-watch server.js",
     "lint": "eslint . --color",
     "lint:f": "eslint --fix . --color",
-    "p": "prettier --write **/*.js",
+    "p": "prettier --list-different --write **/*.js",
     "validate": "npm run lint && npm run p",
     "test": "NODE_ENV=test jest",
     "test:w": "jest --watch-all",

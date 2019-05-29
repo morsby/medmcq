@@ -1,8 +1,4 @@
-import BaseModel, {
-  hiddenCols,
-  CustomQueryBuilder,
-  modifiers
-} from "./_base_model";
+import BaseModel, { CustomQueryBuilder, modifiers } from "./_base_model";
 const { Model } = require("objection");
 
 class QuestionComment extends BaseModel {
