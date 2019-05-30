@@ -29,7 +29,7 @@ const SelectionSpecialtiesSelector = React.memo(
         if (!tagCategories[t.category]) tagCategories[t.category] = [];
         tagCategories[t.category].push(
           <SelectionSpecialtiesSelectorCheckbox
-            key={t._id}
+            key={t.value}
             type="tags"
             speciale={t}
             erValgt={valgteTags.includes(t.value)}
@@ -41,10 +41,10 @@ const SelectionSpecialtiesSelector = React.memo(
 
       for (let key in tagCategories) {
         returned.push(
-          <>
+          <React.Fragment key={key}>
             <h5>{key[0].toUpperCase() + key.substring(1)}</h5>
             {tagCategories[key]}
-          </>
+          </React.Fragment>
         );
       }
 
