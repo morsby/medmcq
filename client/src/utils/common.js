@@ -92,6 +92,11 @@ export const tags = {
     { value: 'a-gas', text: 'A-gas', category: 'paraklinik' },
     { value: 'patologi', text: 'Patologi', category: 'paraklinik' },
 
+    // Reumatologi
+    { value: 'artritis_og_artrose', text: 'Artritis og artrose', category: 'Reumatologi' },
+    { value: 'bindevævssygdomme', text: 'Bindevævssygdomme', category: 'Reumatologi' },
+    { value: 'vaskulitis', text: 'Vaskulitis', category: 'Reumatologi' },
+
     // Organer
     { value: 'lever', text: 'Lever', category: 'organer' },
 
