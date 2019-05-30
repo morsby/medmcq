@@ -11,7 +11,7 @@ export const urls = {
   logout: '/logout',
   profile: '/profil',
   editProfile: '/profil/rediger',
-  forgotPassword: '/glemt-kodeord', //HVIS DENNE ÆNDRES SKAL OGSÅ ÆNDRES I API'ens config/urls.js
+  forgotPassword: '/glemt-kodeord', // HVIS DENNE ÆNDRES SKAL OGSÅ ÆNDRES I API'ens config/urls.js
   resetPassword: '/nyt-kodeord',
   print: '/print'
 };
@@ -96,6 +96,7 @@ export const tags = {
     { value: 'artritis_og_artrose', text: 'Artritis og artrose', category: 'reumatologi' },
     { value: 'bindevævssygdomme', text: 'Bindevævssygdomme', category: 'reumatologi' },
     { value: 'vaskulitis', text: 'Vaskulitis', category: 'reumatologi' },
+    { value: 'lænderygsygdomme', text: 'Lænderygsygdomme', category: 'reumatologi' },
 
     // Gastroenterologi
     { value: 'reflux', text: 'Reflux', category: 'gastroenterologi' },
@@ -125,7 +126,10 @@ export const tags = {
     { value: 'koagulopati', text: 'Koagulopati', category: 'klinisk biokemi' },
 
     // Specifikke sygdomme
-    { value: 'syfilis', text: 'Syfilis', category: 'sygdommme' },
+    { value: 'syfilis', text: 'Syfilis', category: 'infektionsmedicin' },
+    { value: 'sepsis', text: 'Sepsis', category: 'infektionsmedicin' },
+    { value: 'neuroinfektioner', text: 'Neuroinfektioner', category: 'infektionsmedicin' },
+    { value: 'luftvejsinfektioner', text: 'Luftvejsinfektioner', category: 'infektionsmedicin' },
 
     // Diverse
     { value: 'journaloptagelse', text: 'Journaloptagelse', category: 'diverse' },
