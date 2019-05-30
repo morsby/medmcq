@@ -93,12 +93,27 @@ export const tags = {
     { value: 'patologi', text: 'Patologi', category: 'paraklinik' },
 
     // Reumatologi
-    { value: 'artritis_og_artrose', text: 'Artritis og artrose', category: 'Reumatologi' },
-    { value: 'bindevævssygdomme', text: 'Bindevævssygdomme', category: 'Reumatologi' },
-    { value: 'vaskulitis', text: 'Vaskulitis', category: 'Reumatologi' },
+    { value: 'artritis_og_artrose', text: 'Artritis og artrose', category: 'reumatologi' },
+    { value: 'bindevævssygdomme', text: 'Bindevævssygdomme', category: 'reumatologi' },
+    { value: 'vaskulitis', text: 'Vaskulitis', category: 'reumatologi' },
 
-    // Organer
-    { value: 'lever', text: 'Lever', category: 'organer' },
+    // Gastroenterologi
+    { value: 'reflux', text: 'Reflux', category: 'gastroenterologi' },
+    { value: 'ulcus', text: 'Ulcus', category: 'gastroenterologi' },
+    {
+      value: 'inflammatoriske_tarmsygdomme',
+      text: 'Inflammatoriske tarmsygdomme',
+      category: 'gastroenterologi'
+    },
+    { value: 'cøliaki', text: 'Cøliaki', category: 'gastroenterologi' },
+    { value: 'lever', text: 'Lever og galdeveje', category: 'gastroenterologi' },
+    { value: 'pancreas', text: 'Pancreas', category: 'gastroenterologi' },
+
+    // Hæmatologi
+    { value: 'anæmi', text: 'Anæmi', category: 'hæmatologi' },
+    { value: 'leukæmi', text: 'Leukæmi', category: 'hæmatologi' },
+    { value: 'lymfom', text: 'Lymfom', category: 'hæmatologi' },
+    { value: 'myelomatose', text: 'Myelomatose', category: 'hæmatologi' },
 
     // Klinisk immunologi
     { value: 'blodtransfusion', text: 'Blodtransfusion', category: 'klinisk immunologi' },
