@@ -14,16 +14,15 @@ const QuestionAnsweredCounter = (props) => {
     !answered ||
     !answered[question.semester] ||
     !answered[question.semester][String(question._id)]
-  )
-    return null;
+  ) { return null; }
 
   const { correct, wrong } = answered[question.semester][String(question._id)];
   return (
-    <Grid.Column textAlign="right">
+    <Grid.Column textAlign='right'>
       {/* En ret verbose måde at udregne besvarede spørgsmål på, men det fungerer. Muligvis lidt refactor er nyttigt, men jeg har ikke kunnet regne en bedre måde ud, en alle de IFs. */}
       <Grid.Row>
         <Translate
-          id="questionMetadata.answered"
+          id='questionMetadata.answered'
           data={{
             correct,
             wrong: correct + wrong,

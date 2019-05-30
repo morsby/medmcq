@@ -29,13 +29,13 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
     >
       <Comment.Content>
         {!comment.anonymous && (
-          <Comment.Author as="strong">
+          <Comment.Author as='strong'>
             {comment.user[0].toUpperCase() + comment.user.substring(1)}
           </Comment.Author>
         )}
         {comment.anonymous && (
-          <Comment.Author as="strong">
-            <Translate id="questionCommentSingle.anonymous" />
+          <Comment.Author as='strong'>
+            <Translate id='questionCommentSingle.anonymous' />
           </Comment.Author>
         )}
         <Comment.Metadata style={{ color: 'rgb(140, 140, 140)' }}>
@@ -64,11 +64,11 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
             {deleting && (
               <>
                 <Menu.Item>
-                  <Translate id="questionCommentSingle.delete_confirmation" />
+                  <Translate id='questionCommentSingle.delete_confirmation' />
                 </Menu.Item>
                 <Menu.Item onClick={() => setDeleting(false)}>
-                  <Icon name="close" />
-                  <Translate id="questionCommentSingle.no" />
+                  <Icon name='close' />
+                  <Translate id='questionCommentSingle.no' />
                 </Menu.Item>
                 <Menu.Item
                   onClick={() => {
@@ -76,8 +76,8 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
                     setDeleting(false);
                   }}
                 >
-                  <Icon name="trash" color="red" />
-                  <Translate id="questionCommentSingle.yes" />
+                  <Icon name='trash' color='red' />
+                  <Translate id='questionCommentSingle.yes' />
                 </Menu.Item>
               </>
             )}

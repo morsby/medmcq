@@ -30,13 +30,13 @@ class LoginForm extends Component {
 
     if (login.type === 'LoginSuccess') {
       return this.handleNavigation('root');
-    } {
+    } else {
       this.setState({ error: 'Login mislykkedes' });
     }
   };
 
   // TODO: Autocomplete
-  render() {
+  render () {
     return (
       <div>
         <Translate>
@@ -127,7 +127,7 @@ LoginForm.propTypes = {
   history: ReactRouterPropTypes.history
 };
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
     auth: state.auth
   };

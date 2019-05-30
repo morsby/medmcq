@@ -8,7 +8,7 @@ import quizTranslations from '../Translations/quizTranslations.json';
 
 import { Container, Button } from 'semantic-ui-react';
 
-import Swipeable from 'react-swipeable';
+import { Swipeable } from 'react-swipeable';
 import QuizLoader from '../components/Quiz/QuizLoader';
 import Question from '../containers/Question';
 import QuizNavigator from '../components/Quiz/QuizNavigator';
@@ -83,9 +83,11 @@ class QuizMain extends Component {
        * Tjekker om det aktive element er et TEXTAREA (kommentarfeltet) og
        * navigerer i så fald IKKE
        */
+      let { questions } = this.props.quiz;
+
       let qn = this.state.qn;
 
-      let max = this.props.quiz.questions.length;
+      let max = Object.keys(questions).length;
       if (document.activeElement.tagName === 'TEXTAREA') return;
 
       if (e.key === 'ArrowLeft') {
@@ -98,10 +100,10 @@ class QuizMain extends Component {
 
   swiped (e, deltaX) {
     if (!this.state.imgOpen) {
+      let { questions } = this.props.quiz;
       // Navigation ved swipes
       let min = 0;
-
-      let max = this.props.questions.length;
+      let max = Object.keys(questions).length;
 
       let move;
 
@@ -163,16 +165,16 @@ class QuizMain extends Component {
       );
     }
 
-    if (questions.length === 0) {
+    if (Object.keys(questions).length === 0) {
       return (
         <div className='flex-container'>
           <div className='content'>
             <Container>
               <h1>
-                <Translate id="quizLoader.noresultsHeader" />
+                <Translate id='quizLoader.noresultsHeader' />
               </h1>
-              <Button onClick={() => this.props.history.push('/')} basic color="blue">
-                <Translate id="quizLoader.noresults" />
+              <Button onClick={() => this.props.history.push('/')} basic color='blue'>
+                <Translate id='quizLoader.noresults' />
               </Button>
             </Container>
           </div>
@@ -186,7 +188,7 @@ class QuizMain extends Component {
           <QuizNavigator
             onNavigate={this.onChangeQuestion}
             qn={qn}
-            qmax={questions.length}
+            qmax={Object.keys(questions).length}
             position='top'
           />
 
@@ -205,7 +207,7 @@ class QuizMain extends Component {
             />
           </Swipeable>
 
-          <QuizNavigator onNavigate={this.onChangeQuestion} qn={qn} qmax={questions.length} />
+          <QuizNavigator onNavigate={this.onChangeQuestion} qn={qn} qmax={Object.keys(questions).length} />
 
           <QuizSummary
             questions={questions}
@@ -219,12 +221,6 @@ class QuizMain extends Component {
 }
 
 QuizMain.propTypes = {
-  /**
-   * Fra Redux
-   * Et array af de udvalgte spørgsmål. Se questionsReducer.js
-   */
-  questions: PropTypes.array,
-
   /**
    * fra redux
    *
