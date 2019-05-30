@@ -31,10 +31,8 @@ describe("questions route", () => {
       "Paraklinik",
       "Radiologi"
     ]);
-    expect(orderedQuestions[0].specialties).toHaveLength(1);
-    expect(orderedQuestions[0].specialties[0].specialtyName).toEqual(
-      "Hæmatologi"
-    );
+    expect(orderedQuestions[0].specialties).toHaveLength(0);
+
     expect(orderedQuestions[5].specialties.map(s => s.specialtyName)).toEqual([
       "Abdominalkirurgi",
       "Urologi"

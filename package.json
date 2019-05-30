@@ -12,7 +12,7 @@
     "test": "echo \"TESTS are separated in client/ and server/ folders\"",
     "server": "cd server && npm run dev",
     "client": "npm run genversion && cd client && npm start",
-    "dev": "npm-run-all \"npm run server\" \"npm run client\"",
+    "dev": "npm-run-all --parallel server client",
     "update": "git pull && cd server && npm install && cd ../client && npm install",
     "build": "npm run update && npm run genversion && cd client && npm run build",
     "genversion": "genversion -e version.js && mv version.js client/src/",
