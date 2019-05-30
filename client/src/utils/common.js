@@ -112,9 +112,12 @@ export const tags = {
 
     // Hæmatologi
     { value: 'anæmi', text: 'Anæmi', category: 'hæmatologi' },
+    { value: 'trombocytopeni', text: 'Trombocytopeni', category: 'hæmatologi' },
     { value: 'leukæmi', text: 'Leukæmi', category: 'hæmatologi' },
     { value: 'lymfom', text: 'Lymfom', category: 'hæmatologi' },
-    { value: 'myelomatose', text: 'Myelomatose', category: 'hæmatologi' },
+    { value: 'myelodysplastisk_syndrom', text: 'Myelodysplastisk syndrom', category: 'hæmatologi' },
+    { value: 'myeloproliferative_neoplasier', text: 'Myeloproliferative neoplasier', category: 'hæmatologi' },
+    { value: 'myelomatose', text: 'Plasmacellesygdomme', category: 'hæmatologi' },
 
     // Klinisk immunologi
     { value: 'blodtransfusion', text: 'Blodtransfusion', category: 'klinisk immunologi' },
