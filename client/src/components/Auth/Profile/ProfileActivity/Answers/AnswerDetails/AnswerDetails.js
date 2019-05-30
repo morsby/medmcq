@@ -53,10 +53,10 @@ const AnswerDetails = ({ answers, getQuestions }) => {
     <div>
       <Divider hidden />
       <Button onClick={startQuiz} disabled={selected.length === 0}>
-        <Translate id="profileAnswerDetails.start_quiz_button" data={{ n: selected.length }} />
+        <Translate id='profileAnswerDetails.start_quiz_button' data={{ n: selected.length }} />
       </Button>
       <h4>
-        <Translate id="profileAnswerDetails.filter.header" />
+        <Translate id='profileAnswerDetails.filter.header' />
       </h4>
 
       <AnswerDetailsFilterButtons handleClick={setFilter} />

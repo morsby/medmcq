@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import axios from 'axios';
 import * as types from './types';
 import * as voteService from '../services/voteService';
@@ -67,7 +68,7 @@ export const answerQuestion = (id, answer, correct, semester, user = null) => (d
 };
 
 export const postQuestion = (post) => async (dispatch) => {
-  const formData = new FormData();
+  const formData = new window.FormData();
 
   formData.append('question', post.question);
   formData.append('answer1', post.answer1);

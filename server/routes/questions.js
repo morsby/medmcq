@@ -1,18 +1,18 @@
-import express from "express";
-import { ValidationError, NotFoundError, transaction } from "objection";
-import { permit } from "../middleware/permission";
-import createResponse from "./_swaggerComponents";
-import Question from "../models/question";
-import QuestionBookmark from "../models/question_bookmark";
-import QuestionUserAnswer from "../models/question_user_answer";
-import QuestionSpecialtyVote from "../models/question_specialty_vote";
-import QuestionTagVote from "../models/question_tag_vote";
+import express from 'express';
+import { ValidationError, NotFoundError, transaction } from 'objection';
+import { permit } from '../middleware/permission';
+import createResponse from './_swaggerComponents';
+import Question from '../models/question';
+import QuestionBookmark from '../models/question_bookmark';
+import QuestionUserAnswer from '../models/question_user_answer';
+import QuestionSpecialtyVote from '../models/question_specialty_vote';
+import QuestionTagVote from '../models/question_tag_vote';
 
 import {
   errorHandler,
   NotAuthorized,
   BadRequest
-} from "../middleware/errorHandling";
+} from '../middleware/errorHandling';
 
 const router = express.Router();
 
@@ -85,7 +85,7 @@ const router = express.Router();
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   let user = req.user || {};
   let { ids, n, semesters, onlyNew, specialties, tags } = req.query;
   try {
@@ -93,64 +93,64 @@ router.get("/", async (req, res) => {
     if (
       !ids &&
       (!n || n > 300) &&
-      ["admin", "creator"].indexOf(user.role) === -1
+      ['admin', 'creator'].indexOf(user.role) === -1
     ) {
       throw new NotAuthorized({
         message: `You requested too many questions. The limit for non-admins is 300 (you requested ${req
-          .query.n || "all"}).`,
+          .query.n || 'all'}).`,
         data: {}
       });
     }
 
     let query = Question.query()
-      .select("question.*", "semester.id as semester")
-      .joinRelation("semester")
+      .select('question.*', 'semester.id as semester')
+      .joinRelation('semester')
       .eager(Question.defaultEager)
-      .orderByRaw("rand()");
+      .orderByRaw('rand()');
 
     // If requesting ids, get them
     if (ids) {
       query = query.whereIn(
-        "Question.id",
-        ids.split(",").map(id => Number(id))
+        'Question.id',
+        ids.split(',').map(id => Number(id))
       );
     } else {
       // Otherwise, filter by results
-      if (semesters) query = query.whereIn("semester.id", semesters.split(","));
+      if (semesters) query = query.whereIn('semester.id', semesters.split(','));
 
       if (n) query = query.limit(n);
 
       if (specialties) {
-        query = query.modify("filterOnMetadata", {
-          type: "specialties",
-          ids: specialties.split(",")
+        query = query.modify('filterOnMetadata', {
+          type: 'specialties',
+          ids: specialties.split(',')
         });
       }
 
       if (tags) {
-        query = query.modify("filterOnMetadata", {
-          type: "tags",
-          ids: tags.split(",")
+        query = query.modify('filterOnMetadata', {
+          type: 'tags',
+          ids: tags.split(',')
         });
       }
 
       if (req.user && onlyNew) {
         query = query.whereNotIn(
-          "question.id",
+          'question.id',
           QuestionUserAnswer.query()
             .where({ userId: req.user.id })
-            .distinct("questionId")
+            .distinct('questionId')
         );
       }
     }
     if (req.user) {
-      query = query.mergeEager("privateComments(own)", {
+      query = query.mergeEager('privateComments(own)', {
         userId: req.user.id
       });
-      query = query.mergeEager("userSpecialtyVotes(own)", {
+      query = query.mergeEager('userSpecialtyVotes(own)', {
         userId: req.user.id
       });
-      query = query.mergeEager("userTagVotes(own)", {
+      query = query.mergeEager('userTagVotes(own)', {
         userId: req.user.id
       });
     }
@@ -210,7 +210,7 @@ router.get("/", async (req, res) => {
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.post("/", permit({ roles: ["admin"] }), async (req, res) => {
+router.post('/', permit({ roles: ['admin'] }), async (req, res) => {
   try {
     let questionToInsert = req.body;
 
@@ -221,7 +221,7 @@ router.post("/", permit({ roles: ["admin"] }), async (req, res) => {
     const newQuestion = await transaction(Question.knex(), async trx => {
       const newQuestion = await Question.query(trx)
         .insertGraphAndFetch(questionToInsert)
-        .eager("examSet");
+        .eager('examSet');
       return newQuestion;
     });
 
@@ -266,13 +266,13 @@ router.post("/", permit({ roles: ["admin"] }), async (req, res) => {
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.post("/search", async (req, res) => {
+router.post('/search', async (req, res) => {
   try {
     let { searchString } = req.body;
 
     const questions = await Question.query()
       .whereRaw(
-        "MATCH (text, answer1, answer2, answer3) AGAINST (? IN BOOLEAN MODE)",
+        'MATCH (text, answer1, answer2, answer3) AGAINST (? IN BOOLEAN MODE)',
         searchString
       )
       .eager(Question.defaultEager);
@@ -312,7 +312,7 @@ router.post("/search", async (req, res) => {
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.get("/:id", async (req, res) => {
+router.get('/:id', async (req, res) => {
   let { id } = req.params;
 
   let query = Question.query()
@@ -320,11 +320,11 @@ router.get("/:id", async (req, res) => {
     .eager(Question.defaultEager);
 
   if (req.user) {
-    query = query.mergeEager("privateComments(own)", { userId: req.user.id });
-    query = query.mergeEager("userSpecialtyVotes(own)", {
+    query = query.mergeEager('privateComments(own)', { userId: req.user.id });
+    query = query.mergeEager('userSpecialtyVotes(own)', {
       userId: req.user.id
     });
-    query = query.mergeEager("userTagVotes(own)", {
+    query = query.mergeEager('userTagVotes(own)', {
       userId: req.user.id
     });
   }
@@ -391,15 +391,15 @@ router.get("/:id", async (req, res) => {
  *               $ref: "#/components/schemas/Error"
  */
 router.patch(
-  "/:id",
-  permit({ roles: ["editor", "admin"] }),
+  '/:id',
+  permit({ roles: ['editor', 'admin'] }),
   async (req, res) => {
     try {
       // Hvis der ikke er nogle data med i req.body smider vi en fejl
       if (Object.keys(req.body).length === 0) {
         throw new ValidationError({
-          type: "ModelValidation",
-          message: "No values to patch",
+          type: 'ModelValidation',
+          message: 'No values to patch',
           data: {}
         });
       }
@@ -407,10 +407,11 @@ router.patch(
       let questionToPatch = req.body;
       questionToPatch.id = Number(req.params.id);
 
-      if (questionToPatch.correctAnswers)
+      if (questionToPatch.correctAnswers) {
         questionToPatch.correctAnswers = questionToPatch.correctAnswers.map(
           answer => ({ answer })
         );
+      }
 
       const question = await transaction(Question.knex(), async trx => {
         const question = Question.query(trx)
@@ -449,14 +450,14 @@ router.patch(
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.delete("/:id", permit({ roles: ["admin"] }), async (req, res) => {
+router.delete('/:id', permit({ roles: ['admin'] }), async (req, res) => {
   let { id } = req.params;
 
   try {
     const deleted = await Question.query().deleteById(id);
     if (deleted > 0) {
       res.status(200).json({
-        type: "deleteQuestion",
+        type: 'deleteQuestion',
         message: `Succesfully deleted ${deleted} question`
       });
     } else {
@@ -517,27 +518,28 @@ router.delete("/:id", permit({ roles: ["admin"] }), async (req, res) => {
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.put("/:id/vote", permit(), async (req, res) => {
+router.put('/:id/vote', permit(), async (req, res) => {
   try {
     let questionId = Number(req.params.id);
     let { specialtyVotes, tagVotes } = req.body;
 
-    if (!questionId)
-      throw new BadRequest({ message: "You must provide a question id." });
+    if (!questionId) { throw new BadRequest({ message: 'You must provide a question id.' }); }
 
-    if (!specialtyVotes && !tagVotes)
+    if (!specialtyVotes && !tagVotes) {
       throw new BadRequest({
-        message: "You must provide either specialty votes or tag votes."
+        message: 'You must provide either specialty votes or tag votes.'
       });
+    }
 
     let userId = req.user.id;
 
     const updatedQuestion = await transaction(Question.knex(), async trx => {
       if (specialtyVotes) {
-        if (!Array.isArray(specialtyVotes))
+        if (!Array.isArray(specialtyVotes)) {
           throw new BadRequest({
-            message: "specialtyVotes must be an array of integers"
+            message: 'specialtyVotes must be an array of integers'
           });
+        }
 
         await QuestionSpecialtyVote.query(trx)
           .where({ questionId, userId: userId })
@@ -553,10 +555,11 @@ router.put("/:id/vote", permit(), async (req, res) => {
       }
 
       if (tagVotes) {
-        if (!Array.isArray(tagVotes))
+        if (!Array.isArray(tagVotes)) {
           throw new BadRequest({
-            message: "tagVotes must be an array of integers"
+            message: 'tagVotes must be an array of integers'
           });
+        }
 
         await QuestionTagVote.query(trx)
           .where({ questionId, userId: userId })
@@ -574,11 +577,11 @@ router.put("/:id/vote", permit(), async (req, res) => {
       const updatedQuestion = await Question.query(trx)
         .findById(questionId)
         .eager(Question.defaultEager)
-        .mergeEager("privateComments(own)", { userId: userId })
-        .mergeEager("userSpecialtyVotes(own, joinSpecialty)", {
+        .mergeEager('privateComments(own)', { userId: userId })
+        .mergeEager('userSpecialtyVotes(own, joinSpecialty)', {
           userId: userId
         })
-        .mergeEager("userTagVotes(own, joinTag)", { userId: userId });
+        .mergeEager('userTagVotes(own, joinTag)', { userId: userId });
       return updatedQuestion;
     });
     res.status(200).json(updatedQuestion);
@@ -624,7 +627,7 @@ router.put("/:id/vote", permit(), async (req, res) => {
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.post("/:id/answer", async (req, res) => {
+router.post('/:id/answer', async (req, res) => {
   let questionId = Number(req.params.id);
   let { answer } = req.body;
 
@@ -639,10 +642,10 @@ router.post("/:id/answer", async (req, res) => {
 
     const question = await Question.query()
       .findById(questionId)
-      .eager("correctAnswers");
+      .eager('correctAnswers');
 
     res.status(200).send(
-      createResponse("QuestionAnswerSuccess", "Succesfully saved answer", {
+      createResponse('QuestionAnswerSuccess', 'Succesfully saved answer', {
         answer,
         question
       })
@@ -680,12 +683,12 @@ router.post("/:id/answer", async (req, res) => {
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.post("/:id/bookmark", permit(), async (req, res) => {
+router.post('/:id/bookmark', permit(), async (req, res) => {
   let questionId = Number(req.params.id);
   try {
     await QuestionBookmark.query().insert({ userId: req.user.id, questionId });
 
-    res.status(200).json(createResponse("QuestionBookmarkSuccess"));
+    res.status(200).json(createResponse('QuestionBookmarkSuccess'));
   } catch (err) {
     errorHandler(err, res);
   }
@@ -714,7 +717,7 @@ router.post("/:id/bookmark", permit(), async (req, res) => {
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.delete("/:id/bookmark", permit(), async (req, res) => {
+router.delete('/:id/bookmark', permit(), async (req, res) => {
   let questionId = Number(req.params.id);
   try {
     const deleted = await QuestionBookmark.query()
@@ -722,10 +725,10 @@ router.delete("/:id/bookmark", permit(), async (req, res) => {
       .delete();
 
     if (deleted === 0) {
-      throw new NotFoundError({ message: "No bookmark to delete" });
+      throw new NotFoundError({ message: 'No bookmark to delete' });
     }
 
-    res.status(200).json(createResponse("QuestionBookmarkDeleteSuccess"));
+    res.status(200).json(createResponse('QuestionBookmarkDeleteSuccess'));
   } catch (err) {
     errorHandler(err, res);
   }

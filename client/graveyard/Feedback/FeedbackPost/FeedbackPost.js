@@ -29,8 +29,8 @@ const FeedbackPost = ({ postFeedback, history }) => {
   // TODO: Refactor: Flyt validation ud
 
   return (
-    <div className="flex-container">
-      <Container className="content">
+    <div className='flex-container'>
+      <Container className='content'>
         <FeedbackNavigation />
         <Translate>
           {({ translate }) => (
@@ -48,28 +48,28 @@ const FeedbackPost = ({ postFeedback, history }) => {
                 return errors;
               }}
               render={({ handleSubmit, submitting, values, form }) => (
-                <form onSubmit={handleSubmit} className="ui form">
-                  <Field name="title">
+                <form onSubmit={handleSubmit} className='ui form'>
+                  <Field name='title'>
                     {({ input, meta }) => (
                       <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
                         <label>{translate('feedbackPost.form_fields.title')}</label>
                         <input
                           {...input}
-                          type="text"
+                          type='text'
                           placeholder={translate('feedbackPost.form_fields.title')}
                         />
-                        <div className="form-error">
+                        <div className='form-error'>
                           {meta.error && meta.touched && <span>{meta.error}</span>}
                         </div>
                       </div>
                     )}
                   </Field>
 
-                  <Field name="text">
+                  <Field name='text'>
                     {({ input, meta }) => (
                       <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
                         <label>{translate('feedbackPost.form_fields.suggestion')}</label>
-                        <div className="ui info message mini form-explanation">
+                        <div className='ui info message mini form-explanation'>
                           {translate('feedbackPost.form_fields.markdown_supported')}
                         </div>
                         <textarea
@@ -77,14 +77,14 @@ const FeedbackPost = ({ postFeedback, history }) => {
                           placeholder={translate('feedbackPost.form_fields.suggestion')}
                         />
 
-                        <div className="form-error">
+                        <div className='form-error'>
                           {meta.error && meta.touched && <span>{meta.error}</span>}
                         </div>
                       </div>
                     )}
                   </Field>
 
-                  <Button type="submit" disabled={submitting}>
+                  <Button type='submit' disabled={submitting}>
                     {translate('feedbackPost.form_fields.submit')}
                   </Button>
 

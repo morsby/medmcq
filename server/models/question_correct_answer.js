@@ -1,36 +1,36 @@
-import BaseModel from "./_base_model";
-const { Model } = require("objection");
+import BaseModel from './_base_model';
+const { Model } = require('objection');
 class QuestionCorrectAnswer extends BaseModel {
-  static get tableName() {
-    return "questionCorrectAnswer";
+  static get tableName () {
+    return 'questionCorrectAnswer';
   }
-  static get jsonSchema() {
+  static get jsonSchema () {
     return {
-      type: "object",
-      required: ["questionId", "answer"],
+      type: 'object',
+      required: ['questionId', 'answer'],
 
       properties: {
-        id: { type: "integer" },
-        answer: { type: "integer", minimum: 1, maximum: 3 },
-        question_id: { type: "integer" }
+        id: { type: 'integer' },
+        answer: { type: 'integer', minimum: 1, maximum: 3 },
+        question_id: { type: 'integer' }
       }
     };
   }
-  static get relationMappings() {
-    const Question = require("./question");
+  static get relationMappings () {
+    const Question = require('./question');
 
     return {
       question: {
         relation: Model.BelongsToOneRelation,
         modelClass: Question,
         join: {
-          from: "questionCorrectAnswer.questionId",
-          to: "question.id"
+          from: 'questionCorrectAnswer.questionId',
+          to: 'question.id'
         }
       }
     };
   }
-  $formatJson(json) {
+  $formatJson (json) {
     json = super.$formatJson(json);
 
     // Flattens correctAnswers (omits id and questionId)

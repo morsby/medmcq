@@ -1,10 +1,10 @@
-import express from "express";
-import { ValidationError, NotFoundError } from "objection";
+import express from 'express';
+import { ValidationError, NotFoundError } from 'objection';
 
-import ExamSet from "../models/exam_set";
-import Question from "../models/question";
-import { errorHandler } from "../middleware/errorHandling";
-import { permit } from "../middleware/permission";
+import ExamSet from '../models/exam_set';
+import Question from '../models/question';
+import { errorHandler } from '../middleware/errorHandling';
+import { permit } from '../middleware/permission';
 
 const router = express.Router();
 /**
@@ -29,11 +29,11 @@ const router = express.Router();
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const examSets = await ExamSet.query()
-      .select("*")
-      .eager("semester");
+      .select('*')
+      .eager('semester');
 
     res.status(200).json(examSets);
   } catch (err) {
@@ -77,7 +77,7 @@ router.get("/", async (req, res) => {
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.post("/", permit({ roles: ["admin"] }), async (req, res) => {
+router.post('/', permit({ roles: ['admin'] }), async (req, res) => {
   try {
     const newSemester = await ExamSet.query().insert({
       ...req.body,
@@ -111,20 +111,20 @@ router.post("/", permit({ roles: ["admin"] }), async (req, res) => {
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.get("/:id", async (req, res) => {
+router.get('/:id', async (req, res) => {
   let { id } = req.params;
 
   try {
     let examSet = await ExamSet.query()
       .findById(id)
-      .eager("semester");
+      .eager('semester');
 
     if (!examSet) throw new NotFoundError();
     res.status(200).json(examSet);
   } catch (err) {
     res.status(400).json({
       code: 400,
-      message: "Could not GET exam set by id"
+      message: 'Could not GET exam set by id'
     });
   }
 });
@@ -164,15 +164,15 @@ router.get("/:id", async (req, res) => {
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.patch("/:id", permit({ roles: ["admin"] }), async (req, res) => {
+router.patch('/:id', permit({ roles: ['admin'] }), async (req, res) => {
   let { id } = req.params;
 
   try {
     // Hvis der ikke er nogle data med i req.body smider vi en fejl
     if (Object.keys(req.body).length === 0) {
       throw new ValidationError({
-        type: "ModelValidation",
-        message: "No values to patch",
+        type: 'ModelValidation',
+        message: 'No values to patch',
         data: {}
       });
     }
@@ -183,7 +183,7 @@ router.patch("/:id", permit({ roles: ["admin"] }), async (req, res) => {
         semester_id: Number(req.body.semester_id) || undefined,
         year: Number(req.body.year) || undefined
       })
-      .eager("semester");
+      .eager('semester');
     if (!examSet) throw new NotFoundError();
     res.status(200).json(examSet);
   } catch (err) {
@@ -213,14 +213,14 @@ router.patch("/:id", permit({ roles: ["admin"] }), async (req, res) => {
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.delete("/:id", permit({ roles: ["admin"] }), async (req, res) => {
+router.delete('/:id', permit({ roles: ['admin'] }), async (req, res) => {
   let { id } = req.params;
 
   try {
     const deleted = await ExamSet.query().deleteById(id);
     if (deleted > 0) {
       res.status(200).json({
-        type: "deleteExamSet",
+        type: 'deleteExamSet',
         message: `Succesfully deleted ${deleted} exam set`
       });
     } else {
@@ -255,25 +255,24 @@ router.delete("/:id", permit({ roles: ["admin"] }), async (req, res) => {
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.get("/:id/questions", async (req, res) => {
+router.get('/:id/questions', async (req, res) => {
   let { id } = req.params;
 
   try {
     let questions = Question.query()
       .where({ examSetId: id })
       .eager(Question.defaultEager)
-      .orderBy("examSetQno");
+      .orderBy('examSetQno');
 
     if (req.user) {
-      questions = questions.mergeEager("privateComments(own)", {
+      questions = questions.mergeEager('privateComments(own)', {
         userId: req.user.id
       });
     }
 
     questions = await questions;
 
-    if (questions.length === 0)
-      throw new NotFoundError({ message: "No questions found." });
+    if (questions.length === 0) { throw new NotFoundError({ message: 'No questions found.' }); }
 
     res.status(200).json(questions);
   } catch (err) {

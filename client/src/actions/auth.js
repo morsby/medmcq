@@ -12,7 +12,7 @@ export const checkUserAvailability = (field, value) => async () => {
 export const signup = (post) => async () => {
   let res = await axios.post('/api/user', post);
 
-  //dispatch({ type: types.AUTH_SIGNUP, payload: res.data });
+  // dispatch({ type: types.AUTH_SIGNUP, payload: res.data });
   return res.data;
 };
 
@@ -21,13 +21,14 @@ export const login = (post) => async (dispatch) => {
 
   await axios
     .post('/api/auth', post)
-    .then(function(res) {
+    .then(function (res) {
       // handle success
       dispatch(fetchUser());
       response = res.data;
       return res.data;
     })
-    .catch(function(error) {
+    .catch(function (error) {
+      // eslint-disable-next-line
       alert(error);
     });
 
@@ -66,8 +67,9 @@ export const editProfile = (values, callback) => async () => {
 
 export const getAnsweredQuestions = (answers) => async (dispatch) => {
   // Receives an object of objects. Keys of the parent object are question IDs
-  let ids = Object.keys(answers),
-    questions = [];
+  let ids = Object.keys(answers);
+
+  let questions = [];
 
   if (ids.length > 0) {
     const res = await axios.post('/api/questions/ids', {

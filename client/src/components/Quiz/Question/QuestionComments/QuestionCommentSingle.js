@@ -28,13 +28,13 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
       }}
     >
       <Comment.Content>
-        <Comment.Author as="strong">{comment.user.username}</Comment.Author>
+        <Comment.Author as='strong'>{comment.user.username}</Comment.Author>
         <Comment.Metadata style={{ color: 'rgb(140, 140, 140)' }}>
           {new Date(comment.createdAt).toLocaleString('da-DK')}
         </Comment.Metadata>
         {comment.private ? (
           <Comment.Metadata style={{ color: 'rgb(140, 140, 140)' }}>
-            <Translate id="question.private_comment" />
+            <Translate id='question.private_comment' />
           </Comment.Metadata>
         ) : null}
 
@@ -45,11 +45,11 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
           }}
         />
         {comment.userId === user.id && (
-          <Menu size="mini" icon="labeled" secondary>
+          <Menu size='mini' icon='labeled' secondary>
             {!deleting && (
               <Menu.Item onClick={() => setDeleting(true)}>
-                <Icon name="trash" color="red" />
-                <Translate id="questionCommentSingle.delete" />
+                <Icon name='trash' color='red' />
+                <Translate id='questionCommentSingle.delete' />
               </Menu.Item>
             )}
             {deleting && (
@@ -58,7 +58,7 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
                   <p>Er du sikker på du vil slette kommentaren?</p>
                 </Menu.Item>
                 <Menu.Item onClick={() => setDeleting(false)}>
-                  <Icon name="close" />
+                  <Icon name='close' />
                   Nej
                 </Menu.Item>
                 <Menu.Item
@@ -67,14 +67,14 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
                     setDeleting(false);
                   }}
                 >
-                  <Icon name="trash" color="red" />
+                  <Icon name='trash' color='red' />
                   Ja
                 </Menu.Item>
               </>
             )}
             <Menu.Item onClick={() => editComment(comment)}>
-              <Icon name="edit" color="yellow" />
-              <Translate id="questionCommentSingle.edit" />
+              <Icon name='edit' color='yellow' />
+              <Translate id='questionCommentSingle.edit' />
             </Menu.Item>
           </Menu>
         )}

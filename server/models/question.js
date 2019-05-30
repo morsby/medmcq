@@ -1,56 +1,56 @@
-import BaseModel, { CustomQueryBuilder, modifiers } from "./_base_model";
-const { Model } = require("objection");
+import BaseModel, { CustomQueryBuilder, modifiers } from './_base_model';
+const { Model } = require('objection');
 
 class Question extends BaseModel {
-  static get tableName() {
-    return "question";
+  static get tableName () {
+    return 'question';
   }
 
-  static get QueryBuilder() {
+  static get QueryBuilder () {
     return CustomQueryBuilder;
   }
 
-  static get jsonSchema() {
+  static get jsonSchema () {
     return {
-      type: "object",
+      type: 'object',
       required: [
-        "text",
-        "answer1",
-        "answer2",
-        "answer3",
+        'text',
+        'answer1',
+        'answer2',
+        'answer3',
         // TODO pre-migration: Migration Skal tilføje comment på examSetQno
-        "examSetQno",
-        "examSetId"
+        'examSetQno',
+        'examSetId'
       ],
 
       properties: {
-        id: { type: "integer" },
-        oldId: { type: "string" },
-        text: { type: "string" },
-        image: { type: "string" },
-        answer1: { type: "string" },
-        answer2: { type: "string" },
-        answer3: { type: "string" },
-        examSetQno: { type: "integer" },
-        examSetId: { type: "integer" }
+        id: { type: 'integer' },
+        oldId: { type: 'string' },
+        text: { type: 'string' },
+        image: { type: 'string' },
+        answer1: { type: 'string' },
+        answer2: { type: 'string' },
+        answer3: { type: 'string' },
+        examSetQno: { type: 'integer' },
+        examSetId: { type: 'integer' }
       }
     };
   }
 
-  static get relationMappings() {
-    const ExamSet = require("./exam_set");
-    const Semester = require("./semester");
-    const QuestionComment = require("./question_comment");
-    const QuestionCorrectAnswer = require("./question_correct_answer");
-    const QuestionSpecialtyVote = require("./question_specialty_vote");
-    const QuestionTagVote = require("./question_tag_vote");
+  static get relationMappings () {
+    const ExamSet = require('./exam_set');
+    const Semester = require('./semester');
+    const QuestionComment = require('./question_comment');
+    const QuestionCorrectAnswer = require('./question_correct_answer');
+    const QuestionSpecialtyVote = require('./question_specialty_vote');
+    const QuestionTagVote = require('./question_tag_vote');
     return {
       specialties: {
         relation: Model.HasManyRelation,
         modelClass: QuestionSpecialtyVote,
         join: {
-          from: "questionSpecialtyVote.questionId",
-          to: "question.id"
+          from: 'questionSpecialtyVote.questionId',
+          to: 'question.id'
         }
       },
 
@@ -58,8 +58,8 @@ class Question extends BaseModel {
         relation: Model.HasManyRelation,
         modelClass: QuestionTagVote,
         join: {
-          from: "questionTagVote.questionId",
-          to: "question.id"
+          from: 'questionTagVote.questionId',
+          to: 'question.id'
         }
       },
 
@@ -67,8 +67,8 @@ class Question extends BaseModel {
         relation: Model.BelongsToOneRelation,
         modelClass: ExamSet,
         join: {
-          from: "question.examSetId",
-          to: "semesterExamSet.id"
+          from: 'question.examSetId',
+          to: 'semesterExamSet.id'
         }
       },
 
@@ -76,12 +76,12 @@ class Question extends BaseModel {
         relation: Model.ManyToManyRelation,
         modelClass: Semester,
         join: {
-          from: "question.examSetId",
+          from: 'question.examSetId',
           through: {
-            from: "semesterExamSet.id",
-            to: "semesterExamSet.semesterId"
+            from: 'semesterExamSet.id',
+            to: 'semesterExamSet.semesterId'
           },
-          to: "semester.id"
+          to: 'semester.id'
         }
       },
 
@@ -89,16 +89,16 @@ class Question extends BaseModel {
         relation: Model.HasManyRelation,
         modelClass: QuestionCorrectAnswer,
         join: {
-          from: "questionCorrectAnswer.questionId",
-          to: "question.id"
+          from: 'questionCorrectAnswer.questionId',
+          to: 'question.id'
         }
       },
       publicComments: {
         relation: Model.HasManyRelation,
         modelClass: QuestionComment,
         join: {
-          from: "questionComment.questionId",
-          to: "question.id"
+          from: 'questionComment.questionId',
+          to: 'question.id'
         },
         modify: builder => builder.where({ private: false })
       },
@@ -106,8 +106,8 @@ class Question extends BaseModel {
         relation: Model.HasManyRelation,
         modelClass: QuestionComment,
         join: {
-          from: "questionComment.questionId",
-          to: "question.id"
+          from: 'questionComment.questionId',
+          to: 'question.id'
         },
         modify: builder => builder.where({ private: true })
       },
@@ -116,35 +116,34 @@ class Question extends BaseModel {
         relation: Model.HasManyRelation,
         modelClass: QuestionSpecialtyVote,
         join: {
-          from: "questionSpecialtyVote.questionId",
-          to: "question.id"
+          from: 'questionSpecialtyVote.questionId',
+          to: 'question.id'
         }
       },
       userTagVotes: {
         relation: Model.HasManyRelation,
         modelClass: QuestionTagVote,
         join: {
-          from: "questionTagVote.questionId",
-          to: "question.id"
+          from: 'questionTagVote.questionId',
+          to: 'question.id'
         }
       }
     };
   }
 
-  static get modifiers() {
+  static get modifiers () {
     return {
       filterOnMetadata: builder => modifiers.filterOnMetadata(builder)
     };
   }
 
-  static get defaultEager() {
-    return "[examSet.semester, correctAnswers, publicComments.user, specialties(active), tags(active)]";
+  static get defaultEager () {
+    return '[examSet.semester, correctAnswers, publicComments.user, specialties(active), tags(active)]';
   }
 
-  $formatJson(json) {
+  $formatJson (json) {
     json = super.$formatJson(json);
-    if (json.semester && Array.isArray(json.semester))
-      json.semester = json.semester[0];
+    if (json.semester && Array.isArray(json.semester)) { json.semester = json.semester[0]; }
 
     return json;
   }

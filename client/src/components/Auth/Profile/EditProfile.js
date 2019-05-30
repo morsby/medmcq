@@ -33,16 +33,16 @@ class EditProfile extends Component {
     });
   };
 
-  render() {
+  render () {
     let { message } = this.state;
     return (
-      <div className="flex-container">
-        <Container className="content">
+      <div className='flex-container'>
+        <Container className='content'>
           <h3>
-            <Translate id="editProfile.header" />
+            <Translate id='editProfile.header' />
           </h3>
           <p>
-            <Translate id="editProfile.subheader" />
+            <Translate id='editProfile.subheader' />
           </p>
           <Translate>
             {({ translate }) => (
@@ -61,43 +61,43 @@ class EditProfile extends Component {
                           )
                           .then(() => form.reset());
                       }}
-                      className="ui form custom"
+                      className='ui form custom'
                     >
-                      <Field name="email" validate={validation.emailValid}>
+                      <Field name='email' validate={validation.emailValid}>
                         {({ input, meta }) => (
                           <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
                             <label>{translate('editProfile.form_fields.email')}</label>
                             <input
                               {...input}
-                              type="email"
+                              type='email'
                               placeholder={translate('editProfile.form_fields.email')}
                             />
                             {meta.error && meta.touched && (
-                              <Message error visible={true}>
+                              <Message error visible>
                                 {meta.error}
                               </Message>
                             )}
                             {meta.touched && !meta.error && (
-                              <Message warning visible={true}>
+                              <Message warning visible>
                                 {translate('signup.form_fields.email_not_required_message')}
                               </Message>
                             )}
                           </div>
                         )}
                       </Field>
-                      <Field name="password" validate={validation.passwordValid}>
+                      <Field name='password' validate={validation.passwordValid}>
                         {({ input, meta }) => (
                           <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
                             <label>{translate('editProfile.form_fields.new_password')}</label>
                             <input
                               {...input}
-                              type="password"
+                              type='password'
                               placeholder={translate(
                                 'editProfile.form_fields.new_password_placeholder'
                               )}
                             />
                             {meta.error && meta.touched && (
-                              <Message error visible={true} size="small">
+                              <Message error visible size='small'>
                                 {meta.error}
                               </Message>
                             )}
@@ -105,7 +105,7 @@ class EditProfile extends Component {
                         )}
                       </Field>
                       <Divider hidden />
-                      <Field name="password-repeat" validate={validation.passwordRepeatValid}>
+                      <Field name='password-repeat' validate={validation.passwordRepeatValid}>
                         {({ input, meta }) => (
                           <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
                             <label>
@@ -113,11 +113,11 @@ class EditProfile extends Component {
                             </label>
                             <input
                               {...input}
-                              type="password"
+                              type='password'
                               placeholder={translate('editProfile.form_fields.new_password_repeat')}
                             />
                             {meta.error && meta.touched && (
-                              <Message error visible={true}>
+                              <Message error visible>
                                 {meta.error}
                               </Message>
                             )}
@@ -139,9 +139,9 @@ class EditProfile extends Component {
                       </Button>
 
                       <Button
-                        floated="right"
+                        floated='right'
                         basic
-                        color="yellow"
+                        color='yellow'
                         onClick={() => this.handleNavigation('profile')}
                       >
                         {translate('editProfile.form_fields.abort')}
@@ -172,7 +172,7 @@ EditProfile.propTypes = {
   fetchUser: PropTypes.func
 };
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return { auth: state.auth };
 }
 

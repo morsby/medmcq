@@ -1,9 +1,9 @@
-import express from "express";
-import { ValidationError, NotFoundError } from "objection";
-import { permit } from "../middleware/permission";
+import express from 'express';
+import { ValidationError, NotFoundError } from 'objection';
+import { permit } from '../middleware/permission';
 
-import Semester from "../models/semester";
-import { errorHandler } from "../middleware/errorHandling";
+import Semester from '../models/semester';
+import { errorHandler } from '../middleware/errorHandling';
 
 const router = express.Router();
 
@@ -31,17 +31,17 @@ const router = express.Router();
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     let semesters = await Semester.query()
       .select([
-        "semester.*",
-        Semester.relatedQuery("questions")
+        'semester.*',
+        Semester.relatedQuery('questions')
           .count()
-          .as("question_count")
+          .as('question_count')
       ])
       .eager(Semester.defaultEager)
-      .orderBy("value");
+      .orderBy('value');
 
     res.status(200).json(semesters);
   } catch (err) {
@@ -86,7 +86,7 @@ router.get("/", async (req, res) => {
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.post("/", permit({ roles: ["admin"] }), async (req, res) => {
+router.post('/', permit({ roles: ['admin'] }), async (req, res) => {
   try {
     let newSemester = await Semester.query().insert({
       ...req.body,
@@ -123,17 +123,17 @@ router.post("/", permit({ roles: ["admin"] }), async (req, res) => {
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.get("/:id", async (req, res) => {
+router.get('/:id', async (req, res) => {
   let { id } = req.params;
 
   try {
     let semester = await Semester.query()
       .findById(id)
       .select([
-        "semester.*",
-        Semester.relatedQuery("questions")
+        'semester.*',
+        Semester.relatedQuery('questions')
           .count()
-          .as("question_count")
+          .as('question_count')
       ])
       .eager(Semester.defaultEager);
 
@@ -180,15 +180,15 @@ router.get("/:id", async (req, res) => {
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.patch("/:id", permit({ roles: ["admin"] }), async (req, res) => {
+router.patch('/:id', permit({ roles: ['admin'] }), async (req, res) => {
   let { id } = req.params;
 
   try {
     // Hvis der ikke er nogle data med i req.body smider vi en fejl
     if (Object.keys(req.body).length === 0) {
       throw new ValidationError({
-        type: "ModelValidation",
-        message: "No values to patch",
+        type: 'ModelValidation',
+        message: 'No values to patch',
         data: {}
       });
     }
@@ -225,14 +225,14 @@ router.patch("/:id", permit({ roles: ["admin"] }), async (req, res) => {
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.delete("/:id", permit({ roles: ["admin"] }), async (req, res) => {
+router.delete('/:id', permit({ roles: ['admin'] }), async (req, res) => {
   let { id } = req.params;
 
   try {
     const deleted = await Semester.query().deleteById(id);
     if (deleted > 0) {
       res.status(200).json({
-        type: "deleteSemester",
+        type: 'deleteSemester',
         message: `Succesfully deleted ${deleted} semester`
       });
     } else {

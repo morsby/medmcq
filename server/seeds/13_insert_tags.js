@@ -1,17 +1,17 @@
-const _ = require("lodash");
+const _ = require('lodash');
 
-const sampleTags = require("./data/13_sample_tags");
+const sampleTags = require('./data/13_sample_tags');
 
-exports.seed = function(knex, Promise) {
+exports.seed = function (knex, Promise) {
   // Deletes ALL existing entries
-  return knex("question_tag")
+  return knex('question_tag')
     .del()
     .then(async () => {
       // Get the current semesters, used to calculate semester ids
-      const semesters = await knex.from("semester").select("id", "shortName");
+      const semesters = await knex.from('semester').select('id', 'shortName');
       // Inserts seed entries
 
-      return knex("question_tag").insert(
+      return knex('question_tag').insert(
         sampleTags.map(t => {
           return {
             name: t.name,

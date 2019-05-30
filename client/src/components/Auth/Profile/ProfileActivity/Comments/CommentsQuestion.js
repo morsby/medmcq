@@ -7,7 +7,7 @@ import CommentsQuestionComment from './CommentsQuestionComment';
 const CommentsQuestion = ({ question, comments = [] }) => {
   return (
     <div>
-      <ol type="A">
+      <ol type='A'>
         <li className={question.correctAnswers.indexOf(1) > -1 ? 'svar-korrekt' : ''}>
           {question.answer1}
         </li>

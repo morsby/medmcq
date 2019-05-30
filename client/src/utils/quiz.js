@@ -40,8 +40,9 @@ export const evalAnswer = (question, answer) => {
 };
 
 export const calculateResults = (questions) => {
-  let answered = _.filter(questions, (o) => typeof o.answer === 'number'),
-    res;
+  let answered = _.filter(questions, (o) => typeof o.answer === 'number');
+
+  let res;
 
   if (answered.length === 0) {
     res = { status: false };

@@ -11,7 +11,7 @@ const LeftMenu = ({ history }) => {
 
   return (
     <Menu.Item onClick={() => onNavigation('root')}>
-      <Image src={logo} size="small" style={{ height: '30px' }} />
+      <Image src={logo} size='small' style={{ height: '30px' }} />
     </Menu.Item>
   );
 };

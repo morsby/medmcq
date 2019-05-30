@@ -12,7 +12,7 @@ const CommentsQuestionComment = ({ comment, user = {} }) => {
       }}
     >
       <Comment.Content>
-        <Comment.Author as="strong">{username}</Comment.Author>
+        <Comment.Author as='strong'>{username}</Comment.Author>
         <Comment.Metadata>{new Date(comment.createdAt).toLocaleString()}</Comment.Metadata>
         <Comment.Text>{comment.text}</Comment.Text>
       </Comment.Content>

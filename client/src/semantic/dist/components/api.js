@@ -8,83 +8,115 @@
  *
  */
 
-(function($, window, document, undefined) {
+(function ($, window, document, undefined) {
   'use strict';
 
   $.isWindow =
     $.isWindow ||
-    function(obj) {
+    function (obj) {
       return obj != null && obj === obj.window;
     };
 
   var window =
-    typeof window != 'undefined' && window.Math == Math
+    typeof window !== 'undefined' && window.Math == Math
       ? window
-      : typeof self != 'undefined' && self.Math == Math
-      ? self
-      : Function('return this')();
-  $.api = $.fn.api = function(parameters) {
+      : typeof self !== 'undefined' && self.Math == Math
+        ? self
+        : Function('return this')();
+  $.api = $.fn.api = function (parameters) {
     var // use window context if none specified
-      $allModules = $.isFunction(this) ? $(window) : $(this),
-      moduleSelector = $allModules.selector || '',
-      time = new Date().getTime(),
-      performance = [],
-      query = arguments[0],
-      methodInvoked = typeof query == 'string',
-      queryArguments = [].slice.call(arguments, 1),
-      returnedValue;
+      $allModules = $.isFunction(this) ? $(window) : $(this);
 
-    $allModules.each(function() {
+    var moduleSelector = $allModules.selector || '';
+
+    var time = new Date().getTime();
+
+    var performance = [];
+
+    var query = arguments[0];
+
+    var methodInvoked = typeof query === 'string';
+
+    var queryArguments = [].slice.call(arguments, 1);
+
+    var returnedValue;
+
+    $allModules.each(function () {
       var settings = $.isPlainObject(parameters)
-          ? $.extend(true, {}, $.fn.api.settings, parameters)
-          : $.extend({}, $.fn.api.settings),
-        // internal aliases
-        namespace = settings.namespace,
-        metadata = settings.metadata,
-        selector = settings.selector,
-        error = settings.error,
-        className = settings.className,
-        // define namespaces for modules
-        eventNamespace = '.' + namespace,
-        moduleNamespace = 'module-' + namespace,
-        // element that creates request
-        $module = $(this),
-        $form = $module.closest(selector.form),
-        // context used for state
-        $context = settings.stateContext ? $(settings.stateContext) : $module,
-        // request details
-        ajaxSettings,
-        requestSettings,
-        url,
-        data,
-        requestStartTime,
-        // standard module
-        element = this,
-        context = $context[0],
-        instance = $module.data(moduleNamespace),
-        module;
+        ? $.extend(true, {}, $.fn.api.settings, parameters)
+        : $.extend({}, $.fn.api.settings);
+
+      // internal aliases
+
+      var namespace = settings.namespace;
+
+      var metadata = settings.metadata;
+
+      var selector = settings.selector;
+
+      var error = settings.error;
+
+      var className = settings.className;
+
+      // define namespaces for modules
+
+      var eventNamespace = '.' + namespace;
+
+      var moduleNamespace = 'module-' + namespace;
+
+      // element that creates request
+
+      var $module = $(this);
+
+      var $form = $module.closest(selector.form);
+
+      // context used for state
+
+      var $context = settings.stateContext ? $(settings.stateContext) : $module;
+
+      // request details
+
+      var ajaxSettings;
+
+      var requestSettings;
+
+      var url;
+
+      var data;
+
+      var requestStartTime;
+
+      // standard module
+
+      var element = this;
+
+      var context = $context[0];
+
+      var instance = $module.data(moduleNamespace);
+
+      var module;
 
       module = {
-        initialize: function() {
+        initialize: function () {
           if (!methodInvoked) {
             module.bind.events();
           }
           module.instantiate();
         },
 
-        instantiate: function() {
+        instantiate: function () {
           module.verbose('Storing instance of module', module);
           instance = module;
           $module.data(moduleNamespace, instance);
         },
 
-        destroy: function() {
+        destroy: function () {
           module.verbose('Destroying previous module for', element);
           $module.removeData(moduleNamespace).off(eventNamespace);
         },
 
         bind: {
-          events: function() {
+          events: function () {
             var triggerEvent = module.get.event();
             if (triggerEvent) {
               module.verbose('Attaching API events to element', triggerEvent);
@@ -97,8 +129,8 @@
         },
 
         decode: {
-          json: function(response) {
-            if (response !== undefined && typeof response == 'string') {
+          json: function (response) {
+            if (response !== undefined && typeof response === 'string') {
               try {
                 response = JSON.parse(response);
               } catch (e) {
@@ -110,7 +142,7 @@
         },
 
         read: {
-          cachedResponse: function(url) {
+          cachedResponse: function (url) {
             var response;
             if (window.Storage === undefined) {
               module.error(error.noStorage);
@@ -123,7 +155,7 @@
           }
         },
         write: {
-          cachedResponse: function(url, response) {
+          cachedResponse: function (url, response) {
             if (response && response === '') {
               module.debug('Response empty, not caching', response);
               return;
@@ -140,7 +172,7 @@
           }
         },
 
-        query: function() {
+        query: function () {
           if (module.is.disabled()) {
             module.debug('Element is disabled API request aborted');
             return;
@@ -201,9 +233,9 @@
             data: data,
             url: settings.base + url,
             beforeSend: settings.beforeXHR,
-            success: function() {},
-            failure: function() {},
-            complete: function() {}
+            success: function () {},
+            failure: function () {},
+            complete: function () {}
           });
 
           module.debug('Querying URL', ajaxSettings.url);
@@ -222,11 +254,11 @@
             if (!settings.throttleFirstRequest && !module.timer) {
               module.debug('Sending request', data, ajaxSettings.method);
               module.send.request();
-              module.timer = setTimeout(function() {}, settings.throttle);
+              module.timer = setTimeout(function () {}, settings.throttle);
             } else {
               module.debug('Throttling request', settings.throttle);
               clearTimeout(module.timer);
-              module.timer = setTimeout(function() {
+              module.timer = setTimeout(function () {
                 if (module.timer) {
                   delete module.timer;
                 }
@@ -238,7 +270,7 @@
         },
 
         should: {
-          removeError: function() {
+          removeError: function () {
             return (
               settings.hideError === true || (settings.hideError === 'auto' && !module.is.form())
             );
@@ -246,16 +278,16 @@
         },
 
         is: {
-          disabled: function() {
+          disabled: function () {
             return $module.filter(selector.disabled).length > 0;
           },
-          expectingJSON: function() {
+          expectingJSON: function () {
             return settings.dataType === 'json' || settings.dataType === 'jsonp';
           },
-          form: function() {
+          form: function () {
             return $module.is('form') || $context.is('form');
           },
-          mocked: function() {
+          mocked: function () {
             return (
               settings.mockResponse ||
               settings.mockResponseAsync ||
@@ -263,13 +295,13 @@
               settings.responseAsync
             );
           },
-          input: function() {
+          input: function () {
             return $module.is('input');
           },
-          loading: function() {
+          loading: function () {
             return module.request ? module.request.state() == 'pending' : false;
           },
-          abortedRequest: function(xhr) {
+          abortedRequest: function (xhr) {
             if (xhr && xhr.readyState !== undefined && xhr.readyState === 0) {
               module.verbose('XHR request determined to be aborted');
               return true;
@@ -278,7 +310,7 @@
               return false;
             }
           },
-          validResponse: function(response) {
+          validResponse: function (response) {
             if (!module.is.expectingJSON() || !$.isFunction(settings.successTest)) {
               module.verbose(
                 'Response is not JSON, skipping validation',
@@ -299,16 +331,16 @@
         },
 
         was: {
-          cancelled: function() {
+          cancelled: function () {
             return module.cancelled || false;
           },
-          succesful: function() {
+          succesful: function () {
             return module.request && module.request.state() == 'resolved';
           },
-          failure: function() {
+          failure: function () {
             return module.request && module.request.state() == 'rejected';
           },
-          complete: function() {
+          complete: function () {
             return (
               module.request &&
               (module.request.state() == 'resolved' || module.request.state() == 'rejected')
@@ -317,7 +349,7 @@
         },
 
         add: {
-          urlData: function(url, urlData) {
+          urlData: function (url, urlData) {
             var requiredVariables, optionalVariables;
             if (url) {
               requiredVariables = url.match(settings.regExp.required);
@@ -325,20 +357,21 @@
               urlData = urlData || settings.urlData;
               if (requiredVariables) {
                 module.debug('Looking for required URL variables', requiredVariables);
-                $.each(requiredVariables, function(index, templatedString) {
+                $.each(requiredVariables, function (index, templatedString) {
                   var // allow legacy {$var} style
                     variable =
                       templatedString.indexOf('$') !== -1
                         ? templatedString.substr(2, templatedString.length - 3)
-                        : templatedString.substr(1, templatedString.length - 2),
-                    value =
+                        : templatedString.substr(1, templatedString.length - 2);
+
+                  var value =
                       $.isPlainObject(urlData) && urlData[variable] !== undefined
                         ? urlData[variable]
                         : $module.data(variable) !== undefined
-                        ? $module.data(variable)
-                        : $context.data(variable) !== undefined
-                        ? $context.data(variable)
-                        : urlData[variable];
+                          ? $module.data(variable)
+                          : $context.data(variable) !== undefined
+                            ? $context.data(variable)
+                            : urlData[variable];
                   // remove value
                   if (value === undefined) {
                     module.error(error.requiredParameter, variable, url);
@@ -353,20 +386,21 @@
               }
               if (optionalVariables) {
                 module.debug('Looking for optional URL variables', requiredVariables);
-                $.each(optionalVariables, function(index, templatedString) {
+                $.each(optionalVariables, function (index, templatedString) {
                   var // allow legacy {/$var} style
                     variable =
                       templatedString.indexOf('$') !== -1
                         ? templatedString.substr(3, templatedString.length - 4)
-                        : templatedString.substr(2, templatedString.length - 3),
-                    value =
+                        : templatedString.substr(2, templatedString.length - 3);
+
+                  var value =
                       $.isPlainObject(urlData) && urlData[variable] !== undefined
                         ? urlData[variable]
                         : $module.data(variable) !== undefined
-                        ? $module.data(variable)
-                        : $context.data(variable) !== undefined
-                        ? $context.data(variable)
-                        : urlData[variable];
+                          ? $module.data(variable)
+                          : $context.data(variable) !== undefined
+                            ? $context.data(variable)
+                            : urlData[variable];
                   // optional replacement
                   if (value !== undefined) {
                     module.verbose('Optional variable Found', variable, value);
@@ -385,10 +419,12 @@
             }
             return url;
           },
-          formData: function(data) {
-            var canSerialize = $.fn.serializeObject !== undefined,
-              formData = canSerialize ? $form.serializeObject() : $form.serialize(),
-              hasOtherData;
+          formData: function (data) {
+            var canSerialize = $.fn.serializeObject !== undefined;
+
+            var formData = canSerialize ? $form.serializeObject() : $form.serialize();
+
+            var hasOtherData;
             data = data || settings.data;
             hasOtherData = $.isPlainObject(data);
 
@@ -410,7 +446,7 @@
         },
 
         send: {
-          request: function() {
+          request: function () {
             module.set.loading();
             module.request = module.create.request();
             if (module.is.mocked()) {
@@ -423,25 +459,28 @@
         },
 
         event: {
-          trigger: function(event) {
+          trigger: function (event) {
             module.query();
             if (event.type == 'submit' || event.type == 'click') {
               event.preventDefault();
             }
           },
           xhr: {
-            always: function() {
+            always: function () {
               // nothing special
             },
-            done: function(response, textStatus, xhr) {
-              var context = this,
-                elapsedTime = new Date().getTime() - requestStartTime,
-                timeLeft = settings.loadingDuration - elapsedTime,
-                translatedResponse = $.isFunction(settings.onResponse)
-                  ? module.is.expectingJSON() && !settings.rawResponse
-                    ? settings.onResponse.call(context, $.extend(true, {}, response))
-                    : settings.onResponse.call(context, response)
-                  : false;
+            done: function (response, textStatus, xhr) {
+              var context = this;
+
+              var elapsedTime = new Date().getTime() - requestStartTime;
+
+              var timeLeft = settings.loadingDuration - elapsedTime;
+
+              var translatedResponse = $.isFunction(settings.onResponse)
+                ? module.is.expectingJSON() && !settings.rawResponse
+                  ? settings.onResponse.call(context, $.extend(true, {}, response))
+                  : settings.onResponse.call(context, response)
+                : false;
               timeLeft = timeLeft > 0 ? timeLeft : 0;
               if (translatedResponse) {
                 module.debug(
@@ -455,7 +494,7 @@
               if (timeLeft > 0) {
                 module.debug('Response completed early delaying state change by', timeLeft);
               }
-              setTimeout(function() {
+              setTimeout(function () {
                 if (module.is.validResponse(response)) {
                   module.request.resolveWith(context, [response, xhr]);
                 } else {
@@ -463,15 +502,17 @@
                 }
               }, timeLeft);
             },
-            fail: function(xhr, status, httpMessage) {
-              var context = this,
-                elapsedTime = new Date().getTime() - requestStartTime,
-                timeLeft = settings.loadingDuration - elapsedTime;
+            fail: function (xhr, status, httpMessage) {
+              var context = this;
+
+              var elapsedTime = new Date().getTime() - requestStartTime;
+
+              var timeLeft = settings.loadingDuration - elapsedTime;
               timeLeft = timeLeft > 0 ? timeLeft : 0;
               if (timeLeft > 0) {
                 module.debug('Response completed early delaying state change by', timeLeft);
               }
-              setTimeout(function() {
+              setTimeout(function () {
                 if (module.is.abortedRequest(xhr)) {
                   module.request.rejectWith(context, [xhr, 'aborted', httpMessage]);
                 } else {
@@ -481,7 +522,7 @@
             }
           },
           request: {
-            done: function(response, xhr) {
+            done: function (response, xhr) {
               module.debug('Successful API Response', response);
               if (settings.cache === 'local' && url) {
                 module.write.cachedResponse(url, response);
@@ -489,7 +530,7 @@
               }
               settings.onSuccess.call(context, response, $module, xhr);
             },
-            complete: function(firstParameter, secondParameter) {
+            complete: function (firstParameter, secondParameter) {
               var xhr, response;
               // have to guess callback parameters based on request success
               if (module.was.succesful()) {
@@ -502,10 +543,11 @@
               module.remove.loading();
               settings.onComplete.call(context, response, $module, xhr);
             },
-            fail: function(xhr, status, httpMessage) {
+            fail: function (xhr, status, httpMessage) {
               var // pull response from xhr if available
-                response = module.get.responseFromXHR(xhr),
-                errorMessage = module.get.errorFromRequest(response, status, httpMessage);
+                response = module.get.responseFromXHR(xhr);
+
+              var errorMessage = module.get.errorFromRequest(response, status, httpMessage);
               if (status == 'aborted') {
                 module.debug(
                   'XHR Aborted (Most likely caused by page navigation or CORS Policy)',
@@ -544,7 +586,7 @@
         },
 
         create: {
-          request: function() {
+          request: function () {
             // api request promise
             return $.Deferred()
               .always(module.event.request.complete)
@@ -552,16 +594,23 @@
               .fail(module.event.request.fail);
           },
 
-          mockedXHR: function() {
+          mockedXHR: function () {
             var // xhr does not simulate these properties of xhr but must return them
-              textStatus = false,
-              status = false,
-              httpMessage = false,
-              responder = settings.mockResponse || settings.response,
-              asyncResponder = settings.mockResponseAsync || settings.responseAsync,
-              asyncCallback,
-              response,
-              mockedXHR;
+              textStatus = false;
+
+            var status = false;
+
+            var httpMessage = false;
+
+            var responder = settings.mockResponse || settings.response;
+
+            var asyncResponder = settings.mockResponseAsync || settings.responseAsync;
+
+            var asyncCallback;
+
+            var response;
+
+            var mockedXHR;
 
             mockedXHR = $.Deferred()
               .always(module.event.xhr.complete)
@@ -579,7 +628,7 @@
               // simulating response
               mockedXHR.resolveWith(context, [response, textStatus, { responseText: response }]);
             } else if ($.isFunction(asyncResponder)) {
-              asyncCallback = function(response) {
+              asyncCallback = function (response) {
                 module.debug('Async callback returned response', response);
 
                 if (response) {
@@ -598,7 +647,7 @@
             return mockedXHR;
           },
 
-          xhr: function() {
+          xhr: function () {
             var xhr;
             // ajax request promise
             xhr = $.ajax(ajaxSettings)
@@ -611,11 +660,11 @@
         },
 
         set: {
-          error: function() {
+          error: function () {
             module.verbose('Adding error state to element', $context);
             $context.addClass(className.error);
           },
-          loading: function() {
+          loading: function () {
             module.verbose('Adding loading state to element', $context);
             $context.addClass(className.loading);
             requestStartTime = new Date().getTime();
@@ -623,38 +672,38 @@
         },
 
         remove: {
-          error: function() {
+          error: function () {
             module.verbose('Removing error state from element', $context);
             $context.removeClass(className.error);
           },
-          loading: function() {
+          loading: function () {
             module.verbose('Removing loading state from element', $context);
             $context.removeClass(className.loading);
           }
         },
 
         get: {
-          responseFromXHR: function(xhr) {
+          responseFromXHR: function (xhr) {
             return $.isPlainObject(xhr)
               ? module.is.expectingJSON()
                 ? module.decode.json(xhr.responseText)
                 : xhr.responseText
               : false;
           },
-          errorFromRequest: function(response, status, httpMessage) {
+          errorFromRequest: function (response, status, httpMessage) {
             return $.isPlainObject(response) && response.error !== undefined
               ? response.error // use json error message
               : settings.error[status] !== undefined // use server error message
-              ? settings.error[status]
-              : httpMessage;
+                ? settings.error[status]
+                : httpMessage;
           },
-          request: function() {
+          request: function () {
             return module.request || false;
           },
-          xhr: function() {
+          xhr: function () {
             return module.xhr || false;
           },
-          settings: function() {
+          settings: function () {
             var runSettings;
             runSettings = settings.beforeSend.call(context, settings);
             if (runSettings) {
@@ -684,10 +733,12 @@
               ? $.extend(true, {}, runSettings)
               : $.extend(true, {}, settings);
           },
-          urlEncodedValue: function(value) {
-            var decodedValue = window.decodeURIComponent(value),
-              encodedValue = window.encodeURIComponent(value),
-              alreadyEncoded = decodedValue !== value;
+          urlEncodedValue: function (value) {
+            var decodedValue = window.decodeURIComponent(value);
+
+            var encodedValue = window.encodeURIComponent(value);
+
+            var alreadyEncoded = decodedValue !== value;
             if (alreadyEncoded) {
               module.debug('URL value is already encoded, avoiding double encoding', value);
               return value;
@@ -695,7 +746,7 @@
             module.verbose('Encoding value using encodeURIComponent', value, encodedValue);
             return encodedValue;
           },
-          defaultData: function() {
+          defaultData: function () {
             var data = {};
             if (!$.isWindow(element)) {
               if (module.is.input()) {
@@ -707,7 +758,7 @@
             }
             return data;
           },
-          event: function() {
+          event: function () {
             if ($.isWindow(element) || settings.on == 'now') {
               module.debug('API called without element, no events attached');
               return false;
@@ -716,8 +767,8 @@
                 return element.oninput !== undefined
                   ? 'input'
                   : element.onpropertychange !== undefined
-                  ? 'propertychange'
-                  : 'keyup';
+                    ? 'propertychange'
+                    : 'keyup';
               } else if ($module.is('form')) {
                 return 'submit';
               } else {
@@ -727,7 +778,7 @@
               return settings.on;
             }
           },
-          templatedURL: function(action) {
+          templatedURL: function (action) {
             action = action || $module.data(metadata.action) || settings.action || false;
             url = $module.data(metadata.url) || settings.url || false;
             if (url) {
@@ -749,7 +800,7 @@
           }
         },
 
-        abort: function() {
+        abort: function () {
           var xhr = module.get.xhr();
           if (xhr && xhr.state() !== 'resolved') {
             module.debug('Cancelling API request');
@@ -758,12 +809,12 @@
         },
 
         // reset state
-        reset: function() {
+        reset: function () {
           module.remove.error();
           module.remove.loading();
         },
 
-        setting: function(name, value) {
+        setting: function (name, value) {
           module.debug('Changing setting', name, value);
           if ($.isPlainObject(name)) {
             $.extend(true, settings, name);
@@ -777,7 +828,7 @@
             return settings[name];
           }
         },
-        internal: function(name, value) {
+        internal: function (name, value) {
           if ($.isPlainObject(name)) {
             $.extend(true, module, name);
           } else if (value !== undefined) {
@@ -786,7 +837,7 @@
             return module[name];
           }
         },
-        debug: function() {
+        debug: function () {
           if (!settings.silent && settings.debug) {
             if (settings.performance) {
               module.performance.log(arguments);
@@ -800,7 +851,7 @@
             }
           }
         },
-        verbose: function() {
+        verbose: function () {
           if (!settings.silent && settings.verbose && settings.debug) {
             if (settings.performance) {
               module.performance.log(arguments);
@@ -814,7 +865,7 @@
             }
           }
         },
-        error: function() {
+        error: function () {
           if (!settings.silent) {
             module.error = Function.prototype.bind.call(
               console.error,
@@ -825,7 +876,7 @@
           }
         },
         performance: {
-          log: function(message) {
+          log: function (message) {
             var currentTime, executionTime, previousTime;
             if (settings.performance) {
               currentTime = new Date().getTime();
@@ -835,19 +886,20 @@
               performance.push({
                 Name: message[0],
                 Arguments: [].slice.call(message, 1) || '',
-                //'Element'        : element,
+                // 'Element'        : element,
                 'Execution Time': executionTime
               });
             }
             clearTimeout(module.performance.timer);
             module.performance.timer = setTimeout(module.performance.display, 500);
           },
-          display: function() {
-            var title = settings.name + ':',
-              totalTime = 0;
+          display: function () {
+            var title = settings.name + ':';
+
+            var totalTime = 0;
             time = false;
             clearTimeout(module.performance.timer);
-            $.each(performance, function(index, data) {
+            $.each(performance, function (index, data) {
               totalTime += data['Execution Time'];
             });
             title += ' ' + totalTime + 'ms';
@@ -862,7 +914,7 @@
               if (console.table) {
                 console.table(performance);
               } else {
-                $.each(performance, function(index, data) {
+                $.each(performance, function (index, data) {
                   console.log(data['Name'] + ': ' + data['Execution Time'] + 'ms');
                 });
               }
@@ -871,17 +923,20 @@
             performance = [];
           }
         },
-        invoke: function(query, passedArguments, context) {
-          var object = instance,
-            maxDepth,
-            found,
-            response;
+        invoke: function (query, passedArguments, context) {
+          var object = instance;
+
+          var maxDepth;
+
+          var found;
+
+          var response;
           passedArguments = passedArguments || queryArguments;
           context = element || context;
-          if (typeof query == 'string' && object !== undefined) {
+          if (typeof query === 'string' && object !== undefined) {
             query = query.split(/[\. ]/);
             maxDepth = query.length - 1;
-            $.each(query, function(depth, value) {
+            $.each(query, function (depth, value) {
               var camelCaseValue =
                 depth != maxDepth
                   ? value + query[depth + 1].charAt(0).toUpperCase() + query[depth + 1].slice(1)
@@ -1010,29 +1065,29 @@
     rawResponse: false,
 
     // callbacks before request
-    beforeSend: function(settings) {
+    beforeSend: function (settings) {
       return settings;
     },
-    beforeXHR: function(xhr) {},
-    onRequest: function(promise, xhr) {},
+    beforeXHR: function (xhr) {},
+    onRequest: function (promise, xhr) {},
 
     // after request
     onResponse: false, // function(response) { },
 
     // response was successful, if JSON passed validation
-    onSuccess: function(response, $module) {},
+    onSuccess: function (response, $module) {},
 
     // request finished without aborting
-    onComplete: function(response, $module) {},
+    onComplete: function (response, $module) {},
 
     // failed JSON success test
-    onFailure: function(response, $module) {},
+    onFailure: function (response, $module) {},
 
     // server error
-    onError: function(errorMessage, $module) {},
+    onError: function (errorMessage, $module) {},
 
     // request aborted
-    onAbort: function(errorMessage, $module) {},
+    onAbort: function (errorMessage, $module) {},
 
     successTest: false,
 

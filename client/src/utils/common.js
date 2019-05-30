@@ -11,7 +11,7 @@ export const urls = {
   logout: '/logout',
   profile: '/profil',
   editProfile: '/profil/rediger',
-  forgotPassword: '/glemt-kodeord', //HVIS DENNE ÆNDRES SKAL OGSÅ ÆNDRES I API'ens config/urls.js
+  forgotPassword: '/glemt-kodeord', // HVIS DENNE ÆNDRES SKAL OGSÅ ÆNDRES I API'ens config/urls.js
   resetPassword: '/nyt-kodeord',
   print: '/print'
 };

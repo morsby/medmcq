@@ -92,7 +92,7 @@ class Question extends Component {
     width: window.innerWidth
   };
 
-  constructor(props) {
+  constructor (props) {
     super(props);
 
     this.onKeydown = this.onKeydown.bind(this);
@@ -113,13 +113,13 @@ class Question extends Component {
 
     this.handleResize = _.debounce(this.handleResize, 300);
   }
-  componentDidMount() {
+  componentDidMount () {
     document.addEventListener('keydown', this.onKeydown);
     window.addEventListener('resize', this.handleResize);
     this.mouseMover();
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     document.removeEventListener('keydown', this.onKeydown);
     window.removeEventListener('resize', this.handleResize);
   }
@@ -128,7 +128,7 @@ class Question extends Component {
    * For at forhindre lightbox i at være åben på tværs af navigationer og ændring
    * af specialer nulstilles
    */
-  componentDidUpdate(prevProps) {
+  componentDidUpdate (prevProps) {
     if (this.props.question.id !== prevProps.question.id) {
       this.setState({
         reportOpen: false,
@@ -151,7 +151,7 @@ class Question extends Component {
    * For at se om musen er bevæget -- hvis den er, er siden ikke "pristine".
    * Dette bruges i styling af svar-buttons
    */
-  mouseMover() {
+  mouseMover () {
     document.addEventListener(
       'mousemove',
       () => {
@@ -165,7 +165,7 @@ class Question extends Component {
    * For at kunne svare med tal på keyboardet
    * Tager højde for modifier keys (alt, ctrl, meta)
    */
-  onKeydown(e) {
+  onKeydown (e) {
     if (
       !this.props.imgOpen &&
       !(
@@ -176,8 +176,9 @@ class Question extends Component {
       !e.metaKey
     ) {
       e.preventDefault();
-      let answer = Number(e.key),
-        keys = [1, 2, 3];
+      let answer = Number(e.key);
+
+      let keys = [1, 2, 3];
       if (keys.includes(answer)) {
         this.onAnswer(answer);
       }
@@ -190,7 +191,7 @@ class Question extends Component {
    * Ansvarlig for at fortælle redux at der er svaret
    * @param  {number} answer Det der er svaret (1, 2 el. 3)
    */
-  onAnswer(answer) {
+  onAnswer (answer) {
     let { answerQuestion, question, user, qn } = this.props;
 
     // If not already answered:
@@ -198,7 +199,7 @@ class Question extends Component {
       // Er svaret korrekt? Tager højde for flere korrekte svarmuligheder
       let correct;
       if (Array.isArray(question.correctAnswer)) {
-        correct = question.correctAnswer.includes(answer) ? true : false;
+        correct = !!question.correctAnswer.includes(answer);
       } else {
         correct = question.correctAnswer === answer;
       }
@@ -224,19 +225,19 @@ class Question extends Component {
    * @param  {string} value teksten
    * @param  {string} name  navnet på input-feltet
    */
-  onTextType(e, { value, name }) {
+  onTextType (e, { value, name }) {
     this.setState({ [name]: value });
   }
 
   /** Vis/skjul formular til rapportering af spørgsmål */
-  onReportToggle() {
+  onReportToggle () {
     this.setState((prevState) => {
       return { reportOpen: !prevState.reportOpen };
     });
   }
 
   /** Håndter submit af rapport */
-  onReportSubmit() {
+  onReportSubmit () {
     // TODO: CONNECT  TIL REDUX OG API
     this.props.questionReport({
       type: 'error_report',
@@ -245,13 +246,13 @@ class Question extends Component {
     this.setState({ report: '', reportSent: true });
   }
 
-  onPublicCommentsToggle() {
+  onPublicCommentsToggle () {
     this.setState((prevState) => {
       return { publicCommentsOpen: !prevState.publicCommentsOpen, privateCommentsOpen: false };
     });
   }
 
-  onPrivateCommentsToggle() {
+  onPrivateCommentsToggle () {
     this.setState((prevState) => {
       return { privateCommentsOpen: !prevState.privateCommentsOpen, publicCommentsOpen: false };
     });
@@ -261,7 +262,7 @@ class Question extends Component {
    * Poster en kommentar.
    * De brugte props (edit/commentQuestion) er fra redux.
    */
-  onCommentPost(isPrivate) {
+  onCommentPost (isPrivate) {
     if (this.state.newComment.length >= 3) {
       if (this.state.editingComment) {
         /**
@@ -287,8 +288,8 @@ class Question extends Component {
   /**
    * Slet kommentar. Fra redux
    */
-  onDeleteComment(comment_id) {
-    this.props.deleteComment(this.props.question.id, comment_id);
+  onDeleteComment (commentId) {
+    this.props.deleteComment(this.props.question.id, commentId);
   }
 
   /**
@@ -296,7 +297,7 @@ class Question extends Component {
    * Kaldes fra QuestionComments.js
    * @param  {object} comment Kommentaren der skal ændres.
    */
-  onEditComment(comment) {
+  onEditComment (comment) {
     this.setState({
       newComment: comment.comment,
       editingComment: comment.id
@@ -306,37 +307,39 @@ class Question extends Component {
   /**
    * Fortryder ændring af kommentar
    */
-  undoEditComment() {
+  undoEditComment () {
     this.setState({ newComment: '', editingComment: '' });
   }
 
   /**
    * Ændring af specialer
    */
-  onSpecialtiesEditToggle() {
+  onSpecialtiesEditToggle () {
     this.setState((prevState) => {
       return { editingSpecialties: !prevState.editingSpecialties };
     });
   }
 
-  onEditSpecialty(e, { value }) {
+  onEditSpecialty (e, { value }) {
     this.setState({ selectedSpecialties: value });
   }
 
-  onSaveSpecialties() {
+  onSaveSpecialties () {
     this.props.editSpecialties(this.props.question.id, this.state.selectedSpecialties);
     this.setState({ editingSpecialties: false });
   }
 
-  render() {
-    const { question, user } = this.props,
-      { width } = this.state,
-      text = subSupScript(question.text);
+  render () {
+    const { question, user } = this.props;
+
+    const { width } = this.state;
+
+    const text = subSupScript(question.text);
 
     return (
-      <Container className="question">
+      <Container className='question'>
         <Segment>
-          <Grid divided columns="equal" stackable={true}>
+          <Grid divided columns='equal' stackable>
             <Grid.Row>
               <Grid.Column>
                 <div
@@ -348,7 +351,7 @@ class Question extends Component {
                   }}
                   ref={(ref) => (this._div = ref)}
                 />
-                <Responsive as="div" minWidth={breakpoints.mobile + 1}>
+                <Responsive as='div' minWidth={breakpoints.mobile + 1}>
                   <Divider />
 
                   <QuestionAnswerButtons
@@ -369,7 +372,7 @@ class Question extends Component {
               )}
             </Grid.Row>
           </Grid>
-          <Responsive as="div" maxWidth={breakpoints.mobile}>
+          <Responsive as='div' maxWidth={breakpoints.mobile}>
             <Divider />
             <QuestionAnswerButtons
               question={question}
@@ -379,22 +382,22 @@ class Question extends Component {
           </Responsive>
           <Divider />
           <div>
-            <Translate id="questionMetadata.set" />{' '}
+            <Translate id='questionMetadata.set' />{' '}
             {question.examSeason === 'F' ? (
-              <Translate id="questionMetadata.set_season.F" />
+              <Translate id='questionMetadata.set_season.F' />
             ) : (
-              <Translate id="questionMetadata.set_season.E" />
+              <Translate id='questionMetadata.set_season.E' />
             )}{' '}
             {question.examYear}
           </div>
           {question.answer && (
             <div>
               <div>
-                <Translate id="questionMetadata.specialty" />{' '}
+                <Translate id='questionMetadata.specialty' />{' '}
                 {question.specialties.map((spec) => spec.specialtyName).join(' | ')}
               </div>
               <div>
-                <Translate id="questionMetadata.tags" />{' '}
+                <Translate id='questionMetadata.tags' />{' '}
                 {question.tags.map((tag) => tag.tagName).join(' | ')}
               </div>
             </div>
@@ -408,12 +411,12 @@ class Question extends Component {
           >
             {this.state.publicCommentsOpen ? (
               <Translate
-                id="question.hide_public_comments"
+                id='question.hide_public_comments'
                 data={{ n: question.publicComments.length }}
               />
             ) : (
               <Translate
-                id="question.show_public_comments"
+                id='question.show_public_comments'
                 data={{ n: question.publicComments.length }}
               />
             )}
@@ -426,12 +429,12 @@ class Question extends Component {
             >
               {this.state.privateCommentsOpen ? (
                 <Translate
-                  id="question.hide_private_comments"
+                  id='question.hide_private_comments'
                   data={{ n: question.privateComments.length }}
                 />
               ) : (
                 <Translate
-                  id="question.show_private_comments"
+                  id='question.show_private_comments'
                   data={{ n: question.privateComments.length }}
                 />
               )}
@@ -440,11 +443,11 @@ class Question extends Component {
           {width <= 700 && <Divider hidden />}
           <Button
             basic
-            color="orange"
+            color='orange'
             floated={width > 700 ? 'right' : null}
             onClick={this.onReportToggle}
           >
-            <Translate id="question.report_question" />
+            <Translate id='question.report_question' />
           </Button>
           {this.state.reportOpen && (
             <QuestionReport
@@ -479,7 +482,7 @@ class Question extends Component {
               editingComment={this.state.editingComment}
               undoEditComment={this.undoEditComment}
               user={user}
-              privateComment={true}
+              privateComment
             />
           )}
           {user && <Divider />}

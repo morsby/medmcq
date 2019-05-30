@@ -5,30 +5,30 @@ import { Translate } from 'react-localize-redux';
 
 // TODO: TRANSLATION
 const QuestionReport = ({ report, handleChange, handleSubmit, reportSent }) => {
-  if (reportSent)
+  if (reportSent) {
     return (
       <Message success>
         <Message.Header>
-          <Translate id="questionReport.message.header" />
+          <Translate id='questionReport.message.header' />
         </Message.Header>
-        <Translate id="questionReport.message.body" />
+        <Translate id='questionReport.message.body' />
       </Message>
     );
-  else {
+  } else {
     return (
       <Translate>
         {({ translate }) => (
           <Form onSubmit={handleSubmit}>
             <Form.Field>
               <Form.TextArea
-                name="report"
+                name='report'
                 onChange={handleChange}
                 label={translate('questionReport.label')}
                 placeholder={translate('questionReport.placeholder')}
                 value={report}
               />
             </Form.Field>
-            <Form.Button color="orange">Send</Form.Button>
+            <Form.Button color='orange'>Send</Form.Button>
           </Form>
         )}
       </Translate>

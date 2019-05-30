@@ -13,31 +13,34 @@ const Answers = ({ answers = [] }) => {
   // Declare a new state variable, which we'll call "count"
   const [details, toggleDetails] = useState(false);
 
-  let totalAnswers = answers.length,
-    allRight = _.filter(answers, (a) => a.performance.tries === a.performance.correct),
-    allWrong = _.filter(answers, (a) => a.performance.correct === 0),
-    mixed = _.filter(
-      answers,
-      (a) => a.performance.correct > 0 && a.performance.correct < a.performance.tries
-    );
+  let totalAnswers = answers.length;
+
+  let allRight = _.filter(answers, (a) => a.performance.tries === a.performance.correct);
+
+  let allWrong = _.filter(answers, (a) => a.performance.correct === 0);
+
+  let mixed = _.filter(
+    answers,
+    (a) => a.performance.correct > 0 && a.performance.correct < a.performance.tries
+  );
   return (
     <div>
       <p>
-        <Translate id="profileAnswers.summary" data={{ total: totalAnswers }} />
+        <Translate id='profileAnswers.summary' data={{ total: totalAnswers }} />
       </p>
       <div>
         <p>
-          <Translate id="profileAnswers.answers.header" />
+          <Translate id='profileAnswers.answers.header' />
         </p>
-        <ul className="ui list analysis">
-          <li className="item">
-            <Translate id="profileAnswers.answers.correct" data={{ n: allRight.length }} />
+        <ul className='ui list analysis'>
+          <li className='item'>
+            <Translate id='profileAnswers.answers.correct' data={{ n: allRight.length }} />
           </li>
-          <li className="item">
-            <Translate id="profileAnswers.answers.wrong" data={{ n: allWrong.length }} />
+          <li className='item'>
+            <Translate id='profileAnswers.answers.wrong' data={{ n: allWrong.length }} />
           </li>
-          <li className="item">
-            <Translate id="profileAnswers.answers.mixed" data={{ n: mixed.length }} />
+          <li className='item'>
+            <Translate id='profileAnswers.answers.mixed' data={{ n: mixed.length }} />
           </li>
         </ul>
       </div>
@@ -45,9 +48,9 @@ const Answers = ({ answers = [] }) => {
       <Divider hidden />
       <Button onClick={() => toggleDetails(!details)} disabled={totalAnswers === 0}>
         {details && totalAnswers > 0 ? (
-          <Translate id="profileAnswers.buttons.details.hide_details" />
+          <Translate id='profileAnswers.buttons.details.hide_details' />
         ) : (
-          <Translate id="profileAnswers.buttons.details.show_details" />
+          <Translate id='profileAnswers.buttons.details.show_details' />
         )}
       </Button>
       {details && totalAnswers > 0 && <AnswerDetails answers={answers} />}

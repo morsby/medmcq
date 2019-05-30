@@ -8,7 +8,7 @@
     "fomantic-ui": "^2.7.2",
     "http-proxy-middleware": "^0.19.1",
     "lodash": "^4.17.11",
-    "marked": "^0.5.2",
+    "marked": "^0.6.2",
     "node-sass": "^4.11.0",
     "prop-types": "^15.7.1",
     "react": "^16.8.1",
@@ -19,7 +19,7 @@
     "react-redux": "^5.1.1",
     "react-router-dom": "^4.3.1",
     "react-router-prop-types": "^1.0.4",
-    "react-scripts": "3.0.0",
+    "react-scripts": "3.0.1",
     "react-swipeable": "^4.3.2",
     "redux": "^4.0.1",
     "redux-persist": "^5.10.0",
@@ -31,7 +31,7 @@
   "scripts": {
     "start": "concurrently \"react-scripts start\" \"npm run sass\"",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "cross-env CI=true react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "sass": "node-sass --watch --output src/styles/css --output-style compressed --source-map true --source-map-contents src/styles/scss/main.scss",
     "lint": "eslint . --color",
@@ -42,12 +42,8 @@
   "devDependencies": {
     "case-sensitive-paths-webpack-plugin": "^2.2.0",
     "concurrently": "^3.6.1",
-    "eslint": "^5.16.0",
-    "eslint-config-prettier": "^4.1.0",
-    "eslint-plugin-prettier": "^3.0.1",
-    "eslint-plugin-react": "^7.12.4",
+    "cross-env": "^5.2.0",
     "gulp": "^4.0.0",
-    "prettier": "^1.17.0",
     "semantic-ui": "^2.4.2"
   },
   "browserslist": [

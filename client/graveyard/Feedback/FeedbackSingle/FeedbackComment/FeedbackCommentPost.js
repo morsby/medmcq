@@ -46,15 +46,15 @@ const FeedbackCommentPost = ({
                 onSubmit={(event) => {
                   handleSubmit(event).then(form.reset());
                 }}
-                className="ui form"
+                className='ui form'
               >
-                <Field name="text">
+                <Field name='text'>
                   {({ input, meta }) => (
                     <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
                       <label>{translate('feedbackCommentPost.write_comment')}</label>
                       {replyId && (
                         <p>
-                          <Translate id="feedbackCommentPost.replying_to" data={{ replySlug }} />
+                          <Translate id='feedbackCommentPost.replying_to' data={{ replySlug }} />
                           <span
                             style={{
                               cursor: 'pointer',
@@ -62,11 +62,11 @@ const FeedbackCommentPost = ({
                             }}
                             onClick={() => replyReset()}
                           >
-                            <Translate id="feedbackCommentPost.new_comment" />
+                            <Translate id='feedbackCommentPost.new_comment' />
                           </span>
                         </p>
                       )}
-                      <div className="ui info message mini form-explanation">
+                      <div className='ui info message mini form-explanation'>
                         {translate('feedbackPost.form_fields.markdown_supported')}
                       </div>
                       <textarea
@@ -74,14 +74,14 @@ const FeedbackCommentPost = ({
                         placeholder={translate('feedbackCommentPost.write_comment')}
                       />
 
-                      <div className="form-error">
+                      <div className='form-error'>
                         {meta.error && meta.touched && <span>{meta.error}</span>}
                       </div>
                     </div>
                   )}
                 </Field>
 
-                <Button type="submit" disabled={submitting || pristine || invalid}>
+                <Button type='submit' disabled={submitting || pristine || invalid}>
                   {translate('feedbackCommentPost.submit')}
                 </Button>
               </form>

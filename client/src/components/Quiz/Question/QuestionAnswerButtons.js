@@ -44,7 +44,7 @@ const QuestionAnswerButtons = ({ pristine, onAnswer, question }) => {
         style={{ textAlign: 'left' }}
         onClick={() => onAnswer(answerNo)}
         color={evalAnswer(question, answerNo)}
-        size="large"
+        size='large'
       >
         <div
           dangerouslySetInnerHTML={{

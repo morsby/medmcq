@@ -8,102 +8,132 @@
  *
  */
 
-(function($, window, document, undefined) {
+(function ($, window, document, undefined) {
   'use strict';
 
   $.isFunction =
     $.isFunction ||
-    function(obj) {
+    function (obj) {
       return typeof obj === 'function' && typeof obj.nodeType !== 'number';
     };
 
   window =
-    typeof window != 'undefined' && window.Math == Math
+    typeof window !== 'undefined' && window.Math == Math
       ? window
-      : typeof self != 'undefined' && self.Math == Math
-      ? self
-      : Function('return this')();
+      : typeof self !== 'undefined' && self.Math == Math
+        ? self
+        : Function('return this')();
 
-  $.fn.shape = function(parameters) {
-    var $allModules = $(this),
-      $body = $('body'),
-      time = new Date().getTime(),
-      performance = [],
-      query = arguments[0],
-      methodInvoked = typeof query == 'string',
-      queryArguments = [].slice.call(arguments, 1),
-      requestAnimationFrame =
+  $.fn.shape = function (parameters) {
+    var $allModules = $(this);
+
+    var $body = $('body');
+
+    var time = new Date().getTime();
+
+    var performance = [];
+
+    var query = arguments[0];
+
+    var methodInvoked = typeof query === 'string';
+
+    var queryArguments = [].slice.call(arguments, 1);
+
+    var requestAnimationFrame =
         window.requestAnimationFrame ||
         window.mozRequestAnimationFrame ||
         window.webkitRequestAnimationFrame ||
         window.msRequestAnimationFrame ||
-        function(callback) {
+        function (callback) {
           setTimeout(callback, 0);
-        },
-      returnedValue;
+        };
 
-    $allModules.each(function() {
-      var moduleSelector = $allModules.selector || '',
-        settings = $.isPlainObject(parameters)
-          ? $.extend(true, {}, $.fn.shape.settings, parameters)
-          : $.extend({}, $.fn.shape.settings),
-        // internal aliases
-        namespace = settings.namespace,
-        selector = settings.selector,
-        error = settings.error,
-        className = settings.className,
-        // define namespaces for modules
-        eventNamespace = '.' + namespace,
-        moduleNamespace = 'module-' + namespace,
-        // selector cache
-        $module = $(this),
-        $sides = $module.find(selector.sides),
-        $side = $module.find(selector.side),
-        // private variables
-        nextIndex = false,
-        $activeSide,
-        $nextSide,
-        // standard module
-        element = this,
-        instance = $module.data(moduleNamespace),
-        module;
+    var returnedValue;
+
+    $allModules.each(function () {
+      var moduleSelector = $allModules.selector || '';
+
+      var settings = $.isPlainObject(parameters)
+        ? $.extend(true, {}, $.fn.shape.settings, parameters)
+        : $.extend({}, $.fn.shape.settings);
+
+      // internal aliases
+
+      var namespace = settings.namespace;
+
+      var selector = settings.selector;
+
+      var error = settings.error;
+
+      var className = settings.className;
+
+      // define namespaces for modules
+
+      var eventNamespace = '.' + namespace;
+
+      var moduleNamespace = 'module-' + namespace;
+
+      // selector cache
+
+      var $module = $(this);
+
+      var $sides = $module.find(selector.sides);
+
+      var $side = $module.find(selector.side);
+
+      // private variables
+
+      var nextIndex = false;
+
+      var $activeSide;
+
+      var $nextSide;
+
+      // standard module
+
+      var element = this;
+
+      var instance = $module.data(moduleNamespace);
+
+      var module;
 
       module = {
-        initialize: function() {
+        initialize: function () {
           module.verbose('Initializing module for', element);
           module.set.defaultSide();
           module.instantiate();
         },
 
-        instantiate: function() {
+        instantiate: function () {
           module.verbose('Storing instance of module', module);
           instance = module;
           $module.data(moduleNamespace, instance);
         },
 
-        destroy: function() {
+        destroy: function () {
           module.verbose('Destroying previous module for', element);
           $module.removeData(moduleNamespace).off(eventNamespace);
         },
 
-        refresh: function() {
+        refresh: function () {
           module.verbose('Refreshing selector cache for', element);
           $module = $(element);
           $sides = $(this).find(selector.shape);
           $side = $(this).find(selector.side);
         },
 
-        repaint: function() {
+        repaint: function () {
           module.verbose('Forcing repaint event');
-          var shape = $sides[0] || document.createElement('div'),
-            fakeAssignment = shape.offsetWidth;
+          var shape = $sides[0] || document.createElement('div');
+
+          var fakeAssignment = shape.offsetWidth;
         },
 
-        animate: function(propertyObject, callback) {
+        animate: function (propertyObject, callback) {
           module.verbose('Animating box with properties', propertyObject);
           callback =
             callback ||
-            function(event) {
+            function (event) {
               module.verbose('Executing animation callback');
               if (event !== undefined) {
                 event.stopPropagation();
@@ -117,7 +147,7 @@
             $module.addClass(className.animating);
             $sides.css(propertyObject).one(module.get.transitionEvent(), callback);
             module.set.duration(settings.duration);
-            requestAnimationFrame(function() {
+            requestAnimationFrame(function () {
               $module.addClass(className.animating);
               $activeSide.addClass(className.hidden);
             });
@@ -126,17 +156,17 @@
           }
         },
 
-        queue: function(method) {
+        queue: function (method) {
           module.debug('Queueing animation of', method);
-          $sides.one(module.get.transitionEvent(), function() {
+          $sides.one(module.get.transitionEvent(), function () {
             module.debug('Executing queued animation');
-            setTimeout(function() {
+            setTimeout(function () {
               $module.shape(method);
             }, 0);
           });
         },
 
-        reset: function() {
+        reset: function () {
           module.verbose('Animating states reset');
           $module
             .removeClass(className.animating)
@@ -155,16 +185,16 @@
         },
 
         is: {
-          complete: function() {
+          complete: function () {
             return $side.filter('.' + className.active)[0] == $nextSide[0];
           },
-          animating: function() {
+          animating: function () {
             return $module.hasClass(className.animating);
           }
         },
 
         set: {
-          defaultSide: function() {
+          defaultSide: function () {
             $activeSide = $module.find('.' + settings.className.active);
             $nextSide =
               $activeSide.next(selector.side).length > 0
@@ -175,9 +205,9 @@
             module.verbose('Next side set to', $nextSide);
           },
 
-          duration: function(duration) {
+          duration: function (duration) {
             duration = duration || settings.duration;
-            duration = typeof duration == 'number' ? duration + 'ms' : duration;
+            duration = typeof duration === 'number' ? duration + 'ms' : duration;
             module.verbose('Setting animation duration', duration);
             if (settings.duration || settings.duration === 0) {
               $sides.add($side).css({
@@ -190,36 +220,42 @@
             }
           },
 
-          currentStageSize: function() {
-            var $activeSide = $module.find('.' + settings.className.active),
-              width = $activeSide.outerWidth(true),
-              height = $activeSide.outerHeight(true);
+          currentStageSize: function () {
+            var $activeSide = $module.find('.' + settings.className.active);
+
+            var width = $activeSide.outerWidth(true);
+
+            var height = $activeSide.outerHeight(true);
             $module.css({
               width: width,
               height: height
             });
           },
 
-          stageSize: function() {
-            var $clone = $module.clone().addClass(className.loading),
-              $activeSide = $clone.find('.' + settings.className.active),
-              $nextSide = nextIndex
-                ? $clone.find(selector.side).eq(nextIndex)
-                : $activeSide.next(selector.side).length > 0
+          stageSize: function () {
+            var $clone = $module.clone().addClass(className.loading);
+
+            var $activeSide = $clone.find('.' + settings.className.active);
+
+            var $nextSide = nextIndex
+              ? $clone.find(selector.side).eq(nextIndex)
+              : $activeSide.next(selector.side).length > 0
                 ? $activeSide.next(selector.side)
-                : $clone.find(selector.side).first(),
-              newWidth =
+                : $clone.find(selector.side).first();
+
+            var newWidth =
                 settings.width == 'next'
                   ? $nextSide.outerWidth(true)
                   : settings.width == 'initial'
-                  ? $module.width()
-                  : settings.width,
-              newHeight =
+                    ? $module.width()
+                    : settings.width;
+
+            var newHeight =
                 settings.height == 'next'
                   ? $nextSide.outerHeight(true)
                   : settings.height == 'initial'
-                  ? $module.height()
-                  : settings.height;
+                    ? $module.height()
+                    : settings.height;
             $activeSide.removeClass(className.active);
             $nextSide.addClass(className.active);
             $clone.insertAfter($module);
@@ -234,7 +270,7 @@
             }
           },
 
-          nextSide: function(selector) {
+          nextSide: function (selector) {
             nextIndex = selector;
             $nextSide = $side.filter(selector);
             nextIndex = $side.index($nextSide);
@@ -245,7 +281,7 @@
             module.verbose('Next side manually set to', $nextSide);
           },
 
-          active: function() {
+          active: function () {
             module.verbose('Setting new side to active', $nextSide);
             $side.removeClass(className.active);
             $nextSide.addClass(className.active);
@@ -255,7 +291,7 @@
         },
 
         flip: {
-          up: function() {
+          up: function () {
             if (module.is.complete() && !module.is.animating() && !settings.allowRepeats) {
               module.debug('Side already visible', $nextSide);
               return;
@@ -271,7 +307,7 @@
             }
           },
 
-          down: function() {
+          down: function () {
             if (module.is.complete() && !module.is.animating() && !settings.allowRepeats) {
               module.debug('Side already visible', $nextSide);
               return;
@@ -287,7 +323,7 @@
             }
           },
 
-          left: function() {
+          left: function () {
             if (module.is.complete() && !module.is.animating() && !settings.allowRepeats) {
               module.debug('Side already visible', $nextSide);
               return;
@@ -303,7 +339,7 @@
             }
           },
 
-          right: function() {
+          right: function () {
             if (module.is.complete() && !module.is.animating() && !settings.allowRepeats) {
               module.debug('Side already visible', $nextSide);
               return;
@@ -319,7 +355,7 @@
             }
           },
 
-          over: function() {
+          over: function () {
             if (module.is.complete() && !module.is.animating() && !settings.allowRepeats) {
               module.debug('Side already visible', $nextSide);
               return;
@@ -334,7 +370,7 @@
             }
           },
 
-          back: function() {
+          back: function () {
             if (module.is.complete() && !module.is.animating() && !settings.allowRepeats) {
               module.debug('Side already visible', $nextSide);
               return;
@@ -352,7 +388,7 @@
 
         get: {
           transform: {
-            up: function() {
+            up: function () {
               var translate = {
                 y: -(($activeSide.outerHeight(true) - $nextSide.outerHeight(true)) / 2),
                 z: -($activeSide.outerHeight(true) / 2)
@@ -367,7 +403,7 @@
               };
             },
 
-            down: function() {
+            down: function () {
               var translate = {
                 y: -(($activeSide.outerHeight(true) - $nextSide.outerHeight(true)) / 2),
                 z: -($activeSide.outerHeight(true) / 2)
@@ -382,7 +418,7 @@
               };
             },
 
-            left: function() {
+            left: function () {
               var translate = {
                 x: -(($activeSide.outerWidth(true) - $nextSide.outerWidth(true)) / 2),
                 z: -($activeSide.outerWidth(true) / 2)
@@ -397,7 +433,7 @@
               };
             },
 
-            right: function() {
+            right: function () {
               var translate = {
                 x: -(($activeSide.outerWidth(true) - $nextSide.outerWidth(true)) / 2),
                 z: -($activeSide.outerWidth(true) / 2)
@@ -412,7 +448,7 @@
               };
             },
 
-            over: function() {
+            over: function () {
               var translate = {
                 x: -(($activeSide.outerWidth(true) - $nextSide.outerWidth(true)) / 2)
               };
@@ -421,7 +457,7 @@
               };
             },
 
-            back: function() {
+            back: function () {
               var translate = {
                 x: -(($activeSide.outerWidth(true) - $nextSide.outerWidth(true)) / 2)
               };
@@ -431,15 +467,17 @@
             }
           },
 
-          transitionEvent: function() {
-            var element = document.createElement('element'),
-              transitions = {
-                transition: 'transitionend',
-                OTransition: 'oTransitionEnd',
-                MozTransition: 'transitionend',
-                WebkitTransition: 'webkitTransitionEnd'
-              },
-              transition;
+          transitionEvent: function () {
+            var element = document.createElement('element');
+
+            var transitions = {
+              transition: 'transitionend',
+              OTransition: 'oTransitionEnd',
+              MozTransition: 'transitionend',
+              WebkitTransition: 'webkitTransitionEnd'
+            };
+
+            var transition;
             for (transition in transitions) {
               if (element.style[transition] !== undefined) {
                 return transitions[transition];
@@ -447,7 +485,7 @@
             }
           },
 
-          nextSide: function() {
+          nextSide: function () {
             return $activeSide.next(selector.side).length > 0
               ? $activeSide.next(selector.side)
               : $module.find(selector.side).first();
@@ -455,7 +493,7 @@
         },
 
         stage: {
-          above: function() {
+          above: function () {
             var box = {
               origin: ($activeSide.outerHeight(true) - $nextSide.outerHeight(true)) / 2,
               depth: {
@@ -476,7 +514,7 @@
             });
           },
 
-          below: function() {
+          below: function () {
             var box = {
               origin: ($activeSide.outerHeight(true) - $nextSide.outerHeight(true)) / 2,
               depth: {
@@ -497,18 +535,19 @@
             });
           },
 
-          left: function() {
+          left: function () {
             var height = {
-                active: $activeSide.outerWidth(true),
-                next: $nextSide.outerWidth(true)
-              },
-              box = {
-                origin: (height.active - height.next) / 2,
-                depth: {
-                  active: height.next / 2,
-                  next: height.active / 2
-                }
-              };
+              active: $activeSide.outerWidth(true),
+              next: $nextSide.outerWidth(true)
+            };
+
+            var box = {
+              origin: (height.active - height.next) / 2,
+              depth: {
+                active: height.next / 2,
+                next: height.active / 2
+              }
+            };
             module.verbose('Setting the initial animation position as left', $nextSide, box);
             $sides.css({
               transform: 'translateZ(-' + box.depth.active + 'px)'
@@ -522,18 +561,19 @@
             });
           },
 
-          right: function() {
+          right: function () {
             var height = {
-                active: $activeSide.outerWidth(true),
-                next: $nextSide.outerWidth(true)
-              },
-              box = {
-                origin: (height.active - height.next) / 2,
-                depth: {
-                  active: height.next / 2,
-                  next: height.active / 2
-                }
-              };
+              active: $activeSide.outerWidth(true),
+              next: $nextSide.outerWidth(true)
+            };
+
+            var box = {
+              origin: (height.active - height.next) / 2,
+              depth: {
+                active: height.next / 2,
+                next: height.active / 2
+              }
+            };
             module.verbose('Setting the initial animation position as left', $nextSide, box);
             $sides.css({
               transform: 'translateZ(-' + box.depth.active + 'px)'
@@ -547,18 +587,19 @@
             });
           },
 
-          behind: function() {
+          behind: function () {
             var height = {
-                active: $activeSide.outerWidth(true),
-                next: $nextSide.outerWidth(true)
-              },
-              box = {
-                origin: (height.active - height.next) / 2,
-                depth: {
-                  active: height.next / 2,
-                  next: height.active / 2
-                }
-              };
+              active: $activeSide.outerWidth(true),
+              next: $nextSide.outerWidth(true)
+            };
+
+            var box = {
+              origin: (height.active - height.next) / 2,
+              depth: {
+                active: height.next / 2,
+                next: height.active / 2
+              }
+            };
             module.verbose('Setting the initial animation position as behind', $nextSide, box);
             $activeSide.css({
               transform: 'rotateY(0deg)'
@@ -569,7 +610,7 @@
             });
           }
         },
-        setting: function(name, value) {
+        setting: function (name, value) {
           module.debug('Changing setting', name, value);
           if ($.isPlainObject(name)) {
             $.extend(true, settings, name);
@@ -583,7 +624,7 @@
             return settings[name];
           }
         },
-        internal: function(name, value) {
+        internal: function (name, value) {
           if ($.isPlainObject(name)) {
             $.extend(true, module, name);
           } else if (value !== undefined) {
@@ -592,7 +633,7 @@
             return module[name];
           }
         },
-        debug: function() {
+        debug: function () {
           if (!settings.silent && settings.debug) {
             if (settings.performance) {
               module.performance.log(arguments);
@@ -606,7 +647,7 @@
             }
           }
         },
-        verbose: function() {
+        verbose: function () {
           if (!settings.silent && settings.verbose && settings.debug) {
             if (settings.performance) {
               module.performance.log(arguments);
@@ -620,7 +661,7 @@
             }
           }
         },
-        error: function() {
+        error: function () {
           if (!settings.silent) {
             module.error = Function.prototype.bind.call(
               console.error,
@@ -631,7 +672,7 @@
           }
         },
         performance: {
-          log: function(message) {
+          log: function (message) {
             var currentTime, executionTime, previousTime;
             if (settings.performance) {
               currentTime = new Date().getTime();
@@ -648,12 +689,13 @@
             clearTimeout(module.performance.timer);
             module.performance.timer = setTimeout(module.performance.display, 500);
           },
-          display: function() {
-            var title = settings.name + ':',
-              totalTime = 0;
+          display: function () {
+            var title = settings.name + ':';
+
+            var totalTime = 0;
             time = false;
             clearTimeout(module.performance.timer);
-            $.each(performance, function(index, data) {
+            $.each(performance, function (index, data) {
               totalTime += data['Execution Time'];
             });
             title += ' ' + totalTime + 'ms';
@@ -671,7 +713,7 @@
               if (console.table) {
                 console.table(performance);
               } else {
-                $.each(performance, function(index, data) {
+                $.each(performance, function (index, data) {
                   console.log(data['Name'] + ': ' + data['Execution Time'] + 'ms');
                 });
               }
@@ -680,17 +722,20 @@
             performance = [];
           }
         },
-        invoke: function(query, passedArguments, context) {
-          var object = instance,
-            maxDepth,
-            found,
-            response;
+        invoke: function (query, passedArguments, context) {
+          var object = instance;
+
+          var maxDepth;
+
+          var found;
+
+          var response;
           passedArguments = passedArguments || queryArguments;
           context = element || context;
-          if (typeof query == 'string' && object !== undefined) {
+          if (typeof query === 'string' && object !== undefined) {
             query = query.split(/[\. ]/);
             maxDepth = query.length - 1;
-            $.each(query, function(depth, value) {
+            $.each(query, function (depth, value) {
               var camelCaseValue =
                 depth != maxDepth
                   ? value + query[depth + 1].charAt(0).toUpperCase() + query[depth + 1].slice(1)
@@ -771,8 +816,8 @@
     height: 'initial',
 
     // callback occurs on side change
-    beforeChange: function() {},
-    onChange: function() {},
+    beforeChange: function () {},
+    onChange: function () {},
 
     // allow animation to same side
     allowRepeats: false,

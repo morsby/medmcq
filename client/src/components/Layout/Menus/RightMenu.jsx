@@ -20,14 +20,15 @@ const RightMenu = (props) => {
   };
 
   const generateFlag = (lang) => {
-    if (lang.code !== props.activeLanguage)
+    if (lang.code !== props.activeLanguage) {
       return (
         <Menu.Item onClick={() => changeLang(lang.code)} key={lang.code}>
           <div>
-            <Flag style={{ textAlign: 'center' }} country={lang.code.toUpperCase()} size="20" />
+            <Flag style={{ textAlign: 'center' }} country={lang.code.toUpperCase()} size='20' />
           </div>
         </Menu.Item>
       );
+    }
   };
 
   if (user) {
@@ -37,7 +38,7 @@ const RightMenu = (props) => {
         <Menu.Item onClick={() => onNavigation('profile')}>
           <strong>
             <Translate
-              id="header.greeting"
+              id='header.greeting'
               data={{
                 user: user.username[0].toUpperCase() + user.username.substring(1)
               }}
@@ -46,7 +47,7 @@ const RightMenu = (props) => {
         </Menu.Item>
         <Menu.Item>
           <Button inverted onClick={() => (window.location.href = '/api/auth/logout')}>
-            <Translate id="header.logout" />
+            <Translate id='header.logout' />
           </Button>
         </Menu.Item>
       </>
@@ -56,14 +57,14 @@ const RightMenu = (props) => {
       <>
         {languages.map((lang) => generateFlag(lang))}
         <Menu.Item onClick={() => onNavigation('login')}>
-          <Icon name="doctor" /> <Translate id="header.login" />
+          <Icon name='doctor' /> <Translate id='header.login' />
         </Menu.Item>
       </>
     );
   }
 };
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
     user: state.auth.user,
     activeLanguage: state.settings.language

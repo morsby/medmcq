@@ -13,30 +13,31 @@ import { Dimmer, Loader, Button } from 'semantic-ui-react';
 class QuizLoader extends Component {
   state = { seconds: 0 };
 
-  componentDidMount() {
+  componentDidMount () {
     this.interval = setInterval(() => this.tick(), 5000);
   }
-  componentWillUnmount() {
+  componentWillUnmount () {
     clearInterval(this.interval);
   }
 
-  tick() {
+  tick () {
     this.setState((prevState) => ({
       seconds: prevState.seconds + 1
     }));
   }
 
-  render() {
-    let longWait = '',
-      { handleRetry, handleAbort, text } = this.props;
+  render () {
+    let longWait = '';
+
+    let { handleRetry, handleAbort, text } = this.props;
     if (this.state.seconds >= 2) {
       longWait = (
         <div style={{ margin: '5px 0' }}>
           <p>{text.long_wait}</p>
-          <Button basic color="blue" onClick={handleRetry}>
+          <Button basic color='blue' onClick={handleRetry}>
             {text.retry}
           </Button>
-          <Button basic color="yellow" onClick={handleAbort}>
+          <Button basic color='yellow' onClick={handleAbort}>
             {text.abort}
           </Button>
         </div>

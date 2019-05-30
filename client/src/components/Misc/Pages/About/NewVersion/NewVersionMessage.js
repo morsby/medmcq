@@ -14,11 +14,11 @@ import { version } from '../../../../../version';
 
 const LinkToAbout = () => (
   <Link to={urls.about}>
-    <Translate id="newVersionOutNow.aboutLink" />
+    <Translate id='newVersionOutNow.aboutLink' />
   </Link>
 );
 
-const NewVersionMessage = ({ addTranslation, prev_version, changeSettings }) => {
+const NewVersionMessage = ({ addTranslation, prevVersion, changeSettings }) => {
   useEffect(() => {
     addTranslation(newVersionMessageTranslations);
   });
@@ -27,14 +27,14 @@ const NewVersionMessage = ({ addTranslation, prev_version, changeSettings }) => 
     changeSettings({ type: 'version', value: version });
   };
 
-  if (version !== prev_version) {
+  if (version !== prevVersion) {
     return (
       <div style={{ position: 'fixed', width: '80%', bottom: '15px', left: '10%', zIndex: '999' }}>
         <Message info onDismiss={handleDismiss} attached floating>
           <Message.Header>
-            <Translate id="newVersionOutNow.header" />
+            <Translate id='newVersionOutNow.header' />
           </Message.Header>
-          <Translate id="newVersionOutNow.body" data={{ nav: <LinkToAbout /> }} />
+          <Translate id='newVersionOutNow.body' data={{ nav: <LinkToAbout /> }} />
         </Message>
       </div>
     );
@@ -50,7 +50,7 @@ NewVersionMessage.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  prev_version: state.settings.version
+  prevVersion: state.settings.version
 });
 
 export default withLocalize(

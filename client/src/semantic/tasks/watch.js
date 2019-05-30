@@ -3,86 +3,108 @@
 *******************************/
 
 var
-  gulp         = require('gulp-help')(require('gulp')),
+  gulp = require('gulp-help')(require('gulp'));
 
-  // node dependencies
-  console      = require('better-console'),
-  fs           = require('fs'),
+// node dependencies
 
-  // gulp dependencies
-  autoprefixer = require('gulp-autoprefixer'),
-  chmod        = require('gulp-chmod'),
-  clone        = require('gulp-clone'),
-  gulpif       = require('gulp-if'),
-  less         = require('gulp-less'),
-  minifyCSS    = require('gulp-clean-css'),
-  plumber      = require('gulp-plumber'),
-  print        = require('gulp-print').default,
-  rename       = require('gulp-rename'),
-  replace      = require('gulp-replace'),
-  uglify       = require('gulp-uglify'),
-  replaceExt   = require('replace-ext'),
-  watch        = require('gulp-watch'),
+var console = require('better-console');
 
-  // user config
-  config       = require('./config/user'),
+var fs = require('fs');
 
-  // task config
-  tasks        = require('./config/tasks'),
-  install      = require('./config/project/install'),
+// gulp dependencies
 
-  // shorthand
-  globs        = config.globs,
-  assets       = config.paths.assets,
-  output       = config.paths.output,
-  source       = config.paths.source,
+var autoprefixer = require('gulp-autoprefixer');
 
-  banner       = tasks.banner,
-  comments     = tasks.regExp.comments,
-  log          = tasks.log,
-  settings     = tasks.settings
+var chmod = require('gulp-chmod');
+
+var clone = require('gulp-clone');
+
+var gulpif = require('gulp-if');
+
+var less = require('gulp-less');
+
+var minifyCSS = require('gulp-clean-css');
+
+var plumber = require('gulp-plumber');
+
+var print = require('gulp-print').default;
+
+var rename = require('gulp-rename');
+
+var replace = require('gulp-replace');
+
+var uglify = require('gulp-uglify');
+
+var replaceExt = require('replace-ext');
+
+var watch = require('gulp-watch');
+
+// user config
+
+var config = require('./config/user');
+
+// task config
+
+var tasks = require('./config/tasks');
+
+var install = require('./config/project/install');
+
+// shorthand
+
+var globs = config.globs;
+
+var assets = config.paths.assets;
+
+var output = config.paths.output;
+
+var source = config.paths.source;
+
+var banner = tasks.banner;
+
+var comments = tasks.regExp.comments;
+
+var log = tasks.log;
+
+var settings = tasks.settings
 
 ;
 
 // add tasks referenced using gulp.run (sub-tasks)
-if(config.rtl) {
+if (config.rtl) {
   require('./collections/rtl')(gulp);
 }
 require('./collections/internal')(gulp);
 
-
 // export task
-module.exports = function(callback) {
-
-  if( !install.isSetup() ) {
+module.exports = function (callback) {
+  if (!install.isSetup()) {
     console.error('Cannot watch files. Run "gulp install" to set-up Semantic');
     return;
   }
 
   // check for right-to-left (RTL) language
-  if(config.rtl == 'both') {
+  if (config.rtl == 'both') {
     gulp.start('watch-rtl');
   }
-  if(config.rtl === true || config.rtl === 'Yes') {
+  if (config.rtl === true || config.rtl === 'Yes') {
     gulp.start('watch-rtl');
     return;
   }
 
-  //console.clear();
+  // console.clear();
   console.log('Watching source files for changes');
 
-  /*--------------
+  /* --------------
       Watch CSS
-  ---------------*/
+  --------------- */
 
   gulp
     .watch([
       source.config,
-      source.definitions   + '/**/*.less',
-      source.site          + '/**/*.{overrides,variables}',
-      source.themes        + '/**/*.{overrides,variables}'
-    ], function(file) {
-
+      source.definitions + '/**/*.less',
+      source.site + '/**/*.{overrides,variables}',
+      source.themes + '/**/*.{overrides,variables}'
+    ], function (file) {
       var
         lessPath,
 
@@ -101,43 +123,39 @@ module.exports = function(callback) {
         .pipe(print(log.modified))
       ;
 
-      /*--------------
+      /* --------------
          Find Source
-      ---------------*/
+      --------------- */
 
       // recompile on *.override , *.variable change
-      isConfig        = (file.path.indexOf('theme.config') !== -1 || file.path.indexOf('site.variables') !== -1);
+      isConfig = (file.path.indexOf('theme.config') !== -1 || file.path.indexOf('site.variables') !== -1);
       isPackagedTheme = (file.path.indexOf(source.themes) !== -1);
-      isSiteTheme     = (file.path.indexOf(source.site) !== -1);
-      isDefinition    = (file.path.indexOf(source.definitions) !== -1);
+      isSiteTheme = (file.path.indexOf(source.site) !== -1);
+      isDefinition = (file.path.indexOf(source.definitions) !== -1);
 
-      if(isConfig) {
+      if (isConfig) {
         console.info('Rebuilding all UI');
         // impossible to tell which file was updated in theme.config, rebuild all
         gulp.start('build-css');
         return;
-      }
-      else if(isPackagedTheme) {
+      } else if (isPackagedTheme) {
         console.log('Change detected in packaged theme');
         lessPath = replaceExt(file.path, '.less');
         lessPath = lessPath.replace(tasks.regExp.theme, source.definitions);
-      }
-      else if(isSiteTheme) {
+      } else if (isSiteTheme) {
         console.log('Change detected in site theme');
         lessPath = replaceExt(file.path, '.less');
         lessPath = lessPath.replace(source.site, source.definitions);
-      }
-      else {
+      } else {
         console.log('Change detected in definition');
         lessPath = file.path;
       }
 
-      /*--------------
+      /* --------------
          Create CSS
-      ---------------*/
+      --------------- */
 
-      if( fs.existsSync(lessPath) ) {
-
+      if (fs.existsSync(lessPath)) {
         // unified css stream
         stream = gulp.src(lessPath)
           .pipe(plumber(settings.plumber.less))
@@ -154,14 +172,14 @@ module.exports = function(callback) {
 
         // use 2 concurrent streams from same pipe
         uncompressedStream = stream.pipe(clone());
-        compressedStream   = stream.pipe(clone());
+        compressedStream = stream.pipe(clone());
 
         uncompressedStream
           .pipe(plumber())
           .pipe(replace(assets.source, assets.uncompressed))
           .pipe(gulp.dest(output.uncompressed))
           .pipe(print(log.created))
-          .on('end', function() {
+          .on('end', function () {
             gulp.start('package uncompressed css');
           })
         ;
@@ -173,25 +191,24 @@ module.exports = function(callback) {
           .pipe(rename(settings.rename.minCSS))
           .pipe(gulp.dest(output.compressed))
           .pipe(print(log.created))
-          .on('end', function() {
+          .on('end', function () {
             gulp.start('package compressed css');
           })
         ;
-      }
-      else {
+      } else {
         console.log('Cannot find UI definition at path', lessPath);
       }
     })
   ;
 
-  /*--------------
+  /* --------------
       Watch JS
-  ---------------*/
+  --------------- */
 
   gulp
     .watch([
-      source.definitions   + '/**/*.js'
-    ], function(file) {
+      source.definitions + '/**/*.js'
+    ], function (file) {
       gulp.src(file.path)
         .pipe(plumber())
         .pipe(replace(comments.license.in, comments.license.out))
@@ -202,7 +219,7 @@ module.exports = function(callback) {
         .pipe(rename(settings.rename.minJS))
         .pipe(gulp.dest(output.compressed))
         .pipe(print(log.created))
-        .on('end', function() {
+        .on('end', function () {
           gulp.start('package compressed js');
           gulp.start('package uncompressed js');
         })
@@ -210,15 +227,15 @@ module.exports = function(callback) {
     })
   ;
 
-  /*--------------
+  /* --------------
     Watch Assets
-  ---------------*/
+  --------------- */
 
   // only copy assets that match component names (or their plural)
   gulp
     .watch([
-      source.themes   + '/**/assets/**/*.*'
-    ], function(file) {
+      source.themes + '/**/assets/**/*.*'
+    ], function (file) {
       // copy assets
       gulp.src(file.path, { base: source.themes })
         .pipe(gulpif(config.hasPermission, chmod(config.permission)))
@@ -227,5 +244,4 @@ module.exports = function(callback) {
       ;
     })
   ;
-
 };

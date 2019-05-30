@@ -4,23 +4,29 @@
 
 var
   // npm dependencies
-  extend          = require('extend'),
-  fs              = require('fs'),
-  path            = require('path'),
-  requireDotFile  = require('require-dot-file'),
+  extend = require('extend');
 
-  // semantic.json defaults
-  defaults        = require('./defaults'),
-  config          = require('./project/config'),
+var fs = require('fs');
 
-  // Final config object
-  gulpConfig = {},
+var path = require('path');
 
-  // semantic.json settings
-  userConfig
+var requireDotFile = require('require-dot-file');
+
+// semantic.json defaults
+
+var defaults = require('./defaults');
+
+var config = require('./project/config');
+
+// Final config object
+
+var gulpConfig = {};
+
+// semantic.json settings
+
+var userConfig
 
 ;
-
 
 /*******************************
           User Config
@@ -29,9 +35,8 @@ var
 try {
   // looks for config file across all parent directories
   userConfig = requireDotFile('semantic.json');
-}
-catch(error) {
-  if(error.code === 'MODULE_NOT_FOUND') {
+} catch (error) {
+  if (error.code === 'MODULE_NOT_FOUND') {
     console.error('No semantic.json config found');
   }
 }
@@ -49,10 +54,8 @@ gulpConfig = (!userConfig)
 // adds calculated values
 config.addDerivedValues(gulpConfig);
 
-
 /*******************************
              Export
 *******************************/
 
 module.exports = gulpConfig;
-

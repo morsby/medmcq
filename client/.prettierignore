@@ -1,7 +1,0 @@
-**/node_modules/* 
-
-**/semantic/*
-
-# Ignore built files except build/index.js
-build/*
-!build/index.js

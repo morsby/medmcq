@@ -4,41 +4,42 @@
 
 var
   // dependencies
-  gulp         = require('gulp-help')(require('gulp')),
-  runSequence  = require('run-sequence'),
+  gulp = require('gulp-help')(require('gulp'));
 
-  // config
-  config       = require('./config/user'),
-  install      = require('./config/project/install'),
+var runSequence = require('run-sequence');
 
-  // task sequence
-  tasks        = []
+// config
+
+var config = require('./config/user');
+
+var install = require('./config/project/install');
+
+// task sequence
+
+var tasks = []
 ;
 
-
 // sub-tasks
-if(config.rtl) {
+if (config.rtl) {
   require('./collections/rtl')(gulp);
 }
 require('./collections/build')(gulp);
 
-
-module.exports = function(callback) {
-
+module.exports = function (callback) {
   console.info('Building Semantic');
 
-  if( !install.isSetup() ) {
+  if (!install.isSetup()) {
     console.error('Cannot find semantic.json. Run "gulp install" to set-up Semantic');
     return 1;
   }
 
   // check for right-to-left (RTL) language
-  if(config.rtl === true || config.rtl === 'Yes') {
+  if (config.rtl === true || config.rtl === 'Yes') {
     gulp.start('build-rtl');
     return;
   }
 
-  if(config.rtl == 'both') {
+  if (config.rtl == 'both') {
     tasks.push('build-rtl');
   }
 

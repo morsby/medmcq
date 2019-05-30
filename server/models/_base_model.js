@@ -1,7 +1,7 @@
-import { DBErrors } from "objection-db-errors";
-const { Model } = require("objection");
-const visibilityPlugin = require("objection-visibility").default;
-export const hiddenCols = ["oldId", "createdAt", "updatedAt"];
+import { DBErrors } from 'objection-db-errors';
+const { Model } = require('objection');
+const visibilityPlugin = require('objection-visibility').default;
+export const hiddenCols = ['oldId', 'createdAt', 'updatedAt'];
 
 /**
  * BaseModel is the base model all other models are based on.
@@ -18,7 +18,7 @@ export default class BaseModel extends DBErrors(visibilityPlugin(Model)) {
    * columns to hide on output to JSON.
    * @type {Array}
    */
-  static get hidden() {
+  static get hidden () {
     return hiddenCols;
   }
 }
@@ -34,7 +34,7 @@ export class CustomQueryBuilder extends Model.QueryBuilder {
    * @param  {object} args The filters to apply to the eager
    * @return {object}      The eager method(?)
    */
-  eager(expr, args) {
+  eager (expr, args) {
     if (args) {
       this.mergeContext({ namedFilterArgs: args });
     }
@@ -47,7 +47,7 @@ export class CustomQueryBuilder extends Model.QueryBuilder {
    * @param  {object} args The filters to apply to the modify
    * @return {object}      The modify method(?)
    */
-  modify(expr, args) {
+  modify (expr, args) {
     if (args) {
       this.mergeContext({ namedFilterArgs: args });
     }
@@ -59,7 +59,7 @@ export class CustomQueryBuilder extends Model.QueryBuilder {
    * @param  {string} filterName The name of the filter
    * @return {object}            The filters
    */
-  namedFilterArgs(filterName) {
+  namedFilterArgs (filterName) {
     return (this.context().namedFilterArgs || {})[filterName];
   }
 }
@@ -75,8 +75,8 @@ export const modifiers = {
    * @return {function}         A QueryBuilder instance
    */
   belongsToUser: builder => {
-    const args = builder.namedFilterArgs("userId");
-    return builder.where("userId", args);
+    const args = builder.namedFilterArgs('userId');
+    return builder.where('userId', args);
   },
 
   /**
@@ -86,27 +86,27 @@ export const modifiers = {
    * @return {function}         A builder instance with the joins
    */
   filterOnMetadata: builder => {
-    const type = builder.namedFilterArgs("type");
-    const typeSingular = type === "specialties" ? "specialty" : "tag";
-    const ids = builder.namedFilterArgs("ids");
+    const type = builder.namedFilterArgs('type');
+    const typeSingular = type === 'specialties' ? 'specialty' : 'tag';
+    const ids = builder.namedFilterArgs('ids');
     let voteModel;
-    if (type === "specialties") {
-      voteModel = require("./question_specialty_vote");
-    } else if (type === "tags") {
-      voteModel = require("./question_tag_vote");
+    if (type === 'specialties') {
+      voteModel = require('./question_specialty_vote');
+    } else if (type === 'tags') {
+      voteModel = require('./question_tag_vote');
     }
 
     return builder
       .rightJoin(
         voteModel
           .query()
-          .modify("active")
+          .modify('active')
           .as(type),
-        "Question.id",
+        'Question.id',
         `${type}.questionId`
       )
-      .select("Question.*")
-      .groupBy("question.id")
+      .select('Question.*')
+      .groupBy('question.id')
       .whereIn(`${type}.${typeSingular}_id`, ids);
   },
   /**
@@ -120,38 +120,38 @@ export const modifiers = {
     let model = builder._modelClass;
     let tableName = model.name;
 
-    let type = tableName.toLowerCase().includes("specialty")
-      ? "specialty"
-      : "tag";
+    let type = tableName.toLowerCase().includes('specialty')
+      ? 'specialty'
+      : 'tag';
 
     return builder
       .select(
         `${tableName}.questionId`,
         `${tableName}.${type}Id`,
-        "maxVotes.maxVotes as maxVotes",
+        'maxVotes.maxVotes as maxVotes',
         `${type}.name as ${type}Name`
       )
-      .count("* as votes")
+      .count('* as votes')
       .join(
         model
           .query()
-          .max("counter.count as maxVotes")
-          .select("questionId as questionIdx")
+          .max('counter.count as maxVotes')
+          .select('questionId as questionIdx')
           .from(
             model
               .query()
-              .count("* as count")
-              .select("questionId", `${type}Id`)
-              .groupBy("questionId", `${type}Id`)
-              .as("counter")
+              .count('* as count')
+              .select('questionId', `${type}Id`)
+              .groupBy('questionId', `${type}Id`)
+              .as('counter')
           )
-          .groupBy("questionIdx")
-          .as("maxVotes"),
+          .groupBy('questionIdx')
+          .as('maxVotes'),
         `${tableName}.questionId`,
-        "maxVotes.questionIdx"
+        'maxVotes.questionIdx'
       )
       .groupBy(`${tableName}.questionId`, `${tableName}.${type}Id`)
       .joinRelation(`${type}`)
-      .havingRaw("votes >= 0.5*max_votes");
+      .havingRaw('votes >= 0.5*max_votes');
   }
 };

@@ -5,8 +5,9 @@ import marked from 'marked';
 import { Card, Button, Icon, Label } from 'semantic-ui-react';
 
 const FeedbackSingleContent = ({ feedback, votedFor, handleVote }) => {
-  let votedUp = votedFor && votedFor.val === 1,
-    votedDown = votedFor && votedFor.val === -1;
+  let votedUp = votedFor && votedFor.val === 1;
+
+  let votedDown = votedFor && votedFor.val === -1;
 
   return (
     <Card fluid>
@@ -21,11 +22,11 @@ const FeedbackSingleContent = ({ feedback, votedFor, handleVote }) => {
       </Card.Content>
       {feedback._id && (
         <Card.Content extra>
-          <Button as="div" labelPosition="right">
-            <Button color="red">
-              <Icon name="heart" />
+          <Button as='div' labelPosition='right'>
+            <Button color='red'>
+              <Icon name='heart' />
             </Button>
-            <Label as="a" basic color="red" pointing="left">
+            <Label as='a' basic color='red' pointing='left'>
               {feedback.votes}
             </Label>
           </Button>
@@ -38,7 +39,7 @@ const FeedbackSingleContent = ({ feedback, votedFor, handleVote }) => {
             }}
             disabled={votedDown}
           >
-            <span role="img" aria-label="thumbs up">
+            <span role='img' aria-label='thumbs up'>
               👍
             </span>
           </Button>
@@ -50,7 +51,7 @@ const FeedbackSingleContent = ({ feedback, votedFor, handleVote }) => {
             }}
             disabled={votedUp}
           >
-            <span role="img" aria-label="thumbs down">
+            <span role='img' aria-label='thumbs down'>
               👎
             </span>
           </Button>

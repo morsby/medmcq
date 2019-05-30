@@ -45,7 +45,7 @@ import Sidebar from './components/Layout/Sidebar';
 import Footer from './components/Layout/Footer';
 
 class App extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
 
     // Force refresh af semestre på reload:
@@ -67,15 +67,15 @@ class App extends Component {
       }
     });
   }
-  render() {
+  render () {
     return (
       <BrowserRouter>
         <ScrollToTop>
-          <div id="container">
+          <div id='container'>
             <Header />
             <Sidebar>
               <NewVersionMessage />
-              <div id="main-content">
+              <div id='main-content'>
                 <Switch>
                   <Route path={urls.about} component={About} />
                   <Route path={urls.contact} component={Contact} />
@@ -83,12 +83,12 @@ class App extends Component {
                   <Route path={urls.signup} component={Signup} />
                   <Route path={urls.login} component={Login} />
                   <Route path={urls.logout} component={Logout} />
-                  <PrivateRoute isLoggedIn={true} path={urls.editProfile} component={EditProfile} />
+                  <PrivateRoute isLoggedIn path={urls.editProfile} component={EditProfile} />
                   <PrivateRoute path={urls.profile} component={Profile} />
                   <Route path={urls.forgotPassword} component={ForgotPassword} />
                   <Route path={`${urls.resetPassword}/:token`} component={ResetPassword} />
-                  <Route path="/print" component={Print} />
-                  <Route exact path="/" component={Selection} />
+                  <Route path='/print' component={Print} />
+                  <Route exact path='/' component={Selection} />
                   <Route component={ErrorPage} />
                 </Switch>
               </div>

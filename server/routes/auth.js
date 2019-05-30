@@ -1,7 +1,7 @@
-import express from "express";
-import passport from "passport";
-import createResponse from "./_swaggerComponents";
-import { permit } from "../middleware/permission";
+import express from 'express';
+import passport from 'passport';
+import createResponse from './_swaggerComponents';
+import { permit } from '../middleware/permission';
 const router = express.Router();
 /**
  * @swagger
@@ -25,7 +25,7 @@ const router = express.Router();
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   res.json(req.user || null);
 });
 
@@ -69,8 +69,8 @@ router.get("/", async (req, res) => {
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.post("/", (req, res, next) => {
-  passport.authenticate("local", (err, user, info) => {
+router.post('/', (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
     if (err) {
       return next(err);
     }
@@ -78,15 +78,15 @@ router.post("/", (req, res, next) => {
       req.session = null;
       return res
         .status(401)
-        .json(createResponse("LoginFailed", "Login failed."));
+        .json(createResponse('LoginFailed', 'Login failed.'));
     }
-    req.logIn(user, function(err) {
+    req.logIn(user, function (err) {
       if (err) {
         return next(err);
       }
       let { username, id } = user;
       return res.json(
-        createResponse("LoginSuccess", "Logged in succesfully.", {
+        createResponse('LoginSuccess', 'Logged in succesfully.', {
           username,
           id
         })
@@ -120,10 +120,10 @@ router.post("/", (req, res, next) => {
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.get("/logout", permit(), function(req, res) {
+router.get('/logout', permit(), function (req, res) {
   req.logout();
   req.session = null;
-  res.json(createResponse("LogoutSucess", "Logged out succesfully."));
+  res.json(createResponse('LogoutSucess', 'Logged out succesfully.'));
   // res.redirect("/logout");
 });
 

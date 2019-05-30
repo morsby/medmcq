@@ -21,23 +21,23 @@ class ForgotPassword extends Component {
     this.props.forgotPassword(email, (data) => this.setState({ message: data, email: '' }));
   };
 
-  render() {
+  render () {
     let { message } = this.state;
     return (
-      <div className="flex-container">
-        <Container className="content">
+      <div className='flex-container'>
+        <Container className='content'>
           <h3>
-            <Translate id="forgotPassword.header" />
+            <Translate id='forgotPassword.header' />
           </h3>
           <p>
-            <Translate id="forgotPassword.guide" />
+            <Translate id='forgotPassword.guide' />
           </p>
           <Form onSubmit={this.handleSubmit}>
             <Form.Field>
               <label>E-mail</label>
               <Form.Input
-                name="email"
-                placeholder="E-mail"
+                name='email'
+                placeholder='E-mail'
                 onChange={this.handleChange}
                 value={this.state.email}
               />
@@ -47,7 +47,7 @@ class ForgotPassword extends Component {
                 {message.data}
               </Message>
             )}
-            <Button type="submit">Send email</Button>
+            <Button type='submit'>Send email</Button>
           </Form>
         </Container>
       </div>

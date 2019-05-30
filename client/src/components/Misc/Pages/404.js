@@ -12,13 +12,13 @@ import errorTranslation from './404Translation.json';
 const ErrorPage = ({ addTranslation }) => {
   addTranslation(errorTranslation);
   return (
-    <div className="flex-container">
-      <Container className="content">
+    <div className='flex-container'>
+      <Container className='content'>
         <h3>
-          <Translate id="404.header" />
+          <Translate id='404.header' />
         </h3>
         <p>
-          <Translate id="404.text" />
+          <Translate id='404.text' />
         </p>
       </Container>
     </div>

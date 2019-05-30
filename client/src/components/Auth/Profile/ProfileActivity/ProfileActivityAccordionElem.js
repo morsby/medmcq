@@ -13,7 +13,7 @@ const ProfileActivityAccordionElem = ({ title, children, index, active, handleCl
       index={index}
       onClick={() => (active ? handleClick(null) : handleClick(index))}
     >
-      <Icon name="dropdown" />
+      <Icon name='dropdown' />
       <div dangerouslySetInnerHTML={{ __html: marked(title) }} />
     </Accordion.Title>
     <Accordion.Content active={active}>{children}</Accordion.Content>

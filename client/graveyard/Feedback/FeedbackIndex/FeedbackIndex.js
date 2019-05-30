@@ -22,25 +22,25 @@ import Footer from '../../Layout/Footer';
  * Props ses i bunden, stammer alle fra redux.
  */
 class FeedbackIndex extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
 
     this.getSpecificFeedback = this.getSpecificFeedback.bind(this);
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.props.fetchFeedback();
   }
 
-  getSpecificFeedback(id) {
+  getSpecificFeedback (id) {
     this.props.fetchFeedbackSpecific(id);
     this.props.history.push(`${urls.feedback}/${id}`);
   }
 
-  render() {
+  render () {
     return (
-      <div className="flex-container">
-        <Container className="content">
+      <div className='flex-container'>
+        <Container className='content'>
           <FeedbackNavigation />
           <h1>Feedback</h1>
 
@@ -50,10 +50,10 @@ class FeedbackIndex extends Component {
           />
 
           <h2>
-            <Translate id="feedbackIndex.help_wanted.header" />
+            <Translate id='feedbackIndex.help_wanted.header' />
           </h2>
           <p>
-            <Translate id="feedbackIndex.help_wanted.body" />
+            <Translate id='feedbackIndex.help_wanted.body' />
           </p>
         </Container>
         <Footer />
@@ -87,7 +87,7 @@ FeedbackIndex.propTypes = {
   history: ReactRouterPropTypes.history
 };
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
     feedback: state.feedback.feedback
   };

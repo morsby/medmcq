@@ -1,16 +1,16 @@
-exports.up = function(knex, Promise) {
-  return knex.schema.createTable("semester_exam_set", table => {
+exports.up = function (knex, Promise) {
+  return knex.schema.createTable('semester_exam_set', table => {
     table.increments();
-    table.integer("year").notNullable();
-    table.string("season").notNullable();
+    table.integer('year').notNullable();
+    table.string('season').notNullable();
 
     table
-      .integer("semester_id")
+      .integer('semester_id')
       .unsigned()
       .notNullable()
-      .references("id")
-      .inTable("semester")
-      .onDelete("CASCADE");
+      .references('id')
+      .inTable('semester')
+      .onDelete('CASCADE');
 
     table.timestamps(true, true);
 
@@ -20,6 +20,6 @@ exports.up = function(knex, Promise) {
   });
 };
 
-exports.down = function(knex, Promise) {
-  return knex.schema.dropTableIfExists("semester_exam_set");
+exports.down = function (knex, Promise) {
+  return knex.schema.dropTableIfExists('semester_exam_set');
 };

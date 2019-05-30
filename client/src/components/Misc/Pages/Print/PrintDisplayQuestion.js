@@ -12,18 +12,19 @@ import { Translate } from 'react-localize-redux';
  */
 const PrintDisplayQuestion = (props) => {
   let {
-      question,
-      answer1,
-      answer2,
-      answer3,
-      correctAnswer,
-      image,
-      semester,
-      examYear,
-      examSeason,
-      n
-    } = props.questionProp,
-    text = subSupScript(question);
+    question,
+    answer1,
+    answer2,
+    answer3,
+    correctAnswer,
+    image,
+    semester,
+    examYear,
+    examSeason,
+    n
+  } = props.questionProp;
+
+  let text = subSupScript(question);
   answer1 = subSupScript(answer1);
   answer2 = subSupScript(answer2);
   answer3 = subSupScript(answer3);
@@ -37,8 +38,8 @@ const PrintDisplayQuestion = (props) => {
           __html: marked(text)
         }}
       />
-      {image && <img src={imageURL(image)} alt="billede til eksamensspørgsmål" />}
-      <ol type="A" className={props.showCorrect ? `correct-${correctAnswer}` : null}>
+      {image && <img src={imageURL(image)} alt='billede til eksamensspørgsmål' />}
+      <ol type='A' className={props.showCorrect ? `correct-${correctAnswer}` : null}>
         <li
           dangerouslySetInnerHTML={{
             __html: marked(answer1)
@@ -58,7 +59,7 @@ const PrintDisplayQuestion = (props) => {
 
       <Translate>
         {({ translate }) => (
-          <div className="print-metadata">
+          <div className='print-metadata'>
             {translate('print.metadata.from')} {getSemester(semester).name},{' '}
             {translate(`print.metadata.seasons.${examSeason}`)} {examYear},{' '}
             {translate('print.metadata.question', { n })}

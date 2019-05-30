@@ -12,8 +12,8 @@ const SetRadioButton = ({ set, selectedSet, onChange }) => {
         <Translate>
           {({ activeLanguage = { code: 'dk' } }) => {
             // TODO:
-            /*flyt evt. disse replaces over i react-localize-redux 
-                        vha. dynamiske id's (se fx profileAnswerDetails og dets 
+            /* flyt evt. disse replaces over i react-localize-redux
+                        vha. dynamiske id's (se fx profileAnswerDetails og dets
                         Sæt-kolonne i tabellen) */
             let label = `${set.season} ${set.year}`;
             if (activeLanguage.code === 'gb') {
@@ -28,7 +28,7 @@ const SetRadioButton = ({ set, selectedSet, onChange }) => {
                   label={label}
                   value={set.id}
                   checked={set.id === selectedSet}
-                  name="selectedSetId"
+                  name='selectedSetId'
                   onChange={onChange}
                 />
                 <Divider vertical hidden />

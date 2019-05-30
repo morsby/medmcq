@@ -20,7 +20,7 @@ import printTranslations from './printTranslations.json';
 class Print extends Component {
   state = { showCorrect: false };
 
-  constructor(props) {
+  constructor (props) {
     super(props);
 
     this.props.addTranslation(printTranslations);
@@ -28,46 +28,46 @@ class Print extends Component {
     this.toggleAnswers = this.toggleAnswers.bind(this);
   }
 
-  toggleAnswers() {
+  toggleAnswers () {
     this.setState((prevState) => {
       return { showCorrect: !prevState.showCorrect };
     });
   }
 
-  handleNavigation(path) {
+  handleNavigation (path) {
     this.props.history.push(urls[path]);
   }
 
-  render() {
+  render () {
     let { showCorrect } = this.state;
     let { questions } = this.props;
 
     return (
-      <div className="flex-container">
-        <Container className="content print">
-          <div className="hide-on-print">
-            <Button.Group className="hide-on-print">
-              <Button className="primary" onClick={this.toggleAnswers}>
+      <div className='flex-container'>
+        <Container className='content print'>
+          <div className='hide-on-print'>
+            <Button.Group className='hide-on-print'>
+              <Button className='primary' onClick={this.toggleAnswers}>
                 {showCorrect ? (
-                  <Translate id="print.hide_correct" />
+                  <Translate id='print.hide_correct' />
                 ) : (
-                  <Translate id="print.show_correct" />
+                  <Translate id='print.show_correct' />
                 )}
               </Button>
-              <Button className="hide-on-print" onClick={() => window.print()}>
-                <Translate id="print.print" />
+              <Button className='hide-on-print' onClick={() => window.print()}>
+                <Translate id='print.print' />
               </Button>
             </Button.Group>
-            <Button color="yellow" floated="right" onClick={() => this.handleNavigation('quiz')}>
-              <Translate id="print.return_to_quiz" />
+            <Button color='yellow' floated='right' onClick={() => this.handleNavigation('quiz')}>
+              <Translate id='print.return_to_quiz' />
             </Button>
           </div>
 
           {questions.map((q, i) => {
             return (
-              <div className="avoid-page-break" key={q.id}>
+              <div className='avoid-page-break' key={q.id}>
                 <h3>
-                  <Translate id="print.question" data={{ n: i + 1 }} />
+                  <Translate id='print.question' data={{ n: i + 1 }} />
                 </h3>
                 <PrintDisplayQuestion questionProp={q} showCorrect={showCorrect} />
               </div>
@@ -96,7 +96,7 @@ Print.propTypes = {
   addTranslation: PropTypes.func
 };
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
     questions: state.questions
   };

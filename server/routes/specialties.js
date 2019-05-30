@@ -1,9 +1,9 @@
-import express from "express";
-import { ValidationError, NotFoundError } from "objection";
-import { errorHandler } from "../middleware/errorHandling";
-import { permit } from "../middleware/permission";
+import express from 'express';
+import { ValidationError, NotFoundError } from 'objection';
+import { errorHandler } from '../middleware/errorHandling';
+import { permit } from '../middleware/permission';
 
-import Specialty from "../models/specialty";
+import Specialty from '../models/specialty';
 
 const router = express.Router();
 
@@ -29,10 +29,10 @@ const router = express.Router();
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     let specialties = await Specialty.query()
-      .orderBy(["semesterId", "name"])
+      .orderBy(['semesterId', 'name'])
       .eager(Specialty.defaultEager);
 
     res.status(200).json(specialties);
@@ -77,7 +77,7 @@ router.get("/", async (req, res) => {
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.post("/", permit({ roles: ["editor", "admin"] }), async (req, res) => {
+router.post('/', permit({ roles: ['editor', 'admin'] }), async (req, res) => {
   try {
     const newSpecialty = await Specialty.query().insert(req.body);
 
@@ -111,17 +111,17 @@ router.post("/", permit({ roles: ["editor", "admin"] }), async (req, res) => {
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.get("/:id", async (req, res) => {
+router.get('/:id', async (req, res) => {
   let { id } = req.params;
 
   try {
     let specialty = await Specialty.query()
       .findById(id)
       .select([
-        "questionSpecialty.*",
-        Specialty.relatedQuery("questions")
+        'questionSpecialty.*',
+        Specialty.relatedQuery('questions')
           .count()
-          .as("vote_count")
+          .as('vote_count')
       ])
       .eager(Specialty.defaultEager);
 
@@ -168,8 +168,8 @@ router.get("/:id", async (req, res) => {
  *               $ref: "#/components/schemas/Error"
  */
 router.patch(
-  "/:id",
-  permit({ roles: ["editor", "admin"] }),
+  '/:id',
+  permit({ roles: ['editor', 'admin'] }),
   async (req, res) => {
     let { id } = req.params;
 
@@ -177,8 +177,8 @@ router.patch(
       // Hvis der ikke er nogle data med i req.body smider vi en fejl
       if (Object.keys(req.body).length === 0) {
         throw new ValidationError({
-          type: "ModelValidation",
-          message: "No values to patch"
+          type: 'ModelValidation',
+          message: 'No values to patch'
         });
       }
 
@@ -216,8 +216,8 @@ router.patch(
  *               $ref: "#/components/schemas/Error"
  */
 router.delete(
-  "/:id",
-  permit({ roles: ["editor", "admin"] }),
+  '/:id',
+  permit({ roles: ['editor', 'admin'] }),
   async (req, res) => {
     let { id } = req.params;
 
@@ -225,7 +225,7 @@ router.delete(
       const deleted = await Specialty.query().deleteById(id);
       if (deleted > 0) {
         res.status(200).json({
-          type: "deleteSpecialty",
+          type: 'deleteSpecialty',
           message: `Succesfully deleted ${deleted} specialty`
         });
       } else {

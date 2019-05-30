@@ -8,59 +8,80 @@
  *
  */
 
-(function($, window, document, undefined) {
+(function ($, window, document, undefined) {
   'use strict';
 
   $.isFunction =
     $.isFunction ||
-    function(obj) {
+    function (obj) {
       return typeof obj === 'function' && typeof obj.nodeType !== 'number';
     };
 
   window =
-    typeof window != 'undefined' && window.Math == Math
+    typeof window !== 'undefined' && window.Math == Math
       ? window
-      : typeof self != 'undefined' && self.Math == Math
-      ? self
-      : Function('return this')();
+      : typeof self !== 'undefined' && self.Math == Math
+        ? self
+        : Function('return this')();
 
-  $.fn.accordion = function(parameters) {
-    var $allModules = $(this),
-      time = new Date().getTime(),
-      performance = [],
-      query = arguments[0],
-      methodInvoked = typeof query == 'string',
-      queryArguments = [].slice.call(arguments, 1),
-      requestAnimationFrame =
+  $.fn.accordion = function (parameters) {
+    var $allModules = $(this);
+
+    var time = new Date().getTime();
+
+    var performance = [];
+
+    var query = arguments[0];
+
+    var methodInvoked = typeof query === 'string';
+
+    var queryArguments = [].slice.call(arguments, 1);
+
+    var requestAnimationFrame =
         window.requestAnimationFrame ||
         window.mozRequestAnimationFrame ||
         window.webkitRequestAnimationFrame ||
         window.msRequestAnimationFrame ||
-        function(callback) {
+        function (callback) {
           setTimeout(callback, 0);
-        },
-      returnedValue;
-    $allModules.each(function() {
+        };
+
+    var returnedValue;
+    $allModules.each(function () {
       var settings = $.isPlainObject(parameters)
-          ? $.extend(true, {}, $.fn.accordion.settings, parameters)
-          : $.extend({}, $.fn.accordion.settings),
-        className = settings.className,
-        namespace = settings.namespace,
-        selector = settings.selector,
-        error = settings.error,
-        eventNamespace = '.' + namespace,
-        moduleNamespace = 'module-' + namespace,
-        moduleSelector = $allModules.selector || '',
-        $module = $(this),
-        $title = $module.find(selector.title),
-        $content = $module.find(selector.content),
-        element = this,
-        instance = $module.data(moduleNamespace),
-        observer,
-        module;
+        ? $.extend(true, {}, $.fn.accordion.settings, parameters)
+        : $.extend({}, $.fn.accordion.settings);
+
+      var className = settings.className;
+
+      var namespace = settings.namespace;
+
+      var selector = settings.selector;
+
+      var error = settings.error;
+
+      var eventNamespace = '.' + namespace;
+
+      var moduleNamespace = 'module-' + namespace;
+
+      var moduleSelector = $allModules.selector || '';
+
+      var $module = $(this);
+
+      var $title = $module.find(selector.title);
+
+      var $content = $module.find(selector.content);
+
+      var element = this;
+
+      var instance = $module.data(moduleNamespace);
+
+      var observer;
+
+      var module;
 
       module = {
-        initialize: function() {
+        initialize: function () {
           module.debug('Initializing', $module);
           module.bind.events();
           if (settings.observeChanges) {
@@ -69,24 +90,24 @@
           module.instantiate();
         },
 
-        instantiate: function() {
+        instantiate: function () {
           instance = module;
           $module.data(moduleNamespace, module);
         },
 
-        destroy: function() {
+        destroy: function () {
           module.debug('Destroying previous instance', $module);
           $module.off(eventNamespace).removeData(moduleNamespace);
         },
 
-        refresh: function() {
+        refresh: function () {
           $title = $module.find(selector.title);
           $content = $module.find(selector.content);
         },
 
-        observeChanges: function() {
+        observeChanges: function () {
           if ('MutationObserver' in window) {
-            observer = new MutationObserver(function(mutations) {
+            observer = new MutationObserver(function (mutations) {
               module.debug('DOM tree modified, updating selector cache');
               module.refresh();
             });
@@ -99,30 +120,35 @@
         },
 
         bind: {
-          events: function() {
+          events: function () {
             module.debug('Binding delegated events');
             $module.on(settings.on + eventNamespace, selector.trigger, module.event.click);
           }
         },
 
         event: {
-          click: function() {
+          click: function () {
             module.toggle.call(this);
           }
         },
 
-        toggle: function(query) {
+        toggle: function (query) {
           var $activeTitle =
               query !== undefined
                 ? typeof query === 'number'
                   ? $title.eq(query)
                   : $(query).closest(selector.title)
-                : $(this).closest(selector.title),
-            $activeContent = $activeTitle.next($content),
-            isAnimating = $activeContent.hasClass(className.animating),
-            isActive = $activeContent.hasClass(className.active),
-            isOpen = isActive && !isAnimating,
-            isOpening = !isActive && isAnimating;
+                : $(this).closest(selector.title);
+
+          var $activeContent = $activeTitle.next($content);
+
+          var isAnimating = $activeContent.hasClass(className.animating);
+
+          var isActive = $activeContent.hasClass(className.active);
+
+          var isOpen = isActive && !isAnimating;
+
+          var isOpening = !isActive && isAnimating;
           module.debug('Toggling visibility of content', $activeTitle);
           if (isOpen || isOpening) {
             if (settings.collapsible) {
@@ -135,17 +161,21 @@
           }
         },
 
-        open: function(query) {
+        open: function (query) {
           var $activeTitle =
               query !== undefined
                 ? typeof query === 'number'
                   ? $title.eq(query)
                   : $(query).closest(selector.title)
-                : $(this).closest(selector.title),
-            $activeContent = $activeTitle.next($content),
-            isAnimating = $activeContent.hasClass(className.animating),
-            isActive = $activeContent.hasClass(className.active),
-            isOpen = isActive || isAnimating;
+                : $(this).closest(selector.title);
+
+          var $activeContent = $activeTitle.next($content);
+
+          var isAnimating = $activeContent.hasClass(className.animating);
+
+          var isActive = $activeContent.hasClass(className.active);
+
+          var isOpen = isActive || isAnimating;
           if (isOpen) {
             module.debug('Accordion already open, skipping', $activeContent);
             return;
@@ -182,7 +212,7 @@
                 );
             }
           }
-          $activeContent.slideDown(settings.duration, settings.easing, function() {
+          $activeContent.slideDown(settings.duration, settings.easing, function () {
             $activeContent.removeClass(className.animating).addClass(className.active);
             module.reset.display.call(this);
             settings.onOpen.call(this);
@@ -190,18 +220,23 @@
           });
         },
 
-        close: function(query) {
+        close: function (query) {
           var $activeTitle =
               query !== undefined
                 ? typeof query === 'number'
                   ? $title.eq(query)
                   : $(query).closest(selector.title)
-                : $(this).closest(selector.title),
-            $activeContent = $activeTitle.next($content),
-            isAnimating = $activeContent.hasClass(className.animating),
-            isActive = $activeContent.hasClass(className.active),
-            isOpening = !isActive && isAnimating,
-            isClosing = isActive && isAnimating;
+                : $(this).closest(selector.title);
+
+          var $activeContent = $activeTitle.next($content);
+
+          var isAnimating = $activeContent.hasClass(className.animating);
+
+          var isActive = $activeContent.hasClass(className.active);
+
+          var isOpening = !isActive && isAnimating;
+
+          var isClosing = isActive && isAnimating;
           if ((isActive || isOpening) && !isClosing) {
             module.debug('Closing accordion content', $activeContent);
             settings.onClosing.call($activeContent);
@@ -232,7 +267,7 @@
                   );
               }
             }
-            $activeContent.slideUp(settings.duration, settings.easing, function() {
+            $activeContent.slideUp(settings.duration, settings.easing, function () {
               $activeContent.removeClass(className.animating).removeClass(className.active);
               module.reset.display.call(this);
               settings.onClose.call(this);
@@ -241,16 +276,23 @@
           }
         },
 
-        closeOthers: function(index) {
+        closeOthers: function (index) {
           var $activeTitle =
-              index !== undefined ? $title.eq(index) : $(this).closest(selector.title),
-            $parentTitles = $activeTitle.parents(selector.content).prev(selector.title),
-            $activeAccordion = $activeTitle.closest(selector.accordion),
-            activeSelector = selector.title + '.' + className.active + ':visible',
-            activeContent = selector.content + '.' + className.active + ':visible',
-            $openTitles,
-            $nestedTitles,
-            $openContents;
+              index !== undefined ? $title.eq(index) : $(this).closest(selector.title);
+
+          var $parentTitles = $activeTitle.parents(selector.content).prev(selector.title);
+
+          var $activeAccordion = $activeTitle.closest(selector.accordion);
+
+          var activeSelector = selector.title + '.' + className.active + ':visible';
+
+          var activeContent = selector.content + '.' + className.active + ':visible';
+
+          var $openTitles;
+
+          var $nestedTitles;
+
+          var $openContents;
           if (settings.closeNested) {
             $openTitles = $activeAccordion.find(activeSelector).not($parentTitles);
             $openContents = $openTitles.next($content);
@@ -290,7 +332,7 @@
                   );
               }
             }
-            $openContents.slideUp(settings.duration, settings.easing, function() {
+            $openContents.slideUp(settings.duration, settings.easing, function () {
               $(this).removeClass(className.active);
               module.reset.display.call(this);
             });
@@ -298,7 +340,7 @@
         },
 
         reset: {
-          display: function() {
+          display: function () {
             module.verbose('Removing inline display from element', this);
             $(this).css('display', '');
             if ($(this).attr('style') === '') {
@@ -308,7 +350,7 @@
             }
           },
 
-          opacity: function() {
+          opacity: function () {
             module.verbose('Removing inline opacity from element', this);
             $(this).css('opacity', '');
             if ($(this).attr('style') === '') {
@@ -319,7 +361,7 @@
           }
         },
 
-        setting: function(name, value) {
+        setting: function (name, value) {
           module.debug('Changing setting', name, value);
           if ($.isPlainObject(name)) {
             $.extend(true, settings, name);
@@ -333,7 +375,7 @@
             return settings[name];
           }
         },
-        internal: function(name, value) {
+        internal: function (name, value) {
           module.debug('Changing internal', name, value);
           if (value !== undefined) {
             if ($.isPlainObject(name)) {
@@ -345,7 +387,7 @@
             return module[name];
           }
         },
-        debug: function() {
+        debug: function () {
           if (!settings.silent && settings.debug) {
             if (settings.performance) {
               module.performance.log(arguments);
@@ -359,7 +401,7 @@
             }
           }
         },
-        verbose: function() {
+        verbose: function () {
           if (!settings.silent && settings.verbose && settings.debug) {
             if (settings.performance) {
               module.performance.log(arguments);
@@ -373,7 +415,7 @@
             }
           }
         },
-        error: function() {
+        error: function () {
           if (!settings.silent) {
             module.error = Function.prototype.bind.call(
               console.error,
@@ -384,7 +426,7 @@
           }
         },
         performance: {
-          log: function(message) {
+          log: function (message) {
             var currentTime, executionTime, previousTime;
             if (settings.performance) {
               currentTime = new Date().getTime();
@@ -401,12 +443,13 @@
             clearTimeout(module.performance.timer);
             module.performance.timer = setTimeout(module.performance.display, 500);
           },
-          display: function() {
-            var title = settings.name + ':',
-              totalTime = 0;
+          display: function () {
+            var title = settings.name + ':';
+
+            var totalTime = 0;
             time = false;
             clearTimeout(module.performance.timer);
-            $.each(performance, function(index, data) {
+            $.each(performance, function (index, data) {
               totalTime += data['Execution Time'];
             });
             title += ' ' + totalTime + 'ms';
@@ -421,7 +464,7 @@
               if (console.table) {
                 console.table(performance);
               } else {
-                $.each(performance, function(index, data) {
+                $.each(performance, function (index, data) {
                   console.log(data['Name'] + ': ' + data['Execution Time'] + 'ms');
                 });
               }
@@ -430,17 +473,20 @@
             performance = [];
           }
         },
-        invoke: function(query, passedArguments, context) {
-          var object = instance,
-            maxDepth,
-            found,
-            response;
+        invoke: function (query, passedArguments, context) {
+          var object = instance;
+
+          var maxDepth;
+
+          var found;
+
+          var response;
           passedArguments = passedArguments || queryArguments;
           context = element || context;
-          if (typeof query == 'string' && object !== undefined) {
+          if (typeof query === 'string' && object !== undefined) {
             query = query.split(/[\. ]/);
             maxDepth = query.length - 1;
-            $.each(query, function(depth, value) {
+            $.each(query, function (depth, value) {
               var camelCaseValue =
                 depth != maxDepth
                   ? value + query[depth + 1].charAt(0).toUpperCase() + query[depth + 1].slice(1)
@@ -512,13 +558,13 @@
     duration: 350, // duration of animation
     easing: 'easeOutQuad', // easing equation for animation
 
-    onOpening: function() {}, // callback before open animation
-    onClosing: function() {}, // callback before closing animation
-    onChanging: function() {}, // callback before closing or opening animation
+    onOpening: function () {}, // callback before open animation
+    onClosing: function () {}, // callback before closing animation
+    onChanging: function () {}, // callback before closing or opening animation
 
-    onOpen: function() {}, // callback after open animation
-    onClose: function() {}, // callback after closing animation
-    onChange: function() {}, // callback after closing or opening animation
+    onOpen: function () {}, // callback after open animation
+    onClose: function () {}, // callback after closing animation
+    onChange: function () {}, // callback after closing or opening animation
 
     error: {
       method: 'The method you called is not defined'
@@ -539,7 +585,7 @@
 
   // Adds easing
   $.extend($.easing, {
-    easeOutQuad: function(x, t, b, c, d) {
+    easeOutQuad: function (x, t, b, c, d) {
       return -c * (t /= d) * (t - 2) + b;
     }
   });

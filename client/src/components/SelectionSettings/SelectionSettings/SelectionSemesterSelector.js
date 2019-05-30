@@ -5,13 +5,13 @@ import { Header, Dropdown } from 'semantic-ui-react';
 
 const SelectionSemesterSelector = ({ label, semesters, selectedSemester, handleChange }) => (
   <>
-    <Header as="h3">{label}</Header>
+    <Header as='h3'>{label}</Header>
     <Dropdown
       placeholder={label}
       fluid
       selection
       options={semesters}
-      name="selectedSemester"
+      name='selectedSemester'
       value={selectedSemester}
       onChange={handleChange}
     />

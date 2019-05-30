@@ -3,33 +3,44 @@
 *******************************/
 
 var
-  gulp         = require('gulp-help')(require('gulp')),
+  gulp = require('gulp-help')(require('gulp'));
 
-  // read user config to know what task to load
-  config       = require('./tasks/config/user'),
+// read user config to know what task to load
 
-  // watch changes
-  watch        = require('./tasks/watch'),
+var config = require('./tasks/config/user');
 
-  // build all files
-  build        = require('./tasks/build'),
-  buildJS      = require('./tasks/build/javascript'),
-  buildCSS     = require('./tasks/build/css'),
-  buildAssets  = require('./tasks/build/assets'),
+// watch changes
 
-  // utility
-  clean        = require('./tasks/clean'),
-  version      = require('./tasks/version'),
+var watch = require('./tasks/watch');
 
-  // docs tasks
-  serveDocs    = require('./tasks/docs/serve'),
-  buildDocs    = require('./tasks/docs/build'),
+// build all files
 
-  // rtl
-  buildRTL     = require('./tasks/rtl/build'),
-  watchRTL     = require('./tasks/rtl/watch')
+var build = require('./tasks/build');
+
+var buildJS = require('./tasks/build/javascript');
+
+var buildCSS = require('./tasks/build/css');
+
+var buildAssets = require('./tasks/build/assets');
+
+// utility
+
+var clean = require('./tasks/clean');
+
+var version = require('./tasks/version');
+
+// docs tasks
+
+var serveDocs = require('./tasks/docs/serve');
+
+var buildDocs = require('./tasks/docs/build');
+
+// rtl
+
+var buildRTL = require('./tasks/rtl/build');
+
+var watchRTL = require('./tasks/rtl/watch')
 ;
-
 
 /*******************************
              Tasks
@@ -49,9 +60,9 @@ gulp.task('build-assets', 'Copies all assets from source', buildAssets);
 gulp.task('clean', 'Clean dist folder', clean);
 gulp.task('version', 'Displays current version of Semantic', version);
 
-/*--------------
+/* --------------
       Docs
----------------*/
+--------------- */
 
 /*
   Lets you serve files to a local documentation instance
@@ -61,12 +72,11 @@ gulp.task('version', 'Displays current version of Semantic', version);
 gulp.task('serve-docs', 'Serve file changes to SUI Docs', serveDocs);
 gulp.task('build-docs', 'Build all files and add to SUI Docs', buildDocs);
 
-
-/*--------------
+/* --------------
       RTL
----------------*/
+--------------- */
 
-if(config.rtl) {
+if (config.rtl) {
   gulp.task('watch-rtl', 'Watch files as RTL', watchRTL);
   gulp.task('build-rtl', 'Build all files as RTL', buildRTL);
 }

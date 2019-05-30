@@ -34,9 +34,9 @@ const QuestionComments = ({
   let form;
   if (user) {
     let skrivRet = editingComment ? (
-      <Translate id="questionComments.edit_a_comment" />
+      <Translate id='questionComments.edit_a_comment' />
     ) : (
-      <Translate id="questionComments.write_a_comment" />
+      <Translate id='questionComments.write_a_comment' />
     );
     form = (
       <div style={{ marginTop: '1em' }}>
@@ -46,7 +46,7 @@ const QuestionComments = ({
           <Translate>
             {({ translate }) => (
               <TextArea
-                name="newComment"
+                name='newComment'
                 placeholder={translate('questionComments.write_a_comment')}
                 onChange={onCommentType}
                 value={newComment}
@@ -55,12 +55,12 @@ const QuestionComments = ({
           </Translate>
           {!privateComment && (
             <Message info>
-              <Translate id="questionComments.public_comment_info" />
+              <Translate id='questionComments.public_comment_info' />
             </Message>
           )}
           {privateComment && (
             <Message info>
-              <Translate id="questionComments.private_comment_info" />
+              <Translate id='questionComments.private_comment_info' />
             </Message>
           )}
           <Button
@@ -68,11 +68,11 @@ const QuestionComments = ({
             disabled={newComment.length < 3}
             style={{ margin: '0.5em 1em 0.5em 0' }}
           >
-            <Translate id="questionComments.comment" />
+            <Translate id='questionComments.comment' />
           </Button>
           {editingComment && (
             <Button negative onClick={undoEditComment}>
-              <Translate id="questionComments.undo_edit" />
+              <Translate id='questionComments.undo_edit' />
             </Button>
           )}
         </Form>
@@ -81,7 +81,7 @@ const QuestionComments = ({
   } else {
     form = (
       <Message warning>
-        <Translate id="questionComments.login_to_write" />
+        <Translate id='questionComments.login_to_write' />
       </Message>
     );
   }

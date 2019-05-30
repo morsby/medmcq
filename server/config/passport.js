@@ -1,8 +1,8 @@
-var LocalStrategy = require("passport-local").Strategy;
-var User = require("../models/user");
+var LocalStrategy = require('passport-local').Strategy;
+var User = require('../models/user');
 
 // expose this function to our app using module.exports
-module.exports = function(passport) {
+module.exports = function (passport) {
   // =========================================================================
   // passport session setup ==================================================
   // =========================================================================
@@ -10,7 +10,7 @@ module.exports = function(passport) {
   // passport needs ability to serialize and unserialize users out of session
 
   // used to serialize the user for the session
-  passport.serializeUser(function(user, done) {
+  passport.serializeUser(function (user, done) {
     done(null, user.id);
   });
 
@@ -18,31 +18,31 @@ module.exports = function(passport) {
   passport.deserializeUser(async (id, done) => {
     User.query()
       .findById(id)
-      .joinRelation("role")
-      .select("user.*", "role.name as role")
+      .joinRelation('role')
+      .select('user.*', 'role.name as role')
       .then((user, err) => {
         done(err, user || null);
       });
   });
 
   passport.use(
-    "local",
+    'local',
     new LocalStrategy(async (username, password, done) => {
       try {
         const user = await User.query()
           .findOne({ username })
-          .select("id", "username", "password");
+          .select('id', 'username', 'password');
 
         if (!user) {
           return done(null, false, {
-            message: "Incorrect username."
+            message: 'Incorrect username.'
           });
         }
 
         const passwordValid = await user.verifyPassword(password);
         let error;
         if (!passwordValid) {
-          error = { message: "Incorrect password" };
+          error = { message: 'Incorrect password' };
           return done(null, false, error);
         } else {
           return done(null, user);

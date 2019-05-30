@@ -1,6 +1,6 @@
 import * as types from '../actions/types';
 
-export default function(state = { feedback: [], feedbackSingle: {}, votedFor: {} }, action) {
+export default function (state = { feedback: [], feedbackSingle: {}, votedFor: {} }, action) {
   switch (action.type) {
     case types.FETCH_FEEDBACK:
       return { ...state, feedback: action.payload };

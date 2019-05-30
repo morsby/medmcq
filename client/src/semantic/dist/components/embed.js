@@ -8,56 +8,80 @@
  *
  */
 
-(function($, window, document, undefined) {
+(function ($, window, document, undefined) {
   'use strict';
 
   $.isFunction =
     $.isFunction ||
-    function(obj) {
+    function (obj) {
       return typeof obj === 'function' && typeof obj.nodeType !== 'number';
     };
 
   window =
-    typeof window != 'undefined' && window.Math == Math
+    typeof window !== 'undefined' && window.Math == Math
       ? window
-      : typeof self != 'undefined' && self.Math == Math
-      ? self
-      : Function('return this')();
+      : typeof self !== 'undefined' && self.Math == Math
+        ? self
+        : Function('return this')();
 
-  $.fn.embed = function(parameters) {
-    var $allModules = $(this),
-      moduleSelector = $allModules.selector || '',
-      time = new Date().getTime(),
-      performance = [],
-      query = arguments[0],
-      methodInvoked = typeof query == 'string',
-      queryArguments = [].slice.call(arguments, 1),
-      returnedValue;
+  $.fn.embed = function (parameters) {
+    var $allModules = $(this);
 
-    $allModules.each(function() {
+    var moduleSelector = $allModules.selector || '';
+
+    var time = new Date().getTime();
+
+    var performance = [];
+
+    var query = arguments[0];
+
+    var methodInvoked = typeof query === 'string';
+
+    var queryArguments = [].slice.call(arguments, 1);
+
+    var returnedValue;
+
+    $allModules.each(function () {
       var settings = $.isPlainObject(parameters)
-          ? $.extend(true, {}, $.fn.embed.settings, parameters)
-          : $.extend({}, $.fn.embed.settings),
-        selector = settings.selector,
-        className = settings.className,
-        sources = settings.sources,
-        error = settings.error,
-        metadata = settings.metadata,
-        namespace = settings.namespace,
-        templates = settings.templates,
-        eventNamespace = '.' + namespace,
-        moduleNamespace = 'module-' + namespace,
-        $window = $(window),
-        $module = $(this),
-        $placeholder = $module.find(selector.placeholder),
-        $icon = $module.find(selector.icon),
-        $embed = $module.find(selector.embed),
-        element = this,
-        instance = $module.data(moduleNamespace),
-        module;
+        ? $.extend(true, {}, $.fn.embed.settings, parameters)
+        : $.extend({}, $.fn.embed.settings);
+
+      var selector = settings.selector;
+
+      var className = settings.className;
+
+      var sources = settings.sources;
+
+      var error = settings.error;
+
+      var metadata = settings.metadata;
+
+      var namespace = settings.namespace;
+
+      var templates = settings.templates;
+
+      var eventNamespace = '.' + namespace;
+
+      var moduleNamespace = 'module-' + namespace;
+
+      var $window = $(window);
+
+      var $module = $(this);
+
+      var $placeholder = $module.find(selector.placeholder);
+
+      var $icon = $module.find(selector.icon);
+
+      var $embed = $module.find(selector.embed);
+
+      var element = this;
+
+      var instance = $module.data(moduleNamespace);
+
+      var module;
 
       module = {
-        initialize: function() {
+        initialize: function () {
           module.debug('Initializing embed');
           module.determine.autoplay();
           module.create();
@@ -65,19 +89,19 @@
           module.instantiate();
         },
 
-        instantiate: function() {
+        instantiate: function () {
           module.verbose('Storing instance of module', module);
           instance = module;
           $module.data(moduleNamespace, module);
         },
 
-        destroy: function() {
+        destroy: function () {
           module.verbose('Destroying previous instance of embed');
           module.reset();
           $module.removeData(moduleNamespace).off(eventNamespace);
         },
 
-        refresh: function() {
+        refresh: function () {
           module.verbose('Refreshing selector cache');
           $placeholder = $module.find(selector.placeholder);
           $icon = $module.find(selector.icon);
@@ -85,7 +109,7 @@
         },
 
         bind: {
-          events: function() {
+          events: function () {
             if (module.has.placeholder()) {
               module.debug('Adding placeholder events');
               $module
@@ -95,7 +119,7 @@
           }
         },
 
-        create: function() {
+        create: function () {
           var placeholder = module.get.placeholder();
           if (placeholder) {
             module.createPlaceholder();
@@ -104,16 +128,18 @@
           }
         },
 
-        createPlaceholder: function(placeholder) {
-          var icon = module.get.icon(),
-            url = module.get.url(),
-            embed = module.generate.embed(url);
+        createPlaceholder: function (placeholder) {
+          var icon = module.get.icon();
+
+          var url = module.get.url();
+
+          var embed = module.generate.embed(url);
           placeholder = placeholder || module.get.placeholder();
           $module.html(templates.placeholder(placeholder, icon));
           module.debug('Creating placeholder for embed', placeholder, icon);
         },
 
-        createEmbed: function(url) {
+        createEmbed: function (url) {
           module.refresh();
           url = url || module.get.url();
           $embed = $('<div/>')
@@ -124,17 +150,17 @@
           module.debug('Creating embed object', $embed);
         },
 
-        changeEmbed: function(url) {
+        changeEmbed: function (url) {
           $embed.html(module.generate.embed(url));
         },
 
-        createAndShow: function() {
+        createAndShow: function () {
           module.createEmbed();
           module.show();
         },
 
         // sets new embed
-        change: function(source, id, url) {
+        change: function (source, id, url) {
           module.debug('Changing video to ', source, id, url);
           $module.data(metadata.source, source).data(metadata.id, id);
           if (url) {
@@ -150,7 +176,7 @@
         },
 
         // clears embed
-        reset: function() {
+        reset: function () {
           module.debug('Clearing embed and showing placeholder');
           module.remove.data();
           module.remove.active();
@@ -160,68 +186,68 @@
         },
 
         // shows current embed
-        show: function() {
+        show: function () {
           module.debug('Showing embed');
           module.set.active();
           settings.onDisplay.call(element);
         },
 
-        hide: function() {
+        hide: function () {
           module.debug('Hiding embed');
           module.showPlaceholder();
         },
 
-        showPlaceholder: function() {
+        showPlaceholder: function () {
           module.debug('Showing placeholder image');
           module.remove.active();
           settings.onPlaceholderDisplay.call(element);
         },
 
         get: {
-          id: function() {
+          id: function () {
             return settings.id || $module.data(metadata.id);
           },
-          placeholder: function() {
+          placeholder: function () {
             return settings.placeholder || $module.data(metadata.placeholder);
           },
-          icon: function() {
+          icon: function () {
             return settings.icon
               ? settings.icon
               : $module.data(metadata.icon) !== undefined
-              ? $module.data(metadata.icon)
-              : module.determine.icon();
+                ? $module.data(metadata.icon)
+                : module.determine.icon();
           },
-          source: function(url) {
+          source: function (url) {
             return settings.source
               ? settings.source
               : $module.data(metadata.source) !== undefined
-              ? $module.data(metadata.source)
-              : module.determine.source();
+                ? $module.data(metadata.source)
+                : module.determine.source();
           },
-          type: function() {
+          type: function () {
             var source = module.get.source();
             return sources[source] !== undefined ? sources[source].type : false;
           },
-          url: function() {
+          url: function () {
             return settings.url
               ? settings.url
               : $module.data(metadata.url) !== undefined
-              ? $module.data(metadata.url)
-              : module.determine.url();
+                ? $module.data(metadata.url)
+                : module.determine.url();
           }
         },
 
         determine: {
-          autoplay: function() {
+          autoplay: function () {
             if (module.should.autoplay()) {
               settings.autoplay = true;
             }
           },
-          source: function(url) {
+          source: function (url) {
             var matchedSource = false;
             url = url || module.get.url();
             if (url) {
-              $.each(sources, function(name, source) {
+              $.each(sources, function (name, source) {
                 if (url.search(source.domain) !== -1) {
                   matchedSource = name;
                   return false;
@@ -230,14 +256,16 @@
             }
             return matchedSource;
           },
-          icon: function() {
+          icon: function () {
             var source = module.get.source();
             return sources[source] !== undefined ? sources[source].icon : false;
           },
-          url: function() {
-            var id = settings.id || $module.data(metadata.id),
-              source = settings.source || $module.data(metadata.source),
-              url;
+          url: function () {
+            var id = settings.id || $module.data(metadata.id);
+
+            var source = settings.source || $module.data(metadata.source);
+
+            var url;
             url = sources[source] !== undefined ? sources[source].url.replace('{id}', id) : false;
             if (url) {
               $module.data(metadata.url, url);
@@ -247,13 +275,13 @@
         },
 
         set: {
-          active: function() {
+          active: function () {
             $module.addClass(className.active);
           }
         },
 
         remove: {
-          data: function() {
+          data: function () {
             $module
               .removeData(metadata.id)
               .removeData(metadata.icon)
@@ -261,18 +289,19 @@
               .removeData(metadata.source)
               .removeData(metadata.url);
           },
-          active: function() {
+          active: function () {
             $module.removeClass(className.active);
           },
-          embed: function() {
+          embed: function () {
             $embed.empty();
           }
         },
 
         encode: {
-          parameters: function(parameters) {
-            var urlString = [],
-              index;
+          parameters: function (parameters) {
+            var urlString = [];
+
+            var index;
             for (index in parameters) {
               urlString.push(
                 encodeURIComponent(index) + '=' + encodeURIComponent(parameters[index])
@@ -283,11 +312,13 @@
         },
 
         generate: {
-          embed: function(url) {
+          embed: function (url) {
             module.debug('Generating embed html');
-            var source = module.get.source(),
-              html,
-              parameters;
+            var source = module.get.source();
+
+            var html;
+
+            var parameters;
             url = module.get.url(url);
             if (url) {
               parameters = module.generate.parameters(source);
@@ -297,7 +328,7 @@
             }
             return html;
           },
-          parameters: function(source, extraParameters) {
+          parameters: function (source, extraParameters) {
             var parameters =
               sources[source] && sources[source].parameters !== undefined
                 ? sources[source].parameters(settings)
@@ -312,16 +343,16 @@
         },
 
         has: {
-          embed: function() {
+          embed: function () {
             return $embed.length > 0;
           },
-          placeholder: function() {
+          placeholder: function () {
             return settings.placeholder || $module.data(metadata.placeholder);
           }
         },
 
         should: {
-          autoplay: function() {
+          autoplay: function () {
             return settings.autoplay === 'auto'
               ? settings.placeholder || $module.data(metadata.placeholder) !== undefined
               : settings.autoplay;
@@ -329,12 +360,12 @@
         },
 
         is: {
-          video: function() {
+          video: function () {
             return module.get.type() == 'video';
           }
         },
 
-        setting: function(name, value) {
+        setting: function (name, value) {
           module.debug('Changing setting', name, value);
           if ($.isPlainObject(name)) {
             $.extend(true, settings, name);
@@ -348,7 +379,7 @@
             return settings[name];
           }
         },
-        internal: function(name, value) {
+        internal: function (name, value) {
           if ($.isPlainObject(name)) {
             $.extend(true, module, name);
           } else if (value !== undefined) {
@@ -357,7 +388,7 @@
             return module[name];
           }
         },
-        debug: function() {
+        debug: function () {
           if (!settings.silent && settings.debug) {
             if (settings.performance) {
               module.performance.log(arguments);
@@ -371,7 +402,7 @@
             }
           }
         },
-        verbose: function() {
+        verbose: function () {
           if (!settings.silent && settings.verbose && settings.debug) {
             if (settings.performance) {
               module.performance.log(arguments);
@@ -385,7 +416,7 @@
             }
           }
         },
-        error: function() {
+        error: function () {
           if (!settings.silent) {
             module.error = Function.prototype.bind.call(
               console.error,
@@ -396,7 +427,7 @@
           }
         },
         performance: {
-          log: function(message) {
+          log: function (message) {
             var currentTime, executionTime, previousTime;
             if (settings.performance) {
               currentTime = new Date().getTime();
@@ -413,12 +444,13 @@
             clearTimeout(module.performance.timer);
             module.performance.timer = setTimeout(module.performance.display, 500);
           },
-          display: function() {
-            var title = settings.name + ':',
-              totalTime = 0;
+          display: function () {
+            var title = settings.name + ':';
+
+            var totalTime = 0;
             time = false;
             clearTimeout(module.performance.timer);
-            $.each(performance, function(index, data) {
+            $.each(performance, function (index, data) {
               totalTime += data['Execution Time'];
             });
             title += ' ' + totalTime + 'ms';
@@ -436,7 +468,7 @@
               if (console.table) {
                 console.table(performance);
               } else {
-                $.each(performance, function(index, data) {
+                $.each(performance, function (index, data) {
                   console.log(data['Name'] + ': ' + data['Execution Time'] + 'ms');
                 });
               }
@@ -445,17 +477,20 @@
             performance = [];
           }
         },
-        invoke: function(query, passedArguments, context) {
-          var object = instance,
-            maxDepth,
-            found,
-            response;
+        invoke: function (query, passedArguments, context) {
+          var object = instance;
+
+          var maxDepth;
+
+          var found;
+
+          var response;
           passedArguments = passedArguments || queryArguments;
           context = element || context;
-          if (typeof query == 'string' && object !== undefined) {
+          if (typeof query === 'string' && object !== undefined) {
             query = query.split(/[\. ]/);
             maxDepth = query.length - 1;
-            $.each(query, function(depth, value) {
+            $.each(query, function (depth, value) {
               var camelCaseValue =
                 depth != maxDepth
                   ? value + query[depth + 1].charAt(0).toUpperCase() + query[depth + 1].slice(1)
@@ -530,11 +565,11 @@
     // additional parameters to include with the embed
     parameters: false,
 
-    onDisplay: function() {},
-    onPlaceholderDisplay: function() {},
-    onReset: function() {},
-    onCreate: function(url) {},
-    onEmbed: function(parameters) {
+    onDisplay: function () {},
+    onPlaceholderDisplay: function () {},
+    onReset: function () {},
+    onCreate: function (url) {},
+    onEmbed: function (parameters) {
       return parameters;
     },
 
@@ -569,7 +604,7 @@
         icon: 'video play',
         domain: 'youtube.com',
         url: '//www.youtube.com/embed/{id}',
-        parameters: function(settings) {
+        parameters: function (settings) {
           return {
             autohide: !settings.brandedUI,
             autoplay: settings.autoplay,
@@ -586,7 +621,7 @@
         icon: 'video play',
         domain: 'vimeo.com',
         url: '//player.vimeo.com/video/{id}',
-        parameters: function(settings) {
+        parameters: function (settings) {
           return {
             api: settings.api,
             autoplay: settings.autoplay,
@@ -600,7 +635,7 @@
     },
 
     templates: {
-      iframe: function(url, parameters) {
+      iframe: function (url, parameters) {
         var src = url;
         if (parameters) {
           src += '?' + parameters;
@@ -614,7 +649,7 @@
           ' frameborder="0" scrolling="no" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>'
         );
       },
-      placeholder: function(image, icon) {
+      placeholder: function (image, icon) {
         var html = '';
         if (icon) {
           html += '<i class="' + icon + ' icon"></i>';
@@ -628,8 +663,8 @@
 
     // NOT YET IMPLEMENTED
     api: false,
-    onPause: function() {},
-    onPlay: function() {},
-    onStop: function() {}
+    onPause: function () {},
+    onPlay: function () {},
+    onStop: function () {}
   };
 })(jQuery, window, document);

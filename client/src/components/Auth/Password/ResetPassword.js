@@ -25,13 +25,13 @@ class ResetPassword extends Component {
     });
   };
 
-  render() {
+  render () {
     let { message } = this.state;
     return (
-      <div className="flex-container">
-        <Container className="content">
+      <div className='flex-container'>
+        <Container className='content'>
           <h3>
-            <Translate id="resetPassword.header" />
+            <Translate id='resetPassword.header' />
           </h3>
           <Translate>
             {({ translate }) => (
@@ -43,19 +43,19 @@ class ResetPassword extends Component {
                       onSubmit={(event) => {
                         handleSubmit(event).then(form.reset());
                       }}
-                      className="ui form custom"
+                      className='ui form custom'
                     >
-                      <Field name="password" validate={passwordValid}>
+                      <Field name='password' validate={passwordValid}>
                         {({ input, meta }) => (
                           <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
                             <label>{translate('resetPassword.password')}</label>
                             <input
                               {...input}
-                              type="password"
+                              type='password'
                               placeholder={translate('resetPassword.password')}
                             />
                             {meta.error && meta.touched && (
-                              <Message error visible={true} size="small">
+                              <Message error visible size='small'>
                                 {meta.error}
                               </Message>
                             )}
@@ -63,17 +63,17 @@ class ResetPassword extends Component {
                         )}
                       </Field>
                       <Divider hidden />
-                      <Field name="password-repeat" validate={passwordRepeatValid}>
+                      <Field name='password-repeat' validate={passwordRepeatValid}>
                         {({ input, meta }) => (
                           <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
                             <label>{translate('resetPassword.password_repeat')}</label>
                             <input
                               {...input}
-                              type="password"
+                              type='password'
                               placeholder={translate('resetPassword.password_repeat')}
                             />
                             {meta.error && meta.touched && (
-                              <Message error visible={true}>
+                              <Message error visible>
                                 {meta.error}
                               </Message>
                             )}
@@ -90,7 +90,7 @@ class ResetPassword extends Component {
                       )}
                       <Divider hidden />
                       <Button disabled={pristine || invalid}>
-                        <Translate id="resetPassword.submit" />
+                        <Translate id='resetPassword.submit' />
                       </Button>
                     </form>
                   );

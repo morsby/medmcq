@@ -10,10 +10,10 @@ import LoginForm from './LoginForm';
  */
 const Login = () => {
   return (
-    <div className="flex-container">
-      <Container className="content">
+    <div className='flex-container'>
+      <Container className='content'>
         <h3>
-          <Translate id="login.header" />
+          <Translate id='login.header' />
         </h3>
         <LoginForm />
       </Container>

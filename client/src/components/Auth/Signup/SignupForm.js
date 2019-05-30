@@ -49,18 +49,18 @@ const SignupForm = ({ checkUserAvailability, signup, translate, history }) => {
       onSubmit={onSubmit}
       render={({ handleSubmit, pristine, invalid }) => {
         return (
-          <form onSubmit={handleSubmit} className="ui form custom">
-            <Field name="username" validate={userAvailable}>
+          <form onSubmit={handleSubmit} className='ui form custom'>
+            <Field name='username' validate={userAvailable}>
               {({ input, meta }) => (
                 <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
                   <label>{translate('signup.form_fields.username')}</label>
                   <input
                     {...input}
-                    type="text"
+                    type='text'
                     placeholder={translate('signup.form_fields.username')}
                   />
                   {meta.error && meta.touched && (
-                    <Message error visible={true}>
+                    <Message error visible>
                       {meta.error}
                     </Message>
                   )}
@@ -68,40 +68,40 @@ const SignupForm = ({ checkUserAvailability, signup, translate, history }) => {
               )}
             </Field>
             <Divider hidden />
-            <Field name="email" validate={emailValidLocal} validateFields={[]}>
+            <Field name='email' validate={emailValidLocal} validateFields={[]}>
               {({ input, meta }) => (
                 <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
                   <label>{translate('signup.form_fields.email')}</label>
                   <input
                     {...input}
-                    type="email"
+                    type='email'
                     placeholder={translate('signup.form_fields.email')}
                   />
                   {meta.error && meta.touched && (
-                    <Message error visible={true}>
+                    <Message error visible>
                       {meta.error}
                     </Message>
                   )}
                   {meta.touched && !meta.error && (
-                    <Message warning visible={true}>
-                      <Translate id="signup.form_fields.email_not_required_message" />
+                    <Message warning visible>
+                      <Translate id='signup.form_fields.email_not_required_message' />
                     </Message>
                   )}
                 </div>
               )}
             </Field>
             <Divider hidden />
-            <Field name="password" validate={passwordValid} validateFields={['password-repeat']}>
+            <Field name='password' validate={passwordValid} validateFields={['password-repeat']}>
               {({ input, meta }) => (
                 <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
                   <label>{translate('signup.form_fields.password')}</label>
                   <input
                     {...input}
-                    type="password"
+                    type='password'
                     placeholder={translate('signup.form_fields.password')}
                   />
                   {meta.error && meta.touched && (
-                    <Message error visible={true} size="small">
+                    <Message error visible size='small'>
                       {meta.error}
                     </Message>
                   )}
@@ -110,7 +110,7 @@ const SignupForm = ({ checkUserAvailability, signup, translate, history }) => {
             </Field>
             <Divider hidden />
             <Field
-              name="password-repeat"
+              name='password-repeat'
               validate={passwordRepeatValid}
               validateFields={['password']}
             >
@@ -119,11 +119,11 @@ const SignupForm = ({ checkUserAvailability, signup, translate, history }) => {
                   <label>{translate('signup.form_fields.password_repeat')}</label>
                   <input
                     {...input}
-                    type="password"
+                    type='password'
                     placeholder={translate('signup.form_fields.password_repeat')}
                   />
                   {meta.error && meta.touched && (
-                    <Message error visible={true}>
+                    <Message error visible>
                       {meta.error}
                     </Message>
                   )}
@@ -132,7 +132,7 @@ const SignupForm = ({ checkUserAvailability, signup, translate, history }) => {
             </Field>
             <Divider hidden />
             <Button disabled={pristine || invalid}>
-              <Translate id="signup.form_fields.submit" />
+              <Translate id='signup.form_fields.submit' />
             </Button>
           </form>
         );
@@ -166,7 +166,7 @@ SignupForm.propTypes = {
   history: ReactRouterPropTypes.history
 };
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
     currentLanguage: state.settings.language,
     translate: getTranslate(state.localize)

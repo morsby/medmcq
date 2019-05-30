@@ -1,6 +1,6 @@
-import _ from "lodash";
-import User from "../models/user";
-import { errorHandler, NotAuthorized } from "./errorHandling";
+import _ from 'lodash';
+import User from '../models/user';
+import { errorHandler, NotAuthorized } from './errorHandling';
 
 /**
  * A middleware to limit access to certain routes.
@@ -9,13 +9,13 @@ import { errorHandler, NotAuthorized } from "./errorHandling";
  * @param  {string}   owner=""   The express request path for the owner (excluding `req.`)
  * @return {function}            The middleware function
  */
-export const permit = ({ roles = [], owner = "" } = {}) => {
+export const permit = ({ roles = [], owner = '' } = {}) => {
   const isAllowed = async user => {
     let res = await User.query()
       .findById(user.id)
-      .joinEager("role");
+      .joinEager('role');
 
-    return [...roles, "admin", "creator"].indexOf(res.role.name) > -1;
+    return [...roles, 'admin', 'creator'].indexOf(res.role.name) > -1;
   };
 
   return async (req, res, next) => {
@@ -27,13 +27,14 @@ export const permit = ({ roles = [], owner = "" } = {}) => {
         else if (req.user.id === Number(_.get(req, owner))) next();
         // Otherwise, if the user's role is permitted access
         else if (await isAllowed(req.user)) next();
-        else
+        else {
           throw new NotAuthorized({
-            message: "You do not have the required permissions for this route."
+            message: 'You do not have the required permissions for this route.'
           });
+        }
       } else {
         throw new NotAuthorized({
-          message: "You must be logged in to access this route."
+          message: 'You must be logged in to access this route.'
         });
       }
     } catch (err) {

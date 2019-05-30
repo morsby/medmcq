@@ -13,7 +13,7 @@ const AnswerDetailsRow = ({ answer, handleClick, checked }) => {
 
   return (
     <Table.Row
-      verticalAlign="top"
+      verticalAlign='top'
       positive={answer.performance.correct === answer.performance.tries}
       warning={
         answer.performance.correct < answer.performance.tries && answer.performance.correct > 0
@@ -37,7 +37,7 @@ const AnswerDetailsRow = ({ answer, handleClick, checked }) => {
         <Translate id={`profileAnswerDetails.${question.examSet.season}`} />
         {question.examSet.year}
       </Table.Cell>
-      <Table.Cell collapsing textAlign="right">
+      <Table.Cell collapsing textAlign='right'>
         {Math.round((answer.performance.correct / answer.performance.tries) * 100, 2)}%
       </Table.Cell>
     </Table.Row>

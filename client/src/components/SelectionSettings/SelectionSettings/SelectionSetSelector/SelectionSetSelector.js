@@ -7,16 +7,17 @@ import { Form, Header } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 
 const SelectionSetSelector = ({ semester, selectedSet, onChange }) => {
-  if (!semester)
+  if (!semester) {
     return (
-      <Header as="h3">
-        <Translate id="selectionSetSelector.choose_semester" />
+      <Header as='h3'>
+        <Translate id='selectionSetSelector.choose_semester' />
       </Header>
     );
+  }
   return (
     <Form>
-      <Header as="h3">
-        <Translate id="selectionSetSelector.header" data={{ semester: semester.value }} />
+      <Header as='h3'>
+        <Translate id='selectionSetSelector.header' data={{ semester: semester.value }} />
       </Header>
 
       {semester.examSets.map((set) => (

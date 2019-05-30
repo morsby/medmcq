@@ -13,22 +13,28 @@
              Tasks
 *******************************/
 
-
-module.exports = function(gulp) {
+module.exports = function (gulp) {
   var
     // less/css distributions
-    initComponents      = require('../admin/components/init'),
-    createComponents    = require('../admin/components/create'),
-    updateComponents    = require('../admin/components/update'),
+    initComponents = require('../admin/components/init');
 
-    // single component releases
-    initDistributions   = require('../admin/distributions/init'),
-    createDistributions = require('../admin/distributions/create'),
-    updateDistributions = require('../admin/distributions/update'),
+  var createComponents = require('../admin/components/create');
 
-    release             = require('../admin/release'),
-    publish             = require('../admin/publish'),
-    register            = require('../admin/register')
+  var updateComponents = require('../admin/components/update');
+
+  // single component releases
+
+  var initDistributions = require('../admin/distributions/init');
+
+  var createDistributions = require('../admin/distributions/create');
+
+  var updateDistributions = require('../admin/distributions/update');
+
+  var release = require('../admin/release');
+
+  var publish = require('../admin/publish');
+
+  var register = require('../admin/register')
   ;
 
   /* Release */
@@ -45,5 +51,4 @@ module.exports = function(gulp) {
   gulp.task('release', 'Stages changes in GitHub repos for all distributions', release);
   gulp.task('publish', 'Publishes all releases (components, package)', publish);
   gulp.task('register', 'Registers all packages with NPM', register);
-
 };

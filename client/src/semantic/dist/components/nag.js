@@ -8,65 +8,93 @@
  *
  */
 
-(function($, window, document, undefined) {
+(function ($, window, document, undefined) {
   'use strict';
 
   $.isFunction =
     $.isFunction ||
-    function(obj) {
+    function (obj) {
       return typeof obj === 'function' && typeof obj.nodeType !== 'number';
     };
 
   window =
-    typeof window != 'undefined' && window.Math == Math
+    typeof window !== 'undefined' && window.Math == Math
       ? window
-      : typeof self != 'undefined' && self.Math == Math
-      ? self
-      : Function('return this')();
+      : typeof self !== 'undefined' && self.Math == Math
+        ? self
+        : Function('return this')();
 
-  $.fn.nag = function(parameters) {
-    var $allModules = $(this),
-      moduleSelector = $allModules.selector || '',
-      time = new Date().getTime(),
-      performance = [],
-      query = arguments[0],
-      methodInvoked = typeof query == 'string',
-      queryArguments = [].slice.call(arguments, 1),
-      returnedValue;
-    $allModules.each(function() {
+  $.fn.nag = function (parameters) {
+    var $allModules = $(this);
+
+    var moduleSelector = $allModules.selector || '';
+
+    var time = new Date().getTime();
+
+    var performance = [];
+
+    var query = arguments[0];
+
+    var methodInvoked = typeof query === 'string';
+
+    var queryArguments = [].slice.call(arguments, 1);
+
+    var returnedValue;
+    $allModules.each(function () {
       var settings = $.isPlainObject(parameters)
-          ? $.extend(true, {}, $.fn.nag.settings, parameters)
-          : $.extend({}, $.fn.nag.settings),
-        className = settings.className,
-        selector = settings.selector,
-        error = settings.error,
-        namespace = settings.namespace,
-        eventNamespace = '.' + namespace,
-        moduleNamespace = namespace + '-module',
-        $module = $(this),
-        $close = $module.find(selector.close),
-        $context = settings.context ? $(settings.context) : $('body'),
-        element = this,
-        instance = $module.data(moduleNamespace),
-        moduleOffset,
-        moduleHeight,
-        contextWidth,
-        contextHeight,
-        contextOffset,
-        yOffset,
-        yPosition,
-        timer,
-        module,
-        requestAnimationFrame =
+        ? $.extend(true, {}, $.fn.nag.settings, parameters)
+        : $.extend({}, $.fn.nag.settings);
+
+      var className = settings.className;
+
+      var selector = settings.selector;
+
+      var error = settings.error;
+
+      var namespace = settings.namespace;
+
+      var eventNamespace = '.' + namespace;
+
+      var moduleNamespace = namespace + '-module';
+
+      var $module = $(this);
+
+      var $close = $module.find(selector.close);
+
+      var $context = settings.context ? $(settings.context) : $('body');
+
+      var element = this;
+
+      var instance = $module.data(moduleNamespace);
+
+      var moduleOffset;
+
+      var moduleHeight;
+
+      var contextWidth;
+
+      var contextHeight;
+
+      var contextOffset;
+
+      var yOffset;
+
+      var yPosition;
+
+      var timer;
+
+      var module;
+
+      var requestAnimationFrame =
           window.requestAnimationFrame ||
           window.mozRequestAnimationFrame ||
           window.webkitRequestAnimationFrame ||
           window.msRequestAnimationFrame ||
-          function(callback) {
+          function (callback) {
             setTimeout(callback, 0);
           };
       module = {
-        initialize: function() {
+        initialize: function () {
           module.verbose('Initializing element');
 
           $module
@@ -83,12 +111,12 @@
           module.show();
         },
 
-        destroy: function() {
+        destroy: function () {
           module.verbose('Destroying instance');
           $module.removeData(moduleNamespace).off(eventNamespace);
         },
 
-        show: function() {
+        show: function () {
           if (module.should.show() && !$module.is(':visible')) {
             module.debug('Showing nag', settings.animation.show);
             if (settings.animation.show == 'fade') {
@@ -99,7 +127,7 @@
           }
         },
 
-        hide: function() {
+        hide: function () {
           module.debug('Showing nag', settings.animation.hide);
           if (settings.animation.show == 'fade') {
             $module.fadeIn(settings.duration, settings.easing);
@@ -108,7 +136,7 @@
           }
         },
 
-        onHide: function() {
+        onHide: function () {
           module.debug('Removing nag', settings.animation.hide);
           $module.remove();
           if (settings.onHide) {
@@ -116,7 +144,7 @@
           }
         },
 
-        dismiss: function(event) {
+        dismiss: function (event) {
           if (settings.storageMethod) {
             module.storage.set(settings.key, settings.value);
           }
@@ -126,7 +154,7 @@
         },
 
         should: {
-          show: function() {
+          show: function () {
             if (settings.persist) {
               module.debug('Persistent nag is set, can show nag');
               return true;
@@ -144,7 +172,7 @@
         },
 
         get: {
-          storageOptions: function() {
+          storageOptions: function () {
             var options = {};
             if (settings.expires) {
               options.expires = settings.expires;
@@ -159,12 +187,12 @@
           }
         },
 
-        clear: function() {
+        clear: function () {
           module.storage.remove(settings.key);
         },
 
         storage: {
-          set: function(key, value) {
+          set: function (key, value) {
             var options = module.get.storageOptions();
             if (settings.storageMethod == 'localstorage' && window.localStorage !== undefined) {
               window.localStorage.setItem(key, value);
@@ -180,10 +208,9 @@
               module.debug('Value stored using cookie', key, value, options);
             } else {
               module.error(error.noCookieStorage);
-              return;
             }
           },
-          get: function(key, value) {
+          get: function (key, value) {
             var storedValue;
             if (settings.storageMethod == 'localstorage' && window.localStorage !== undefined) {
               storedValue = window.localStorage.getItem(key);
@@ -209,7 +236,7 @@
             }
             return storedValue;
           },
-          remove: function(key) {
+          remove: function (key) {
             var options = module.get.storageOptions();
             if (settings.storageMethod == 'localstorage' && window.localStorage !== undefined) {
               window.localStorage.removeItem(key);
@@ -228,7 +255,7 @@
           }
         },
 
-        setting: function(name, value) {
+        setting: function (name, value) {
           module.debug('Changing setting', name, value);
           if ($.isPlainObject(name)) {
             $.extend(true, settings, name);
@@ -242,7 +269,7 @@
             return settings[name];
           }
         },
-        internal: function(name, value) {
+        internal: function (name, value) {
           if ($.isPlainObject(name)) {
             $.extend(true, module, name);
           } else if (value !== undefined) {
@@ -251,7 +278,7 @@
             return module[name];
           }
         },
-        debug: function() {
+        debug: function () {
           if (!settings.silent && settings.debug) {
             if (settings.performance) {
               module.performance.log(arguments);
@@ -265,7 +292,7 @@
             }
           }
         },
-        verbose: function() {
+        verbose: function () {
           if (!settings.silent && settings.verbose && settings.debug) {
             if (settings.performance) {
               module.performance.log(arguments);
@@ -279,7 +306,7 @@
             }
           }
         },
-        error: function() {
+        error: function () {
           if (!settings.silent) {
             module.error = Function.prototype.bind.call(
               console.error,
@@ -290,7 +317,7 @@
           }
         },
         performance: {
-          log: function(message) {
+          log: function (message) {
             var currentTime, executionTime, previousTime;
             if (settings.performance) {
               currentTime = new Date().getTime();
@@ -307,12 +334,13 @@
             clearTimeout(module.performance.timer);
             module.performance.timer = setTimeout(module.performance.display, 500);
           },
-          display: function() {
-            var title = settings.name + ':',
-              totalTime = 0;
+          display: function () {
+            var title = settings.name + ':';
+
+            var totalTime = 0;
             time = false;
             clearTimeout(module.performance.timer);
-            $.each(performance, function(index, data) {
+            $.each(performance, function (index, data) {
               totalTime += data['Execution Time'];
             });
             title += ' ' + totalTime + 'ms';
@@ -327,7 +355,7 @@
               if (console.table) {
                 console.table(performance);
               } else {
-                $.each(performance, function(index, data) {
+                $.each(performance, function (index, data) {
                   console.log(data['Name'] + ': ' + data['Execution Time'] + 'ms');
                 });
               }
@@ -336,17 +364,20 @@
             performance = [];
           }
         },
-        invoke: function(query, passedArguments, context) {
-          var object = instance,
-            maxDepth,
-            found,
-            response;
+        invoke: function (query, passedArguments, context) {
+          var object = instance;
+
+          var maxDepth;
+
+          var found;
+
+          var response;
           passedArguments = passedArguments || queryArguments;
           context = element || context;
-          if (typeof query == 'string' && object !== undefined) {
+          if (typeof query === 'string' && object !== undefined) {
             query = query.split(/[\. ]/);
             maxDepth = query.length - 1;
-            $.each(query, function(depth, value) {
+            $.each(query, function (depth, value) {
               var camelCaseValue =
                 depth != maxDepth
                   ? value + query[depth + 1].charAt(0).toUpperCase() + query[depth + 1].slice(1)
@@ -453,12 +484,12 @@
     speed: 500,
     easing: 'easeOutQuad',
 
-    onHide: function() {}
+    onHide: function () {}
   };
 
   // Adds easing
   $.extend($.easing, {
-    easeOutQuad: function(x, t, b, c, d) {
+    easeOutQuad: function (x, t, b, c, d) {
       return -c * (t /= d) * (t - 2) + b;
     }
   });

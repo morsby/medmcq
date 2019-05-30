@@ -1,13 +1,13 @@
-import express from "express";
-import { ValidationError, NotFoundError } from "objection";
-import _ from "lodash";
-import { errorHandler } from "../middleware/errorHandling";
-import { permit } from "../middleware/permission";
-import Question from "../models/question";
-import QuestionUserAnswer from "../models/question_user_answer";
-import QuestionBookmark from "../models/question_bookmark";
-import QuestionComment from "../models/question_comment";
-import User from "../models/user";
+import express from 'express';
+import { ValidationError, NotFoundError } from 'objection';
+import _ from 'lodash';
+import { errorHandler } from '../middleware/errorHandling';
+import { permit } from '../middleware/permission';
+import Question from '../models/question';
+import QuestionUserAnswer from '../models/question_user_answer';
+import QuestionBookmark from '../models/question_bookmark';
+import QuestionComment from '../models/question_comment';
+import User from '../models/user';
 const router = express.Router();
 
 /**
@@ -32,12 +32,12 @@ const router = express.Router();
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.get("/", permit({ roles: ["admin"] }), async (req, res) => {
+router.get('/', permit({ roles: ['admin'] }), async (req, res) => {
   try {
     let users = await User.query()
-      .joinRelation("role")
-      .select("user.*", "role.name as role")
-      .orderBy("roleId");
+      .joinRelation('role')
+      .select('user.*', 'role.name as role')
+      .orderBy('roleId');
 
     res.status(200).json(users);
   } catch (err) {
@@ -80,7 +80,7 @@ router.get("/", permit({ roles: ["admin"] }), async (req, res) => {
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.post("/", async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     let newUser = await User.query().insert({
       ...req.body
@@ -117,8 +117,8 @@ router.post("/", async (req, res) => {
  *               $ref: "#/components/schemas/Error"
  */
 router.get(
-  "/:id",
-  permit({ roles: ["admin"], owner: "params.id" }),
+  '/:id',
+  permit({ roles: ['admin'], owner: 'params.id' }),
   async (req, res) => {
     let { id } = req.params;
 
@@ -184,8 +184,8 @@ router.get(
  *               $ref: "#/components/schemas/Error"
  */
 router.get(
-  "/:id/profile",
-  permit({ roles: ["admin"], owner: "params.id" }),
+  '/:id/profile',
+  permit({ roles: ['admin'], owner: 'params.id' }),
   async (req, res) => {
     let { id } = req.params;
 
@@ -194,52 +194,52 @@ router.get(
       // TODO: Find en måde at undgå at kalde hente brugeren men i stedet
       // direkte finde svar. Husk parseJson i Models/User.
       let answers = QuestionUserAnswer.query()
-        .where("userId", id)
-        .modify("summary");
+        .where('userId', id)
+        .modify('summary');
 
       let answeredQuestions = Question.query()
         .whereIn(
-          "id",
+          'id',
           QuestionUserAnswer.query()
-            .where("userId", id)
-            .distinct("questionId")
+            .where('userId', id)
+            .distinct('questionId')
         )
-        .eager(Question.defaultEager.replace("publicComments.user, ", ""));
+        .eager(Question.defaultEager.replace('publicComments.user, ', ''));
 
       // Find questions the user has commented publicly, fetches including other public comments
       let publicComments = Question.query()
         .whereIn(
-          "id",
+          'id',
           QuestionComment.query()
-            .where("userId", id)
-            .andWhere("private", false)
-            .distinct("questionId")
+            .where('userId', id)
+            .andWhere('private', false)
+            .distinct('questionId')
         )
         .eager(Question.defaultEager);
 
       // Find questions the usrer has commented privately, ...
       let privateComments = Question.query()
         .whereIn(
-          "id",
+          'id',
           QuestionComment.query()
-            .where("userId", id)
-            .andWhere("private", true)
-            .distinct("questionId")
+            .where('userId', id)
+            .andWhere('private', true)
+            .distinct('questionId')
         )
-        .eager(Question.defaultEager.replace("publicComments.user, ", ""))
-        .mergeEager("privateComments(own).user", {
+        .eager(Question.defaultEager.replace('publicComments.user, ', ''))
+        .mergeEager('privateComments(own).user', {
           userId: id
         });
 
       // Find questions the user has bookmarked
       let bookmarks = Question.query()
         .whereIn(
-          "id",
+          'id',
           QuestionBookmark.query()
-            .where("userId", id)
-            .distinct("questionId")
+            .where('userId', id)
+            .distinct('questionId')
         )
-        .eager(Question.defaultEager.replace("publicComments.user, ", ""));
+        .eager(Question.defaultEager.replace('publicComments.user, ', ''));
 
       // Perform all queries.
       [
@@ -258,7 +258,7 @@ router.get(
 
       let profile = {};
 
-      answers = _.groupBy(answers, "questionId");
+      answers = _.groupBy(answers, 'questionId');
 
       answeredQuestions = answeredQuestions.map(question => ({
         question,
@@ -317,8 +317,8 @@ router.get(
  *               $ref: "#/components/schemas/Error"
  */
 router.patch(
-  "/:id",
-  permit({ roles: ["admin"], owner: "params.id" }),
+  '/:id',
+  permit({ roles: ['admin'], owner: 'params.id' }),
   async (req, res) => {
     let { id } = req.params;
 
@@ -326,8 +326,8 @@ router.patch(
       // Hvis der ikke er nogle data med i req.body smider vi en fejl
       if (Object.keys(req.body).length === 0) {
         throw new ValidationError({
-          type: "ModelValidation",
-          message: "No values to patch",
+          type: 'ModelValidation',
+          message: 'No values to patch',
           data: {}
         });
       }
@@ -366,8 +366,8 @@ router.patch(
  *               $ref: "#/components/schemas/Error"
  */
 router.delete(
-  "/:id",
-  permit({ roles: ["admin"], owner: "params.id" }),
+  '/:id',
+  permit({ roles: ['admin'], owner: 'params.id' }),
   async (req, res) => {
     let { id } = req.params;
 
@@ -375,7 +375,7 @@ router.delete(
       const deleted = await User.query().deleteById(id);
       if (deleted > 0) {
         res.status(200).json({
-          type: "deleteUser",
+          type: 'deleteUser',
           message: `Succesfully deleted ${deleted} user`
         });
       } else {

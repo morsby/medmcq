@@ -8,75 +8,90 @@
  *
  */
 
-(function($, window, document, undefined) {
+(function ($, window, document, undefined) {
   $.isFunction =
     $.isFunction ||
-    function(obj) {
+    function (obj) {
       return typeof obj === 'function' && typeof obj.nodeType !== 'number';
     };
 
-  $.site = $.fn.site = function(parameters) {
-    var time = new Date().getTime(),
-      performance = [],
-      query = arguments[0],
-      methodInvoked = typeof query == 'string',
-      queryArguments = [].slice.call(arguments, 1),
-      settings = $.isPlainObject(parameters)
-        ? $.extend(true, {}, $.site.settings, parameters)
-        : $.extend({}, $.site.settings),
-      namespace = settings.namespace,
-      error = settings.error,
-      eventNamespace = '.' + namespace,
-      moduleNamespace = 'module-' + namespace,
-      $document = $(document),
-      $module = $document,
-      element = this,
-      instance = $module.data(moduleNamespace),
-      module,
-      returnedValue;
+  $.site = $.fn.site = function (parameters) {
+    var time = new Date().getTime();
+
+    var performance = [];
+
+    var query = arguments[0];
+
+    var methodInvoked = typeof query === 'string';
+
+    var queryArguments = [].slice.call(arguments, 1);
+
+    var settings = $.isPlainObject(parameters)
+      ? $.extend(true, {}, $.site.settings, parameters)
+      : $.extend({}, $.site.settings);
+
+    var namespace = settings.namespace;
+
+    var error = settings.error;
+
+    var eventNamespace = '.' + namespace;
+
+    var moduleNamespace = 'module-' + namespace;
+
+    var $document = $(document);
+
+    var $module = $document;
+
+    var element = this;
+
+    var instance = $module.data(moduleNamespace);
+
+    var module;
+
+    var returnedValue;
     module = {
-      initialize: function() {
+      initialize: function () {
         module.instantiate();
       },
 
-      instantiate: function() {
+      instantiate: function () {
         module.verbose('Storing instance of site', module);
         instance = module;
         $module.data(moduleNamespace, module);
       },
 
-      normalize: function() {
+      normalize: function () {
         module.fix.console();
         module.fix.requestAnimationFrame();
       },
 
       fix: {
-        console: function() {
+        console: function () {
           module.debug('Normalizing window.console');
           if (console === undefined || console.log === undefined) {
             module.verbose('Console not available, normalizing events');
             module.disable.console();
           }
           if (
-            typeof console.group == 'undefined' ||
-            typeof console.groupEnd == 'undefined' ||
-            typeof console.groupCollapsed == 'undefined'
+            typeof console.group === 'undefined' ||
+            typeof console.groupEnd === 'undefined' ||
+            typeof console.groupCollapsed === 'undefined'
           ) {
             module.verbose('Console group not available, normalizing events');
-            window.console.group = function() {};
-            window.console.groupEnd = function() {};
-            window.console.groupCollapsed = function() {};
+            window.console.group = function () {};
+            window.console.groupEnd = function () {};
+            window.console.groupCollapsed = function () {};
           }
-          if (typeof console.markTimeline == 'undefined') {
+          if (typeof console.markTimeline === 'undefined') {
             module.verbose('Mark timeline not available, normalizing events');
-            window.console.markTimeline = function() {};
+            window.console.markTimeline = function () {};
           }
         },
-        consoleClear: function() {
+        consoleClear: function () {
           module.debug('Disabling programmatic console clearing');
-          window.console.clear = function() {};
+          window.console.clear = function () {};
         },
-        requestAnimationFrame: function() {
+        requestAnimationFrame: function () {
           module.debug('Normalizing requestAnimationFrame');
           if (window.requestAnimationFrame === undefined) {
             module.debug('RequestAnimationFrame not available, normalizing event');
@@ -85,22 +100,22 @@
               window.mozRequestAnimationFrame ||
               window.webkitRequestAnimationFrame ||
               window.msRequestAnimationFrame ||
-              function(callback) {
+              function (callback) {
                 setTimeout(callback, 0);
               };
           }
         }
       },
 
-      moduleExists: function(name) {
+      moduleExists: function (name) {
         return $.fn[name] !== undefined && $.fn[name].settings !== undefined;
       },
 
       enabled: {
-        modules: function(modules) {
+        modules: function (modules) {
           var enabledModules = [];
           modules = modules || settings.modules;
-          $.each(modules, function(index, name) {
+          $.each(modules, function (index, name) {
             if (module.moduleExists(name)) {
               enabledModules.push(name);
             }
@@ -110,10 +125,10 @@
       },
 
       disabled: {
-        modules: function(modules) {
+        modules: function (modules) {
           var disabledModules = [];
           modules = modules || settings.modules;
-          $.each(modules, function(index, name) {
+          $.each(modules, function (index, name) {
             if (!module.moduleExists(name)) {
               disabledModules.push(name);
             }
@@ -123,7 +138,7 @@
       },
 
       change: {
-        setting: function(setting, value, modules, modifyExisting) {
+        setting: function (setting, value, modules, modifyExisting) {
           modules =
             typeof modules === 'string'
               ? modules === 'all'
@@ -131,11 +146,12 @@
                 : [modules]
               : modules || settings.modules;
           modifyExisting = modifyExisting !== undefined ? modifyExisting : true;
-          $.each(modules, function(index, name) {
+          $.each(modules, function (index, name) {
             var namespace = module.moduleExists(name)
-                ? $.fn[name].settings.namespace || false
-                : true,
-              $existingModules;
+              ? $.fn[name].settings.namespace || false
+              : true;
+
+            var $existingModules;
             if (module.moduleExists(name)) {
               module.verbose('Changing default setting', setting, value, name);
               $.fn[name].settings[setting] = value;
@@ -149,10 +165,10 @@
             }
           });
         },
-        settings: function(newSettings, modules, modifyExisting) {
+        settings: function (newSettings, modules, modifyExisting) {
           modules = typeof modules === 'string' ? [modules] : modules || settings.modules;
           modifyExisting = modifyExisting !== undefined ? modifyExisting : true;
-          $.each(modules, function(index, name) {
+          $.each(modules, function (index, name) {
             var $existingModules;
             if (module.moduleExists(name)) {
               module.verbose('Changing default setting', newSettings, name);
@@ -170,37 +186,37 @@
       },
 
       enable: {
-        console: function() {
+        console: function () {
           module.console(true);
         },
-        debug: function(modules, modifyExisting) {
+        debug: function (modules, modifyExisting) {
           modules = modules || settings.modules;
           module.debug('Enabling debug for modules', modules);
           module.change.setting('debug', true, modules, modifyExisting);
         },
-        verbose: function(modules, modifyExisting) {
+        verbose: function (modules, modifyExisting) {
           modules = modules || settings.modules;
           module.debug('Enabling verbose debug for modules', modules);
           module.change.setting('verbose', true, modules, modifyExisting);
         }
       },
       disable: {
-        console: function() {
+        console: function () {
           module.console(false);
         },
-        debug: function(modules, modifyExisting) {
+        debug: function (modules, modifyExisting) {
           modules = modules || settings.modules;
           module.debug('Disabling debug for modules', modules);
           module.change.setting('debug', false, modules, modifyExisting);
         },
-        verbose: function(modules, modifyExisting) {
+        verbose: function (modules, modifyExisting) {
           modules = modules || settings.modules;
           module.debug('Disabling verbose debug for modules', modules);
           module.change.setting('verbose', false, modules, modifyExisting);
         }
       },
 
-      console: function(enable) {
+      console: function (enable) {
         if (enable) {
           if (instance.cache.console === undefined) {
             module.error(error.console);
@@ -212,27 +228,27 @@
           module.debug('Disabling console function');
           instance.cache.console = window.console;
           window.console = {
-            clear: function() {},
-            error: function() {},
-            group: function() {},
-            groupCollapsed: function() {},
-            groupEnd: function() {},
-            info: function() {},
-            log: function() {},
-            markTimeline: function() {},
-            warn: function() {}
+            clear: function () {},
+            error: function () {},
+            group: function () {},
+            groupCollapsed: function () {},
+            groupEnd: function () {},
+            info: function () {},
+            log: function () {},
+            markTimeline: function () {},
+            warn: function () {}
           };
         }
       },
 
-      destroy: function() {
+      destroy: function () {
         module.verbose('Destroying previous site for', $module);
         $module.removeData(moduleNamespace);
       },
 
       cache: {},
 
-      setting: function(name, value) {
+      setting: function (name, value) {
         if ($.isPlainObject(name)) {
           $.extend(true, settings, name);
         } else if (value !== undefined) {
@@ -241,7 +257,7 @@
           return settings[name];
         }
       },
-      internal: function(name, value) {
+      internal: function (name, value) {
         if ($.isPlainObject(name)) {
           $.extend(true, module, name);
         } else if (value !== undefined) {
@@ -250,7 +266,7 @@
           return module[name];
         }
       },
-      debug: function() {
+      debug: function () {
         if (settings.debug) {
           if (settings.performance) {
             module.performance.log(arguments);
@@ -260,7 +276,7 @@
           }
         }
       },
-      verbose: function() {
+      verbose: function () {
         if (settings.verbose && settings.debug) {
           if (settings.performance) {
             module.performance.log(arguments);
@@ -274,12 +290,12 @@
           }
         }
       },
-      error: function() {
+      error: function () {
         module.error = Function.prototype.bind.call(console.error, console, settings.name + ':');
         module.error.apply(console, arguments);
       },
       performance: {
-        log: function(message) {
+        log: function (message) {
           var currentTime, executionTime, previousTime;
           if (settings.performance) {
             currentTime = new Date().getTime();
@@ -296,12 +312,13 @@
           clearTimeout(module.performance.timer);
           module.performance.timer = setTimeout(module.performance.display, 500);
         },
-        display: function() {
-          var title = settings.name + ':',
-            totalTime = 0;
+        display: function () {
+          var title = settings.name + ':';
+
+          var totalTime = 0;
           time = false;
           clearTimeout(module.performance.timer);
-          $.each(performance, function(index, data) {
+          $.each(performance, function (index, data) {
             totalTime += data['Execution Time'];
           });
           title += ' ' + totalTime + 'ms';
@@ -313,7 +330,7 @@
             if (console.table) {
               console.table(performance);
             } else {
-              $.each(performance, function(index, data) {
+              $.each(performance, function (index, data) {
                 console.log(data['Name'] + ': ' + data['Execution Time'] + 'ms');
               });
             }
@@ -322,17 +339,20 @@
           performance = [];
         }
       },
-      invoke: function(query, passedArguments, context) {
-        var object = instance,
-          maxDepth,
-          found,
-          response;
+      invoke: function (query, passedArguments, context) {
+        var object = instance;
+
+        var maxDepth;
+
+        var found;
+
+        var response;
         passedArguments = passedArguments || queryArguments;
         context = element || context;
-        if (typeof query == 'string' && object !== undefined) {
+        if (typeof query === 'string' && object !== undefined) {
           query = query.split(/[\. ]/);
           maxDepth = query.length - 1;
-          $.each(query, function(depth, value) {
+          $.each(query, function (depth, value) {
             var camelCaseValue =
               depth != maxDepth
                 ? value + query[depth + 1].charAt(0).toUpperCase() + query[depth + 1].slice(1)
@@ -434,14 +454,14 @@
   // allows for selection of elements with data attributes
   $.extend($.expr[':'], {
     data: $.expr.createPseudo
-      ? $.expr.createPseudo(function(dataName) {
-          return function(elem) {
-            return !!$.data(elem, dataName);
-          };
-        })
-      : function(elem, i, match) {
-          // support: jQuery < 1.8
-          return !!$.data(elem, match[3]);
-        }
+      ? $.expr.createPseudo(function (dataName) {
+        return function (elem) {
+          return !!$.data(elem, dataName);
+        };
+      })
+      : function (elem, i, match) {
+        // support: jQuery < 1.8
+        return !!$.data(elem, match[3]);
+      }
   });
 })(jQuery, window, document);

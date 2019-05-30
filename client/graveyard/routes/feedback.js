@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 // /api/feedback
 
 const express = require('express');
@@ -9,7 +10,7 @@ const Feedback = require('../../../models/feedback.js');
 const Comment = require('../../../models/comment.js');
 
 router.get('/', (req, res) => {
-  Feedback.find(function(err, feedback) {
+  Feedback.find(function (err, feedback) {
     if (err) res.status(400).send(err);
 
     res.json(feedback);
@@ -64,6 +65,7 @@ router.put('/:id', (req, res) => {
 
 router.put('/:id/vote', (req, res) => {
   Feedback.findById(req.params.id, (err, feedback) => {
+    if (err) res.send(err);
     feedback.votes = feedback.votes + Number(req.body.val);
     feedback.save((err) => {
       if (err) res.send(err);

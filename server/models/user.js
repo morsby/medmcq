@@ -1,59 +1,59 @@
-import BaseModel, { hiddenCols } from "./_base_model";
+import BaseModel, { hiddenCols } from './_base_model';
 
-const { Model } = require("objection");
-const Password = require("objection-password")({
+const { Model } = require('objection');
+const Password = require('objection-password')({
   rounds: 10
 });
 
 // TODO: pre-migration: Password skal slåes fra under migrering
 
 class User extends Password(BaseModel) {
-  static get hidden() {
+  static get hidden () {
     return [
       ...hiddenCols,
-      "password",
-      "resetPasswordToken",
-      "resetPasswordExpires"
+      'password',
+      'resetPasswordToken',
+      'resetPasswordExpires'
     ];
   }
 
-  static get tableName() {
-    return "user";
+  static get tableName () {
+    return 'user';
   }
 
-  static get jsonSchema() {
+  static get jsonSchema () {
     return {
-      type: "object",
-      required: ["username", "password"],
+      type: 'object',
+      required: ['username', 'password'],
 
       properties: {
-        id: { type: "integer" },
-        username: { type: "string" },
-        password: { type: "string" },
-        email: { type: "string" },
-        resetPasswordExpires: { type: ["integer", "null"] },
-        resetPasswordToken: { type: ["string", "null"] },
-        oldId: { type: "string" },
-        roleId: { type: "integer" }
+        id: { type: 'integer' },
+        username: { type: 'string' },
+        password: { type: 'string' },
+        email: { type: 'string' },
+        resetPasswordExpires: { type: ['integer', 'null'] },
+        resetPasswordToken: { type: ['string', 'null'] },
+        oldId: { type: 'string' },
+        roleId: { type: 'integer' }
       }
     };
   }
 
-  static get relationMappings() {
-    const QuestionComment = require("./question_comment");
-    const QuestionBookmark = require("./question_bookmark");
-    const QuestionUserAnswer = require("./question_user_answer");
-    const UserRole = require("./user_role");
-    const SpecialtyVote = require("./question_specialty_vote");
-    const TagVote = require("./question_tag_vote");
+  static get relationMappings () {
+    const QuestionComment = require('./question_comment');
+    const QuestionBookmark = require('./question_bookmark');
+    const QuestionUserAnswer = require('./question_user_answer');
+    const UserRole = require('./user_role');
+    const SpecialtyVote = require('./question_specialty_vote');
+    const TagVote = require('./question_tag_vote');
 
     return {
       comments: {
         relation: Model.HasManyRelation,
         modelClass: QuestionComment,
         join: {
-          from: "questionComment.userId",
-          to: "user.id"
+          from: 'questionComment.userId',
+          to: 'user.id'
         }
       },
 
@@ -61,8 +61,8 @@ class User extends Password(BaseModel) {
         relation: Model.HasManyRelation,
         modelClass: QuestionComment,
         join: {
-          from: "questionComment.userId",
-          to: "user.id"
+          from: 'questionComment.userId',
+          to: 'user.id'
         },
         modify: builder => builder.where({ private: false })
       },
@@ -70,8 +70,8 @@ class User extends Password(BaseModel) {
         relation: Model.HasManyRelation,
         modelClass: QuestionComment,
         join: {
-          from: "questionComment.userId",
-          to: "user.id"
+          from: 'questionComment.userId',
+          to: 'user.id'
         },
         modify: builder => builder.where({ private: true })
       },
@@ -80,8 +80,8 @@ class User extends Password(BaseModel) {
         relation: Model.HasManyRelation,
         modelClass: QuestionBookmark,
         join: {
-          from: "questionBookmark.userId",
-          to: "user.id"
+          from: 'questionBookmark.userId',
+          to: 'user.id'
         }
       },
 
@@ -89,8 +89,8 @@ class User extends Password(BaseModel) {
         relation: Model.HasManyRelation,
         modelClass: QuestionUserAnswer,
         join: {
-          from: "questionUserAnswer.userId",
-          to: "user.id"
+          from: 'questionUserAnswer.userId',
+          to: 'user.id'
         }
       },
 
@@ -98,26 +98,26 @@ class User extends Password(BaseModel) {
         relation: Model.BelongsToOneRelation,
         modelClass: UserRole,
         join: {
-          from: "user.roleId",
-          to: "userRole.id"
+          from: 'user.roleId',
+          to: 'userRole.id'
         },
-        modify: builder => builder.select("id", "name")
+        modify: builder => builder.select('id', 'name')
       },
 
       specialtyVotes: {
         relation: Model.HasManyRelation,
         modelClass: SpecialtyVote,
         join: {
-          from: "questionSpecialtyVote.userId",
-          to: "user.id"
+          from: 'questionSpecialtyVote.userId',
+          to: 'user.id'
         }
       },
       tagVotes: {
         relation: Model.HasManyRelation,
         modelClass: TagVote,
         join: {
-          from: "questionTagVote.userId",
-          to: "user.id"
+          from: 'questionTagVote.userId',
+          to: 'user.id'
         }
       }
     };

@@ -36,7 +36,7 @@ class LoginForm extends Component {
   };
 
   // TODO: Autocomplete
-  render() {
+  render () {
     return (
       <div>
         <Translate>
@@ -44,19 +44,19 @@ class LoginForm extends Component {
             <Form
               onSubmit={this.onSubmit}
               render={({ handleSubmit, pristine, invalid }) => (
-                <form onSubmit={handleSubmit} className="ui form custom">
-                  <Field name="username" validate={loginUsernameValid}>
+                <form onSubmit={handleSubmit} className='ui form custom'>
+                  <Field name='username' validate={loginUsernameValid}>
                     {({ input, meta }) => (
                       <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
                         <label>{translate('loginForm.username')}</label>
                         <input
                           {...input}
-                          type="text"
+                          type='text'
                           placeholder={translate('loginForm.username')}
                         />
 
                         {meta.error && meta.touched && (
-                          <Message error visible={true}>
+                          <Message error visible>
                             {meta.error}
                           </Message>
                         )}
@@ -64,17 +64,17 @@ class LoginForm extends Component {
                     )}
                   </Field>
 
-                  <Field name="password" validate={loginPasswordValid}>
+                  <Field name='password' validate={loginPasswordValid}>
                     {({ input, meta }) => (
                       <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
                         <label>{translate('loginForm.password')}</label>
                         <input
                           {...input}
-                          type="password"
+                          type='password'
                           placeholder={translate('loginForm.password')}
                         />
                         {meta.error && meta.touched && (
-                          <Message error visible={true} size="small">
+                          <Message error visible size='small'>
                             {meta.error}
                           </Message>
                         )}
@@ -85,7 +85,7 @@ class LoginForm extends Component {
                     <Message negative>{translate('loginForm.errs.login_failed')}</Message>
                   )}
                   <Divider hidden />
-                  <Message warning visible={true}>
+                  <Message warning visible>
                     <Message.Header>Mellemrum i brugernavne</Message.Header>
                     <p>
                       Vi har fjernet alle mellemrum fra brugernavne. Har du før logget ind med et
@@ -97,7 +97,7 @@ class LoginForm extends Component {
                     </p>
                   </Message>
                   <Divider hidden />
-                  <Button floated="left" disabled={pristine || invalid} positive>
+                  <Button floated='left' disabled={pristine || invalid} positive>
                     {translate('loginForm.login')}
                   </Button>
                 </form>
@@ -106,11 +106,11 @@ class LoginForm extends Component {
           )}
         </Translate>
         <div style={{ float: 'right' }}>
-          <Button onClick={() => this.handleNavigation('forgotPassword')} color="blue">
-            <Translate id="loginForm.forgot_password" />
+          <Button onClick={() => this.handleNavigation('forgotPassword')} color='blue'>
+            <Translate id='loginForm.forgot_password' />
           </Button>
           <Button onClick={() => this.handleNavigation('signup')}>
-            <Translate id="loginForm.signup" />
+            <Translate id='loginForm.signup' />
           </Button>
         </div>
       </div>
@@ -127,7 +127,7 @@ LoginForm.propTypes = {
   history: ReactRouterPropTypes.history
 };
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
     auth: state.auth
   };

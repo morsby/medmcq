@@ -15,7 +15,7 @@ import FeedbackListItem from './FeedbackListItem';
 class FeedbackList extends Component {
   state = { sortBy: 'votes', order: 'desc' };
 
-  sortBy(key) {
+  sortBy (key) {
     if (key === this.state.sortBy) {
       let order = this.state.order === 'desc' ? 'asc' : 'desc';
       this.setState({ order });
@@ -24,33 +24,34 @@ class FeedbackList extends Component {
     }
   }
 
-  render() {
-    let { feedback, getSpecificFeedback } = this.props,
-      { sortBy, order } = this.state;
+  render () {
+    let { feedback, getSpecificFeedback } = this.props;
+
+    let { sortBy, order } = this.state;
 
     let sortedFeedback = _.orderBy(feedback, sortBy, order);
 
-    let icon = order === 'desc' ? <Icon name="sort descending" /> : <Icon name="sort ascending" />;
+    let icon = order === 'desc' ? <Icon name='sort descending' /> : <Icon name='sort ascending' />;
 
     return (
       <div>
         <p>
-          <Translate id="feedbackList.sort_by" />{' '}
+          <Translate id='feedbackList.sort_by' />{' '}
           <span
             style={{ fontWeight: 'bold' }}
-            className="click"
+            className='click'
             onClick={() => this.sortBy('date')}
           >
-            <Translate id="feedbackList.date" />
+            <Translate id='feedbackList.date' />
           </span>{' '}
           {sortBy === 'date' && icon}
-          <Translate id="feedbackList.or" />{' '}
+          <Translate id='feedbackList.or' />{' '}
           <span
             style={{ fontWeight: 'bold' }}
-            className="click"
+            className='click'
             onClick={() => this.sortBy('votes')}
           >
-            <Translate id="feedbackList.popularity" />
+            <Translate id='feedbackList.popularity' />
           </span>
           {sortBy === 'votes' && icon}
         </p>

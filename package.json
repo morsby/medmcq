@@ -9,28 +9,46 @@
   },
   "repository": "https://github.com/Morsby/medmcq",
   "scripts": {
-    "test": "echo \"TESTS are separated in client/ and server/ folders\"",
     "server": "cd server && npm run dev",
     "client": "npm run genversion && cd client && npm start",
     "dev": "npm-run-all --parallel server client",
     "update": "git pull && cd server && npm install && cd ../client && npm install",
     "build": "npm run update && npm run genversion && cd client && npm run build",
     "genversion": "genversion -e version.js && mv version.js client/src/",
-    "validate": "npm-run-all --parallel lint:* ",
-    "lint:server": "cd server && npm run validate",
-    "lint:client": "cd client && npm run validate"
+    "lint": "semistandard --fix --verbose | snazzy",
+    "validate": "npm-run-all --sequential lint test",
+    "test": "npm-run-all --parallel test:server",
+    "test:server": "cd server && npm run test",
+    "test:client": "cd client && npm run test"
   },
   "husky": {
     "hooks": {
       "pre-commit": "npm run validate"
     }
   },
+  "semistandard": {
+    "parser": "babel-eslint",
+    "env": [
+      "jest"
+    ],
+    "ignore": [
+      "**/node_modules/",
+      "**/coverage/**",
+      "**/graveyard/",
+      "client/build/",
+      "client/src/semantic/",
+      "client/src/serviceWorker.js"
+    ]
+  },
   "author": "Morsby",
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
+    "babel-eslint": "^10.0.1",
     "genversion": "^2.1.1",
     "husky": "^2.3.0",
-    "npm-run-all": "^4.1.5"
+    "npm-run-all": "^4.1.5",
+    "semistandard": "github:morsby/semistandard",
+    "snazzy": "^8.0.0"
   }
 }

@@ -1,4 +1,4 @@
-const dev = require("./dev");
+const dev = require('./dev');
 
 module.exports = {
   ...dev

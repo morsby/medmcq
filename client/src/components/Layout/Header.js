@@ -14,13 +14,13 @@ import LeftMenu from './Menus/LeftMenu';
  */
 const Header = () => {
   return (
-    <Responsive as="header" minWidth={breakpoints.mobile}>
+    <Responsive as='header' minWidth={breakpoints.mobile}>
       <h2 className={styles.onprint}>
-        <Translate id="header.credit" />
+        <Translate id='header.credit' />
       </h2>
-      <Menu className={styles.noprint} inverted color="blue" attached borderless={true}>
+      <Menu className={styles.noprint} inverted color='blue' attached borderless>
         <LeftMenu />
-        <Menu.Menu position="right">
+        <Menu.Menu position='right'>
           <RightMenu />
         </Menu.Menu>
       </Menu>

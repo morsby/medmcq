@@ -10,20 +10,22 @@ import { Translate } from 'react-localize-redux';
  * @param {string} type     Hvilken quiz ønskes?
  */
 const SelectionMessage = ({ user = null, type }) => {
-  if (user && type !== 'set')
+  if (user && type !== 'set') {
     return (
       <Message info>
         <p>
-          <Translate id="selectionMessage.available_lower_than_requested" />
+          <Translate id='selectionMessage.available_lower_than_requested' />
         </p>
       </Message>
     );
-  if (!user && type === 'specialer')
+  }
+  if (!user && type === 'specialer') {
     return (
       <p>
-        <Translate id="selectionMessage.specialties_lower_than_requested" />
+        <Translate id='selectionMessage.specialties_lower_than_requested' />
       </p>
     );
+  }
   return null;
 };
 

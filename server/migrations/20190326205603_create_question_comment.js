@@ -1,32 +1,32 @@
-exports.up = function(knex, Promise) {
-  return knex.schema.createTable("question_comment", table => {
+exports.up = function (knex, Promise) {
+  return knex.schema.createTable('question_comment', table => {
     table.increments();
-    table.text("text").notNullable();
+    table.text('text').notNullable();
     table
-      .boolean("private")
+      .boolean('private')
       .notNullable()
       .defaultTo(0);
 
     table
-      .integer("question_id")
+      .integer('question_id')
       .unsigned()
       .notNullable()
-      .references("id")
-      .inTable("question")
-      .onDelete("CASCADE");
+      .references('id')
+      .inTable('question')
+      .onDelete('CASCADE');
 
     table
-      .integer("user_id")
+      .integer('user_id')
       .unsigned()
       .notNullable()
-      .references("id")
-      .inTable("user")
-      .onDelete("CASCADE");
+      .references('id')
+      .inTable('user')
+      .onDelete('CASCADE');
 
     table.timestamps(true, true);
   });
 };
 
-exports.down = function(knex, Promise) {
-  return knex.schema.dropTableIfExists("question_comment");
+exports.down = function (knex, Promise) {
+  return knex.schema.dropTableIfExists('question_comment');
 };

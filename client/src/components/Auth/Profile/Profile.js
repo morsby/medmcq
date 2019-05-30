@@ -16,7 +16,7 @@ import ProfileActivity from './ProfileActivity/ProfileActivity';
  * Component der viser profilen.
  */
 class Profile extends Component {
-  constructor(props) {
+  constructor (props) {
     super(props);
     let { semester } = props.settings;
 
@@ -29,12 +29,12 @@ class Profile extends Component {
     this.handleResize = _.debounce(this.handleResize, 300);
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.props.getProfile(this.props.auth.user.id);
     window.addEventListener('resize', this.handleResize);
   }
 
-  componentWillUnmount() {
+  componentWillUnmount () {
     window.removeEventListener('resize', this.handleResize);
   }
 
@@ -49,21 +49,24 @@ class Profile extends Component {
     this.props.history.push(urls[path]);
   };
 
-  render() {
-    const { profile, user } = this.props.auth,
-      currentLanguage = this.props.settings.language,
-      panes = [],
-      generatePaneLabel = (semester) => {
-        if (this.state.width < 480) {
-          return `${semester.value}${currentLanguage === 'dk' ? '.' : 'th'}`;
-        } else if (this.state.width < 768) {
-          return `${semester.value}${currentLanguage === 'dk' ? '.' : 'th'} (${semester.name})`;
-        } else {
-          return `${semester.value}${currentLanguage === 'dk' ? '.' : 'th'} semester (${
-            semester.name
-          })`;
-        }
-      };
+  render () {
+    const { profile, user } = this.props.auth;
+
+    const currentLanguage = this.props.settings.language;
+
+    const panes = [];
+
+    const generatePaneLabel = (semester) => {
+      if (this.state.width < 480) {
+        return `${semester.value}${currentLanguage === 'dk' ? '.' : 'th'}`;
+      } else if (this.state.width < 768) {
+        return `${semester.value}${currentLanguage === 'dk' ? '.' : 'th'} (${semester.name})`;
+      } else {
+        return `${semester.value}${currentLanguage === 'dk' ? '.' : 'th'} semester (${
+          semester.name
+        })`;
+      }
+    };
 
     _.map(semestre, (e) =>
       panes.push({
@@ -82,23 +85,23 @@ class Profile extends Component {
     );
 
     return (
-      <div className="flex-container">
-        <Container className="content">
+      <div className='flex-container'>
+        <Container className='content'>
           <h2 style={{ textAlign: 'center' }}>
             <Translate
-              id="profile.header"
+              id='profile.header'
               data={{ username: user.username[0].toUpperCase() + user.username.substring(1) }}
             />
           </h2>
           <Divider />
           <div style={{ textAlign: 'center' }}>
-            <Button basic color="yellow" onClick={() => this.handleNavigation('editProfile')}>
-              <Translate id="profile.buttons.edit_profile" />
+            <Button basic color='yellow' onClick={() => this.handleNavigation('editProfile')}>
+              <Translate id='profile.buttons.edit_profile' />
             </Button>
           </div>
           <Divider hidden />
           <h3 style={{ textAlign: 'center' }}>
-            <Translate id="profile.subheader" />
+            <Translate id='profile.subheader' />
           </h3>
           <Tab
             panes={panes}
@@ -138,7 +141,7 @@ Profile.propTypes = {
   auth: PropTypes.object
 };
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
     auth: state.auth,
     settings: state.settings

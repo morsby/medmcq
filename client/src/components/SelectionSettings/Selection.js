@@ -6,7 +6,7 @@ import * as actions from '../../actions';
 
 import _ from 'lodash';
 
-import { allowedNs, breakpoints } from '../../utils/common';
+import { allowedNs, breakpoints, urls } from '../../utils/common';
 import { calculateResults } from '../../utils/quiz';
 
 import selectionTranslations from './selectionTranslations.json';
@@ -22,8 +22,6 @@ import SelectionTypeSelector from './SelectionSettings/SelectionTypeSelector';
 import SelectionUniqueSelector from './SelectionSettings/SelectionUniqueSelector';
 import SelectionMessage from './SelectionMessage';
 
-import { urls } from '../../utils/common';
-
 /**
  * Hovedsiden til at håndtere alle valg af spørgsmål.
  * Props beskrives i bunden.
@@ -31,7 +29,7 @@ import { urls } from '../../utils/common';
 class SelectionMain extends Component {
   state = { err: [], search: '' };
 
-  constructor(props) {
+  constructor (props) {
     super(props);
     this.props.addTranslation(selectionTranslations);
     this.searchHandler = this.searchHandler.bind(this);
@@ -42,7 +40,7 @@ class SelectionMain extends Component {
   /**
    * Henter nye data, hvis det er længe siden sidst.
    */
-  componentDidMount() {
+  componentDidMount () {
     this.props.fetchSemesters();
   }
 
@@ -52,7 +50,7 @@ class SelectionMain extends Component {
    * @param  {string} name     Den indstilling der ændres
    * @param  {string} value    Den værdi der sættes
    */
-  onSettingsChange(e, { value, name, checked }) {
+  onSettingsChange (e, { value, name, checked }) {
     let type = name;
     this.setState({ err: [] });
     if (type === 'n' && value) value = Number(value);
@@ -66,11 +64,11 @@ class SelectionMain extends Component {
    *                           af en gammel?
    */
 
-  searchHandler(e, { value }) {
+  searchHandler (e, { value }) {
     this.setState({ search: value });
   }
 
-  handleSubmit(quizType) {
+  handleSubmit (quizType) {
     let err = [];
 
     /**
@@ -79,7 +77,7 @@ class SelectionMain extends Component {
      * at kunne tælle antal spørgsmål for hvert semester, speciale m.v.
      */
     // TODO: Ny validation
-    /*let { n, semester, type, set, questions, specialer, tags } = this.props.selection;
+    /* let { n, semester, type, set, questions, specialer, tags } = this.props.selection;
 
     // Når den er tom modtager den fuldt antal
 
@@ -122,7 +120,7 @@ class SelectionMain extends Component {
     if (this.state.search !== '') {
       this.props.searchQuestion(this.props.selection.semester.selectedSemester, this.state.search);
       return this.props.history.push(urls.quiz);
-  }*/
+  } */
 
     // tjek for fejl, start eller ej
     if (err.length === 0) {
@@ -138,7 +136,7 @@ class SelectionMain extends Component {
     }
   }
 
-  render() {
+  render () {
     /**
      * Alle de nedenstående variable kommer fra selectionReducer -- de har
      * derfor IKKE noget med selve quiz-spørgsmålene at gøre, og hentes for
@@ -158,15 +156,15 @@ class SelectionMain extends Component {
 
     let antalValgte;
     return (
-      <div className="flex-container">
-        <Container className="content">
-          <Header as="h1" style={{ textAlign: 'center' }}>
+      <div className='flex-container'>
+        <Container className='content'>
+          <Header as='h1' style={{ textAlign: 'center' }}>
             medMcq
           </Header>
           <Divider />
           <SelectionSemesterSelector
             label={this.props.translate('selection.static.choose_semester')}
-            name="selectedSemester"
+            name='selectedSemester'
             semesters={_.map(semesters, ({ id, value, name }) => ({
               value: id,
               text: `${value}. semester (${name})`
@@ -185,7 +183,7 @@ class SelectionMain extends Component {
               <SelectionNSelector n={Number(n)} onChange={this.onSettingsChange} />
               <Divider hidden />
               <Translate
-                id="selectionNSelector.total_n"
+                id='selectionNSelector.total_n'
                 data={{ n: (semesters[selectedSemester] || {}).questionCount }}
               />
               <Divider />
@@ -195,7 +193,7 @@ class SelectionMain extends Component {
           {type !== 'specialer' && type !== 'set' && (
             <>
               <h3>
-                <Translate id="search.title" />
+                <Translate id='search.title' />
               </h3>
               <Input
                 value={this.state.search}
@@ -235,7 +233,7 @@ class SelectionMain extends Component {
             </Message>
           )}
           <Button
-            color="green"
+            color='green'
             basic
             onClick={() => this.handleSubmit('new')}
             disabled={
@@ -253,12 +251,12 @@ class SelectionMain extends Component {
 
           {calculateResults(this.props.questions).status === 'in_progress' && (
             <Button onClick={() => this.handleSubmit('cont')}>
-              <Translate id="selection.static.continue_quiz" />
+              <Translate id='selection.static.continue_quiz' />
             </Button>
           )}
 
           <Message warning>
-            <Translate id="selection.static.front-disclaimer" />
+            <Translate id='selection.static.front-disclaimer' />
           </Message>
           <Divider hidden />
         </Container>
@@ -314,7 +312,7 @@ SelectionMain.propTypes = {
   searchQuestion: PropTypes.func
 };
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
     user: state.auth.user,
     questions: state.questions,

@@ -7,7 +7,7 @@ import { Dimmer, Loader } from 'semantic-ui-react';
  */
 const LoadingPage = () => (
   <Dimmer active page>
-    <Loader active inline="centered" />
+    <Loader active inline='centered' />
   </Dimmer>
 );
 

@@ -39,32 +39,32 @@ const Sidebar = (props) => {
         <SemanticSidebar.Pushable>
           <SemanticSidebar
             as={Menu}
-            animation="overlay"
-            icon="labeled"
+            animation='overlay'
+            icon='labeled'
             inverted
-            color="blue"
+            color='blue'
             onHide={() => setVisible(false)}
             vertical
             visible={visible}
-            width="thin"
+            width='thin'
           >
             <Menu.Item onClick={() => setVisible(false)}>
-              <Icon name="close" inverted size="large" />
-              <Translate id="header.close" />
+              <Icon name='close' inverted size='large' />
+              <Translate id='header.close' />
             </Menu.Item>
             <Menu.Item onClick={() => props.history.push('/')}>
-              <Icon name="home" />
-              <Translate id="header.home" />
+              <Icon name='home' />
+              <Translate id='header.home' />
             </Menu.Item>
             <RightMenu />
           </SemanticSidebar>
 
           <SemanticSidebar.Pusher onClick={handlePusher} dimmed={visible}>
-            <Menu className={styles.noprint} inverted color="blue" attached borderless={true}>
+            <Menu className={styles.noprint} inverted color='blue' attached borderless>
               <Menu.Item disabled={visible} onClick={() => setVisible(!visible)}>
-                <Icon name="bars" inverted size="large" />
+                <Icon name='bars' inverted size='large' />
               </Menu.Item>
-              <Menu.Menu position="right">
+              <Menu.Menu position='right'>
                 <Menu.Item onClick={() => props.history.push('/')}>
                   <Image src={logo} style={{ height: '30px' }} />
                 </Menu.Item>

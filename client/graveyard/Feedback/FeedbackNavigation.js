@@ -34,13 +34,13 @@ const FeedbackNavigation = ({
 
       {id && (
         <Menu.Item onClick={handleClick} path={`${urls.feedback}/${id}`}>
-          <Translate id="feedbackNavigation.suggestion_link" data={{ title }} />
+          <Translate id='feedbackNavigation.suggestion_link' data={{ title }} />
         </Menu.Item>
       )}
-      <Menu.Menu position="right">
+      <Menu.Menu position='right'>
         {match.path !== `${urls.feedback}/new` && (
           <Menu.Item onClick={handleClick} path={`${urls.feedback}/new`}>
-            <Translate id="feedbackNavigation.write_suggestion" />
+            <Translate id='feedbackNavigation.write_suggestion' />
           </Menu.Item>
         )}
       </Menu.Menu>

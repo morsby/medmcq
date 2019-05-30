@@ -3,27 +3,34 @@
 *******************************/
 
 var
-  gulp         = require('gulp'),
+  gulp = require('gulp');
 
-  // gulp dependencies
-  chmod        = require('gulp-chmod'),
-  gulpif       = require('gulp-if'),
+// gulp dependencies
 
-  // config
-  config       = require('../config/user'),
-  tasks        = require('../config/tasks'),
+var chmod = require('gulp-chmod');
 
-  // shorthand
-  globs        = config.globs,
-  assets       = config.paths.assets,
-  output       = config.paths.output,
-  source       = config.paths.source,
+var gulpif = require('gulp-if');
 
-  log          = tasks.log
+// config
+
+var config = require('../config/user');
+
+var tasks = require('../config/tasks');
+
+// shorthand
+
+var globs = config.globs;
+
+var assets = config.paths.assets;
+
+var output = config.paths.output;
+
+var source = config.paths.source;
+
+var log = tasks.log
 ;
 
-module.exports = function(callback) {
-
+module.exports = function (callback) {
   console.info('Building assets');
 
   // copy assets
@@ -31,5 +38,4 @@ module.exports = function(callback) {
     .pipe(gulpif(config.hasPermission, chmod(config.permission)))
     .pipe(gulp.dest(output.themes))
   ;
-
 };

@@ -1,34 +1,34 @@
-import BaseModel from "./_base_model";
-const { Model } = require("objection");
+import BaseModel from './_base_model';
+const { Model } = require('objection');
 
 class UserRole extends BaseModel {
-  static get tableName() {
-    return "userRole";
+  static get tableName () {
+    return 'userRole';
   }
 
-  static get jsonSchema() {
+  static get jsonSchema () {
     return {
-      type: "object",
-      required: ["name", "level"],
+      type: 'object',
+      required: ['name', 'level'],
 
       properties: {
-        id: { type: "integer" },
-        name: { type: "string" },
-        level: { type: "integer" }
+        id: { type: 'integer' },
+        name: { type: 'string' },
+        level: { type: 'integer' }
       }
     };
   }
 
-  static get relationMappings() {
-    const User = require("./user");
+  static get relationMappings () {
+    const User = require('./user');
 
     return {
       users: {
         relation: Model.HasManyRelation,
         modelClass: User,
         join: {
-          from: "user.roleId",
-          to: "userRole.id"
+          from: 'user.roleId',
+          to: 'userRole.id'
         }
       }
     };

@@ -22,11 +22,11 @@ const FeedbackComment = ({ comment, replyId, onReply }) => {
         <Card.Meta>
           <Button
             basic={replyId !== comment._id}
-            color="green"
-            className="click"
+            color='green'
+            className='click'
             onClick={() => onReply(comment._id, comment.slug)}
           >
-            <Translate id="feedbackComment.reply" />
+            <Translate id='feedbackComment.reply' />
           </Button>
           <p>{comment.slug}</p>
         </Card.Meta>

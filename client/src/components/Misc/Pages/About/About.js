@@ -14,32 +14,32 @@ const About = ({ addTranslation }) => {
   addTranslation(aboutTranslations);
 
   return (
-    <div className="flex-container">
-      <Container className="content">
+    <div className='flex-container'>
+      <Container className='content'>
         <h1>
-          <Translate id="about.header" />
+          <Translate id='about.header' />
         </h1>
         <Message warning>
           <Message.Header>
-            <Translate id="about.notice.header" />
+            <Translate id='about.notice.header' />
           </Message.Header>
-          <Translate id="about.notice.body" />
+          <Translate id='about.notice.body' />
         </Message>
 
         <h2>
-          <Translate id="changelog.header" />
+          <Translate id='changelog.header' />
         </h2>
-        <Translate id="changelog.body" />
+        <Translate id='changelog.body' />
 
         <h2>
-          <Translate id="voting.header" />
+          <Translate id='voting.header' />
         </h2>
-        <Translate id="voting.body" />
+        <Translate id='voting.body' />
 
         <h2>
-          <Translate id="about.privacy.header" />
+          <Translate id='about.privacy.header' />
         </h2>
-        <Translate id="about.privacy.body" />
+        <Translate id='about.privacy.body' />
       </Container>
       <Divider hidden />
     </div>

@@ -23,7 +23,7 @@ class FeedbackSingle extends Component {
   // TODO: Få component til at opdatere selv ved dybt nested ny kommentar.
   state = { replyId: null, replySlug: null };
 
-  constructor(props) {
+  constructor (props) {
     super(props);
 
     this.onReply = this.onReply.bind(this);
@@ -31,30 +31,30 @@ class FeedbackSingle extends Component {
     this.handleReplyReset = this.handleReplyReset.bind(this);
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.props.fetchFeedbackSpecific(this.pathId());
   }
 
-  onReply(id, slug) {
+  onReply (id, slug) {
     this.setState({ replyId: id, replySlug: slug });
     smoothScroll(null, 'down');
   }
 
-  pathId() {
+  pathId () {
     return this.props.match.params.id;
   }
 
-  onVote(val) {
+  onVote (val) {
     if (!this.props.votedFor.hasOwnProperty(this.props.feedbackSingle.feedback._id)) {
       this.props.voteFeedback(this.props.feedbackSingle.feedback._id, val);
     }
   }
 
-  handleReplyReset() {
+  handleReplyReset () {
     this.setState({ replyId: null, replySlug: null });
   }
 
-  render() {
+  render () {
     let { feedbackSingle, votedFor } = this.props;
     let { replyId, replySlug } = this.state;
 
@@ -64,20 +64,21 @@ class FeedbackSingle extends Component {
       return <LoadingPage />;
     }
 
-    let feedback = feedbackSingle.feedback,
-      comments = feedbackSingle.comments;
+    let feedback = feedbackSingle.feedback;
+
+    let comments = feedbackSingle.comments;
 
     votedFor = votedFor.hasOwnProperty(feedback._id) ? votedFor[feedback._id] : undefined;
 
     return (
-      <div className="flex-container">
-        <Container className="content">
+      <div className='flex-container'>
+        <Container className='content'>
           <FeedbackNavigation id={feedback._id} title={feedback.title} />
           <FeedbackSingleContent feedback={feedback} handleVote={this.onVote} votedFor={votedFor} />
 
           <Segment>
             <h4>
-              <Translate id="feedbackSingle.comments" />
+              <Translate id='feedbackSingle.comments' />
             </h4>
             {comments.map((comment) => {
               return (
@@ -133,7 +134,7 @@ FeedbackSingle.propTypes = {
   match: ReactRouterPropTypes.match
 };
 
-function mapStateToProps(state) {
+function mapStateToProps (state) {
   return {
     feedbackSingle: state.feedback.feedbackSingle,
     votedFor: state.feedback.votedFor
