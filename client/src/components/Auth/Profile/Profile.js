@@ -16,25 +16,26 @@ import ProfileActivity from './ProfileActivity/ProfileActivity';
  * Component der viser profilen.
  */
 class Profile extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
     let { semester } = props.settings;
 
     this.state = {
       activeTab: semesterIndices(semester),
       semester: semester,
-      width: window.innerWidth
+      width: window.innerWidth,
+      comments: []
     };
 
     this.handleResize = _.debounce(this.handleResize, 300);
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.props.getProfile(this.props.auth.user.id);
     window.addEventListener('resize', this.handleResize);
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     window.removeEventListener('resize', this.handleResize);
   }
 
@@ -49,7 +50,7 @@ class Profile extends Component {
     this.props.history.push(urls[path]);
   };
 
-  render () {
+  render() {
     const { profile, user } = this.props.auth;
 
     const currentLanguage = this.props.settings.language;
@@ -64,7 +65,7 @@ class Profile extends Component {
       } else {
         return `${semester.value}${currentLanguage === 'dk' ? '.' : 'th'} semester (${
           semester.name
-        })`;
+          })`;
       }
     };
 
@@ -141,7 +142,7 @@ Profile.propTypes = {
   auth: PropTypes.object
 };
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   return {
     auth: state.auth,
     settings: state.settings

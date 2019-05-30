@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { Dimmer, Loader, Button } from 'semantic-ui-react';
+import { Divider, Button } from 'semantic-ui-react';
+import LoadingPage from '../Misc/Utility-pages/LoadingPage';
 
 /**
  * Loading-screen component ved start af quiz.
@@ -33,6 +34,7 @@ class QuizLoader extends Component {
     if (this.state.seconds >= 2) {
       longWait = (
         <div style={{ margin: '5px 0' }}>
+          <Divider hidden />
           <p>{text.long_wait}</p>
           <Button basic color='blue' onClick={handleRetry}>
             {text.retry}
@@ -44,12 +46,10 @@ class QuizLoader extends Component {
       );
     }
     return (
-      <Dimmer active page>
-        <Loader>
-          {text.fetching}
-          {longWait}
-        </Loader>
-      </Dimmer>
+      <div style={{ margin: '1rem 5rem', textAlign: 'center', minHeight: '100vh' }}>
+        <LoadingPage />
+        {longWait}
+      </div>
     );
   }
 }

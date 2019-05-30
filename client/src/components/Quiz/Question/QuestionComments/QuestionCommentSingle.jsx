@@ -28,7 +28,16 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
       }}
     >
       <Comment.Content>
-        <Comment.Author as='strong'>{comment.user.username}</Comment.Author>
+        {!comment.anonymous && (
+          <Comment.Author as="strong">
+            {comment.user[0].toUpperCase() + comment.user.substring(1)}
+          </Comment.Author>
+        )}
+        {comment.anonymous && (
+          <Comment.Author as="strong">
+            <Translate id="questionCommentSingle.anonymous" />
+          </Comment.Author>
+        )}
         <Comment.Metadata style={{ color: 'rgb(140, 140, 140)' }}>
           {new Date(comment.createdAt).toLocaleString('da-DK')}
         </Comment.Metadata>
@@ -39,7 +48,7 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
         ) : null}
 
         <Comment.Text
-          style={{ marginTop: '1em', fontSize: '18px' }}
+          style={{ marginTop: '1em', fontSize: '15px' }}
           dangerouslySetInnerHTML={{
             __html: marked(comment.text)
           }}
@@ -55,11 +64,11 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
             {deleting && (
               <>
                 <Menu.Item>
-                  <p>Er du sikker på du vil slette kommentaren?</p>
+                  <Translate id="questionCommentSingle.delete_confirmation" />
                 </Menu.Item>
                 <Menu.Item onClick={() => setDeleting(false)}>
-                  <Icon name='close' />
-                  Nej
+                  <Icon name="close" />
+                  <Translate id="questionCommentSingle.no" />
                 </Menu.Item>
                 <Menu.Item
                   onClick={() => {
@@ -67,8 +76,8 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
                     setDeleting(false);
                   }}
                 >
-                  <Icon name='trash' color='red' />
-                  Ja
+                  <Icon name="trash" color="red" />
+                  <Translate id="questionCommentSingle.yes" />
                 </Menu.Item>
               </>
             )}

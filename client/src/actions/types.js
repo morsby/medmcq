@@ -30,3 +30,4 @@ export const AUTH_SIGNUP = 'auth_signup';
 export const AUTH_CURRENT_USER = 'auth_current_user';
 export const AUTH_GET_ANSWERED_QUESTIONS = 'auth_get_answered_questions';
 export const AUTH_PROFILE = 'auth_profile';
+export const AUTH_UPDATE_USER_ANSWERS = 'AUTH_UPDATE_USER_ANSWERS';

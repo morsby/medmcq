@@ -6,7 +6,15 @@
       "Hmm, this is taking longer than usual..."
     ],
     "retry": ["Prøv igen", "Retry"],
-    "abort": ["Tilbage til forsiden", "Back to the front page"]
+    "abort": ["Tilbage til forsiden", "Back to the front page"],
+    "noresultsHeader": [
+      "Der var desværre ingen spørgsmål, der opfylder kriterierne.",
+      "Unfortunately your criteria does not match any questions."
+    ],
+    "noresults": [
+      "Vend tilbage til forsiden og prøv igen.",
+      "Return to the frontpage and try again"
+    ]
   },
   "quizNavigator": {
     "progress": ["Spørgsmål ${n} af ${total}", "Question ${n} of ${total}"],
@@ -16,8 +24,8 @@
   "quizSummary": {
     "header": ["Fremgang", "Progress"],
     "results": [
-      "Du svarede rigtigt på ${correct} af ${n} spørgsmål. Det svarer til ${percentage}",
-      "You answered ${correct} out of ${n} questions correctly. That is equivalent to ${percentage}."
+      "Du har svaret rigtigt på ${correct} af ${n} spørgsmål. Dette svarer til ${percentage}",
+      "You have answered ${correct} out of ${n} questions correctly. This is equivalent to ${percentage}."
     ],
     "print": ["Print disse spørgsmål", "Print these questions"]
   },
@@ -51,7 +59,11 @@
       "F": ["Forår", "Spring "]
     },
     "specialty": ["Speciale:", "Specialty:"],
-    "tags": ["Tags:", "Tags:"]
+    "tags": ["Tags:", "Tags:"],
+    "answered": [
+      "Du har svaret rigtigt ${correct} ud af ${wrong} gange (${percent}%)",
+      "You have answered correctly ${correct} out of ${wrong} times (${percent}%)"
+    ]
   },
   "questionReport": {
     "label": ["Hvad er fejlen?", "What's the error?"],
@@ -59,13 +71,25 @@
       "F.eks. \"der er en stavefejl i ordet blodpørve\", \"billede/tabel mangler\" eller \"det markerede svar stemmer ikke overens med det originale sæt\".",
       "E.g. \"there is a spelling error in the word blood samlpe\", \"the picture/table is missing\" or \"the marked answer is not the same as in the original set\"."
     ],
+    "pictureMissing11": [
+      "11. semester har valgt ikke at frigøre billeder til deres spørgsmål, grundet ophavsrettigheder og personfølsomme data",
+      "11th semester has chosen not to distribute pictures in the question, due to sensitive data and copyright"
+    ],
     "message": {
       "header": ["Tak for indberetning!", "Thanks for the heads up!"],
       "body": [
         "Vi ser på det og får det rettet hurtigst muligt!",
         "We'll look into it and have it fixed ASAP!"
       ]
-    }
+    },
+    "checkIssue": [
+      "Inden du rapporterer spørgsmålet, så tjek venligst om andre har sendt samme problem til os. <br /> Du er velkommen til at kommentere på problemer magen til dit eget. <a target='_blank' href='https://github.com/morsby/medmcq/issues?utf8=%E2%9C%93&q=${link}'>Tjek ved at klikke her</a>.",
+      "Please check if the issue has already been sent to us, before submitting. <br /> You are welcome to comment on identical issues. <a target='_blank' href='https://github.com/morsby/medmcq/issues?utf8=%E2%9C%93&q=${link}'>Click here to check.</a>"
+    ],
+    "checkbox": [
+      "Jeg har tjekket for lignende problemer <a target='_blank' href='https://github.com/morsby/medmcq/issues?utf8=%E2%9C%93&q=${link}'>her.</a>",
+      "I have checked for similar issues <a target='_blank' href='https://github.com/morsby/medmcq/issues?utf8=%E2%9C%93&q=${link}'>here.</a>"
+    ]
   },
   "questionComments": {
     "write_a_comment": ["Skriv en kommentar", "Write a comment"],
@@ -75,19 +99,27 @@
       "Login to write a comment."
     ],
     "public_comment_info": [
-      "Kommentarer du skriver her vil vise dit brugernavn og din kommentar for andre brugere.",
-      "Writing a comment here will show your username as well as your comment to other users."
+      "Kommentarer du skriver her vil vise dit brugernavn (hvis det ikke fravælges) og din kommentar for andre brugere.",
+      "Writing a comment here will show your username (unless you have chosen not to) as well as your comment to other users."
     ],
     "private_comment_info": [
       "Kommentarer du skriver her vil ikke blive vist for andre brugere. Vi opfordrer dog til, at du deler ud af din viden, så andre studerende kan få glæde af dine kommentarer. Hvis du kan, så skriv venligst en offentlig kommentar.",
       "Comments you write here will not be shown to other users. However, we suggest that you share your knowledge with other students, in order for them to benefit from your comments. If possible, please write a public comment instead."
     ],
     "comment": ["Kommentér", "Comment"],
-    "undo_edit": ["Fortryd ændring", "Undo edit"]
+    "undo_edit": ["Fortryd ændring", "Undo edit"],
+    "hide_username": ["Skjul dit brugernavn", "Hide your usernname"]
   },
   "questionCommentSingle": {
     "edit": ["Ret", "Edit"],
-    "delete": ["Slet", "Delete"]
+    "delete": ["Slet", "Delete"],
+    "anonymous": ["Anonym", "Anonymous"],
+    "delete_confirmation": [
+      "Er du sikker på du vil slette kommentaren?",
+      "Are you sure you want to delete this comment?"
+    ],
+    "no": ["Nej", "No"],
+    "yes": ["Ja", "Yes"]
   },
   "voting": {
     "specialtyHeadline": ["Stem på speciale", "Vote for specialty"],

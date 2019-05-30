@@ -17,6 +17,7 @@ export const signup = (post) => async () => {
 };
 
 export const login = (post) => async (dispatch) => {
+  post.username = post.username.toLowerCase();
   let response;
 
   await axios

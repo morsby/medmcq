@@ -2,25 +2,25 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import { connect } from 'react-redux';
-import * as actions from '../../actions';
+import * as actions from 'actions';
 
 import _ from 'lodash';
 
-import { allowedNs, breakpoints, urls } from '../../utils/common';
-import { calculateResults } from '../../utils/quiz';
+import { allowedNs, breakpoints, urls } from 'utils/common';
+import { calculateResults } from 'utils/quiz';
 
-import selectionTranslations from './selectionTranslations.json';
+import selectionTranslations from 'Translations/selectionTranslations.json';
 import { withLocalize, Translate } from 'react-localize-redux';
 
 import { Container, Header, Divider, Button, Message, Input } from 'semantic-ui-react';
 
-import SelectionSemesterSelector from './SelectionSettings/SelectionSemesterSelector';
-import SelectionNSelector from './SelectionSettings/SelectionNSelector';
-import SelectionSetSelector from './SelectionSettings/SelectionSetSelector/SelectionSetSelector';
-import SelectionSpecialtiesSelector from './SelectionSettings/SelectionSpecialtiesSelector/SelectionSpecialtiesSelector';
-import SelectionTypeSelector from './SelectionSettings/SelectionTypeSelector';
-import SelectionUniqueSelector from './SelectionSettings/SelectionUniqueSelector';
-import SelectionMessage from './SelectionMessage';
+import SelectionSemesterSelector from 'components/SelectionSettings/SelectionSemesterSelector';
+import SelectionNSelector from 'components/SelectionSettings/SelectionNSelector';
+import SelectionSetSelector from 'components/SelectionSettings/SelectionSetSelector/SelectionSetSelector';
+import SelectionSpecialtiesSelector from 'components/SelectionSettings/SelectionSpecialtiesSelector/SelectionSpecialtiesSelector';
+import SelectionTypeSelector from 'components/SelectionSettings/SelectionTypeSelector';
+import SelectionUniqueSelector from 'components/SelectionSettings/SelectionUniqueSelector';
+import SelectionMessage from 'components/SelectionSettings/SelectionMessage';
 
 /**
  * Hovedsiden til at håndtere alle valg af spørgsmål.
@@ -67,6 +67,12 @@ class SelectionMain extends Component {
   searchHandler (e, { value }) {
     this.setState({ search: value });
   }
+
+  handleKeyPress = (e) => {
+    if (e.key === 'Enter') {
+      this.handleSubmit('new');
+    }
+  };
 
   handleSubmit (quizType) {
     let err = [];
@@ -200,6 +206,7 @@ class SelectionMain extends Component {
                 onChange={this.searchHandler}
                 fluid
                 placeholder={this.props.translate('search.placeholder')}
+                onKeyPress={(e) => this.handleKeyPress(e)}
               />
               <Divider />
             </>
@@ -247,13 +254,13 @@ class SelectionMain extends Component {
             <SelectionUniqueSelector onlyNew={onlyNew} onChange={this.onSettingsChange} />
           )}
 
-          <SelectionMessage user={user} type={type} />
-
           {calculateResults(this.props.questions).status === 'in_progress' && (
             <Button onClick={() => this.handleSubmit('cont')}>
               <Translate id='selection.static.continue_quiz' />
             </Button>
           )}
+
+          <SelectionMessage user={user} type={type} />
 
           <Message warning>
             <Translate id='selection.static.front-disclaimer' />

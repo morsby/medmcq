@@ -65,6 +65,7 @@ export const answerQuestion = (id, answer, correct, semester, user = null) => (d
   if (user) axios.post('/api/questions/answer', post);
 
   dispatch({ type: types.ANSWER_QUESTION, payload: { id, answer, correct } });
+  dispatch({ type: types.AUTH_UPDATE_USER_ANSWERS, payload: { semester, id, correct } });
 };
 
 export const postQuestion = (post) => async (dispatch) => {
@@ -87,11 +88,13 @@ export const postQuestion = (post) => async (dispatch) => {
   dispatch({ type: types.POST_QUESTION, payload: res.data });
 };
 
-export const commentQuestion = (id, comment, isPrivate) => async (dispatch) => {
+export const commentQuestion = (id, comment, isPrivate, anonymous) => async (dispatch) => {
   const res = await axios.put(`/api/questions/${id}/comment`, {
     comment,
-    isPrivate
+    isPrivate,
+    anonymous
   });
+  console.log(res);
   dispatch({
     type: types.QUESTION_COMMENT_UPDATE,
     payload: res.data
@@ -107,10 +110,13 @@ export const deleteComment = (question_id, comment_id) => async (dispatch) => {
   });
 };
 
-export const editComment = (question_id, comment_id, comment, isPrivate) => async (dispatch) => {
+export const editComment = (question_id, comment_id, comment, isPrivate, anonymous) => async (
+  dispatch
+) => {
   const res = await axios.put(`/api/questions/${question_id}/comment/${comment_id}`, {
     comment,
-    isPrivate
+    isPrivate,
+    anonymous
   });
 
   dispatch({

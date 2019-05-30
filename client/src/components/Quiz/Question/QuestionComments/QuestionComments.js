@@ -21,7 +21,7 @@ import QuestionCommentSingle from './QuestionCommentSingle';
  */
 const QuestionComments = ({
   comments,
-  newComment,
+  newComment = '',
   onCommentType,
   onCommentPost,
   onDeleteComment,

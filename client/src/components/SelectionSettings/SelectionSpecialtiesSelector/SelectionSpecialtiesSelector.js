@@ -82,7 +82,7 @@ SelectionSpecialtiesSelector.propTypes = {
   /**
    * Det aktuelle semester.
    */
-  semester: PropTypes.number,
+  semester: PropTypes.object,
 
   /**
    * Hvilke specialer er valgt?

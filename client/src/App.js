@@ -15,15 +15,15 @@ import PrivateRoute from './components/Misc/HOC/PrivateRoute';
 import ScrollToTop from './components/Misc/HOC/ScrollToTop';
 // Routes
 // Diverse
-import ErrorPage from './components/Misc/Pages/404';
-import Print from './components/Misc/Pages/Print/Print';
+import ErrorPage from './components/Misc/Utility-pages/404';
+import Print from './components/Misc/Utility-pages/Print/Print';
 // Selections
-import Selection from './components/SelectionSettings/Selection';
+import Selection from './pages/Selection';
 
 // Selve quizzen
-import Quiz from './components/Quiz/Quiz';
-import About from './components/Misc/Pages/About/About';
-import Contact from './components/Misc/Pages/Contact';
+import Quiz from './pages/Quiz';
+import About from './components/Misc/Utility-pages/About/About';
+import Contact from './components/Misc/Utility-pages/Contact';
 
 import Header from './components/Layout/Header';
 
@@ -37,7 +37,7 @@ import ForgotPassword from './components/Auth/Password/ForgotPassword';
 import ResetPassword from './components/Auth/Password/ResetPassword';
 
 // NewVersionMessage
-import NewVersionMessage from './components/Misc/Pages/About/NewVersion/NewVersionMessage';
+import NewVersionMessage from './components/Misc/Utility-pages/About/NewVersion/NewVersionMessage';
 
 import * as actions from './actions';
 import { urls } from './utils/common';
@@ -45,7 +45,7 @@ import Sidebar from './components/Layout/Sidebar';
 import Footer from './components/Layout/Footer';
 
 class App extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     // Force refresh af semestre på reload:
@@ -67,34 +67,30 @@ class App extends Component {
       }
     });
   }
-  render () {
+  render() {
     return (
       <BrowserRouter>
         <ScrollToTop>
-          <div id='container'>
+          <Sidebar>
             <Header />
-            <Sidebar>
-              <NewVersionMessage />
-              <div id='main-content'>
-                <Switch>
-                  <Route path={urls.about} component={About} />
-                  <Route path={urls.contact} component={Contact} />
-                  <Route path={urls.quiz} component={Quiz} />
-                  <Route path={urls.signup} component={Signup} />
-                  <Route path={urls.login} component={Login} />
-                  <Route path={urls.logout} component={Logout} />
-                  <PrivateRoute isLoggedIn path={urls.editProfile} component={EditProfile} />
-                  <PrivateRoute path={urls.profile} component={Profile} />
-                  <Route path={urls.forgotPassword} component={ForgotPassword} />
-                  <Route path={`${urls.resetPassword}/:token`} component={ResetPassword} />
-                  <Route path='/print' component={Print} />
-                  <Route exact path='/' component={Selection} />
-                  <Route component={ErrorPage} />
-                </Switch>
-              </div>
-              <Footer />
-            </Sidebar>
-          </div>
+            <NewVersionMessage />
+            <Switch>
+              <Route path={urls.about} component={About} />
+              <Route path={urls.contact} component={Contact} />
+              <Route path={urls.quiz} component={Quiz} />
+              <Route path={urls.signup} component={Signup} />
+              <Route path={urls.login} component={Login} />
+              <Route path={urls.logout} component={Logout} />
+              <PrivateRoute isLoggedIn={true} path={urls.editProfile} component={EditProfile} />
+              <PrivateRoute path={urls.profile} component={Profile} />
+              <Route path={urls.forgotPassword} component={ForgotPassword} />
+              <Route path={`${urls.resetPassword}/:token`} component={ResetPassword} />
+              <Route path="/print" component={Print} />
+              <Route exact path="/" component={Selection} />
+              <Route component={ErrorPage} />
+            </Switch>
+            <Footer />
+          </Sidebar>
         </ScrollToTop>
       </BrowserRouter>
     );
