@@ -65,7 +65,7 @@ const SelectionSpecialtiesSelector = React.memo(
               <Header as="h3">
                 <Translate id="selectionSpecialtiesSelector.header" data={{ semester }} />
               </Header>
-              {specialer[semester].map((speciale) => {
+              {_.sortBy(specialer[semester], (s) => s.value).map((speciale) => {
                 let erValgt = valgteSpecialer.includes(speciale.value);
                 return (
                   <SelectionSpecialtiesSelectorCheckbox
