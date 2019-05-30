@@ -27,7 +27,6 @@ const SelectionSpecialtiesSelector = React.memo(
       for (let t of _.sortBy(tags[semester], (t) => t.category)) {
         if (!t.category) continue;
         if (!tagCategories[t.category]) tagCategories[t.category] = [];
-        console.log(antalPerTag[t.value]);
         tagCategories[t.category].push(
           <SelectionSpecialtiesSelectorCheckbox
             key={t._id}
