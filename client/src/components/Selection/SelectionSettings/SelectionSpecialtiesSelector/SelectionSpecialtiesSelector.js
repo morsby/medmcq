@@ -6,75 +6,98 @@ import { Translate } from 'react-localize-redux';
 
 import { Form, Header, Message, Grid } from 'semantic-ui-react';
 import SelectionSpecialtiesSelectorCheckbox from './SelectionSpecialtiesSelectorCheckbox';
+import _ from 'lodash';
 
 /**
  * Laver en checkbox for hvert speciale.
  */
-const SelectionSpecialtiesSelector = ({
-  semester = 7,
-  valgteSpecialer = [],
-  valgteTags = [],
-  onChange,
-  antalPerSpeciale,
-  antalPerTag
-}) => {
-  if (!semester)
-    return (
-      <Header as="h3">
-        <Translate id="selectionSpecialtiesSelector.choose_semester" />
-      </Header>
-    );
-  return (
-    <Form>
-      <Grid columns="equal" stackable>
-        <Grid.Column>
-          <Grid.Row>
-            <Header as="h3">
-              <Translate id="selectionSpecialtiesSelector.header" data={{ semester }} />
-            </Header>
-            {specialer[semester].map((speciale) => {
-              let erValgt = valgteSpecialer.includes(speciale.value);
-              return (
-                <SelectionSpecialtiesSelectorCheckbox
-                  key={speciale.value}
-                  type="specialer"
-                  speciale={speciale}
-                  erValgt={erValgt}
-                  antalPerSpeciale={antalPerSpeciale[speciale.value]}
-                  onChange={onChange}
-                />
-              );
-            })}
-          </Grid.Row>
-        </Grid.Column>
-        <Grid.Column>
-          <Grid.Row>
-            <Header as="h3">
-              <Translate id="selectionSpecialtiesSelector.tags" data={{ semester }} />
-            </Header>
-            {tags[semester].map((tag) => {
-              let erValgt = valgteTags.includes(tag.value);
-              return (
-                <SelectionSpecialtiesSelectorCheckbox
-                  key={tag.value}
-                  type="tags"
-                  speciale={tag}
-                  erValgt={erValgt}
-                  antalPerSpeciale={antalPerTag[tag.value]}
-                  onChange={onChange}
-                />
-              );
-            })}
-          </Grid.Row>
-        </Grid.Column>
-      </Grid>
+const SelectionSpecialtiesSelector = React.memo(
+  ({
+    semester = 7,
+    valgteSpecialer = [],
+    valgteTags = [],
+    onChange,
+    antalPerSpeciale,
+    antalPerTag
+  }) => {
+    const tagsList = () => {
+      let tagCategories = {};
+      let returned = [];
 
-      <Message info>
-        <Translate id="selectionSpecialtiesSelector.tags_explanation" />
-      </Message>
-    </Form>
-  );
-};
+      for (let t of _.sortBy(tags[semester], (t) => t.category)) {
+        if (!t.category) continue;
+        if (!tagCategories[t.category]) tagCategories[t.category] = [];
+        console.log(antalPerTag[t.value]);
+        tagCategories[t.category].push(
+          <SelectionSpecialtiesSelectorCheckbox
+            key={t._id}
+            type="tags"
+            speciale={t}
+            erValgt={valgteTags.includes(t.value)}
+            antalPerSpeciale={antalPerTag[t.value]}
+            onChange={onChange}
+          />
+        );
+      }
+
+      for (let key in tagCategories) {
+        returned.push(
+          <>
+            <h5>{key[0].toUpperCase() + key.substring(1)}</h5>
+            {tagCategories[key]}
+          </>
+        );
+      }
+
+      return returned;
+    };
+
+    if (!semester)
+      return (
+        <Header as="h3">
+          <Translate id="selectionSpecialtiesSelector.choose_semester" />
+        </Header>
+      );
+    return (
+      <Form>
+        <Grid columns="equal" stackable>
+          <Grid.Column>
+            <Grid.Row>
+              <Header as="h3">
+                <Translate id="selectionSpecialtiesSelector.header" data={{ semester }} />
+              </Header>
+              {specialer[semester].map((speciale) => {
+                let erValgt = valgteSpecialer.includes(speciale.value);
+                return (
+                  <SelectionSpecialtiesSelectorCheckbox
+                    key={speciale.value}
+                    type="specialer"
+                    speciale={speciale}
+                    erValgt={erValgt}
+                    antalPerSpeciale={antalPerSpeciale[speciale.value]}
+                    onChange={onChange}
+                  />
+                );
+              })}
+            </Grid.Row>
+          </Grid.Column>
+          <Grid.Column>
+            <Grid.Row>
+              <Header as="h3">
+                <Translate id="selectionSpecialtiesSelector.tags" data={{ semester }} />
+              </Header>
+              {tagsList()}
+            </Grid.Row>
+          </Grid.Column>
+        </Grid>
+
+        <Message info>
+          <Translate id="selectionSpecialtiesSelector.tags_explanation" />
+        </Message>
+      </Form>
+    );
+  }
+);
 
 SelectionSpecialtiesSelector.propTypes = {
   /**
