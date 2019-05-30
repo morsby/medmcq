@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { Translate } from 'react-localize-redux';
 
@@ -6,8 +6,6 @@ import { Form, Header, Message, Grid } from 'semantic-ui-react';
 import SelectionSpecialtiesSelectorCheckbox from './SelectionSpecialtiesSelectorCheckbox';
 import LoadingPage from './../../../Misc/Utility-pages/LoadingPage';
 import _ from 'lodash';
-import { connect } from 'react-redux';
-import { fetchMetadata } from './../../../../actions/settings';
 
 /**
  * Laver en checkbox for hvert speciale.
@@ -19,37 +17,8 @@ const SelectionSpecialtiesSelector = ({
   onChange,
   specialties,
   tags,
-  fetchMetadata,
-  lastMetadataFetch
+  loading
 }) => {
-  const [loading, setLoading] = useState(false);
-
-  const getMetadata = async () => {
-    setLoading(true);
-    await fetchMetadata(semester);
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    if (
-      specialties.length === 0 ||
-      tags.length === 0 ||
-      Date.now() - lastMetadataFetch > 3.6 * Math.pow(10, 6)
-    ) {
-      getMetadata();
-    }
-  }, []);
-
-  const firstUpdate = useRef(true);
-  useEffect(() => {
-    if (firstUpdate.current) {
-      firstUpdate.current = false;
-      return;
-    }
-
-    getMetadata();
-  }, [semester]);
-
   const tagsList = () => {
     let tagCategories = {};
     let returned = [];
@@ -70,10 +39,10 @@ const SelectionSpecialtiesSelector = ({
 
     for (let key in tagCategories) {
       returned.push(
-        <React.Fragment key={key}>
+        <>
           <h5>{key[0].toUpperCase() + key.substring(1)}</h5>
           {tagCategories[key]}
-        </React.Fragment>
+        </>
       );
     }
 
@@ -83,6 +52,12 @@ const SelectionSpecialtiesSelector = ({
   tagsList();
 
   if (loading || !specialties || !tags) return <LoadingPage />;
+  if (!semester)
+    return (
+      <Header as="h3">
+        <Translate id="selectionSpecialtiesSelector.choose_semester" />
+      </Header>
+    );
   return (
     <Form>
       <Grid columns="equal" stackable>
@@ -134,10 +109,19 @@ SelectionSpecialtiesSelector.propTypes = {
   valgteSpecialer: PropTypes.array,
 
   /**
+   * Hvor mange spg findes per speciale?
+   */
+  antalPerSpeciale: PropTypes.object,
+
+  /**
    * Hvilke tags er valgt?
    */
   valgteTags: PropTypes.array,
 
+  /**
+   * Hvor mange spg findes per tag?
+   */
+  antalPerTag: PropTypes.object,
   /**
    * onChange
    * @type {[type]}
@@ -145,24 +129,4 @@ SelectionSpecialtiesSelector.propTypes = {
   onChange: PropTypes.func
 };
 
-const mapStateToProps = (state) => {
-  return {
-    semester: state.settings.semester,
-    valgteTags: state.settings.tags,
-    valgteSpecialer: state.settings.specialer,
-    specialties: state.settings.metadata.specialties,
-    tags: state.settings.metadata.tags,
-    lastMetadataFetch: state.settings.metadata.date
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    fetchMetadata: (semester) => dispatch(fetchMetadata(semester))
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(SelectionSpecialtiesSelector);
+export default SelectionSpecialtiesSelector;

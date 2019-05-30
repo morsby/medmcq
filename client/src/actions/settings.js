@@ -31,7 +31,6 @@ export const fetchSettingsQuestions = (semester) => async (dispatch) => {
 };
 
 export const fetchMetadata = (semester) => async (dispatch) => {
-  console.log('fetching');
   const { data: metadata } = await axios.get('/api/questions/metadata/count?sem=' + semester);
   let { specialtyCount: specialties, tagCount: tags } = metadata;
   if (!specialties || !tags) return;

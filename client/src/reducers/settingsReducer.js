@@ -79,7 +79,8 @@ const initialState = {
    */
   lastFetch: 0,
 
-  metadata: { specialties: [], tags: [] }
+  metadata: {specialties: [], tags: []},
+  
 };
 /**
  * createReducer er en funktion fra redux-starter-kit, der laver en IMMUTABLE
