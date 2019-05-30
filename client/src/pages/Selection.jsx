@@ -36,7 +36,7 @@ class SelectionMain extends Component {
       Date.now() - this.props.lastMetadataFetch > 3.6 * Math.pow(10, 6)
     )
       this.state.loading = true;
-    this.props.fetchSettingsQuestions(this.props.settings.semester);
+    this.props.getTotalQuestionCount(this.props.settings.semester);
     this.props.addTranslation(selectionTranslations);
     this.searchHandler = this.searchHandler.bind(this);
     this.onSettingsChange = this.onSettingsChange.bind(this);
@@ -48,8 +48,8 @@ class SelectionMain extends Component {
    * Tager nu højde for evt. "tomme" semestre, da semester = 7 er default
    */
   async componentDidMount() {
-    let { questions, semester, type } = this.props.settings;
-    if (questions.length === 0 && semester === 7) {
+    let { totalQuestions, semester, type } = this.props.settings;
+    if (totalQuestions === 0 && semester === 7) {
       type = 'semester';
       const value = 7;
       const e = null;
@@ -182,7 +182,7 @@ class SelectionMain extends Component {
      * derfor IKKE noget med selve quiz-spørgsmålene at gøre, og hentes for
      * at kunne tælle antal spørgsmål for hvert semester, speciale m.v.
      */
-    let { semester, specialer, tags, type, n, onlyNew, questions, sets, set } = this.props.settings;
+    let { semester, specialer, tags, type, n, onlyNew, totalQuestions, sets, set } = this.props.settings;
 
     let { user } = this.props,
       answeredQuestions;
@@ -221,11 +221,11 @@ class SelectionMain extends Component {
               <SelectionNSelector
                 n={Number(n)}
                 onChange={this.onSettingsChange}
-                total={questions.length}
+                total={totalQuestions}
                 semester={semester}
               />
               <Divider hidden />
-              <Translate id="selectionNSelector.total_n" data={{ n: questions.length }} />
+              <Translate id="selectionNSelector.total_n" data={{ n: totalQuestions }} />
               <Divider />
             </>
           )}
@@ -248,8 +248,6 @@ class SelectionMain extends Component {
 
           {type === 'set' && (
             <SelectionSetSelector
-              questions={questions}
-              sets={sets}
               activeSet={set}
               semester={semester}
               answeredQuestions={answeredQuestions}
@@ -360,7 +358,8 @@ function mapStateToProps(state) {
     questions: state.questions,
     specialties: state.settings.metadata.specialties,
     tags: state.settings.metadata.tags,
-    lastMetadataFetch: state.settings.metadata.date
+    lastMetadataFetch: state.settings.metadata.date,
+    totalQuestions: state.settings.totalQuestionCount
   };
 }
 

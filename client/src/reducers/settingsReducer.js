@@ -79,8 +79,8 @@ const initialState = {
    */
   lastFetch: 0,
 
-  metadata: {specialties: [], tags: []},
-  
+  metadata: { specialties: [], tags: [] }
+
 };
 /**
  * createReducer er en funktion fra redux-starter-kit, der laver en IMMUTABLE
@@ -102,8 +102,9 @@ export default createReducer(initialState, {
          * specialer = allerede valgte specialer
          * alreadySelected = er det speciale, brugeren klikkede på, allerede valgt?
          */
-        let currentSelection = state[type],
-          alreadySelected = state[type].indexOf(value);
+        let currentSelection = state[type];
+
+        let alreadySelected = state[type].indexOf(value);
 
         /**
          * Er specialet allerede valgt?
@@ -133,76 +134,9 @@ export default createReducer(initialState, {
   /**
    * types.FETCH_SETTINGS_QUESTION
    */
-  [types.FETCH_SETTINGS_QUESTION]: (state, action) => {
-    let { questions, semester } = action;
-    /**
-     * API'en ved egentlig ikke hvilke sæt, der findes. Det beregnes
-     * her ud fra hvilke spørgsmål, der hentes ned (alle fra et
-     * semester hentes hver gang).
-     *
-     * Vi starter med et tomt array
-     */
-    let sets = [];
+  [types.SETTINGS_COUNT_TOTAL_QUESTIONS]: (state, action) => {
+    state.totalQuestions = action.payload;
 
-    /**
-     * Vi looper over alle spørgsmål.
-     * Ud fra spørgsmålenes metadata, beregner vi så hvilke sæt,
-     * der findes.
-     */
-    questions.forEach((q) => {
-      // Er det forår eller efterår?
-      let season = q.examSeason.charAt(0) === 'F' ? 'Forår' : 'Efterår';
-
-      // Er det fra reeksamen (sjældent!)
-      let reex = '';
-      if (q.examSeason.toLowerCase().includes('ree')) {
-        reex = ' (reeks)';
-      }
-
-      /**
-       *  Hvad er det menneskelige navn for sættet
-       * (fx Forår 2018 (reeks))
-       */
-      let text = `${season} ${q.examYear}${reex}`;
-
-      /**
-       * Den mere API-venlige udgave:
-       * (fx 2018/E)
-       */
-      let api = `${q.examYear}/${q.examSeason}`;
-
-      /**
-       * Tilføj sættet til vores array
-       */
-      sets.push({
-        examSeason: q.examSeason.charAt(0),
-        examYear: q.examYear,
-        reex,
-        text,
-        api
-      });
-    });
-
-    /**
-     * Sorter vores eksamenssæt efter
-     * 1. examYear (asc)
-     * 2. examSeason (desc, fordi E kommer før F i alfabetet)
-     * 3. reex (asc, fordi reeks kommer efter ordinær)
-     */
-    sets = _.orderBy(sets, ['examYear', 'examSeason', 'reex'], ['asc', 'desc', 'asc']);
-
-    /**
-     * Vi har jo lavet en masse dubletter -- har loopet alle spørgsmål
-     * Nu fjerner vi dubletterne vha. lodash
-     */
-    sets = _.uniqWith(sets, _.isEqual);
-
-    state.sets = sets;
-    state.questions = questions;
-    if (state.semester !== semester) {
-      state.specialer = [];
-      state.tags = [];
-    }
     state.lastSettingsQuestionFetch = Date.now();
   },
   /**
@@ -213,7 +147,7 @@ export default createReducer(initialState, {
    * overhalet indenom af selve FETCH_QUESTIONS).
    */
   [types.IS_FETCHING]: (state) => {
-    state.isFetching = Date.now() - state.lastFetch > 1000 ? true : false;
+    state.isFetching = Date.now() - state.lastFetch > 1000;
   },
 
   /**
@@ -227,5 +161,8 @@ export default createReducer(initialState, {
   },
   [types.FETCH_METADATA]: (state, action) => {
     state.metadata = action.payload;
+  },
+  [types.SETTINGS_GET_SETS]: (state, action) => {
+    state.sets = action.payload;
   }
 });

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import { groupQuestionsBySet } from '../../../../utils/questions';
@@ -7,6 +7,9 @@ import SetRadioButton from './SetRadioButton';
 import { Form, Header } from 'semantic-ui-react';
 
 import { Translate } from 'react-localize-redux';
+import { connect } from 'react-redux';
+import { getSets } from '../../../../actions';
+import LoadingPage from '../../../Misc/Utility-pages/LoadingPage';
 
 const SelectionSetSelector = ({
   semester,
@@ -14,18 +17,32 @@ const SelectionSetSelector = ({
   sets,
   questions,
   answeredQuestions,
-  onChange
+  onChange,
+  getSets
 }) => {
-  if (!semester)
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    const fetchSets = async () => {
+      await getSets(semester);
+    };
+    fetchSets();
+    setLoading(false);
+  }, [semester]);
+
+  if (!semester) {
     return (
-      <Header as="h3">
-        <Translate id="selectionSetSelector.choose_semester" />
+      <Header as='h3'>
+        <Translate id='selectionSetSelector.choose_semester' />
       </Header>
     );
+  }
+  if (loading) { return <LoadingPage />; }
   return (
     <Form>
-      <Header as="h3">
-        <Translate id="selectionSetSelector.header" data={{ semester }} />
+      <Header as='h3'>
+        <Translate id='selectionSetSelector.header' data={{ semester }} />
       </Header>
 
       {sets.map((set) => (
@@ -33,7 +50,6 @@ const SelectionSetSelector = ({
           key={set.api}
           set={set}
           answeredQuestions={answeredQuestions}
-          groupedQuestions={groupQuestionsBySet(questions)[set.api]}
           activeSet={activeSet}
           onChange={onChange}
         />
@@ -51,4 +67,16 @@ SelectionSetSelector.propTypes = {
   onChange: PropTypes.func
 };
 
-export default SelectionSetSelector;
+const mapStateToProps = (state) => {
+  return {
+    sets: state.settings.sets
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    getSets: (semester) => dispatch(getSets(semester))
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SelectionSetSelector);

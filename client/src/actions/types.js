@@ -10,7 +10,8 @@ export const QUESTION_SPECIALTY_UPDATE = 'question_specialty_update';
 export const QUESTION_REPORT = 'question_report';
 
 export const CHANGE_SETTINGS = 'change_settings';
-export const FETCH_SETTINGS_QUESTION = 'fetch_settings_question';
+export const SETTINGS_COUNT_TOTAL_QUESTIONS = 'SETTINGS_COUNT_TOTAL_QUESTIONS';
+export const SETTINGS_GET_SETS = 'SETTINGS_GET_SETS';
 export const FETCH_METADATA = 'FETCH_METADATA';
 
 export const AUTH_SIGNUP = 'auth_signup';

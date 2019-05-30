@@ -23,8 +23,8 @@ router.use('/metadata', require('./Question/metadata'));
 router.get('/', async (req, res) => {
   let { n, specialer, tags, unique, semester, examSeason, examYear } = req.query;
 
-  /* 
-            Nedenfor er nogle lidt vilde if-else statements.     
+  /*
+            Nedenfor er nogle lidt vilde if-else statements.
             De omhandler hvilke spørgsmål der ønskes
         */
 
@@ -151,7 +151,7 @@ router.post('/ids', async (req, res) => {
 });
 
 // Bliver p.t. ikke brugt, da spørgsmål tilføjes direkte til databasen
-/*// POST: Nyt spørgsmål
+/* // POST: Nyt spørgsmål
     router.post("/", upload.single("image"), function(req, res) {
         var question = new Question();
 
@@ -164,7 +164,7 @@ router.post('/ids', async (req, res) => {
         question.correctAnswer = q.correctAnswer;
 
         question.semester = q.semester;
-        question.examYear = q.examYear; 
+        question.examYear = q.examYear;
         question.examSeason = q.examSeason;
         question.specialty = q.specialty.split(",");
         //question.tags = q.tags.toLowerCase();
@@ -280,9 +280,9 @@ router.delete('/:question_id/comment/:comment_id', async (req, res) => {
     /* Ikke så intuitivt: Hvis der ikke længere er en kommentar på
                 spørgsmålet af brugeren, slettes spørgsmåls-id'et fra brugerens
                 profil, så det ikke fremgår af listen over kommenterede spørgsmål.
-                
-                Det er altså vigtigt, at dette komme EFTER at selve kommentaren 
-                er fjernet*/
+
+                Det er altså vigtigt, at dette komme EFTER at selve kommentaren
+                er fjernet */
     if (_.findIndex(comment, { user: req.user.username }) === -1) {
       let user = await User.findById(req.user._id);
 
@@ -313,10 +313,22 @@ router.delete('/:id', permit('admin'), (req, res) => {
 });
 
 // Bruges på quiz-vælger-siden til at vise hvor mange spørgsmål der er for hvert semester
-router.get('/count/:semester', (req, res) => {
-  Question.find({ semester: req.params.semester }).exec((err, questions) => {
-    res.json(questions);
-  });
+router.get('/count/:semester', async (req, res) => {
+  const count = await Question.countDocuments({ semester: req.params.semester });
+  res.json(count);
+});
+
+router.get('/sets/:semester', async (req, res) => {
+  const questions = await Question.find({ semester: req.params.semester });
+  let sets = [];
+
+  for (let q of questions) {
+    sets.push({ text: `${q.examSeason === 'E' ? 'Efterår' : 'Forår'} ${q.examYear}`, examYear: q.examYear, season: q.examSeason, api: `${q.examYear}/${q.examSeason}` });
+  }
+
+  sets = _(sets).uniqBy((s) => s.text).sortBy((s) => s.examYear);
+
+  res.status(200).send(sets);
 });
 
 // Besvar spørgsmål
@@ -335,11 +347,12 @@ router.post('/answer', (req, res) => {
     User.findById(req.user._id, (err, user) => {
       if (err) res.send(err);
 
-      let answeredQuestions = user.answeredQuestions || {},
-        values = _.get(answeredQuestions, [semester, questionId], {
-          correct: 0,
-          wrong: 0
-        });
+      let answeredQuestions = user.answeredQuestions || {};
+
+      let values = _.get(answeredQuestions, [semester, questionId], {
+        correct: 0,
+        wrong: 0
+      });
 
       values[answer] = values[answer] + 1;
       _.set(answeredQuestions, [semester, questionId], values);
@@ -360,12 +373,14 @@ router.post('/answer', (req, res) => {
 });
 
 router.post('/report', (req, res) => {
-  let { type, data } = req.body,
-    msg;
+  let { type, data } = req.body;
+
+  let msg;
   sgMail.setApiKey(keys.sendgrid_api_key);
 
-  let to = urls.email.issue,
-    from = `medMCQ-app <${urls.email.noreply}>`;
+  let to = urls.email.issue;
+
+  let from = `medMCQ-app <${urls.email.noreply}>`;
 
   if (type === 'error_report') {
     let { report, question } = data;
