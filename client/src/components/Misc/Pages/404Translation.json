@@ -1,6 +1,12 @@
 {
-    "404": {
-        "header": ["404 – Ups!", "404 – Woops!"],
-        "text": ["Siden blev ikke fundet ...", "The page was not found ..."]
-    }
+  "404": {
+    "header": [
+      "404 – Ups!",
+      "404 – Woops!"
+    ],
+    "text": [
+      "Siden blev ikke fundet ...",
+      "The page was not found ..."
+    ]
+  }
 }

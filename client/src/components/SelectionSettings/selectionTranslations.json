@@ -2,24 +2,36 @@
   "selection": {
     "static": {
       "choose_semester": ["Vælg et semester", "Choose a semester"],
-      "continue_quiz": ["Fortsæt med igangværende spørgsmål", "Continue with previous questions"],
+      "continue_quiz": [
+        "Fortsæt med igangværende spørgsmål",
+        "Continue with previous questions"
+      ],
       "front-disclaimer": [
         "<p>Velkommen til medMCQ. Her kan du teste dine færdigheder inden for diverse semestre og medicinske specialer. medMCQ besidder MCQ-eksamenspørgsmål fra tidligere semestre og du bør derfor være opmærksom på:</p><ol><li>Nogle besvarelser kan være forældet ift. hvad vil være korrekt i dag.</li><li>Pensum kan siden være ændret, hvorfor du kan møde spørgsmål der ligger uden for pensum. Der kan også være elementer af pensum, som der ikke er spørgsmål indenfor.</li><li>Flere af spørgsmålene er udviklet til MCQ-eksamener med hjælpemidler. Derfor kan du opleve at spørgsmålene har et højere kompleksitetsniveau.</li></ol><p>God fornøjelse!</p>",
         "<p>Welcome to medMCQ. You can test your abilities within different semesters and different medical specialties. Since the site contains MCQ examination questions from earlier semesters, you should be aware that</p><ol><li>Some answers might be outdated.</li><li>The curriculum may be different today, which means that some questions may be irrelevant for your upcoming exam and some areas of relevance may not be covered by the questions.</li><li>Some of the questions were for an examination where aid was permitted, which means you may experience a higher level of complexity in the questions.</li></ol><p>Enjoy!</p>"
       ]
     },
     "errs": {
-      "no_semester": ["Du skal vælge et semester først.", "You have to choose a semester first"],
+      "no_semester": [
+        "Du skal vælge et semester først.",
+        "You have to choose a semester first"
+      ],
       "no_specialty": [
         "Du skal vælge mindst ét speciale",
         "You have to select at least one specialty."
       ],
-      "no_set": ["Du skal vælge et sæt for at kunne starte.", "You have to select a set to start."],
+      "no_set": [
+        "Du skal vælge et sæt for at kunne starte.",
+        "You have to select a set to start."
+      ],
       "no_questions": [
         "Der er ingen spørgsmål for det valgte semester.",
         "There are no questions for the selected semester."
       ],
-      "no_n": ["Du skal vælge et antal spørgsmål.", "You have to select a number of questions."],
+      "no_n": [
+        "Du skal vælge et antal spørgsmål.",
+        "You have to select a number of questions."
+      ],
       "n_too_high": [
         "Du har ønsket for mange spørgsmål.",
         "You have requested too many questions."
@@ -65,10 +77,16 @@
       "Vælger du både specialer og tags, vil siden udvælge spørgsmål, hvor mindst ét speciale og ét tag overlapper. Vælges f.eks. specialet lungemedicin og tagget ekg, vil kun spørgsmål hvor begge ting er opfyldt blive valgt -- ønskes også kardiologisk ekg'er, må kardiologi medtages som speciale.",
       "If you select both specialties and tags, the site will select questions where at least one specialty and one tag overlap. I.e., if you select the specialty pediatrics and the tag paraclinical, only questions fulfilling both requirements will be selected."
     ],
-    "checkbox_labels": ["${speciale} (${n} spørgsmål)", "${speciale} (${n} questions)"]
+    "checkbox_labels": [
+      "${speciale} (${n} spørgsmål)",
+      "${speciale} (${n} questions)"
+    ]
   },
   "selectionNSelector": {
-    "header": ["Hvor mange spørgsmål vil du have?", "How many questions would you like?"],
+    "header": [
+      "Hvor mange spørgsmål vil du have?",
+      "How many questions would you like?"
+    ],
     "other_value": ["Anden værdi", "Other value"],
     "err_n_range": [
       "Værdi skal være mellem ${min} og ${max}.",
@@ -97,6 +115,9 @@
   },
   "search": {
     "title": ["Søg", "Search"],
-    "placeholder": ["Ét ord eller sammenhængende sætning.", "One word or combined sentence."]
+    "placeholder": [
+      "Ét ord eller sammenhængende sætning.",
+      "One word or combined sentence."
+    ]
   }
 }

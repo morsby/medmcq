@@ -9,8 +9,14 @@
     "forgot_password": ["Jeg har glemt min kode", "I forgot my password"],
     "signup": ["Opret bruger", "Sign up"],
     "errs": {
-      "must_enter_username": ["Du skal indtaste et brugernavn", "You must enter a username"],
-      "must_enter_password": ["Du skal indtaste en adgangskode", "You must enter a password"],
+      "must_enter_username": [
+        "Du skal indtaste et brugernavn",
+        "You must enter a username"
+      ],
+      "must_enter_password": [
+        "Du skal indtaste en adgangskode",
+        "You must enter a password"
+      ],
       "login_failed": ["Login mislykkedes", "Login failed"]
     }
   },
@@ -139,13 +145,22 @@
       "submit": ["Opret bruger", "Create account"]
     },
     "errs": {
-      "username_required": ["Du skal udfylde et brugernavn.", "You must enter a username."],
+      "username_required": [
+        "Du skal udfylde et brugernavn.",
+        "You must enter a username."
+      ],
       "username_invalid": [
         "Ugyldigt brugernavn. Brugernavne skal være mindst 3 tegn og må ikke indeholde mellemrum. Gyldige brugernavne er f.eks. sigurd, sig_urd, sig.urd og sigurd123.",
         "Username invalid. Usernames must be at least 3 characters and can not contain spaces. Valid usernames include sigurd, sig_urd, sig.urd and sigurd1234."
       ],
-      "username_taken": ["Brugernavnet er allerde taget.", "Username has already been taken."],
-      "email_taken": ["Emailen er allerede brugt.", "E-mail has already been taken."]
+      "username_taken": [
+        "Brugernavnet er allerde taget.",
+        "Username has already been taken."
+      ],
+      "email_taken": [
+        "Emailen er allerede brugt.",
+        "E-mail has already been taken."
+      ]
     }
   }
 }
