@@ -41,7 +41,7 @@ class QuestionComment extends BaseModel {
           from: 'questionComment.userId',
           to: 'user.id'
         },
-        modify: builder => builder.select('username', 'id')
+        modify: (builder) => builder.select('username', 'id')
       },
       question: {
         relation: Model.BelongsToOneRelation,
@@ -56,7 +56,7 @@ class QuestionComment extends BaseModel {
 
   static get modifiers() {
     return {
-      own: builder => modifiers.belongsToUser(builder)
+      own: (builder) => modifiers.belongsToUser(builder)
     };
   }
 }

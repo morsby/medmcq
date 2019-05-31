@@ -42,10 +42,7 @@ const NewVersionMessage = ({ addTranslation, prevVersion, changeSettings }) => {
           <Message.Header>
             <Translate id="newVersionOutNow.header" />
           </Message.Header>
-          <Translate
-            id="newVersionOutNow.body"
-            data={{ nav: <LinkToAbout /> }}
-          />
+          <Translate id="newVersionOutNow.body" data={{ nav: <LinkToAbout /> }} />
         </Message>
       </div>
     );
@@ -60,7 +57,7 @@ NewVersionMessage.propTypes = {
   addTranslation: PropTypes.func
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   prevVersion: state.settings.version
 });
 

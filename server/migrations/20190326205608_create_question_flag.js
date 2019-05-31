@@ -1,5 +1,5 @@
 exports.up = function(knex) {
-  return knex.schema.createTable('question_bookmark', table => {
+  return knex.schema.createTable('question_bookmark', (table) => {
     table.increments();
 
     table

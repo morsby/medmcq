@@ -100,7 +100,7 @@ class Question extends BaseModel {
           from: 'questionComment.questionId',
           to: 'question.id'
         },
-        modify: builder => builder.where({ private: false })
+        modify: (builder) => builder.where({ private: false })
       },
       privateComments: {
         relation: Model.HasManyRelation,
@@ -109,7 +109,7 @@ class Question extends BaseModel {
           from: 'questionComment.questionId',
           to: 'question.id'
         },
-        modify: builder => builder.where({ private: true })
+        modify: (builder) => builder.where({ private: true })
       },
 
       userSpecialtyVotes: {
@@ -133,7 +133,7 @@ class Question extends BaseModel {
 
   static get modifiers() {
     return {
-      filterOnMetadata: builder => modifiers.filterOnMetadata(builder)
+      filterOnMetadata: (builder) => modifiers.filterOnMetadata(builder)
     };
   }
 

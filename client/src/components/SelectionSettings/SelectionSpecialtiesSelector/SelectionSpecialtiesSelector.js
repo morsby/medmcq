@@ -33,7 +33,7 @@ const SelectionSpecialtiesSelector = ({
                 data={{ semester: semester.value }}
               />
             </Header>
-            {semester.specialties.map(speciale => {
+            {semester.specialties.map((speciale) => {
               let erValgt = valgteSpecialer.includes(speciale.id);
               return (
                 <SelectionSpecialtiesSelectorCheckbox
@@ -55,7 +55,7 @@ const SelectionSpecialtiesSelector = ({
                 data={{ semester: semester.value }}
               />
             </Header>
-            {semester.tags.map(tag => {
+            {semester.tags.map((tag) => {
               let erValgt = valgteTags.includes(tag.id);
               return (
                 <SelectionSpecialtiesSelectorCheckbox

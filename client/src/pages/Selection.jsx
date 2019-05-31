@@ -12,14 +12,7 @@ import { calculateResults } from 'utils/quiz';
 import selectionTranslations from 'Translations/selectionTranslations.json';
 import { withLocalize, Translate } from 'react-localize-redux';
 
-import {
-  Container,
-  Header,
-  Divider,
-  Button,
-  Message,
-  Input
-} from 'semantic-ui-react';
+import { Container, Header, Divider, Button, Message, Input } from 'semantic-ui-react';
 
 import SelectionSemesterSelector from 'components/SelectionSettings/SelectionSemesterSelector';
 import SelectionNSelector from 'components/SelectionSettings/SelectionNSelector';
@@ -75,7 +68,7 @@ class SelectionMain extends Component {
     this.setState({ search: value });
   }
 
-  handleKeyPress = e => {
+  handleKeyPress = (e) => {
     if (e.key === 'Enter') {
       this.handleSubmit('new');
     }
@@ -187,19 +180,13 @@ class SelectionMain extends Component {
           />
           <Divider hidden />
 
-          <SelectionTypeSelector
-            handleClick={this.onSettingsChange}
-            type={type}
-          />
+          <SelectionTypeSelector handleClick={this.onSettingsChange} type={type} />
 
           <Divider hidden />
 
           {type !== 'set' && (
             <>
-              <SelectionNSelector
-                n={Number(n)}
-                onChange={this.onSettingsChange}
-              />
+              <SelectionNSelector n={Number(n)} onChange={this.onSettingsChange} />
               <Divider hidden />
               <Translate
                 id="selectionNSelector.total_n"
@@ -219,7 +206,7 @@ class SelectionMain extends Component {
                 onChange={this.searchHandler}
                 fluid
                 placeholder={this.props.translate('search.placeholder')}
-                onKeyPress={e => this.handleKeyPress(e)}
+                onKeyPress={(e) => this.handleKeyPress(e)}
               />
               <Divider />
             </>
@@ -247,7 +234,7 @@ class SelectionMain extends Component {
 
           {this.state.err.length > 0 && (
             <Message negative>
-              {this.state.err.map(err => {
+              {this.state.err.map((err) => {
                 return <p key={err}>{err}</p>;
               })}
             </Message>
@@ -257,19 +244,14 @@ class SelectionMain extends Component {
             basic
             onClick={() => this.handleSubmit('new')}
             disabled={
-              (antalValgte < 1 && type === 'specialer') ||
-              n < allowedNs.min ||
-              n > allowedNs.max
+              (antalValgte < 1 && type === 'specialer') || n < allowedNs.min || n > allowedNs.max
             }
           >
             Start!
           </Button>
           {window.innerWidth < breakpoints.mobile && <Divider hidden />}
           {user && type !== 'set' && (
-            <SelectionUniqueSelector
-              onlyNew={onlyNew}
-              onChange={this.onSettingsChange}
-            />
+            <SelectionUniqueSelector onlyNew={onlyNew} onChange={this.onSettingsChange} />
           )}
 
           {calculateResults(this.props.questions).status === 'in_progress' && (

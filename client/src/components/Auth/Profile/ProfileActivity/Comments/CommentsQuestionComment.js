@@ -8,17 +8,12 @@ const CommentsQuestionComment = ({ comment, user = {} }) => {
   return (
     <Comment
       style={{
-        borderLeft:
-          (comment.user || {}).id === user.id
-            ? '3px solid rgb(175, 175, 175)'
-            : ''
+        borderLeft: (comment.user || {}).id === user.id ? '3px solid rgb(175, 175, 175)' : ''
       }}
     >
       <Comment.Content>
         <Comment.Author as="strong">{username}</Comment.Author>
-        <Comment.Metadata>
-          {new Date(comment.createdAt).toLocaleString()}
-        </Comment.Metadata>
+        <Comment.Metadata>{new Date(comment.createdAt).toLocaleString()}</Comment.Metadata>
         <Comment.Text>{comment.text}</Comment.Text>
       </Comment.Content>
     </Comment>
@@ -30,7 +25,7 @@ CommentsQuestionComment.propTypes = {
   user: PropTypes.object
 };
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   user: state.auth.user
 });
 

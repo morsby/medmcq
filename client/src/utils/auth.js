@@ -1,4 +1,4 @@
-export const semesterIndices = value => {
+export const semesterIndices = (value) => {
   // Hvis value er et semester (>7)
   if (value >= 7) {
     switch (value) {

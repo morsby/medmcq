@@ -1,5 +1,5 @@
 exports.up = function(knex) {
-  return knex.schema.createTable('semester_exam_set', table => {
+  return knex.schema.createTable('semester_exam_set', (table) => {
     table.increments();
     table.integer('year').notNullable();
     table.string('season').notNullable();

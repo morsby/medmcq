@@ -4,13 +4,7 @@ import { Form, Message } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 
 // TODO: TRANSLATION
-const QuestionReport = ({
-  report,
-  handleChange,
-  handleSubmit,
-  reportSent,
-  question
-}) => {
+const QuestionReport = ({ report, handleChange, handleSubmit, reportSent, question }) => {
   const [checked, setChecked] = useState(false);
   if (reportSent) {
     return (
@@ -31,14 +25,9 @@ const QuestionReport = ({
                 <Translate id="questionReport.pictureMissing11" />
               </Message>
             )}
-            {question.disclaimer && (
-              <Message color="yellow">{question.disclaimer}</Message>
-            )}
+            {question.disclaimer && <Message color="yellow">{question.disclaimer}</Message>}
             <Message>
-              <Translate
-                id="questionReport.checkIssue"
-                data={{ link: question._id }}
-              />
+              <Translate id="questionReport.checkIssue" data={{ link: question._id }} />
             </Message>
             <Form.Field>
               <Form.TextArea
@@ -56,10 +45,7 @@ const QuestionReport = ({
                 onChange={() => setChecked(!checked)}
                 label={
                   <label>
-                    <Translate
-                      id="questionReport.checkbox"
-                      data={{ link: question._id }}
-                    />
+                    <Translate id="questionReport.checkbox" data={{ link: question._id }} />
                   </label>
                 }
               />

@@ -29,7 +29,7 @@ class Print extends Component {
   }
 
   toggleAnswers() {
-    this.setState(prevState => {
+    this.setState((prevState) => {
       return { showCorrect: !prevState.showCorrect };
     });
   }
@@ -58,11 +58,7 @@ class Print extends Component {
                 <Translate id="print.print" />
               </Button>
             </Button.Group>
-            <Button
-              color="yellow"
-              floated="right"
-              onClick={() => this.handleNavigation('quiz')}
-            >
+            <Button color="yellow" floated="right" onClick={() => this.handleNavigation('quiz')}>
               <Translate id="print.return_to_quiz" />
             </Button>
           </div>
@@ -73,10 +69,7 @@ class Print extends Component {
                 <h3>
                   <Translate id="print.question" data={{ n: i + 1 }} />
                 </h3>
-                <PrintDisplayQuestion
-                  questionProp={q}
-                  showCorrect={showCorrect}
-                />
+                <PrintDisplayQuestion questionProp={q} showCorrect={showCorrect} />
               </div>
             );
           })}

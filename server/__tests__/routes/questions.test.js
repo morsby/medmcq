@@ -27,13 +27,10 @@ describe('questions route', () => {
     expect(body[0].privateComments).toBeFalsy();
 
     let orderedQuestions = _.sortBy(body, ['id']);
-    expect(orderedQuestions[0].tags.map(t => t.tagName)).toEqual([
-      'Paraklinik',
-      'Radiologi'
-    ]);
+    expect(orderedQuestions[0].tags.map((t) => t.tagName)).toEqual(['Paraklinik', 'Radiologi']);
     expect(orderedQuestions[0].specialties).toHaveLength(0);
 
-    expect(orderedQuestions[5].specialties.map(s => s.specialtyName)).toEqual([
+    expect(orderedQuestions[5].specialties.map((s) => s.specialtyName)).toEqual([
       'Abdominalkirurgi',
       'Urologi'
     ]);
@@ -46,9 +43,7 @@ describe('questions route', () => {
   });
 
   test("GET '/' -- should complete because admin", async () => {
-    await agent
-      .post('/api/auth')
-      .send({ username: 'TestAdmin', password: 'TestPassword123' });
+    await agent.post('/api/auth').send({ username: 'TestAdmin', password: 'TestPassword123' });
 
     let { body } = await agent.get(questionApi);
     expect(body.length).toEqual(6);
@@ -146,9 +141,7 @@ describe('questions route', () => {
   });
 
   test("GET '/:id' -- should fetch one question", async () => {
-    let { body } = await request(server).get(
-      `${questionApi}/${firstQuestionId}`
-    );
+    let { body } = await request(server).get(`${questionApi}/${firstQuestionId}`);
 
     expect(body.id).toEqual(firstQuestionId);
     expect(body).toHaveProperty('publicComments');
@@ -215,9 +208,7 @@ describe('questions route', () => {
   });
 
   test("POST '/:id/answer' -- WITH auth -- should save an answer to the database", async () => {
-    let { body } = await agent
-      .post(`${questionApi}/${newQuestionId}/answer`)
-      .send({ answer: 2 });
+    let { body } = await agent.post(`${questionApi}/${newQuestionId}/answer`).send({ answer: 2 });
 
     expect(body.type).toEqual('QuestionAnswerSuccess');
     expect(body.data.question.id).toEqual(newQuestionId);
@@ -233,45 +224,35 @@ describe('questions route', () => {
   });
 
   test("POST '/:id/bookmark' -- should insert a bookmark", async () => {
-    let { status, body } = await agent.post(
-      `${questionApi}/${newQuestionId}/bookmark`
-    );
+    let { status, body } = await agent.post(`${questionApi}/${newQuestionId}/bookmark`);
 
     expect(status).toEqual(200);
     expect(body.type).toEqual('QuestionBookmarkSuccess');
   });
 
   test("POST '/:id/bookmark' -- should fail because already bookmarked", async () => {
-    let { status, body } = await agent.post(
-      `${questionApi}/${newQuestionId}/bookmark`
-    );
+    let { status, body } = await agent.post(`${questionApi}/${newQuestionId}/bookmark`);
 
     expect(status).toEqual(409);
     expect(body.type).toEqual('UniqueViolation');
   });
 
   test("POST '/:id/bookmark' -- should fail because not logged in", async () => {
-    let { status, body } = await request(server).post(
-      `${questionApi}/${newQuestionId}/bookmark`
-    );
+    let { status, body } = await request(server).post(`${questionApi}/${newQuestionId}/bookmark`);
 
     expect(status).toEqual(403);
     expect(body.type).toEqual('NotAuthorized');
   });
 
   test("DELETE '/:id/bookmark' -- should delete a bookmark", async () => {
-    let { status, body } = await agent.delete(
-      `${questionApi}/${newQuestionId}/bookmark`
-    );
+    let { status, body } = await agent.delete(`${questionApi}/${newQuestionId}/bookmark`);
 
     expect(status).toEqual(200);
     expect(body.type).toEqual('QuestionBookmarkDeleteSuccess');
   });
 
   test("DELETE '/:id' -- should fail because not admin", async () => {
-    let { status, body } = await request(server).delete(
-      `${questionApi}/${newQuestionId}`
-    );
+    let { status, body } = await request(server).delete(`${questionApi}/${newQuestionId}`);
     expect(status).toEqual(403);
     expect(body.type).toEqual('NotAuthorized');
   });

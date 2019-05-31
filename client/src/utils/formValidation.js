@@ -1,7 +1,7 @@
 // SIGNUP and EDIT
 // usernameAvailable er stadig i SignupForm
 
-export const emailValid = email => {
+export const emailValid = (email) => {
   if (!email) return '';
   const validator = new RegExp(
     "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
@@ -10,7 +10,7 @@ export const emailValid = email => {
   return res ? '' : 'Ikke en gyldig adresse / Not a valid address';
 };
 
-export const passwordValid = pwd => {
+export const passwordValid = (pwd) => {
   if (!pwd) {
     return '';
   } else {
@@ -23,7 +23,7 @@ export const passwordValid = pwd => {
     let validator = [uppercase, lowercase, nums, special];
 
     let strength = 0;
-    validator.map(e => {
+    validator.map((e) => {
       if (e) strength++;
       return null;
     });
@@ -41,14 +41,14 @@ export const passwordRepeatValid = (pwdRepeat, allValues) => {
 };
 
 // LOGIN
-export const loginUsernameValid = username => {
+export const loginUsernameValid = (username) => {
   if (!username) {
     return 'Du skal indtaste et brugernavn / You must provide a username';
   }
   return null;
 };
 
-export const loginPasswordValid = pwd => {
+export const loginPasswordValid = (pwd) => {
   if (!pwd) {
     return 'Du skal indtaste en adgangskode / You must enter a password';
   }

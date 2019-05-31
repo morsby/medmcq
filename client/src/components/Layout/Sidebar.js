@@ -1,12 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { PropTypes } from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
-import {
-  Sidebar as SemanticSidebar,
-  Menu,
-  Icon,
-  Image
-} from 'semantic-ui-react';
+import { Sidebar as SemanticSidebar, Menu, Icon, Image } from 'semantic-ui-react';
 import { breakpoints } from '../../utils/common';
 import styles from './Header.module.css';
 import logo from './logo/aulogo_hvid.png';
@@ -14,7 +9,7 @@ import RightMenu from './Menus/RightMenu';
 import { withRouter } from 'react-router';
 import { Translate } from 'react-localize-redux';
 
-const Sidebar = props => {
+const Sidebar = (props) => {
   const [visible, setVisible] = useState(false);
   const [width, setWidth] = useState(window.innerWidth);
 
@@ -68,13 +63,7 @@ const Sidebar = props => {
         style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
       >
         {width < breakpoints.mobile && (
-          <Menu
-            className={styles.noprint}
-            inverted
-            color="blue"
-            attached
-            borderless
-          >
+          <Menu className={styles.noprint} inverted color="blue" attached borderless>
             <Menu.Item disabled={visible} onClick={() => setVisible(!visible)}>
               <Icon name="bars" inverted size="large" />
             </Menu.Item>

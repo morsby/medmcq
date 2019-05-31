@@ -22,7 +22,7 @@ class QuizLoader extends Component {
   }
 
   tick() {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       seconds: prevState.seconds + 1
     }));
   }
@@ -46,9 +46,7 @@ class QuizLoader extends Component {
       );
     }
     return (
-      <div
-        style={{ margin: '1rem 5rem', textAlign: 'center', minHeight: '100vh' }}
-      >
+      <div style={{ margin: '1rem 5rem', textAlign: 'center', minHeight: '100vh' }}>
         <LoadingPage />
         {longWait}
       </div>

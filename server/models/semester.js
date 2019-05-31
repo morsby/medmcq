@@ -75,7 +75,7 @@ class Semester extends BaseModel {
 
     // Vi tjekker om specialties er et array (og nester en masse for at undgå undefined errs)
     if (Array.isArray(((json.specialties || [{}])[0] || {}).questions)) {
-      json.specialties = json.specialties.map(specialty => ({
+      json.specialties = json.specialties.map((specialty) => ({
         ...specialty,
         questionCount: specialty.questions.length,
         questions: undefined
@@ -83,7 +83,7 @@ class Semester extends BaseModel {
     }
     // Vi tjekker om tags er et array (og nester en masse for at undgå undefined errs)
     if (Array.isArray(((json.tags || [{}])[0] || {}).questions)) {
-      json.tags = json.tags.map(specialty => ({
+      json.tags = json.tags.map((specialty) => ({
         ...specialty,
         questionCount: specialty.questions.length,
         questions: undefined

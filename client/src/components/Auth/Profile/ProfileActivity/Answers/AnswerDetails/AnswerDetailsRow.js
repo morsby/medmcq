@@ -16,16 +16,12 @@ const AnswerDetailsRow = ({ answer, handleClick, checked }) => {
       verticalAlign="top"
       positive={answer.performance.correct === answer.performance.tries}
       warning={
-        answer.performance.correct < answer.performance.tries &&
-        answer.performance.correct > 0
+        answer.performance.correct < answer.performance.tries && answer.performance.correct > 0
       }
       error={answer.performance.correct === 0}
     >
       <Table.Cell>
-        <Checkbox
-          onChange={() => handleClick(question.id, checked)}
-          checked={checked}
-        />
+        <Checkbox onChange={() => handleClick(question.id, checked)} checked={checked} />
       </Table.Cell>
       <Table.Cell>
         <div
@@ -35,18 +31,14 @@ const AnswerDetailsRow = ({ answer, handleClick, checked }) => {
         />
       </Table.Cell>
       <Table.Cell collapsing>
-        {question.specialties.map(spec => spec.specialtyName).join('|')}
+        {question.specialties.map((spec) => spec.specialtyName).join('|')}
       </Table.Cell>
       <Table.Cell collapsing>
         <Translate id={`profileAnswerDetails.${question.examSet.season}`} />
         {question.examSet.year}
       </Table.Cell>
       <Table.Cell collapsing textAlign="right">
-        {Math.round(
-          (answer.performance.correct / answer.performance.tries) * 100,
-          2
-        )}
-        %
+        {Math.round((answer.performance.correct / answer.performance.tries) * 100, 2)}%
       </Table.Cell>
     </Table.Row>
   );

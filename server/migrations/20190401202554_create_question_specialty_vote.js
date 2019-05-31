@@ -1,5 +1,5 @@
 exports.up = function(knex) {
-  return knex.schema.createTable('question_specialty_vote', table => {
+  return knex.schema.createTable('question_specialty_vote', (table) => {
     table.increments();
 
     table

@@ -46,7 +46,7 @@ class Profile extends Component {
     this.setState({ activeTab: activeIndex, semester: semester });
   };
 
-  handleNavigation = path => {
+  handleNavigation = (path) => {
     this.props.history.push(urls[path]);
   };
 
@@ -57,21 +57,19 @@ class Profile extends Component {
 
     const panes = [];
 
-    const generatePaneLabel = semester => {
+    const generatePaneLabel = (semester) => {
       if (this.state.width < 480) {
         return `${semester.value}${currentLanguage === 'dk' ? '.' : 'th'}`;
       } else if (this.state.width < 768) {
-        return `${semester.value}${currentLanguage === 'dk' ? '.' : 'th'} (${
+        return `${semester.value}${currentLanguage === 'dk' ? '.' : 'th'} (${semester.name})`;
+      } else {
+        return `${semester.value}${currentLanguage === 'dk' ? '.' : 'th'} semester (${
           semester.name
         })`;
-      } else {
-        return `${semester.value}${
-          currentLanguage === 'dk' ? '.' : 'th'
-        } semester (${semester.name})`;
       }
     };
 
-    _.map(semestre, e =>
+    _.map(semestre, (e) =>
       panes.push({
         menuItem: generatePaneLabel(e),
         render: () => (
@@ -94,18 +92,13 @@ class Profile extends Component {
             <Translate
               id="profile.header"
               data={{
-                username:
-                  user.username[0].toUpperCase() + user.username.substring(1)
+                username: user.username[0].toUpperCase() + user.username.substring(1)
               }}
             />
           </h2>
           <Divider />
           <div style={{ textAlign: 'center' }}>
-            <Button
-              basic
-              color="yellow"
-              onClick={() => this.handleNavigation('editProfile')}
-            >
+            <Button basic color="yellow" onClick={() => this.handleNavigation('editProfile')}>
               <Translate id="profile.buttons.edit_profile" />
             </Button>
           </div>

@@ -116,22 +116,18 @@ router.post('/', async (req, res) => {
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.get(
-  '/:id',
-  permit({ roles: ['admin'], owner: 'params.id' }),
-  async (req, res) => {
-    let { id } = req.params;
+router.get('/:id', permit({ roles: ['admin'], owner: 'params.id' }), async (req, res) => {
+  let { id } = req.params;
 
-    try {
-      let user = await User.query().findById(id);
+  try {
+    let user = await User.query().findById(id);
 
-      if (!user) throw new NotFoundError();
-      res.status(200).json(user);
-    } catch (err) {
-      errorHandler(err, res);
-    }
+    if (!user) throw new NotFoundError();
+    res.status(200).json(user);
+  } catch (err) {
+    errorHandler(err, res);
   }
-);
+});
 
 /**
  * @swagger
@@ -183,99 +179,89 @@ router.get(
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.get(
-  '/:id/profile',
-  permit({ roles: ['admin'], owner: 'params.id' }),
-  async (req, res) => {
-    let { id } = req.params;
+router.get('/:id/profile', permit({ roles: ['admin'], owner: 'params.id' }), async (req, res) => {
+  let { id } = req.params;
 
-    try {
-      // We load the user including answers.
-      // TODO: Find en måde at undgå at kalde hente brugeren men i stedet
-      // direkte finde svar. Husk parseJson i Models/User.
-      let answers = QuestionUserAnswer.query()
-        .where('userId', id)
-        .modify('summary');
+  try {
+    // We load the user including answers.
+    // TODO: Find en måde at undgå at kalde hente brugeren men i stedet
+    // direkte finde svar. Husk parseJson i Models/User.
+    let answers = QuestionUserAnswer.query()
+      .where('userId', id)
+      .modify('summary');
 
-      let answeredQuestions = Question.query()
-        .whereIn(
-          'id',
-          QuestionUserAnswer.query()
-            .where('userId', id)
-            .distinct('questionId')
-        )
-        .eager(Question.defaultEager.replace('publicComments.user, ', ''));
+    let answeredQuestions = Question.query()
+      .whereIn(
+        'id',
+        QuestionUserAnswer.query()
+          .where('userId', id)
+          .distinct('questionId')
+      )
+      .eager(Question.defaultEager.replace('publicComments.user, ', ''));
 
-      // Find questions the user has commented publicly, fetches including other public comments
-      let publicComments = Question.query()
-        .whereIn(
-          'id',
-          QuestionComment.query()
-            .where('userId', id)
-            .andWhere('private', false)
-            .distinct('questionId')
-        )
-        .eager(Question.defaultEager);
+    // Find questions the user has commented publicly, fetches including other public comments
+    let publicComments = Question.query()
+      .whereIn(
+        'id',
+        QuestionComment.query()
+          .where('userId', id)
+          .andWhere('private', false)
+          .distinct('questionId')
+      )
+      .eager(Question.defaultEager);
 
-      // Find questions the usrer has commented privately, ...
-      let privateComments = Question.query()
-        .whereIn(
-          'id',
-          QuestionComment.query()
-            .where('userId', id)
-            .andWhere('private', true)
-            .distinct('questionId')
-        )
-        .eager(Question.defaultEager.replace('publicComments.user, ', ''))
-        .mergeEager('privateComments(own).user', {
-          userId: id
-        });
+    // Find questions the usrer has commented privately, ...
+    let privateComments = Question.query()
+      .whereIn(
+        'id',
+        QuestionComment.query()
+          .where('userId', id)
+          .andWhere('private', true)
+          .distinct('questionId')
+      )
+      .eager(Question.defaultEager.replace('publicComments.user, ', ''))
+      .mergeEager('privateComments(own).user', {
+        userId: id
+      });
 
-      // Find questions the user has bookmarked
-      let bookmarks = Question.query()
-        .whereIn(
-          'id',
-          QuestionBookmark.query()
-            .where('userId', id)
-            .distinct('questionId')
-        )
-        .eager(Question.defaultEager.replace('publicComments.user, ', ''));
+    // Find questions the user has bookmarked
+    let bookmarks = Question.query()
+      .whereIn(
+        'id',
+        QuestionBookmark.query()
+          .where('userId', id)
+          .distinct('questionId')
+      )
+      .eager(Question.defaultEager.replace('publicComments.user, ', ''));
 
-      // Perform all queries.
-      [
-        answers,
-        answeredQuestions,
-        publicComments,
-        privateComments,
-        bookmarks
-      ] = await Promise.all([
-        answers,
-        answeredQuestions,
-        publicComments,
-        privateComments,
-        bookmarks
-      ]);
+    // Perform all queries.
+    [answers, answeredQuestions, publicComments, privateComments, bookmarks] = await Promise.all([
+      answers,
+      answeredQuestions,
+      publicComments,
+      privateComments,
+      bookmarks
+    ]);
 
-      let profile = {};
+    let profile = {};
 
-      answers = _.groupBy(answers, 'questionId');
+    answers = _.groupBy(answers, 'questionId');
 
-      answeredQuestions = answeredQuestions.map(question => ({
-        question,
-        answers: answers[question.id]
-      }));
+    answeredQuestions = answeredQuestions.map((question) => ({
+      question,
+      answers: answers[question.id]
+    }));
 
-      profile.answers = answeredQuestions;
-      profile.publicComments = publicComments;
-      profile.privateComments = privateComments;
-      profile.bookmarks = bookmarks;
+    profile.answers = answeredQuestions;
+    profile.publicComments = publicComments;
+    profile.privateComments = privateComments;
+    profile.bookmarks = bookmarks;
 
-      res.status(200).json(profile);
-    } catch (err) {
-      errorHandler(err, res);
-    }
+    res.status(200).json(profile);
+  } catch (err) {
+    errorHandler(err, res);
   }
-);
+});
 
 /**
  * @swagger
@@ -316,30 +302,26 @@ router.get(
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.patch(
-  '/:id',
-  permit({ roles: ['admin'], owner: 'params.id' }),
-  async (req, res) => {
-    let { id } = req.params;
+router.patch('/:id', permit({ roles: ['admin'], owner: 'params.id' }), async (req, res) => {
+  let { id } = req.params;
 
-    try {
-      // Hvis der ikke er nogle data med i req.body smider vi en fejl
-      if (Object.keys(req.body).length === 0) {
-        throw new ValidationError({
-          type: 'ModelValidation',
-          message: 'No values to patch',
-          data: {}
-        });
-      }
-
-      let user = await User.query().patchAndFetchById(id, req.body);
-      if (!user) throw new NotFoundError();
-      res.status(200).json(user);
-    } catch (err) {
-      errorHandler(err, res);
+  try {
+    // Hvis der ikke er nogle data med i req.body smider vi en fejl
+    if (Object.keys(req.body).length === 0) {
+      throw new ValidationError({
+        type: 'ModelValidation',
+        message: 'No values to patch',
+        data: {}
+      });
     }
+
+    let user = await User.query().patchAndFetchById(id, req.body);
+    if (!user) throw new NotFoundError();
+    res.status(200).json(user);
+  } catch (err) {
+    errorHandler(err, res);
   }
-);
+});
 
 /**
  * @swagger
@@ -365,27 +347,23 @@ router.patch(
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.delete(
-  '/:id',
-  permit({ roles: ['admin'], owner: 'params.id' }),
-  async (req, res) => {
-    let { id } = req.params;
+router.delete('/:id', permit({ roles: ['admin'], owner: 'params.id' }), async (req, res) => {
+  let { id } = req.params;
 
-    try {
-      const deleted = await User.query().deleteById(id);
-      if (deleted > 0) {
-        res.status(200).json({
-          type: 'deleteUser',
-          message: `Succesfully deleted ${deleted} user`
-        });
-      } else {
-        throw new NotFoundError();
-      }
-    } catch (err) {
-      errorHandler(err, res);
+  try {
+    const deleted = await User.query().deleteById(id);
+    if (deleted > 0) {
+      res.status(200).json({
+        type: 'deleteUser',
+        message: `Succesfully deleted ${deleted} user`
+      });
+    } else {
+      throw new NotFoundError();
     }
+  } catch (err) {
+    errorHandler(err, res);
   }
-);
+});
 /**
  * @swagger
  * components:

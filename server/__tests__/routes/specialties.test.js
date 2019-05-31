@@ -21,9 +21,9 @@ describe('specialties route', () => {
     firstSpecialtyId = specialties[0].id;
     let sortedSpecialties = _.sortBy(specialties, ['name']);
     let seededSpecialties = require('../../seeds/data/12_sample_specialer.json');
-    seededSpecialties = seededSpecialties.map(s => s.name).sort();
+    seededSpecialties = seededSpecialties.map((s) => s.name).sort();
 
-    expect(sortedSpecialties.map(sem => sem.name)).toEqual(seededSpecialties);
+    expect(sortedSpecialties.map((sem) => sem.name)).toEqual(seededSpecialties);
   });
 
   test("POST '/' -- should fail because not admin", async () => {
@@ -39,9 +39,7 @@ describe('specialties route', () => {
   });
 
   test("POST '/' -- should insert a new specialty", async () => {
-    await agent
-      .post('/api/auth')
-      .send({ username: 'TestAdmin', password: 'TestPassword123' });
+    await agent.post('/api/auth').send({ username: 'TestAdmin', password: 'TestPassword123' });
 
     let { body } = await agent.post(specialtyApi).send({
       name: 'Test',
@@ -62,9 +60,7 @@ describe('specialties route', () => {
   });
 
   test("GET '/:id' -- should get one specialty", async () => {
-    let { body } = await request(server).get(
-      `${specialtyApi}/${firstSpecialtyId}`
-    );
+    let { body } = await request(server).get(`${specialtyApi}/${firstSpecialtyId}`);
 
     expect(body.name).toEqual('Almen medicin');
     expect(body.semesterId).toEqual(1);
@@ -91,9 +87,7 @@ describe('specialties route', () => {
   });
 
   test("DELETE '/:id' -- should fail because not admin", async () => {
-    let { body, status } = await request(server).delete(
-      `${specialtyApi}/${newSpecialtyId}`
-    );
+    let { body, status } = await request(server).delete(`${specialtyApi}/${newSpecialtyId}`);
     expect(status).toEqual(403);
     expect(body.type).toEqual('NotAuthorized');
   });

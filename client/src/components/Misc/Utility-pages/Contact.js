@@ -130,9 +130,7 @@ class Contact extends Component {
             <Translate>
               {({ translate }) => (
                 <Message positive>
-                  <Message.Header>
-                    {translate('contact.form.submitted.header')}
-                  </Message.Header>
+                  <Message.Header>{translate('contact.form.submitted.header')}</Message.Header>
                   <Message.Content>
                     <div
                       dangerouslySetInnerHTML={{

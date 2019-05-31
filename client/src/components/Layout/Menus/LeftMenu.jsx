@@ -6,7 +6,7 @@ import logo from '../logo/aulogo_dk_var2_hvid.png';
 import { urls } from '../../../utils/common';
 
 const LeftMenu = ({ history }) => {
-  const onNavigation = path => {
+  const onNavigation = (path) => {
     history.push(urls[path]);
   };
 

@@ -132,7 +132,7 @@ class QuizMain extends Component {
 
   /** Håndtering af pop-up af billeder **/
   onImgClick() {
-    this.setState(prevState => {
+    this.setState((prevState) => {
       return { imgOpen: !prevState.imgOpen };
     });
   }
@@ -171,11 +171,7 @@ class QuizMain extends Component {
               <h1>
                 <Translate id="quizLoader.noresultsHeader" />
               </h1>
-              <Button
-                onClick={() => this.props.history.push('/')}
-                basic
-                color="blue"
-              >
+              <Button onClick={() => this.props.history.push('/')} basic color="blue">
                 <Translate id="quizLoader.noresults" />
               </Button>
             </Container>

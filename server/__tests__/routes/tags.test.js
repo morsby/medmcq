@@ -21,9 +21,9 @@ describe('tags route', () => {
     firstTagId = tags[0].id;
     let sortedTags = _.sortBy(tags, ['name']);
     let seededTags = require('../../seeds/data/13_sample_tags.json');
-    seededTags = seededTags.map(s => s.name).sort();
+    seededTags = seededTags.map((s) => s.name).sort();
 
-    expect(sortedTags.map(sem => sem.name)).toEqual(seededTags);
+    expect(sortedTags.map((sem) => sem.name)).toEqual(seededTags);
   });
 
   test("POST '/' -- should fail non-admin", async () => {
@@ -39,9 +39,7 @@ describe('tags route', () => {
   });
 
   test("POST '/' -- should insert a new tag", async () => {
-    await agent
-      .post('/api/auth')
-      .send({ username: 'TestAdmin', password: 'TestPassword123' });
+    await agent.post('/api/auth').send({ username: 'TestAdmin', password: 'TestPassword123' });
 
     let { body } = await agent.post(tagApi).send({
       name: 'Test',
@@ -89,9 +87,7 @@ describe('tags route', () => {
   });
 
   test("DELETE '/:id' -- should fail non-admin", async () => {
-    let { status, body } = await request(server).delete(
-      `${tagApi}/${newTagId}`
-    );
+    let { status, body } = await request(server).delete(`${tagApi}/${newTagId}`);
     expect(body.type).toEqual('NotAuthorized');
     expect(status).toEqual(403);
   });

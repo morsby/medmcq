@@ -15,17 +15,13 @@ const Answers = ({ answers = [] }) => {
 
   let totalAnswers = answers.length;
 
-  let allRight = _.filter(
-    answers,
-    a => a.performance.tries === a.performance.correct
-  );
+  let allRight = _.filter(answers, (a) => a.performance.tries === a.performance.correct);
 
-  let allWrong = _.filter(answers, a => a.performance.correct === 0);
+  let allWrong = _.filter(answers, (a) => a.performance.correct === 0);
 
   let mixed = _.filter(
     answers,
-    a =>
-      a.performance.correct > 0 && a.performance.correct < a.performance.tries
+    (a) => a.performance.correct > 0 && a.performance.correct < a.performance.tries
   );
   return (
     <div>
@@ -38,31 +34,19 @@ const Answers = ({ answers = [] }) => {
         </p>
         <ul className="ui list analysis">
           <li className="item">
-            <Translate
-              id="profileAnswers.answers.correct"
-              data={{ n: allRight.length }}
-            />
+            <Translate id="profileAnswers.answers.correct" data={{ n: allRight.length }} />
           </li>
           <li className="item">
-            <Translate
-              id="profileAnswers.answers.wrong"
-              data={{ n: allWrong.length }}
-            />
+            <Translate id="profileAnswers.answers.wrong" data={{ n: allWrong.length }} />
           </li>
           <li className="item">
-            <Translate
-              id="profileAnswers.answers.mixed"
-              data={{ n: mixed.length }}
-            />
+            <Translate id="profileAnswers.answers.mixed" data={{ n: mixed.length }} />
           </li>
         </ul>
       </div>
 
       <Divider hidden />
-      <Button
-        onClick={() => toggleDetails(!details)}
-        disabled={totalAnswers === 0}
-      >
+      <Button onClick={() => toggleDetails(!details)} disabled={totalAnswers === 0}>
         {details && totalAnswers > 0 ? (
           <Translate id="profileAnswers.buttons.details.hide_details" />
         ) : (

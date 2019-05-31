@@ -5,10 +5,7 @@
     "login": ["Log ind", "Login"],
     "logout": ["Log ud", "Logout"],
     "home": ["Forside", "Home"],
-    "credit": [
-      "Spørgsmål er printet fra medMCQ",
-      "Questions have been printed using medMCQ"
-    ],
+    "credit": ["Spørgsmål er printet fra medMCQ", "Questions have been printed using medMCQ"],
     "close": ["Luk", "Close"]
   },
   "footer": {
@@ -18,10 +15,7 @@
       "Siden er lavet med tilladelse fra Institut for Klinisk Medicin, Health, Aarhus Universitet.",
       "The site is developed with permission from The Department of Clinical Medicine, Health, Aarhus University"
     ],
-    "developed_by": [
-      "Udviklet af Sigurd Morsby Larsen",
-      "Developed by Sigurd Morsby Larsen"
-    ],
+    "developed_by": ["Udviklet af Sigurd Morsby Larsen", "Developed by Sigurd Morsby Larsen"],
     "maintained_by": [
       "Vedligeholdes og forbedres i samarbejde med Thomas Jensen (Thjen) og <strong><a href=\"https://cesu.au.dk\">CESU</a></strong>",
       "Maintained and improved in collaboration with Thomas Jensen (Thjen) and <strong><a href=\"https://cesu.au.dk\">CESU</a></strong>"

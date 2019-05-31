@@ -9,13 +9,7 @@ import { specialer, tags, imageURL, breakpoints } from '../utils/common';
 
 import { subSupScript } from '../utils/quiz';
 
-import {
-  Container,
-  Grid,
-  Divider,
-  Segment,
-  Responsive
-} from 'semantic-ui-react';
+import { Container, Grid, Divider, Segment, Responsive } from 'semantic-ui-react';
 
 import QuestionAnswerButtons from '../components/Quiz/Question/QuestionAnswerButtons';
 import QuestionImage from '../components/Quiz/Question/QuestionImage';
@@ -118,12 +112,11 @@ class Question extends PureComponent {
    * For at kunne svare med tal på keyboardet
    * Tager højde for modifier keys (alt, ctrl, meta)
    */
-  onKeydown = e => {
+  onKeydown = (e) => {
     if (
       !this.props.imgOpen &&
       !(
-        document.activeElement.tagName === 'TEXTAREA' ||
-        document.activeElement.tagName === 'INPUT'
+        document.activeElement.tagName === 'TEXTAREA' || document.activeElement.tagName === 'INPUT'
       ) &&
       !e.altKey &&
       !e.ctrlKey &&
@@ -145,7 +138,7 @@ class Question extends PureComponent {
    * Ansvarlig for at fortælle redux at der er svaret
    * @param  {number} answer Det der er svaret (1, 2 el. 3)
    */
-  onAnswer = answer => {
+  onAnswer = (answer) => {
     let { answerQuestion, question, user, qn } = this.props;
 
     // If not already answered:
@@ -190,7 +183,7 @@ class Question extends PureComponent {
                       smartypants: true
                     })
                   }}
-                  ref={ref => (this._div = ref)}
+                  ref={(ref) => (this._div = ref)}
                 />
                 <Responsive as="div" minWidth={breakpoints.mobile + 1}>
                   <Divider />
@@ -222,12 +215,7 @@ class Question extends PureComponent {
             />
           </Responsive>
           <Divider />
-          <QuestionMetadata
-            question={question}
-            specialer={specialer}
-            tags={tags}
-            user={user}
-          />
+          <QuestionMetadata question={question} specialer={specialer} tags={tags} user={user} />
           <Divider />
           <QuestionExtras
             deleteComment={this.props.deleteComment}

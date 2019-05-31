@@ -25,9 +25,7 @@ const AnswerDetails = ({ answers, getQuestions }) => {
    * @return {null}            Returns nothing, simply updates state.
    */
   const toggleCheckbox = (id, checked) => {
-    checked
-      ? setSelected(_.filter(selected, el => el !== id))
-      : setSelected([...selected, id]);
+    checked ? setSelected(_.filter(selected, (el) => el !== id)) : setSelected([...selected, id]);
   };
 
   const startQuiz = () => {
@@ -37,20 +35,15 @@ const AnswerDetails = ({ answers, getQuestions }) => {
   if (filter) {
     switch (filter) {
       case 'allRight':
-        answers = _.filter(
-          answers,
-          a => a.performance.correct === a.performance.tries
-        );
+        answers = _.filter(answers, (a) => a.performance.correct === a.performance.tries);
         break;
       case 'allWrong':
-        answers = _.filter(answers, a => a.performance.correct === 0);
+        answers = _.filter(answers, (a) => a.performance.correct === 0);
         break;
       default:
         answers = _.filter(
           answers,
-          a =>
-            a.performance.correct > 0 &&
-            a.performance.correct < a.performance.tries
+          (a) => a.performance.correct > 0 && a.performance.correct < a.performance.tries
         );
     }
   }
@@ -60,10 +53,7 @@ const AnswerDetails = ({ answers, getQuestions }) => {
     <div>
       <Divider hidden />
       <Button onClick={startQuiz} disabled={selected.length === 0}>
-        <Translate
-          id="profileAnswerDetails.start_quiz_button"
-          data={{ n: selected.length }}
-        />
+        <Translate id="profileAnswerDetails.start_quiz_button" data={{ n: selected.length }} />
       </Button>
       <h4>
         <Translate id="profileAnswerDetails.filter.header" />
@@ -73,7 +63,7 @@ const AnswerDetails = ({ answers, getQuestions }) => {
       <Table celled>
         <AnswerDetailsHeaderRow />
         <Table.Body>
-          {_.map(answers, answer => (
+          {_.map(answers, (answer) => (
             <AnswerDetailsRow
               key={answer.question.id}
               answer={answer}

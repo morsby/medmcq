@@ -10,7 +10,7 @@ import { errorHandler, NotAuthorized } from './errorHandling';
  * @return {function}            The middleware function
  */
 export const permit = ({ roles = [], owner = '' } = {}) => {
-  const isAllowed = async user => {
+  const isAllowed = async (user) => {
     let res = await User.query()
       .findById(user.id)
       .joinEager('role');

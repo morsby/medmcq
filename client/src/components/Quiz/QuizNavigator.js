@@ -16,19 +16,13 @@ const QuizNavigator = ({ onNavigate, qn, qmax, position }) => {
   return (
     <Container {...(position === 'top' ? { className: 'top-nav' } : {})}>
       <Menu size="large" fluid widths={3}>
-        <Menu.Item
-          {...(qn <= 0 ? { disabled: true } : {})}
-          onClick={() => onNavigate(qn - 1)}
-        >
+        <Menu.Item {...(qn <= 0 ? { disabled: true } : {})} onClick={() => onNavigate(qn - 1)}>
           <Icon name="step backward" />
           <Translate id="quizNavigator.previous" />
         </Menu.Item>
         <Menu.Item header>
           {position === 'top' && (
-            <Translate
-              id="quizNavigator.progress"
-              data={{ n: qn + 1, total: qmax }}
-            />
+            <Translate id="quizNavigator.progress" data={{ n: qn + 1, total: qmax }} />
           )}
         </Menu.Item>
         <Menu.Item

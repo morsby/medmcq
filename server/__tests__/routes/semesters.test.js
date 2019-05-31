@@ -21,7 +21,7 @@ describe('semesters route', () => {
     // To reuse the id without making a second API call -- id can change if rerunning seeds
     firstSemesterId = semesters[0].id;
 
-    expect(semesters.map(sem => sem.name)).toEqual([
+    expect(semesters.map((sem) => sem.name)).toEqual([
       'Inflammation',
       'Abdomen',
       'Hjerte-lunge-kar',
@@ -30,9 +30,7 @@ describe('semesters route', () => {
   });
 
   test("POST '/' -- should fail because user not permitted", async () => {
-    await user
-      .post('/api/auth')
-      .send({ username: 'TestBruger', password: 'TestPassword123' });
+    await user.post('/api/auth').send({ username: 'TestBruger', password: 'TestPassword123' });
 
     let { status, body } = await user.post(semesterApi).send({
       value: 12,
@@ -45,9 +43,7 @@ describe('semesters route', () => {
   });
 
   test("POST '/' -- should insert a new semester", async () => {
-    await admin
-      .post('/api/auth')
-      .send({ username: 'TestAdmin', password: 'TestPassword123' });
+    await admin.post('/api/auth').send({ username: 'TestAdmin', password: 'TestPassword123' });
 
     let { body } = await admin.post(semesterApi).send({
       value: 12,
@@ -69,9 +65,7 @@ describe('semesters route', () => {
   });
 
   test("GET '/:id' -- should get one semester", async () => {
-    let { body } = await request(server).get(
-      `${semesterApi}/${firstSemesterId}`
-    );
+    let { body } = await request(server).get(`${semesterApi}/${firstSemesterId}`);
 
     expect(body.value).toEqual(7);
     expect(body.name).toEqual('Inflammation');
@@ -83,11 +77,9 @@ describe('semesters route', () => {
   });
 
   test("PATCH '/:id' -- should fail as user", async () => {
-    let { status, body } = await user
-      .patch(`${semesterApi}/${newSemesterId}`)
-      .send({
-        name: 'NewName'
-      });
+    let { status, body } = await user.patch(`${semesterApi}/${newSemesterId}`).send({
+      name: 'NewName'
+    });
     expect(status).toEqual(403);
     expect(body.type).toEqual('NotAuthorized');
   });

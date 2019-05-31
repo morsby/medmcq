@@ -30,26 +30,11 @@
     "print": ["Print disse spørgsmål", "Print these questions"]
   },
   "question": {
-    "show_public_comments": [
-      "Vis offentlige kommentarer (${n})",
-      "Show public comments (${n})"
-    ],
-    "hide_public_comments": [
-      "Skjul offentlige kommentarer (${n})",
-      "Hide public comments (${n})"
-    ],
-    "show_private_comments": [
-      "Vis private kommentarer (${n})",
-      "Show private comments (${n})"
-    ],
-    "hide_private_comments": [
-      "Skjul private kommentarer (${n})",
-      "Hide private comments (${n})"
-    ],
-    "report_question": [
-      "Rapporter en fejl i spørgsmålet",
-      "Report an error in the question"
-    ],
+    "show_public_comments": ["Vis offentlige kommentarer (${n})", "Show public comments (${n})"],
+    "hide_public_comments": ["Skjul offentlige kommentarer (${n})", "Hide public comments (${n})"],
+    "show_private_comments": ["Vis private kommentarer (${n})", "Show private comments (${n})"],
+    "hide_private_comments": ["Skjul private kommentarer (${n})", "Hide private comments (${n})"],
+    "report_question": ["Rapporter en fejl i spørgsmålet", "Report an error in the question"],
     "private_comment": ["Privat kommentar", "Private comment"]
   },
   "questionMetadata": {
@@ -94,10 +79,7 @@
   "questionComments": {
     "write_a_comment": ["Skriv en kommentar", "Write a comment"],
     "edit_a_comment": ["Ret en kommentar", "Edit a comment"],
-    "login_to_write": [
-      "Log ind for at skrive en kommentar.",
-      "Login to write a comment."
-    ],
+    "login_to_write": ["Log ind for at skrive en kommentar.", "Login to write a comment."],
     "public_comment_info": [
       "Kommentarer du skriver her vil vise dit brugernavn (hvis det ikke fravælges) og din kommentar for andre brugere.",
       "Writing a comment here will show your username (unless you have chosen not to) as well as your comment to other users."

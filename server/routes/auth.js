@@ -77,9 +77,7 @@ router.post('/', (req, res, next) => {
     }
     if (!user) {
       req.session = null;
-      return res
-        .status(401)
-        .json(createResponse('LoginFailed', 'Login failed.'));
+      return res.status(401).json(createResponse('LoginFailed', 'Login failed.'));
     }
     req.logIn(user, function(err) {
       if (err) {

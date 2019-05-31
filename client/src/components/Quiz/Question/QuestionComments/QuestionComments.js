@@ -88,7 +88,7 @@ const QuestionComments = ({
   return (
     <div>
       <div>
-        {comments.map(c => (
+        {comments.map((c) => (
           <QuestionCommentSingle
             key={c.id}
             comment={c}

@@ -9,12 +9,7 @@ const Password = require('objection-password')({
 
 class User extends Password(BaseModel) {
   static get hidden() {
-    return [
-      ...hiddenCols,
-      'password',
-      'resetPasswordToken',
-      'resetPasswordExpires'
-    ];
+    return [...hiddenCols, 'password', 'resetPasswordToken', 'resetPasswordExpires'];
   }
 
   static get tableName() {
@@ -64,7 +59,7 @@ class User extends Password(BaseModel) {
           from: 'questionComment.userId',
           to: 'user.id'
         },
-        modify: builder => builder.where({ private: false })
+        modify: (builder) => builder.where({ private: false })
       },
       privateComments: {
         relation: Model.HasManyRelation,
@@ -73,7 +68,7 @@ class User extends Password(BaseModel) {
           from: 'questionComment.userId',
           to: 'user.id'
         },
-        modify: builder => builder.where({ private: true })
+        modify: (builder) => builder.where({ private: true })
       },
 
       bookmarks: {
@@ -101,7 +96,7 @@ class User extends Password(BaseModel) {
           from: 'user.roleId',
           to: 'userRole.id'
         },
-        modify: builder => builder.select('id', 'name')
+        modify: (builder) => builder.select('id', 'name')
       },
 
       specialtyVotes: {

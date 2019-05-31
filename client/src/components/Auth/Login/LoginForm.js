@@ -7,10 +7,7 @@ import { withRouter } from 'react-router';
 import * as actions from '../../../actions';
 
 import { urls } from '../../../utils/common';
-import {
-  loginUsernameValid,
-  loginPasswordValid
-} from '../../../utils/formValidation';
+import { loginUsernameValid, loginPasswordValid } from '../../../utils/formValidation';
 
 import { Form, Field } from 'react-final-form';
 import { Button, Divider, Message } from 'semantic-ui-react';
@@ -24,11 +21,11 @@ import { Translate } from 'react-localize-redux';
 class LoginForm extends Component {
   state = { error: null };
 
-  handleNavigation = path => {
+  handleNavigation = (path) => {
     this.props.history.push(urls[path]);
   };
 
-  onSubmit = async values => {
+  onSubmit = async (values) => {
     let login = await this.props.login(values);
 
     if (login.type === 'LoginSuccess') {
@@ -50,11 +47,7 @@ class LoginForm extends Component {
                 <form onSubmit={handleSubmit} className="ui form custom">
                   <Field name="username" validate={loginUsernameValid}>
                     {({ input, meta }) => (
-                      <div
-                        className={
-                          'field ' + (meta.error && meta.touched ? 'error' : '')
-                        }
-                      >
+                      <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
                         <label>{translate('loginForm.username')}</label>
                         <input
                           {...input}
@@ -73,11 +66,7 @@ class LoginForm extends Component {
 
                   <Field name="password" validate={loginPasswordValid}>
                     {({ input, meta }) => (
-                      <div
-                        className={
-                          'field ' + (meta.error && meta.touched ? 'error' : '')
-                        }
-                      >
+                      <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
                         <label>{translate('loginForm.password')}</label>
                         <input
                           {...input}
@@ -93,29 +82,22 @@ class LoginForm extends Component {
                     )}
                   </Field>
                   {this.state.error && (
-                    <Message negative>
-                      {translate('loginForm.errs.login_failed')}
-                    </Message>
+                    <Message negative>{translate('loginForm.errs.login_failed')}</Message>
                   )}
                   <Divider hidden />
                   <Message warning visible>
                     <Message.Header>Mellemrum i brugernavne</Message.Header>
                     <p>
-                      Vi har fjernet alle mellemrum fra brugernavne. Har du før
-                      logget ind med et brugernavn, skal du blot fjerne dette
-                      for at logge ind.
+                      Vi har fjernet alle mellemrum fra brugernavne. Har du før logget ind med et
+                      brugernavn, skal du blot fjerne dette for at logge ind.
                     </p>
                     <p>
-                      Indtil sommerferien kan du dog stadig logge ind, som du
-                      plejer <em>med</em> mellemrum.
+                      Indtil sommerferien kan du dog stadig logge ind, som du plejer <em>med</em>{' '}
+                      mellemrum.
                     </p>
                   </Message>
                   <Divider hidden />
-                  <Button
-                    floated="left"
-                    disabled={pristine || invalid}
-                    positive
-                  >
+                  <Button floated="left" disabled={pristine || invalid} positive>
                     {translate('loginForm.login')}
                   </Button>
                 </form>
@@ -124,10 +106,7 @@ class LoginForm extends Component {
           )}
         </Translate>
         <div style={{ float: 'right' }}>
-          <Button
-            onClick={() => this.handleNavigation('forgotPassword')}
-            color="blue"
-          >
+          <Button onClick={() => this.handleNavigation('forgotPassword')} color="blue">
             <Translate id="loginForm.forgot_password" />
           </Button>
           <Button onClick={() => this.handleNavigation('signup')}>

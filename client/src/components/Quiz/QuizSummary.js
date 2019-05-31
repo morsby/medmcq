@@ -41,12 +41,7 @@ const QuizSummary = ({ questions, clickHandler }) => {
                   svar = 'svar-forkert';
                 }
                 return (
-                  <List.Item
-                    as="a"
-                    className={svar}
-                    onClick={() => clickHandler(index)}
-                    key={q.id}
-                  >
+                  <List.Item as="a" className={svar} onClick={() => clickHandler(index)} key={q.id}>
                     {truncateText(q.text)}
                   </List.Item>
                 );

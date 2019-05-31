@@ -19,7 +19,7 @@ const QuestionAnswerButtons = ({ pristine, onAnswer, question }) => {
    * @param  {Number} answerNo Svarmulighed nr. 1, 2 el. 3
    * @return {Comp}            Selve knappen.
    */
-  const generateButton = answerNo => {
+  const generateButton = (answerNo) => {
     let answerText;
     switch (answerNo) {
       case 1:

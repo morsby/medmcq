@@ -12,12 +12,7 @@ import { Translate } from 'react-localize-redux';
  * @param {func}    deleteComment Funktion at slette kommentar
  * @param {func}    editComment   Funktion at ændre kommentar
  */
-const QuestionCommentSingle = ({
-  comment,
-  user,
-  deleteComment,
-  editComment
-}) => {
+const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) => {
   const [deleting, setDeleting] = useState(false);
 
   if (!user) user = {};

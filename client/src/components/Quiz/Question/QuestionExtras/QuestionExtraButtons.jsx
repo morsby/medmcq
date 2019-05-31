@@ -14,11 +14,7 @@ const QuestionExtraButtons = ({
 }) => {
   return (
     <>
-      <Button
-        color={publicCommentsOpen ? 'green' : null}
-        basic
-        onClick={onPublicCommentsToggle}
-      >
+      <Button color={publicCommentsOpen ? 'green' : null} basic onClick={onPublicCommentsToggle}>
         {publicCommentsOpen ? (
           <Translate id="question.hide_public_comments" data="FIX" />
         ) : (
@@ -39,12 +35,7 @@ const QuestionExtraButtons = ({
         </Button>
       )}
       {width <= 700 && <Divider hidden />}
-      <Button
-        basic
-        color="orange"
-        floated={width > 700 ? 'right' : null}
-        onClick={onReportToggle}
-      >
+      <Button basic color="orange" floated={width > 700 ? 'right' : null} onClick={onReportToggle}>
         <Translate id="question.report_question" />
       </Button>
     </>

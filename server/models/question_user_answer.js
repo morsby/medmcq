@@ -54,7 +54,7 @@ class QuestionUserAnswer extends BaseModel {
   }
   static get modifiers() {
     return {
-      summary: builder =>
+      summary: (builder) =>
         builder.select(
           '*',
           builder

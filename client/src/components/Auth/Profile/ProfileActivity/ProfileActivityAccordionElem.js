@@ -6,13 +6,7 @@ import marked from 'marked';
 /**
  * An accordion element.
  */
-const ProfileActivityAccordionElem = ({
-  title,
-  children,
-  index,
-  active,
-  handleClick
-}) => (
+const ProfileActivityAccordionElem = ({ title, children, index, active, handleClick }) => (
   <>
     <Accordion.Title
       active={active}

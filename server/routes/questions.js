@@ -8,11 +8,7 @@ import QuestionUserAnswer from '../models/question_user_answer';
 import QuestionSpecialtyVote from '../models/question_specialty_vote';
 import QuestionTagVote from '../models/question_tag_vote';
 
-import {
-  errorHandler,
-  NotAuthorized,
-  BadRequest
-} from '../middleware/errorHandling';
+import { errorHandler, NotAuthorized, BadRequest } from '../middleware/errorHandling';
 
 const router = express.Router();
 
@@ -90,11 +86,7 @@ router.get('/', async (req, res) => {
   let { ids, n, semesters, onlyNew, specialties, tags } = req.query;
   try {
     // If user is not allowed to query >300 questions, we throw an error
-    if (
-      !ids &&
-      (!n || n > 300) &&
-      ['admin', 'creator'].indexOf(user.role) === -1
-    ) {
+    if (!ids && (!n || n > 300) && ['admin', 'creator'].indexOf(user.role) === -1) {
       throw new NotAuthorized({
         message: `You requested too many questions. The limit for non-admins is 300 (you requested ${req
           .query.n || 'all'}).`,
@@ -110,10 +102,7 @@ router.get('/', async (req, res) => {
 
     // If requesting ids, get them
     if (ids) {
-      query = query.whereIn(
-        'Question.id',
-        ids.split(',').map(id => Number(id))
-      );
+      query = query.whereIn('Question.id', ids.split(',').map((id) => Number(id)));
     } else {
       // Otherwise, filter by results
       if (semesters) query = query.whereIn('semester.id', semesters.split(','));
@@ -214,11 +203,9 @@ router.post('/', permit({ roles: ['admin'] }), async (req, res) => {
   try {
     let questionToInsert = req.body;
 
-    questionToInsert.correctAnswers = questionToInsert.correctAnswers.map(
-      answer => ({ answer })
-    );
+    questionToInsert.correctAnswers = questionToInsert.correctAnswers.map((answer) => ({ answer }));
 
-    const newQuestion = await transaction(Question.knex(), async trx => {
+    const newQuestion = await transaction(Question.knex(), async (trx) => {
       const newQuestion = await Question.query(trx)
         .insertGraphAndFetch(questionToInsert)
         .eager('examSet');
@@ -271,10 +258,7 @@ router.post('/search', async (req, res) => {
     let { searchString } = req.body;
 
     const questions = await Question.query()
-      .whereRaw(
-        'MATCH (text, answer1, answer2, answer3) AGAINST (? IN BOOLEAN MODE)',
-        searchString
-      )
+      .whereRaw('MATCH (text, answer1, answer2, answer3) AGAINST (? IN BOOLEAN MODE)', searchString)
       .eager(Question.defaultEager);
 
     res.status(200).json(questions);
@@ -390,43 +374,37 @@ router.get('/:id', async (req, res) => {
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.patch(
-  '/:id',
-  permit({ roles: ['editor', 'admin'] }),
-  async (req, res) => {
-    try {
-      // Hvis der ikke er nogle data med i req.body smider vi en fejl
-      if (Object.keys(req.body).length === 0) {
-        throw new ValidationError({
-          type: 'ModelValidation',
-          message: 'No values to patch',
-          data: {}
-        });
-      }
-
-      let questionToPatch = req.body;
-      questionToPatch.id = Number(req.params.id);
-
-      if (questionToPatch.correctAnswers) {
-        questionToPatch.correctAnswers = questionToPatch.correctAnswers.map(
-          answer => ({ answer })
-        );
-      }
-
-      const question = await transaction(Question.knex(), async trx => {
-        const question = Question.query(trx)
-          .upsertGraphAndFetch(questionToPatch)
-          .eager(Question.defaultEager);
-        return question;
+router.patch('/:id', permit({ roles: ['editor', 'admin'] }), async (req, res) => {
+  try {
+    // Hvis der ikke er nogle data med i req.body smider vi en fejl
+    if (Object.keys(req.body).length === 0) {
+      throw new ValidationError({
+        type: 'ModelValidation',
+        message: 'No values to patch',
+        data: {}
       });
-
-      if (!question) throw new NotFoundError();
-      res.status(200).json(question);
-    } catch (err) {
-      errorHandler(err, res);
     }
+
+    let questionToPatch = req.body;
+    questionToPatch.id = Number(req.params.id);
+
+    if (questionToPatch.correctAnswers) {
+      questionToPatch.correctAnswers = questionToPatch.correctAnswers.map((answer) => ({ answer }));
+    }
+
+    const question = await transaction(Question.knex(), async (trx) => {
+      const question = Question.query(trx)
+        .upsertGraphAndFetch(questionToPatch)
+        .eager(Question.defaultEager);
+      return question;
+    });
+
+    if (!question) throw new NotFoundError();
+    res.status(200).json(question);
+  } catch (err) {
+    errorHandler(err, res);
   }
-);
+});
 
 /**
  * @swagger
@@ -535,7 +513,7 @@ router.put('/:id/vote', permit(), async (req, res) => {
 
     let userId = req.user.id;
 
-    const updatedQuestion = await transaction(Question.knex(), async trx => {
+    const updatedQuestion = await transaction(Question.knex(), async (trx) => {
       if (specialtyVotes) {
         if (!Array.isArray(specialtyVotes)) {
           throw new BadRequest({
@@ -547,7 +525,7 @@ router.put('/:id/vote', permit(), async (req, res) => {
           .where({ questionId, userId: userId })
           .delete();
 
-        specialtyVotes = specialtyVotes.map(vote => ({
+        specialtyVotes = specialtyVotes.map((vote) => ({
           questionId,
           userId,
           specialtyId: vote
@@ -567,7 +545,7 @@ router.put('/:id/vote', permit(), async (req, res) => {
           .where({ questionId, userId: userId })
           .delete();
 
-        tagVotes = tagVotes.map(vote => ({
+        tagVotes = tagVotes.map((vote) => ({
           questionId,
           userId,
           tagId: vote

@@ -9,7 +9,7 @@ exports.seed = function(knex) {
       const users = await knex.from('user').select('id', 'username');
       const questions = await knex.from('question').select('id', 'old_id');
       const tags = await knex.from('question_tag').select('id', 'name');
-      let votes = sampleVotes.map(vote => {
+      let votes = sampleVotes.map((vote) => {
         vote.user_id = _.find(users, { username: vote.user_id }).id;
         vote.question_id = _.find(questions, {
           oldId: vote.question_id

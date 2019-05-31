@@ -23,12 +23,12 @@ import { Translate } from 'react-localize-redux';
 class EditProfile extends Component {
   state = { message: null };
 
-  handleNavigation = path => {
+  handleNavigation = (path) => {
     this.props.history.push(urls[path]);
   };
 
-  onSubmit = async values => {
-    await this.props.editProfile(values, data => {
+  onSubmit = async (values) => {
+    await this.props.editProfile(values, (data) => {
       this.setState({ message: data });
     });
   };
@@ -54,13 +54,10 @@ class EditProfile extends Component {
                 render={({ handleSubmit, pristine, invalid, form }) => {
                   return (
                     <form
-                      onSubmit={event => {
+                      onSubmit={(event) => {
                         handleSubmit(event)
                           .then(
-                            () =>
-                              new Promise(resolve =>
-                                this.props.fetchUser().then(resolve)
-                              )
+                            () => new Promise((resolve) => this.props.fetchUser().then(resolve))
                           )
                           .then(() => form.reset());
                       }}
@@ -68,21 +65,12 @@ class EditProfile extends Component {
                     >
                       <Field name="email" validate={validation.emailValid}>
                         {({ input, meta }) => (
-                          <div
-                            className={
-                              'field ' +
-                              (meta.error && meta.touched ? 'error' : '')
-                            }
-                          >
-                            <label>
-                              {translate('editProfile.form_fields.email')}
-                            </label>
+                          <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
+                            <label>{translate('editProfile.form_fields.email')}</label>
                             <input
                               {...input}
                               type="email"
-                              placeholder={translate(
-                                'editProfile.form_fields.email'
-                              )}
+                              placeholder={translate('editProfile.form_fields.email')}
                             />
                             {meta.error && meta.touched && (
                               <Message error visible>
@@ -91,30 +79,16 @@ class EditProfile extends Component {
                             )}
                             {meta.touched && !meta.error && (
                               <Message warning visible>
-                                {translate(
-                                  'signup.form_fields.email_not_required_message'
-                                )}
+                                {translate('signup.form_fields.email_not_required_message')}
                               </Message>
                             )}
                           </div>
                         )}
                       </Field>
-                      <Field
-                        name="password"
-                        validate={validation.passwordValid}
-                      >
+                      <Field name="password" validate={validation.passwordValid}>
                         {({ input, meta }) => (
-                          <div
-                            className={
-                              'field ' +
-                              (meta.error && meta.touched ? 'error' : '')
-                            }
-                          >
-                            <label>
-                              {translate(
-                                'editProfile.form_fields.new_password'
-                              )}
-                            </label>
+                          <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
+                            <label>{translate('editProfile.form_fields.new_password')}</label>
                             <input
                               {...input}
                               type="password"
@@ -131,28 +105,16 @@ class EditProfile extends Component {
                         )}
                       </Field>
                       <Divider hidden />
-                      <Field
-                        name="password-repeat"
-                        validate={validation.passwordRepeatValid}
-                      >
+                      <Field name="password-repeat" validate={validation.passwordRepeatValid}>
                         {({ input, meta }) => (
-                          <div
-                            className={
-                              'field ' +
-                              (meta.error && meta.touched ? 'error' : '')
-                            }
-                          >
+                          <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
                             <label>
-                              {translate(
-                                'editProfile.form_fields.new_password_repeat'
-                              )}
+                              {translate('editProfile.form_fields.new_password_repeat')}
                             </label>
                             <input
                               {...input}
                               type="password"
-                              placeholder={translate(
-                                'editProfile.form_fields.new_password_repeat'
-                              )}
+                              placeholder={translate('editProfile.form_fields.new_password_repeat')}
                             />
                             {meta.error && meta.touched && (
                               <Message error visible>

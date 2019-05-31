@@ -17,8 +17,8 @@
     "genversion": "genversion -e version.js && mv version.js client/src/",
     "lint": "eslint . --fix --ext .js,.jsx,.json",
     "format": "npm-run-all --parallel format:*",
-    "format:json": "prettier --list-different  --write '**/*.json'",
-    "format:styles": "prettier --list-different --write '**/*.{css,scss}'",
+    "format:json": "prettier --list-different  --write \"**/*.json\"",
+    "format:styles": "prettier --list-different --write \"**/*.{css,scss}\"",
     "validate": "npm-run-all --sequential lint format test",
     "test": "npm-run-all --parallel test:server",
     "test:server": "cd server && npm run test",
@@ -28,6 +28,9 @@
     "hooks": {
       "pre-commit": "npm run validate"
     }
+  },
+  "eslintConfig": {
+    "extends": "react-app"
   },
   "author": "Morsby",
   "license": "MIT",

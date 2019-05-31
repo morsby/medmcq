@@ -74,7 +74,7 @@ export const modifiers = {
    * @param  {function} builder A QueryBuilder instance
    * @return {function}         A QueryBuilder instance
    */
-  belongsToUser: builder => {
+  belongsToUser: (builder) => {
     const args = builder.namedFilterArgs('userId');
     return builder.where('userId', args);
   },
@@ -85,7 +85,7 @@ export const modifiers = {
    * @param  {function} builder A builder instance from Objection
    * @return {function}         A builder instance with the joins
    */
-  filterOnMetadata: builder => {
+  filterOnMetadata: (builder) => {
     const type = builder.namedFilterArgs('type');
     const typeSingular = type === 'specialties' ? 'specialty' : 'tag';
     const ids = builder.namedFilterArgs('ids');
@@ -116,13 +116,11 @@ export const modifiers = {
    * @param  {[type]} builder [A builder instance from Objection]
    * @return {[type]}         [A builder instance containing only the active metadata]
    */
-  activeMetadata: builder => {
+  activeMetadata: (builder) => {
     let model = builder._modelClass;
     let tableName = model.name;
 
-    let type = tableName.toLowerCase().includes('specialty')
-      ? 'specialty'
-      : 'tag';
+    let type = tableName.toLowerCase().includes('specialty') ? 'specialty' : 'tag';
 
     return builder
       .select(

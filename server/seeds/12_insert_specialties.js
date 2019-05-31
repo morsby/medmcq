@@ -12,7 +12,7 @@ exports.seed = function(knex) {
 
       // Inserts seed entries
       return knex('question_specialty').insert(
-        sampleSpecialer.map(s => {
+        sampleSpecialer.map((s) => {
           return {
             name: s.name,
             semester_id: _.find(semesters, { shortName: s.semester_name }).id

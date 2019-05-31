@@ -58,9 +58,9 @@ class QuestionSpecialtyVote extends BaseModel {
 
   static get modifiers() {
     return {
-      active: builder => modifiers.activeMetadata(builder),
-      own: builder => modifiers.belongsToUser(builder),
-      joinSpecialty: builder =>
+      active: (builder) => modifiers.activeMetadata(builder),
+      own: (builder) => modifiers.belongsToUser(builder),
+      joinSpecialty: (builder) =>
         builder
           .joinRelation('specialty')
           .select('questionSpecialtyVote.*', 'specialty.name as name')

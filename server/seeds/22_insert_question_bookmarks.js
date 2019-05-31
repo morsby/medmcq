@@ -8,7 +8,7 @@ exports.seed = function(knex) {
     .then(async () => {
       const users = await knex.from('user').select('id', 'username');
       const questions = await knex.from('question').select('id', 'old_id');
-      let bookmarks = sampleBookmarks.map(bookmark => {
+      let bookmarks = sampleBookmarks.map((bookmark) => {
         bookmark.user_id = _.find(users, { username: bookmark.user_id }).id;
         bookmark.question_id = _.find(questions, {
           oldId: bookmark.question_id

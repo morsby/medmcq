@@ -36,9 +36,7 @@ describe('exam_sets route', () => {
   });
 
   test("POST '/' -- should post a new exam set", async () => {
-    await agent
-      .post('/api/auth')
-      .send({ username: 'TestAdmin', password: 'TestPassword123' });
+    await agent.post('/api/auth').send({ username: 'TestAdmin', password: 'TestPassword123' });
 
     let { body } = await agent.post(examSetApi).send({
       semesterId,
@@ -90,9 +88,7 @@ describe('exam_sets route', () => {
   });
 
   test("DELETE '/:id' -- should delete a examSet", async () => {
-    let { status, body } = await request(server).delete(
-      `${examSetApi}/${newExamSetId}`
-    );
+    let { status, body } = await request(server).delete(`${examSetApi}/${newExamSetId}`);
     expect(status).toEqual(403);
     expect(body.type).toEqual('NotAuthorized');
   });

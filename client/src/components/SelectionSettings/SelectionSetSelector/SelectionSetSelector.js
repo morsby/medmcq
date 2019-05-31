@@ -17,19 +17,11 @@ const SelectionSetSelector = ({ semester, selectedSet, onChange }) => {
   return (
     <Form>
       <Header as="h3">
-        <Translate
-          id="selectionSetSelector.header"
-          data={{ semester: semester.value }}
-        />
+        <Translate id="selectionSetSelector.header" data={{ semester: semester.value }} />
       </Header>
 
-      {semester.examSets.map(set => (
-        <SetRadioButton
-          key={set.id}
-          set={set}
-          selectedSet={selectedSet}
-          onChange={onChange}
-        />
+      {semester.examSets.map((set) => (
+        <SetRadioButton key={set.id} set={set} selectedSet={selectedSet} onChange={onChange} />
       ))}
     </Form>
   );

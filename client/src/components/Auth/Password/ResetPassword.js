@@ -4,10 +4,7 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import { connect } from 'react-redux';
 import * as actions from '../../../actions';
 
-import {
-  passwordValid,
-  passwordRepeatValid
-} from '../../../utils/formValidation';
+import { passwordValid, passwordRepeatValid } from '../../../utils/formValidation';
 
 import { Container, Message, Button, Divider } from 'semantic-ui-react';
 import { Form, Field } from 'react-final-form';
@@ -21,9 +18,9 @@ import { Translate } from 'react-localize-redux';
 class ResetPassword extends Component {
   state = { message: null };
 
-  onSubmit = async values => {
+  onSubmit = async (values) => {
     let token = this.props.match.params.token;
-    await this.props.resetPassword(token, values, data => {
+    await this.props.resetPassword(token, values, (data) => {
       this.setState({ message: data });
     });
   };
@@ -43,19 +40,14 @@ class ResetPassword extends Component {
                 render={({ handleSubmit, pristine, invalid, form }) => {
                   return (
                     <form
-                      onSubmit={event => {
+                      onSubmit={(event) => {
                         handleSubmit(event).then(form.reset());
                       }}
                       className="ui form custom"
                     >
                       <Field name="password" validate={passwordValid}>
                         {({ input, meta }) => (
-                          <div
-                            className={
-                              'field ' +
-                              (meta.error && meta.touched ? 'error' : '')
-                            }
-                          >
+                          <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
                             <label>{translate('resetPassword.password')}</label>
                             <input
                               {...input}
@@ -71,26 +63,14 @@ class ResetPassword extends Component {
                         )}
                       </Field>
                       <Divider hidden />
-                      <Field
-                        name="password-repeat"
-                        validate={passwordRepeatValid}
-                      >
+                      <Field name="password-repeat" validate={passwordRepeatValid}>
                         {({ input, meta }) => (
-                          <div
-                            className={
-                              'field ' +
-                              (meta.error && meta.touched ? 'error' : '')
-                            }
-                          >
-                            <label>
-                              {translate('resetPassword.password_repeat')}
-                            </label>
+                          <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
+                            <label>{translate('resetPassword.password_repeat')}</label>
                             <input
                               {...input}
                               type="password"
-                              placeholder={translate(
-                                'resetPassword.password_repeat'
-                              )}
+                              placeholder={translate('resetPassword.password_repeat')}
                             />
                             {meta.error && meta.touched && (
                               <Message error visible>

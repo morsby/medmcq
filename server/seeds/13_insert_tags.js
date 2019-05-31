@@ -12,7 +12,7 @@ exports.seed = function(knex) {
       // Inserts seed entries
 
       return knex('question_tag').insert(
-        sampleTags.map(t => {
+        sampleTags.map((t) => {
           return {
             name: t.name,
             semester_id: _.find(semesters, { shortName: t.semester_name }).id

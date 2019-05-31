@@ -8,7 +8,7 @@ exports.seed = function(knex) {
     .then(async () => {
       const users = await knex.from('user').select('id', 'username');
       const questions = await knex.from('question').select('id', 'old_id');
-      let answers = sampleAnswers.map(answer => {
+      let answers = sampleAnswers.map((answer) => {
         answer.user_id = _.find(users, { username: answer.user_id }).id;
         answer.question_id = _.find(questions, {
           oldId: answer.question_id

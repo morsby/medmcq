@@ -12,7 +12,7 @@ import layoutTranslations from './layoutTranslations.json';
 /**
  * Footer component.
  */
-const Footer = props => {
+const Footer = (props) => {
   useEffect(() => {
     props.addTranslation(layoutTranslations);
   });
@@ -30,7 +30,7 @@ const Footer = props => {
     color: '#fff'
   };
 
-  const handleClick = path => {
+  const handleClick = (path) => {
     props.history.push(path);
   };
 

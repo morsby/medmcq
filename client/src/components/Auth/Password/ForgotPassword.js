@@ -13,15 +13,12 @@ import { Translate } from 'react-localize-redux';
 class ForgotPassword extends Component {
   state = { email: '', message: null };
 
-  handleChange = (e, { name, value }) =>
-    this.setState({ [name]: value, message: null });
+  handleChange = (e, { name, value }) => this.setState({ [name]: value, message: null });
 
   handleSubmit = () => {
     const { email } = this.state;
 
-    this.props.forgotPassword(email, data =>
-      this.setState({ message: data, email: '' })
-    );
+    this.props.forgotPassword(email, (data) => this.setState({ message: data, email: '' }));
   };
 
   render() {
@@ -46,10 +43,7 @@ class ForgotPassword extends Component {
               />
             </Form.Field>
             {message && (
-              <Message
-                negative={message.type === 'error'}
-                positive={message.type === 'success'}
-              >
+              <Message negative={message.type === 'error'} positive={message.type === 'success'}>
                 {message.data}
               </Message>
             )}

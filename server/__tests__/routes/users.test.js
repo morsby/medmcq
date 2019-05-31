@@ -177,7 +177,7 @@ describe('users route: admin', () => {
     let response = await admin.get(userApi);
     let users = response.body;
 
-    expect(users.map(user => user.username)).toEqual([
+    expect(users.map((user) => user.username)).toEqual([
       'TestAdmin',
       'TestEditor',
       'TestBruger',

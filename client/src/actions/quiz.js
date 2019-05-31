@@ -5,7 +5,7 @@ import * as voteService from '../services/voteService';
 
 const questionApi = '/api/questions';
 
-export const getQuestions = ids => async (dispatch, getState) => {
+export const getQuestions = (ids) => async (dispatch, getState) => {
   let state = getState();
   let {
     type,
@@ -55,13 +55,7 @@ export const getQuestions = ids => async (dispatch, getState) => {
   });
 };
 
-export const answerQuestion = (
-  id,
-  answer,
-  correct,
-  semester,
-  user = null
-) => dispatch => {
+export const answerQuestion = (id, answer, correct, semester, user = null) => (dispatch) => {
   let post = {
     questionId: id,
     answer: correct.correct ? 'correct' : 'wrong',
@@ -77,7 +71,7 @@ export const answerQuestion = (
   });
 };
 
-export const postQuestion = post => async dispatch => {
+export const postQuestion = (post) => async (dispatch) => {
   const formData = new window.FormData();
 
   formData.append('question', post.question);
@@ -97,12 +91,7 @@ export const postQuestion = post => async dispatch => {
   dispatch({ type: types.POST_QUESTION, payload: res.data });
 };
 
-export const commentQuestion = (
-  id,
-  comment,
-  isPrivate,
-  anonymous
-) => async dispatch => {
+export const commentQuestion = (id, comment, isPrivate, anonymous) => async (dispatch) => {
   const res = await axios.put(`/api/questions/${id}/comment`, {
     comment,
     isPrivate,
@@ -114,10 +103,8 @@ export const commentQuestion = (
   });
 };
 
-export const deleteComment = (question_id, comment_id) => async dispatch => {
-  const res = await axios.delete(
-    `/api/questions/${question_id}/comment/${comment_id}`
-  );
+export const deleteComment = (question_id, comment_id) => async (dispatch) => {
+  const res = await axios.delete(`/api/questions/${question_id}/comment/${comment_id}`);
 
   dispatch({
     type: types.QUESTION_COMMENT_UPDATE,
@@ -125,21 +112,14 @@ export const deleteComment = (question_id, comment_id) => async dispatch => {
   });
 };
 
-export const editComment = (
-  question_id,
-  comment_id,
-  comment,
-  isPrivate,
-  anonymous
-) => async dispatch => {
-  const res = await axios.put(
-    `/api/questions/${question_id}/comment/${comment_id}`,
-    {
-      comment,
-      isPrivate,
-      anonymous
-    }
-  );
+export const editComment = (question_id, comment_id, comment, isPrivate, anonymous) => async (
+  dispatch
+) => {
+  const res = await axios.put(`/api/questions/${question_id}/comment/${comment_id}`, {
+    comment,
+    isPrivate,
+    anonymous
+  });
 
   dispatch({
     type: types.QUESTION_COMMENT_UPDATE,
@@ -147,12 +127,12 @@ export const editComment = (
   });
 };
 
-export const questionReport = ({ type, data }) => dispatch => {
+export const questionReport = ({ type, data }) => (dispatch) => {
   axios.post('/api/questions/report', { type, data });
   dispatch({ type: types.QUESTION_REPORT });
 };
 
-export const voteSpecialty = (value, userId, id) => async dispatch => {
+export const voteSpecialty = (value, userId, id) => async (dispatch) => {
   const res = await voteService.specialtyVote(value, userId, id);
   dispatch({
     type: types.QUESTION_SPECIALTY_UPDATE,
@@ -160,7 +140,7 @@ export const voteSpecialty = (value, userId, id) => async dispatch => {
   });
 };
 
-export const voteTags = (value, userId, id) => async dispatch => {
+export const voteTags = (value, userId, id) => async (dispatch) => {
   const res = await voteService.tagVote(value, userId, id);
   dispatch({
     type: types.QUESTION_SPECIALTY_UPDATE,
@@ -168,7 +148,7 @@ export const voteTags = (value, userId, id) => async dispatch => {
   });
 };
 
-export const searchQuestion = (semester, search) => async dispatch => {
+export const searchQuestion = (semester, search) => async (dispatch) => {
   const res = await axios.post('/api/questions/search', { search, semester });
 
   dispatch({

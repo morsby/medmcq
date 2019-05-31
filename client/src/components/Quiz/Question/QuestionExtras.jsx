@@ -78,7 +78,7 @@ const QuestionExtras = ({
           <Divider hidden />
           <QuestionReport
             report={report}
-            handleChange={e => setReport(e.target.value)}
+            handleChange={(e) => setReport(e.target.value)}
             handleSubmit={onReportSubmit}
             reportSent={reportSent}
             question={question}

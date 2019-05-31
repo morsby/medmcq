@@ -57,12 +57,10 @@ class QuestionTagVote extends BaseModel {
   }
   static get modifiers() {
     return {
-      active: builder => modifiers.activeMetadata(builder),
-      own: builder => modifiers.belongsToUser(builder),
-      joinTag: builder =>
-        builder
-          .joinRelation('tag')
-          .select('questionTagVote.*', 'tag.name as name')
+      active: (builder) => modifiers.activeMetadata(builder),
+      own: (builder) => modifiers.belongsToUser(builder),
+      joinTag: (builder) =>
+        builder.joinRelation('tag').select('questionTagVote.*', 'tag.name as name')
     };
   }
 }

@@ -1,7 +1,7 @@
 const sampleQuestions = require('./data/20_sample_questions.js');
 const _ = require('lodash');
 
-exports.seed = knex => {
+exports.seed = (knex) => {
   // Deletes ALL existing entries
   return knex('question')
     .del()
@@ -9,15 +9,10 @@ exports.seed = knex => {
       const examSets = await knex
         .from('semester_exam_set')
         .join('semester', { 'semester_exam_set.semester_id': 'semester.id' })
-        .select(
-          'semester_exam_set.id',
-          'year',
-          'season',
-          'semester.value as semester'
-        );
+        .select('semester_exam_set.id', 'year', 'season', 'semester.value as semester');
 
       // Insert questions
-      let qs = sampleQuestions.map(q => {
+      let qs = sampleQuestions.map((q) => {
         let set = q.set.split('/');
 
         let examSetId = _.find(examSets, {
@@ -39,8 +34,8 @@ exports.seed = knex => {
       let correctAnswers = [];
       const qs = await knex.from('question').select('id', 'old_id');
 
-      sampleQuestions.forEach(q =>
-        q.correctAnswers.map(ans => {
+      sampleQuestions.forEach((q) =>
+        q.correctAnswers.map((ans) => {
           correctAnswers.push({
             questionId: _.find(qs, { oldId: q.old_id }).id,
             answer: ans

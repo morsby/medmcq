@@ -3,7 +3,7 @@ import { Grid } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 import { PropTypes } from 'prop-types';
 
-const QuestionAnsweredCounter = props => {
+const QuestionAnsweredCounter = (props) => {
   // Udregner hvor mange rigtige brugeren har svaret på
   const { question, user } = props;
 

@@ -6,19 +6,12 @@ import _ from 'lodash';
 
 import { specialer, tags } from '../../../utils/common';
 
-import {
-  Button,
-  Message,
-  Input,
-  Grid,
-  Divider,
-  Dropdown
-} from 'semantic-ui-react';
+import { Button, Message, Input, Grid, Divider, Dropdown } from 'semantic-ui-react';
 
 import { Translate } from 'react-localize-redux';
 import { withRouter } from 'react-router';
 
-const QuestionVoting = props => {
+const QuestionVoting = (props) => {
   const [chosenTags, setChosenTags] = useState([]);
   const [chosenSpecialties, setChosenSpecialties] = useState([]);
   const [tagMessage, setTagMessage] = useState('');
@@ -29,7 +22,7 @@ const QuestionVoting = props => {
 
   useEffect(() => {
     let userSpecialties = [];
-    props.question.votes.forEach(vote => {
+    props.question.votes.forEach((vote) => {
       if (_.includes(vote.users, props.user.id)) {
         userSpecialties.push(vote.specialty);
       }
@@ -37,7 +30,7 @@ const QuestionVoting = props => {
     setChosenSpecialties(userSpecialties);
 
     let userTags = [];
-    props.question.tagVotes.forEach(tagVote => {
+    props.question.tagVotes.forEach((tagVote) => {
       if (_.includes(tagVote.users, props.user.id)) {
         userTags.push(tagVote.tag);
       }
@@ -54,11 +47,7 @@ const QuestionVoting = props => {
   }, [props.question, props.user]);
 
   const specialtyVote = async () => {
-    await props.voteSpecialty(
-      chosenSpecialties,
-      props.user.id,
-      props.question.id
-    );
+    await props.voteSpecialty(chosenSpecialties, props.user.id, props.question.id);
     setSpecialtyMessage('Du har stemt på specialerne');
   };
 
@@ -115,9 +104,7 @@ const QuestionVoting = props => {
             <Button basic color="green" onClick={specialtyVote}>
               <Translate id="voting.vote_specialty" />
             </Button>
-            {specialtyMessage && (
-              <Message color="green">{specialtyMessage}</Message>
-            )}
+            {specialtyMessage && <Message color="green">{specialtyMessage}</Message>}
           </Grid.Column>
           <Grid.Column>
             <h5 style={{ color: 'grey', marginLeft: '3px' }}>
@@ -137,11 +124,7 @@ const QuestionVoting = props => {
               <Translate id="voting.vote_tags" />
             </Button>
             {!addingNewTag && (
-              <Button
-                basic
-                color="yellow"
-                onClick={() => setAddingNewTag(true)}
-              >
+              <Button basic color="yellow" onClick={() => setAddingNewTag(true)}>
                 <Translate id="voting.suggest_tag" />
               </Button>
             )}
@@ -158,18 +141,12 @@ const QuestionVoting = props => {
                 <Button basic color="green" onClick={suggestTag}>
                   <Translate id="voting.suggest_tag" />
                 </Button>
-                <Button
-                  basic
-                  color="red"
-                  onClick={() => setAddingNewTag(false)}
-                >
+                <Button basic color="red" onClick={() => setAddingNewTag(false)}>
                   <Translate id="voting.cancel" />
                 </Button>
               </div>
             )}
-            {suggestTagMessage && (
-              <Message color="green">{suggestTagMessage}</Message>
-            )}
+            {suggestTagMessage && <Message color="green">{suggestTagMessage}</Message>}
             {tagMessage && <Message color="green">{tagMessage}</Message>}
           </Grid.Column>
         </Grid.Row>

@@ -12,13 +12,11 @@ exports.seed = function(knex) {
 
       // Inserts exam sets
       return knex('semester_exam_set').insert(
-        sampleExamSets.map(s => {
+        sampleExamSets.map((s) => {
           return {
             year: s.year,
             season: s.season,
-            semester_id:
-              semesters[_.findIndex(semesters, { shortName: s.semester_name })]
-                .id
+            semester_id: semesters[_.findIndex(semesters, { shortName: s.semester_name })].id
           };
         })
       );

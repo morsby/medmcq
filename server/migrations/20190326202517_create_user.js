@@ -1,5 +1,5 @@
-exports.up = knex => {
-  return knex.schema.createTable('user', table => {
+exports.up = (knex) => {
+  return knex.schema.createTable('user', (table) => {
     table.increments();
     table
       .string('username')

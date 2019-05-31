@@ -23,13 +23,7 @@ const Header = ({ fetchUser }) => {
       <h2 className={styles.onprint}>
         <Translate id="header.credit" />
       </h2>
-      <Menu
-        className={styles.noprint}
-        inverted
-        color="blue"
-        attached
-        borderless
-      >
+      <Menu className={styles.noprint} inverted color="blue" attached borderless>
         <LeftMenu />
         <Menu.Menu position="right">
           <RightMenu />

@@ -1,5 +1,5 @@
 exports.up = function(knex) {
-  return knex.schema.createTable('question_tag', table => {
+  return knex.schema.createTable('question_tag', (table) => {
     table.increments();
     table.string('name').notNullable();
     table

@@ -28,7 +28,7 @@ export const semestre = [
  * @param  {Number} semester Semesteret (7 || 8 || 9 || 11)
  * @return {Object}          Objektet der svarer til semesteret.
  */
-export const getSemester = semester => _.find(semestre, { value: semester });
+export const getSemester = (semester) => _.find(semestre, { value: semester });
 
 export const specialer = {
   7: [
@@ -517,7 +517,7 @@ export const breakpoints = {
   mobile: 768
 };
 
-export const imageURL = image => {
+export const imageURL = (image) => {
   if (image.match('cloudinary')) {
     return image;
   } else {

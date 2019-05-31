@@ -167,31 +167,27 @@ router.get('/:id', async (req, res) => {
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.patch(
-  '/:id',
-  permit({ roles: ['editor', 'admin'] }),
-  async (req, res) => {
-    let { id } = req.params;
+router.patch('/:id', permit({ roles: ['editor', 'admin'] }), async (req, res) => {
+  let { id } = req.params;
 
-    try {
-      // Hvis der ikke er nogle data med i req.body smider vi en fejl
-      if (Object.keys(req.body).length === 0) {
-        throw new ValidationError({
-          type: 'ModelValidation',
-          message: 'No values to patch'
-        });
-      }
-
-      let specialty = await Specialty.query()
-        .patchAndFetchById(id, req.body)
-        .eager(Specialty.defaultEager);
-      if (!specialty) throw new NotFoundError();
-      res.status(200).json(specialty);
-    } catch (err) {
-      errorHandler(err, res);
+  try {
+    // Hvis der ikke er nogle data med i req.body smider vi en fejl
+    if (Object.keys(req.body).length === 0) {
+      throw new ValidationError({
+        type: 'ModelValidation',
+        message: 'No values to patch'
+      });
     }
+
+    let specialty = await Specialty.query()
+      .patchAndFetchById(id, req.body)
+      .eager(Specialty.defaultEager);
+    if (!specialty) throw new NotFoundError();
+    res.status(200).json(specialty);
+  } catch (err) {
+    errorHandler(err, res);
   }
-);
+});
 
 /**
  * @swagger
@@ -215,27 +211,23 @@ router.patch(
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.delete(
-  '/:id',
-  permit({ roles: ['editor', 'admin'] }),
-  async (req, res) => {
-    let { id } = req.params;
+router.delete('/:id', permit({ roles: ['editor', 'admin'] }), async (req, res) => {
+  let { id } = req.params;
 
-    try {
-      const deleted = await Specialty.query().deleteById(id);
-      if (deleted > 0) {
-        res.status(200).json({
-          type: 'deleteSpecialty',
-          message: `Succesfully deleted ${deleted} specialty`
-        });
-      } else {
-        throw new NotFoundError();
-      }
-    } catch (err) {
-      errorHandler(err, res);
+  try {
+    const deleted = await Specialty.query().deleteById(id);
+    if (deleted > 0) {
+      res.status(200).json({
+        type: 'deleteSpecialty',
+        message: `Succesfully deleted ${deleted} specialty`
+      });
+    } else {
+      throw new NotFoundError();
     }
+  } catch (err) {
+    errorHandler(err, res);
   }
-);
+});
 
 // Specialties
 /**
