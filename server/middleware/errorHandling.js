@@ -10,7 +10,7 @@ const {
 } = require('objection-db-errors');
 
 class BaseError extends Error {
-  constructor ({ type, message, data = {} } = {}) {
+  constructor({ type, message, data = {} } = {}) {
     super(message);
     this.type = type;
     this.message = message;

@@ -17,28 +17,28 @@ const SelectionSpecialtiesSelector = ({
 }) => {
   if (!semester) {
     return (
-      <Header as='h3'>
-        <Translate id='selectionSpecialtiesSelector.choose_semester' />
+      <Header as="h3">
+        <Translate id="selectionSpecialtiesSelector.choose_semester" />
       </Header>
     );
   }
   return (
     <Form>
-      <Grid columns='equal' stackable>
+      <Grid columns="equal" stackable>
         <Grid.Column>
           <Grid.Row>
-            <Header as='h3'>
+            <Header as="h3">
               <Translate
-                id='selectionSpecialtiesSelector.header'
+                id="selectionSpecialtiesSelector.header"
                 data={{ semester: semester.value }}
               />
             </Header>
-            {semester.specialties.map((speciale) => {
+            {semester.specialties.map(speciale => {
               let erValgt = valgteSpecialer.includes(speciale.id);
               return (
                 <SelectionSpecialtiesSelectorCheckbox
                   key={speciale.id}
-                  type='selectedSpecialtyIds'
+                  type="selectedSpecialtyIds"
                   speciale={speciale}
                   erValgt={erValgt}
                   onChange={onChange}
@@ -49,18 +49,18 @@ const SelectionSpecialtiesSelector = ({
         </Grid.Column>
         <Grid.Column>
           <Grid.Row>
-            <Header as='h3'>
+            <Header as="h3">
               <Translate
-                id='selectionSpecialtiesSelector.tags'
+                id="selectionSpecialtiesSelector.tags"
                 data={{ semester: semester.value }}
               />
             </Header>
-            {semester.tags.map((tag) => {
+            {semester.tags.map(tag => {
               let erValgt = valgteTags.includes(tag.id);
               return (
                 <SelectionSpecialtiesSelectorCheckbox
                   key={tag.id}
-                  type='selectedTagIds'
+                  type="selectedTagIds"
                   speciale={tag}
                   erValgt={erValgt}
                   onChange={onChange}
@@ -72,7 +72,7 @@ const SelectionSpecialtiesSelector = ({
       </Grid>
 
       <Message info>
-        <Translate id='selectionSpecialtiesSelector.tags_explanation' />
+        <Translate id="selectionSpecialtiesSelector.tags_explanation" />
       </Message>
     </Form>
   );

@@ -10,18 +10,18 @@ import SignupForm from './SignupForm';
  */
 const Signup = () => {
   return (
-    <div className='flex-container'>
-      <Container className='content'>
+    <div className="flex-container">
+      <Container className="content">
         <h3>
-          <Translate id='signup.header' />
+          <Translate id="signup.header" />
         </h3>
         <SignupForm />
         <Message info>
           <Message.Header>
-            <Translate id='signup.privacy_message.header' />
+            <Translate id="signup.privacy_message.header" />
           </Message.Header>
           <Message.Content>
-            <Translate id='signup.privacy_message.body' />
+            <Translate id="signup.privacy_message.body" />
           </Message.Content>
         </Message>
       </Container>

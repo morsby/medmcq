@@ -2,7 +2,7 @@ const _ = require('lodash');
 
 const sampleExamSets = require('./data/11_sample_exam_sets');
 
-exports.seed = function (knex, Promise) {
+exports.seed = function(knex) {
   // Deletes ALL existing entries
   return knex('semester_exam_set')
     .del()

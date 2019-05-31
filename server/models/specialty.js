@@ -2,11 +2,11 @@ import BaseModel from './_base_model';
 const { Model } = require('objection');
 
 class Specialty extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'questionSpecialty';
   }
 
-  static get jsonSchema () {
+  static get jsonSchema() {
     return {
       type: 'object',
       required: ['name', 'semesterId'],
@@ -19,7 +19,7 @@ class Specialty extends BaseModel {
     };
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     const QuestionSpecialtyVote = require('./question_specialty_vote');
     const Semester = require('./semester');
 
@@ -44,7 +44,7 @@ class Specialty extends BaseModel {
     };
   }
 
-  static get defaultEager () {
+  static get defaultEager() {
     return '[semester, questions(active)]';
   }
 }

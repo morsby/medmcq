@@ -6,12 +6,12 @@ import { connect } from 'react-redux';
 import * as actions from '../../../actions';
 
 class Logout extends Component {
-  componentDidMount () {
+  componentDidMount() {
     this.props.fetchUser();
     this.props.history.push('/');
   }
 
-  render () {
+  render() {
     return null;
   }
 }

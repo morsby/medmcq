@@ -523,7 +523,9 @@ router.put('/:id/vote', permit(), async (req, res) => {
     let questionId = Number(req.params.id);
     let { specialtyVotes, tagVotes } = req.body;
 
-    if (!questionId) { throw new BadRequest({ message: 'You must provide a question id.' }); }
+    if (!questionId) {
+      throw new BadRequest({ message: 'You must provide a question id.' });
+    }
 
     if (!specialtyVotes && !tagVotes) {
       throw new BadRequest({

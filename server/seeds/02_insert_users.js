@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const sampleUsers = require('./data/02_sample_users');
 
-exports.seed = function (knex, Promise) {
+exports.seed = function(knex) {
   // Deletes ALL existing entries
   return knex('user')
     .del()

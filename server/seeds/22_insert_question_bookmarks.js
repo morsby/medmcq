@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const sampleBookmarks = require('./data/22_sample_bookmarks');
 
-exports.seed = function (knex, Promise) {
+exports.seed = function(knex) {
   // Deletes ALL existing entries
   return knex('question_bookmark')
     .del()

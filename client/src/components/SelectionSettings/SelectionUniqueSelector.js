@@ -13,7 +13,7 @@ const SelectionUniqueSelector = ({ onlyNew, onChange }) => (
       {({ translate }) => (
         <Checkbox
           style={{ marginLeft: '1rem' }}
-          name='onlyNew'
+          name="onlyNew"
           checked={onlyNew}
           onClick={onChange}
           label={translate('selectionUniqueSelector.label')}

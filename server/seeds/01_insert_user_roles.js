@@ -1,8 +1,8 @@
-exports.seed = function (knex, Promise) {
+exports.seed = function(knex) {
   // Deletes ALL existing entries
   return knex('user_role')
     .del()
-    .then(function () {
+    .then(function() {
       // Inserts seed entries
       return knex('user_role').insert([
         { name: 'creator', level: 999 },

@@ -44,7 +44,9 @@ export default createReducer(initialState, {
     } else {
       // Hvis vi ændrer specialer/tags, opdaterer vi array'et
       if (['selectedSpecialtyIds', 'selectedTagIds'].indexOf(type) > -1) {
-        let selection = Array.isArray(state.quizSelection[type]) ? state.quizSelection[type] : [];
+        let selection = Array.isArray(state.quizSelection[type])
+          ? state.quizSelection[type]
+          : [];
         value = insertOrRemove(selection, value);
       }
       state.quizSelection[type] = value;
@@ -53,14 +55,14 @@ export default createReducer(initialState, {
   /*
    * Siger at semestrene trænger til en opdateret henting fra api'en.
    */
-  [types.INVALIDATE_SEMESTERS]: (state) => {
+  [types.INVALIDATE_SEMESTERS]: state => {
     state.semesters.info.didInvalidate = true;
   },
 
   /*
    * Når et API-kald til at hente semestre starter
    */
-  [types.FETCH_SEMESTERS_REQUEST]: (state) => {
+  [types.FETCH_SEMESTERS_REQUEST]: state => {
     state.semesters.info.didInvalidate = false;
     state.semesters.info.isFetching = true;
   },
@@ -82,6 +84,6 @@ export default createReducer(initialState, {
     state.semesters.info.isFetching = false;
     state.semesters.info.lastUpdated = receivedAt;
     state.semesters.info.error = {};
-    state.semesters.items = _.keyBy(semesters, (semester) => semester.id);
+    state.semesters.items = _.keyBy(semesters, semester => semester.id);
   }
 });

@@ -5,39 +5,50 @@ import QuestionAnsweredCounter from './QuestionMetadata/QuestionAnsweredCounter'
 import _ from 'lodash';
 import { PropTypes } from 'prop-types';
 
-const QuestionMetadata = (props) => {
+const QuestionMetadata = props => {
   const { question, user, specialer, tags } = props;
 
   return (
-    <Grid divided columns='equal'>
+    <Grid divided columns="equal">
       <Grid.Column>
         <Grid.Row>
-          <Translate id='questionMetadata.set' />{' '}
+          <Translate id="questionMetadata.set" />{' '}
           {question.examSeason === 'F' ? (
-            <Translate id='questionMetadata.set_season.F' />
+            <Translate id="questionMetadata.set_season.F" />
           ) : (
-            <Translate id='questionMetadata.set_season.E' />
+            <Translate id="questionMetadata.set_season.E" />
           )}{' '}
           {question.examYear}
         </Grid.Row>
         {question.answer && (
           <>
             <Grid.Row>
-              <Translate id='questionMetadata.specialty' />{' '}
+              <Translate id="questionMetadata.specialty" />{' '}
               {question.specialty
-                .map((spec) => (_.find(specialer[question.semester], { value: spec }) || {}).text)
+                .map(
+                  spec =>
+                    (
+                      _.find(specialer[question.semester], { value: spec }) ||
+                      {}
+                    ).text
+                )
                 .join(' | ')}
             </Grid.Row>
             <Grid.Row>
-              <Translate id='questionMetadata.tags' />{' '}
+              <Translate id="questionMetadata.tags" />{' '}
               {question.tags
-                .map((tag) => (_.find(tags[question.semester], { value: tag }) || {}).text)
+                .map(
+                  tag =>
+                    (_.find(tags[question.semester], { value: tag }) || {}).text
+                )
                 .join(' | ')}
             </Grid.Row>
           </>
         )}
       </Grid.Column>
-      {user && question.answer && <QuestionAnsweredCounter user={user} question={question} />}
+      {user && question.answer && (
+        <QuestionAnsweredCounter user={user} question={question} />
+      )}
     </Grid>
   );
 };

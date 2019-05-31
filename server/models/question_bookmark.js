@@ -2,10 +2,10 @@ import BaseModel from './_base_model';
 const { Model } = require('objection');
 
 class QuestionBookmark extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'questionBookmark';
   }
-  static get jsonSchema () {
+  static get jsonSchema() {
     return {
       type: 'object',
       required: ['userId', 'questionId'],
@@ -17,7 +17,7 @@ class QuestionBookmark extends BaseModel {
       }
     };
   }
-  static get relationMappings () {
+  static get relationMappings() {
     const Question = require('./question');
     const User = require('./user');
 

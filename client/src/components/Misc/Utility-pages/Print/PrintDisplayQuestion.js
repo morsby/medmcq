@@ -10,7 +10,7 @@ import { Translate } from 'react-localize-redux';
  * Selve den component, der viser de printervenlige udgaver af spørgsmålet.
  * Kaldes af Print.js som også giver alle props.
  */
-const PrintDisplayQuestion = (props) => {
+const PrintDisplayQuestion = props => {
   let {
     question,
     answer1,
@@ -29,7 +29,8 @@ const PrintDisplayQuestion = (props) => {
   answer2 = subSupScript(answer2);
   answer3 = subSupScript(answer3);
 
-  if (Array.isArray(correctAnswer)) correctAnswer = correctAnswer.join(' correct-');
+  if (Array.isArray(correctAnswer))
+    correctAnswer = correctAnswer.join(' correct-');
 
   return (
     <div>
@@ -38,8 +39,13 @@ const PrintDisplayQuestion = (props) => {
           __html: marked(text)
         }}
       />
-      {image && <img src={imageURL(image)} alt='billede til eksamensspørgsmål' />}
-      <ol type='A' className={props.showCorrect ? `correct-${correctAnswer}` : null}>
+      {image && (
+        <img src={imageURL(image)} alt="billede til eksamensspørgsmål" />
+      )}
+      <ol
+        type="A"
+        className={props.showCorrect ? `correct-${correctAnswer}` : null}
+      >
         <li
           dangerouslySetInnerHTML={{
             __html: marked(answer1)
@@ -59,7 +65,7 @@ const PrintDisplayQuestion = (props) => {
 
       <Translate>
         {({ translate }) => (
-          <div className='print-metadata'>
+          <div className="print-metadata">
             {translate('print.metadata.from')} {getSemester(semester).name},{' '}
             {translate(`print.metadata.seasons.${examSeason}`)} {examYear},{' '}
             {translate('print.metadata.question', { n })}

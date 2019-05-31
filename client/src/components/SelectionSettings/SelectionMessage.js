@@ -14,7 +14,7 @@ const SelectionMessage = ({ user = null, type }) => {
     return (
       <Message info>
         <p>
-          <Translate id='selectionMessage.available_lower_than_requested' />
+          <Translate id="selectionMessage.available_lower_than_requested" />
         </p>
       </Message>
     );
@@ -22,7 +22,7 @@ const SelectionMessage = ({ user = null, type }) => {
   if (!user && type === 'specialer') {
     return (
       <p>
-        <Translate id='selectionMessage.specialties_lower_than_requested' />
+        <Translate id="selectionMessage.specialties_lower_than_requested" />
       </p>
     );
   }

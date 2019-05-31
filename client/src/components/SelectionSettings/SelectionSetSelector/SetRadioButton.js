@@ -28,7 +28,7 @@ const SetRadioButton = ({ set, selectedSet, onChange }) => {
                   label={label}
                   value={set.id}
                   checked={set.id === selectedSet}
-                  name='selectedSetId'
+                  name="selectedSetId"
                   onChange={onChange}
                 />
                 <Divider vertical hidden />

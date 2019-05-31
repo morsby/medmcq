@@ -14,7 +14,7 @@ import { version } from '../../../../../version';
 
 const LinkToAbout = () => (
   <Link to={urls.about}>
-    <Translate id='newVersionOutNow.aboutLink' />
+    <Translate id="newVersionOutNow.aboutLink" />
   </Link>
 );
 
@@ -29,12 +29,23 @@ const NewVersionMessage = ({ addTranslation, prevVersion, changeSettings }) => {
 
   if (version !== prevVersion) {
     return (
-      <div style={{ position: 'fixed', width: '80%', bottom: '15px', left: '10%', zIndex: '999' }}>
+      <div
+        style={{
+          position: 'fixed',
+          width: '80%',
+          bottom: '15px',
+          left: '10%',
+          zIndex: '999'
+        }}
+      >
         <Message info onDismiss={handleDismiss} attached floating>
           <Message.Header>
-            <Translate id='newVersionOutNow.header' />
+            <Translate id="newVersionOutNow.header" />
           </Message.Header>
-          <Translate id='newVersionOutNow.body' data={{ nav: <LinkToAbout /> }} />
+          <Translate
+            id="newVersionOutNow.body"
+            data={{ nav: <LinkToAbout /> }}
+          />
         </Message>
       </div>
     );
@@ -49,7 +60,7 @@ NewVersionMessage.propTypes = {
   addTranslation: PropTypes.func
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   prevVersion: state.settings.version
 });
 

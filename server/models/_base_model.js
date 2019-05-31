@@ -18,7 +18,7 @@ export default class BaseModel extends DBErrors(visibilityPlugin(Model)) {
    * columns to hide on output to JSON.
    * @type {Array}
    */
-  static get hidden () {
+  static get hidden() {
     return hiddenCols;
   }
 }
@@ -34,7 +34,7 @@ export class CustomQueryBuilder extends Model.QueryBuilder {
    * @param  {object} args The filters to apply to the eager
    * @return {object}      The eager method(?)
    */
-  eager (expr, args) {
+  eager(expr, args) {
     if (args) {
       this.mergeContext({ namedFilterArgs: args });
     }
@@ -47,7 +47,7 @@ export class CustomQueryBuilder extends Model.QueryBuilder {
    * @param  {object} args The filters to apply to the modify
    * @return {object}      The modify method(?)
    */
-  modify (expr, args) {
+  modify(expr, args) {
     if (args) {
       this.mergeContext({ namedFilterArgs: args });
     }
@@ -59,7 +59,7 @@ export class CustomQueryBuilder extends Model.QueryBuilder {
    * @param  {string} filterName The name of the filter
    * @return {object}            The filters
    */
-  namedFilterArgs (filterName) {
+  namedFilterArgs(filterName) {
     return (this.context().namedFilterArgs || {})[filterName];
   }
 }

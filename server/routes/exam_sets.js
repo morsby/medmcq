@@ -272,7 +272,9 @@ router.get('/:id/questions', async (req, res) => {
 
     questions = await questions;
 
-    if (questions.length === 0) { throw new NotFoundError({ message: 'No questions found.' }); }
+    if (questions.length === 0) {
+      throw new NotFoundError({ message: 'No questions found.' });
+    }
 
     res.status(200).json(questions);
   } catch (err) {

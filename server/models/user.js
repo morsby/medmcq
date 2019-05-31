@@ -8,7 +8,7 @@ const Password = require('objection-password')({
 // TODO: pre-migration: Password skal slåes fra under migrering
 
 class User extends Password(BaseModel) {
-  static get hidden () {
+  static get hidden() {
     return [
       ...hiddenCols,
       'password',
@@ -17,11 +17,11 @@ class User extends Password(BaseModel) {
     ];
   }
 
-  static get tableName () {
+  static get tableName() {
     return 'user';
   }
 
-  static get jsonSchema () {
+  static get jsonSchema() {
     return {
       type: 'object',
       required: ['username', 'password'],
@@ -39,7 +39,7 @@ class User extends Password(BaseModel) {
     };
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     const QuestionComment = require('./question_comment');
     const QuestionBookmark = require('./question_bookmark');
     const QuestionUserAnswer = require('./question_user_answer');

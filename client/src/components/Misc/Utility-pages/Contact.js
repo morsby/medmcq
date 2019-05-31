@@ -21,7 +21,7 @@ class Contact extends Component {
     submitted: false
   };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.props.addTranslation(contactTranslations);
@@ -56,19 +56,24 @@ class Contact extends Component {
 
     if (this.validateForm() === 'valid') {
       this.props.contactUs({ subject, message });
-      this.setState({ subject: '', message: '', errorFields: [], submitted: true });
+      this.setState({
+        subject: '',
+        message: '',
+        errorFields: [],
+        submitted: true
+      });
     }
   };
 
-  render () {
+  render() {
     const { subject, message, errorFields, submitted } = this.state;
     return (
-      <div className='flex-container'>
-        <Container className='content'>
+      <div className="flex-container">
+        <Container className="content">
           <h1>
-            <Translate id='contact.header' />
+            <Translate id="contact.header" />
           </h1>
-          <Translate id='contact.subheader' />
+          <Translate id="contact.subheader" />
           <Divider hidden />
           <Form onSubmit={this.handleSubmit} error={errorFields.length > 0}>
             <Translate>
@@ -76,7 +81,7 @@ class Contact extends Component {
                 <Form.Input
                   label={translate('contact.form.subject')}
                   placeholder={translate('contact.form.subject')}
-                  name='subject'
+                  name="subject"
                   value={subject}
                   onChange={this.handleChange}
                   error={errorFields.indexOf('subject') > -1}
@@ -89,7 +94,7 @@ class Contact extends Component {
                 <Form.TextArea
                   label={translate('contact.form.message')}
                   placeholder={translate('contact.form.message')}
-                  name='message'
+                  name="message"
                   value={message}
                   onChange={this.handleChange}
                   error={errorFields.indexOf('message') > -1}
@@ -111,19 +116,23 @@ class Contact extends Component {
               <Translate>
                 {({ translate }) => (
                   <div
-                    dangerouslySetInnerHTML={{ __html: marked(translate('contact.disclaimer')) }}
+                    dangerouslySetInnerHTML={{
+                      __html: marked(translate('contact.disclaimer'))
+                    }}
                   />
                 )}
               </Translate>
             </Message>
-            <Form.Button content='Send' disabled={errorFields.length > 0} />
+            <Form.Button content="Send" disabled={errorFields.length > 0} />
           </Form>
 
           {submitted && (
             <Translate>
               {({ translate }) => (
                 <Message positive>
-                  <Message.Header>{translate('contact.form.submitted.header')}</Message.Header>
+                  <Message.Header>
+                    {translate('contact.form.submitted.header')}
+                  </Message.Header>
                   <Message.Content>
                     <div
                       dangerouslySetInnerHTML={{

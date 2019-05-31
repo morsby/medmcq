@@ -2,16 +2,16 @@ import axios from 'axios';
 import _ from 'lodash';
 import * as types from './types';
 
-export const changeSelection = (type, value) => (dispatch) => {
+export const changeSelection = (type, value) => dispatch => {
   dispatch({ type: types.CHANGE_SELECTION, payload: { type, value } });
 };
 
-export const invalidateSemesters = () => (dispatch) => {
+export const invalidateSemesters = () => dispatch => {
   dispatch({ type: types.INVALIDATE_SEMESTERS });
   dispatch(fetchSemesters());
 };
 
-const shouldFetchSemesters = (state) => {
+const shouldFetchSemesters = state => {
   const semesters = state.selection.semesters;
   if (_.isEmpty(semesters.items)) {
     return true;

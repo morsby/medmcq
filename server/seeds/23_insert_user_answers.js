@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const sampleAnswers = require('./data/23_sample_answers');
 
-exports.seed = function (knex, Promise) {
+exports.seed = function(knex) {
   // Deletes ALL existing entries
   return knex('question_user_answer')
     .del()

@@ -10,7 +10,7 @@ class ExamSet extends BaseModel {
    * The name of the table in the database
    * @type {String}
    */
-  static get tableName () {
+  static get tableName() {
     return 'semesterExamSet';
   }
 
@@ -19,7 +19,7 @@ class ExamSet extends BaseModel {
    * This performs validation and gives GraphQL properties.
    * @type {object}
    */
-  static get jsonSchema () {
+  static get jsonSchema() {
     return {
       type: 'object',
       required: ['year', 'season', 'semesterId'],
@@ -37,7 +37,7 @@ class ExamSet extends BaseModel {
    * All relations for the exam set
    * @type {object}
    */
-  static get relationMappings () {
+  static get relationMappings() {
     const Question = require('./question');
     const Semester = require('./semester');
 

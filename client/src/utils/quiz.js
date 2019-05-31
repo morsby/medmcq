@@ -39,8 +39,8 @@ export const evalAnswer = (question, answer) => {
   }
 };
 
-export const calculateResults = (questions) => {
-  let answered = _.filter(questions, (o) => typeof o.answer === 'number');
+export const calculateResults = questions => {
+  let answered = _.filter(questions, o => typeof o.answer === 'number');
 
   let res;
 
@@ -48,7 +48,7 @@ export const calculateResults = (questions) => {
     res = { status: false };
   } else {
     let correct = 0;
-    answered.map((question) => {
+    answered.map(question => {
       if (question.correctAnswers.includes(question.answer)) correct++;
       return correct;
     });
@@ -64,8 +64,10 @@ export const calculateResults = (questions) => {
   return res;
 };
 
-export const subSupScript = (text) => {
-  return text.replace(/\^(.+?)\^/g, '<sup>$1</sup>').replace(/~(.+?)~/g, '<sub>$1</sub>');
+export const subSupScript = text => {
+  return text
+    .replace(/\^(.+?)\^/g, '<sup>$1</sup>')
+    .replace(/~(.+?)~/g, '<sub>$1</sub>');
 };
 
 export const getSpecialtyName = ({ semester, specialtyApiKey }) => {

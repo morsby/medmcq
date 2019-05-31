@@ -1,10 +1,10 @@
 import BaseModel from './_base_model';
 const { Model } = require('objection');
 class QuestionCorrectAnswer extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'questionCorrectAnswer';
   }
-  static get jsonSchema () {
+  static get jsonSchema() {
     return {
       type: 'object',
       required: ['questionId', 'answer'],
@@ -16,7 +16,7 @@ class QuestionCorrectAnswer extends BaseModel {
       }
     };
   }
-  static get relationMappings () {
+  static get relationMappings() {
     const Question = require('./question');
 
     return {
@@ -30,7 +30,7 @@ class QuestionCorrectAnswer extends BaseModel {
       }
     };
   }
-  $formatJson (json) {
+  $formatJson(json) {
     json = super.$formatJson(json);
 
     // Flattens correctAnswers (omits id and questionId)

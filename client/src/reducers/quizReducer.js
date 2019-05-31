@@ -21,7 +21,7 @@ const initialState = {
  * version af state. Se dokumentation på: https://goo.gl/wJZmMX
  */
 export default createReducer(initialState, {
-  [types.FETCH_QUESTIONS_REQUEST]: (state) => {
+  [types.FETCH_QUESTIONS_REQUEST]: state => {
     state.isFetching = true;
   },
   [types.FETCH_QUESTIONS_SUCCESS]: (state, action) => {

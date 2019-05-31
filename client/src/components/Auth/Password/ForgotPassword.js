@@ -13,41 +13,47 @@ import { Translate } from 'react-localize-redux';
 class ForgotPassword extends Component {
   state = { email: '', message: null };
 
-  handleChange = (e, { name, value }) => this.setState({ [name]: value, message: null });
+  handleChange = (e, { name, value }) =>
+    this.setState({ [name]: value, message: null });
 
   handleSubmit = () => {
     const { email } = this.state;
 
-    this.props.forgotPassword(email, (data) => this.setState({ message: data, email: '' }));
+    this.props.forgotPassword(email, data =>
+      this.setState({ message: data, email: '' })
+    );
   };
 
-  render () {
+  render() {
     let { message } = this.state;
     return (
-      <div className='flex-container'>
-        <Container className='content'>
+      <div className="flex-container">
+        <Container className="content">
           <h3>
-            <Translate id='forgotPassword.header' />
+            <Translate id="forgotPassword.header" />
           </h3>
           <p>
-            <Translate id='forgotPassword.guide' />
+            <Translate id="forgotPassword.guide" />
           </p>
           <Form onSubmit={this.handleSubmit}>
             <Form.Field>
               <label>E-mail</label>
               <Form.Input
-                name='email'
-                placeholder='E-mail'
+                name="email"
+                placeholder="E-mail"
                 onChange={this.handleChange}
                 value={this.state.email}
               />
             </Form.Field>
             {message && (
-              <Message negative={message.type === 'error'} positive={message.type === 'success'}>
+              <Message
+                negative={message.type === 'error'}
+                positive={message.type === 'success'}
+              >
                 {message.data}
               </Message>
             )}
-            <Button type='submit'>Send email</Button>
+            <Button type="submit">Send email</Button>
           </Form>
         </Container>
       </div>

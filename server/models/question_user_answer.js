@@ -2,11 +2,11 @@ import BaseModel from './_base_model';
 const { Model, ref } = require('objection');
 
 class QuestionUserAnswer extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'questionUserAnswer';
   }
 
-  static get jsonSchema () {
+  static get jsonSchema() {
     return {
       type: 'object',
       required: ['userId', 'questionId', 'answer'],
@@ -20,7 +20,7 @@ class QuestionUserAnswer extends BaseModel {
     };
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     const Question = require('./question');
     const QuestionCorrectAnswer = require('./question_correct_answer');
     const User = require('./user');
@@ -52,7 +52,7 @@ class QuestionUserAnswer extends BaseModel {
       }
     };
   }
-  static get modifiers () {
+  static get modifiers() {
     return {
       summary: builder =>
         builder.select(

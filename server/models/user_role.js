@@ -2,11 +2,11 @@ import BaseModel from './_base_model';
 const { Model } = require('objection');
 
 class UserRole extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'userRole';
   }
 
-  static get jsonSchema () {
+  static get jsonSchema() {
     return {
       type: 'object',
       required: ['name', 'level'],
@@ -19,7 +19,7 @@ class UserRole extends BaseModel {
     };
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     const User = require('./user');
 
     return {

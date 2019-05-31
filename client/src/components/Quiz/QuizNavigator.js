@@ -15,22 +15,28 @@ import { Translate } from 'react-localize-redux';
 const QuizNavigator = ({ onNavigate, qn, qmax, position }) => {
   return (
     <Container {...(position === 'top' ? { className: 'top-nav' } : {})}>
-      <Menu size='large' fluid widths={3}>
-        <Menu.Item {...(qn <= 0 ? { disabled: true } : {})} onClick={() => onNavigate(qn - 1)}>
-          <Icon name='step backward' />
-          <Translate id='quizNavigator.previous' />
+      <Menu size="large" fluid widths={3}>
+        <Menu.Item
+          {...(qn <= 0 ? { disabled: true } : {})}
+          onClick={() => onNavigate(qn - 1)}
+        >
+          <Icon name="step backward" />
+          <Translate id="quizNavigator.previous" />
         </Menu.Item>
         <Menu.Item header>
           {position === 'top' && (
-            <Translate id='quizNavigator.progress' data={{ n: qn + 1, total: qmax }} />
+            <Translate
+              id="quizNavigator.progress"
+              data={{ n: qn + 1, total: qmax }}
+            />
           )}
         </Menu.Item>
         <Menu.Item
           {...(qn + 1 >= qmax ? { disabled: true } : {})}
           onClick={() => onNavigate(qn + 1)}
         >
-          <Translate id='quizNavigator.next' />
-          <Icon name='step forward' />
+          <Translate id="quizNavigator.next" />
+          <Icon name="step forward" />
         </Menu.Item>
       </Menu>
     </Container>

@@ -11,16 +11,16 @@ const AnswerDetailsHeaderRow = () => (
     <Table.Row>
       <Table.HeaderCell />
       <Table.HeaderCell>
-        <Translate id='profileAnswerDetails.table_headers.question' />
+        <Translate id="profileAnswerDetails.table_headers.question" />
       </Table.HeaderCell>
       <Table.HeaderCell>
-        <Translate id='profileAnswerDetails.table_headers.specialty' />
+        <Translate id="profileAnswerDetails.table_headers.specialty" />
       </Table.HeaderCell>
       <Table.HeaderCell>
-        <Translate id='profileAnswerDetails.table_headers.set' />
+        <Translate id="profileAnswerDetails.table_headers.set" />
       </Table.HeaderCell>
-      <Table.HeaderCell textAlign='right'>
-        <Translate id='profileAnswerDetails.table_headers.performance' />
+      <Table.HeaderCell textAlign="right">
+        <Translate id="profileAnswerDetails.table_headers.performance" />
       </Table.HeaderCell>
     </Table.Row>
   </Table.Header>

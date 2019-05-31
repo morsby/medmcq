@@ -24,11 +24,11 @@ const QuizSummary = ({ questions, clickHandler }) => {
       <Card fluid>
         <Card.Content>
           <Card.Header>
-            <Translate id='quizSummary.header' />
+            <Translate id="quizSummary.header" />
           </Card.Header>
           {results.status && (
             <Card.Content>
-              <Translate id='quizSummary.results' data={{ ...results }} />
+              <Translate id="quizSummary.results" data={{ ...results }} />
             </Card.Content>
           )}
           <Card.Description style={{ columns: '250px 4' }}>
@@ -41,7 +41,12 @@ const QuizSummary = ({ questions, clickHandler }) => {
                   svar = 'svar-forkert';
                 }
                 return (
-                  <List.Item as='a' className={svar} onClick={() => clickHandler(index)} key={q.id}>
+                  <List.Item
+                    as="a"
+                    className={svar}
+                    onClick={() => clickHandler(index)}
+                    key={q.id}
+                  >
                     {truncateText(q.text)}
                   </List.Item>
                 );
@@ -49,10 +54,10 @@ const QuizSummary = ({ questions, clickHandler }) => {
             </List>
           </Card.Description>
         </Card.Content>
-        <Card.Content extra textAlign='center'>
+        <Card.Content extra textAlign="center">
           <Link to={urls.print}>
             <Button basic>
-              <Translate id='quizSummary.print' />
+              <Translate id="quizSummary.print" />
             </Button>
           </Link>
         </Card.Content>

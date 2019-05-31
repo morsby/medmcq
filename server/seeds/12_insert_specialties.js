@@ -2,7 +2,7 @@ const _ = require('lodash');
 
 const sampleSpecialer = require('./data/12_sample_specialer');
 
-exports.seed = function (knex, Promise) {
+exports.seed = function(knex) {
   // Deletes ALL existing entries
   return knex('question_specialty')
     .del()

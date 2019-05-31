@@ -1,0 +1,5 @@
+**/node_modules
+client/graveyard
+client/src/semantic
+client/build/*
+!client/build/index.js

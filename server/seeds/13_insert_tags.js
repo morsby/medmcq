@@ -2,7 +2,7 @@ const _ = require('lodash');
 
 const sampleTags = require('./data/13_sample_tags');
 
-exports.seed = function (knex, Promise) {
+exports.seed = function(knex) {
   // Deletes ALL existing entries
   return knex('question_tag')
     .del()

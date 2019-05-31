@@ -6,14 +6,20 @@ import marked from 'marked';
 /**
  * An accordion element.
  */
-const ProfileActivityAccordionElem = ({ title, children, index, active, handleClick }) => (
+const ProfileActivityAccordionElem = ({
+  title,
+  children,
+  index,
+  active,
+  handleClick
+}) => (
   <>
     <Accordion.Title
       active={active}
       index={index}
       onClick={() => (active ? handleClick(null) : handleClick(index))}
     >
-      <Icon name='dropdown' />
+      <Icon name="dropdown" />
       <div dangerouslySetInnerHTML={{ __html: marked(title) }} />
     </Accordion.Title>
     <Accordion.Content active={active}>{children}</Accordion.Content>

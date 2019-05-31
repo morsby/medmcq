@@ -9,19 +9,27 @@ import { Translate } from 'react-localize-redux';
 const SelectionSetSelector = ({ semester, selectedSet, onChange }) => {
   if (!semester) {
     return (
-      <Header as='h3'>
-        <Translate id='selectionSetSelector.choose_semester' />
+      <Header as="h3">
+        <Translate id="selectionSetSelector.choose_semester" />
       </Header>
     );
   }
   return (
     <Form>
-      <Header as='h3'>
-        <Translate id='selectionSetSelector.header' data={{ semester: semester.value }} />
+      <Header as="h3">
+        <Translate
+          id="selectionSetSelector.header"
+          data={{ semester: semester.value }}
+        />
       </Header>
 
-      {semester.examSets.map((set) => (
-        <SetRadioButton key={set.id} set={set} selectedSet={selectedSet} onChange={onChange} />
+      {semester.examSets.map(set => (
+        <SetRadioButton
+          key={set.id}
+          set={set}
+          selectedSet={selectedSet}
+          onChange={onChange}
+        />
       ))}
     </Form>
   );

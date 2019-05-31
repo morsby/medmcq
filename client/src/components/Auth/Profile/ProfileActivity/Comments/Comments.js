@@ -7,7 +7,8 @@ import CommentsQuestion from './CommentsQuestion';
 const Comments = ({ questions = [], type = 'public' }) => {
   let [activeIndex, setActiveIndex] = useState(null);
 
-  if (questions.length === 0) return <div>Du har ingen kommentarer på dette semester.</div>;
+  if (questions.length === 0)
+    return <div>Du har ingen kommentarer på dette semester.</div>;
 
   return (
     <div>

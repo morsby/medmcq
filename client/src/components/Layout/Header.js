@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import { Translate } from 'react-localize-redux';
@@ -18,18 +19,28 @@ const Header = ({ fetchUser }) => {
   fetchUser();
   setInterval(fetchUser, 60 * 1000);
   return (
-    <Responsive as='header' minWidth={breakpoints.mobile}>
+    <Responsive as="header" minWidth={breakpoints.mobile}>
       <h2 className={styles.onprint}>
-        <Translate id='header.credit' />
+        <Translate id="header.credit" />
       </h2>
-      <Menu className={styles.noprint} inverted color='blue' attached borderless>
+      <Menu
+        className={styles.noprint}
+        inverted
+        color="blue"
+        attached
+        borderless
+      >
         <LeftMenu />
-        <Menu.Menu position='right'>
+        <Menu.Menu position="right">
           <RightMenu />
         </Menu.Menu>
       </Menu>
     </Responsive>
   );
+};
+
+Header.propTypes = {
+  fetchUser: PropTypes.func
 };
 
 export default connect(

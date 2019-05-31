@@ -2,11 +2,11 @@ import BaseModel from './_base_model';
 const { Model } = require('objection');
 
 class Semester extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'semester';
   }
 
-  static get jsonSchema () {
+  static get jsonSchema() {
     return {
       type: 'object',
       required: ['value', 'name', 'shortName'],
@@ -20,7 +20,7 @@ class Semester extends BaseModel {
     };
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     const ExamSet = require('./exam_set');
     const Question = require('./question');
     const Specialty = require('./specialty');
@@ -66,11 +66,11 @@ class Semester extends BaseModel {
     };
   }
 
-  static get defaultEager () {
+  static get defaultEager() {
     return '[examSets, specialties.questions(active), tags.questions(active)]';
   }
 
-  $formatJson (json) {
+  $formatJson(json) {
     json = super.$formatJson(json);
 
     // Vi tjekker om specialties er et array (og nester en masse for at undgå undefined errs)

@@ -70,6 +70,7 @@ router.get('/', async (req, res) => {
  *               $ref: "#/components/schemas/Error"
  */
 router.post('/', (req, res, next) => {
+  // eslint-disable-next-line no-unused-vars
   passport.authenticate('local', (err, user, info) => {
     if (err) {
       return next(err);
@@ -80,7 +81,7 @@ router.post('/', (req, res, next) => {
         .status(401)
         .json(createResponse('LoginFailed', 'Login failed.'));
     }
-    req.logIn(user, function (err) {
+    req.logIn(user, function(err) {
       if (err) {
         return next(err);
       }
@@ -120,7 +121,7 @@ router.post('/', (req, res, next) => {
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.get('/logout', permit(), function (req, res) {
+router.get('/logout', permit(), function(req, res) {
   req.logout();
   req.session = null;
   res.json(createResponse('LogoutSucess', 'Logged out succesfully.'));

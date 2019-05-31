@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const sampleVotes = require('./data/25_sample_tag_votes');
 
-exports.seed = function (knex, Promise) {
+exports.seed = function(knex) {
   // Deletes ALL existing entries
   return knex('question_tag_vote')
     .del()

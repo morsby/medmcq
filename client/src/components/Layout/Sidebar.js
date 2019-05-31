@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { PropTypes } from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
-import { Sidebar as SemanticSidebar, Menu, Icon, Image } from 'semantic-ui-react';
+import {
+  Sidebar as SemanticSidebar,
+  Menu,
+  Icon,
+  Image
+} from 'semantic-ui-react';
 import { breakpoints } from '../../utils/common';
 import styles from './Header.module.css';
 import logo from './logo/aulogo_hvid.png';
@@ -9,7 +14,7 @@ import RightMenu from './Menus/RightMenu';
 import { withRouter } from 'react-router';
 import { Translate } from 'react-localize-redux';
 
-const Sidebar = (props) => {
+const Sidebar = props => {
   const [visible, setVisible] = useState(false);
   const [width, setWidth] = useState(window.innerWidth);
 
@@ -19,11 +24,11 @@ const Sidebar = (props) => {
     });
 
     return window.removeEventListener('resize', setWidth(window.innerWidth));
-  }, [window.innerWidth]);
+  }, []);
 
   useEffect(() => {
     setVisible(false);
-  }, [window.location.href]);
+  }, []);
 
   const handlePusher = () => {
     if (visible) {
@@ -37,22 +42,22 @@ const Sidebar = (props) => {
     <SemanticSidebar.Pushable>
       <SemanticSidebar
         as={Menu}
-        animation='overlay'
-        icon='labeled'
+        animation="overlay"
+        icon="labeled"
         inverted
-        color='blue'
+        color="blue"
         onHide={() => setVisible(false)}
         vertical
         visible={visible}
-        width='thin'
+        width="thin"
       >
         <Menu.Item onClick={() => setVisible(false)}>
-          <Icon name='close' inverted size='large' />
-          <Translate id='header.close' />
+          <Icon name="close" inverted size="large" />
+          <Translate id="header.close" />
         </Menu.Item>
         <Menu.Item onClick={() => props.history.push('/')}>
-          <Icon name='home' />
-          <Translate id='header.home' />
+          <Icon name="home" />
+          <Translate id="header.home" />
         </Menu.Item>
         <RightMenu />
       </SemanticSidebar>
@@ -63,11 +68,17 @@ const Sidebar = (props) => {
         style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}
       >
         {width < breakpoints.mobile && (
-          <Menu className={styles.noprint} inverted color='blue' attached borderless>
+          <Menu
+            className={styles.noprint}
+            inverted
+            color="blue"
+            attached
+            borderless
+          >
             <Menu.Item disabled={visible} onClick={() => setVisible(!visible)}>
-              <Icon name='bars' inverted size='large' />
+              <Icon name="bars" inverted size="large" />
             </Menu.Item>
-            <Menu.Menu position='right'>
+            <Menu.Menu position="right">
               <Menu.Item onClick={() => props.history.push('/')}>
                 <Image src={logo} style={{ height: '30px' }} />
               </Menu.Item>

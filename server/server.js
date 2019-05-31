@@ -62,6 +62,7 @@ app.get('*', (req, res) => {
 const server = app.listen(port);
 
 if (env !== 'test') {
+  // eslint-disable-next-line no-console
   console.log('Server is live on port ' + port);
 }
 

@@ -15,10 +15,10 @@ import LoadingPage from '../Utility-pages/LoadingPage';
 class PrivateRoute extends React.Component {
   state = { loading: true };
 
-  componentDidMount () {
+  componentDidMount() {
     this.props.fetchUser().then(() => this.setState({ loading: false }));
   }
-  render () {
+  render() {
     if (this.state.loading) return <LoadingPage />;
     if (!this.props.user) {
       return <Redirect to={urls.login} />;
@@ -35,7 +35,7 @@ PrivateRoute.propTypes = {
   user: PropTypes.object
 };
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   return { user: state.auth.user };
 }
 

@@ -2,19 +2,19 @@ import BaseModel, { CustomQueryBuilder, modifiers } from './_base_model';
 const { Model } = require('objection');
 
 class QuestionComment extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'questionComment';
   }
 
-  static get hidden () {
+  static get hidden() {
     return ['oldId', 'private'];
   }
 
-  static get QueryBuilder () {
+  static get QueryBuilder() {
     return CustomQueryBuilder;
   }
 
-  static get jsonSchema () {
+  static get jsonSchema() {
     return {
       type: 'object',
       required: ['userId', 'questionId', 'text'],
@@ -29,7 +29,7 @@ class QuestionComment extends BaseModel {
       }
     };
   }
-  static get relationMappings () {
+  static get relationMappings() {
     const Question = require('./question');
     const User = require('./user');
 
@@ -54,7 +54,7 @@ class QuestionComment extends BaseModel {
     };
   }
 
-  static get modifiers () {
+  static get modifiers() {
     return {
       own: builder => modifiers.belongsToUser(builder)
     };

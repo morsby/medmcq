@@ -2,15 +2,15 @@ import BaseModel, { CustomQueryBuilder, modifiers } from './_base_model';
 const { Model } = require('objection');
 
 class Question extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'question';
   }
 
-  static get QueryBuilder () {
+  static get QueryBuilder() {
     return CustomQueryBuilder;
   }
 
-  static get jsonSchema () {
+  static get jsonSchema() {
     return {
       type: 'object',
       required: [
@@ -37,7 +37,7 @@ class Question extends BaseModel {
     };
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     const ExamSet = require('./exam_set');
     const Semester = require('./semester');
     const QuestionComment = require('./question_comment');
@@ -131,19 +131,21 @@ class Question extends BaseModel {
     };
   }
 
-  static get modifiers () {
+  static get modifiers() {
     return {
       filterOnMetadata: builder => modifiers.filterOnMetadata(builder)
     };
   }
 
-  static get defaultEager () {
+  static get defaultEager() {
     return '[examSet.semester, correctAnswers, publicComments.user, specialties(active), tags(active)]';
   }
 
-  $formatJson (json) {
+  $formatJson(json) {
     json = super.$formatJson(json);
-    if (json.semester && Array.isArray(json.semester)) { json.semester = json.semester[0]; }
+    if (json.semester && Array.isArray(json.semester)) {
+      json.semester = json.semester[0];
+    }
 
     return json;
   }

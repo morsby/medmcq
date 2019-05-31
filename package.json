@@ -15,9 +15,7 @@
     "update": "git pull && cd server && npm install && cd ../client && npm install",
     "build": "npm run update && npm run genversion && cd client && npm run build",
     "genversion": "genversion -e version.js && mv version.js client/src/",
-    "lint:js": "semistandard --fix --verbose | snazzy",
-    "lint:json": "prettier --write --list-different '**/*.json'",
-    "lint": "npm-run-all --parallel lint:*",
+    "lint": "eslint --fix . && echo 'Lint complete'",
     "validate": "npm-run-all --sequential lint test",
     "test": "npm-run-all --parallel test:server",
     "test:server": "cd server && npm run test",
@@ -28,29 +26,19 @@
       "pre-commit": "npm run validate"
     }
   },
-  "semistandard": {
-    "parser": "babel-eslint",
-    "env": [
-      "jest"
-    ],
-    "ignore": [
-      "**/node_modules/",
-      "**/coverage/**",
-      "**/graveyard/",
-      "client/build/",
-      "client/src/semantic/",
-      "client/src/serviceWorker.js"
-    ]
-  },
   "author": "Morsby",
   "license": "MIT",
   "dependencies": {},
   "devDependencies": {
     "babel-eslint": "^10.0.1",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.13.0",
+    "eslint-plugin-react-hooks": "^1.6.0",
     "genversion": "^2.1.1",
     "husky": "^2.3.0",
     "npm-run-all": "^4.1.5",
-    "semistandard": "github:morsby/semistandard",
-    "snazzy": "^8.0.0"
+    "prettier": "^1.17.1"
   }
 }

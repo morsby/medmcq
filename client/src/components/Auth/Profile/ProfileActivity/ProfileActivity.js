@@ -36,7 +36,9 @@ const ProfileActivity = ({
       <Translate>
         {({ translate }) => (
           <ProfileActivityAccordionElem
-            title={translate('profileActivity.accordionElements.publicComments')}
+            title={translate(
+              'profileActivity.accordionElements.publicComments'
+            )}
             index={1}
             active={activeIndex === 1}
             handleClick={setActiveIndex}
@@ -48,12 +50,14 @@ const ProfileActivity = ({
       <Translate>
         {({ translate }) => (
           <ProfileActivityAccordionElem
-            title={translate('profileActivity.accordionElements.privateComments')}
+            title={translate(
+              'profileActivity.accordionElements.privateComments'
+            )}
             index={2}
             active={activeIndex === 2}
             handleClick={setActiveIndex}
           >
-            <Comments questions={privateComments} type='private' />
+            <Comments questions={privateComments} type="private" />
           </ProfileActivityAccordionElem>
         )}
       </Translate>

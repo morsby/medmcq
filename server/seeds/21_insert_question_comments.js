@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const sampleComments = require('./data/21_sample_comments');
 
-exports.seed = function (knex, Promise) {
+exports.seed = function(knex) {
   // Deletes ALL existing entries
   return knex('question_comment')
     .del()

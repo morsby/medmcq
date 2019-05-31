@@ -2,15 +2,15 @@ import BaseModel, { CustomQueryBuilder, modifiers } from './_base_model';
 const { Model } = require('objection');
 
 class QuestionSpecialtyVote extends BaseModel {
-  static get tableName () {
+  static get tableName() {
     return 'questionSpecialtyVote';
   }
 
-  static get QueryBuilder () {
+  static get QueryBuilder() {
     return CustomQueryBuilder;
   }
 
-  static get jsonSchema () {
+  static get jsonSchema() {
     return {
       type: 'object',
       required: ['userId', 'questionId', 'specialtyId'],
@@ -24,7 +24,7 @@ class QuestionSpecialtyVote extends BaseModel {
     };
   }
 
-  static get relationMappings () {
+  static get relationMappings() {
     const Question = require('./question');
     const User = require('./user');
     const Specialty = require('./specialty');
@@ -56,7 +56,7 @@ class QuestionSpecialtyVote extends BaseModel {
     };
   }
 
-  static get modifiers () {
+  static get modifiers() {
     return {
       active: builder => modifiers.activeMetadata(builder),
       own: builder => modifiers.belongsToUser(builder),
