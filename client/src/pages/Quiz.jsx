@@ -35,7 +35,7 @@ class QuizMain extends Component {
    */
   state = { qn: 0, imgOpen: false };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
 
     this.props.addTranslation(quizTranslations);
@@ -48,10 +48,10 @@ class QuizMain extends Component {
     this.onImgClick = this.onImgClick.bind(this);
   }
 
-  componentDidMount () {
+  componentDidMount() {
     document.addEventListener('keydown', this.onKeydown);
   }
-  componentWillUnmount () {
+  componentWillUnmount() {
     document.removeEventListener('keydown', this.onKeydown);
   }
 
@@ -59,7 +59,7 @@ class QuizMain extends Component {
    * Henter spørgsmål fra API'en baseret på de valgte indstillinger.
    * Sætter desuden navigationen (qn) til 0
    */
-  getQuestions () {
+  getQuestions() {
     let { getQuestions, settings } = this.props;
     getQuestions(settings);
     this.setState({ qn: 0 });
@@ -69,14 +69,14 @@ class QuizMain extends Component {
    * Navigerer til en side.
    * @param  {string} path alle URLS bør defineres og kaldes fra 'src/utils/common.js'
    */
-  navigateToPage (path) {
+  navigateToPage(path) {
     this.props.history.push(urls[path]);
   }
 
   /**
    * Navigation mellem spørgsmål
    */
-  onKeydown (e) {
+  onKeydown(e) {
     if (!this.state.imgOpen) {
       /**
        * Navigation ved piletaster
@@ -98,7 +98,7 @@ class QuizMain extends Component {
     }
   }
 
-  swiped (e, deltaX) {
+  swiped(e, deltaX) {
     if (!this.state.imgOpen) {
       let { questions } = this.props.quiz;
       // Navigation ved swipes
@@ -115,8 +115,6 @@ class QuizMain extends Component {
         move = this.state.qn - 1;
       }
       if (move >= min && move < max) this.onChangeQuestion(move);
-    } else {
-
     }
   }
 
@@ -124,7 +122,7 @@ class QuizMain extends Component {
    * Den egentlige navigationsfunktion
    * @param  {number} q det indeks der ønskes navigeret til
    */
-  onChangeQuestion (q) {
+  onChangeQuestion(q) {
     this.setState({
       qn: q
     });
@@ -133,13 +131,13 @@ class QuizMain extends Component {
   }
 
   /** Håndtering af pop-up af billeder **/
-  onImgClick () {
-    this.setState((prevState) => {
+  onImgClick() {
+    this.setState(prevState => {
       return { imgOpen: !prevState.imgOpen };
     });
   }
 
-  render () {
+  render() {
     let { quiz, answers, user } = this.props;
 
     let { qn } = this.state;
@@ -167,14 +165,18 @@ class QuizMain extends Component {
 
     if (Object.keys(questions).length === 0) {
       return (
-        <div className='flex-container'>
-          <div className='content'>
+        <div className="flex-container">
+          <div className="content">
             <Container>
               <h1>
-                <Translate id='quizLoader.noresultsHeader' />
+                <Translate id="quizLoader.noresultsHeader" />
               </h1>
-              <Button onClick={() => this.props.history.push('/')} basic color='blue'>
-                <Translate id='quizLoader.noresults' />
+              <Button
+                onClick={() => this.props.history.push('/')}
+                basic
+                color="blue"
+              >
+                <Translate id="quizLoader.noresults" />
               </Button>
             </Container>
           </div>
@@ -183,13 +185,13 @@ class QuizMain extends Component {
     }
 
     return (
-      <div className='flex-container'>
-        <div className='content'>
+      <div className="flex-container">
+        <div className="content">
           <QuizNavigator
             onNavigate={this.onChangeQuestion}
             qn={qn}
             qmax={Object.keys(questions).length}
-            position='top'
+            position="top"
           />
 
           <Swipeable
@@ -207,7 +209,11 @@ class QuizMain extends Component {
             />
           </Swipeable>
 
-          <QuizNavigator onNavigate={this.onChangeQuestion} qn={qn} qmax={Object.keys(questions).length} />
+          <QuizNavigator
+            onNavigate={this.onChangeQuestion}
+            qn={qn}
+            qmax={Object.keys(questions).length}
+          />
 
           <QuizSummary
             questions={questions}
@@ -266,7 +272,7 @@ QuizMain.propTypes = {
   addTranslation: PropTypes.func
 };
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   return {
     quiz: state.quiz,
     answers: state.answers,

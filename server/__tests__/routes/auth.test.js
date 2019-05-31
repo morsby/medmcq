@@ -1,6 +1,6 @@
 const request = require('supertest');
 const server = require('../../server');
-const authApi = `/api/auth`;
+const authApi = '/api/auth';
 
 // For at gemme sessions
 const agent = request.agent(server);

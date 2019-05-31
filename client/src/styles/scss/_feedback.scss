@@ -2,35 +2,35 @@ $left-margin: 5vw;
 $left-line: 3.3vw;
 
 @for $i from 0 through 10 {
-	.ui.fluid.card.comment-level-#{$i} {
-		margin-left: ($i * $left-margin);
-		width: calc(100% - (#{$i} * #{$left-margin}));
-		margin-bottom: 0;
-		z-index: 2;
-		@if $i > 0 {
-			margin-top: 1px;
-		}
-	}
+  .ui.fluid.card.comment-level-#{$i} {
+    margin-left: ($i * $left-margin);
+    width: calc(100% - (#{$i} * #{$left-margin}));
+    margin-bottom: 0;
+    z-index: 2;
+    @if $i > 0 {
+      margin-top: 1px;
+    }
+  }
 
-	.v#{$i} {
-		position: absolute;
-		border-radius: 0;
-		border-left: 1px solid rgb(221, 221, 221);
-		left: calc(-#{$i} * #{$left-margin} - #{$left-line});
-		top: 0px;
-		bottom: 0px;
-	}
+  .v#{$i} {
+    position: absolute;
+    border-radius: 0;
+    border-left: 1px solid rgb(221, 221, 221);
+    left: calc(-#{$i} * #{$left-margin} - #{$left-line});
+    top: 0px;
+    bottom: 0px;
+  }
 }
 
 .form-has-explanation {
-	margin-bottom: 0 !important;
+  margin-bottom: 0 !important;
 }
 
 .form-explanation {
-	margin-bottom: 0 !important;
+  margin-bottom: 0 !important;
 }
 
 .form-error {
-	min-height: 1.3em;
-	color: rgb(159, 61, 61);
+  min-height: 1.3em;
+  color: rgb(159, 61, 61);
 }

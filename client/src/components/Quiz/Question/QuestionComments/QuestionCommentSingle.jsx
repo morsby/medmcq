@@ -12,7 +12,12 @@ import { Translate } from 'react-localize-redux';
  * @param {func}    deleteComment Funktion at slette kommentar
  * @param {func}    editComment   Funktion at ændre kommentar
  */
-const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) => {
+const QuestionCommentSingle = ({
+  comment,
+  user,
+  deleteComment,
+  editComment
+}) => {
   const [deleting, setDeleting] = useState(false);
 
   if (!user) user = {};
@@ -29,13 +34,13 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
     >
       <Comment.Content>
         {!comment.anonymous && (
-          <Comment.Author as='strong'>
+          <Comment.Author as="strong">
             {comment.user[0].toUpperCase() + comment.user.substring(1)}
           </Comment.Author>
         )}
         {comment.anonymous && (
-          <Comment.Author as='strong'>
-            <Translate id='questionCommentSingle.anonymous' />
+          <Comment.Author as="strong">
+            <Translate id="questionCommentSingle.anonymous" />
           </Comment.Author>
         )}
         <Comment.Metadata style={{ color: 'rgb(140, 140, 140)' }}>
@@ -43,7 +48,7 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
         </Comment.Metadata>
         {comment.private ? (
           <Comment.Metadata style={{ color: 'rgb(140, 140, 140)' }}>
-            <Translate id='question.private_comment' />
+            <Translate id="question.private_comment" />
           </Comment.Metadata>
         ) : null}
 
@@ -54,21 +59,21 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
           }}
         />
         {comment.userId === user.id && (
-          <Menu size='mini' icon='labeled' secondary>
+          <Menu size="mini" icon="labeled" secondary>
             {!deleting && (
               <Menu.Item onClick={() => setDeleting(true)}>
-                <Icon name='trash' color='red' />
-                <Translate id='questionCommentSingle.delete' />
+                <Icon name="trash" color="red" />
+                <Translate id="questionCommentSingle.delete" />
               </Menu.Item>
             )}
             {deleting && (
               <>
                 <Menu.Item>
-                  <Translate id='questionCommentSingle.delete_confirmation' />
+                  <Translate id="questionCommentSingle.delete_confirmation" />
                 </Menu.Item>
                 <Menu.Item onClick={() => setDeleting(false)}>
-                  <Icon name='close' />
-                  <Translate id='questionCommentSingle.no' />
+                  <Icon name="close" />
+                  <Translate id="questionCommentSingle.no" />
                 </Menu.Item>
                 <Menu.Item
                   onClick={() => {
@@ -76,14 +81,14 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
                     setDeleting(false);
                   }}
                 >
-                  <Icon name='trash' color='red' />
-                  <Translate id='questionCommentSingle.yes' />
+                  <Icon name="trash" color="red" />
+                  <Translate id="questionCommentSingle.yes" />
                 </Menu.Item>
               </>
             )}
             <Menu.Item onClick={() => editComment(comment)}>
-              <Icon name='edit' color='yellow' />
-              <Translate id='questionCommentSingle.edit' />
+              <Icon name="edit" color="yellow" />
+              <Translate id="questionCommentSingle.edit" />
             </Menu.Item>
           </Menu>
         )}

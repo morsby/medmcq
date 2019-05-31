@@ -1,6 +1,6 @@
 const request = require('supertest');
 const server = require('../../server');
-const semesterApi = `/api/semesters`;
+const semesterApi = '/api/semesters';
 
 afterEach(() => {
   server.close();

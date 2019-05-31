@@ -1,7 +1,7 @@
 import _ from 'lodash';
 const request = require('supertest');
 const server = require('../../server');
-const tagApi = `/api/tags`;
+const tagApi = '/api/tags';
 
 const agent = request.agent(server);
 

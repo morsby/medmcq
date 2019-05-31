@@ -12,7 +12,14 @@ import { calculateResults } from 'utils/quiz';
 import selectionTranslations from 'Translations/selectionTranslations.json';
 import { withLocalize, Translate } from 'react-localize-redux';
 
-import { Container, Header, Divider, Button, Message, Input } from 'semantic-ui-react';
+import {
+  Container,
+  Header,
+  Divider,
+  Button,
+  Message,
+  Input
+} from 'semantic-ui-react';
 
 import SelectionSemesterSelector from 'components/SelectionSettings/SelectionSemesterSelector';
 import SelectionNSelector from 'components/SelectionSettings/SelectionNSelector';
@@ -29,7 +36,7 @@ import SelectionMessage from 'components/SelectionSettings/SelectionMessage';
 class SelectionMain extends Component {
   state = { err: [], search: '' };
 
-  constructor (props) {
+  constructor(props) {
     super(props);
     this.props.addTranslation(selectionTranslations);
     this.searchHandler = this.searchHandler.bind(this);
@@ -40,7 +47,7 @@ class SelectionMain extends Component {
   /**
    * Henter nye data, hvis det er længe siden sidst.
    */
-  componentDidMount () {
+  componentDidMount() {
     this.props.fetchSemesters();
   }
 
@@ -50,7 +57,7 @@ class SelectionMain extends Component {
    * @param  {string} name     Den indstilling der ændres
    * @param  {string} value    Den værdi der sættes
    */
-  onSettingsChange (e, { value, name, checked }) {
+  onSettingsChange(e, { value, name, checked }) {
     let type = name;
     this.setState({ err: [] });
     if (type === 'n' && value) value = Number(value);
@@ -64,17 +71,17 @@ class SelectionMain extends Component {
    *                           af en gammel?
    */
 
-  searchHandler (e, { value }) {
+  searchHandler(e, { value }) {
     this.setState({ search: value });
   }
 
-  handleKeyPress = (e) => {
+  handleKeyPress = e => {
     if (e.key === 'Enter') {
       this.handleSubmit('new');
     }
   };
 
-  handleSubmit (quizType) {
+  handleSubmit(quizType) {
     let err = [];
 
     /**
@@ -142,7 +149,7 @@ class SelectionMain extends Component {
     }
   }
 
-  render () {
+  render() {
     /**
      * Alle de nedenstående variable kommer fra selectionReducer -- de har
      * derfor IKKE noget med selve quiz-spørgsmålene at gøre, og hentes for
@@ -162,15 +169,15 @@ class SelectionMain extends Component {
 
     let antalValgte;
     return (
-      <div className='flex-container'>
-        <Container className='content'>
-          <Header as='h1' style={{ textAlign: 'center' }}>
+      <div className="flex-container">
+        <Container className="content">
+          <Header as="h1" style={{ textAlign: 'center' }}>
             medMcq
           </Header>
           <Divider />
           <SelectionSemesterSelector
             label={this.props.translate('selection.static.choose_semester')}
-            name='selectedSemester'
+            name="selectedSemester"
             semesters={_.map(semesters, ({ id, value, name }) => ({
               value: id,
               text: `${value}. semester (${name})`
@@ -180,16 +187,22 @@ class SelectionMain extends Component {
           />
           <Divider hidden />
 
-          <SelectionTypeSelector handleClick={this.onSettingsChange} type={type} />
+          <SelectionTypeSelector
+            handleClick={this.onSettingsChange}
+            type={type}
+          />
 
           <Divider hidden />
 
           {type !== 'set' && (
             <>
-              <SelectionNSelector n={Number(n)} onChange={this.onSettingsChange} />
+              <SelectionNSelector
+                n={Number(n)}
+                onChange={this.onSettingsChange}
+              />
               <Divider hidden />
               <Translate
-                id='selectionNSelector.total_n'
+                id="selectionNSelector.total_n"
                 data={{ n: (semesters[selectedSemester] || {}).questionCount }}
               />
               <Divider />
@@ -199,14 +212,14 @@ class SelectionMain extends Component {
           {type !== 'specialer' && type !== 'set' && (
             <>
               <h3>
-                <Translate id='search.title' />
+                <Translate id="search.title" />
               </h3>
               <Input
                 value={this.state.search}
                 onChange={this.searchHandler}
                 fluid
                 placeholder={this.props.translate('search.placeholder')}
-                onKeyPress={(e) => this.handleKeyPress(e)}
+                onKeyPress={e => this.handleKeyPress(e)}
               />
               <Divider />
             </>
@@ -234,36 +247,41 @@ class SelectionMain extends Component {
 
           {this.state.err.length > 0 && (
             <Message negative>
-              {this.state.err.map((err) => {
+              {this.state.err.map(err => {
                 return <p key={err}>{err}</p>;
               })}
             </Message>
           )}
           <Button
-            color='green'
+            color="green"
             basic
             onClick={() => this.handleSubmit('new')}
             disabled={
-              (antalValgte < 1 && type === 'specialer') || n < allowedNs.min || n > allowedNs.max
+              (antalValgte < 1 && type === 'specialer') ||
+              n < allowedNs.min ||
+              n > allowedNs.max
             }
           >
             Start!
           </Button>
           {window.innerWidth < breakpoints.mobile && <Divider hidden />}
           {user && type !== 'set' && (
-            <SelectionUniqueSelector onlyNew={onlyNew} onChange={this.onSettingsChange} />
+            <SelectionUniqueSelector
+              onlyNew={onlyNew}
+              onChange={this.onSettingsChange}
+            />
           )}
 
           {calculateResults(this.props.questions).status === 'in_progress' && (
             <Button onClick={() => this.handleSubmit('cont')}>
-              <Translate id='selection.static.continue_quiz' />
+              <Translate id="selection.static.continue_quiz" />
             </Button>
           )}
 
           <SelectionMessage user={user} type={type} />
 
           <Message warning>
-            <Translate id='selection.static.front-disclaimer' />
+            <Translate id="selection.static.front-disclaimer" />
           </Message>
           <Divider hidden />
         </Container>
@@ -319,7 +337,7 @@ SelectionMain.propTypes = {
   searchQuestion: PropTypes.func
 };
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   return {
     user: state.auth.user,
     questions: state.questions,

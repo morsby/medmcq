@@ -7,24 +7,28 @@ import { connect } from 'react-redux';
 import * as actions from '../../../actions';
 import Flag from 'react-flagkit';
 
-const RightMenu = (props) => {
+const RightMenu = props => {
   const { user, history, languages } = props;
 
-  const onNavigation = (path) => {
+  const onNavigation = path => {
     history.push(urls[path]);
   };
 
-  const changeLang = (lang) => {
+  const changeLang = lang => {
     props.setActiveLanguage(lang);
     props.changeSettings({ type: 'language', value: lang });
   };
 
-  const generateFlag = (lang) => {
+  const generateFlag = lang => {
     if (lang.code !== props.activeLanguage) {
       return (
         <Menu.Item onClick={() => changeLang(lang.code)} key={lang.code}>
           <div>
-            <Flag style={{ textAlign: 'center' }} country={lang.code.toUpperCase()} size='20' />
+            <Flag
+              style={{ textAlign: 'center' }}
+              country={lang.code.toUpperCase()}
+              size="20"
+            />
           </div>
         </Menu.Item>
       );
@@ -34,20 +38,24 @@ const RightMenu = (props) => {
   if (user) {
     return (
       <>
-        {languages.map((lang) => generateFlag(lang))}
+        {languages.map(lang => generateFlag(lang))}
         <Menu.Item onClick={() => onNavigation('profile')}>
           <strong>
             <Translate
-              id='header.greeting'
+              id="header.greeting"
               data={{
-                user: user.username[0].toUpperCase() + user.username.substring(1)
+                user:
+                  user.username[0].toUpperCase() + user.username.substring(1)
               }}
             />
           </strong>
         </Menu.Item>
         <Menu.Item>
-          <Button inverted onClick={() => (window.location.href = '/api/auth/logout')}>
-            <Translate id='header.logout' />
+          <Button
+            inverted
+            onClick={() => (window.location.href = '/api/auth/logout')}
+          >
+            <Translate id="header.logout" />
           </Button>
         </Menu.Item>
       </>
@@ -55,16 +63,16 @@ const RightMenu = (props) => {
   } else {
     return (
       <>
-        {languages.map((lang) => generateFlag(lang))}
+        {languages.map(lang => generateFlag(lang))}
         <Menu.Item onClick={() => onNavigation('login')}>
-          <Icon name='doctor' /> <Translate id='header.login' />
+          <Icon name="doctor" /> <Translate id="header.login" />
         </Menu.Item>
       </>
     );
   }
 };
 
-function mapStateToProps (state) {
+function mapStateToProps(state) {
   return {
     user: state.auth.user,
     activeLanguage: state.settings.language

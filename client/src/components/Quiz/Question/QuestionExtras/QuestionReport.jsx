@@ -4,15 +4,21 @@ import { Form, Message } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 
 // TODO: TRANSLATION
-const QuestionReport = ({ report, handleChange, handleSubmit, reportSent, question }) => {
+const QuestionReport = ({
+  report,
+  handleChange,
+  handleSubmit,
+  reportSent,
+  question
+}) => {
   const [checked, setChecked] = useState(false);
   if (reportSent) {
     return (
       <Message success>
         <Message.Header>
-          <Translate id='questionReport.message.header' />
+          <Translate id="questionReport.message.header" />
         </Message.Header>
-        <Translate id='questionReport.message.body' />
+        <Translate id="questionReport.message.body" />
       </Message>
     );
   } else {
@@ -21,17 +27,22 @@ const QuestionReport = ({ report, handleChange, handleSubmit, reportSent, questi
         {({ translate }) => (
           <Form onSubmit={checked ? handleSubmit : null}>
             {question.semester === 11 && (
-              <Message color='yellow'>
-                <Translate id='questionReport.pictureMissing11' />
+              <Message color="yellow">
+                <Translate id="questionReport.pictureMissing11" />
               </Message>
             )}
-            {question.disclaimer && <Message color='yellow'>{question.disclaimer}</Message>}
+            {question.disclaimer && (
+              <Message color="yellow">{question.disclaimer}</Message>
+            )}
             <Message>
-              <Translate id='questionReport.checkIssue' data={{ link: question._id }} />
+              <Translate
+                id="questionReport.checkIssue"
+                data={{ link: question._id }}
+              />
             </Message>
             <Form.Field>
               <Form.TextArea
-                name='report'
+                name="report"
                 onChange={handleChange}
                 label={translate('questionReport.label')}
                 placeholder={translate('questionReport.placeholder')}
@@ -45,11 +56,14 @@ const QuestionReport = ({ report, handleChange, handleSubmit, reportSent, questi
                 onChange={() => setChecked(!checked)}
                 label={
                   <label>
-                    <Translate id='questionReport.checkbox' data={{ link: question._id }} />
+                    <Translate
+                      id="questionReport.checkbox"
+                      data={{ link: question._id }}
+                    />
                   </label>
                 }
               />
-              <Form.Button color='orange'>Send</Form.Button>
+              <Form.Button color="orange">Send</Form.Button>
             </Form.Field>
           </Form>
         )}

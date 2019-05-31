@@ -14,20 +14,20 @@ import LoadingPage from '../Misc/Utility-pages/LoadingPage';
 class QuizLoader extends Component {
   state = { seconds: 0 };
 
-  componentDidMount () {
+  componentDidMount() {
     this.interval = setInterval(() => this.tick(), 5000);
   }
-  componentWillUnmount () {
+  componentWillUnmount() {
     clearInterval(this.interval);
   }
 
-  tick () {
-    this.setState((prevState) => ({
+  tick() {
+    this.setState(prevState => ({
       seconds: prevState.seconds + 1
     }));
   }
 
-  render () {
+  render() {
     let longWait = '';
 
     let { handleRetry, handleAbort, text } = this.props;
@@ -36,17 +36,19 @@ class QuizLoader extends Component {
         <div style={{ margin: '5px 0' }}>
           <Divider hidden />
           <p>{text.long_wait}</p>
-          <Button basic color='blue' onClick={handleRetry}>
+          <Button basic color="blue" onClick={handleRetry}>
             {text.retry}
           </Button>
-          <Button basic color='yellow' onClick={handleAbort}>
+          <Button basic color="yellow" onClick={handleAbort}>
             {text.abort}
           </Button>
         </div>
       );
     }
     return (
-      <div style={{ margin: '1rem 5rem', textAlign: 'center', minHeight: '100vh' }}>
+      <div
+        style={{ margin: '1rem 5rem', textAlign: 'center', minHeight: '100vh' }}
+      >
         <LoadingPage />
         {longWait}
       </div>

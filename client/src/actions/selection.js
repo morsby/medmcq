@@ -27,7 +27,7 @@ export const fetchSemesters = () => async (dispatch, getState) => {
     dispatch({ type: types.FETCH_SEMESTERS_REQUEST });
 
     try {
-      let { data } = await axios.get(`/api/semesters/`);
+      let { data } = await axios.get('/api/semesters/');
       dispatch({
         type: types.FETCH_SEMESTERS_SUCCESS,
         semesters: data,

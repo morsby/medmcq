@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as types from './types';
 
 export const checkUserAvailability = (field, value) => async () => {
-  let res = await axios.post(`/api/user/check-availability`, {
+  let res = await axios.post('/api/user/check-availability', {
     field,
     value
   });

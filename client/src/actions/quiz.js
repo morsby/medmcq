@@ -3,7 +3,7 @@ import axios from 'axios';
 import * as types from './types';
 import * as voteService from '../services/voteService';
 
-const questionApi = `/api/questions`;
+const questionApi = '/api/questions';
 
 export const getQuestions = ids => async (dispatch, getState) => {
   let state = getState();

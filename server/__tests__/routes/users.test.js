@@ -1,6 +1,6 @@
 const request = require('supertest');
 const server = require('../../server');
-const userApi = `/api/users`;
+const userApi = '/api/users';
 
 const admin = request.agent(server);
 const user = request.agent(server);

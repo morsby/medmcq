@@ -1,22 +1,22 @@
 #root {
-    .ui.list.analysis {
-        .item {
-            .correct,
-            .wrong,
-            .mixed {
-                font-weight: bold;
-            }
-            .correct {
-                color: green;
-            }
+  .ui.list.analysis {
+    .item {
+      .correct,
+      .wrong,
+      .mixed {
+        font-weight: bold;
+      }
+      .correct {
+        color: green;
+      }
 
-            .wrong {
-                color: red;
-            }
+      .wrong {
+        color: red;
+      }
 
-            .mixed {
-                color: rgb(218, 110, 27);
-            }
-        }
+      .mixed {
+        color: rgb(218, 110, 27);
+      }
     }
+  }
 }

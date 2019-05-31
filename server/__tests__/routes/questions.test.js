@@ -1,7 +1,7 @@
 import _ from 'lodash';
 const request = require('supertest');
 const server = require('../../server');
-const questionApi = `/api/questions`;
+const questionApi = '/api/questions';
 
 // Settings vars to reuse across tests
 const agent = request.agent(server);

@@ -1,6 +1,6 @@
 import request from 'supertest';
 import server from '../../server';
-const examSetApi = `/api/exam_sets`;
+const examSetApi = '/api/exam_sets';
 const agent = request.agent(server);
 afterEach(() => {
   server.close();
