@@ -4,6 +4,10 @@ Dette er en webapp bygget som en Express-server med React ovenpå. Den bruges af
 
 Siden er lavet med tilladelse fra Institut for Klinisk Medicin, Health, Aarhus Universitet.
 
+## Opsætning
+
+For at køre appen på windows, kræver det installering af følgende: "npm install -g win-node-env". Dette skyldes mådes linux og windows håndterer env-variables forskelligt.
+
 ## For de teknisk interesserede
 
 I `/server` findes en RESTful api og forbindelsen til en SQL-database.
