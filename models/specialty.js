@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const specialtySchema = mongoose.Schema({
   text: String,
   semester: Number,
-  category: String,
   value: String
 });
 

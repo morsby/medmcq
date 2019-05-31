@@ -8,7 +8,7 @@ const Tag = require('../../models/tag');
 const axios = require('axios');
 const mongoose = require('mongoose');
 
-String.prototype.toObjectId = function() {
+String.prototype.toObjectId = function () {
   var ObjectId = require('mongoose').Types.ObjectId;
   return new ObjectId(this.toString());
 };
@@ -23,7 +23,8 @@ const specialer = {
     { value: 'almen_medicin', text: 'Almen medicin' },
     { value: 'klinisk_biokemi', text: 'Klinisk biokemi' },
     { value: 'klinisk_mikrobiologi', text: 'Klinisk mikrobiologi' },
-    { value: 'klinisk_immunologi', text: 'Klinisk immunologi' }
+    { value: 'klinisk_immunologi', text: 'Klinisk immunologi' },
+    { value: 'paraklinik', text: '' }
   ],
   8: [
     {
@@ -73,10 +74,37 @@ const tags = {
     { value: 'radiologi', text: 'Radiologi', category: 'paraklinik' },
     { value: 'a-gas', text: 'A-gas', category: 'paraklinik' },
     { value: 'patologi', text: 'Patologi', category: 'paraklinik' },
-    { value: 'farmakologi', text: 'Farmakologi', category: 'paraklinik' },
 
-    // Organer
-    { value: 'lever', text: 'Lever', category: 'organer' },
+    // Reumatologi
+    { value: 'artritis_og_artrose', text: 'Artritis og artrose', category: 'reumatologi' },
+    { value: 'bindevævssygdomme', text: 'Bindevævssygdomme', category: 'reumatologi' },
+    { value: 'vaskulitis', text: 'Vaskulitis', category: 'reumatologi' },
+    { value: 'lænderygsygdomme', text: 'Lænderygsygdomme', category: 'reumatologi' },
+
+    // Gastroenterologi
+    { value: 'reflux', text: 'Reflux', category: 'gastroenterologi' },
+    { value: 'ulcus', text: 'Ulcus', category: 'gastroenterologi' },
+    {
+      value: 'inflammatoriske_tarmsygdomme',
+      text: 'Inflammatoriske tarmsygdomme',
+      category: 'gastroenterologi'
+    },
+    { value: 'cøliaki', text: 'Cøliaki', category: 'gastroenterologi' },
+    { value: 'lever', text: 'Lever og galdeveje', category: 'gastroenterologi' },
+    { value: 'pancreas', text: 'Pancreas', category: 'gastroenterologi' },
+
+    // Hæmatologi
+    { value: 'anæmi', text: 'Anæmi', category: 'hæmatologi' },
+    { value: 'trombocytopeni', text: 'Trombocytopeni', category: 'hæmatologi' },
+    { value: 'leukæmi', text: 'Leukæmi', category: 'hæmatologi' },
+    { value: 'lymfom', text: 'Lymfom', category: 'hæmatologi' },
+    { value: 'myelodysplastisk_syndrom', text: 'Myelodysplastisk syndrom', category: 'hæmatologi' },
+    {
+      value: 'myeloproliferative_neoplasier',
+      text: 'Myeloproliferative neoplasier',
+      category: 'hæmatologi'
+    },
+    { value: 'myelomatose', text: 'Plasmacellesygdomme', category: 'hæmatologi' },
 
     // Klinisk immunologi
     { value: 'blodtransfusion', text: 'Blodtransfusion', category: 'klinisk immunologi' },
@@ -88,10 +116,14 @@ const tags = {
     { value: 'koagulopati', text: 'Koagulopati', category: 'klinisk biokemi' },
 
     // Specifikke sygdomme
-    { value: 'syfilis', text: 'Syfilis', category: 'sygdomme' },
+    { value: 'syfilis', text: 'Syfilis', category: 'infektionsmedicin' },
+    { value: 'sepsis', text: 'Sepsis', category: 'infektionsmedicin' },
+    { value: 'neuroinfektioner', text: 'Neuroinfektioner', category: 'infektionsmedicin' },
+    { value: 'luftvejsinfektioner', text: 'Luftvejsinfektioner', category: 'infektionsmedicin' },
 
     // Diverse
     { value: 'journaloptagelse', text: 'Journaloptagelse', category: 'diverse' },
+    { value: 'farmakologi', text: 'Farmakologi', category: 'diverse' },
     { value: 'statistik', text: 'Statistik', category: 'diverse' },
     { value: 'forskning', text: 'Forskning', category: 'diverse' },
     { value: 'molekylærbiologisk_metode', text: 'Molekylærbiologisk metode', category: 'diverse' },
@@ -129,12 +161,13 @@ const tags = {
     { value: 'gi_blødning', text: 'GI-blødning', category: 'abdominalkirurgi' },
     { value: 'infektion', text: 'Infektion', category: 'abdominalkirurgi' },
 
-    // Andre organer
+    // Organer
     { value: 'lunge', text: 'Lunge', category: 'organer' },
-    { value: 'nyrer', text: 'Nyrer', category: 'organer' },
 
     // Urologi
+    { value: 'nyrer', text: 'Nyrer', category: 'urologi' },
     { value: 'urinveje', text: 'Urinveje', category: 'urologi' },
+    { value: 'sten_i_urinvejene', text: 'Sten i urinvejene', category: 'urologi' },
     {
       value: 'neuromuskulær_blæredysfunktion',
       text: 'Neuromuskulær blæredysfunktion',
@@ -182,6 +215,7 @@ const tags = {
       text: 'Brysthypertrofi og brystanomalier',
       category: 'plastikkirurgi'
     },
+    { value: 'postbariatrisk_kirurgi', text: 'Postbariatrisk kirurgi', category: 'plastikkirurgi' },
 
     // Onkologi
     { value: 'strålebehandling', text: 'Strålebehandling', category: 'onkologi' },
@@ -212,7 +246,7 @@ const tags = {
     },
     { value: 'postoperative_smerter', text: 'Postoperative smerter', category: 'anæstesi' },
 
-    // Hjertemedicin
+    // Kardiologi
     { value: 'aks', text: 'Akut koronart syndrom', category: 'kardiologi' },
     { value: 'angina_pectoris', text: 'Angina pectoris', category: 'kardiologi' },
     { value: 'hypertension', text: 'Hypertension', category: 'kardiologi' },
@@ -228,18 +262,20 @@ const tags = {
     { value: 'perikarditis', text: 'Perikarditis og tamponade', category: 'kardiologi' },
     { value: 'synkope', text: 'Synkope', category: 'kardiologi' },
     { value: 'aortadissektion', text: 'Aortadissektion', category: 'kardiologi' },
+    { value: 'aterosklerose', text: 'Aterosklerose', category: 'kardiologi' },
 
     // Lungemedicin
-    { value: 'lungecancer', text: 'Lungecancer', category: 'lungemedicinsk' },
-    { value: 'kol', text: 'KOL', category: 'lungemedicinsk' },
-    { value: 'astma', text: 'Astma', category: 'lungemedicinsk' },
-    { value: 'restriktiv_lungesygdom', text: 'Restriktiv lungesygdom', category: 'lungemedicinsk' },
-    { value: 'tuberkulose', text: 'Tuberkulose', category: 'lungemedicinsk' },
-    { value: 'pneumoni', text: 'Pneumoni', category: 'lungemedicinsk' },
-    { value: 'pneumothorax', text: 'Pneumothorax', category: 'lungemedicinsk' },
-    { value: 'sarkoidose', text: 'Sarkoidose', category: 'lungemedicinsk' },
-    { value: 'allergi', text: 'Allergi', category: 'lungemedicinsk' },
-    { value: 'allergisk_alveolitis', text: 'Allergisk alveolitis', category: 'lungemedicinsk' },
+    { value: 'lungecancer', text: 'Lungecancer', category: 'lungemedicin' },
+    { value: 'kol', text: 'KOL', category: 'lungemedicin' },
+    { value: 'astma', text: 'Astma', category: 'lungemedicin' },
+    { value: 'restriktiv_lungesygdom', text: 'Restriktiv lungesygdom', category: 'lungemedicin' },
+    { value: 'tuberkulose', text: 'Tuberkulose', category: 'lungemedicin' },
+    { value: 'pneumoni', text: 'Pneumoni', category: 'lungemedicin' },
+    { value: 'pneumothorax', text: 'Pneumothorax', category: 'lungemedicin' },
+    { value: 'sarkoidose', text: 'Sarkoidose', category: 'lungemedicin' },
+    { value: 'allergi', text: 'Allergi', category: 'lungemedicin' },
+    { value: 'allergisk_alveolitis', text: 'Allergisk alveolitis', category: 'lungemedicin' },
+    { value: 'pleuraeffusion', text: 'Pleuraeffusion', category: 'lungemedicin' },
 
     // Karkirurgi
     { value: 'underekstremitets-iskæmi', text: 'Underekstremitets-iskæmi', category: 'karkirurgi' },
@@ -247,6 +283,7 @@ const tags = {
     { value: 'venesygdomme', text: 'Venesygdomme', category: 'karkirurgi' },
 
     // Thoraxkirurgi
+    { value: 'pci_og_cabg', text: 'PCI og CABG', category: 'thoraxkirurgi' },
     {
       value: 'pectus_carinatum_og_excavatum',
       text: 'Pectus carinatum og excavatum',
@@ -259,21 +296,9 @@ const tags = {
     { value: 'dyspnø', text: 'Dyspnø', category: 'symptomkomplekser' }
   ],
   11: [
-    {
-      value: 'paraklinik/paraclinical',
-      text: 'Paraklinik/Paraclinical',
-      category: 'paraklinik/paraclinical'
-    },
-    {
-      value: 'farmakologi/pharmacology',
-      text: 'Farmakologi/Pharmacology',
-      category: 'paraklinik/paraclinical'
-    },
-    {
-      value: 'radiologi/radiology',
-      text: 'Radiologi/Radiology',
-      category: 'paraklinik/paraclinical'
-    }
+    { value: 'paraklinik/paraclinical', text: 'Paraklinik/Paraclinical', category: 'tags' },
+    { value: 'farmakologi/pharmacology', text: 'Farmakologi/Pharmacology', category: 'tags' },
+    { value: 'radiologi/radiology', text: 'Radiologi/Radiology', category: 'tags' }
   ]
 };
 
@@ -398,6 +423,7 @@ router.get('/convert', async (req, res) => {
 
 router.post('/question/:id', async (req, res) => {
   const { user, value, type } = req.body;
+  if ((!user, !value, !type)) return res.status(404).send('Missing parameters');
   const question = await Question.findById(req.params.id);
 
   if (type === 'specialty') {
@@ -421,8 +447,9 @@ router.post('/question/:id', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const { type, text, value, semester, category } = req.body; // Disse parametre skal alle opgives i post requesten
-    if (!type || !text || !semester)
+    if (!type || !text || !semester || !value) {
       return res.status(400).send('Du mangler at opgive alle parametre');
+    }
 
     if (type === 'specialty') {
       let specialty = await Specialty.findOne({ semester: semester, text: text });
@@ -464,6 +491,8 @@ router.get('/', async (req, res) => {
   const tags = await Tag.find({ semester: sem });
   const specialties = await Specialty.find({ semester: sem });
 
+  console.log(JSON.stringify(specialties, null, 2));
+
   res.status(200).send({ tags, specialties });
 });
 
@@ -483,6 +512,7 @@ router.get('/count', async (req, res) => {
       _id: s._id,
       semester: s.semester,
       text: s.text,
+      value: s.value,
       count
     });
   }
@@ -498,6 +528,7 @@ router.get('/count', async (req, res) => {
       semester: t.semester,
       text: t.text,
       category: t.category,
+      value: t.value,
       count
     });
   }
