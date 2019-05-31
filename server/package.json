@@ -6,10 +6,6 @@
   "scripts": {
     "start": "node server.js",
     "dev": "babel-watch server.js",
-    "lint": "eslint . --color",
-    "lint:f": "eslint --fix . --color",
-    "p": "prettier --list-different --write **/*.js",
-    "validate": "npm run lint && npm run p",
     "test": "NODE_ENV=test jest",
     "test:w": "jest --watch-all",
     "reset": "knex migrate:rollback --env=test && knex migrate:latest --env=test && knex seed:run --env=test"
@@ -32,7 +28,7 @@
     "express": "^4.17.1",
     "helmet": "^3.18.0",
     "keygrip": "^1.1.0",
-    "knex": "^0.17.0",
+    "knex": "^0.17.0", 
     "knex-migrate": "^1.7.2",
     "lodash": "^4.17.11",
     "mysql": "^2.17.1",
