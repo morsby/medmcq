@@ -47,7 +47,13 @@ export const calculateResults = (questions) => {
   } else {
     let correct = 0;
     answered.map((question) => {
-      if (question.answer === question.correctAnswer) correct++;
+      if (typeof question.correctAnswer === 'number') {
+        if (question.answer === question.correctAnswer) correct++;
+      } else if (typeof question.correctAnswer === 'object') {
+        if (question.correctAnswer.includes(question.answer)) {
+          correct++;
+        }
+      }
       return correct;
     });
 
