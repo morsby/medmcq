@@ -109,6 +109,7 @@
       "Info about the new votingsystem can be found on the "
     ],
     "cancel": ["Fortryd", "Cancel"],
-    "about_page": ["om siden", "about page"]
+    "about_page": ["om siden", "about page"],
+    "suggest_tag": ["Foreslå nyt tag", "Suggest new tag"]
   }
 }

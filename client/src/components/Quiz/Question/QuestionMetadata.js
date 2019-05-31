@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Translate } from 'react-localize-redux';
-import { Grid, Dropdown } from 'semantic-ui-react';
+import { Grid, Dropdown, Button, Divider, Input, Message } from 'semantic-ui-react';
 import QuestionAnsweredCounter from './QuestionMetadata/QuestionAnsweredCounter';
 import { PropTypes } from 'prop-types';
 import QuestionMetadataLabel from './QuestionMetadata/QuestionMetadataLabel';
@@ -14,6 +14,9 @@ const QuestionMetadata = (props) => {
   const { question, user } = props;
   const [specialties, setSpecialties] = useState([]);
   const [tags, setTags] = useState([]);
+  const [newTag, setNewTag] = useState('');
+  const [addingNewTag, setAddingNewTag] = useState(false);
+  const [suggestTagMessage, setSuggestTagMessage] = useState('');
 
   const newMetadata = async (type, value) => {
     await props.newMetadata(type, value, question._id, user._id);
@@ -63,8 +66,25 @@ const QuestionMetadata = (props) => {
     getMetadata();
   }, [question]);
 
+  const suggestTag = () => {
+    props.questionReport({
+      type: 'suggest_tag',
+      data: {
+        tag: newTag,
+        question: props.question
+      }
+    });
+    setNewTag('');
+    setAddingNewTag(false);
+    setSuggestTagMessage('Dit tag er blevet foreslået');
+  };
+
+  const handleNewTag = (e, { value }) => {
+    setNewTag(value);
+  };
+
   return (
-    <Grid divided stackable columns="equal">
+    <Grid celled="internally" stackable columns="equal">
       <Grid.Column>
         <Grid.Row>
           <Translate id="questionMetadata.set" />{' '}
@@ -130,18 +150,34 @@ const QuestionMetadata = (props) => {
       </Grid.Column>
       {user && question.answer && (
         <>
-          <QuestionAnsweredCounter user={user} question={question} />
+          <Grid.Column width={5} style={{ textAlign: 'right' }}>
+            <QuestionAnsweredCounter user={user} question={question} />
+          </Grid.Column>
           <Grid.Row>
-            <Grid.Column align="center">
-              <p style={{ color: 'grey' }}>
-                <Translate id="voting.notice" />
-                <span
-                  style={{ cursor: 'pointer', color: '#4183c4' }}
-                  onClick={() => props.history.push('/om-siden')}
-                >
-                  <Translate id="voting.about_page" />
-                </span>
-              </p>
+            <Grid.Column>
+              {!addingNewTag && (
+                <Button basic color="yellow" onClick={() => setAddingNewTag(true)}>
+                  <Translate id="voting.suggest_tag" />
+                </Button>
+              )}
+              {addingNewTag && (
+                <>
+                  <Input
+                    style={{ marginRight: '1rem' }}
+                    width={5}
+                    placeholder="Tag ..."
+                    value={newTag}
+                    onChange={handleNewTag}
+                  />
+                  <Button basic color="green" onClick={suggestTag}>
+                    <Translate id="voting.suggest_tag" />
+                  </Button>
+                  <Button basic color="red" onClick={() => setAddingNewTag(false)}>
+                    <Translate id="voting.cancel" />
+                  </Button>
+                </>
+              )}
+              {suggestTagMessage && <Message color="green">{suggestTagMessage}</Message>}
             </Grid.Column>
           </Grid.Row>
         </>
