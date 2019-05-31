@@ -7,7 +7,7 @@ import { createReducer } from 'redux-starter-kit';
  * initialState er et tomt object i et array.
  * Det fyldes op med spørgsmål opbygget som i models/question.js
  */
-const initialState = [{}];
+const initialState = [[]];
 
 /**
  * createReducer er en funktion fra redux-starter-kit, der laver en IMMUTABLE

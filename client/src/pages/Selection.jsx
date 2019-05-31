@@ -62,6 +62,7 @@ class SelectionMain extends Component {
       this.props.tags.length === 0 ||
       Date.now() - this.props.lastMetadataFetch > 3.6 * Math.pow(10, 6)
     ) {
+      this.props.getSets(this.props.settings.semester)
       await this.getMetadata();
     }
   }
@@ -69,6 +70,7 @@ class SelectionMain extends Component {
   async componentDidUpdate(prevProps) {
     if (this.props.settings.semester !== prevProps.settings.semester) {
       this.setState({ loading: true });
+      this.props.getSets(this.props.settings.semester)
       await this.getMetadata();
     }
   }
@@ -139,7 +141,7 @@ class SelectionMain extends Component {
     }
 
     // Findes der spørgsmål?
-    if (questions.length === 0) {
+    if (this.props.totalQuestions === 0) {
       err.push(this.props.translate('selection.errs.no_questions'));
     }
 

@@ -24,9 +24,9 @@ export const getQuestions = (settings, requestedIds = null) => async (dispatch) 
     case 'random':
     case 'specialer': {
       // Lav tomme strings til API-request
-      let querySpecialer = '',
-        unique = '',
-        queryTags = '';
+      let querySpecialer = '';
+      let unique = '';
+      let queryTags = '';
 
       // Spcialeønsker? Lav det til en streng!
       if (type === 'specialer') {

@@ -165,8 +165,8 @@ class Question extends PureComponent {
   };
 
   render() {
-    const { question, user } = this.props,
-      text = subSupScript(question.question);
+    const { question, user } = this.props
+    const text = subSupScript(question.question);
 
     return (
       <Container className="question">

@@ -42,10 +42,18 @@ export const fetchMetadata = (semester) => async (dispatch) => {
 };
 
 export const getSets = (semester) => async (dispatch) => {
+  dispatch({
+    type: types.LOAD_SETS
+  });
+
   const { data: sets } = await axios.get('/api/questions/sets/' + semester);
 
   dispatch({
     type: types.SETTINGS_GET_SETS,
     payload: sets
+  });
+
+  dispatch({
+    type: types.LOAD_SETS_FINISH
   });
 };

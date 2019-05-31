@@ -28,7 +28,7 @@ const SelectionSpecialtiesSelector = ({
       tagCategories[t.category].push(
         <SelectionSpecialtiesSelectorCheckbox
           key={t._id}
-          type="tags"
+          type='tags'
           speciale={t}
           erValgt={valgteTags.includes(t._id)}
           antal={t.count}
@@ -39,10 +39,10 @@ const SelectionSpecialtiesSelector = ({
 
     for (let key in tagCategories) {
       returned.push(
-        <>
+        <React.Fragment key={key}>
           <h5>{key[0].toUpperCase() + key.substring(1)}</h5>
           {tagCategories[key]}
-        </>
+        </React.Fragment>
       );
     }
 
@@ -52,25 +52,26 @@ const SelectionSpecialtiesSelector = ({
   tagsList();
 
   if (loading || !specialties || !tags) return <LoadingPage />;
-  if (!semester)
+  if (!semester) {
     return (
-      <Header as="h3">
-        <Translate id="selectionSpecialtiesSelector.choose_semester" />
+      <Header as='h3'>
+        <Translate id='selectionSpecialtiesSelector.choose_semester' />
       </Header>
     );
+  }
   return (
     <Form>
-      <Grid columns="equal" stackable>
+      <Grid columns='equal' stackable>
         <Grid.Column>
           <Grid.Row>
-            <Header as="h3">
-              <Translate id="selectionSpecialtiesSelector.header" data={{ semester }} />
+            <Header as='h3'>
+              <Translate id='selectionSpecialtiesSelector.header' data={{ semester }} />
             </Header>
             {specialties.map((s) => {
               return (
                 <SelectionSpecialtiesSelectorCheckbox
                   key={s._id}
-                  type="specialer"
+                  type='specialer'
                   speciale={s}
                   erValgt={valgteSpecialer.includes(s._id)}
                   antal={s.count}
@@ -82,8 +83,8 @@ const SelectionSpecialtiesSelector = ({
         </Grid.Column>
         <Grid.Column>
           <Grid.Row>
-            <Header as="h3">
-              <Translate id="selectionSpecialtiesSelector.tags" data={{ semester }} />
+            <Header as='h3'>
+              <Translate id='selectionSpecialtiesSelector.tags' data={{ semester }} />
             </Header>
             {tagsList()}
           </Grid.Row>
@@ -91,7 +92,7 @@ const SelectionSpecialtiesSelector = ({
       </Grid>
 
       <Message info>
-        <Translate id="selectionSpecialtiesSelector.tags_explanation" />
+        <Translate id='selectionSpecialtiesSelector.tags_explanation' />
       </Message>
     </Form>
   );

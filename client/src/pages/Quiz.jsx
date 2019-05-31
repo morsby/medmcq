@@ -45,15 +45,15 @@ class QuizMain extends Component {
     this.swiped = this.swiped.bind(this);
     this.onKeydown = this.onKeydown.bind(this);
     this.onImgClick = this.onImgClick.bind(this);
+
+    // Hvis man går ind på quizzen uden spørgsmål
+    if (!props.settings.isFetching && !props.questions[0].question) {
+      this.navigateToPage('root');
+    }
   }
 
   componentDidMount() {
     document.addEventListener('keydown', this.onKeydown);
-
-    // Hvis man går ind på quizzen uden spørgsmål
-    if (this.props.settings.questions.length === 0) {
-      this.navigateToPage('root');
-    }
   }
   componentWillUnmount() {
     document.removeEventListener('keydown', this.onKeydown);
@@ -71,7 +71,7 @@ class QuizMain extends Component {
 
   /**
    * Henter spørgsmål fra API'en baseret på de valgte indstillinger.
-   * Sætter desuden navigationen (qn) til 0
+   * Sætter desuden navigationen (qn) til 0 i redux
    */
   getQuestions() {
     let { getQuestions, settings } = this.props;
@@ -137,8 +137,8 @@ class QuizMain extends Component {
   }
 
   render() {
-    let { questions, settings, answers, user } = this.props,
-      { qn } = this.props;
+    let { questions, settings, answers, user } = this.props
+    let { qn } = this.props;
 
     if (!questions || settings.isFetching)
       return (
@@ -158,7 +158,7 @@ class QuizMain extends Component {
         </Translate>
       );
 
-    if (questions.length === 0) {
+    if (questions.length === 0 || (!settings.isFetching && !questions[0].question)) {
       return (
         <div className="flex-container">
           <div className="content">
@@ -189,7 +189,7 @@ class QuizMain extends Component {
             onSwipedLeft={this.swiped}
             onSwipedRight={this.swiped}
             flickThreshold={flickNumber}
-            // onSwiped={this.swipeChecker}
+          // onSwiped={this.swipeChecker}
           >
             <Question
               onImgClick={this.onImgClick}

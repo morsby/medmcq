@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 
 import { groupQuestionsBySet } from '../../../../utils/questions';
 
 import SetRadioButton from './SetRadioButton';
-import { Form, Header } from 'semantic-ui-react';
+import { Form, Header, Divider } from 'semantic-ui-react';
 
 import { Translate } from 'react-localize-redux';
 import { connect } from 'react-redux';
-import { getSets } from '../../../../actions';
 import LoadingPage from '../../../Misc/Utility-pages/LoadingPage';
 
 const SelectionSetSelector = ({
@@ -18,18 +17,10 @@ const SelectionSetSelector = ({
   questions,
   answeredQuestions,
   onChange,
-  getSets
+  getSets,
+  loading
 }) => {
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    setLoading(true);
-    const fetchSets = async () => {
-      await getSets(semester);
-    };
-    fetchSets();
-    setLoading(false);
-  }, [semester]);
+  console.log(loading)
 
   if (!semester) {
     return (
@@ -38,7 +29,7 @@ const SelectionSetSelector = ({
       </Header>
     );
   }
-  if (loading) { return <LoadingPage />; }
+  if (sets.length === 0 || loading) { return <><LoadingPage /><Divider hidden /></>; }
   return (
     <Form>
       <Header as='h3'>
@@ -52,6 +43,7 @@ const SelectionSetSelector = ({
           answeredQuestions={answeredQuestions}
           activeSet={activeSet}
           onChange={onChange}
+          groupedQuestions={groupQuestionsBySet(questions)[set.api]}
         />
       ))}
     </Form>
@@ -69,14 +61,9 @@ SelectionSetSelector.propTypes = {
 
 const mapStateToProps = (state) => {
   return {
-    sets: state.settings.sets
+    sets: state.settings.sets,
+    loading: state.loading.sets
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    getSets: (semester) => dispatch(getSets(semester))
-  };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(SelectionSetSelector);
+export default connect(mapStateToProps)(SelectionSetSelector);
