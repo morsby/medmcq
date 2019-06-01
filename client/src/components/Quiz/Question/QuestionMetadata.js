@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import * as actions from '../../../actions/questions';
 import { withRouter } from 'react-router';
 import _ from 'lodash';
+import QuestionMetadataDropdown from './QuestionMetadata/QuestionMetadataDropdown';
 
 const QuestionMetadata = (props) => {
   const { question, user } = props;
@@ -111,13 +112,9 @@ const QuestionMetadata = (props) => {
                 </QuestionMetadataLabel>
               ))}
               {user && (
-                <Dropdown
-                  style={{ margin: '3px' }}
-                  search
-                  selection
+                <QuestionMetadataDropdown
                   onChange={(e, { value }) => newMetadata('specialty', value)}
                   options={specialties}
-                  value=""
                 />
               )}
             </Grid.Row>
@@ -135,13 +132,9 @@ const QuestionMetadata = (props) => {
                 </QuestionMetadataLabel>
               ))}
               {user && (
-                <Dropdown
-                  style={{ margin: '3px' }}
-                  search
+                <QuestionMetadataDropdown
                   onChange={(e, { value }) => newMetadata('tag', value)}
-                  selection
                   options={tags}
-                  value=""
                 />
               )}
             </Grid.Row>
