@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import { specialer } from './common';
 
 export const smoothScroll = (h, dir = 'up') => {
   let top = window.pageYOffset || document.documentElement.scrollTop;
@@ -71,10 +70,4 @@ export const calculateResults = (questions) => {
 
 export const subSupScript = (text) => {
   return text.replace(/\^(.+?)\^/g, '<sup>$1</sup>').replace(/~(.+?)~/g, '<sub>$1</sub>');
-};
-
-export const getSpecialtyName = ({ semester, specialtyApiKey }) => {
-  let res = _.find(specialer[semester], ['value', specialtyApiKey]);
-
-  return res ? res.text : null;
 };

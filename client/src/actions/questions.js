@@ -1,6 +1,5 @@
 import axios from 'axios';
 import * as types from './types';
-import * as voteService from '../services/voteService';
 
 export const getQuestions = (settings, requestedIds = null) => async (dispatch) => {
   let { type, semester, specialer, tags, n, onlyNew, set } = settings;
@@ -25,9 +24,9 @@ export const getQuestions = (settings, requestedIds = null) => async (dispatch) 
     case 'random':
     case 'specialer': {
       // Lav tomme strings til API-request
-      let querySpecialer = '',
-        unique = '',
-        queryTags = '';
+      let querySpecialer = '';
+      let unique = '';
+      let queryTags = '';
 
       // Spcialeønsker? Lav det til en streng!
       if (type === 'specialer') {
@@ -52,6 +51,7 @@ export const getQuestions = (settings, requestedIds = null) => async (dispatch) 
       return null;
   }
 
+  dispatch({ type: types.CHANGE_QUIZ_TO_SPECIFIC_NUMBER, payload: 0 });
   dispatch({
     type: types.FETCH_QUESTIONS,
     payload: res.data,
@@ -134,16 +134,23 @@ export const questionReport = ({ type, data }) => (dispatch) => {
   dispatch({ type: types.QUESTION_REPORT });
 };
 
-export const voteSpecialty = (value, userId, id) => async (dispatch) => {
-  const res = await voteService.specialtyVote(value, userId, id);
+export const voteAction = (type, questionId, metadataId, vote, user) => async (dispatch) => {
+  const res = await axios.put('/api/questions/metadata/vote', {
+    type: type,
+    questionId,
+    metadataId,
+    vote,
+    user
+  });
   dispatch({
     type: types.QUESTION_SPECIALTY_UPDATE,
     payload: res.data
   });
 };
 
-export const voteTags = (value, userId, id) => async (dispatch) => {
-  const res = await voteService.tagVote(value, userId, id);
+export const newMetadata = (type, value, id, user) => async (dispatch) => {
+  const res = await axios.post('/api/questions/metadata/question/' + id, { type, value, user });
+
   dispatch({
     type: types.QUESTION_SPECIALTY_UPDATE,
     payload: res.data

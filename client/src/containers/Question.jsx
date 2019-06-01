@@ -5,7 +5,6 @@ import * as actions from '../actions';
 import marked from 'marked';
 
 import _ from 'lodash';
-import { specialer, tags } from '../utils/common';
 
 import { imageURL, breakpoints } from '../utils/common';
 import { subSupScript } from '../utils/quiz';
@@ -166,8 +165,8 @@ class Question extends PureComponent {
   };
 
   render() {
-    const { question, user } = this.props,
-      text = subSupScript(question.question);
+    const { question, user } = this.props
+    const text = subSupScript(question.question);
 
     return (
       <Container className="question">
@@ -214,7 +213,7 @@ class Question extends PureComponent {
             />
           </Responsive>
           <Divider />
-          <QuestionMetadata question={question} specialer={specialer} tags={tags} user={user} />
+          <QuestionMetadata question={question} user={user} />
           <Divider />
           <QuestionExtras
             deleteComment={this.props.deleteComment}

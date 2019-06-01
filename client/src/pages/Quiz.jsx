@@ -14,9 +14,9 @@ import Question from '../containers/Question';
 import QuizNavigator from '../components/Quiz/QuizNavigator';
 import QuizSummary from '../components/Quiz/QuizSummary';
 
-import { smoothScroll } from '../utils/quiz';
 import { urls } from '../utils/common';
 import { withRouter } from 'react-router';
+import { smoothScroll } from '../utils/quiz';
 
 const flickNumber = 0.1;
 
@@ -33,41 +33,50 @@ class QuizMain extends Component {
    * state:
    * - qn : Indeholder navigationen (spørgsmålsindeks)
    */
-  state = { qn: 0, imgOpen: false };
+  state = { imgOpen: false };
 
   constructor(props) {
     super(props);
 
     this.props.addTranslation(quizTranslations);
 
-    this.onChangeQuestion = this.onChangeQuestion.bind(this);
     this.navigateToPage = this.navigateToPage.bind(this);
     this.getQuestions = this.getQuestions.bind(this);
     this.swiped = this.swiped.bind(this);
     this.onKeydown = this.onKeydown.bind(this);
     this.onImgClick = this.onImgClick.bind(this);
+
+    // Hvis man går ind på quizzen uden spørgsmål
+    if (!props.settings.isFetching && !props.questions[0].question) {
+      this.navigateToPage('root');
+    }
   }
 
   componentDidMount() {
     document.addEventListener('keydown', this.onKeydown);
-
-    // Hvis man går ind på quizzen uden spørgsmål
-    if (this.props.settings.questions.length === 0) {
-      this.navigateToPage('root');
-    }
   }
   componentWillUnmount() {
     document.removeEventListener('keydown', this.onKeydown);
   }
 
   /**
+   * Den egentlige navigationsfunktion
+   * @param  {number} q det indeks der ønskes navigeret til
+   */
+  onChangeQuestion = (q) => {
+    this.props.changeQuestionBySpecificNumber(q);
+
+    smoothScroll();
+  };
+
+  /**
    * Henter spørgsmål fra API'en baseret på de valgte indstillinger.
-   * Sætter desuden navigationen (qn) til 0
+   * Sætter desuden navigationen (qn) til 0 i redux
    */
   getQuestions() {
     let { getQuestions, settings } = this.props;
     getQuestions(settings);
-    this.setState({ qn: 0 });
+    this.props.changeQuestionBySpecificNumber(0);
   }
 
   /**
@@ -88,14 +97,14 @@ class QuizMain extends Component {
        * Tjekker om det aktive element er et TEXTAREA (kommentarfeltet) og
        * navigerer i så fald IKKE
        */
-      let qn = this.state.qn,
+      let qn = this.props.qn,
         max = this.props.questions.length;
       if (document.activeElement.tagName === 'TEXTAREA') return;
 
       if (e.key === 'ArrowLeft') {
-        if (qn > 0) this.onChangeQuestion(this.state.qn - 1);
+        if (qn > 0) this.props.changeQuestionByStep(-1);
       } else if (e.key === 'ArrowRight') {
-        if (qn < max - 1) this.onChangeQuestion(this.state.qn + 1);
+        if (qn < max - 1) this.props.changeQuestionByStep(1);
       }
     }
   }
@@ -108,28 +117,16 @@ class QuizMain extends Component {
         move;
 
       if (deltaX > 75) {
-        move = this.state.qn + 1;
+        move = 1;
       }
 
       if (deltaX < -75) {
-        move = this.state.qn - 1;
+        move = -1;
       }
-      if (move >= min && move < max) this.onChangeQuestion(move);
+      if (move >= min && move < max) this.props.changeQuestionByStep(move);
     } else {
       return;
     }
-  }
-
-  /**
-   * Den egentlige navigationsfunktion
-   * @param  {number} q det indeks der ønskes navigeret til
-   */
-  onChangeQuestion(q) {
-    this.setState({
-      qn: q
-    });
-
-    smoothScroll();
   }
 
   /** Håndtering af pop-up af billeder **/
@@ -140,8 +137,8 @@ class QuizMain extends Component {
   }
 
   render() {
-    let { questions, settings, answers, user } = this.props,
-      { qn } = this.state;
+    let { questions, settings, answers, user } = this.props
+    let { qn } = this.props;
 
     if (!questions || settings.isFetching)
       return (
@@ -161,7 +158,7 @@ class QuizMain extends Component {
         </Translate>
       );
 
-    if (questions.length === 0) {
+    if (questions.length === 0 || (!settings.isFetching && !questions[0].question)) {
       return (
         <div className="flex-container">
           <div className="content">
@@ -192,7 +189,7 @@ class QuizMain extends Component {
             onSwipedLeft={this.swiped}
             onSwipedRight={this.swiped}
             flickThreshold={flickNumber}
-            // onSwiped={this.swipeChecker}
+          // onSwiped={this.swipeChecker}
           >
             <Question
               onImgClick={this.onImgClick}
@@ -259,7 +256,8 @@ QuizMain.propTypes = {
   /**
    * Tilføjer quizTranslations i hele app'en
    */
-  addTranslation: PropTypes.func
+  addTranslation: PropTypes.func,
+  qn: PropTypes.number
 };
 
 function mapStateToProps(state) {
@@ -267,7 +265,8 @@ function mapStateToProps(state) {
     questions: state.questions,
     answers: state.answers,
     settings: state.settings,
-    user: state.auth.user
+    user: state.auth.user,
+    qn: state.quiz.qn
   };
 }
 

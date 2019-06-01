@@ -68,8 +68,8 @@
       ]
     },
     "checkIssue": [
-      "Inden du rapporterer spørgsmålet, så tjek venligst om andre har sendt samme problem til os. <br /> Du er velkommen til at kommentere på problemer magen til dit eget. <a target='_blank' href='https://github.com/morsby/medmcq/issues?utf8=%E2%9C%93&q=${link}'>Tjek ved at klikke her</a>.",
-      "Please check if the issue has already been sent to us, before submitting. <br /> You are welcome to comment on identical issues. <a target='_blank' href='https://github.com/morsby/medmcq/issues?utf8=%E2%9C%93&q=${link}'>Click here to check.</a>"
+      "<b>Vi retter kun uoverensstemmelser mellem de officielle eksamenssæt og MedMcq's spørgsmål. Vi retter ikke dårlige opgaver, outdatede retningslinjer o.lign. </b> <br /> Inden du rapporterer spørgsmålet, så tjek venligst om andre har sendt samme problem til os. <br /> Du er velkommen til at kommentere på problemer magen til dit eget. <a target='_blank' href='https://github.com/morsby/medmcq/issues?utf8=%E2%9C%93&q=${link}'>Tjek ved at klikke her</a>.",
+      "<b>We only fix inconsistencies between the official exams and MedMcq's questions. We do not fix badly formulated questions, outdated guidelines, etc. </b> <br />Please check if the issue has already been sent to us, before submitting. <br /> You are welcome to comment on identical issues. <a target='_blank' href='https://github.com/morsby/medmcq/issues?utf8=%E2%9C%93&q=${link}'>Click here to check.</a>"
     ],
     "checkbox": [
       "Jeg har tjekket for lignende problemer <a target='_blank' href='https://github.com/morsby/medmcq/issues?utf8=%E2%9C%93&q=${link}'>her.</a>",
@@ -104,16 +104,12 @@
     "yes": ["Ja", "Yes"]
   },
   "voting": {
-    "specialtyHeadline": ["Stem på speciale", "Vote for specialty"],
-    "tagsHeadline": ["Tilføj tags", "Add tags"],
     "notice": [
-      "Info om disse nye funktioner kan findes på ",
-      "Info about these new features can be found on the "
+      "Info om det nye stemmesystem kan findes på ",
+      "Info about the new votingsystem can be found on the "
     ],
-    "vote_specialty": ["Stem på specialer", "Vote for specialties"],
-    "vote_tags": ["Stem på tags", "Vote for tags"],
-    "suggest_tag": ["Foreslå nyt tag", "Suggest new tag"],
     "cancel": ["Fortryd", "Cancel"],
-    "about_page": ["om siden", "about page"]
+    "about_page": ["om siden", "about page"],
+    "suggest_tag": ["Foreslå nyt tag", "Suggest new tag"]
   }
 }

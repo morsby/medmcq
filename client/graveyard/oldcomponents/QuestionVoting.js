@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as actions from '../../../actions';
+import * as actions from '../../src/actions';
 import _ from 'lodash';
 
-import { specialer, tags } from '../../../utils/common';
+import { specialer, tags } from '../../src/utils/common';
 
 import { Button, Message, Input, Grid } from 'semantic-ui-react';
 import { Divider, Dropdown } from 'semantic-ui-react';
@@ -96,7 +96,11 @@ const QuestionVoting = (props) => {
               multiple
               selection
               search
-              options={specialer[props.question.semester]}
+              options={_.sortBy(specialer[props.question.semester], [
+                (s) => {
+                  return s.text;
+                }
+              ])}
               value={chosenSpecialties}
               onChange={onChangeSpecialties}
             />
@@ -115,7 +119,16 @@ const QuestionVoting = (props) => {
               multiple
               selection
               search
-              options={tags[props.question.semester]}
+              options={_.filter(
+                _.sortBy(tags[props.question.semester], [
+                  (t) => {
+                    if (t.text) return t.text;
+                  }
+                ]),
+                (t) => {
+                  return t.text;
+                }
+              )}
               value={chosenTags}
               onChange={onChangeTags}
             />

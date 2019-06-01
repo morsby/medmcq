@@ -8,15 +8,8 @@ import { Translate } from 'react-localize-redux';
  * Component der viser checkboxes for hvert speciale.
  * Alle prps fra SelectionSpecialtiesSelector.js
  */
-const SelectionSpecialtiesSelectorCheckbox = ({
-  speciale,
-  erValgt,
-  antalPerSpeciale,
-  type,
-  onChange
-}) => {
-  let antal = antalPerSpeciale === undefined ? 0 : antalPerSpeciale;
-  if (!speciale.text) return null;
+const SelectionSpecialtiesSelectorCheckbox = ({ speciale, erValgt, antal, type, onChange }) => {
+  if (!speciale) return null;
   return (
     <Form.Group key={speciale.value}>
       <Form.Field>
@@ -29,7 +22,7 @@ const SelectionSpecialtiesSelectorCheckbox = ({
                     speciale: speciale.text,
                     n: antal
                   })}
-                  value={speciale.value}
+                  value={speciale._id}
                   checked={erValgt}
                   name={type}
                   onChange={onChange}

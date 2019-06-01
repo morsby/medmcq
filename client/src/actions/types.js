@@ -10,9 +10,17 @@ export const QUESTION_SPECIALTY_UPDATE = 'question_specialty_update';
 export const QUESTION_REPORT = 'question_report';
 
 export const CHANGE_SETTINGS = 'change_settings';
-export const FETCH_SETTINGS_QUESTION = 'fetch_settings_question';
+export const SETTINGS_COUNT_TOTAL_QUESTIONS = 'SETTINGS_COUNT_TOTAL_QUESTIONS';
+export const SETTINGS_GET_SETS = 'SETTINGS_GET_SETS';
+export const FETCH_METADATA = 'FETCH_METADATA';
 
 export const AUTH_SIGNUP = 'auth_signup';
 export const AUTH_CURRENT_USER = 'auth_current_user';
 export const AUTH_GET_ANSWERED_QUESTIONS = 'auth_get_answered_questions';
 export const AUTH_UPDATE_USER_ANSWERS = 'AUTH_UPDATE_USER_ANSWERS';
+export const CHANGE_QUESTION_BY_STEP = 'CHANGE_QUESTION_BY_STEP';
+export const CHANGE_QUIZ_TO_SPECIFIC_NUMBER = 'CHANGE_QUIZ_TO_SPECIFIC_NUMBER';
+
+export const LOAD_SETS = 'LOAD_SETS';
+export const LOAD_SETS_FINISH = 'LOAD_SETS_FINISH'
+  ;

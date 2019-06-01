@@ -14,7 +14,7 @@ const SetRadioButton = ({ set, answeredQuestions, groupedQuestions, activeSet, o
   if (answeredQuestions) {
     let missingQuestions = _.difference(getIds(groupedQuestions), getIds(answeredQuestions));
 
-    if (missingQuestions.length === 0) completed = <Icon name="check" color="green" />;
+    if (missingQuestions.length === 0) completed = <Icon name='check' color='green' />;
   }
 
   return (
@@ -23,8 +23,8 @@ const SetRadioButton = ({ set, answeredQuestions, groupedQuestions, activeSet, o
         <Translate>
           {({ activeLanguage = { code: 'dk' } }) => {
             // TODO:
-            /*flyt evt. disse replaces over i react-localize-redux 
-                        vha. dynamiske id's (se fx profileAnswerDetails og dets 
+            /* flyt evt. disse replaces over i react-localize-redux
+                        vha. dynamiske id's (se fx profileAnswerDetails og dets
                         Sæt-kolonne i tabellen) */
             let label = set.text;
             if (activeLanguage.code === 'gb') {
@@ -39,7 +39,7 @@ const SetRadioButton = ({ set, answeredQuestions, groupedQuestions, activeSet, o
                   label={label}
                   value={set.api}
                   checked={set.api === activeSet}
-                  name="set"
+                  name='set'
                   onChange={onChange}
                 />{' '}
                 {completed}

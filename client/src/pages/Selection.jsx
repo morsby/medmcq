@@ -10,8 +10,6 @@ import { calculateResults } from '../utils/quiz';
 import selectionTranslations from '../Translations/selectionTranslations.json';
 import { withLocalize, Translate } from 'react-localize-redux';
 
-import _ from 'lodash';
-
 import { Container, Header, Dropdown, Divider, Button, Message, Input } from 'semantic-ui-react';
 
 import SelectionNSelector from '../components/Selection/SelectionSettings/SelectionNSelector';
@@ -22,18 +20,23 @@ import SelectionUniqueSelector from '../components/Selection/SelectionSettings/S
 import SelectionMessage from '../components/Selection/SelectionMessage';
 
 import { semestre, urls } from '../utils/common';
-import { specialer as specialerCommon, tags as tagsCommon } from '../utils/common';
 
 /**
  * Hovedsiden til at håndtere alle valg af spørgsmål.
  * Props beskrives i bunden.
  */
 class SelectionMain extends Component {
-  state = { err: [], search: '' };
+  state = { err: [], search: '', loading: false };
 
   constructor(props) {
     super(props);
-    this.props.fetchSettingsQuestions(this.props.settings.semester);
+    if (
+      this.props.specialties.length === 0 ||
+      this.props.tags.length === 0 ||
+      Date.now() - this.props.lastMetadataFetch > 3.6 * Math.pow(10, 6)
+    )
+      this.state.loading = true;
+    this.props.getTotalQuestionCount(this.props.settings.semester);
     this.props.addTranslation(selectionTranslations);
     this.searchHandler = this.searchHandler.bind(this);
     this.onSettingsChange = this.onSettingsChange.bind(this);
@@ -44,16 +47,38 @@ class SelectionMain extends Component {
    * Seeder data hvis det er første besøg.
    * Tager nu højde for evt. "tomme" semestre, da semester = 7 er default
    */
-  componentDidMount() {
-    let { questions, semester, type } = this.props.settings;
-    if (questions.length === 0 && semester === 7) {
+  async componentDidMount() {
+    let { totalQuestions, semester, type } = this.props.settings;
+    if (totalQuestions === 0 && semester === 7) {
       type = 'semester';
       const value = 7;
       const e = null;
 
       this.onSettingsChange(e, { type, value });
     }
+
+    if (
+      this.props.specialties.length === 0 ||
+      this.props.tags.length === 0 ||
+      Date.now() - this.props.lastMetadataFetch > 3.6 * Math.pow(10, 6)
+    ) {
+      this.props.getSets(this.props.settings.semester)
+      await this.getMetadata();
+    }
   }
+
+  async componentDidUpdate(prevProps) {
+    if (this.props.settings.semester !== prevProps.settings.semester) {
+      this.setState({ loading: true });
+      this.props.getSets(this.props.settings.semester)
+      await this.getMetadata();
+    }
+  }
+
+  getMetadata = async () => {
+    await this.props.fetchMetadata(this.props.settings.semester);
+    this.setState({ loading: false });
+  };
 
   /**
    * Func der ændrer settings i redux state. Passes via Semantic UI (derfor navnene)
@@ -116,7 +141,7 @@ class SelectionMain extends Component {
     }
 
     // Findes der spørgsmål?
-    if (questions.length === 0) {
+    if (this.props.totalQuestions === 0) {
       err.push(this.props.translate('selection.errs.no_questions'));
     }
 
@@ -159,7 +184,7 @@ class SelectionMain extends Component {
      * derfor IKKE noget med selve quiz-spørgsmålene at gøre, og hentes for
      * at kunne tælle antal spørgsmål for hvert semester, speciale m.v.
      */
-    let { semester, specialer, tags, type, n, onlyNew, questions, sets, set } = this.props.settings;
+    let { semester, specialer, tags, type, n, onlyNew, totalQuestions, sets, set } = this.props.settings;
 
     let { user } = this.props,
       answeredQuestions;
@@ -168,44 +193,6 @@ class SelectionMain extends Component {
     if (this.props.user && this.props.user.hasOwnProperty('answeredQuestions')) {
       answeredQuestions = user.answeredQuestions[semester];
     }
-
-    // Laver et array af specialer for semesteret
-    let uniques = {
-      specialer: specialerCommon[semester].map((s) => s.value),
-      tags: tagsCommon[semester].map((t) => t.value)
-    };
-
-    // Grupperer de fundne spørgsmål efter specialer
-    let questionsBySpecialty = _.countBy(
-      // Laver et flat array af alle i spg indeholdte specialer
-      _.flattenDeep(questions.map((a) => a.specialty)),
-      (e) => {
-        return uniques.specialer[uniques.specialer.indexOf(e)];
-      }
-    );
-
-    // Grupperer de fundne spørgsmål efter tags
-    let questionsByTag = _.countBy(
-      // Laver et flat array af alle i spg indeholdte tags
-      _.flattenDeep(questions.map((a) => a.tags)),
-      (e) => {
-        return uniques.tags[uniques.tags.indexOf(e)];
-      }
-    );
-
-    // Tjekker hvor mange der er valgt
-    let antalValgte = 0;
-    specialer.map((s) => {
-      let n = questionsBySpecialty[s] ? questionsBySpecialty[s] : 0;
-      antalValgte = antalValgte + n;
-      return null;
-    });
-
-    tags.map((t) => {
-      let n = questionsByTag[t] ? questionsByTag[t] : 0;
-      antalValgte = antalValgte + n;
-      return null;
-    });
 
     return (
       <div className="flex-container">
@@ -236,11 +223,11 @@ class SelectionMain extends Component {
               <SelectionNSelector
                 n={Number(n)}
                 onChange={this.onSettingsChange}
-                total={questions.length}
+                total={totalQuestions}
                 semester={semester}
               />
               <Divider hidden />
-              <Translate id="selectionNSelector.total_n" data={{ n: questions.length }} />
+              <Translate id="selectionNSelector.total_n" data={{ n: totalQuestions }} />
               <Divider />
             </>
           )}
@@ -263,8 +250,6 @@ class SelectionMain extends Component {
 
           {type === 'set' && (
             <SelectionSetSelector
-              questions={questions}
-              sets={sets}
               activeSet={set}
               semester={semester}
               answeredQuestions={answeredQuestions}
@@ -277,10 +262,11 @@ class SelectionMain extends Component {
               <SelectionSpecialtiesSelector
                 semester={semester}
                 valgteSpecialer={specialer}
-                antalPerSpeciale={questionsBySpecialty}
                 valgteTags={tags}
-                antalPerTag={questionsByTag}
                 onChange={this.onSettingsChange}
+                specialties={this.props.specialties}
+                tags={this.props.tags}
+                loading={this.state.loading}
               />
               <Divider hidden />
             </>
@@ -293,14 +279,7 @@ class SelectionMain extends Component {
               })}
             </Message>
           )}
-          <Button
-            color="green"
-            basic
-            onClick={() => this.handleSubmit('new')}
-            disabled={
-              (antalValgte < 1 && type === 'specialer') || n < allowedNs.min || n > allowedNs.max
-            }
-          >
+          <Button color="green" basic onClick={() => this.handleSubmit('new')}>
             Start!
           </Button>
           {window.innerWidth < breakpoints.mobile && <Divider hidden />}
@@ -378,7 +357,11 @@ function mapStateToProps(state) {
   return {
     settings: state.settings,
     user: state.auth.user,
-    questions: state.questions
+    questions: state.questions,
+    specialties: state.settings.metadata.specialties,
+    tags: state.settings.metadata.tags,
+    lastMetadataFetch: state.settings.metadata.date,
+    totalQuestions: state.settings.totalQuestionCount
   };
 }
 
