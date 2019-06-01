@@ -28,7 +28,11 @@ import { configureStore, getDefaultMiddleware } from 'redux-starter-kit';
 const persistConfig = {
   key: 'root',
   storage: storage,
-  stateReconciler: autoMergeLevel2 // see "Merge Process" section for details.
+  stateReconciler: autoMergeLevel2, // see "Merge Process" section for details.
+  version: 1,
+  migrate: (state) => {
+    return Promise.resolve({ auth: state.auth });
+  }
 };
 
 const pReducer = persistReducer(persistConfig, reducers);
