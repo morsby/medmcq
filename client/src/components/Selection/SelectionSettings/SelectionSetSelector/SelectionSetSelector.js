@@ -1,7 +1,5 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-
-import { groupQuestionsBySet } from '../../../../utils/questions';
 
 import SetRadioButton from './SetRadioButton';
 import { Form, Header, Divider } from 'semantic-ui-react';
@@ -9,6 +7,7 @@ import { Form, Header, Divider } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 import { connect } from 'react-redux';
 import LoadingPage from '../../../Misc/Utility-pages/LoadingPage';
+import axios from 'axios';
 
 const SelectionSetSelector = ({
   semester,
@@ -18,7 +17,9 @@ const SelectionSetSelector = ({
   answeredQuestions,
   onChange,
   getSets,
-  loading
+  loading,
+  user,
+  completedSets
 }) => {
   if (!semester) {
     return (
@@ -27,6 +28,7 @@ const SelectionSetSelector = ({
       </Header>
     );
   }
+
   if (sets.length === 0 || loading) {
     return (
       <>
@@ -42,14 +44,15 @@ const SelectionSetSelector = ({
       </Header>
 
       {sets.map((set) => (
-        <SetRadioButton
-          key={set.api}
-          set={set}
-          answeredQuestions={answeredQuestions}
-          activeSet={activeSet}
-          onChange={onChange}
-          groupedQuestions={groupQuestionsBySet(questions)[set.api]}
-        />
+        <>
+          <SetRadioButton
+            key={set.api}
+            set={set}
+            activeSet={activeSet}
+            onChange={onChange}
+            completedSetsCount={completedSets[set.api]}
+          />
+        </>
       ))}
     </Form>
   );
@@ -67,7 +70,9 @@ SelectionSetSelector.propTypes = {
 const mapStateToProps = (state) => {
   return {
     sets: state.settings.sets,
-    loading: state.loading.sets
+    loading: state.loading.sets,
+    user: state.auth.user,
+    completedSets: state.settings.completedSets
   };
 };
 

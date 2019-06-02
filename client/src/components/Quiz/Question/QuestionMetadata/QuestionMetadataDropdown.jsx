@@ -7,15 +7,13 @@ const QuestionMetadataDropdown = ({ options, onChange, text, type }) => {
     onChange(value);
   };
 
-  const createDropdownItems = (category) => {
+  const createDropdownItems = (tags) => {
     let items = [];
 
-    for (const o of options) {
-      if (o.category === category) {
-        items.push(
-          <Dropdown.Item onClick={handleDropdownPick} text={o.text} value={o.value} key={o.value} />
-        );
-      }
+    for (const t of tags) {
+      items.push(
+        <Dropdown.Item onClick={handleDropdownPick} text={t.text} value={t.value} key={t.value} />
+      );
     }
 
     if (items.length === 0) {
@@ -27,21 +25,15 @@ const QuestionMetadataDropdown = ({ options, onChange, text, type }) => {
 
   const createDropdowns = () => {
     if (type === 'tag') {
-      let categories = [];
       let dropdown = [];
 
-      for (const o of options) {
-        categories.push(o.category);
-      }
-      categories = _(categories)
-        .uniq()
-        .sort();
+      const groupedTags = _.groupBy(options, (t) => t.category);
 
-      for (const c of categories) {
+      for (const key in groupedTags) {
         dropdown.push(
-          <Dropdown.Item key={c}>
-            <Dropdown scrolling text={c.charAt(0).toUpperCase() + c.slice(1)}>
-              <Dropdown.Menu>{createDropdownItems(c)}</Dropdown.Menu>
+          <Dropdown.Item key={key}>
+            <Dropdown scrolling text={key.charAt(0).toUpperCase() + key.slice(1)}>
+              <Dropdown.Menu>{createDropdownItems(groupedTags[key])}</Dropdown.Menu>
             </Dropdown>
           </Dropdown.Item>
         );

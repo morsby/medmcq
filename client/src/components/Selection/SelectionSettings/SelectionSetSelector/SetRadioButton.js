@@ -2,19 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
-import { getIds } from '../../../../utils/questions';
 import { Form, Radio, Divider, Icon } from 'semantic-ui-react';
 
 import { Translate } from 'react-localize-redux';
 
-const SetRadioButton = ({ set, answeredQuestions, groupedQuestions, activeSet, onChange }) => {
+const SetRadioButton = ({ set, completedSetsCount, activeSet, onChange }) => {
   let completed = '';
 
   // Tjekker hvilke spg. i sættet der ikke er besvaret allerede
-  if (answeredQuestions) {
-    let missingQuestions = _.difference(getIds(groupedQuestions), getIds(answeredQuestions));
-
-    if (missingQuestions.length === 0) completed = <Icon name='check' color='green' />;
+  if (!completedSetsCount) {
+    completed = <Icon name="check" color="green" />;
   }
 
   return (
@@ -39,7 +36,7 @@ const SetRadioButton = ({ set, answeredQuestions, groupedQuestions, activeSet, o
                   label={label}
                   value={set.api}
                   checked={set.api === activeSet}
-                  name='set'
+                  name="set"
                   onChange={onChange}
                 />{' '}
                 {completed}

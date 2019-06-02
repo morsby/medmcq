@@ -6,6 +6,7 @@ const Question = require('../../models/question');
 const Specialty = require('../../models/specialty');
 const Tag = require('../../models/tag');
 const mongoose = require('mongoose');
+const User = require('../../models/user');
 
 String.prototype.toObjectId = function() {
   var ObjectId = require('mongoose').Types.ObjectId;
@@ -129,12 +130,6 @@ router.get('/count', async (req, res) => {
   res.status(200).send(count);
 });
 
-router.get('/all', async (req, res) => {
-  const questions = await Question.find();
-
-  res.status(200).send({ questions });
-});
-
 // Stem på metadata
 router.put('/vote', async (req, res) => {
   const { type, questionId, metadataId, vote, user } = req.body; // Vote er et tal, enten 1 eller -1 (for upvote eller downvote)
@@ -188,6 +183,22 @@ router.put('/vote', async (req, res) => {
 
   const result = await question.save();
   res.status(200).send(result);
+});
+
+router.get('/completedSets', async (req, res) => {
+  const user = await User.findById(req.query.user);
+
+  const questions = await Question.find({
+    _id: { $nin: Object.keys(user.answeredQuestions[req.query.sem]) },
+    semester: req.query.sem
+  });
+
+  let answeredSets = _.groupBy(questions, (q) => `${q.examYear}/${q.examSeason}`);
+  for (const key in answeredSets) {
+    answeredSets[key] = answeredSets[key].length;
+  }
+
+  res.status(200).send(answeredSets);
 });
 
 module.exports = router;
