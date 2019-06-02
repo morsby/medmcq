@@ -6,11 +6,11 @@ import { Form, Radio, Divider, Icon } from 'semantic-ui-react';
 
 import { Translate } from 'react-localize-redux';
 
-const SetRadioButton = ({ set, completedSetsCount, activeSet, onChange }) => {
+const SetRadioButton = ({ set, completedSetsCount, activeSet, onChange, user }) => {
   let completed = '';
 
   // Tjekker hvilke spg. i sættet der ikke er besvaret allerede
-  if (!completedSetsCount) {
+  if (!completedSetsCount && user) {
     completed = <Icon name="check" color="green" />;
   }
 

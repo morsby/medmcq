@@ -51,6 +51,7 @@ const SelectionSetSelector = ({
             activeSet={activeSet}
             onChange={onChange}
             completedSetsCount={completedSets[set.api]}
+            user={user}
           />
         </>
       ))}
