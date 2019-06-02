@@ -44,6 +44,7 @@ import { urls } from './utils/common';
 import Sidebar from './components/Layout/Sidebar';
 import Footer from './components/Layout/Footer';
 import MaintenancePage from './components/Misc/Utility-pages/MaintenancePage';
+import ErrorBoundary from './components/Misc/Utility-pages/ErrorBoundary';
 
 class App extends Component {
   state = { maintenance: false };
@@ -69,28 +70,30 @@ class App extends Component {
     if (this.state.maintenance) return <MaintenancePage />;
     return (
       <BrowserRouter>
-        <ScrollToTop>
-          <Sidebar>
-            <Header />
-            <NewVersionMessage />
-            <Switch>
-              <Route path={urls.about} component={About} />
-              <Route path={urls.contact} component={Contact} />
-              <Route path={urls.quiz} component={Quiz} />
-              <Route path={urls.signup} component={Signup} />
-              <Route path={urls.login} component={Login} />
-              <Route path={urls.logout} component={Logout} />
-              <PrivateRoute isLoggedIn={true} path={urls.editProfile} component={EditProfile} />
-              <PrivateRoute path={urls.profile} component={Profile} />
-              <Route path={urls.forgotPassword} component={ForgotPassword} />
-              <Route path={`${urls.resetPassword}/:token`} component={ResetPassword} />
-              <Route path="/print" component={Print} />
-              <Route exact path="/" component={Selection} />
-              <Route component={ErrorPage} />
-            </Switch>
-            <Footer />
-          </Sidebar>
-        </ScrollToTop>
+        <ErrorBoundary>
+          <ScrollToTop>
+            <Sidebar>
+              <Header />
+              <NewVersionMessage />
+              <Switch>
+                <Route path={urls.about} component={About} />
+                <Route path={urls.contact} component={Contact} />
+                <Route path={urls.quiz} component={Quiz} />
+                <Route path={urls.signup} component={Signup} />
+                <Route path={urls.login} component={Login} />
+                <Route path={urls.logout} component={Logout} />
+                <PrivateRoute isLoggedIn={true} path={urls.editProfile} component={EditProfile} />
+                <PrivateRoute path={urls.profile} component={Profile} />
+                <Route path={urls.forgotPassword} component={ForgotPassword} />
+                <Route path={`${urls.resetPassword}/:token`} component={ResetPassword} />
+                <Route path="/print" component={Print} />
+                <Route exact path="/" component={Selection} />
+                <Route component={ErrorPage} />
+              </Switch>
+              <Footer />
+            </Sidebar>
+          </ScrollToTop>
+        </ErrorBoundary>
       </BrowserRouter>
     );
   }
