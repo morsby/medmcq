@@ -48,7 +48,6 @@ export default createReducer(initialState, {
      * Find det id i arrayet og erstat specialerne.
      */
     const { _id, newSpecialties, newTags } = action.payload;
-    console.log(action.payload);
 
     const index = _.findIndex(state, { _id });
 

@@ -20,20 +20,25 @@ const SelectionSetSelector = ({
   getSets,
   loading
 }) => {
-  console.log(loading)
-
   if (!semester) {
     return (
-      <Header as='h3'>
-        <Translate id='selectionSetSelector.choose_semester' />
+      <Header as="h3">
+        <Translate id="selectionSetSelector.choose_semester" />
       </Header>
     );
   }
-  if (sets.length === 0 || loading) { return <><LoadingPage /><Divider hidden /></>; }
+  if (sets.length === 0 || loading) {
+    return (
+      <>
+        <LoadingPage />
+        <Divider hidden />
+      </>
+    );
+  }
   return (
     <Form>
-      <Header as='h3'>
-        <Translate id='selectionSetSelector.header' data={{ semester }} />
+      <Header as="h3">
+        <Translate id="selectionSetSelector.header" data={{ semester }} />
       </Header>
 
       {sets.map((set) => (

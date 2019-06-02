@@ -113,7 +113,9 @@ const QuestionMetadata = (props) => {
               ))}
               {user && (
                 <QuestionMetadataDropdown
-                  onChange={(e, { value }) => newMetadata('specialty', value)}
+                  type="specialty"
+                  text="Speciale"
+                  onChange={(value) => newMetadata('specialty', value)}
                   options={specialties}
                 />
               )}
@@ -133,7 +135,9 @@ const QuestionMetadata = (props) => {
               ))}
               {user && (
                 <QuestionMetadataDropdown
-                  onChange={(e, { value }) => newMetadata('tag', value)}
+                  type="tag"
+                  text="Tag"
+                  onChange={(value) => newMetadata('tag', value)}
                   options={tags}
                 />
               )}
