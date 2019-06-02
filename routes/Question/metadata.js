@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const superUsers = require('../../utils/superUsers');
 const _ = require('lodash');
 const Question = require('../../models/question');
 const Specialty = require('../../models/specialty');
@@ -190,15 +189,28 @@ router.get('/completedSets', async (req, res) => {
   if (!req.query.user || !req.query.sem)
     return res.status(404).send('Du skal opgive bruger og semester');
 
-  if (!user.answeredQuestions[req.query.sem])
-    return res.status(200).send('Der er endnu ingen spørgsmålet svaret på for dette semester');
+  if (!user.answeredQuestions[req.query.sem]) {
+    const questions = await Question.find({
+      semester: req.query.sem
+    });
+    const answeredSets = _.groupBy(questions, (q) => `${q.examYear}/${q.examSeason}`);
+    for (const key in answeredSets) {
+      answeredSets[key] = answeredSets[key].length;
+    }
+    return res.status(200).send(answeredSets);
+  }
 
   const questions = await Question.find({
-    _id: { $nin: Object.keys(user.answeredQuestions[req.query.sem]) },
+    semester: req.query.sem
+  });
+  const answered = await Question.find({
+    _id: { $in: Object.keys(user.answeredQuestions[req.query.sem]) },
     semester: req.query.sem
   });
 
-  let answeredSets = _.groupBy(questions, (q) => `${q.examYear}/${q.examSeason}`);
+  const notAnswered = _.differenceBy(questions, answered, (q) => q.question);
+
+  let answeredSets = _.groupBy(notAnswered, (q) => `${q.examYear}/${q.examSeason}`);
   for (const key in answeredSets) {
     answeredSets[key] = answeredSets[key].length;
   }
