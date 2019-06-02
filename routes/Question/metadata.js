@@ -187,6 +187,11 @@ router.put('/vote', async (req, res) => {
 
 router.get('/completedSets', async (req, res) => {
   const user = await User.findById(req.query.user);
+  if (!req.query.user || !req.query.sem)
+    return res.status(404).send('Du skal opgive bruger og semester');
+
+  if (!user.answeredQuestions[req.query.sem])
+    return res.status(200).send('Der er endnu ingen spørgsmålet svaret på for dette semester');
 
   const questions = await Question.find({
     _id: { $nin: Object.keys(user.answeredQuestions[req.query.sem]) },
