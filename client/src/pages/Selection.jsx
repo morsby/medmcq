@@ -62,15 +62,18 @@ class SelectionMain extends Component {
       this.props.tags.length === 0 ||
       Date.now() - this.props.lastMetadataFetch > 3.6 * Math.pow(10, 6)
     ) {
-      this.props.getSets(this.props.settings.semester)
+      this.props.getSets(this.props.settings.semester, this.props.user);
       await this.getMetadata();
     }
   }
 
   async componentDidUpdate(prevProps) {
-    if (this.props.settings.semester !== prevProps.settings.semester) {
+    if (
+      this.props.settings.semester !== prevProps.settings.semester ||
+      this.props.user !== prevProps.user
+    ) {
       this.setState({ loading: true });
-      this.props.getSets(this.props.settings.semester)
+      this.props.getSets(this.props.settings.semester, this.props.user);
       await this.getMetadata();
     }
   }
@@ -184,7 +187,17 @@ class SelectionMain extends Component {
      * derfor IKKE noget med selve quiz-spørgsmålene at gøre, og hentes for
      * at kunne tælle antal spørgsmål for hvert semester, speciale m.v.
      */
-    let { semester, specialer, tags, type, n, onlyNew, totalQuestions, sets, set } = this.props.settings;
+    let {
+      semester,
+      specialer,
+      tags,
+      type,
+      n,
+      onlyNew,
+      totalQuestions,
+      sets,
+      set
+    } = this.props.settings;
 
     let { user } = this.props,
       answeredQuestions;
