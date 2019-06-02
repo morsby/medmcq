@@ -33,7 +33,9 @@ const QuestionMetadataDropdown = ({ options, onChange, text, type }) => {
       for (const o of options) {
         categories.push(o.category);
       }
-      categories = _.uniq(categories);
+      categories = _(categories)
+        .uniq()
+        .sort();
 
       for (const c of categories) {
         dropdown.push(
