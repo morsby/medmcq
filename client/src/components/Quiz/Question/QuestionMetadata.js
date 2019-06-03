@@ -40,9 +40,9 @@ const QuestionMetadata = (props) => {
         });
       });
 
-      spliceArray.forEach((value) => {
-        specialties.splice(value, 1);
-      });
+      for (let i = spliceArray.length - 1; i >= 0; i--) {
+        specialties.splice(spliceArray[i], 1);
+      }
 
       // Do the same with tags
       spliceArray = [];
@@ -55,9 +55,11 @@ const QuestionMetadata = (props) => {
         });
       });
 
-      spliceArray.forEach((value) => {
-        tags.splice(value, 1);
-      });
+      console.log(spliceArray);
+
+      for (let i = spliceArray.length - 1; i >= 0; i--) {
+        tags.splice(spliceArray[i], 1);
+      }
 
       setSpecialties(specialties);
       setTags(tags);
