@@ -40,12 +40,14 @@ const SelectionSetSelector = ({
       <Header as="h3">
         <Translate id="selectionSetSelector.header" data={{ semester }} />
       </Header>
-      <p style={{ color: 'grey' }}>
-        Det nye orange flueben (længst til højre) kan trykkes på, for at manuelt gemme de sæt du har
-        lavet.
-        <br /> Den grønne pil er automatisk, og dannes ud fra hvilke spørgsmål i sættene du allerede
-        har svaret på
-      </p>
+      {user && (
+        <p style={{ color: 'grey' }}>
+          Det nye orange flueben (længst til højre) kan trykkes på, for at manuelt gemme de sæt du
+          har lavet.
+          <br /> Den grønne pil er automatisk, og dannes ud fra hvilke spørgsmål i sættene du
+          allerede har svaret på
+        </p>
+      )}
 
       {sets.map((set) => (
         <>
