@@ -189,6 +189,8 @@ router.get('/completedSets', async (req, res) => {
   if (!req.query.user || !req.query.sem)
     return res.status(404).send('Du skal opgive bruger og semester');
 
+  if (!user.answeredQuestions) user.answeredQuestions = {};
+
   if (!user.answeredQuestions[req.query.sem]) {
     const questions = await Question.find({
       semester: req.query.sem

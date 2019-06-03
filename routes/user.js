@@ -69,31 +69,24 @@ router.get('/:id', async (req, res) => {
 
 router.put('/completedsets/:id', async (req, res) => {
   const { api, semester } = req.body;
-  console.log(api, semester);
   if (!api || !semester) return res.status(404).send('Du mangler at opgive api eller semester');
-
   const user = await User.findById(req.params.id);
 
-  console.log(user.completedSets);
+  if (!user.completedSets) user.completedSets = {};
 
   if (!user.completedSets[semester]) {
-    console.log(user.completedSets);
-    console.log('new');
     user.completedSets[semester] = [api];
   } else {
     const alreadyExists = _.indexOf(user.completedSets[semester], api);
     if (alreadyExists !== -1) {
-      console.log('alreadyt');
       user.completedSets[semester].splice(alreadyExists, 1);
     } else {
       user.completedSets[semester].push(api);
-      console.log('push');
     }
   }
 
   user.markModified('completedSets');
   const result = await user.save();
-  console.log(result.completedSets);
   res.status(200).send(result);
 });
 

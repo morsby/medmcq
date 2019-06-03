@@ -44,13 +44,15 @@ const SetRadioButton = ({
                   onChange={onChange}
                 />{' '}
                 {<Icon name="check" color={!completedSetsCount && user ? 'green' : 'grey'} />}
-                {user && user.completedSets && (
+                {user && (
                   <Icon
                     name="check"
                     onClick={() => manualCompleteSet(api, user, semester)}
                     style={{ cursor: 'pointer' }}
                     color={
-                      _.indexOf(user.completedSets[semester] || [], api) !== -1 ? 'orange' : 'grey'
+                      _.indexOf((user.completedSets || {})[semester] || [], api) !== -1
+                        ? 'orange'
+                        : 'grey'
                     }
                   />
                 )}
