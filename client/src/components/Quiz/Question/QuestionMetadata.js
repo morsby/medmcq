@@ -84,7 +84,7 @@ const QuestionMetadata = (props) => {
   };
 
   return (
-    <Grid celled="internally" stackable columns="equal">
+    <Grid celled stackable columns="equal">
       <Grid.Column>
         <Grid.Row>
           <Translate id="questionMetadata.set" />{' '}
@@ -97,7 +97,7 @@ const QuestionMetadata = (props) => {
         </Grid.Row>
         {question.answer && (
           <>
-            <Grid.Row>
+            <Grid.Row style={{ margin: '7px 0 7px 0' }}>
               <Translate id="questionMetadata.specialty" />{' '}
               {question.newSpecialties.map((spec) => (
                 <QuestionMetadataLabel
@@ -147,7 +147,9 @@ const QuestionMetadata = (props) => {
       {user && question.answer && (
         <>
           <Grid.Column width={5} style={{ textAlign: 'right' }}>
-            <QuestionAnsweredCounter user={user} question={question} />
+            <Grid.Row>
+              <QuestionAnsweredCounter user={user} question={question} />
+            </Grid.Row>
           </Grid.Column>
           <Grid.Row>
             <Grid.Column>

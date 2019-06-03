@@ -165,7 +165,7 @@ class Question extends PureComponent {
   };
 
   render() {
-    const { question, user } = this.props
+    const { question, user } = this.props;
     const text = subSupScript(question.question);
 
     return (
@@ -212,9 +212,7 @@ class Question extends PureComponent {
               pristine={this.state.pristine}
             />
           </Responsive>
-          <Divider />
           <QuestionMetadata question={question} user={user} />
-          <Divider />
           <QuestionExtras
             deleteComment={this.props.deleteComment}
             commentQuestion={this.props.commentQuestion}
