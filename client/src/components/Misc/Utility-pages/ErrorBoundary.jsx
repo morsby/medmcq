@@ -27,6 +27,17 @@ class ErrorBoundary extends Component {
             Hvis det ikke hjælper, så prøv at slette alle cookies og browserdata, og genindlæs siden
             derefter.
           </p>
+          <p>
+            Hvis du har prøvet alt det ovenstående, kan du sende os en mail på{' '}
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="mailto:medmcqau@gmail.com?Subject=Error"
+            >
+              medmcqau@gmail.com
+            </a>{' '}
+            , så lover vi at vende hurtigt tilbage!
+          </p>
         </Container>
       );
     }
