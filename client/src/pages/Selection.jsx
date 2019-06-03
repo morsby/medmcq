@@ -122,7 +122,7 @@ class SelectionMain extends Component {
      * derfor IKKE noget med selve quiz-spørgsmålene at gøre, og hentes for
      * at kunne tælle antal spørgsmål for hvert semester, speciale m.v.
      */
-    let { n, semester, type, set, questions, specialer, tags } = this.props.settings;
+    let { n, semester, type, set, specialer, tags } = this.props.settings;
 
     // Når den er tom modtager den fuldt antal
 
@@ -187,17 +187,7 @@ class SelectionMain extends Component {
      * derfor IKKE noget med selve quiz-spørgsmålene at gøre, og hentes for
      * at kunne tælle antal spørgsmål for hvert semester, speciale m.v.
      */
-    let {
-      semester,
-      specialer,
-      tags,
-      type,
-      n,
-      onlyNew,
-      totalQuestions,
-      sets,
-      set
-    } = this.props.settings;
+    let { semester, specialer, tags, type, n, onlyNew, totalQuestions, set } = this.props.settings;
 
     let { user } = this.props,
       answeredQuestions;

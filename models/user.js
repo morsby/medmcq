@@ -22,7 +22,8 @@ var UserSchema = new Schema({
   comments: [{ type: Schema.Types.ObjectId }],
   answeredQuestions: {},
   resetPasswordToken: { type: String },
-  resetPasswordExpires: { type: Number }
+  resetPasswordExpires: { type: Number },
+  completedSets: {}
 });
 
 UserSchema.pre('save', function(next) {

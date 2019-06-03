@@ -5,15 +5,19 @@ import _ from 'lodash';
 import { Form, Radio, Divider, Icon } from 'semantic-ui-react';
 
 import { Translate } from 'react-localize-redux';
+import { connect } from 'react-redux';
+import { manualCompleteSet } from './../../../../actions/auth';
 
-const SetRadioButton = ({ set, completedSetsCount, activeSet, onChange, user }) => {
-  let completed = '';
-
-  // Tjekker hvilke spg. i sættet der ikke er besvaret allerede
-  if (!completedSetsCount && user) {
-    completed = <Icon name="check" color="green" />;
-  }
-
+const SetRadioButton = ({
+  set,
+  completedSetsCount,
+  activeSet,
+  onChange,
+  user,
+  api,
+  manualCompleteSet,
+  semester
+}) => {
   return (
     <Form.Group key={set.api}>
       <Form.Field>
@@ -39,7 +43,15 @@ const SetRadioButton = ({ set, completedSetsCount, activeSet, onChange, user }) 
                   name="set"
                   onChange={onChange}
                 />{' '}
-                {completed}
+                {<Icon name="check" color={!completedSetsCount && user ? 'green' : 'grey'} />}
+                {user && (
+                  <Icon
+                    name="check"
+                    onClick={() => manualCompleteSet(api, user, semester)}
+                    style={{ cursor: 'pointer' }}
+                    color={_.indexOf(user.completedSets[semester], api) !== -1 ? 'orange' : 'grey'}
+                  />
+                )}
                 <Divider vertical hidden />
               </>
             );
@@ -58,4 +70,13 @@ SetRadioButton.propTypes = {
   onChange: PropTypes.func
 };
 
-export default SetRadioButton;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    manualCompleteSet: (api, user, semester) => dispatch(manualCompleteSet(api, user, semester))
+  };
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(SetRadioButton);

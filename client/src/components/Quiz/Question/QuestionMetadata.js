@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Translate } from 'react-localize-redux';
-import { Grid, Dropdown, Button, Divider, Input, Message } from 'semantic-ui-react';
+import { Grid, Button, Input, Message } from 'semantic-ui-react';
 import QuestionAnsweredCounter from './QuestionMetadata/QuestionAnsweredCounter';
 import { PropTypes } from 'prop-types';
 import QuestionMetadataLabel from './QuestionMetadata/QuestionMetadataLabel';
-import axios from 'axios';
 import { connect } from 'react-redux';
 import * as actions from '../../../actions/questions';
 import { withRouter } from 'react-router';
@@ -65,7 +64,7 @@ const QuestionMetadata = (props) => {
     };
 
     getMetadata();
-  }, [question]);
+  }, [question, props.metadata]);
 
   const suggestTag = () => {
     props.questionReport({
