@@ -55,8 +55,6 @@ const QuestionMetadata = (props) => {
         });
       });
 
-      console.log(spliceArray);
-
       for (let i = spliceArray.length - 1; i >= 0; i--) {
         tags.splice(spliceArray[i], 1);
       }
