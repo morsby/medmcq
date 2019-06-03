@@ -49,7 +49,9 @@ const SetRadioButton = ({
                     name="check"
                     onClick={() => manualCompleteSet(api, user, semester)}
                     style={{ cursor: 'pointer' }}
-                    color={_.indexOf(user.completedSets[semester], api) !== -1 ? 'orange' : 'grey'}
+                    color={
+                      _.indexOf(user.completedSets[semester] || [], api) !== -1 ? 'orange' : 'grey'
+                    }
                   />
                 )}
                 <Divider vertical hidden />
