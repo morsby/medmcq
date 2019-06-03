@@ -21,6 +21,21 @@ class ProfileAnswerDetails extends Component {
     data: this.props.performance.answeredQuestions
   };
 
+  componentDidUpdate = (prevProps, prevState) => {
+    if (this.state.filter !== prevState.filter) {
+      let { summary } = this.props.performance;
+      if (this.state.filter) {
+        this.setState({
+          data: _.filter(this.props.performance.answeredQuestions, (q) => {
+            return summary[this.state.filter].indexOf(q._id) !== -1;
+          })
+        });
+      } else {
+        this.setState({ data: this.props.performance.answeredQuestions });
+      }
+    }
+  };
+
   handleSort = (clickedColumn) => () => {
     const { column, data, direction } = this.state;
 
@@ -82,15 +97,9 @@ class ProfileAnswerDetails extends Component {
   };
 
   render() {
-    let { answeredQuestions, summary } = this.props.performance;
-    const { column, direction } = this.state;
-    if (this.state.filter) {
-      answeredQuestions = _.filter(answeredQuestions, (q) => {
-        return summary[this.state.filter].indexOf(q._id) !== -1;
-      });
-    }
-    let total = Object.keys(answeredQuestions).length;
-    // TODO: Tillad filtrering
+    let { summary } = this.props.performance;
+    const { column, direction, data } = this.state;
+    let total = Object.keys(data).length;
 
     return (
       <div>
