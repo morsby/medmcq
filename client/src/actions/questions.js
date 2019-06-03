@@ -159,6 +159,7 @@ export const newMetadata = (type, value, id, user) => async (dispatch) => {
 export const searchQuestion = (semester, search) => async (dispatch) => {
   const res = await axios.post('/api/questions/search', { search, semester });
 
+  dispatch({ type: types.CHANGE_QUIZ_TO_SPECIFIC_NUMBER, payload: 0 });
   dispatch({
     type: types.FETCH_QUESTIONS,
     payload: res.data,
