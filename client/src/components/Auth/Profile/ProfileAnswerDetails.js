@@ -15,7 +15,44 @@ import { Translate } from 'react-localize-redux';
  */
 class ProfileAnswerDetails extends Component {
   state = {
-    filter: null
+    filter: null,
+    column: null,
+    direction: null,
+    data: this.props.performance.answeredQuestions
+  };
+
+  handleSort = (clickedColumn) => () => {
+    const { column, data, direction } = this.state;
+
+    if (column !== clickedColumn && clickedColumn !== 'percent') {
+      this.setState({
+        column: clickedColumn,
+        data: _.sortBy(data, [clickedColumn]),
+        direction: 'ascending'
+      });
+
+      return;
+    }
+
+    if (column !== clickedColumn && clickedColumn === 'percent') {
+      this.setState({
+        column: clickedColumn,
+        data: _.sortBy(data, (q) =>
+          Math.round(
+            (q.userAnswers.correct / (q.userAnswers.correct + q.userAnswers.wrong)) * 100,
+            2
+          )
+        ),
+        direction: 'ascending'
+      });
+
+      return;
+    }
+
+    this.setState({
+      data: data.reverse(),
+      direction: direction === 'ascending' ? 'descending' : 'ascending'
+    });
   };
 
   startQuiz = () => {
@@ -46,13 +83,14 @@ class ProfileAnswerDetails extends Component {
 
   render() {
     let { answeredQuestions, summary } = this.props.performance;
+    const { column, direction } = this.state;
     if (this.state.filter) {
       answeredQuestions = _.filter(answeredQuestions, (q) => {
         return summary[this.state.filter].indexOf(q._id) !== -1;
       });
     }
     let total = Object.keys(answeredQuestions).length;
-    // TODO: Tillad sortering
+    // TODO: Tillad filtrering
 
     return (
       <div>
@@ -82,25 +120,38 @@ class ProfileAnswerDetails extends Component {
         </Button.Group>
         <Divider hidden />
         <div style={{ overflowX: 'auto' }}>
-          <Table unstackable celled>
+          <Table sortable unstackable celled>
             <Table.Header>
               <Table.Row>
-                <Table.HeaderCell>
+                <Table.HeaderCell
+                  sorted={column === 'question' ? direction : null}
+                  onClick={this.handleSort('question')}
+                >
                   <Translate id="profileAnswerDetails.table_headers.question" />
                 </Table.HeaderCell>
-                <Table.HeaderCell>
+                <Table.HeaderCell
+                  sorted={column === 'specialty' ? direction : null}
+                  onClick={this.handleSort('specialty')}
+                >
                   <Translate id="profileAnswerDetails.table_headers.specialty" />
                 </Table.HeaderCell>
-                <Table.HeaderCell>
+                <Table.HeaderCell
+                  sorted={column === 'examYear' ? direction : null}
+                  onClick={this.handleSort('examYear')}
+                >
                   <Translate id="profileAnswerDetails.table_headers.set" />
                 </Table.HeaderCell>
-                <Table.HeaderCell textAlign="right">
+                <Table.HeaderCell
+                  sorted={column === 'percent' ? direction : null}
+                  onClick={this.handleSort('percent')}
+                  textAlign="right"
+                >
                   <Translate id="profileAnswerDetails.table_headers.performance" />
                 </Table.HeaderCell>
               </Table.Row>
             </Table.Header>
             <Table.Body>
-              {_.map(answeredQuestions, (q) => {
+              {_.map(this.state.data, (q) => {
                 return (
                   <Table.Row
                     style={{ cursor: 'pointer' }}
