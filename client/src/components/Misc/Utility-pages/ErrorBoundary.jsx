@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router';
-import { Button, Container } from 'semantic-ui-react';
+import { Button, Container, Divider } from 'semantic-ui-react';
 
 class ErrorBoundary extends Component {
   state = { hasError: false };
@@ -16,11 +16,17 @@ class ErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <Container>
+        <Container textAlign="center">
+          <Divider hidden />
           <h1>Hovsa! Der er gået noget galt...</h1>
           <Button color="blue" onClick={() => (window.location = '/')}>
             Vend tilbage til forsiden ved at trykke her
           </Button>
+          <Divider hidden />
+          <p>
+            Hvis det ikke hjælper, så prøv at slette alle cookies og browserdata, og genindlæs siden
+            derefter.
+          </p>
         </Container>
       );
     }
