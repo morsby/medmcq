@@ -102,9 +102,15 @@ class QuizMain extends Component {
       if (document.activeElement.tagName === 'TEXTAREA') return;
 
       if (e.key === 'ArrowLeft') {
-        if (qn > 0) this.props.changeQuestionByStep(-1);
+        if (qn > 0) {
+          smoothScroll();
+          this.props.changeQuestionByStep(-1);
+        }
       } else if (e.key === 'ArrowRight') {
-        if (qn < max - 1) this.props.changeQuestionByStep(1);
+        if (qn < max - 1) {
+          smoothScroll();
+          this.props.changeQuestionByStep(1);
+        }
       }
     }
   }
@@ -123,7 +129,10 @@ class QuizMain extends Component {
       if (deltaX < -75) {
         move = -1;
       }
-      if (move >= min && move < max) this.props.changeQuestionByStep(move);
+      if (move >= min && move < max) {
+        smoothScroll();
+        this.props.changeQuestionByStep(move);
+      }
     } else {
       return;
     }
@@ -137,7 +146,7 @@ class QuizMain extends Component {
   }
 
   render() {
-    let { questions, settings, answers, user } = this.props
+    let { questions, settings, answers, user } = this.props;
     let { qn } = this.props;
 
     if (!questions || settings.isFetching)
@@ -189,7 +198,7 @@ class QuizMain extends Component {
             onSwipedLeft={this.swiped}
             onSwipedRight={this.swiped}
             flickThreshold={flickNumber}
-          // onSwiped={this.swipeChecker}
+            // onSwiped={this.swipeChecker}
           >
             <Question
               onImgClick={this.onImgClick}
