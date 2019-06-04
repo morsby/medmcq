@@ -17,7 +17,8 @@ const SelectionSetSelector = ({
   onChange,
   getSets,
   user,
-  completedSets
+  completedSets,
+  loading
 }) => {
   if (!semester) {
     return (
@@ -27,7 +28,7 @@ const SelectionSetSelector = ({
     );
   }
 
-  if (sets.length === 0) {
+  if (sets.length === 0 || loading) {
     return (
       <>
         <LoadingPage />
