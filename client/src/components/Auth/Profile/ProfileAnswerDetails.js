@@ -30,8 +30,10 @@ class ProfileAnswerDetails extends Component {
             return summary[this.state.filter].indexOf(q._id) !== -1;
           })
         });
+        this.handleSort(this.state.column);
       } else {
         this.setState({ data: this.props.performance.answeredQuestions });
+        this.handleSort(this.state.column);
       }
     }
   };
