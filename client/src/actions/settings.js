@@ -42,10 +42,6 @@ export const fetchMetadata = (semester) => async (dispatch) => {
 };
 
 export const getSets = (semester, user) => async (dispatch) => {
-  dispatch({
-    type: types.LOAD_SETS
-  });
-
   const { data: sets } = await axios.get('/api/questions/sets/' + semester);
   if (user) {
     const { data: completedSets } = await axios.get(
@@ -57,13 +53,8 @@ export const getSets = (semester, user) => async (dispatch) => {
       payload: completedSets
     });
   }
-
   dispatch({
     type: types.SETTINGS_GET_SETS,
     payload: sets
-  });
-
-  dispatch({
-    type: types.LOAD_SETS_FINISH
   });
 };

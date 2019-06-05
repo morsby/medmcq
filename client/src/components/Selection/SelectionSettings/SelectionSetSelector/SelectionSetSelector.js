@@ -80,7 +80,6 @@ SelectionSetSelector.propTypes = {
 const mapStateToProps = (state) => {
   return {
     sets: state.settings.sets,
-    loading: state.loading.sets,
     user: state.auth.user,
     completedSets: state.settings.completedSets
   };
