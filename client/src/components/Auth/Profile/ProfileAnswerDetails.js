@@ -22,6 +22,15 @@ class ProfileAnswerDetails extends Component {
   };
 
   componentDidUpdate = (prevProps, prevState) => {
+    if (prevProps.performance.answeredQuestions !== this.props.performance.answeredQuestions) {
+      this.setState({
+        data: this.props.performance.answeredQuestions,
+        filter: null,
+        direction: null,
+        column: null
+      });
+    }
+
     if (this.state.filter !== prevState.filter) {
       let { summary } = this.props.performance;
       if (this.state.filter) {
@@ -41,28 +50,37 @@ class ProfileAnswerDetails extends Component {
   handleSort = (clickedColumn) => () => {
     const { column, data, direction } = this.state;
 
-    if (column !== clickedColumn && clickedColumn !== 'percent') {
-      this.setState({
-        column: clickedColumn,
-        data: _.sortBy(data, [clickedColumn]),
-        direction: 'ascending'
-      });
-
-      return;
-    }
-
-    if (column !== clickedColumn && clickedColumn === 'percent') {
-      this.setState({
-        column: clickedColumn,
-        data: _.sortBy(data, (q) =>
-          Math.round(
-            (q.userAnswers.correct / (q.userAnswers.correct + q.userAnswers.wrong)) * 100,
-            2
-          )
-        ),
-        direction: 'ascending'
-      });
-
+    if (column !== clickedColumn) {
+      switch (clickedColumn) {
+        case 'percent':
+          this.setState({
+            column: clickedColumn,
+            data: _.sortBy(data, (q) =>
+              Math.round(
+                (q.userAnswers.correct / (q.userAnswers.correct + q.userAnswers.wrong)) * 100,
+                2
+              )
+            ),
+            direction: 'ascending'
+          });
+          break;
+        case 'specialty':
+          this.setState({
+            column: clickedColumn,
+            data: _.sortBy(data, (q) => {
+              return this.getSpecialties(q);
+            }),
+            direction: 'ascending'
+          });
+          break;
+        default:
+          this.setState({
+            column: clickedColumn,
+            data: _.sortBy(data, [clickedColumn]),
+            direction: 'ascending'
+          });
+          break;
+      }
       return;
     }
 
@@ -96,6 +114,16 @@ class ProfileAnswerDetails extends Component {
     };
     this.props.getQuestions(settings);
     this.props.history.push('/quiz');
+  };
+
+  getSpecialties = (q) => {
+    let specialties = [];
+
+    for (const spec of q.newSpecialties) {
+      specialties.push(spec.specialty.text);
+    }
+
+    return specialties.join(', ');
   };
 
   render() {
@@ -180,9 +208,9 @@ class ProfileAnswerDetails extends Component {
                         }}
                       />
                     </Table.Cell>
-                    <Table.Cell collapsing>{q.specialty.join(', ')}</Table.Cell>
+                    <Table.Cell collapsing>{this.getSpecialties(q)}</Table.Cell>
                     <Table.Cell collapsing>
-                      <Translate id={`profileAnswerDetails.${q.examSeason}`} />
+                      {q.examSeason}
                       {q.examYear}
                     </Table.Cell>
                     <Table.Cell collapsing textAlign="right">
