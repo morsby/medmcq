@@ -72,15 +72,17 @@ class SelectionMain extends Component {
       this.props.settings.semester !== prevProps.settings.semester ||
       this.props.user !== prevProps.user
     ) {
-      this.setState({ loading: true });
-      this.props.getSets(this.props.settings.semester, this.props.user);
+      if (this.props.settings.semester !== prevProps.settings.semester) {
+        this.setState({ loading: true });
+      }
+      await this.props.getSets(this.props.settings.semester, this.props.user);
       await this.getMetadata();
+      this.setState({ loading: false });
     }
   }
 
   getMetadata = async () => {
     await this.props.fetchMetadata(this.props.settings.semester);
-    this.setState({ loading: false });
   };
 
   /**
@@ -257,6 +259,7 @@ class SelectionMain extends Component {
               semester={semester}
               answeredQuestions={answeredQuestions}
               onChange={this.onSettingsChange}
+              loading={this.state.loading}
             />
           )}
 
