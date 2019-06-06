@@ -42,10 +42,13 @@ const QuestionComments = ({
         commentQuestion(question._id, comment, isPrivateComment, anonymous);
       }
       setAnonymous(false);
-      setComment('');
-      setEditingCommentId('');
     }
   };
+
+  useEffect(() => {
+    setComment('');
+    setEditingCommentId('');
+  }, [comments]);
 
   /**
    * Slet kommentar. Fra redux
