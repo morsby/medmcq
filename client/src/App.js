@@ -65,6 +65,9 @@ class App extends Component {
         defaultLanguage
       }
     });
+
+    // Simple fix to update user and metadata onLoad
+    this.props.fetchUser();
   }
   render() {
     if (this.state.maintenance) return <MaintenancePage />;
