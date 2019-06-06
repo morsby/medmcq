@@ -2,7 +2,7 @@ import axios from 'axios';
 import * as types from './types';
 
 export const getQuestions = (settings, requestedIds = null) => async (dispatch) => {
-  let { type, semester, specialer, tags, n, onlyNew, set } = settings;
+  let { type, semester, specialer, tags, n, onlyNew, set, noPicture } = settings;
 
   dispatch({ type: types.IS_FETCHING });
   let res = { data: [] };
@@ -18,7 +18,9 @@ export const getQuestions = (settings, requestedIds = null) => async (dispatch) 
       set = set.split('/');
 
       res = await axios.get(
-        `/api/questions?semester=${semester}&examYear=${set[0]}&examSeason=${set[1]}`
+        `/api/questions?semester=${semester}&examYear=${set[0]}&examSeason=${set[1]}${
+          noPicture ? '&nopic=true' : ''
+        }`
       );
       break;
     case 'random':
@@ -27,6 +29,7 @@ export const getQuestions = (settings, requestedIds = null) => async (dispatch) 
       let querySpecialer = '';
       let unique = '';
       let queryTags = '';
+      let noPic = '';
 
       // Spcialeønsker? Lav det til en streng!
       if (type === 'specialer') {
@@ -36,10 +39,11 @@ export const getQuestions = (settings, requestedIds = null) => async (dispatch) 
 
       // Nye spørgsmål? lav det til en streng!
       if (onlyNew) unique = '&unique=t';
+      if (noPicture) noPic = '&nopic=true';
 
       // Generer den samlede query-streng
       res = await axios.get(
-        `/api/questions?semester=${semester}&n=${n}${querySpecialer}${queryTags}${unique}`
+        `/api/questions?semester=${semester}&n=${n}${querySpecialer}${queryTags}${unique}${noPic}`
       );
       break;
     }

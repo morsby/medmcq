@@ -58,3 +58,10 @@ export const getSets = (semester, user) => async (dispatch) => {
     payload: sets
   });
 };
+
+export const settingsNoPicture = (setting) => async (dispatch) => {
+  dispatch({
+    type: types.SETTINGS_NO_PICTURE,
+    payload: setting
+  });
+};
