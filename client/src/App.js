@@ -65,8 +65,10 @@ class App extends Component {
         defaultLanguage
       }
     });
+  }
 
-    // Simple fix to update user and metadata onLoad
+  componentDidMount() {
+    // Simple fix to update user onLoad
     this.props.fetchUser();
   }
   render() {
