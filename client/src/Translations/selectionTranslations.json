@@ -8,8 +8,8 @@
         "<p>Welcome to medMCQ. You can test your abilities within different semesters and different medical specialties. Since the site contains MCQ examination questions from earlier semesters, you should be aware that</p><ol><li>Some answers might be outdated.</li><li>The curriculum may be different today, which means that some questions may be irrelevant for your upcoming exam and some areas of relevance may not be covered by the questions.</li><li>Some of the questions were for an examination where aid was permitted, which means you may experience a higher level of complexity in the questions.</li></ol><p>Enjoy!</p>"
       ],
       "no_picture": [
-        "Hent ikke billeder, der har \"Mangler billede\" tagget",
-        "Do not get questions with the \"missing picture\" tag"
+        "Hent ikke spørgsmål, der har \"Mangler billede\" tagget",
+        "Do not get questions with the \"Missing picture\" tag"
       ]
     },
     "errs": {
