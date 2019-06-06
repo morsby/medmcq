@@ -21,23 +21,25 @@ const mongoose = require('mongoose');
 router.use('/metadata', require('./Question/metadata'));
 
 router.get('/', async (req, res) => {
-  let { n, specialer, tags, unique, semester, examSeason, examYear } = req.query;
-
+  let { n, specialer, tags, unique, semester, examSeason, examYear, nopic } = req.query;
   /*
-            Nedenfor er nogle lidt vilde if-else statements.
-            De omhandler hvilke spørgsmål der ønskes
-        */
+    Nedenfor er nogle lidt vilde if-else statements.
+    De omhandler hvilke spørgsmål der ønskes
+  */
 
   if (!n && !semester) {
     res.status(400).send('Status 400: Bad request');
   } else if (semester && examSeason && examYear) {
+    let filter = {
+      semester: semester,
+      examYear: examYear,
+      examSeason: examSeason
+    };
+    if (nopic) Object.assign(filter, { 'newTags.tag': { $nin: ['5cf78aaaf0ea4b2268e2f215'] } });
+
     // Hent det eksamenssæt der bedes om
     try {
-      const questions = await Question.find({
-        semester: semester,
-        examYear: examYear,
-        examSeason: examSeason
-      }).sort('n');
+      const questions = await Question.find(filter).sort('n');
       res.json(questions);
     } catch (err) {
       res.send(err);
@@ -64,6 +66,10 @@ router.get('/', async (req, res) => {
       semester: { $eq: semester }
     };
 
+    if (nopic && !tags) {
+      Object.assign(filter, { 'newTags.tag': { $nin: ['5cf78aaaf0ea4b2268e2f215'] } });
+    }
+
     if (specialer) {
       const specialtyArray = specialer.split(',');
       let specFilter = [];
@@ -83,7 +89,13 @@ router.get('/', async (req, res) => {
         tagFilter.push(mongoose.Types.ObjectId(tag));
       }
 
-      Object.assign(filter, { 'newTags.tag': { $in: tagFilter } });
+      if (nopic) {
+        Object.assign(filter, {
+          'newTags.tag': { $in: tagFilter, $nin: ['5cf78aaaf0ea4b2268e2f215'] }
+        });
+      } else {
+        Object.assign(filter, { 'newTags.tag': { $in: tagFilter } });
+      }
     }
 
     Question.findRandom(filter, {}, { limit: n }, (err, questions) => {
@@ -95,7 +107,10 @@ router.get('/', async (req, res) => {
         let filter2 = { ...filter };
         delete filter2._id;
         Question.findRandom(filter2, {}, { limit: n }, (err, questions) => {
-          if (err) res.send(err);
+          if (err) {
+            res.send(err);
+            throw new Error(err);
+          }
           res.json(questions);
         });
       } else {
@@ -323,10 +338,17 @@ router.get('/sets/:semester', async (req, res) => {
   let sets = [];
 
   for (let q of questions) {
-    sets.push({ text: `${q.examSeason === 'E' ? 'Efterår' : 'Forår'} ${q.examYear}`, examYear: q.examYear, season: q.examSeason, api: `${q.examYear}/${q.examSeason}` });
+    sets.push({
+      text: `${q.examSeason === 'E' ? 'Efterår' : 'Forår'} ${q.examYear}`,
+      examYear: q.examYear,
+      season: q.examSeason,
+      api: `${q.examYear}/${q.examSeason}`
+    });
   }
 
-  sets = _(sets).uniqBy((s) => s.text).sortBy((s) => s.examYear);
+  sets = _(sets)
+    .uniqBy((s) => s.text)
+    .sortBy((s) => s.examYear);
 
   res.status(200).send(sets);
 });

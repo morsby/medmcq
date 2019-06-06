@@ -10,7 +10,16 @@ import { calculateResults } from '../utils/quiz';
 import selectionTranslations from '../Translations/selectionTranslations.json';
 import { withLocalize, Translate } from 'react-localize-redux';
 
-import { Container, Header, Dropdown, Divider, Button, Message, Input } from 'semantic-ui-react';
+import {
+  Container,
+  Header,
+  Dropdown,
+  Divider,
+  Button,
+  Message,
+  Input,
+  Checkbox
+} from 'semantic-ui-react';
 
 import SelectionNSelector from '../components/Selection/SelectionSettings/SelectionNSelector';
 import SelectionSetSelector from '../components/Selection/SelectionSettings/SelectionSetSelector/SelectionSetSelector';
@@ -72,15 +81,17 @@ class SelectionMain extends Component {
       this.props.settings.semester !== prevProps.settings.semester ||
       this.props.user !== prevProps.user
     ) {
-      this.setState({ loading: true });
-      this.props.getSets(this.props.settings.semester, this.props.user);
+      if (this.props.settings.semester !== prevProps.settings.semester) {
+        this.setState({ loading: true });
+      }
+      await this.props.getSets(this.props.settings.semester, this.props.user);
       await this.getMetadata();
+      this.setState({ loading: false });
     }
   }
 
   getMetadata = async () => {
     await this.props.fetchMetadata(this.props.settings.semester);
-    this.setState({ loading: false });
   };
 
   /**
@@ -97,6 +108,10 @@ class SelectionMain extends Component {
     let { lastSettingsQuestionFetch } = this.props.settings;
     this.props.changeSettings({ type, value, lastSettingsQuestionFetch });
   }
+
+  onNoPicture = () => {
+    this.props.settingsNoPicture(!this.props.settings.noPicture);
+  };
 
   /**
    * Func der (efter validering) henter spørgsmålene
@@ -122,7 +137,7 @@ class SelectionMain extends Component {
      * derfor IKKE noget med selve quiz-spørgsmålene at gøre, og hentes for
      * at kunne tælle antal spørgsmål for hvert semester, speciale m.v.
      */
-    let { n, semester, type, set, specialer, tags } = this.props.settings;
+    let { n, semester, type, set, specialer, tags, noPicture } = this.props.settings;
 
     // Når den er tom modtager den fuldt antal
 
@@ -187,7 +202,17 @@ class SelectionMain extends Component {
      * derfor IKKE noget med selve quiz-spørgsmålene at gøre, og hentes for
      * at kunne tælle antal spørgsmål for hvert semester, speciale m.v.
      */
-    let { semester, specialer, tags, type, n, onlyNew, totalQuestions, set } = this.props.settings;
+    let {
+      semester,
+      specialer,
+      tags,
+      type,
+      n,
+      onlyNew,
+      totalQuestions,
+      set,
+      noPicture
+    } = this.props.settings;
 
     let { user } = this.props,
       answeredQuestions;
@@ -257,6 +282,7 @@ class SelectionMain extends Component {
               semester={semester}
               answeredQuestions={answeredQuestions}
               onChange={this.onSettingsChange}
+              loading={this.state.loading}
             />
           )}
 
@@ -273,6 +299,16 @@ class SelectionMain extends Component {
               />
               <Divider hidden />
             </>
+          )}
+
+          {semester === 11 && (
+            <div style={{ marginBottom: '1rem' }}>
+              <Checkbox
+                checked={noPicture}
+                onChange={this.onNoPicture}
+                label={this.props.translate('selection.static.no_picture')}
+              />
+            </div>
           )}
 
           {this.state.err.length > 0 && (

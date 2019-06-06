@@ -80,7 +80,9 @@ const initialState = {
 
   completedSets: [],
 
-  metadata: { specialties: [], tags: [] }
+  metadata: { specialties: [], tags: [] },
+
+  noPicture: false
 };
 /**
  * createReducer er en funktion fra redux-starter-kit, der laver en IMMUTABLE
@@ -167,5 +169,8 @@ export default createReducer(initialState, {
   },
   [types.SETTINGS_GET_COMPLETED_SETS]: (state, action) => {
     state.completedSets = action.payload;
+  },
+  [types.SETTINGS_NO_PICTURE]: (state, action) => {
+    state.noPicture = action.payload;
   }
 });
