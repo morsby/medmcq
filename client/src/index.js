@@ -26,9 +26,10 @@ import 'react-image-lightbox/style.css'; // This only needs to be imported once 
 import { configureStore, getDefaultMiddleware } from 'redux-starter-kit';
 
 const migrations = {
-  5: (state) => {
+  6: (state) => {
     return {
-      auth: state.auth
+      auth: state.auth,
+      questions: state.questions
     };
   }
 };
@@ -37,7 +38,7 @@ const persistConfig = {
   key: 'root',
   storage: storage,
   stateReconciler: autoMergeLevel2, // see "Merge Process" section for details.
-  version: 5,
+  version: 6,
   migrate: createMigrate(migrations)
 };
 
