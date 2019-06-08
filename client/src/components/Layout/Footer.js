@@ -45,7 +45,7 @@ const Footer = (props) => {
               <Icon name="heartbeat" />
               <Translate id="footer.developed_by" />
               <p>
-                <Icon name="hand peace" />
+                <Icon name="beer" />
                 <Translate id="footer.maintained_by" />
               </p>
             </Grid.Column>
