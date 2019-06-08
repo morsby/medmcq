@@ -2,7 +2,8 @@ import React from 'react';
 import _ from 'lodash';
 import Dropdown from 'antd/lib/dropdown';
 import Menu from 'antd/lib/menu';
-import 'antd/dist/antd.css';
+import 'antd/lib/dropdown/style/css';
+import 'antd/lib/menu/style/css';
 import { Icon } from 'semantic-ui-react';
 const { SubMenu } = Menu;
 
