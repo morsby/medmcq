@@ -14,17 +14,17 @@ String.prototype.toObjectId = function() {
 
 // FIX AF MANGLENDE TAGS
 const axios = require('axios');
-const tags = {
+const missingTags = {
   7: [
     // Infektionsmedicin
-    { value: 'sepsis', text: 'Bakteriæmi og sepsis', category: 'infektionsmedicin' },
-    { value: 'neuroinfektioner', text: 'Neuroinfektioner', category: 'infektionsmedicin' },
-    { value: 'luftvejsinfektioner', text: 'Luftvejsinfektioner', category: 'infektionsmedicin' },
+    //{ value: 'sepsis', text: 'Bakteriæmi og sepsis', category: 'infektionsmedicin' },
+    //{ value: 'neuroinfektioner', text: 'Neuroinfektioner', category: 'infektionsmedicin' },
+    //{ value: 'luftvejsinfektioner', text: 'Luftvejsinfektioner', category: 'infektionsmedicin' },
     { value: 'endocarditis', text: 'Endocarditis', category: 'infektionsmedicin' },
     { value: 'hepatitis', text: 'Hepatitis', category: 'infektionsmedicin' },
     { value: 'gastroenteritis', text: 'Gastroenteritis', category: 'infektionsmedicin' },
     { value: 'urinvejsinfektioner', text: 'Urinvejsinfektioner', category: 'infektionsmedicin' },
-    { value: 'syfilis', text: 'Seksuelt overførte sygdomme', category: 'infektionsmedicin' },
+    //{ value: 'syfilis', text: 'Seksuelt overførte sygdomme', category: 'infektionsmedicin' },
     {
       value: 'infektioner_i_hud_knogler_og_bloddele',
       text: 'Infektioner i hud, knogler og bløddele',
@@ -39,17 +39,20 @@ const tags = {
 const postMetadata = async () => {
   console.log('Starting posting...');
   try {
-    for (let key in tags) {
-      for (let tag of tags[key]) {
+    for (let key in missingTags) {
+      for (let tag of missingTags[key]) {
         if (!tag.text) continue;
-
-        await axios.post(`http://localhost:${process.env.PORT || 3001}/api/questions/metadata`, {
-          type: 'tag',
-          text: tag.text,
-          value: tag.value,
-          semester: Number(key),
-          category: tag.category
-        });
+        try {
+          await axios.post(`http://localhost:${process.env.PORT || 3001}/api/questions/metadata`, {
+            type: 'tag',
+            text: tag.text,
+            value: tag.value,
+            semester: Number(key),
+            category: tag.category
+          });
+        } catch (err) {
+          console.log(new Error(err));
+        }
       }
     }
 
@@ -62,7 +65,8 @@ const postMetadata = async () => {
 // Konvertering af gammelt tagsystem
 const convertQuestions = async () => {
   let counting = 1;
-  const questions = await Question.find({ tags: { $in: tags['7'].map((t) => t.value) } });
+  const questions = await Question.find({ tags: { $in: missingTags['7'].map((t) => t.value) } });
+  const newQuestions = await Question.find({ newSpecialties: { $exists: false } });
   const tags = await Tag.find();
 
   for (let q of questions) {
@@ -81,11 +85,19 @@ const convertQuestions = async () => {
       newTags.push({ tag: tag._id, votes: tagVote.users.length, users });
     }
 
-    q.newSpecialties = newSpecialties;
     q.newTags = newTags;
     counting++;
     await q.save();
   }
+
+  console.log('Converting questions without newProps');
+  for (let q of newQuestions) {
+    q.newSpecialties = [];
+    q.newTags = [];
+
+    await q.save();
+  }
+
   console.log('Done converting!');
 };
 
