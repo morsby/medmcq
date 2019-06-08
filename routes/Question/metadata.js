@@ -12,6 +12,110 @@ String.prototype.toObjectId = function() {
   return new ObjectId(this.toString());
 };
 
+// FIX AF MANGLENDE TAGS
+const axios = require('axios');
+const missingTags = {
+  7: [
+    // Infektionsmedicin
+    //{ value: 'sepsis', text: 'Bakteriæmi og sepsis', category: 'infektionsmedicin' },
+    //{ value: 'neuroinfektioner', text: 'Neuroinfektioner', category: 'infektionsmedicin' },
+    //{ value: 'luftvejsinfektioner', text: 'Luftvejsinfektioner', category: 'infektionsmedicin' },
+    { value: 'endocarditis', text: 'Endocarditis', category: 'infektionsmedicin' },
+    { value: 'hepatitis', text: 'Hepatitis', category: 'infektionsmedicin' },
+    { value: 'gastroenteritis', text: 'Gastroenteritis', category: 'infektionsmedicin' },
+    { value: 'urinvejsinfektioner', text: 'Urinvejsinfektioner', category: 'infektionsmedicin' },
+    //{ value: 'syfilis', text: 'Seksuelt overførte sygdomme', category: 'infektionsmedicin' },
+    {
+      value: 'infektioner_i_hud_knogler_og_bloddele',
+      text: 'Infektioner i hud, knogler og bløddele',
+      category: 'infektionsmedicin'
+    },
+    { value: 'hiv', text: 'HIV', category: 'infektionsmedicin' },
+    { value: 'tuberkulose', text: 'Tuberkulose', category: 'infektionsmedicin' },
+    { value: 'eksotiske_sygdomme', text: 'Eksotiske sygdomme', category: 'infektionsmedicin' }
+  ]
+};
+
+const postMetadata = async () => {
+  console.log('Starting posting...');
+  try {
+    for (let key in missingTags) {
+      for (let tag of missingTags[key]) {
+        if (!tag.text) continue;
+        try {
+          await axios.post(`http://localhost:${process.env.PORT || 3001}/api/questions/metadata`, {
+            type: 'tag',
+            text: tag.text,
+            value: tag.value,
+            semester: Number(key),
+            category: tag.category
+          });
+        } catch (err) {
+          console.log(new Error(err));
+        }
+      }
+    }
+
+    console.log('Done posting');
+  } catch (error) {
+    console.log(new Error(error));
+  }
+};
+
+// Konvertering af gammelt tagsystem
+const convertQuestions = async () => {
+  let counting = 1;
+  const questions = await Question.find({ tags: { $in: missingTags['7'].map((t) => t.value) } });
+  const newQuestions = await Question.find({ newSpecialties: { $exists: false } });
+  const tags = await Tag.find();
+
+  for (let q of questions) {
+    console.log('Converting question ' + counting);
+    let newTags = [];
+
+    for (let tagVote of q.tagVotes) {
+      const tag = _.find(tags, { value: tagVote.tag, semester: q.semester });
+      if (!tag) continue;
+
+      let users = [];
+      for (let user of tagVote.users) {
+        users.push({ user, vote: 1 });
+      }
+
+      newTags.push({ tag: tag._id, votes: tagVote.users.length, users });
+    }
+
+    q.newTags = newTags;
+    counting++;
+    await q.save();
+  }
+
+  console.log('Converting questions without newProps');
+  for (let q of newQuestions) {
+    q.newSpecialties = [];
+    q.newTags = [];
+
+    await q.save();
+  }
+
+  console.log('Done converting!');
+};
+
+router.get('/convert', async (req, res) => {
+  try {
+    res
+      .status(200)
+      .send('Started conversion, this will take a while... DO NOT REFRESH THIS PAGE EVER!');
+    await postMetadata();
+    await convertQuestions();
+
+    console.log('All done!');
+  } catch (error) {
+    console.log(new Error(error));
+  }
+});
+// SLUT KONVERTERING
+
 router.post('/question/:id', async (req, res) => {
   const { user, value, type } = req.body;
   if ((!user, !value, !type)) return res.status(404).send('Missing parameters');
