@@ -339,7 +339,13 @@ router.get('/sets/:semester', async (req, res) => {
 
   for (let q of questions) {
     sets.push({
-      text: `${q.examSeason === 'E' ? 'Efterår' : 'Forår'} ${q.examYear}`,
+      text: `${
+        q.examSeason === 'E'
+          ? 'Efterår'
+          : q.examSeason === 'E-reeks'
+          ? 'Efterår reeksamen'
+          : 'Forår'
+      } ${q.examYear}`,
       examYear: q.examYear,
       season: q.examSeason,
       api: `${q.examYear}/${q.examSeason}`
