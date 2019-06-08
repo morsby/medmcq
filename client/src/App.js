@@ -66,6 +66,11 @@ class App extends Component {
       }
     });
   }
+
+  componentDidMount() {
+    // Simple fix to update user onLoad
+    this.props.fetchUser();
+  }
   render() {
     if (this.state.maintenance) return <MaintenancePage />;
     return (

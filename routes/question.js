@@ -348,7 +348,7 @@ router.get('/sets/:semester', async (req, res) => {
 
   sets = _(sets)
     .uniqBy((s) => s.text)
-    .sortBy((s) => s.examYear);
+    .orderBy(['examYear', 'season'], ['asc', 'desc']);
 
   res.status(200).send(sets);
 });
