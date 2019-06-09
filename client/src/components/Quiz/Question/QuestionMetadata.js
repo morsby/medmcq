@@ -64,6 +64,7 @@ const QuestionMetadata = (props) => {
     };
 
     getMetadata();
+    setSuggestTagMessage('');
   }, [question, props.metadata]);
 
   const suggestTag = () => {
