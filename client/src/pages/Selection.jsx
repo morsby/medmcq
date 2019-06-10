@@ -165,16 +165,18 @@ class SelectionMain extends Component {
     }
 
     // Antal
-    if (!n) {
-      err.push(this.props.translate('selection.errs.no_n'));
-    }
+    if (type !== 'set') {
+      if (!n) {
+        err.push(this.props.translate('selection.errs.no_n'));
+      }
 
-    if (n > allowedNs.max) {
-      err.push(this.props.translate('selection.errs.n_too_high'));
-    }
+      if (n > allowedNs.max) {
+        err.push(this.props.translate('selection.errs.n_too_high'));
+      }
 
-    if (n < allowedNs.min) {
-      err.push(this.props.translate('selection.errs.n_neg'));
+      if (n < allowedNs.min) {
+        err.push(this.props.translate('selection.errs.n_neg'));
+      }
     }
 
     if (err.length === 0) {
