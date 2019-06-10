@@ -177,14 +177,14 @@ class SelectionMain extends Component {
       err.push(this.props.translate('selection.errs.n_neg'));
     }
 
-    // Hvis vi er ved at søge
-    if (this.state.search !== '') {
-      this.props.searchQuestion(this.props.settings.semester, this.state.search);
-      return this.props.history.push(urls.quiz);
-    }
-
-    // tjek for fejl, start eller ej
     if (err.length === 0) {
+      // Hvis vi er ved at søge
+      if (this.state.search !== '') {
+        this.props.searchQuestion(this.props.settings.semester, this.state.search);
+        return this.props.history.push(urls.quiz);
+      }
+
+      // tjek for fejl, start eller ej
       // Ny quiz? Hent spørgsmål
       if (quizType === 'new') {
         this.props.getQuestions(this.props.settings);
