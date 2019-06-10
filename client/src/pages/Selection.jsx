@@ -273,6 +273,7 @@ class SelectionMain extends Component {
                 onChange={this.searchHandler}
                 fluid
                 icon="search"
+                iconPosition="left"
                 placeholder={this.props.translate('search.placeholder')}
                 onKeyPress={(e) => this.handleKeyPress(e)}
               />
