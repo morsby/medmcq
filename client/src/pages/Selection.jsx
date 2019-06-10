@@ -73,6 +73,7 @@ class SelectionMain extends Component {
     ) {
       this.props.getSets(this.props.settings.semester, this.props.user);
       await this.getMetadata();
+      this.setState({ loading: false });
     }
   }
 
