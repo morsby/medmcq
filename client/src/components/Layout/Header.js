@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as actions from '../../actions';
 import { Translate } from 'react-localize-redux';
@@ -16,9 +15,7 @@ import LeftMenu from './Menus/LeftMenu';
  * Header-component. Viser headeren og tjekker at brugeren er logget ind.
  */
 
-const Header = ({ fetchUser }) => {
-  fetchUser();
-  setInterval(fetchUser, 60 * 1000);
+const Header = () => {
   return (
     <Responsive as="header" minWidth={breakpoints.mobile}>
       <h2 className={styles.onprint}>
@@ -32,10 +29,6 @@ const Header = ({ fetchUser }) => {
       </Menu>
     </Responsive>
   );
-};
-
-Header.propTypes = {
-  fetchUser: PropTypes.func
 };
 
 export default connect(

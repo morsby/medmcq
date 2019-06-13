@@ -28,7 +28,7 @@
     "express": "^4.17.1",
     "helmet": "^3.18.0",
     "keygrip": "^1.1.0",
-    "knex": "^0.17.0",
+    "knex": "^0.17.5",
     "knex-migrate": "^1.7.2",
     "lodash": "^4.17.11",
     "mysql": "^2.17.1",
@@ -47,7 +47,7 @@
     "babel-core": "^6.26.3",
     "babel-watch": "^7.0.0",
     "jest": "^24.8.0",
-    "webpack": "^4.32.2"
+    "webpack": "^4.34.0"
   },
   "jest": {
     "testEnvironment": "node"
