@@ -7,7 +7,7 @@ import { Form, Radio, Divider, Icon } from 'semantic-ui-react';
 
 import { Translate } from 'react-localize-redux';
 import { connect } from 'react-redux';
-import { manualCompleteSet } from './../../../../actions/auth';
+import { manualCompleteSet } from 'actions/auth';
 
 const SetRadioButton = ({
   set,

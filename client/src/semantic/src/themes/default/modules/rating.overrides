@@ -1,7 +1,6 @@
 /*******************************
          Theme Overrides
 *******************************/
-<<<<<<< HEAD
 
 @font-face {
   font-family: 'Rating';
@@ -67,5 +66,3 @@
 .ui.heart.rating .active.icon:before {
   content: '\f004';
 }
-=======
->>>>>>> master

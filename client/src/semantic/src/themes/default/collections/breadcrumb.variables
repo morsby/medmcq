@@ -26,11 +26,6 @@
 /* Coupling */
 @segmentPadding: @relativeMini @relativeMedium;
 
-/* Inverted */
-@invertedColor: @midWhite;
-@invertedActiveColor: @white;
-@invertedDividerColor: @invertedLightTextColor;
-
 /*-------------------
        States
 --------------------*/

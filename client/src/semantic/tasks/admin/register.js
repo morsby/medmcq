@@ -10,52 +10,46 @@
 
 var
   // node dependencies
-  process = require('child_process');
+  process = require('child_process'),
 
-// config
+  // config
+  release = require('../config/admin/release'),
 
-var release = require('../config/admin/release');
+  // register components and distributions
+  repos   = release.distributions.concat(release.components),
+  total   = repos.length,
+  index   = -1,
 
-// register components and distributions
-
-var repos = release.distributions.concat(release.components);
-
-var total = repos.length;
-
-var index = -1;
-
-var stream;
-
-var stepRepo
+  stream,
+  stepRepo
 ;
 
-module.exports = function (callback) {
+module.exports = function(callback) {
+
   console.log('Registering repos with package managers');
 
   // Do Git commands synchronously per component, to avoid issues
-  stepRepo = function () {
+  stepRepo = function() {
     index = index + 1;
-    if (index >= total) {
+    if(index >= total) {
       callback();
       return;
     }
     var
-      repo = repos[index].toLowerCase();
-
-    var outputDirectory = release.outputRoot + repo + '/';
-
-    var exec = process.exec;
-
-    var execSettings = { cwd: outputDirectory };
-
-    var updateNPM = 'npm publish;meteor publish;'
+      repo            = repos[index].toLowerCase(),
+      outputDirectory = release.outputRoot + repo + '/',
+      exec            = process.exec,
+      execSettings    = {cwd: outputDirectory},
+      updateNPM       = 'npm publish;meteor publish;'
     ;
 
     /* Register with NPM */
-    exec(updateNPM, execSettings, function (err, stdout, stderr) {
+    exec(updateNPM, execSettings, function(err, stdout, stderr) {
       console.log(err, stdout, stderr);
       stepRepo();
     });
+
   };
   stepRepo();
 };
+

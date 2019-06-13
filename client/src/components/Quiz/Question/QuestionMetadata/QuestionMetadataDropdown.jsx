@@ -86,7 +86,7 @@ const QuestionMetadataDropdown = ({ options, onChange, type }) => {
 
 QuestionMetadataDropdown.propTypes = {
   options: PropTypes.object,
-  onChange: PropTypes.function,
+  onChange: PropTypes.func,
   type: PropTypes.string
 };
 

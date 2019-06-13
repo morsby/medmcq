@@ -1,6 +1,6 @@
 /*!
- * # Fomantic-UI - Form
- * http://github.com/fomantic/Fomantic-UI/
+ * # Semantic UI - Form
+ * http://github.com/semantic-org/semantic-ui/
  *
  *
  * Released under the MIT license
@@ -159,55 +159,6 @@
   vertical-align: @checkboxVerticalAlign;
 }
 
-<<<<<<< HEAD
-=======
-/*--------------------
-    Checkbox margin
----------------------*/
-
-.ui.form .fields:not(.grouped):not(.inline) .field:not(:only-child) .ui.checkbox {
-  margin-top: @inputLineHeight + @checkboxFieldTopMargin;
-}
-.ui.form .fields:not(.grouped):not(.inline) .field:not(:only-child) .ui.toggle.checkbox {
-  margin-top: @inputLineHeight + @checkboxToggleFieldTopMargin;
-}
-.ui.form .fields:not(.grouped):not(.inline) .field:not(:only-child) .ui.slider.checkbox {
-  margin-top: @inputLineHeight + @checkboxSliderFieldTopMargin;
-}
-.ui.ui.form .field .fields .field:not(:only-child) .ui.checkbox {
-  margin-top: @checkboxFieldTopMargin / 2;
-}
-.ui.ui.form .field .fields .field:not(:only-child) .ui.toggle.checkbox {
-  margin-top: @checkboxToggleFieldTopMargin / 2;
-}
-.ui.ui.form .field .fields .field:not(:only-child) .ui.slider.checkbox {
-  margin-top: @checkboxSliderFieldTopMargin / 2;
-}
-
-/*--------------------
-      Transparent
----------------------*/
-
-.ui.form .field .transparent.input input,
-.ui.form .field input.transparent,
-.ui.form .field textarea.transparent {
-  padding: @transparentPadding !important;
-}
-
-.ui.form .field textarea.transparent {
-  border-color: transparent !important;
-  background-color: transparent !important;
-  box-shadow: none !important;
-}
-
-.ui.form .field.error .transparent.input input,
-.ui.form .field.error input.transparent,
-.ui.form .field.error textarea.transparent {
-  background-color: @transparentFormErrorBackground !important;
-  color: @transparentFormErrorColor !important;
-}
-
->>>>>>> master
 /*--------------------------
   Input w/ attached Button
 ---------------------------*/
@@ -553,6 +504,7 @@
   border-color: @inputErrorFocusBorder;
   color: @inputErrorFocusColor;
 
+  -webkit-appearance: none;
   box-shadow: @inputErrorFocusBoxShadow;
 }
 
@@ -672,11 +624,6 @@
   height: 100%;
   z-index: @loaderDimmerZIndex;
 }
-
-.ui.loading.form.segments:before {
-  border-radius: @defaultBorderRadius;
-}
-
 .ui.loading.form:after {
   position: absolute;
   content: '';

@@ -5,7 +5,7 @@ import QuestionAnsweredCounter from './QuestionMetadata/QuestionAnsweredCounter'
 import { PropTypes } from 'prop-types';
 import QuestionMetadataLabel from './QuestionMetadata/QuestionMetadataLabel';
 import { connect } from 'react-redux';
-import * as actions from '../../../actions/questions';
+import * as actions from 'actions/index';
 import { withRouter } from 'react-router';
 import _ from 'lodash';
 import QuestionMetadataDropdown from './QuestionMetadata/QuestionMetadataDropdown';
@@ -196,11 +196,11 @@ QuestionMetadata.propTypes = {
   user: PropTypes.object,
   specialer: PropTypes.object,
   tags: PropTypes.object,
-  questionReport: PropTypes.function,
+  questionReport: PropTypes.func,
 
   // Probably delete/change:
   metadata: PropTypes.object,
-  newMetadata: PropTypes.function
+  newMetadata: PropTypes.func
 };
 
 export default withRouter(

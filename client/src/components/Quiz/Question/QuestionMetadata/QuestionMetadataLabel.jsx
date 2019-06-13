@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Icon, Label } from 'semantic-ui-react';
 import _ from 'lodash';
 import { connect } from 'react-redux';
-import * as actions from '../../../../actions/questions';
+import * as actions from 'actions';
 
 const QuestionMetadataLabel = ({ metadata, user, question, children, type, voteAction }) => {
   const vote = async (vote) => {
@@ -58,7 +58,7 @@ QuestionMetadataLabel.propTypes = {
   question: PropTypes.object,
   children: PropTypes.node,
   type: PropTypes.string,
-  voteAction: PropTypes.function
+  voteAction: PropTypes.func
 };
 
 export default connect(
