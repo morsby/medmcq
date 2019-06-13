@@ -1,6 +1,6 @@
 /*!
- * # Semantic UI - Search
- * http://github.com/semantic-org/semantic-ui/
+ * # Fomantic-UI - Search
+ * http://github.com/fomantic/Fomantic-UI/
  *
  *
  * Released under the MIT license
@@ -526,6 +526,7 @@
             }
           },
 
+<<<<<<< HEAD
           remove: {
             loading: function () {
               $module.removeClass(className.loading);
@@ -535,6 +536,23 @@
             },
             buttonPressed: function () {
               $searchButton.removeClass(className.pressed);
+=======
+        search: {
+          local: function(searchTerm) {
+            var
+              results = module.search.object(searchTerm, settings.source),
+              searchHTML
+            ;
+            module.set.loading();
+            module.save.results(results);
+            module.debug('Returned full local search results', results);
+            if(settings.maxResults > 0) {
+              module.debug('Using specified max results', results);
+              results = results.slice(0, settings.maxResults);
+            }
+            if(settings.type == 'category') {
+              results = module.create.categoryResults(results);
+>>>>>>> master
             }
           },
 

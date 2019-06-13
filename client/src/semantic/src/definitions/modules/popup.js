@@ -1,6 +1,6 @@
 /*!
- * # Semantic UI - Popup
- * http://github.com/semantic-org/semantic-ui/
+ * # Fomantic-UI - Popup
+ * http://github.com/fomantic/Fomantic-UI/
  *
  *
  * Released under the MIT license
@@ -36,7 +36,16 @@
 
     var performance = [];
 
+<<<<<<< HEAD
     var query = arguments[0];
+=======
+    clickEvent      = ('ontouchstart' in document.documentElement)
+        ? 'touchstart'
+        : 'click',
+
+    time           = new Date().getTime(),
+    performance    = [],
+>>>>>>> master
 
     var methodInvoked = (typeof query === 'string');
 
@@ -1070,10 +1079,19 @@
             }
           },
 
+<<<<<<< HEAD
           unbind: {
             events: function () {
               $window
                 .off(elementNamespace)
+=======
+        bind: {
+          events: function() {
+            module.debug('Binding popup events to module');
+            if(settings.on == 'click') {
+              $module
+                .on(clickEvent + eventNamespace, module.toggle)
+>>>>>>> master
               ;
               $module
                 .off(eventNamespace)
@@ -1088,6 +1106,45 @@
               ;
             }
           },
+<<<<<<< HEAD
+=======
+          close: function() {
+            if(settings.hideOnScroll === true || (settings.hideOnScroll == 'auto' && settings.on != 'click')) {
+              module.bind.closeOnScroll();
+            }
+            if(module.is.closable()) {
+              module.bind.clickaway();
+            }
+            else if(settings.on == 'hover' && openedWithTouch) {
+              module.bind.touchClose();
+            }
+          },
+          closeOnScroll: function() {
+            module.verbose('Binding scroll close event to document');
+            $scrollContext
+              .one(module.get.scrollEvent() + elementNamespace, module.event.hideGracefully)
+            ;
+          },
+          touchClose: function() {
+            module.verbose('Binding popup touchclose event to document');
+            $document
+              .on('touchstart' + elementNamespace, function(event) {
+                module.verbose('Touched away from popup');
+                module.event.hideGracefully.call(element, event);
+              })
+            ;
+          },
+          clickaway: function() {
+            module.verbose('Binding popup close event to document');
+            $document
+              .on(clickEvent + elementNamespace, function(event) {
+                module.verbose('Clicked away from popup');
+                module.event.hideGracefully.call(element, event);
+              })
+            ;
+          }
+        },
+>>>>>>> master
 
           has: {
             popup: function () {

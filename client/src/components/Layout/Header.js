@@ -15,6 +15,7 @@ import LeftMenu from './Menus/LeftMenu';
 /**
  * Header-component. Viser headeren og tjekker at brugeren er logget ind.
  */
+
 const Header = ({ fetchUser }) => {
   fetchUser();
   setInterval(fetchUser, 60 * 1000);

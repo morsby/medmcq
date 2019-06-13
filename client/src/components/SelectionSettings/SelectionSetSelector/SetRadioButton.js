@@ -1,11 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { Form, Radio, Divider } from 'semantic-ui-react';
+import _ from 'lodash';
+
+import { Form, Radio, Divider, Icon } from 'semantic-ui-react';
 
 import { Translate } from 'react-localize-redux';
+import { connect } from 'react-redux';
+import { manualCompleteSet } from './../../../../actions/auth';
 
-const SetRadioButton = ({ set, selectedSet, onChange }) => {
+const SetRadioButton = ({
+  set,
+  onChange,
+  completedSetsCount,
+  selectedSet,
+  user,
+  api,
+  manualCompleteSet,
+  semester
+}) => {
   return (
     <Form.Group key={set.api}>
       <Form.Field>
@@ -30,7 +43,20 @@ const SetRadioButton = ({ set, selectedSet, onChange }) => {
                   checked={set.id === selectedSet}
                   name="selectedSetId"
                   onChange={onChange}
-                />
+                />{' '}
+                {<Icon name="check" color={!completedSetsCount && user ? 'green' : 'grey'} />}
+                {user && (
+                  <Icon
+                    name="check"
+                    onClick={() => manualCompleteSet(api, user, semester)}
+                    style={{ cursor: 'pointer' }}
+                    color={
+                      _.indexOf((user.completedSets || {})[semester] || [], api) !== -1
+                        ? 'orange'
+                        : 'grey'
+                    }
+                  />
+                )}
                 <Divider vertical hidden />
               </>
             );
@@ -46,7 +72,23 @@ SetRadioButton.propTypes = {
   answeredQuestions: PropTypes.object,
   groupedQuestions: PropTypes.array,
   selectedSet: PropTypes.number,
-  onChange: PropTypes.func
+  onChange: PropTypes.func,
+
+  // Ryd op:
+  completedSetsCount: PropTypes.bool,
+  user: PropTypes.object,
+  api: PropTypes.string,
+  manualCompleteSet: PropTypes.func,
+  semester: PropTypes.string
 };
 
-export default SetRadioButton;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    manualCompleteSet: (api, user, semester) => dispatch(manualCompleteSet(api, user, semester))
+  };
+};
+
+export default connect(
+  null,
+  mapDispatchToProps
+)(SetRadioButton);

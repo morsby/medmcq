@@ -172,9 +172,12 @@ export const tags = {
     },
     { value: 'koagulopati', text: 'Koagulopati', category: 'klinisk biokemi' },
 
-    // Specifikke sygdomme
-    { value: 'syfilis', text: 'Syfilis', category: 'infektionsmedicin' },
-    { value: 'sepsis', text: 'Sepsis', category: 'infektionsmedicin' },
+    // Infektionsmedicin
+    {
+      value: 'sepsis',
+      text: 'Bakteriæmi og sepsis',
+      category: 'infektionsmedicin'
+    },
     {
       value: 'neuroinfektioner',
       text: 'Neuroinfektioner',
@@ -183,6 +186,43 @@ export const tags = {
     {
       value: 'luftvejsinfektioner',
       text: 'Luftvejsinfektioner',
+      category: 'infektionsmedicin'
+    },
+    {
+      value: 'endocarditis',
+      text: 'Endocarditis',
+      category: 'infektionsmedicin'
+    },
+    { value: 'hepatitis', text: 'Hepatitis', category: 'infektionsmedicin' },
+    {
+      value: 'gastroenteritis',
+      text: 'Gastroenteritis',
+      category: 'infektionsmedicin'
+    },
+    {
+      value: 'urinvejsinfektioner',
+      text: 'Urinvejsinfektioner',
+      category: 'infektionsmedicin'
+    },
+    {
+      value: 'syfilis',
+      text: 'Seksuelt overførte sygdomme',
+      category: 'infektionsmedicin'
+    },
+    {
+      value: 'infektioner_i_hud_knogler_og_bloddele',
+      text: 'Infektioner i hud, knogler og bløddele',
+      category: 'infektionsmedicin'
+    },
+    { value: 'hiv', text: 'HIV', category: 'infektionsmedicin' },
+    {
+      value: 'tuberkulose',
+      text: 'Tuberkulose',
+      category: 'infektionsmedicin'
+    },
+    {
+      value: 'eksotiske_sygdomme',
+      text: 'Eksotiske sygdomme',
       category: 'infektionsmedicin'
     },
 

@@ -1,6 +1,6 @@
 /*
- * # Semantic - Menu
- * http://github.com/semantic-org/semantic-ui/
+ * # Fomantic - Menu
+ * http://github.com/fomantic/Fomantic-UI/
  *
  *
  * Copyright 2015 Contributor
@@ -468,7 +468,7 @@ Floated Menu / Item
 
 /* Left Floated */
 .ui.menu:not(.vertical) .left.item,
-.ui.menu:not(.vertical) :not(.dropdown) > .left.menu {
+.ui.menu:not(.vertical) .left.menu {
   display: flex;
   margin-right: auto !important;
 }
@@ -478,6 +478,22 @@ Floated Menu / Item
   display: flex;
   margin-left: auto !important;
 }
+<<<<<<< HEAD
+=======
+
+.ui.menu:not(.vertical) :not(.dropdown) > .left.menu,
+.ui.menu:not(.vertical) :not(.dropdown) > .right.menu {
+  display: inherit;
+}
+
+/* Center */
+.ui.menu:not(.vertical) .center.item,
+.ui.menu:not(.vertical) .center.menu {
+  display: flex;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+>>>>>>> master
 
 /* Swapped Borders */
 .ui.menu .right.item::before,
@@ -915,6 +931,21 @@ Floated Menu / Item
   border-bottom-width: @secondaryPointingBorderWidth;
   transition: @secondaryItemTransition;
 }
+<<<<<<< HEAD
+=======
+.ui.secondary.pointing.menu .ui.dropdown .menu .item {
+  border-bottom-width: 0;
+}
+
+.ui.secondary.pointing.menu .item > .label:not(.floating) {
+  margin-top: -@labelVerticalPadding;
+  margin-bottom: -@labelVerticalPadding;
+}
+.ui.secondary.pointing.menu .item > .circular.label {
+  margin-top: -@circularLabelVerticalPadding;
+  margin-bottom: -@circularLabelVerticalPadding;
+}
+>>>>>>> master
 
 /* Item Types */
 .ui.secondary.pointing.menu .header.item {
@@ -1662,8 +1693,13 @@ Floated Menu / Item
   text-align: center;
   justify-content: center;
 }
+<<<<<<< HEAD
 .ui.attached.item.menu {
   margin: 0em @attachedHorizontalOffset !important;
+=======
+.ui.attached.item.menu:not(.tabular) {
+  margin: 0 @attachedHorizontalOffset !important;
+>>>>>>> master
 }
 
 .ui.item.menu .item:last-child:before {
@@ -1976,6 +2012,38 @@ Floated Menu / Item
 }
 .ui.massive.vertical.menu {
   width: @massiveWidth;
+}
+
+/*-------------------
+  Inverted dropdowns
+--------------------*/
+.ui.menu .ui.inverted.inverted.dropdown.item .menu {
+  background: @invertedDropdownBackground;
+  box-shadow: @invertedDropdownMenuBoxShadow;
+}
+
+.ui.menu .ui.inverted.dropdown .menu > .item {
+  color: @invertedDropdownItemColor !important;
+}
+
+.ui.menu .ui.inverted.dropdown .menu > .active.item {
+  background: @invertedDropdownActiveItemBackground !important;
+  color: @invertedDropdownActiveItemColor !important;
+}
+
+.ui.menu .ui.inverted.dropdown .menu > .item:hover {
+  background: @invertedDropdownHoveredItemBackground !important;
+  color: @invertedDropdownHoveredItemColor !important;
+}
+
+.ui.menu .ui.inverted.dropdown .menu > .selected.item {
+  background: @invertedDropdownSelectedItemBackground !important;
+  color: @invertedDropdownSelectedItemColor !important;
+}
+
+/* Vertical */
+.ui.vertical.menu .inverted.dropdown.item .menu {
+  box-shadow: @invertedDropdownMenuBoxShadow;
 }
 
 .loadUIOverrides();

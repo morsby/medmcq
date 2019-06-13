@@ -1,6 +1,6 @@
 /*!
- * # Semantic UI - Dropdown
- * http://github.com/semantic-org/semantic-ui/
+ * # Fomantic-UI - Dropdown
+ * http://github.com/fomantic/Fomantic-UI/
  *
  *
  * Released under the MIT license
@@ -110,6 +110,7 @@
 
         var willRefocus;
 
+<<<<<<< HEAD
         var elementNamespace;
 
         var id;
@@ -172,6 +173,45 @@
             module.disconnect.menuObserver();
             module.disconnect.selectObserver();
           },
+=======
+        instantiate: function() {
+          module.verbose('Storing instance of dropdown', module);
+          instance = module;
+          $module
+            .data(moduleNamespace, module)
+          ;
+        },
+
+        destroy: function() {
+          module.verbose('Destroying previous dropdown', $module);
+          module.remove.tabbable();
+          module.remove.active();
+          $menu.transition('stop all');
+          $menu.removeClass(className.visible).addClass(className.hidden);
+          $module
+            .off(eventNamespace)
+            .removeData(moduleNamespace)
+          ;
+          $menu
+            .off(eventNamespace)
+          ;
+          $document
+            .off(elementNamespace)
+          ;
+          module.disconnect.menuObserver();
+          module.disconnect.selectObserver();
+        },
+
+        observeChanges: function() {
+          if('MutationObserver' in window) {
+            selectObserver = new MutationObserver(module.event.select.mutation);
+            menuObserver   = new MutationObserver(module.event.menu.mutation);
+            module.debug('Setting up mutation observer', selectObserver, menuObserver);
+            module.observe.select();
+            module.observe.menu();
+          }
+        },
+>>>>>>> master
 
           observeChanges: function () {
             if ('MutationObserver' in window) {
@@ -534,7 +574,14 @@
                 });
               }
             }
+<<<<<<< HEAD
           },
+=======
+          } else if( module.can.click() ) {
+              module.unbind.intent();
+          }
+        },
+>>>>>>> master
 
           hideOthers: function () {
             module.verbose('Finding other dropdowns to hide');
@@ -2659,7 +2706,74 @@
                       .addClass(className.selected)
                     ;
                   }
+<<<<<<< HEAD
                 })
+=======
+                  else if(!isFiltered) {
+                    module.debug('Selected active value, removing label');
+                    module.remove.selected(selectedValue);
+                  }
+                }
+                else {
+                  if(settings.apiSettings && settings.saveRemoteData) {
+                    module.save.remoteData(selectedText, selectedValue);
+                  }
+                  module.set.text(selectedText);
+                  module.set.value(selectedValue, selectedText, $selected);
+                  $selected
+                    .addClass(className.active)
+                    .addClass(className.selected)
+                  ;
+                }
+              })
+            ;
+          },
+        },
+
+        add: {
+          label: function(value, text, shouldAnimate) {
+            var
+              $next  = module.is.searchSelection()
+                ? $search
+                : $text,
+              escapedValue = module.escape.value(value),
+              $label
+            ;
+            if(settings.ignoreCase) {
+              escapedValue = escapedValue.toLowerCase();
+            }
+            $label =  $('<a />')
+              .addClass(className.label)
+              .attr('data-' + metadata.value, escapedValue)
+              .html(templates.label(escapedValue, text, settings.preserveHTML, settings.className))
+            ;
+            $label = settings.onLabelCreate.call($label, escapedValue, text);
+
+            if(module.has.label(value)) {
+              module.debug('User selection already exists, skipping', escapedValue);
+              return;
+            }
+            if(settings.label.variation) {
+              $label.addClass(settings.label.variation);
+            }
+            if(shouldAnimate === true) {
+              module.debug('Animating in label', $label);
+              $label
+                .addClass(className.hidden)
+                .insertBefore($next)
+                .transition({
+                    animation  : settings.label.transition,
+                    debug      : settings.debug,
+                    verbose    : settings.verbose,
+                    duration   : settings.label.duration
+                })
+              ;
+            }
+            else {
+              module.debug('Adding selection label', $label);
+              $label
+                .insertBefore($next)
+>>>>>>> master
               ;
             },
             clearable: function () {

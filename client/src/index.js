@@ -26,13 +26,20 @@ import 'react-image-lightbox/style.css'; // This only needs to be imported once 
 import { configureStore, getDefaultMiddleware } from 'redux-starter-kit';
 
 const migrations = {
-  0: () => ({})
+  6: (state) => {
+    return {
+      auth: state.auth,
+      questions: state.questions
+    };
+  },
+  7: () => ({})
 };
+
 const persistConfig = {
   key: 'medMCQ',
   storage: storage,
-  version: 0,
-  stateReconciler: autoMergeLevel2,
+  stateReconciler: autoMergeLevel2, // see "Merge Process" section for details.
+  version: 7,
   migrate: createMigrate(migrations)
 };
 
@@ -49,7 +56,7 @@ if (middleware.length > 1) middleware.pop();
 export const store = configureStore({
   reducer: pReducer,
   middleware,
-  devTools: true
+  devTools: { maxAge: 20 }
 });
 
 export const persistor = persistStore(store);

@@ -20,7 +20,7 @@ const QuestionAnsweredCounter = (props) => {
 
   const { correct, wrong } = answered[question.semester][String(question._id)];
   return (
-    <Grid.Column textAlign="right">
+    <Grid.Column textAlign="right" floated="right" width="5">
       {/* En ret verbose måde at udregne besvarede spørgsmål på, men det fungerer. Muligvis lidt refactor er nyttigt, men jeg har ikke kunnet regne en bedre måde ud, en alle de IFs. */}
       <Grid.Row>
         <Translate

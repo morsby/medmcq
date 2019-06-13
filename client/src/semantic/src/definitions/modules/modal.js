@@ -1,6 +1,6 @@
 /*!
- * # Semantic UI - Modal
- * http://github.com/semantic-org/semantic-ui/
+ * # Fomantic-UI - Modal
+ * http://github.com/fomantic/Fomantic-UI/
  *
  *
  * Released under the MIT license
@@ -452,12 +452,56 @@
             }
           },
 
+<<<<<<< HEAD
           showDimmer: function () {
             if ($dimmable.dimmer('is animating') || !$dimmable.dimmer('is active')) {
               module.debug('Showing dimmer');
               $dimmable.dimmer('show');
             } else {
               module.debug('Dimmer already visible');
+=======
+          if( module.is.animating() || module.is.active() ) {
+            if(settings.transition && $.fn.transition !== undefined && $module.transition('is supported')) {
+              module.remove.active();
+              $module
+                .transition({
+                  debug       : settings.debug,
+                  animation   : settings.transition + ' out',
+                  queue       : settings.queue,
+                  duration    : settings.duration,
+                  useFailSafe : true,
+                  onStart     : function() {
+                    if(!module.others.active() && !module.others.animating() && !keepDimmed) {
+                      module.hideDimmer();
+                    }
+                    if( settings.keyboardShortcuts && !module.others.active() ) {
+                      module.remove.keyboardShortcuts();
+                    }
+                  },
+                  onComplete : function() {
+                    module.unbind.scrollLock();
+                    if ( settings.allowMultiple ) {
+                      $previousModal.addClass(className.front);
+                      $module.removeClass(className.front);
+      
+                      if ( hideOthersToo ) {
+                        $allModals.find(selector.dimmer).removeClass('active');
+                      }
+                      else {
+                        $previousModal.find(selector.dimmer).removeClass('active');
+                      }
+                    }
+                    settings.onHidden.call(element);
+                    module.remove.dimmerStyles();
+                    module.restore.focus();
+                    callback();
+                  }
+                })
+              ;
+            }
+            else {
+              module.error(error.noTransition);
+>>>>>>> master
             }
           },
 
@@ -536,6 +580,18 @@
               }
             }
           },
+<<<<<<< HEAD
+=======
+          bodyMargin: function() {
+            initialBodyMargin = $body.css('margin-right');
+            var bodyMarginRightPixel = parseInt(initialBodyMargin.replace(/[^\d.]/g, '')),
+                bodyScrollbarWidth = window.innerWidth - document.documentElement.clientWidth,
+                diffPos = bodyMarginRightPixel + bodyScrollbarWidth;
+            $body.css('margin-right', diffPos + 'px');
+            $body.find(selector.bodyFixed).css('padding-right', diffPos + 'px');
+          }
+        },
+>>>>>>> master
 
           restore: {
             focus: function () {
@@ -544,6 +600,14 @@
               }
             }
           },
+<<<<<<< HEAD
+=======
+          bodyMargin: function() {
+            $body.css('margin-right', initialBodyMargin);
+            $body.find(selector.bodyFixed).css('padding-right', initialBodyMargin);
+          }
+        },
+>>>>>>> master
 
           remove: {
             active: function () {
@@ -667,6 +731,7 @@
             }
           },
 
+<<<<<<< HEAD
           set: {
             autofocus: function () {
               var
@@ -675,6 +740,16 @@
               var $autofocus = $inputs.filter('[autofocus]');
 
               var $input = ($autofocus.length > 0)
+=======
+        set: {
+          autofocus: function() {
+            var
+              $inputs    = $module.find('[tabindex], :input').filter(':visible').filter(function() {
+                return $(this).closest('.disabled').length === 0;
+              }),
+              $autofocus = $inputs.filter('[autofocus]'),
+              $input     = ($autofocus.length > 0)
+>>>>>>> master
                 ? $autofocus.first()
                 : $inputs.first()
             ;
@@ -945,6 +1020,7 @@
           }
           module.initialize();
         }
+<<<<<<< HEAD
       })
     ;
 
@@ -1037,3 +1113,112 @@
     }
   };
 })(jQuery, window, document);
+=======
+        module.invoke(query);
+      }
+      else {
+        if(instance !== undefined) {
+          instance.invoke('destroy');
+        }
+        module.initialize();
+      }
+    })
+  ;
+
+  return (returnedValue !== undefined)
+    ? returnedValue
+    : this
+  ;
+};
+
+$.fn.modal.settings = {
+
+  name           : 'Modal',
+  namespace      : 'modal',
+
+  useFlex        : 'auto',
+  offset         : 0,
+
+  silent         : false,
+  debug          : false,
+  verbose        : false,
+  performance    : true,
+
+  observeChanges : false,
+
+  allowMultiple  : false,
+  detachable     : true,
+  closable       : true,
+  autofocus      : true,
+  restoreFocus   : true,
+
+  inverted       : false,
+  blurring       : false,
+
+  centered       : true,
+
+  dimmerSettings : {
+    closable : false,
+    useCSS   : true
+  },
+
+  // whether to use keyboard shortcuts
+  keyboardShortcuts: true,
+
+  context    : 'body',
+
+  queue      : false,
+  duration   : 500,
+  transition : 'scale',
+
+  // padding with edge of page
+  padding    : 50,
+  scrollbarWidth: 10,
+
+  // called before show animation
+  onShow     : function(){},
+
+  // called after show animation
+  onVisible  : function(){},
+
+  // called before hide animation
+  onHide     : function(){ return true; },
+
+  // called after hide animation
+  onHidden   : function(){},
+
+  // called after approve selector match
+  onApprove  : function(){ return true; },
+
+  // called after deny selector match
+  onDeny     : function(){ return true; },
+
+  selector    : {
+    close    : '> .close',
+    approve  : '.actions .positive, .actions .approve, .actions .ok',
+    deny     : '.actions .negative, .actions .deny, .actions .cancel',
+    modal    : '.ui.modal',
+    dimmer   : '> .ui.dimmer',
+    bodyFixed: '> .ui.fixed.menu, > .ui.right.toast-container, > .ui.right.sidebar'
+  },
+  error : {
+    dimmer    : 'UI Dimmer, a required component is not included in this page',
+    method    : 'The method you called is not defined.',
+    notFound  : 'The element you specified could not be found'
+  },
+  className : {
+    active     : 'active',
+    animating  : 'animating',
+    blurring   : 'blurring',
+    inverted   : 'inverted',
+    legacy     : 'legacy',
+    loading    : 'loading',
+    scrolling  : 'scrolling',
+    undetached : 'undetached',
+    front      : 'front'
+  }
+};
+
+
+})( jQuery, window, document );
+>>>>>>> master

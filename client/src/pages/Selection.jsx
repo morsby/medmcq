@@ -6,13 +6,13 @@ import * as actions from 'actions';
 
 import _ from 'lodash';
 
-import { allowedNs, breakpoints, urls } from 'utils/common';
+import { breakpoints, urls } from 'utils/common';
 import { calculateResults } from 'utils/quiz';
 
 import selectionTranslations from 'Translations/selectionTranslations.json';
 import { withLocalize, Translate } from 'react-localize-redux';
 
-import { Container, Header, Divider, Button, Message, Input } from 'semantic-ui-react';
+import { Container, Header, Divider, Button, Message, Input, Checkbox } from 'semantic-ui-react';
 
 import SelectionSemesterSelector from 'components/SelectionSettings/SelectionSemesterSelector';
 import SelectionNSelector from 'components/SelectionSettings/SelectionNSelector';
@@ -27,7 +27,7 @@ import SelectionMessage from 'components/SelectionSettings/SelectionMessage';
  * Props beskrives i bunden.
  */
 class SelectionMain extends Component {
-  state = { err: [], search: '' };
+  state = { err: [], search: '', loading: false };
 
   constructor(props) {
     super(props);
@@ -44,6 +44,10 @@ class SelectionMain extends Component {
     this.props.fetchSemesters();
   }
 
+  getMetadata = async () => {
+    await this.props.fetchMetadata(this.props.settings.semester);
+  };
+
   /**
    * Func der ændrer settings i redux state. Passes via Semantic UI (derfor navnene)
    * @param  {event} e         Event. Bruges ikke.
@@ -57,6 +61,10 @@ class SelectionMain extends Component {
     if (type === 'onlyNew') value = checked;
     this.props.changeSelection(type, value);
   }
+
+  onNoPicture = () => {
+    this.props.settingsNoPicture(!this.props.settings.noPicture);
+  };
 
   /**
    * Func der (efter validering) henter spørgsmålene
@@ -105,22 +113,19 @@ class SelectionMain extends Component {
     }
 
     // Findes der spørgsmål?
-    if (questions.length === 0) {
+    if (this.props.totalQuestions === 0) {
       err.push(this.props.translate('selection.errs.no_questions'));
     }
 
     // Antal
-    if (!n) {
-      err.push(this.props.translate('selection.errs.no_n'));
-    }
+    if (type !== 'set') {
+      if (!n) {
+        err.push(this.props.translate('selection.errs.no_n'));
+      }
 
-    if (n > allowedNs.max) {
-      err.push(this.props.translate('selection.errs.n_too_high'));
-    }
-
-    if (n < allowedNs.min) {
-      err.push(this.props.translate('selection.errs.n_neg'));
-    }
+      if (n > allowedNs.max) {
+        err.push(this.props.translate('selection.errs.n_too_high'));
+      }
 
     // Hvis vi er ved at søge
     if (this.state.search !== '') {
@@ -128,8 +133,14 @@ class SelectionMain extends Component {
       return this.props.history.push(urls.quiz);
   } */
 
-    // tjek for fejl, start eller ej
     if (err.length === 0) {
+      // Hvis vi er ved at søge
+      if (this.state.search !== '') {
+        this.props.searchQuestion(this.props.settings.semester, this.state.search);
+        return this.props.history.push(urls.quiz);
+      }
+
+      // tjek for fejl, start eller ej
       // Ny quiz? Hent spørgsmål
       if (quizType === 'new') {
         this.props.getQuestions();
@@ -157,10 +168,10 @@ class SelectionMain extends Component {
       selectedSpecialtyIds,
       selectedTagIds,
       selectedSetId,
-      onlyNew
+      onlyNew,
+      noPicture
     } = this.props.selection.quizSelection;
 
-    let antalValgte;
     return (
       <div className="flex-container">
         <Container className="content">
@@ -205,6 +216,8 @@ class SelectionMain extends Component {
                 value={this.state.search}
                 onChange={this.searchHandler}
                 fluid
+                icon="search"
+                iconPosition="left"
                 placeholder={this.props.translate('search.placeholder')}
                 onKeyPress={(e) => this.handleKeyPress(e)}
               />
@@ -217,6 +230,7 @@ class SelectionMain extends Component {
               selectedSet={selectedSetId}
               semester={semesters[selectedSemester]}
               onChange={this.onSettingsChange}
+              loading={this.state.loading}
             />
           )}
 
@@ -227,9 +241,22 @@ class SelectionMain extends Component {
                 valgteSpecialer={selectedSpecialtyIds}
                 valgteTags={selectedTagIds}
                 onChange={this.onSettingsChange}
+                specialties={this.props.specialties}
+                tags={this.props.tags}
+                loading={this.state.loading}
               />
               <Divider hidden />
             </>
+          )}
+
+          {selectedSemester === 11 && (
+            <div style={{ marginBottom: '1rem' }}>
+              <Checkbox
+                checked={noPicture}
+                onChange={this.onNoPicture}
+                label={this.props.translate('selection.static.no_picture')}
+              />
+            </div>
           )}
 
           {this.state.err.length > 0 && (
@@ -239,14 +266,7 @@ class SelectionMain extends Component {
               })}
             </Message>
           )}
-          <Button
-            color="green"
-            basic
-            onClick={() => this.handleSubmit('new')}
-            disabled={
-              (antalValgte < 1 && type === 'specialer') || n < allowedNs.min || n > allowedNs.max
-            }
-          >
+          <Button color="green" basic onClick={() => this.handleSubmit('new')}>
             Start!
           </Button>
           {window.innerWidth < breakpoints.mobile && <Divider hidden />}
@@ -316,7 +336,14 @@ SelectionMain.propTypes = {
    */
   addTranslation: PropTypes.func,
   translate: PropTypes.func,
-  searchQuestion: PropTypes.func
+  searchQuestion: PropTypes.func,
+
+  // Til oprydning
+  fetchMetadata: PropTypes.func,
+  settings: PropTypes.object,
+  specialties: PropTypes.object,
+  tags: PropTypes.object,
+  settingsNoPicture: PropTypes.func
 };
 
 function mapStateToProps(state) {

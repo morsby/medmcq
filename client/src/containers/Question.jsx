@@ -5,7 +5,7 @@ import * as actions from '../actions';
 import marked from 'marked';
 
 import _ from 'lodash';
-import { specialer, tags, imageURL, breakpoints } from '../utils/common';
+import { imageURL, breakpoints } from '../utils/common';
 
 import { subSupScript } from '../utils/quiz';
 
@@ -214,9 +214,7 @@ class Question extends PureComponent {
               pristine={this.state.pristine}
             />
           </Responsive>
-          <Divider />
-          <QuestionMetadata question={question} specialer={specialer} tags={tags} user={user} />
-          <Divider />
+          <QuestionMetadata question={question} user={user} />
           <QuestionExtras
             deleteComment={this.props.deleteComment}
             commentQuestion={this.props.commentQuestion}

@@ -1,6 +1,6 @@
 /*!
- * # Semantic UI - API
- * http://github.com/semantic-org/semantic-ui/
+ * # Fomantic-UI - API
+ * http://github.com/fomantic/Fomantic-UI/
  *
  *
  * Released under the MIT license
@@ -292,6 +292,7 @@
             }
           },
 
+<<<<<<< HEAD
           is: {
             disabled: function () {
               return ($module.filter(selector.disabled).length > 0);
@@ -337,6 +338,18 @@
                 return false;
               }
             }
+=======
+        was: {
+          cancelled: function() {
+            return (module.cancelled || false);
+          },
+          succesful: function() {
+            module.verbose('This behavior will be deleted due to typo. Use "was successful" instead.');
+            return module.was.successful();
+          },
+          successful: function() {
+            return (module.request && module.request.state() == 'resolved');
+>>>>>>> master
           },
 
           was: {
@@ -557,6 +570,7 @@
                   response
               ;
               // have to guess callback parameters based on request success
+<<<<<<< HEAD
                 if (module.was.succesful()) {
                   response = firstParameter;
                   xhr = secondParameter;
@@ -569,6 +583,21 @@
               },
               fail: function (xhr, status, httpMessage) {
                 var
+=======
+              if( module.was.successful() ) {
+                response = firstParameter;
+                xhr      = secondParameter;
+              }
+              else {
+                xhr      = firstParameter;
+                response = module.get.responseFromXHR(xhr);
+              }
+              module.remove.loading();
+              settings.onComplete.call(context, response, $module, xhr);
+            },
+            fail: function(xhr, status, httpMessage) {
+              var
+>>>>>>> master
                 // pull response from xhr if available
                   response = module.get.responseFromXHR(xhr);
 

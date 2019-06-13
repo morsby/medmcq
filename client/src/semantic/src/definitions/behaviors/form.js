@@ -1,6 +1,6 @@
 /*!
- * # Semantic UI - Form Validation
- * http://github.com/semantic-org/semantic-ui/
+ * # Fomantic-UI - Form Validation
+ * http://github.com/fomantic/Fomantic-UI/
  *
  *
  * Released under the MIT license
@@ -50,6 +50,37 @@
         var keyHeldDown = false;
 
         // set at run-time
+<<<<<<< HEAD
+=======
+        $field,
+        $group,
+        $message,
+        $prompt,
+        $submit,
+        $clear,
+        $reset,
+
+        settings,
+        validation,
+
+        metadata,
+        selector,
+        className,
+        regExp,
+        error,
+
+        namespace,
+        moduleNamespace,
+        eventNamespace,
+
+        submitting = false,
+        dirty = false,
+        history = ['clean', 'clean'],
+
+        instance,
+        module
+      ;
+>>>>>>> master
 
         var $field;
 
@@ -119,6 +150,7 @@
             ;
           },
 
+<<<<<<< HEAD
           destroy: function () {
             module.verbose('Destroying previous module', instance);
             module.removeEvents();
@@ -138,12 +170,212 @@
             $clear = $module.find(selector.clear);
             $reset = $module.find(selector.reset);
           },
+=======
+        destroy: function() {
+          module.verbose('Destroying previous module', instance);
+          module.removeEvents();
+          $module
+            .removeData(moduleNamespace)
+          ;
+        },
+
+        refresh: function() {
+          module.verbose('Refreshing selector cache');
+          $field      = $module.find(selector.field);
+          $group      = $module.find(selector.group);
+          $message    = $module.find(selector.message);
+          $prompt     = $module.find(selector.prompt);
+
+          $submit     = $module.find(selector.submit);
+          $clear      = $module.find(selector.clear);
+          $reset      = $module.find(selector.reset);
+        },
+
+        submit: function() {
+          module.verbose('Submitting form', $module);
+          submitting = true;
+          $module.submit();
+        },
+
+        attachEvents: function(selector, action) {
+          action = action || 'submit';
+          $(selector).on('click' + eventNamespace, function(event) {
+            module[action]();
+            event.preventDefault();
+          });
+        },
+
+        bindEvents: function() {
+          module.verbose('Attaching form events');
+          $module
+            .on('submit' + eventNamespace, module.validate.form)
+            .on('blur'   + eventNamespace, selector.field, module.event.field.blur)
+            .on('click'  + eventNamespace, selector.submit, module.submit)
+            .on('click'  + eventNamespace, selector.reset, module.reset)
+            .on('click'  + eventNamespace, selector.clear, module.clear)
+          ;
+          if(settings.keyboardShortcuts) {
+            $module.on('keydown' + eventNamespace, selector.field, module.event.field.keydown);
+          }
+          $field.each(function(index, el) {
+            var
+              $input     = $(el),
+              type       = $input.prop('type'),
+              inputEvent = module.get.changeEvent(type, $input)
+            ;
+            $input.on(inputEvent + eventNamespace, module.event.field.change);
+          });
+
+          // Dirty events
+          if (settings.preventLeaving) {
+            $(window).on('beforeunload' + eventNamespace, module.event.beforeUnload);
+          }
+
+          $field.on('change click keyup keydown blur', function(e) {
+            $(this).trigger(e.type + ".dirty");
+          });
+
+          $field.on('change.dirty click.dirty keyup.dirty keydown.dirty blur.dirty', module.determine.isDirty);
+
+          $module.on('dirty' + eventNamespace, function(e) {
+            settings.onDirty.call();
+          });
+
+          $module.on('clean' + eventNamespace, function(e) {
+            settings.onClean.call();
+          })
+        },
+
+        clear: function() {
+          $field.each(function (index, el) {
+            var
+              $field       = $(el),
+              $element     = $field.parent(),
+              $fieldGroup  = $field.closest($group),
+              $prompt      = $fieldGroup.find(selector.prompt),
+              $calendar    = $field.closest(selector.uiCalendar),
+              defaultValue = $field.data(metadata.defaultValue) || '',
+              isCheckbox   = $element.is(selector.uiCheckbox),
+              isDropdown   = $element.is(selector.uiDropdown),
+              isCalendar   = ($calendar.length > 0),
+              isErrored    = $fieldGroup.hasClass(className.error)
+            ;
+            if(isErrored) {
+              module.verbose('Resetting error on field', $fieldGroup);
+              $fieldGroup.removeClass(className.error);
+              $prompt.remove();
+            }
+            if(isDropdown) {
+              module.verbose('Resetting dropdown value', $element, defaultValue);
+              $element.dropdown('clear');
+            }
+            else if(isCheckbox) {
+              $field.prop('checked', false);
+            }
+            else if (isCalendar) {
+              $calendar.calendar('clear');
+            }
+            else {
+              module.verbose('Resetting field value', $field, defaultValue);
+              $field.val('');
+            }
+          });
+        },
+
+        reset: function() {
+          $field.each(function (index, el) {
+            var
+              $field       = $(el),
+              $element     = $field.parent(),
+              $fieldGroup  = $field.closest($group),
+              $calendar    = $field.closest(selector.uiCalendar),
+              $prompt      = $fieldGroup.find(selector.prompt),
+              defaultValue = $field.data(metadata.defaultValue),
+              isCheckbox   = $element.is(selector.uiCheckbox),
+              isDropdown   = $element.is(selector.uiDropdown),
+              isCalendar   = ($calendar.length > 0),
+              isErrored    = $fieldGroup.hasClass(className.error)
+            ;
+            if(defaultValue === undefined) {
+              return;
+            }
+            if(isErrored) {
+              module.verbose('Resetting error on field', $fieldGroup);
+              $fieldGroup.removeClass(className.error);
+              $prompt.remove();
+            }
+            if(isDropdown) {
+              module.verbose('Resetting dropdown value', $element, defaultValue);
+              $element.dropdown('restore defaults');
+            }
+            else if(isCheckbox) {
+              module.verbose('Resetting checkbox value', $element, defaultValue);
+              $field.prop('checked', defaultValue);
+            }
+            else if (isCalendar) {
+              $calendar.calendar('set date', defaultValue);
+            }
+            else {
+              module.verbose('Resetting field value', $field, defaultValue);
+              $field.val(defaultValue);
+            }
+          });
+
+          module.determine.isDirty();
+        },
+>>>>>>> master
 
           submit: function () {
             module.verbose('Submitting form', $module);
             $module
               .submit()
             ;
+<<<<<<< HEAD
+=======
+            $.each(validation, function(fieldName, field) {
+              if( !( module.validate.field(field, fieldName, true) ) ) {
+                allValid = false;
+              }
+            });
+            return allValid;
+          },
+          isDirty: function(e) {
+            var formIsDirty = false;
+
+            $field.each(function(index, el) {
+              var
+                $el = $(el),
+                isCheckbox = ($el.filter(selector.checkbox).length > 0),
+                isDirty
+              ;
+
+              if (isCheckbox) {
+                isDirty = module.is.checkboxDirty($el);
+              } else {
+                isDirty = module.is.fieldDirty($el);
+              }
+
+              $el.data(settings.metadata.isDirty, isDirty);
+
+              formIsDirty |= isDirty;
+            });
+
+            if (formIsDirty) {
+              module.set.dirty();
+            } else {
+              module.set.clean();
+            }
+                  
+            if (e) {
+              e.stopImmediatePropagation();
+            }
+          }
+        },
+
+        is: {
+          bracketedRule: function(rule) {
+            return (rule.type && rule.type.match(settings.regExp.bracket));
+>>>>>>> master
           },
 
           attachEvents: function (selector, action) {
@@ -279,6 +511,7 @@
               return allValid;
             }
           },
+<<<<<<< HEAD
 
           is: {
             bracketedRule: function (rule) {
@@ -287,6 +520,51 @@
             shorthandFields: function (fields) {
               var
                 fieldKeys = Object.keys(fields);
+=======
+          dirty: function() {
+            return dirty;
+          },
+          clean: function() {
+            return !dirty;
+          },
+          fieldDirty: function($el) {
+            var initialValue = $el.data(metadata.defaultValue);
+            // Explicitly check for null/undefined here as value may be `false`, so ($el.data(dataInitialValue) || '') would not work
+            if (initialValue == null) { initialValue = ''; }
+            var currentValue = $el.val();
+            if (currentValue == null) { currentValue = ''; }
+
+            // Boolean values can be encoded as "true/false" or "True/False" depending on underlying frameworks so we need a case insensitive comparison
+            var boolRegex = /^(true|false)$/i;
+            var isBoolValue = boolRegex.test(initialValue) && boolRegex.test(currentValue);
+            if (isBoolValue) {
+              var regex = new RegExp("^" + initialValue + "$", "i");
+              return !regex.test(currentValue);
+            }
+
+            return currentValue !== initialValue;
+          },
+          checkboxDirty: function($el) {
+            var initialValue = $el.data(metadata.defaultValue);
+            var currentValue = $el.is(":checked");
+
+            return initialValue !== currentValue;
+          },
+          justDirty: function() {
+            return (history[0] === 'dirty');
+          },
+          justClean: function() {
+            return (history[0] === 'clean');
+          }
+        },
+
+        removeEvents: function() {
+          $module.off(eventNamespace);
+          $field.off(eventNamespace);
+          $submit.off(eventNamespace);
+          $field.off(eventNamespace);
+        },
+>>>>>>> master
 
               var firstRule = fields[fieldKeys[0]]
             ;
@@ -361,11 +639,25 @@
                   escape: 27
                 }
               ;
+<<<<<<< HEAD
                 if (key == keyCode.escape) {
                   module.verbose('Escape key pressed blurring field');
                   $field
                     .blur()
                   ;
+=======
+              if( key == keyCode.escape) {
+                module.verbose('Escape key pressed blurring field');
+                $field
+                  .blur()
+                ;
+              }
+              if(!event.ctrlKey && key == keyCode.enter && isInput && !isInDropdown && !isCheckbox) {
+                if(!keyHeldDown) {
+                  $field.one('keyup' + eventNamespace, module.event.field.keyup);
+                  module.submit();
+                  module.debug('Enter pressed on input submitting form');
+>>>>>>> master
                 }
                 if (!event.ctrlKey && key == keyCode.enter && isInput && !isInDropdown && !isCheckbox) {
                   if (!keyHeldDown) {
@@ -417,6 +709,25 @@
                 }
               }
             }
+<<<<<<< HEAD
+=======
+          },
+          beforeUnload: function(event) {
+            if (module.is.dirty() && !submitting) {
+              var event = event || window.event;
+
+              // For modern browsers
+              if (event) {
+                event.returnValue = settings.text.leavingMessage;
+              }
+
+              // For olders...
+              return settings.text.leavingMessage;
+            }
+          }
+
+        },
+>>>>>>> master
 
           },
 
@@ -608,6 +919,7 @@
             },
             values: function (fields) {
               var
+<<<<<<< HEAD
                 $fields = $.isArray(fields)
                   ? module.get.fields(fields)
                   : $field;
@@ -631,6 +943,17 @@
                 var isMultiple = (name.indexOf('[]') !== -1);
 
                 var isChecked = (isCheckbox)
+=======
+                $field       = $(field),
+                $calendar    = $field.closest(selector.uiCalendar),
+                name         = $field.prop('name'),
+                value        = $field.val(),
+                isCheckbox   = $field.is(selector.checkbox),
+                isRadio      = $field.is(selector.radio),
+                isMultiple   = (name.indexOf('[]') !== -1),
+                isCalendar   = ($calendar.length > 0),
+                isChecked    = (isCheckbox)
+>>>>>>> master
                   ? $field.is(':checked')
                   : false
               ;
@@ -667,9 +990,83 @@
                       values[name] = value;
                     }
                   }
+<<<<<<< HEAD
                 }
               });
               return values;
+=======
+                  else if(isCalendar) {
+                    var date = $calendar.calendar('get date');
+
+                    if (date !== null) {
+                      if (settings.dateHandling == 'date') {
+                        values[name] = date;
+                      } else if(settings.dateHandling == 'input') {
+                        values[name] = $calendar.calendar('get input date')
+                      } else if (settings.dateHandling == 'formatter') {
+                        var type = $calendar.calendar('setting', 'type');
+
+                        switch(type) {
+                          case 'date':
+                          values[name] = settings.formatter.date(date);
+                          break;
+                          
+                          case 'datetime':
+                          values[name] = settings.formatter.datetime(date);
+                          break;
+                          
+                          case 'time':
+                          values[name] = settings.formatter.time(date);
+                          break;
+                          
+                          case 'month':
+                          values[name] = settings.formatter.month(date);
+                          break;
+                          
+                          case 'year':
+                          values[name] = settings.formatter.year(date);
+                          break;
+  
+                          default:
+                          module.debug('Wrong calendar mode', $calendar, type);
+                          values[name] = '';
+                        }
+                      }
+                    } else {
+                      values[name] = '';
+                    }
+                  } else {
+                    values[name] = value;
+                  }
+                }
+              }
+            });
+            return values;
+          },
+          dirtyFields: function() {
+            return $field.filter(function(index, e) {
+              return $(e).data(metadata.isDirty);
+            });
+          }
+        },
+
+        has: {
+
+          field: function(identifier) {
+            module.verbose('Checking for existence of a field with identifier', identifier);
+            identifier = module.escape.string(identifier);
+            if(typeof identifier !== 'string') {
+              module.error(error.identifier, identifier);
+            }
+            if($field.filter('#' + identifier).length > 0 ) {
+              return true;
+            }
+            else if( $field.filter('[name="' + identifier +'"]').length > 0 ) {
+              return true;
+            }
+            else if( $field.filter('[data-' + metadata.validate + '="'+ identifier +'"]').length > 0 ) {
+              return true;
+>>>>>>> master
             }
           },
 
@@ -861,6 +1258,7 @@
               }
             }
           },
+<<<<<<< HEAD
 
           set: {
             success: function () {
@@ -892,6 +1290,44 @@
               ;
             },
             value: function (field, value) {
+=======
+          defaults: function () {
+            $field.each(function (index, el) {
+              var
+                $el        = $(el),
+                $parent    = $el.parent(),
+                isCheckbox = ($el.filter(selector.checkbox).length > 0),
+                isDropdown = $parent.is(selector.uiDropdown),
+                value      = (isCheckbox)
+                  ? $el.is(':checked')
+                  : $el.val()
+              ;
+              if (isDropdown) {
+                $parent.dropdown('save defaults');
+              }
+              $el.data(metadata.defaultValue, value);
+              $el.data(metadata.isDirty, false);
+            });
+          },
+          error: function() {
+            $module
+              .removeClass(className.success)
+              .addClass(className.error)
+            ;
+          },
+          value: function (field, value) {
+            var
+              fields = {}
+            ;
+            fields[field] = value;
+            return module.set.values.call(element, fields);
+          },
+          values: function (fields) {
+            if($.isEmptyObject(fields)) {
+              return;
+            }
+            $.each(fields, function(key, value) {
+>>>>>>> master
               var
                 fields = {}
             ;
@@ -952,15 +1388,55 @@
                     $field.val(value);
                   }
                 }
+<<<<<<< HEAD
               });
             }
           },
+=======
+              }
+            });
+          },
+          dirty: function() {
+            module.verbose('Setting state dirty');
+            dirty = true;
+            history[0] = history[1];
+            history[1] = 'dirty';
+
+            if (module.is.justClean()) {
+              $module.trigger('dirty');
+            }
+          },
+          clean: function() {
+            module.verbose('Setting state clean');
+            dirty = false;
+            history[0] = history[1];
+            history[1] = 'clean';
+
+            if (module.is.justDirty()) {
+              $module.trigger('clean');
+            }
+          },
+          asClean: function() {
+            module.set.defaults();
+            module.set.clean();
+          },
+          asDirty: function() {
+            module.set.defaults();
+            module.set.dirty();
+          }
+        },
+>>>>>>> master
 
           validate: {
 
+<<<<<<< HEAD
             form: function (event, ignoreCallbacks) {
               var
                 values = module.get.values();
+=======
+          form: function(event, ignoreCallbacks) {
+            var values = module.get.values();
+>>>>>>> master
 
               var apiRequest
             ;
@@ -969,6 +1445,7 @@
               if (keyHeldDown) {
                 return false;
               }
+<<<<<<< HEAD
 
               // reset errors
               formErrors = [];
@@ -991,6 +1468,11 @@
                 if (ignoreCallbacks !== true) {
                   return settings.onFailure.call(element, formErrors, values);
                 }
+=======
+              // prevent ajax submit
+              if(event && $module.data('moduleApi') !== undefined) {
+                event.stopImmediatePropagation();
+>>>>>>> master
               }
             },
 
@@ -1086,11 +1568,41 @@
             }
           },
 
+<<<<<<< HEAD
           setting: function (name, value) {
             if ($.isPlainObject(name)) {
               $.extend(true, settings, name);
             } else if (value !== undefined) {
               settings[name] = value;
+=======
+          // takes validation rule and returns whether field passes rule
+          rule: function(field, rule, internal) {
+            var
+              $field       = module.get.field(field.identifier),
+              ancillary    = module.get.ancillaryValue(rule),
+              ruleName     = module.get.ruleName(rule),
+              ruleFunction = settings.rules[ruleName],
+              invalidFields = [],
+              isCheckbox = $field.is(selector.checkbox),
+              isValid = function(field){
+                var value = (isCheckbox ? $(field).filter(':checked').val() : $(field).val());
+                // cast to string avoiding encoding special values
+                value = (value === undefined || value === '' || value === null)
+                    ? ''
+                    : (settings.shouldTrim) ? $.trim(value + '') : String(value + '')
+                ;
+                return ruleFunction.call(field, value, ancillary, $module);
+              }
+            ;
+            if( !$.isFunction(ruleFunction) ) {
+              module.error(error.noRule, ruleName);
+              return;
+            }
+            if(isCheckbox) {
+              if (!isValid($field)) {
+                invalidFields = $field;
+              }
+>>>>>>> master
             } else {
               return settings[name];
             }
@@ -1238,16 +1750,191 @@
       })
     ;
 
+<<<<<<< HEAD
     return (returnedValue !== undefined)
       ? returnedValue
       : this
     ;
   };
+=======
+  return (returnedValue !== undefined)
+    ? returnedValue
+    : this
+  ;
+};
+
+$.fn.form.settings = {
+
+  name              : 'Form',
+  namespace         : 'form',
+
+  debug             : false,
+  verbose           : false,
+  performance       : true,
+
+  fields            : false,
+
+  keyboardShortcuts : true,
+  on                : 'submit',
+  inline            : false,
+
+  delay             : 200,
+  revalidate        : true,
+  shouldTrim        : true,
+
+  transition        : 'scale',
+  duration          : 200,
+
+  preventLeaving    : false,
+  dateHandling      : 'date', // 'date', 'input', 'formatter'
+
+  onValid           : function() {},
+  onInvalid         : function() {},
+  onSuccess         : function() { return true; },
+  onFailure         : function() { return false; },
+  onDirty           : function() {},
+  onClean           : function() {},
+
+  metadata : {
+    defaultValue : 'default',
+    validate     : 'validate',
+    isDirty      : 'isDirty'
+  },
+
+  regExp: {
+    htmlID  : /^[a-zA-Z][\w:.-]*$/g,
+    bracket : /\[(.*)\]/i,
+    decimal : /^\d+\.?\d*$/,
+    email   : /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i,
+    escape  : /[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|:,=@]/g,
+    flags   : /^\/(.*)\/(.*)?/,
+    integer : /^\-?\d+$/,
+    number  : /^\-?\d*(\.\d+)?$/,
+    url     : /(https?:\/\/(?:www\.|(?!www))[^\s\.]+\.[^\s]{2,}|www\.[^\s]+\.[^\s]{2,})/i
+  },
+
+  text: {
+    unspecifiedRule  : 'Please enter a valid value',
+    unspecifiedField : 'This field',
+    leavingMessage   : 'There are unsaved changes on this page which will be discarded if you continue.'
+  },
+
+  prompt: {
+    empty                : '{name} must have a value',
+    checked              : '{name} must be checked',
+    email                : '{name} must be a valid e-mail',
+    url                  : '{name} must be a valid url',
+    regExp               : '{name} is not formatted correctly',
+    integer              : '{name} must be an integer',
+    decimal              : '{name} must be a decimal number',
+    number               : '{name} must be set to a number',
+    is                   : '{name} must be "{ruleValue}"',
+    isExactly            : '{name} must be exactly "{ruleValue}"',
+    not                  : '{name} cannot be set to "{ruleValue}"',
+    notExactly           : '{name} cannot be set to exactly "{ruleValue}"',
+    contain              : '{name} must contain "{ruleValue}"',
+    containExactly       : '{name} must contain exactly "{ruleValue}"',
+    doesntContain        : '{name} cannot contain  "{ruleValue}"',
+    doesntContainExactly : '{name} cannot contain exactly "{ruleValue}"',
+    minLength            : '{name} must be at least {ruleValue} characters',
+    length               : '{name} must be at least {ruleValue} characters',
+    exactLength          : '{name} must be exactly {ruleValue} characters',
+    maxLength            : '{name} cannot be longer than {ruleValue} characters',
+    match                : '{name} must match {ruleValue} field',
+    different            : '{name} must have a different value than {ruleValue} field',
+    creditCard           : '{name} must be a valid credit card number',
+    minCount             : '{name} must have at least {ruleValue} choices',
+    exactCount           : '{name} must have exactly {ruleValue} choices',
+    maxCount             : '{name} must have {ruleValue} or less choices'
+  },
+
+  selector : {
+    checkbox   : 'input[type="checkbox"], input[type="radio"]',
+    clear      : '.clear',
+    field      : 'input, textarea, select',
+    group      : '.field',
+    input      : 'input',
+    message    : '.error.message',
+    prompt     : '.prompt.label',
+    radio      : 'input[type="radio"]',
+    reset      : '.reset:not([type="reset"])',
+    submit     : '.submit:not([type="submit"])',
+    uiCheckbox : '.ui.checkbox',
+    uiDropdown : '.ui.dropdown',
+    uiCalendar : '.ui.calendar'
+  },
+
+  className : {
+    error   : 'error',
+    label   : 'ui prompt label',
+    pressed : 'down',
+    success : 'success'
+  },
+
+  error: {
+    identifier : 'You must specify a string identifier for each field',
+    method     : 'The method you called is not defined.',
+    noRule     : 'There is no rule matching the one you specified',
+    oldSyntax  : 'Starting in 2.0 forms now only take a single settings object. Validation settings converted to new syntax automatically.'
+  },
+
+  templates: {
+
+    // template that produces error message
+    error: function(errors) {
+      var
+        html = '<ul class="list">'
+      ;
+      $.each(errors, function(index, value) {
+        html += '<li>' + value + '</li>';
+      });
+      html += '</ul>';
+      return $(html);
+    },
+>>>>>>> master
 
   $.fn.form.settings = {
 
+<<<<<<< HEAD
     name: 'Form',
     namespace: 'form',
+=======
+  formatter: {
+    date: function(date) {
+      return Intl.DateTimeFormat('en-GB').format(date);
+    },
+    datetime: function(date) {
+      return Intl.DateTimeFormat('en-GB', {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      }).format(date);
+    },
+    time: function(date) {
+      return Intl.DateTimeFormat('en-GB', {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit'
+      }).format(date);
+    },
+    month: function(date) {
+      return Intl.DateTimeFormat('en-GB', {
+        month: '2-digit',
+        year: 'numeric'
+      }).format(date);
+    },
+    year: function(date) {
+      return Intl.DateTimeFormat('en-GB', {
+        year: 'numeric'
+      }).format(date);
+    }
+  },
+
+  rules: {
+>>>>>>> master
 
     debug: false,
     verbose: false,
@@ -1563,6 +2250,7 @@
         var
           $form = $(this);
 
+<<<<<<< HEAD
         var matchingValue
       ;
         if ($('[data-validate="' + identifier + '"]').length > 0) {
@@ -1587,6 +2275,54 @@
           $form = $(this);
 
         var matchingValue
+=======
+    // matches another field
+    match: function(value, identifier, $module) {
+      var
+        matchingValue,
+        matchingElement
+      ;
+      if((matchingElement = $module.find('[data-validate="'+ identifier +'"]')).length > 0 ) {
+        matchingValue = matchingElement.val();
+      }
+      else if((matchingElement = $module.find('#' + identifier)).length > 0) {
+        matchingValue = matchingElement.val();
+      }
+      else if((matchingElement = $module.find('[name="' + identifier +'"]')).length > 0) {
+        matchingValue = matchingElement.val();
+      }
+      else if((matchingElement = $module.find('[name="' + identifier +'[]"]')).length > 0 ) {
+        matchingValue = matchingElement;
+      }
+      return (matchingValue !== undefined)
+        ? ( value.toString() == matchingValue.toString() )
+        : false
+      ;
+    },
+
+    // different than another field
+    different: function(value, identifier, $module) {
+      // use either id or name of field
+      var
+        matchingValue,
+        matchingElement
+      ;
+      if((matchingElement = $module.find('[data-validate="'+ identifier +'"]')).length > 0 ) {
+        matchingValue = matchingElement.val();
+      }
+      else if((matchingElement = $module.find('#' + identifier)).length > 0) {
+        matchingValue = matchingElement.val();
+      }
+      else if((matchingElement = $module.find('[name="' + identifier +'"]')).length > 0) {
+        matchingValue = matchingElement.val();
+      }
+      else if((matchingElement = $module.find('[name="' + identifier +'[]"]')).length > 0 ) {
+        matchingValue = matchingElement;
+      }
+      return (matchingValue !== undefined)
+        ? ( value.toString() !== matchingValue.toString() )
+        : false
+>>>>>>> master
       ;
         if ($('[data-validate="' + identifier + '"]').length > 0) {
           matchingValue = $('[data-validate="' + identifier + '"]').val();

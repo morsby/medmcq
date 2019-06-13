@@ -1,6 +1,6 @@
 /*!
- * # Semantic UI - Transition
- * http://github.com/semantic-org/semantic-ui/
+ * # Fomantic-UI - Transition
+ * http://github.com/fomantic/Fomantic-UI/
  *
  *
  * Released under the MIT license
@@ -185,6 +185,7 @@
               module.error(error.support);
               return false;
             }
+<<<<<<< HEAD
             module.debug('Preparing animation', settings.animation);
             if (module.is.animating()) {
               if (settings.queue) {
@@ -201,6 +202,57 @@
                 module.debug('New animation started, completing previous early', settings.animation);
                 instance.complete();
               }
+=======
+            else {
+              module.debug('New animation started, completing previous early', settings.animation);
+              instance.complete();
+            }
+          }
+          if( module.can.animate() ) {
+            module.set.animating(settings.animation);
+          }
+          else {
+            module.error(error.noAnimation, settings.animation, element);
+          }
+        },
+
+        reset: function() {
+          module.debug('Resetting animation to beginning conditions');
+          module.remove.animationCallbacks();
+          module.restore.conditions();
+          module.remove.animating();
+        },
+
+        queue: function(animation) {
+          module.debug('Queueing animation of', animation);
+          module.queuing = true;
+          $module
+            .one(animationEnd + '.queue' + eventNamespace, function() {
+              module.queuing = false;
+              module.repaint();
+              module.animate.apply(this, settings);
+            })
+          ;
+        },
+
+        complete: function (event) {
+          if(event.target === element) {
+              event.stopPropagation();
+          }
+          module.debug('Animation complete', settings.animation);
+          module.remove.completeCallback();
+          module.remove.failSafe();
+          if(!module.is.looping()) {
+            if( module.is.outward() ) {
+              module.verbose('Animation is outward, hiding element');
+              module.restore.conditions();
+              module.hide();
+            }
+            else if( module.is.inward() ) {
+              module.verbose('Animation is outward, showing element');
+              module.restore.conditions();
+              module.show();
+>>>>>>> master
             }
             if (module.can.animate()) {
               module.set.animating(settings.animation);

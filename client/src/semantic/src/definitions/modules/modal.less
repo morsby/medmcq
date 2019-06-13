@@ -1,6 +1,6 @@
 /*!
- * # Semantic UI - Modal
- * http://github.com/semantic-org/semantic-ui/
+ * # Fomantic-UI - Modal
+ * http://github.com/fomantic/Fomantic-UI/
  *
  *
  * Released under the MIT license
@@ -227,6 +227,15 @@
     padding: @mobileHeaderPadding !important;
     padding-right: @closeHitbox !important;
   }
+<<<<<<< HEAD
+=======
+  .ui.overlay.fullscreen.modal > .content.content.content {
+    min-height: @overlayFullscreenScrollingContentMaxHeightMobile;
+  }
+  .ui.overlay.fullscreen.modal > .scrolling.content.content.content {
+    max-height: @overlayFullscreenScrollingContentMaxHeightMobile;
+  }
+>>>>>>> master
   .ui.modal > .content {
     display: block;
     padding: @mobileContentPadding !important;
@@ -410,10 +419,19 @@
 }
 
 /* Scrolling Content */
-.ui.modal .scrolling.content {
+.ui.modal > .scrolling.content {
   max-height: @scrollingContentMaxHeight;
   overflow: auto;
 }
+<<<<<<< HEAD
+=======
+.ui.overlay.fullscreen.modal > .content {
+  min-height: @overlayFullscreenScrollingContentMaxHeight;
+}
+.ui.overlay.fullscreen.modal > .scrolling.content {
+  max-height: @overlayFullscreenScrollingContentMaxHeight;
+}
+>>>>>>> master
 
 /*--------------
    Full Screen

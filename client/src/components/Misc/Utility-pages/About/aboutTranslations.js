@@ -108,18 +108,11 @@ export default {
     header: ['Stemmesystemet', 'The voting system'],
     body: [
       `
-<p>Når du stemmer på et speciale, gælder det, at specialet med flest stemmer bliver vist som det første. 
-    Andre specialer med mindst 50% af stemmerne af det højst bedømte speciale bliver også tilføjet. 
-    Dvs. hvis et speciale har 6 stemmer, vil alle andre specialer med 3 eller flere stemmer også blive talt med. 
-</p>
-<p>Hver bruger tæller kun én gang per tag eller speciale, og du kan ændre dine stemmer for et spørgsmål ved at stemme påny.</p>`,
+    <p>Når du stemmer på et speciale eller tag, så tæller du 1 point. Du kan tilføje nye tags eller specialer i dropdown menuerne. Hvis du er den eneste der har stemt på tagget, vil tagget blive fjernet, hvis du nedstemmer spørgsmålet til 0. Hvis også andre har stemt på samme speciale eller tag som dig, så skal pointene nå -1 før det forsvinder. 
+    </p>`,
       `
-<p>When you vote for a specialty, the system makes the specialty with the most amount of uservotes the primary specialty. 
-   If another specialty has at least 50% of the votes of the primary specialty, this specialty is also added to the question. 
-   For example, if the highest voted specialty is pediatrics with 6 votes, but clinical genetics also has 3 votes, both pediatrics 
-   and clinical genetics will be added to the question. 
-</p>
-<p>Each user can only count once per specialty or tag. You can change your votes for a question by simply voting again.</p>`
+      <p>When voting for a specialty or tag, your vote will count for 1 point. You can add new tags or specialties in the dropdown menus. If you are the only one, who has voted on the tag, the tag will dissapear, if you downvote it to 0 points. If others have voted on the same specialty or tag, the points will need to reach -1 before it is removed.
+      </p>`
     ]
   },
   privacy: {
@@ -147,11 +140,17 @@ export default {
     ]
   },
   changelog: {
-    header: ['Hvad er der sket på siden?', 'What has happened to the site?'],
+    header: ['Hvad er nyt på siden?', "What's new on the site?"],
     body: [
       `
-  <h3>v.0.2.2 - 2019-04-25</h3>
-  <ul>
+    <h3>v.0.2.3 - 24/05-2019</h3>
+    <ul>
+        <li>
+            Vi har fået et nyt stemmesystem! Du kan nu også nedstemme specialer og tags. Du kan læse om det nye system længere nede.
+        </li>
+    </ul>
+    <h3>v.0.2.2 - 2019-04-25</h3>
+    <ul>
       <li>
           Der kan nu søges efter spørgsmål (med én frase). Søg efter 
           ordstammen for at få flest resultater ("hjerte" vil også matche 
@@ -228,6 +227,12 @@ export default {
   </li>
 </ul>`,
       `
+    <h3>v.0.2.3 - 24/05-2019</h3>
+    <ul>
+        <li>
+            We have a new voting system! You can now also downvote wrongly labelled specialties and tags. You can read more about the new system further down.
+        </li>
+    </ul>
   <h3>v.0.2.2 - 2019-04-25</h3>
   <ul>
     <li>
