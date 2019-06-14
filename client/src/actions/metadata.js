@@ -7,8 +7,8 @@ export const getMetadata = () => async (dispatch) => {
   });
 
   try {
-    const metadata = await axios.get('/api/semesters');
-    dispatch({ type: types.FETCH_METADATA_SUCCESS, payload: metadata });
+    const { data: metadata } = await axios.get('/api/semesters');
+    dispatch({ type: types.FETCH_METADATA_SUCCESS, payload: metadata, timestamp: Date.now() });
   } catch (err) {
     dispatch({ type: types.FETCH_METADATA_FAILURE, error: err });
   }

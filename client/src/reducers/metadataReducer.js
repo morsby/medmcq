@@ -3,10 +3,9 @@ import { createReducer } from 'redux-starter-kit';
 import { normalize, schema } from 'normalizr';
 
 export const initialState = {
-  semesters: {},
-  examSets: {},
-  specialties: {},
-  tags: {}
+  entities: {},
+  result: [],
+  lastUpdated: 0
 };
 
 const specialty = new schema.Entity('specialties');
@@ -20,6 +19,6 @@ const semester = new schema.Entity('semesters', {
 
 export default createReducer(initialState, {
   [types.FETCH_METADATA_SUCCESS]: (state, action) => {
-    return normalize(action.payload, [semester]);
+    return { ...normalize(action.payload, [semester]), lastUpdated: action.timestamp };
   }
 });

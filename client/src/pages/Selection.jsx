@@ -41,12 +41,8 @@ class SelectionMain extends Component {
    * Henter nye data, hvis det er længe siden sidst.
    */
   componentDidMount() {
-    this.props.fetchSemesters();
+    this.props.getMetadata();
   }
-
-  getMetadata = async () => {
-    await this.props.fetchMetadata(this.props.settings.semester);
-  };
 
   /**
    * Func der ændrer settings i redux state. Passes via Semantic UI (derfor navnene)
@@ -85,54 +81,6 @@ class SelectionMain extends Component {
   handleSubmit(quizType) {
     let err = [];
 
-    /**
-     * Alle de nedenstående variable kommer fra settingsReducer -- de har
-     * derfor IKKE noget med selve quiz-spørgsmålene at gøre, og hentes for
-     * at kunne tælle antal spørgsmål for hvert semester, speciale m.v.
-     */
-    // TODO: Ny validation
-    /* let { n, semester, type, set, questions, specialer, tags } = this.props.selection;
-
-    // Når den er tom modtager den fuldt antal
-
-    // VALIDATION
-    // Question.length = Antallet af spørgsmål for et semester eller speciale
-    // Semester
-    if (!semester) {
-      err.push(this.props.translate('selection.errs.no_semester'));
-    }
-
-    //Specialer
-    if (type === 'specialer' && specialer.length === 0 && tags.length === 0) {
-      err.push(this.props.translate('selection.errs.no_specialty'));
-    }
-
-    // Sæt
-    if (type === 'set' && !set) {
-      err.push(this.props.translate('selection.errs.no_set'));
-    }
-
-    // Findes der spørgsmål?
-    if (this.props.totalQuestions === 0) {
-      err.push(this.props.translate('selection.errs.no_questions'));
-    }
-
-    // Antal
-    if (type !== 'set') {
-      if (!n) {
-        err.push(this.props.translate('selection.errs.no_n'));
-      }
-
-      if (n > allowedNs.max) {
-        err.push(this.props.translate('selection.errs.n_too_high'));
-      }
-
-    // Hvis vi er ved at søge
-    if (this.state.search !== '') {
-      this.props.searchQuestion(this.props.selection.semester.selectedSemester, this.state.search);
-      return this.props.history.push(urls.quiz);
-  } */
-
     if (err.length === 0) {
       // Hvis vi er ved at søge
       if (this.state.search !== '') {
@@ -160,7 +108,7 @@ class SelectionMain extends Component {
      * at kunne tælle antal spørgsmål for hvert semester, speciale m.v.
      */
 
-    let { user } = this.props;
+    let { user, metadata } = this.props;
     let { items: semesters, selectedSemester } = this.props.selection.semesters;
     let {
       type,
@@ -182,7 +130,7 @@ class SelectionMain extends Component {
           <SelectionSemesterSelector
             label={this.props.translate('selection.static.choose_semester')}
             name="selectedSemester"
-            semesters={_.map(semesters, ({ id, value, name }) => ({
+            semesters={_.map(metadata.entities.semesters, ({ id, value, name }) => ({
               value: id,
               text: `${value}. semester (${name})`
             }))}
@@ -293,6 +241,13 @@ class SelectionMain extends Component {
 }
 
 SelectionMain.propTypes = {
+  // metadataReducer
+  metadata: PropTypes.object,
+
+  // getMetadata action
+  getMetadata: PropTypes.func,
+
+  /// GAMLE PROPS
   /**
    * Indstillinger der styrer valg af spørgsmål.
    * Fra redux
@@ -350,7 +305,8 @@ function mapStateToProps(state) {
   return {
     user: state.auth.user,
     questions: state.questions,
-    selection: state.selection
+    selection: state.selection,
+    metadata: state.metadata
   };
 }
 
