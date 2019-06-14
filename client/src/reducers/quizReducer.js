@@ -8,13 +8,12 @@ import { createReducer } from 'redux-starter-kit';
  * Det fyldes op med spørgsmål opbygget som i models/question.js
  */
 const initialState = {
-  questions: {},
+  questions: [],
   quizId: null,
   currentQuestion: null,
   isFetching: false,
   didInvalidate: false,
-  lastUpdated: 0,
-  qn: 0
+  lastUpdated: 0
 };
 
 /**
@@ -25,6 +24,7 @@ export default createReducer(initialState, {
   [types.FETCH_QUESTIONS_REQUEST]: (state) => {
     state.isFetching = true;
   },
+
   [types.FETCH_QUESTIONS_SUCCESS]: (state, action) => {
     let qs = action.payload;
 
@@ -67,7 +67,7 @@ export default createReducer(initialState, {
     state.questions[index].tags = tags;
     state.questions[index].tagVotes = tagVotes;
   },
-  [types.CHANGE_QUIZ_TO_SPECIFIC_NUMBER]: (state, action) => {
-    state.qn = action.payload;
+  [types.QUIZ_NAVIGATE]: (state, action) => {
+    state.currentQuestion = action.payload;
   }
 });

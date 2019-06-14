@@ -47,7 +47,7 @@ export const getQuestions = (ids) => async (dispatch, getState) => {
       });
   }
 
-  dispatch({ type: types.CHANGE_QUIZ_TO_SPECIFIC_NUMBER, payload: 0 });
+  dispatch({ type: types.QUIZ_NAVIGATE, payload: 0 });
   dispatch({
     type: types.FETCH_QUESTIONS_SUCCESS,
     payload: res.data,
@@ -162,7 +162,7 @@ export const newMetadata = (type, value, id, user) => async (dispatch) => {
 export const searchQuestion = (semester, search) => async (dispatch) => {
   const res = await axios.post('/api/questions/search', { search, semester });
 
-  dispatch({ type: types.CHANGE_QUIZ_TO_SPECIFIC_NUMBER, payload: 0 });
+  dispatch({ type: types.QUIZ_NAVIGATE, payload: 0 });
   dispatch({
     type: types.FETCH_QUESTIONS_SUCCESS,
     payload: res.data,
