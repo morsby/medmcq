@@ -102,13 +102,13 @@ const QuestionMetadata = (props) => {
               <Translate id="questionMetadata.specialty" />{' '}
               {question.specialties.map((spec) => (
                 <QuestionMetadataLabel
-                  key={spec._id}
+                  key={spec.specialtyId}
                   metadata={spec}
                   user={user}
                   question={question}
                   type="specialty"
                 >
-                  {spec.specialty.text}
+                  {spec.specialtyName}
                 </QuestionMetadataLabel>
               ))}
               {user && (
@@ -130,7 +130,7 @@ const QuestionMetadata = (props) => {
                   user={user}
                   question={question}
                 >
-                  {tag.tag.text}
+                  {tag.tagName}
                 </QuestionMetadataLabel>
               ))}
               {user && (
