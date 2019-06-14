@@ -119,8 +119,8 @@ class ProfileAnswerDetails extends Component {
   getSpecialties = (q) => {
     let specialties = [];
 
-    if (typeof q.newSpecialties !== 'undefined') {
-      for (const spec of q.newSpecialties) {
+    if (typeof q.specialties !== 'undefined') {
+      for (const spec of q.specialties) {
         specialties.push(spec.specialty.text);
       }
     }
