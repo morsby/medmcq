@@ -271,7 +271,8 @@ function mapStateToProps(state) {
     answers: state.answers,
     settings: state.settings,
     user: state.auth.user,
-    qn: state.quiz.qn
+    qn: state.quiz.qn,
+    questions: state.quiz.questions
   };
 }
 

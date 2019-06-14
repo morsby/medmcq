@@ -13,7 +13,8 @@ const initialState = {
   currentQuestion: null,
   isFetching: false,
   didInvalidate: false,
-  lastUpdated: 0
+  lastUpdated: 0,
+  qn: 0
 };
 
 /**
@@ -65,5 +66,8 @@ export default createReducer(initialState, {
     state.questions[index].votes = votes;
     state.questions[index].tags = tags;
     state.questions[index].tagVotes = tagVotes;
+  },
+  [types.CHANGE_QUIZ_TO_SPECIFIC_NUMBER]: (state, action) => {
+    state.qn = action.payload;
   }
 });

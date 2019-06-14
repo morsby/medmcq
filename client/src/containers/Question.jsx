@@ -151,9 +151,11 @@ class Question extends PureComponent {
         correct = question.correctAnswer === answer;
       }
 
+      console.log(answer);
+
       // Call answerQuestion fra redux
       answerQuestion(
-        question._id,
+        question.id,
         answer,
         {
           qn: qn,

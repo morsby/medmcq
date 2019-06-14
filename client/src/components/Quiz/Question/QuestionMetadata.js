@@ -24,7 +24,7 @@ const QuestionMetadata = (props) => {
 
   useEffect(() => {
     const getMetadata = async () => {
-      let { tags, specialties } = props.metadata;
+      let { tags, specialties } = question;
       if (!tags || !specialties) return;
       specialties = _.sortBy(specialties, (s) => s.text);
       tags = _.sortBy(tags, (t) => t.text);
@@ -33,8 +33,8 @@ const QuestionMetadata = (props) => {
       let spliceArray = [];
 
       specialties.forEach((spec, i) => {
-        question.newSpecialties.forEach((s) => {
-          if (spec._id === s.specialty._id) {
+        question.specialties.forEach((s) => {
+          if (spec._id === s.specialtyId) {
             spliceArray.push(i);
           }
         });
@@ -48,8 +48,8 @@ const QuestionMetadata = (props) => {
       spliceArray = [];
 
       tags.forEach((tag, i) => {
-        question.newTags.forEach((t) => {
-          if (tag._id === t.tag._id) {
+        question.tags.forEach((t) => {
+          if (tag.tagId === t.tagId) {
             spliceArray.push(i);
           }
         });
@@ -100,15 +100,15 @@ const QuestionMetadata = (props) => {
           <>
             <Grid.Row style={{ margin: '7px 0 7px 0' }}>
               <Translate id="questionMetadata.specialty" />{' '}
-              {question.newSpecialties.map((spec) => (
+              {question.specialties.map((spec) => (
                 <QuestionMetadataLabel
-                  key={spec._id}
+                  key={spec.specialtyId}
                   metadata={spec}
                   user={user}
                   question={question}
                   type="specialty"
                 >
-                  {spec.specialty.text}
+                  {spec.specialtyName}
                 </QuestionMetadataLabel>
               ))}
               {user && (
@@ -122,15 +122,15 @@ const QuestionMetadata = (props) => {
             </Grid.Row>
             <Grid.Row>
               <Translate id="questionMetadata.tags" />{' '}
-              {question.newTags.map((tag) => (
+              {question.tags.map((tag) => (
                 <QuestionMetadataLabel
                   type="tag"
-                  key={tag._id}
+                  key={tag.tagId}
                   metadata={tag}
                   user={user}
                   question={question}
                 >
-                  {tag.tag.text}
+                  {tag.tagName}
                 </QuestionMetadataLabel>
               ))}
               {user && (
