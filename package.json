@@ -20,7 +20,7 @@
     "format:json": "prettier --list-different  --write \"**/*.json\"",
     "format:styles": "prettier --list-different --write \"**/*.{css,scss}\"",
     "validate": "npm-run-all --sequential lint format test",
-    "test": "npm-run-all --parallel test:server",
+    "test": "npm-run-all --parallel test:*",
     "test:server": "cd server && npm run test",
     "test:client": "cd client && npm run test"
   },
