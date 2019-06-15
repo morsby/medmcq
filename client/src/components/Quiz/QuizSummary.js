@@ -33,7 +33,8 @@ const QuizSummary = ({ questions, clickHandler }) => {
           )}
           <Card.Description style={{ columns: '250px 4' }}>
             <List ordered>
-              {questions.map((q, index) => {
+              {questions.result.map((qId, index) => {
+                let q = questions.entities.questions[qId];
                 let svar;
                 if (q.correctAnswers.includes(q.answer)) {
                   svar = 'svar-korrekt';
@@ -62,7 +63,7 @@ const QuizSummary = ({ questions, clickHandler }) => {
 };
 
 QuizSummary.propTypes = {
-  questions: PropTypes.array.isRequired,
+  questions: PropTypes.object.isRequired,
   clickHandler: PropTypes.func.isRequired
 };
 

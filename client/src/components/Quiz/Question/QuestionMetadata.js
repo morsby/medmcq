@@ -7,13 +7,10 @@ import QuestionMetadataLabel from './QuestionMetadata/QuestionMetadataLabel';
 import { connect } from 'react-redux';
 import * as actions from 'actions/index';
 import { withRouter } from 'react-router';
-import _ from 'lodash';
 import QuestionMetadataDropdown from './QuestionMetadata/QuestionMetadataDropdown';
 
 const QuestionMetadata = (props) => {
   const { question, user } = props;
-  const [specialties, setSpecialties] = useState([]);
-  const [tags, setTags] = useState([]);
   const [newTag, setNewTag] = useState('');
   const [addingNewTag, setAddingNewTag] = useState(false);
   const [suggestTagMessage, setSuggestTagMessage] = useState('');
@@ -23,47 +20,6 @@ const QuestionMetadata = (props) => {
   };
 
   useEffect(() => {
-    const getMetadata = async () => {
-      let { tags, specialties } = question;
-      if (!tags || !specialties) return;
-      specialties = _.sortBy(specialties, (s) => s.text);
-      tags = _.sortBy(tags, (t) => t.text);
-
-      // Filter the specialty array, so that you can't vote for existing specialties
-      let spliceArray = [];
-
-      specialties.forEach((spec, i) => {
-        question.specialties.forEach((s) => {
-          if (spec._id === s.specialtyId) {
-            spliceArray.push(i);
-          }
-        });
-      });
-
-      for (let i = spliceArray.length - 1; i >= 0; i--) {
-        specialties.splice(spliceArray[i], 1);
-      }
-
-      // Do the same with tags
-      spliceArray = [];
-
-      tags.forEach((tag, i) => {
-        question.tags.forEach((t) => {
-          if (tag.tagId === t.tagId) {
-            spliceArray.push(i);
-          }
-        });
-      });
-
-      for (let i = spliceArray.length - 1; i >= 0; i--) {
-        tags.splice(spliceArray[i], 1);
-      }
-
-      setSpecialties(specialties);
-      setTags(tags);
-    };
-
-    getMetadata();
     setSuggestTagMessage('');
   }, [question, props.metadata]);
 
@@ -83,6 +39,9 @@ const QuestionMetadata = (props) => {
   const handleNewTag = (e, { value }) => {
     setNewTag(value);
   };
+
+  let tags = [];
+  let specialties = [];
 
   return (
     <Grid celled stackable columns="equal">

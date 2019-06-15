@@ -139,7 +139,7 @@ class Question extends PureComponent {
    * @param  {number} answer Det der er svaret (1, 2 el. 3)
    */
   onAnswer = (answer) => {
-    let { answerQuestion, question, user, qn } = this.props;
+    let { answerQuestion, question, user } = this.props;
 
     // If not already answered:
     if (!question.answer) {
@@ -155,22 +155,12 @@ class Question extends PureComponent {
       console.log(answer);
 
       // Call answerQuestion fra redux
-      answerQuestion(
-        question.id,
-        answer,
-        {
-          qn: qn,
-          correct: correct
-        },
-        question.semester,
-        user
-      );
+      answerQuestion(question.id, answer, correct, question.semester, user);
     }
   };
 
   render() {
-    const { question, user } = this.props;
-
+    const { question, user, answers } = this.props;
     const text = subSupScript(question.text);
 
     return (
@@ -193,6 +183,7 @@ class Question extends PureComponent {
 
                   <QuestionAnswerButtons
                     question={question}
+                    answer={answers[question.id]}
                     onAnswer={this.onAnswer}
                     pristine={this.state.pristine}
                   />
@@ -213,6 +204,7 @@ class Question extends PureComponent {
             <Divider />
             <QuestionAnswerButtons
               question={question}
+              answer={answers[question.id]}
               onAnswer={this.onAnswer}
               pristine={this.state.pristine}
             />
@@ -226,7 +218,6 @@ class Question extends PureComponent {
             width={this.state.width}
             question={question}
             user={user}
-            qn={this.props.qn}
           />
         </Segment>
         <Divider hidden />
@@ -237,16 +228,15 @@ class Question extends PureComponent {
 
 Question.propTypes = {
   /**
-   * Det aktuelle spørgsmål. Fra Quiz.js
+   * Det aktuelle spørgsmål. Fra redux
    * @type {array}
    */
   question: PropTypes.object,
 
   /**
-   * Nuværende spørgsmålsindeks. Benyttes til at besvare spørgsmål. Fra Quiz.js
-   * @type {number}
+   * Object af svar. question.id er keys
    */
-  qn: PropTypes.number,
+  answers: PropTypes.object,
 
   /**
    * Brugeren (hvis nogen). Fra Quiz.js
@@ -294,7 +284,12 @@ Question.propTypes = {
   onImgClick: PropTypes.func
 };
 
+const mapStateToProps = (state) => ({
+  question: state.questions.entities.questions[state.quiz.questions[state.quiz.currentQuestion]],
+  answers: state.quiz.answers
+});
+
 export default connect(
-  null,
+  mapStateToProps,
   actions
 )(Question);

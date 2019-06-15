@@ -7,7 +7,7 @@ export const initialState = {
   result: [],
   lastUpdated: 0,
   didInvalidate: false,
-  isLoading: false
+  isFetching: false
 };
 
 const specialty = new schema.Entity('specialties');
@@ -31,7 +31,7 @@ export default createReducer(initialState, {
    */
   [types.FETCH_METADATA_REQUEST]: (state) => {
     state.didInvalidate = false;
-    state.isLoading = true;
+    state.isFetching = true;
   },
 
   /*
@@ -42,7 +42,7 @@ export default createReducer(initialState, {
       ...state,
       ...normalize(action.payload, [semester]),
       lastUpdated: action.timestamp,
-      isLoading: false
+      isFetching: false
     };
   },
 
@@ -50,6 +50,6 @@ export default createReducer(initialState, {
    * Når et API-kald fejler
    */
   [types.FETCH_METADATA_FAILURE]: (state) => {
-    state.isLoading = false;
+    state.isFetching = false;
   }
 });

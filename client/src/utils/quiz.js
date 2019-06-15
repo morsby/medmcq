@@ -26,12 +26,12 @@ export const smoothScroll = (h, dir = 'up') => {
   }
 };
 
-export const evalAnswer = (question, answer) => {
-  if (!question.answer) return null; // hvis ikke svaret
+export const evalAnswer = (question, userAnswer, answerNo) => {
+  if (!userAnswer) return null; // hvis ikke svaret
 
-  if (question.correctAnswers.includes(answer)) {
+  if (question.correctAnswers.includes(answerNo)) {
     return 'green';
-  } else if (answer === question.answer) {
+  } else if (answerNo === userAnswer) {
     return 'red'; // hvis forkert svar
   } else {
     return 'grey'; // ikke valgt mulighed

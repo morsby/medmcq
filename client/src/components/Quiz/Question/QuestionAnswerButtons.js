@@ -13,7 +13,7 @@ import marked from 'marked';
  * @param {func}    onAnswer Func der kaldes når der svares på spg.
  * @param {object}  question Selve spørgsmålet.
  */
-const QuestionAnswerButtons = ({ pristine, onAnswer, question }) => {
+const QuestionAnswerButtons = ({ pristine, answer, onAnswer, question }) => {
   /**
    * Func der prefixer svarmuligheder med A, B og C samt laver knappen.
    * @param  {Number} answerNo Svarmulighed nr. 1, 2 el. 3
@@ -43,7 +43,7 @@ const QuestionAnswerButtons = ({ pristine, onAnswer, question }) => {
       <Button
         style={{ textAlign: 'left' }}
         onClick={() => onAnswer(answerNo)}
-        color={evalAnswer(question, answerNo)}
+        color={evalAnswer(question, answer, answerNo)}
         size="large"
       >
         <div
@@ -71,6 +71,7 @@ const QuestionAnswerButtons = ({ pristine, onAnswer, question }) => {
 QuestionAnswerButtons.propTypes = {
   onAnswer: PropTypes.func.isRequired,
   question: PropTypes.object.isRequired,
+  answer: PropTypes.number,
   pristine: PropTypes.bool
 };
 

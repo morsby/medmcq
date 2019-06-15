@@ -41,7 +41,7 @@ class QuizMain extends Component {
     this.props.addTranslation(quizTranslations);
 
     this.navigateToPage = this.navigateToPage.bind(this);
-    this.getQuestions = this.getQuestions.bind(this);
+
     this.swiped = this.swiped.bind(this);
     this.onKeydown = this.onKeydown.bind(this);
     this.onImgClick = this.onImgClick.bind(this);
@@ -65,15 +65,6 @@ class QuizMain extends Component {
   };
 
   /**
-   * Henter spørgsmål fra API'en baseret på de valgte indstillinger.
-   * Sætter desuden navigationen (qn) til 0 i redux
-   */
-  getQuestions() {
-    let { getQuestions, settings } = this.props;
-    getQuestions(settings);
-  }
-
-  /**
    * Navigerer til en side.
    * @param  {string} path alle URLS bør defineres og kaldes fra 'src/utils/common.js'
    */
@@ -91,7 +82,7 @@ class QuizMain extends Component {
        * Tjekker om det aktive element er et TEXTAREA (kommentarfeltet) og
        * navigerer i så fald IKKE
        */
-      let qn = this.props.qn,
+      let qn = this.props.quiz.currentQuestion,
         max = this.props.quiz.questions.length;
       if (document.activeElement.tagName === 'TEXTAREA') return;
 
@@ -142,14 +133,13 @@ class QuizMain extends Component {
 
   render() {
     let { questions, answers, user, quiz } = this.props;
-    let { qn } = quiz;
 
-    if (quiz.isFetching) {
+    if (questions.isFetching) {
       return (
         <Translate>
           {({ translate }) => (
             <QuizLoader
-              handleRetry={this.getQuestions}
+              handleRetry={() => alert('Ikke implementeret')}
               handleAbort={() => this.navigateToPage('root')}
               text={{
                 retry: translate('quizLoader.retry'),
@@ -185,8 +175,8 @@ class QuizMain extends Component {
         <div className="content">
           <QuizNavigator
             onNavigate={this.onChangeQuestion}
-            qn={qn}
-            qmax={Object.keys(questions).length}
+            qn={quiz.currentQuestion}
+            qmax={quiz.questions.length}
             position="top"
           />
 
@@ -196,19 +186,13 @@ class QuizMain extends Component {
             flickThreshold={flickNumber}
             // onSwiped={this.swipeChecker}
           >
-            <Question
-              onImgClick={this.onImgClick}
-              imgOpen={this.state.imgOpen}
-              question={questions[qn]}
-              user={user}
-              qn={qn}
-            />
+            <Question onImgClick={this.onImgClick} imgOpen={this.state.imgOpen} user={user} />
           </Swipeable>
 
           <QuizNavigator
             onNavigate={this.onChangeQuestion}
-            qn={qn}
-            qmax={Object.keys(questions).length}
+            qn={quiz.currentQuestion}
+            qmax={quiz.questions.length}
           />
 
           <QuizSummary
@@ -228,12 +212,6 @@ QuizMain.propTypes = {
    *
    */
   quiz: PropTypes.object,
-
-  /**
-   * Fra Redux
-   * Den funktion, der henter spørgsmålene fra API'en
-   */
-  getQuestions: PropTypes.func,
 
   changeQuestion: PropTypes.func,
   /**
@@ -260,19 +238,17 @@ QuizMain.propTypes = {
    * Tilføjer quizTranslations i hele app'en
    */
   addTranslation: PropTypes.func,
+
   qn: PropTypes.number,
-  questions: PropTypes.object,
-  settings: PropTypes.object
+  questions: PropTypes.object
 };
 
 function mapStateToProps(state) {
   return {
     quiz: state.quiz,
     answers: state.answers,
-    settings: state.settings,
     user: state.auth.user,
-    qn: state.quiz.qn,
-    questions: state.quiz.questions
+    questions: state.questions
   };
 }
 

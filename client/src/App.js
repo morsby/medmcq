@@ -53,7 +53,7 @@ class App extends Component {
     super(props);
 
     // Force refresh af semestre på reload:
-    this.props.invalidateSemesters();
+    this.props.invalidateMetadata();
     // Tjek om brugeren er logget ind på reload (kan være logget ud af serveren/invalid cookie m.v.)
     this.props.fetchUser();
 
@@ -124,8 +124,8 @@ App.propTypes = {
   // Initialize the translation, seeding into redux state
   initialize: PropTypes.func,
 
-  // determines if it's time to reload semester
-  invalidateSemesters: PropTypes.func,
+  // forces reload of metadata
+  invalidateMetadata: PropTypes.func,
 
   // fetches the user
   fetchUser: PropTypes.func

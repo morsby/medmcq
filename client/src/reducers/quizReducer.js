@@ -9,6 +9,7 @@ import { createReducer } from 'redux-starter-kit';
  */
 const initialState = {
   questions: [],
+  answers: {},
   quizId: null,
   currentQuestion: null,
   isFetching: false,
@@ -21,25 +22,17 @@ const initialState = {
  * version af state. Se dokumentation på: https://goo.gl/wJZmMX
  */
 export default createReducer(initialState, {
-  [types.FETCH_QUESTIONS_REQUEST]: (state) => {
-    state.isFetching = true;
-  },
-
   [types.FETCH_QUESTIONS_SUCCESS]: (state, action) => {
-    let qs = action.payload;
-
-    state.questions = qs;
-    state.isFetching = false;
-    state.lastUpdated = action.createdAt;
+    if (action.quiz) {
+      state.questions = _.map(action.payload, (q) => q.id);
+    }
   },
 
   [types.ANSWER_QUESTION]: (state, action) => {
     /**
      * Find det spørgsmål i array'et der har det rette id, opdater svaret
      */
-    const index = _.findIndex(state.questions, { id: action.payload.id });
-    const q = state.questions[index];
-    q.answer = action.payload.answer;
+    state.answers[action.payload.id] = action.payload.answer;
   },
 
   [types.QUESTION_COMMENT_UPDATE]: (state, action) => {

@@ -2,7 +2,7 @@ import * as types from '../actions/types';
 import { updateSelection } from '../utils/reducers';
 
 export const initialState = {
-  loading: false,
+  isLoading: false,
   selection: {
     type: 'random',
     n: 10,
@@ -21,12 +21,19 @@ const uiReducer = (state = initialState, action) => {
     case types.CHANGE_SELECTION:
       return { ...state, selection: updateSelection(state.selection, action) };
 
+    // Requests
+    case types.FETCH_METADATA_REQUEST:
+    case types.FETCH_QUESTIONS_REQUEST:
+      return { ...state, isLoading: true };
+
     // Successes
     case types.FETCH_METADATA_SUCCESS:
-      return { ...state, loading: false };
+    case types.FETCH_QUESTIONS_SUCCESS:
+      return { ...state, isLoading: false };
     // Failures
     case types.FETCH_METADATA_FAILURE:
-      return { ...state, loading: false, error: action.payload };
+    case types.FETCH_QUESTIONS_FAILURE:
+      return { ...state, isLoading: false, error: action.payload };
     default:
       return state;
   }

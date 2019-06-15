@@ -38,13 +38,6 @@ class SelectionMain extends Component {
   }
 
   /**
-   * Henter nye data, hvis det er længe siden sidst.
-   */
-  componentDidMount() {
-    this.props.getMetadata();
-  }
-
-  /**
    * Func der ændrer settings i redux state. Passes via Semantic UI (derfor navnene)
    * @param  {event} e         Event. Bruges ikke.
    * @param  {string} name     Den indstilling der ændres
@@ -91,7 +84,7 @@ class SelectionMain extends Component {
       // tjek for fejl, start eller ej
       // Ny quiz? Hent spørgsmål
       if (quizType === 'new') {
-        this.props.getQuestions();
+        this.props.startQuiz();
       }
 
       // Uanset om det er en ny quiz eller ej – skift url til quizzen.
@@ -227,8 +220,8 @@ SelectionMain.propTypes = {
   // metadataReducer
   metadata: PropTypes.object,
 
-  // getMetadata action
-  getMetadata: PropTypes.func,
+  // startQuiz action
+  startQuiz: PropTypes.func,
 
   // uiReducer
   ui: PropTypes.object,
