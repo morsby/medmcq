@@ -618,5 +618,7 @@
       }
     }
   },
-  "result": [1, 2, 3, 4]
+  "result": [1, 2, 3, 4],
+  "lastUpdated": 100,
+  "isLoading": false
 }

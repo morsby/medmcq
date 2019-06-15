@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import * as actions from 'actions';
 
 import { Translate } from 'react-localize-redux';
 
@@ -9,13 +11,15 @@ import SelectionSpecialtiesSelectorCheckbox from './SelectionSpecialtiesSelector
 /**
  * Laver en checkbox for hvert speciale.
  */
-const SelectionSpecialtiesSelector = ({
-  semester = {},
-  valgteSpecialer = [],
-  valgteTags = [],
-  onChange
-}) => {
-  if (!semester) {
+const SelectionSpecialtiesSelector = ({ selection, metadata, changeSelection }) => {
+  const { selectedSemester, selectedSpecialtyIds, selectedTagIds } = selection;
+  const semester = metadata.entities.semesters[selectedSemester];
+
+  const onChange = (e, { value, name }) => {
+    changeSelection(name, value);
+  };
+
+  if (!selectedSemester) {
     return (
       <Header as="h3">
         <Translate id="selectionSpecialtiesSelector.choose_semester" />
@@ -33,8 +37,9 @@ const SelectionSpecialtiesSelector = ({
                 data={{ semester: semester.value }}
               />
             </Header>
-            {semester.specialties.map((speciale) => {
-              let erValgt = valgteSpecialer.includes(speciale.id);
+            {semester.specialties.map((specialtyId) => {
+              let speciale = metadata.entities.specialties[specialtyId];
+              let erValgt = selectedSpecialtyIds.includes(speciale.id);
               return (
                 <SelectionSpecialtiesSelectorCheckbox
                   key={speciale.id}
@@ -55,8 +60,9 @@ const SelectionSpecialtiesSelector = ({
                 data={{ semester: semester.value }}
               />
             </Header>
-            {semester.tags.map((tag) => {
-              let erValgt = valgteTags.includes(tag.id);
+            {semester.tags.map((tagId) => {
+              let tag = metadata.entities.tags[tagId];
+              let erValgt = selectedTagIds.includes(tag.id);
               return (
                 <SelectionSpecialtiesSelectorCheckbox
                   key={tag.id}
@@ -79,35 +85,14 @@ const SelectionSpecialtiesSelector = ({
 };
 
 SelectionSpecialtiesSelector.propTypes = {
-  /**
-   * Det aktuelle semester.
-   */
-  semester: PropTypes.object,
-
-  /**
-   * Hvilke specialer er valgt?
-   */
-  valgteSpecialer: PropTypes.array,
-
-  /**
-   * Hvor mange spg findes per speciale?
-   */
-  antalPerSpeciale: PropTypes.object,
-
-  /**
-   * Hvilke tags er valgt?
-   */
-  valgteTags: PropTypes.array,
-
-  /**
-   * Hvor mange spg findes per tag?
-   */
-  antalPerTag: PropTypes.object,
-  /**
-   * onChange
-   * @type {[type]}
-   */
-  onChange: PropTypes.func
+  metadata: PropTypes.object,
+  selection: PropTypes.object,
+  changeSelection: PropTypes.func
 };
 
-export default SelectionSpecialtiesSelector;
+const mapStateToProps = (state) => ({ metadata: state.metadata, selection: state.ui.selection });
+
+export default connect(
+  mapStateToProps,
+  actions
+)(SelectionSpecialtiesSelector);

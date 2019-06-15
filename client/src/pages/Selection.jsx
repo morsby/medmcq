@@ -109,16 +109,8 @@ class SelectionMain extends Component {
      */
 
     let { user, metadata } = this.props;
-    let { items: semesters, selectedSemester } = this.props.selection.semesters;
-    let {
-      type,
-      n,
-      selectedSpecialtyIds,
-      selectedTagIds,
-      selectedSetId,
-      onlyNew,
-      noPicture
-    } = this.props.selection.quizSelection;
+    let semesters = metadata.entities.semesters || {};
+    let { type, n, selectedSemester, selectedSetId, onlyNew, noPicture } = this.props.ui.selection;
 
     return (
       <div className="flex-container">
@@ -173,28 +165,19 @@ class SelectionMain extends Component {
             </>
           )}
 
+          {type === 'specialer' && (
+            <>
+              <SelectionSpecialtiesSelector />
+              <Divider hidden />
+            </>
+          )}
+
           {type === 'set' && (
             <SelectionSetSelector
               selectedSet={selectedSetId}
               semester={semesters[selectedSemester]}
               onChange={this.onSettingsChange}
-              loading={this.state.loading}
             />
-          )}
-
-          {type === 'specialer' && (
-            <>
-              <SelectionSpecialtiesSelector
-                semester={semesters[selectedSemester]}
-                valgteSpecialer={selectedSpecialtyIds}
-                valgteTags={selectedTagIds}
-                onChange={this.onSettingsChange}
-                specialties={this.props.specialties}
-                tags={this.props.tags}
-                loading={this.state.loading}
-              />
-              <Divider hidden />
-            </>
           )}
 
           {selectedSemester === 11 && (
@@ -247,22 +230,15 @@ SelectionMain.propTypes = {
   // getMetadata action
   getMetadata: PropTypes.func,
 
-  /// GAMLE PROPS
-  /**
-   * Indstillinger der styrer valg af spørgsmål.
-   * Fra redux
-   */
-  selection: PropTypes.object,
+  // uiReducer
+  ui: PropTypes.object,
 
   /**
    * Func der kaldes, når der ændres indstillinger. Ændrer Redux state.
    */
   changeSelection: PropTypes.func,
 
-  /**
-   * Func der opdaterer semestre (med antal spørgsmål, specialer, tags m.v.)
-   */
-  fetchSemesters: PropTypes.func,
+  /// GAMLE PROPS
 
   /**
    * Func der henter nye spørgsmål (ud fra settings) fra API'en.
@@ -283,7 +259,7 @@ SelectionMain.propTypes = {
    * Evt. allerede hentede spørgsmål. Benyttes til at give muligheden for at
    * fortsætte en tidligere quiz.
    */
-  questions: PropTypes.array,
+  questions: PropTypes.object,
 
   /**
    * Tilføjer hhv. står for oversættelser
@@ -306,7 +282,10 @@ function mapStateToProps(state) {
     user: state.auth.user,
     questions: state.questions,
     selection: state.selection,
-    metadata: state.metadata
+
+    // nye props
+    metadata: state.metadata,
+    ui: state.ui
   };
 }
 

@@ -223,5 +223,9 @@ const initialState = {};
 export default createReducer(initialState, {
   [types.FETCH_QUESTIONS_SUCCESS]: (state, action) => {
     state = { ...state, ...action.payload };
+  },
+
+  [types.FETCH_QUESTIONS_FAILURE]: () => {
+    return initialState;
   }
 });

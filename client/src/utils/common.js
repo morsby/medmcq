@@ -581,7 +581,8 @@ export const validationRegex = {
   username: /^[a-zA-ZæøåÆØÅ0-9]+([._]?[a-zA-Z0-9]+)*$/
 };
 
-export const insertOrRemove = (array, elem) => {
+export const insertOrRemoveFromArray = (array, elem) => {
+  array = [...array];
   const index = array.indexOf(elem);
   if (index > -1) {
     array.splice(index, 1);

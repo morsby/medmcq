@@ -5,7 +5,9 @@ import { normalize, schema } from 'normalizr';
 export const initialState = {
   entities: {},
   result: [],
-  lastUpdated: 0
+  lastUpdated: 0,
+  didInvalidate: false,
+  isLoading: false
 };
 
 const specialty = new schema.Entity('specialties');
@@ -18,7 +20,36 @@ const semester = new schema.Entity('semesters', {
 });
 
 export default createReducer(initialState, {
+  /*
+   * Siger at metadata trænger til en opdateret henting fra api'en.
+   */
+  [types.INVALIDATE_METADATA]: (state) => {
+    state.didInvalidate = true;
+  },
+  /*
+   * Når et API-kald til at hente metadata starter
+   */
+  [types.FETCH_METADATA_REQUEST]: (state) => {
+    state.didInvalidate = false;
+    state.isLoading = true;
+  },
+
+  /*
+   * Når et API-kald er succesfuldt
+   */
   [types.FETCH_METADATA_SUCCESS]: (state, action) => {
-    return { ...normalize(action.payload, [semester]), lastUpdated: action.timestamp };
+    return {
+      ...state,
+      ...normalize(action.payload, [semester]),
+      lastUpdated: action.timestamp,
+      isLoading: false
+    };
+  },
+
+  /*
+   * Når et API-kald fejler
+   */
+  [types.FETCH_METADATA_FAILURE]: (state) => {
+    state.isLoading = false;
   }
 });

@@ -10,7 +10,7 @@ describe('metadata reducer', () => {
 
   it('should handle new metadata', async () => {
     const { data: metadata } = await axios.get('http://localhost:3000/api/semesters');
-    const action = { type: types.FETCH_METADATA_SUCCESS, payload: metadata };
+    const action = { type: types.FETCH_METADATA_SUCCESS, payload: metadata, timestamp: 100 };
     expect(reducer({}, action)).toEqual(mockData);
   });
 });

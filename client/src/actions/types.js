@@ -2,6 +2,7 @@
 export const QUIZ_NAVIGATE = 'QUIZ_MAVIGATE';
 
 // Metadata reducer
+export const INVALIDATE_METADATA = 'invalidate_metadata';
 export const FETCH_METADATA_REQUEST = 'fetch_metadata_request';
 export const FETCH_METADATA_SUCCESS = 'fetch_metadata_success';
 export const FETCH_METADATA_FAILURE = 'fetch_metadata_failure';
