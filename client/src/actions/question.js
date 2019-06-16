@@ -47,11 +47,18 @@ export const getQuestions = ({ ids = [], quiz = false }) => async (dispatch, get
       });
   }
 
-  dispatch({
-    type: types.FETCH_QUESTIONS_SUCCESS,
-    payload: res.data,
-    quiz
-  });
+  if (res.data.length > 0) {
+    dispatch({
+      type: types.FETCH_QUESTIONS_SUCCESS,
+      payload: res.data,
+      quiz
+    });
+  } else {
+    dispatch({
+      type: types.FETCH_QUESTIONS_FAILURE,
+      payload: { type: 'NotFound', message: 'No questions found' }
+    });
+  }
 };
 
 export const commentQuestion = (id, comment, isPrivate, anonymous) => async (dispatch) => {

@@ -18,8 +18,8 @@ const QuestionMetadataDropdown = ({ options, onChange, type }) => {
 
     for (const t of tags) {
       items.push(
-        <Menu.Item onClick={handleDropdownPick} key={t.value}>
-          {t.text}
+        <Menu.Item onClick={handleDropdownPick} key={t.id}>
+          {t.name}
         </Menu.Item>
       );
     }
@@ -49,10 +49,10 @@ const QuestionMetadataDropdown = ({ options, onChange, type }) => {
     }
 
     if (type === 'specialty') {
-      return options.map((o) => {
+      return _.map(options, (o) => {
         return (
-          <Menu.Item onClick={handleDropdownPick} key={o.value}>
-            {o.text}
+          <Menu.Item onClick={handleDropdownPick} key={o.id}>
+            {o.name}
           </Menu.Item>
         );
       });

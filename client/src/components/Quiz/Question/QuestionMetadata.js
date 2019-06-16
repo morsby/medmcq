@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import * as actions from 'actions/index';
+import _ from 'lodash';
 import { isAnswered } from 'utils/quiz';
 
 import { Grid, Button, Input, Message } from 'semantic-ui-react';
@@ -42,8 +43,8 @@ const QuestionMetadata = (props) => {
   };
 
   let { tags, specialties } = metadata.entities;
-  tags = [];
-  specialties = [];
+  specialties = _.pickBy(specialties, (s) => s.semesterId === question.semester);
+  tags = _.pickBy(tags, (t) => t.semesterId === question.semester);
   return (
     <Grid celled stackable columns="equal">
       <Grid.Column>
@@ -60,17 +61,20 @@ const QuestionMetadata = (props) => {
           <>
             <Grid.Row style={{ margin: '7px 0 7px 0' }}>
               <Translate id="questionMetadata.specialty" />{' '}
-              {question.specialties.map((spec) => (
-                <QuestionMetadataLabel
-                  key={spec.specialtyId}
-                  metadata={spec}
-                  user={user}
-                  question={question}
-                  type="specialty"
-                >
-                  {spec.specialtyName}
-                </QuestionMetadataLabel>
-              ))}
+              {_.map(question.specialties, (s) => {
+                let spec = specialties[s.specialtyId];
+                return (
+                  <QuestionMetadataLabel
+                    key={spec.id}
+                    metadata={spec}
+                    user={user}
+                    question={question}
+                    type="specialty"
+                  >
+                    {spec.name}
+                  </QuestionMetadataLabel>
+                );
+              })}
               {user && (
                 <QuestionMetadataDropdown
                   type="specialty"
@@ -82,17 +86,20 @@ const QuestionMetadata = (props) => {
             </Grid.Row>
             <Grid.Row>
               <Translate id="questionMetadata.tags" />{' '}
-              {question.tags.map((tag) => (
-                <QuestionMetadataLabel
-                  type="tag"
-                  key={tag.tagId}
-                  metadata={tag}
-                  user={user}
-                  question={question}
-                >
-                  {tag.tagName}
-                </QuestionMetadataLabel>
-              ))}
+              {_.map(question.tags, (t) => {
+                let tag = tags[t.tagId];
+                return (
+                  <QuestionMetadataLabel
+                    type="tag"
+                    key={tag.tagId}
+                    metadata={tag}
+                    user={user}
+                    question={question}
+                  >
+                    {tag.name}
+                  </QuestionMetadataLabel>
+                );
+              })}
               {user && (
                 <QuestionMetadataDropdown
                   type="tag"

@@ -111,7 +111,7 @@ export const modifiers = {
   },
   /**
    * A function that filters metadata votes to only the active ones
-   * (i.e. having at least 50% of the votes of the most popular voted metadata).
+   * (i.e. having a sum of 0r or more).
    * Is used on SpecialtyVote and TagVote models.
    * @param  {[type]} builder [A builder instance from Objection]
    * @return {[type]}         [A builder instance containing only the active metadata]

@@ -151,9 +151,6 @@ class Question extends PureComponent {
         correct = question.correctAnswer === answer;
       }
 
-      //eslint-disable-next-line no-console
-      console.log(answer);
-
       // Call answerQuestion fra redux
       answerQuestion(question.id, answer, correct, question.semester, user);
     }

@@ -153,7 +153,7 @@ class QuizMain extends Component {
       );
     }
 
-    if (Object.keys(questions).length === 0) {
+    if (Object.keys(questions.entities).length === 0) {
       return (
         <div className="flex-container">
           <div className="content">

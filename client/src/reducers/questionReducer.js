@@ -2,16 +2,27 @@ import * as types from 'actions/types';
 
 import { createReducer } from 'redux-starter-kit';
 import { normalize, schema } from 'normalizr';
+import _ from 'lodash';
 
 const user = new schema.Entity('users');
 const publicComment = new schema.Entity('publicComments', { author: user });
 const privateComment = new schema.Entity('privateComments', { author: user });
 const examSet = new schema.Entity('examSets');
-const question = new schema.Entity('questions', {
-  examSet,
-  publicComments: [publicComment],
-  privateComments: [privateComment]
-});
+const question = new schema.Entity(
+  'questions',
+  {
+    examSet,
+    publicComments: [publicComment],
+    privateComments: [privateComment]
+  },
+  {
+    processStrategy: (ent) => ({
+      ...ent,
+      specialties: _.keyBy(ent.specialties, 'specialtyId'),
+      tags: _.keyBy(ent.tags, 'tagId')
+    })
+  }
+);
 
 const initialState = { entities: {}, result: [], isFetching: false };
 

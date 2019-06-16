@@ -7,21 +7,31 @@ import * as actions from 'actions';
 
 const QuestionMetadataLabel = ({ metadata, user, question, children, type, voteAction }) => {
   const vote = async (vote) => {
-    voteAction(type, question._id, metadata._id, vote, user._id);
+    voteAction(type, question.id, metadata.id, vote, user.id);
   };
 
   const isVotedOn = (metadata) => {
-    const userIndex = _.findIndex(metadata.users, { user: user._id });
-    if (userIndex !== -1) {
-      if (metadata.users[userIndex].vote === 1) {
-        return 'upvote';
-      } else if (metadata.users[userIndex].vote === -1) {
-        return 'downvote';
-      } else {
-        return null;
-      }
+    let userVote;
+    if (type === 'specialty') {
+      userVote = (_.find(question.userSpecialtyVotes, ['specialtyId', metadata.id]) || {}).value;
+    } else {
+      userVote = (_.find(question.userSpecialtyVotes, ['tagId', metadata.id]) || {}).value;
+    }
+    if (userVote === 1) {
+      return 'upvote';
+    } else if (userVote === -1) {
+      return 'downvote';
+    } else {
+      return null;
     }
   };
+
+  let votes;
+  if (type === 'specialty') {
+    votes = (question.specialties[metadata.id] || {}).votes;
+  } else {
+    votes = (question.tags[metadata.id] || {}).votes;
+  }
 
   return (
     <>
@@ -29,7 +39,6 @@ const QuestionMetadataLabel = ({ metadata, user, question, children, type, voteA
         {children}
         {user && (
           <>
-            {' '}
             <Icon
               onClick={() => vote(1)}
               name="arrow up"
@@ -44,7 +53,7 @@ const QuestionMetadataLabel = ({ metadata, user, question, children, type, voteA
               disabled={isVotedOn(metadata) === 'downvote' ? true : false}
               style={{ margin: '2px', cursor: 'pointer' }}
             />{' '}
-            {metadata.votes}
+            {votes}
           </>
         )}
       </Label>
