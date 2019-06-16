@@ -7,9 +7,9 @@ Siden er lavet med tilladelse fra Institut for Klinisk Medicin, Health, Aarhus U
 ## TODOs
 
 - [x] Bedre struktur af redux state
-- [] Forbedret migrering (p.t. er der fx forvirring omkring tags og tilhørsforhold til semestre)
-- [] Integrering af voting
-- [] En masse opdatering af redux/frontend
+- [ ] Forbedret migrering (p.t. er der fx forvirring omkring tags og tilhørsforhold til semestre)
+- [ ] Integrering af voting
+- [ ] En masse opdatering af redux/frontend
 
 ## Opsætning
 
