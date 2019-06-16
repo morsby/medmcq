@@ -6,15 +6,11 @@ import { normalize, schema } from 'normalizr';
 const user = new schema.Entity('users');
 const publicComment = new schema.Entity('publicComments', { author: user });
 const privateComment = new schema.Entity('privateComments', { author: user });
-const specialty = new schema.Entity('specialties');
-const tag = new schema.Entity('tags');
 const examSet = new schema.Entity('examSets');
 const question = new schema.Entity('questions', {
   examSet,
   publicComments: [publicComment],
-  privateComments: [privateComment],
-  specialties: [specialty],
-  tags: [tag]
+  privateComments: [privateComment]
 });
 
 const initialState = { entities: {}, result: [], isFetching: false };

@@ -138,7 +138,7 @@ class Question extends BaseModel {
   }
 
   static get defaultEager() {
-    return '[examSet.semester, correctAnswers, publicComments.user, specialties(active), tags(active)]';
+    return '[correctAnswers, publicComments.user, specialties(active), tags(active)]';
   }
 
   $formatJson(json) {

@@ -21,19 +21,15 @@ describe('questions route', () => {
 
     expect(body.length).toEqual(6);
     expect(body[0]).toHaveProperty('correctAnswers');
-    expect(body[0]).toHaveProperty('examSet');
     expect(body[0]).toHaveProperty('semester');
     expect(body[0]).toHaveProperty('publicComments');
     expect(body[0].privateComments).toBeFalsy();
 
     let orderedQuestions = _.sortBy(body, ['id']);
-    expect(orderedQuestions[0].tags.map((t) => t.tagName)).toEqual(['Paraklinik', 'Radiologi']);
+    expect(orderedQuestions[0].tags.map((t) => t.tagId)).toEqual([1, 2]);
     expect(orderedQuestions[0].specialties).toHaveLength(0);
 
-    expect(orderedQuestions[5].specialties.map((s) => s.specialtyName)).toEqual([
-      'Abdominalkirurgi',
-      'Urologi'
-    ]);
+    expect(orderedQuestions[5].specialties.map((s) => s.specialtyId)).toEqual([11, 13]);
   });
 
   test("GET '/?ids=...' -- should fetch three questions", async () => {
@@ -90,7 +86,6 @@ describe('questions route', () => {
     newQuestionId = body.id;
 
     expect(body.text).toEqual('Test');
-    expect(body).toHaveProperty('examSet');
     expect(body.correctAnswers).toEqual([1]);
   });
 

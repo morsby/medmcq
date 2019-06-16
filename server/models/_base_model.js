@@ -119,37 +119,12 @@ export const modifiers = {
   activeMetadata: (builder) => {
     let model = builder._modelClass;
     let tableName = model.name;
-
     let type = tableName.toLowerCase().includes('specialty') ? 'specialty' : 'tag';
 
     return builder
-      .select(
-        `${tableName}.questionId`,
-        `${tableName}.${type}Id`,
-        'maxVotes.maxVotes as maxVotes',
-        `${type}.name as ${type}Name`
-      )
-      .count('* as votes')
-      .join(
-        model
-          .query()
-          .max('counter.count as maxVotes')
-          .select('questionId as questionIdx')
-          .from(
-            model
-              .query()
-              .count('* as count')
-              .select('questionId', `${type}Id`)
-              .groupBy('questionId', `${type}Id`)
-              .as('counter')
-          )
-          .groupBy('questionIdx')
-          .as('maxVotes'),
-        `${tableName}.questionId`,
-        'maxVotes.questionIdx'
-      )
-      .groupBy(`${tableName}.questionId`, `${tableName}.${type}Id`)
-      .joinRelation(`${type}`)
-      .havingRaw('votes >= 0.5*max_votes');
+      .select(`${type}Id`, 'questionId')
+      .sum('value as votes')
+      .having('votes', '>', '-1')
+      .groupBy(`${type}Id`, 'questionId');
   }
 };
