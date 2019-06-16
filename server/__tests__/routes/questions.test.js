@@ -164,7 +164,7 @@ describe('questions route', () => {
   test("PUT '/:id/vote' -- should vote for a specialty", async () => {
     let { body } = await agent
       .put(`${questionApi}/${newQuestionId}/vote`)
-      .send({ vote: { type: 'specialty', id: 1, value: 1 } });
+      .send({ type: 'specialty', id: 1, value: 1 });
 
     expect(body.specialties[0].specialtyId).toEqual(1);
     expect(body.userSpecialtyVotes).toHaveLength(1);
@@ -173,7 +173,7 @@ describe('questions route', () => {
   test("PUT '/:id/vote' -- should delete votes when providing value = 'delete'", async () => {
     let { body } = await agent
       .put(`${questionApi}/${newQuestionId}/vote`)
-      .send({ vote: { type: 'specialty', id: 1, value: 'delete' } });
+      .send({ type: 'specialty', id: 1, value: 'delete' });
 
     expect(body.specialties).toHaveLength(0);
     expect(body.userSpecialtyVotes).toHaveLength(0);

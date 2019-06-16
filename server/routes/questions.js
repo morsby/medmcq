@@ -470,14 +470,11 @@ router.delete('/:id', permit({ roles: ['admin'] }), async (req, res) => {
  *           schema:
  *             type: object
  *             properties:
- *               vote:
- *                 type: object
- *                 properties:
- *                   type: string
- *                   id: integer
- *                   value: number
- *                 description: An object containing a type, a metadata id and a value.
- *                 example: {type: 'specialty', id: 1, value: 1}
+ *               type: string
+ *               id: integer
+ *               value: number
+ *             description: An object containing a type, a metadata id and a value.
+ *             example: {type: 'specialty', id: 1, value: 1}
  *     responses:
  *       200:
  *         description: The updated question
@@ -495,7 +492,7 @@ router.delete('/:id', permit({ roles: ['admin'] }), async (req, res) => {
 router.put('/:id/vote', permit(), async (req, res) => {
   try {
     let questionId = Number(req.params.id);
-    let { vote } = req.body;
+    let { body: vote } = req;
 
     if (!questionId) {
       throw new BadRequest({ message: 'You must provide a question id.' });
