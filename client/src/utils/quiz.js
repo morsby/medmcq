@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { store } from 'index';
 
 export const smoothScroll = (h, dir = 'up') => {
   let top = window.pageYOffset || document.documentElement.scrollTop;
@@ -65,4 +66,9 @@ export const calculateResults = (questions) => {
 
 export const subSupScript = (text) => {
   return text.replace(/\^(.+?)\^/g, '<sup>$1</sup>').replace(/~(.+?)~/g, '<sub>$1</sub>');
+};
+
+export const isAnswered = (question) => {
+  const state = store.getState();
+  return state.quiz.answers.hasOwnProperty(question.id);
 };

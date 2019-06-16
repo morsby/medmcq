@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react';
-import { Translate } from 'react-localize-redux';
-import { Grid, Button, Input, Message } from 'semantic-ui-react';
-import QuestionAnsweredCounter from './QuestionMetadata/QuestionAnsweredCounter';
 import { PropTypes } from 'prop-types';
-import QuestionMetadataLabel from './QuestionMetadata/QuestionMetadataLabel';
 import { connect } from 'react-redux';
 import * as actions from 'actions/index';
-import { withRouter } from 'react-router';
+import { isAnswered } from 'utils/quiz';
+
+import { Grid, Button, Input, Message } from 'semantic-ui-react';
+import { Translate } from 'react-localize-redux';
+import QuestionAnsweredCounter from './QuestionMetadata/QuestionAnsweredCounter';
+import QuestionMetadataLabel from './QuestionMetadata/QuestionMetadataLabel';
 import QuestionMetadataDropdown from './QuestionMetadata/QuestionMetadataDropdown';
 
 const QuestionMetadata = (props) => {
-  const { question, user } = props;
+  const { question, user, metadata } = props;
   const [newTag, setNewTag] = useState('');
   const [addingNewTag, setAddingNewTag] = useState(false);
   const [suggestTagMessage, setSuggestTagMessage] = useState('');
@@ -40,9 +41,9 @@ const QuestionMetadata = (props) => {
     setNewTag(value);
   };
 
-  let tags = [];
-  let specialties = [];
-
+  let { tags, specialties } = metadata.entities;
+  tags = [];
+  specialties = [];
   return (
     <Grid celled stackable columns="equal">
       <Grid.Column>
@@ -55,7 +56,7 @@ const QuestionMetadata = (props) => {
           )}{' '}
           {question.examYear}
         </Grid.Row>
-        {question.answer && (
+        {isAnswered(question) && (
           <>
             <Grid.Row style={{ margin: '7px 0 7px 0' }}>
               <Translate id="questionMetadata.specialty" />{' '}
@@ -104,7 +105,7 @@ const QuestionMetadata = (props) => {
           </>
         )}
       </Grid.Column>
-      {user && question.answer && (
+      {user && isAnswered(question) && (
         <>
           <Grid.Column width={5} style={{ textAlign: 'right' }}>
             <Grid.Row>
@@ -146,25 +147,23 @@ const QuestionMetadata = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    metadata: state.settings.metadata
+    metadata: state.metadata,
+
+    // bruges kun til at opdatere på besvarelse
+    answers: state.quiz.answers
   };
 };
 
 QuestionMetadata.propTypes = {
   question: PropTypes.object,
   user: PropTypes.object,
-  specialer: PropTypes.object,
-  tags: PropTypes.object,
   questionReport: PropTypes.func,
-
-  // Probably delete/change:
-  metadata: PropTypes.object,
-  newMetadata: PropTypes.func
+  newMetadata: PropTypes.func,
+  // New props
+  metadata: PropTypes.object
 };
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    actions
-  )(QuestionMetadata)
-);
+export default connect(
+  mapStateToProps,
+  actions
+)(QuestionMetadata);
