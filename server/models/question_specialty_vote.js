@@ -13,13 +13,14 @@ class QuestionSpecialtyVote extends BaseModel {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['userId', 'questionId', 'specialtyId'],
+      required: ['userId', 'questionId', 'specialtyId', 'value'],
 
       properties: {
         id: { type: 'integer' },
         userId: { type: 'integer' },
         questionId: { type: 'integer' },
-        specialtyId: { type: 'integer' }
+        specialtyId: { type: 'integer' },
+        value: { type: 'number', minimum: -1, maximum: 1 }
       }
     };
   }
@@ -28,6 +29,7 @@ class QuestionSpecialtyVote extends BaseModel {
     const Question = require('./question');
     const User = require('./user');
     const Specialty = require('./specialty');
+
     return {
       user: {
         relation: Model.BelongsToOneRelation,

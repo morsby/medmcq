@@ -164,24 +164,19 @@ describe('questions route', () => {
   test("PUT '/:id/vote' -- should vote for a specialty", async () => {
     let { body } = await agent
       .put(`${questionApi}/${newQuestionId}/vote`)
-      .send({ specialtyVotes: [1], tagVotes: [1, 2] });
+      .send({ vote: { type: 'specialty', id: 1, value: 1 } });
 
     expect(body.specialties[0].specialtyId).toEqual(1);
-    expect(body.tags[0].tagId).toEqual(1);
-    expect(body.tags[1].tagId).toEqual(2);
     expect(body.userSpecialtyVotes).toHaveLength(1);
-    expect(body.userTagVotes).toHaveLength(2);
   });
 
-  test("PUT '/:id/vote' -- should delete votes when providing empty array", async () => {
+  test("PUT '/:id/vote' -- should delete votes when providing value = 'delete'", async () => {
     let { body } = await agent
       .put(`${questionApi}/${newQuestionId}/vote`)
-      .send({ specialtyVotes: [], tagVotes: [] });
+      .send({ vote: { type: 'specialty', id: 1, value: 'delete' } });
 
     expect(body.specialties).toHaveLength(0);
-    expect(body.tags).toHaveLength(0);
     expect(body.userSpecialtyVotes).toHaveLength(0);
-    expect(body.userTagVotes).toHaveLength(0);
   });
 
   test("PUT '/:id/vote' -- should fail if not logged in", async () => {

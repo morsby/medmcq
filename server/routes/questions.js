@@ -1,13 +1,13 @@
 import express from 'express';
 import { ValidationError, NotFoundError, transaction } from 'objection';
 import { permit } from '../middleware/permission';
+import _ from 'lodash';
 import createResponse from './_swaggerComponents';
 import Question from '../models/question';
 import QuestionBookmark from '../models/question_bookmark';
 import QuestionUserAnswer from '../models/question_user_answer';
 import QuestionSpecialtyVote from '../models/question_specialty_vote';
 import QuestionTagVote from '../models/question_tag_vote';
-
 import { errorHandler, NotAuthorized, BadRequest } from '../middleware/errorHandling';
 
 const router = express.Router();
@@ -470,18 +470,14 @@ router.delete('/:id', permit({ roles: ['admin'] }), async (req, res) => {
  *           schema:
  *             type: object
  *             properties:
- *               specialtyVotes:
- *                 type: array
- *                 items:
- *                   type: integer
- *                 description: An array of specialty ids.
- *                 example: [1,3]
- *               tagVotes:
- *                 type: array
- *                 items:
- *                   type: integer
- *                 description: An array of tag ids.
- *                 example: [2,4]
+ *               vote:
+ *                 type: object
+ *                 properties:
+ *                   type: string
+ *                   id: integer
+ *                   value: number
+ *                 description: An object containing a type, a metadata id and a value.
+ *                 example: {type: 'specialty', id: 1, value: 1}
  *     responses:
  *       200:
  *         description: The updated question
@@ -499,59 +495,43 @@ router.delete('/:id', permit({ roles: ['admin'] }), async (req, res) => {
 router.put('/:id/vote', permit(), async (req, res) => {
   try {
     let questionId = Number(req.params.id);
-    let { specialtyVotes, tagVotes } = req.body;
+    let { vote } = req.body;
 
     if (!questionId) {
       throw new BadRequest({ message: 'You must provide a question id.' });
     }
 
-    if (!specialtyVotes && !tagVotes) {
+    if (!vote) {
       throw new BadRequest({
-        message: 'You must provide either specialty votes or tag votes.'
+        message: 'You must provide a vote.'
       });
     }
 
     let userId = req.user.id;
 
     const updatedQuestion = await transaction(Question.knex(), async (trx) => {
-      if (specialtyVotes) {
-        if (!Array.isArray(specialtyVotes)) {
-          throw new BadRequest({
-            message: 'specialtyVotes must be an array of integers'
-          });
-        }
-
+      if (!_.isEqual(Object.keys(vote), ['type', 'id', 'value'])) {
+        throw new BadRequest({
+          message: 'vote must be an object containing type and id'
+        });
+      }
+      if (vote.type === 'specialty') {
         await QuestionSpecialtyVote.query(trx)
-          .where({ questionId, userId: userId })
+          .where({ questionId, userId: userId, specialtyId: vote.id })
           .delete();
 
-        specialtyVotes = specialtyVotes.map((vote) => ({
-          questionId,
-          userId,
-          specialtyId: vote
-        }));
+        vote = { questionId, userId, specialtyId: vote.id, value: vote.value };
 
-        await QuestionSpecialtyVote.query(trx).insertGraph(specialtyVotes);
+        if (vote.value !== 'delete') await QuestionSpecialtyVote.query(trx).insertGraph(vote);
       }
 
-      if (tagVotes) {
-        if (!Array.isArray(tagVotes)) {
-          throw new BadRequest({
-            message: 'tagVotes must be an array of integers'
-          });
-        }
-
+      if (vote.type === 'tag') {
         await QuestionTagVote.query(trx)
-          .where({ questionId, userId: userId })
+          .where({ questionId, userId: userId, tagId: vote.id })
           .delete();
 
-        tagVotes = tagVotes.map((vote) => ({
-          questionId,
-          userId,
-          tagId: vote
-        }));
-
-        await QuestionTagVote.query(trx).insertGraph(tagVotes);
+        vote = { questionId, userId, tagId: vote.id, value: vote.value };
+        if (vote.value !== 'delete') await QuestionTagVote.query(trx).insertGraph(vote);
       }
 
       const updatedQuestion = await Question.query(trx)

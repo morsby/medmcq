@@ -13,16 +13,18 @@ class QuestionTagVote extends BaseModel {
   static get jsonSchema() {
     return {
       type: 'object',
-      required: ['userId', 'questionId', 'tagId'],
+      required: ['userId', 'questionId', 'tagId', 'value'],
 
       properties: {
         id: { type: 'integer' },
         userId: { type: 'integer' },
         questionId: { type: 'integer' },
-        tagId: { type: 'integer' }
+        tagId: { type: 'integer' },
+        value: { type: 'number', minimum: -1, maximum: 1 }
       }
     };
   }
+
   static get relationMappings() {
     const Question = require('./question');
     const User = require('./user');
