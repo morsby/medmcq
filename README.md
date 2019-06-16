@@ -13,7 +13,7 @@ Siden er lavet med tilladelse fra Institut for Klinisk Medicin, Health, Aarhus U
 
 ## Opsætning
 
-For at køre appen på windows, kræver det installering af følgende: "npm install -g win-node-env". Dette skyldes mådes linux og windows håndterer env-variables forskelligt.
+For at køre appen på windows, kræver det installering af følgende: `npm install -g win-node-env`. Dette skyldes mådes linux og windows håndterer env-variables forskelligt.
 
 ## For de teknisk interesserede
 
