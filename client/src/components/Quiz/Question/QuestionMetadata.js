@@ -17,8 +17,8 @@ const QuestionMetadata = (props) => {
   const [addingNewTag, setAddingNewTag] = useState(false);
   const [suggestTagMessage, setSuggestTagMessage] = useState('');
 
-  const newMetadata = async (type, value) => {
-    await props.newMetadata(type, value, question._id, user._id);
+  const metadataVote = async (type, metadataId) => {
+    await props.voteAction(type, question.id, metadataId, 1);
   };
 
   useEffect(() => {
@@ -62,7 +62,7 @@ const QuestionMetadata = (props) => {
             <Grid.Row style={{ margin: '7px 0 7px 0' }}>
               <Translate id="questionMetadata.specialty" />{' '}
               {_.map(question.specialties, (s) => {
-                let spec = specialties[s.specialtyId];
+                let spec = specialties[s.specialtyId] || {};
                 return (
                   <QuestionMetadataLabel
                     key={spec.id}
@@ -79,7 +79,7 @@ const QuestionMetadata = (props) => {
                 <QuestionMetadataDropdown
                   type="specialty"
                   text="Speciale"
-                  onChange={(value) => newMetadata('specialty', value)}
+                  onChange={(value) => metadataVote('specialty', value)}
                   options={specialties}
                 />
               )}
@@ -91,7 +91,7 @@ const QuestionMetadata = (props) => {
                 return (
                   <QuestionMetadataLabel
                     type="tag"
-                    key={tag.tagId}
+                    key={tag.id}
                     metadata={tag}
                     user={user}
                     question={question}
@@ -104,7 +104,7 @@ const QuestionMetadata = (props) => {
                 <QuestionMetadataDropdown
                   type="tag"
                   text="Tag"
-                  onChange={(value) => newMetadata('tag', value)}
+                  onChange={(value) => metadataVote('tag', value)}
                   options={tags}
                 />
               )}
@@ -165,9 +165,9 @@ QuestionMetadata.propTypes = {
   question: PropTypes.object,
   user: PropTypes.object,
   questionReport: PropTypes.func,
-  newMetadata: PropTypes.func,
   // New props
-  metadata: PropTypes.object
+  metadata: PropTypes.object,
+  voteAction: PropTypes.func
 };
 
 export default connect(

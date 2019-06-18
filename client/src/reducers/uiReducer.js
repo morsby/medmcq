@@ -29,7 +29,7 @@ const uiReducer = (state = initialState, action) => {
     // Successes
     case types.FETCH_METADATA_SUCCESS:
     case types.FETCH_QUESTIONS_SUCCESS:
-      return { ...state, isLoading: false };
+      return { ...state, isLoading: false, error: false };
     // Failures
     case types.FETCH_METADATA_FAILURE:
     case types.FETCH_QUESTIONS_FAILURE:

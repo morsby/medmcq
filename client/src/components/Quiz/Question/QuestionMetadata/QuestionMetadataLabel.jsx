@@ -13,9 +13,9 @@ const QuestionMetadataLabel = ({ metadata, user, question, children, type, voteA
   const isVotedOn = (metadata) => {
     let userVote;
     if (type === 'specialty') {
-      userVote = (_.find(question.userSpecialtyVotes, ['specialtyId', metadata.id]) || {}).value;
+      userVote = _.get(question, ['userSpecialtyVotes', metadata.id], {}).value;
     } else {
-      userVote = (_.find(question.userSpecialtyVotes, ['tagId', metadata.id]) || {}).value;
+      userVote = _.get(question, ['userTagVotes', metadata.id], {}).value;
     }
     if (userVote === 1) {
       return 'upvote';

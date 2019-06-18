@@ -102,29 +102,14 @@ export const questionReport = ({ type, data }) => (dispatch) => {
   dispatch({ type: types.QUESTION_REPORT });
 };
 
-export const voteAction = (type, questionId, metadataId, vote, user) => async (dispatch) => {
-  const res = await axios.put('/api/questions/metadata/vote', {
+export const voteAction = (type, questionId, metadataId, vote) => async (dispatch) => {
+  const res = await axios.put(`/api/questions/${questionId}/vote`, {
     type: type,
-    questionId,
-    metadataId,
-    vote,
-    user
+    id: Number(metadataId),
+    value: Number(vote)
   });
   dispatch({
-    type: types.QUESTION_SPECIALTY_UPDATE,
-    payload: res.data
-  });
-};
-
-export const newMetadata = (type, value, id, user) => async (dispatch) => {
-  const res = await axios.post('/api/questions/metadata/question/' + id, {
-    type,
-    value,
-    user
-  });
-
-  dispatch({
-    type: types.QUESTION_SPECIALTY_UPDATE,
+    type: types.QUESTION_UPDATE,
     payload: res.data
   });
 };

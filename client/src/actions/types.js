@@ -7,14 +7,15 @@ export const FETCH_METADATA_REQUEST = 'fetch_metadata_request';
 export const FETCH_METADATA_SUCCESS = 'fetch_metadata_success';
 export const FETCH_METADATA_FAILURE = 'fetch_metadata_failure';
 
-// Gamle types
 // Question reducer
 export const FETCH_QUESTIONS_REQUEST = 'fetch_questions_request';
 export const FETCH_QUESTIONS_SUCCESS = 'fetch_questions_success';
 export const FETCH_QUESTIONS_FAILURE = 'fetch_questions_failure';
 export const ANSWER_QUESTION = 'answer_question';
-
 export const POST_QUESTION = 'post_question';
+export const QUESTION_UPDATE = 'question_update';
+
+// Gamle types
 
 // TODO: Make async
 export const QUESTION_COMMENT = 'question_comment';

@@ -259,6 +259,8 @@ router.post('/search', async (req, res) => {
 
     const questions = await Question.query()
       .whereRaw('MATCH (text, answer1, answer2, answer3) AGAINST (? IN BOOLEAN MODE)', searchString)
+      .select('question.*', 'semester.id as semester')
+      .joinRelation('semester')
       .eager(Question.defaultEager);
 
     res.status(200).json(questions);
@@ -301,6 +303,8 @@ router.get('/:id', async (req, res) => {
 
   let query = Question.query()
     .findById(id)
+    .select('question.*', 'semester.id as semester')
+    .joinRelation('semester')
     .eager(Question.defaultEager);
 
   if (req.user) {
@@ -395,6 +399,8 @@ router.patch('/:id', permit({ roles: ['editor', 'admin'] }), async (req, res) =>
     const question = await transaction(Question.knex(), async (trx) => {
       const question = Question.query(trx)
         .upsertGraphAndFetch(questionToPatch)
+        .select('question.*', 'semester.id as semester')
+        .joinRelation('semester')
         .eager(Question.defaultEager);
       return question;
     });
@@ -509,7 +515,7 @@ router.put('/:id/vote', permit(), async (req, res) => {
     const updatedQuestion = await transaction(Question.knex(), async (trx) => {
       if (!_.isEqual(Object.keys(vote), ['type', 'id', 'value'])) {
         throw new BadRequest({
-          message: 'vote must be an object containing type and id'
+          message: 'vote must be an object containing type, id and value'
         });
       }
       if (vote.type === 'specialty') {
@@ -533,12 +539,14 @@ router.put('/:id/vote', permit(), async (req, res) => {
 
       const updatedQuestion = await Question.query(trx)
         .findById(questionId)
+        .select('question.*', 'semester.id as semester')
+        .joinRelation('semester')
         .eager(Question.defaultEager)
         .mergeEager('privateComments(own)', { userId: userId })
-        .mergeEager('userSpecialtyVotes(own, joinSpecialty)', {
+        .mergeEager('userSpecialtyVotes(own)', {
           userId: userId
         })
-        .mergeEager('userTagVotes(own, joinTag)', { userId: userId });
+        .mergeEager('userTagVotes(own)', { userId: userId });
       return updatedQuestion;
     });
     res.status(200).json(updatedQuestion);

@@ -19,7 +19,9 @@ const question = new schema.Entity(
     processStrategy: (ent) => ({
       ...ent,
       specialties: _.keyBy(ent.specialties, 'specialtyId'),
-      tags: _.keyBy(ent.tags, 'tagId')
+      tags: _.keyBy(ent.tags, 'tagId'),
+      userSpecialtyVotes: _.keyBy(ent.userSpecialtyVotes, 'specialtyId'),
+      userTagVotes: _.keyBy(ent.userTagVotes, 'tagId')
     })
   }
 );
@@ -39,5 +41,10 @@ export default createReducer(initialState, {
 
   [types.FETCH_QUESTIONS_FAILURE]: () => {
     return initialState;
+  },
+
+  [types.QUESTION_UPDATE]: (state, action) => {
+    const normalized = normalize(action.payload, question);
+    state.entities.questions[action.payload.id] = normalized.entities.questions[action.payload.id];
   }
 });

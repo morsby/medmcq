@@ -39,7 +39,7 @@ const QuestionMetadataDropdown = ({ options, onChange, type }) => {
 
       for (const key in groupedTags) {
         dropdown.push(
-          <SubMenu title={key.charAt(0).toUpperCase() + key.slice(1)}>
+          <SubMenu title={key.charAt(0).toUpperCase() + key.slice(1)} key={key}>
             {createDropdownItems(groupedTags[key])}
           </SubMenu>
         );
