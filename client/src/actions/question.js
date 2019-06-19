@@ -103,10 +103,14 @@ export const questionReport = ({ type, data }) => (dispatch) => {
 };
 
 export const voteAction = (type, questionId, metadataId, vote) => async (dispatch) => {
+  if (vote !== 'delete') {
+    vote = Number(vote);
+  }
+
   const res = await axios.put(`/api/questions/${questionId}/vote`, {
     type: type,
     id: Number(metadataId),
-    value: Number(vote)
+    value: vote
   });
   dispatch({
     type: types.QUESTION_UPDATE,

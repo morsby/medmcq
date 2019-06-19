@@ -7,6 +7,9 @@ import * as actions from 'actions';
 
 const QuestionMetadataLabel = ({ metadata, user, question, children, type, voteAction }) => {
   const vote = async (vote) => {
+    if (isVotedOn(metadata) === vote) {
+      vote = 'delete';
+    }
     voteAction(type, question.id, metadata.id, vote, user.id);
   };
 
@@ -17,13 +20,7 @@ const QuestionMetadataLabel = ({ metadata, user, question, children, type, voteA
     } else {
       userVote = _.get(question, ['userTagVotes', metadata.id], {}).value;
     }
-    if (userVote === 1) {
-      return 'upvote';
-    } else if (userVote === -1) {
-      return 'downvote';
-    } else {
-      return null;
-    }
+    return userVote || null;
   };
 
   let votes;
@@ -42,15 +39,13 @@ const QuestionMetadataLabel = ({ metadata, user, question, children, type, voteA
             <Icon
               onClick={() => vote(1)}
               name="arrow up"
-              color={isVotedOn(metadata) === 'upvote' ? 'green' : null}
+              color={isVotedOn(metadata) === 1 ? 'green' : null}
               style={{ margin: '2px', cursor: 'pointer' }}
-              disabled={isVotedOn(metadata) === 'upvote' ? true : false}
             />
             <Icon
               onClick={() => vote(-1)}
               name="arrow down"
-              color={isVotedOn(metadata) === 'downvote' ? 'red' : null}
-              disabled={isVotedOn(metadata) === 'downvote' ? true : false}
+              color={isVotedOn(metadata) === -1 ? 'red' : null}
               style={{ margin: '2px', cursor: 'pointer' }}
             />{' '}
             {votes}
