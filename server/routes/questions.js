@@ -5,6 +5,7 @@ import _ from 'lodash';
 import createResponse from './_swaggerComponents';
 import Question from '../models/question';
 import QuestionBookmark from '../models/question_bookmark';
+import QuestionComment from '../models/question_comment';
 import QuestionUserAnswer from '../models/question_user_answer';
 import QuestionSpecialtyVote from '../models/question_specialty_vote';
 import QuestionTagVote from '../models/question_tag_vote';
@@ -454,15 +455,223 @@ router.delete('/:id', permit({ roles: ['admin'] }), async (req, res) => {
 
 /**
  * @swagger
+ * /questions/:id/comment:
+ *   post:
+ *     summary: Comment on a question
+ *     description: Comment on a qestion
+ *     tags:
+ *       - Question comments
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *           description: A question id to comment on
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               text:
+ *                 type: string
+ *               isAnonymous:
+ *                 type: boolean
+ *               isPrivate:
+ *                 type: boolean
+ *             description: An object containing a comment, and two booleans indicating whether the comment is anonymous or private
+ *             example: {comment: 'What a great question!', isAnonymous: false, isPrivate: false}
+ *     responses:
+ *       200:
+ *         description: The question including the new comment
+ *         content:
+ *            application/json:
+ *              schema:
+ *                $ref: "#/components/schemas/Question"
+ *       default:
+ *         description: unexpected error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/Error"
+ */
+router.post('/:questionId/comment', permit(), async (req, res) => {
+  let { questionId } = req.params;
+  let userId = req.user.id;
+
+  try {
+    const updatedQuestion = await transaction(Question.knex(), async (trx) => {
+      let { isPrivate, text } = req.body;
+      const comment = {
+        userId,
+        questionId,
+        text,
+        private: isPrivate
+      };
+
+      await QuestionComment.query(trx).insert(comment);
+
+      const updatedQuestion = await Question.query(trx)
+        .findById(questionId)
+        .select('question.*', 'semester.id as semester')
+        .joinRelation('semester')
+        .eager(Question.defaultEager)
+        .mergeEager('privateComments(own)', { userId: userId })
+        .mergeEager('userSpecialtyVotes(own)', {
+          userId: userId
+        })
+        .mergeEager('userTagVotes(own)', { userId: userId });
+      return updatedQuestion;
+    });
+    res.status(200).json(updatedQuestion);
+  } catch (err) {
+    errorHandler(err, res);
+  }
+});
+
+/**
+ * @swagger
+ * /questions/:id/comment/:commentId:
+ *   patch:
+ *     summary: Edit a comment
+ *     description: Edits an existing comment on a question
+ *     tags:
+ *       - Question comments
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: integer
+ *           description: A question id to comment on
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               text:
+ *                 type: string
+ *               isAnonymous:
+ *                 type: boolean
+ *               isPrivate:
+ *                 type: boolean
+ *             description: An object containing a comment, and two booleans indicating whether the comment is anonymous or private
+ *             example: {comment: 'What a great question!', isAnonymous: false, isPrivate: false}
+ *     responses:
+ *       200:
+ *         description: The question including the edited comment
+ *         content:
+ *            application/json:
+ *              schema:
+ *                $ref: "#/components/schemas/Question"
+ *       default:
+ *         description: unexpected error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/Error"
+ */
+router.patch('/:questionId/comment/:commentId', permit(), async (req, res) => {
+  let { questionId, commentId } = req.params;
+  let userId = req.user.id;
+
+  try {
+    const updatedQuestion = await transaction(Question.knex(), async (trx) => {
+      let { isPrivate, text } = req.body;
+      const comment = {
+        userId,
+        questionId,
+        text,
+        private: isPrivate
+      };
+
+      await QuestionComment.query(trx)
+        .where('id', commentId)
+        .andWhere('userId', userId)
+        .update(comment);
+
+      const updatedQuestion = await Question.query(trx)
+        .findById(questionId)
+        .select('question.*', 'semester.id as semester')
+        .joinRelation('semester')
+        .eager(Question.defaultEager)
+        .mergeEager('privateComments(own)', { userId: userId })
+        .mergeEager('userSpecialtyVotes(own)', {
+          userId: userId
+        })
+        .mergeEager('userTagVotes(own)', { userId: userId });
+      return updatedQuestion;
+    });
+    res.status(200).json(updatedQuestion);
+  } catch (err) {
+    errorHandler(err, res);
+  }
+});
+
+/**
+ * @swagger
+ * /questions/:id/comment/:commentId:
+ *   delete:
+ *     summary: Delete a comment
+ *     description: Deletes a comment.
+ *     tags:
+ *       - Question comments
+ *     responses:
+ *       200:
+ *         description: The question without the deleted comment.
+ *         content:
+ *            application/json:
+ *              schema:
+ *                $ref: "#/components/schemas/Question"
+ *       default:
+ *         description: unexpected error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/Error"
+ */
+router.delete('/:questionId/comment/:commentId', permit(), async (req, res) => {
+  let { questionId, commentId } = req.params;
+  let userId = req.user.id;
+
+  try {
+    const deleted = await QuestionComment.query()
+      .where('userId', userId)
+      .andWhere('id', commentId)
+      .delete();
+    if (deleted > 0) {
+      const question = await Question.query()
+        .findById(questionId)
+        .select('question.*', 'semester.id as semester')
+        .joinRelation('semester')
+        .eager(Question.defaultEager)
+        .mergeEager('privateComments(own)', { userId: userId })
+        .mergeEager('userSpecialtyVotes(own)', {
+          userId: userId
+        })
+        .mergeEager('userTagVotes(own)', { userId: userId });
+      res.status(200).json(question);
+    } else {
+      throw new NotFoundError();
+    }
+  } catch (err) {
+    errorHandler(err, res);
+  }
+});
+
+/**
+ * @swagger
  * /questions/:id/vote:
  *   put:
  *     summary: Vote for a specialty or tag
  *     description: >
  *       Saves specialty and tag votes to the database, related to a questionId.
- *       If supplying an empty array, the user's votes of the type are reset.
+ *       If supplying a `value` of `"delete"`, the user's votes of the type are reset.
  *       Requires a logged-in user.
  *     tags:
- *       - Questions
+ *       - Question voting
  *     parameters:
  *       - in: path
  *         name: id
@@ -476,9 +685,12 @@ router.delete('/:id', permit({ roles: ['admin'] }), async (req, res) => {
  *           schema:
  *             type: object
  *             properties:
- *               type: string
- *               id: integer
- *               value: number
+ *               type:
+ *                 type: string
+ *               id:
+ *                 type: integer
+ *               value:
+ *                 type: number
  *             description: An object containing a type, a metadata id and a value.
  *             example: {type: 'specialty', id: 1, value: 1}
  *     responses:
@@ -562,7 +774,7 @@ router.put('/:id/vote', permit(), async (req, res) => {
  *     summary: Save an answer
  *     description: Saves an answer to the database
  *     tags:
- *       - Questions
+ *       - Question answering
  *     requestBody:
  *       required: true
  *       content:
@@ -632,7 +844,7 @@ router.post('/:id/answer', async (req, res) => {
  *
  *       Requires the user to be logged in.
  *     tags:
- *       - Questions
+ *       - Question bookmarks
  *     responses:
  *       200:
  *         description: >
@@ -666,7 +878,7 @@ router.post('/:id/bookmark', permit(), async (req, res) => {
  *     summary: Delete a bookmark
  *     description: Deletes a bookmark. Requires the user to be logged in.
  *     tags:
- *       - Questions
+ *       - Question bookmarks
  *     responses:
  *       200:
  *         description: >

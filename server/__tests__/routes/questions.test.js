@@ -7,6 +7,7 @@ const questionApi = '/api/questions';
 const agent = request.agent(server);
 let firstQuestionId;
 let newQuestionId;
+let newCommentId;
 
 afterEach(() => {
   server.close();
@@ -239,6 +240,47 @@ describe('questions route', () => {
 
     expect(status).toEqual(200);
     expect(body.type).toEqual('QuestionBookmarkDeleteSuccess');
+  });
+
+  test("POST '/:id/comment' -- should insert a comment", async () => {
+    let { status, body } = await agent
+      .post(`${questionApi}/${newQuestionId}/comment`)
+      .send({ text: 'Dette er en test', isPrivate: false, isAnonymous: false });
+
+    expect(status).toEqual(200);
+    expect(body.publicComments).toHaveLength(1);
+    expect(body.publicComments[0].text).toEqual('Dette er en test');
+
+    newCommentId = body.publicComments[0].id;
+  });
+
+  test("POST '/:id/comment' -- should fail because not logged in", async () => {
+    let { status, body } = await request(server).post(`${questionApi}/${newQuestionId}/comment`);
+
+    expect(status).toEqual(403);
+    expect(body.type).toEqual('NotAuthorized');
+  });
+
+  test("PATCH '/:id/comment/:commentId' -- should patch a comment", async () => {
+    let { status, body } = await agent
+      .patch(`${questionApi}/${newQuestionId}/comment/${newCommentId}`)
+      .send({
+        text: 'opdateret text',
+        isPrivate: false,
+        isAnonymous: false
+      });
+
+    expect(status).toEqual(200);
+    expect(body.publicComments[0].text).toEqual('opdateret text');
+  });
+
+  test("DELETE '/:id/comment/:commentId' -- should delete a comment", async () => {
+    let { status, body } = await agent.delete(
+      `${questionApi}/${newQuestionId}/comment/${newCommentId}`
+    );
+
+    expect(status).toEqual(200);
+    expect(body.publicComments).toHaveLength(0);
   });
 
   test("DELETE '/:id' -- should fail because not admin", async () => {
