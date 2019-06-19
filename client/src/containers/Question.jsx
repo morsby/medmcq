@@ -7,7 +7,7 @@ import marked from 'marked';
 import _ from 'lodash';
 import { imageURL, breakpoints } from '../utils/common';
 
-import { subSupScript } from '../utils/quiz';
+import { subSupScript, isAnswered } from '../utils/quiz';
 
 import { Container, Grid, Divider, Segment, Responsive } from 'semantic-ui-react';
 
@@ -24,42 +24,6 @@ import QuestionExtras from '../components/Quiz/Question/QuestionExtras';
 class Question extends PureComponent {
   state = {
     /**
-     * Er report-formen åben?
-     */
-    reportOpen: false,
-
-    /**
-     * Selve rapporten
-     */
-    report: '',
-
-    /**
-     * Er der sendt en rapport?
-     * @type {Boolean}
-     */
-    reportSent: false,
-
-    /**
-     * Er der blevet flyttet på mus el.lign.?
-     * Benyttes til styling af svar-buttons.
-     * @type {Boolean}
-     */
-    pristine: true,
-
-    /**
-     * Er vi i gang med at ændre på specialer?
-     * @type {Boolean}
-     */
-    editingSpecialties: false,
-
-    /**
-     * Selected specialties
-     * Defaults til allerede kendte værdier
-     * @type {Array}
-     */
-    selectedSpecialties: this.props.question.specialty,
-
-    /**
      * Current window width
      */
     width: window.innerWidth
@@ -72,41 +36,12 @@ class Question extends PureComponent {
   componentDidMount() {
     document.addEventListener('keydown', this.onKeydown);
     window.addEventListener('resize', this.handleResize);
-    this.mouseMover();
   }
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.onKeydown);
     window.removeEventListener('resize', this.handleResize);
   }
-
-  /**
-   * For at forhindre lightbox i at være åben på tværs af navigationer og ændring
-   * af specialer nulstilles
-   */
-  componentDidUpdate(prevProps) {
-    if (this.props.question._id !== prevProps.question._id) {
-      this.setState({
-        pristine: true,
-        selectedSpecialties: this.props.question.specialty,
-        editingSpecialties: false
-      });
-      this.mouseMover();
-    }
-  }
-  /**
-   * For at se om musen er bevæget -- hvis den er, er siden ikke "pristine".
-   * Dette bruges i styling af svar-buttons
-   */
-  mouseMover = () => {
-    document.addEventListener(
-      'mousemove',
-      () => {
-        this.setState({ pristine: false });
-      },
-      { once: true }
-    );
-  };
 
   /**
    * For at kunne svare med tal på keyboardet
@@ -142,7 +77,7 @@ class Question extends PureComponent {
     let { answerQuestion, question, user } = this.props;
 
     // If not already answered:
-    if (!question.answer) {
+    if (!isAnswered(question)) {
       // Er svaret korrekt? Tager højde for flere korrekte svarmuligheder
       let correct;
       if (Array.isArray(question.correctAnswer)) {
@@ -182,7 +117,6 @@ class Question extends PureComponent {
                     question={question}
                     answer={answers[question.id]}
                     onAnswer={this.onAnswer}
-                    pristine={this.state.pristine}
                   />
                 </Responsive>
               </Grid.Column>
@@ -203,7 +137,6 @@ class Question extends PureComponent {
               question={question}
               answer={answers[question.id]}
               onAnswer={this.onAnswer}
-              pristine={this.state.pristine}
             />
           </Responsive>
           <QuestionMetadata question={question} user={user} />

@@ -14,37 +14,43 @@ import QuestionCommentSingle from './QuestionCommentSingle';
  * @param {array} comments          Array af kommentarer til spørgsmålet
  * @param {string} newComment       Den nye kommentar
  * @param {func}  onCommentType     Funktion til at ændre kommentar-tekst
- * @param {func} onCommentPost      Funktion der poster kommentar
- * @param {func} onDeleteComment    Funktion der sletter kommentar
- * @param {func} onEditComment      Funktion til at åbne ændring af kommentar
- * @param {string} editingComment   id til ændret kommentar. false hvis ny kommentar
- * @param {func} undoEditComment           Funktion der fortryder ændring / starter ny kommentar
  * @param {object} user             Brugeren
  */
 const QuestionComments = ({
   comments,
-  onDeleteComment,
-  onEditComment,
-  editingComment,
-  undoEditComment,
   user,
   privateComment,
   question,
   writeComment,
+  editComment,
   type
 }) => {
   let form;
+  const [editCommentId, setEditCommentId] = useState(null);
   const [comment, setComment] = useState('');
-  let isPrivate = type === 'private';
-  let isAnonymous = false;
+
   const onCommentPost = () => {
-    writeComment(question.id, comment, isPrivate, isAnonymous);
+    let isPrivate = type === 'private';
+    let isAnonymous = false;
+
+    if (editCommentId) {
+      editComment(question.id, editCommentId, comment, isPrivate, isAnonymous);
+      setEditCommentId(null);
+    } else {
+      writeComment(question.id, comment, isPrivate, isAnonymous);
+    }
+
     // TODO: Vent med at slette kommentar til den ER postet
     setComment('');
   };
 
+  const onEditComment = (comment) => {
+    setEditCommentId(comment.id);
+    setComment(comment.text);
+  };
+
   if (user) {
-    let skrivRet = editingComment ? (
+    let skrivRet = editCommentId ? (
       <Translate id="questionComments.edit_a_comment" />
     ) : (
       <Translate id="questionComments.write_a_comment" />
@@ -81,8 +87,14 @@ const QuestionComments = ({
           >
             <Translate id="questionComments.comment" />
           </Button>
-          {editingComment && (
-            <Button negative onClick={undoEditComment}>
+          {editCommentId && (
+            <Button
+              negative
+              onClick={() => {
+                setEditCommentId(null);
+                setComment('');
+              }}
+            >
               <Translate id="questionComments.undo_edit" />
             </Button>
           )}
@@ -103,9 +115,9 @@ const QuestionComments = ({
           <QuestionCommentSingle
             key={c}
             commentId={c}
+            questionId={question.id}
             type={type}
-            deleteComment={onDeleteComment}
-            editComment={onEditComment}
+            onEditComment={onEditComment}
           />
         ))}
       </div>
@@ -116,17 +128,12 @@ const QuestionComments = ({
 
 QuestionComments.propTypes = {
   comments: PropTypes.array,
-  newComment: PropTypes.string,
-  onCommentType: PropTypes.func,
-  onCommentPost: PropTypes.func,
-  onDeleteComment: PropTypes.func,
-  onEditComment: PropTypes.func,
-  editingComment: PropTypes.string,
-  undoEditComment: PropTypes.func,
+  // I brug:
   user: PropTypes.object,
   privateComment: PropTypes.bool,
   question: PropTypes.object,
   writeComment: PropTypes.func,
+  editComment: PropTypes.func,
   type: PropTypes.string
 };
 

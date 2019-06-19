@@ -45,23 +45,24 @@ const QuestionMetadata = (props) => {
   let { tags, specialties } = metadata.entities;
   specialties = _.pickBy(specialties, (s) => s.semesterId === question.semester);
   tags = _.pickBy(tags, (t) => t.semesterId === question.semester);
+  let examSet = metadata.entities.examSets[question.examSetId];
   return (
     <Grid celled stackable columns="equal">
       <Grid.Column>
         <Grid.Row>
           <Translate id="questionMetadata.set" />{' '}
-          {question.examSeason === 'F' ? (
+          {examSet.season === 'F' ? (
             <Translate id="questionMetadata.set_season.F" />
           ) : (
             <Translate id="questionMetadata.set_season.E" />
           )}{' '}
-          {question.examYear}
+          {examSet.year}
         </Grid.Row>
         {isAnswered(question) && (
           <>
             <Grid.Row style={{ margin: '7px 0 7px 0' }}>
               <Translate id="questionMetadata.specialty" />{' '}
-              {_.map(question.specialties, (s) => {
+              {_.orderBy(question.specialties, 'votes', 'desc').map((s) => {
                 let spec = specialties[s.specialtyId] || {};
                 return (
                   <QuestionMetadataLabel

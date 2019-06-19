@@ -20,7 +20,7 @@ const QuestionCommentSingle = ({
   privateComments = {},
   publicComments = {},
   user,
-  editComment,
+  onEditComment,
   deleteComment,
   questionId
 }) => {
@@ -99,7 +99,7 @@ const QuestionCommentSingle = ({
                 </Menu.Item>
               </>
             )}
-            <Menu.Item onClick={() => editComment(comment)}>
+            <Menu.Item onClick={() => onEditComment(comment)}>
               <Icon name="edit" color="yellow" />
               <Translate id="questionCommentSingle.edit" />
             </Menu.Item>
@@ -117,7 +117,7 @@ QuestionCommentSingle.propTypes = {
   privateComments: PropTypes.object,
   publicComments: PropTypes.object,
   user: PropTypes.object,
-  editComment: PropTypes.func,
+  onEditComment: PropTypes.func,
   deleteComment: PropTypes.func,
   questionId: PropTypes.number
 };
@@ -126,8 +126,7 @@ const mapStateToProps = (state) => ({
   authors: state.questions.entities.users,
   publicComments: state.questions.entities.publicComments,
   privateComments: state.questions.entities.privateComments,
-  user: state.auth.user,
-  questionId: state.quiz.questions[state.quiz.currentQuestion]
+  user: state.auth.user
 });
 
 export default connect(

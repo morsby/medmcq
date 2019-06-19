@@ -13,7 +13,7 @@ import marked from 'marked';
  * @param {func}    onAnswer Func der kaldes når der svares på spg.
  * @param {object}  question Selve spørgsmålet.
  */
-const QuestionAnswerButtons = ({ pristine, answer, onAnswer, question }) => {
+const QuestionAnswerButtons = ({ answer, onAnswer, question }) => {
   /**
    * Func der prefixer svarmuligheder med A, B og C samt laver knappen.
    * @param  {Number} answerNo Svarmulighed nr. 1, 2 el. 3
@@ -55,10 +55,8 @@ const QuestionAnswerButtons = ({ pristine, answer, onAnswer, question }) => {
     );
   };
 
-  let pristineClass = pristine ? 'pristine' : '';
-
   return (
-    <Button.Group vertical fluid className={pristineClass}>
+    <Button.Group vertical fluid>
       {generateButton(1)}
       <Divider hidden />
       {generateButton(2)}
@@ -71,8 +69,7 @@ const QuestionAnswerButtons = ({ pristine, answer, onAnswer, question }) => {
 QuestionAnswerButtons.propTypes = {
   onAnswer: PropTypes.func.isRequired,
   question: PropTypes.object.isRequired,
-  answer: PropTypes.number,
-  pristine: PropTypes.bool
+  answer: PropTypes.number
 };
 
 export default QuestionAnswerButtons;

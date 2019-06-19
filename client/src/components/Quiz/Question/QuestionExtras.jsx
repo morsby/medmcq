@@ -5,16 +5,7 @@ import QuestionComments from './QuestionComments/QuestionComments';
 import { PropTypes } from 'prop-types';
 import QuestionExtraButtons from './QuestionExtras/QuestionExtraButtons';
 
-const QuestionExtras = ({
-  user,
-  question,
-  width,
-  questionReport,
-  deleteComment,
-  commentQuestion,
-  editComment,
-  qn
-}) => {
+const QuestionExtras = ({ user, question, width, questionReport, qn }) => {
   const [privateCommentsOpen, setPrivateCommentsOpen] = useState(false);
   const [publicCommentsOpen, setPublicCommentsOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
@@ -67,8 +58,8 @@ const QuestionExtras = ({
         privateCommentsOpen={privateCommentsOpen}
         onPublicCommentsToggle={onPublicCommentsToggle}
         publicCommentsOpen={publicCommentsOpen}
-        publicComments={question.publicComments}
-        privateComments={question.privateComments}
+        publicComments={(question.publicComments || []).length}
+        privateComments={(question.privateComments || []).length}
         width={width}
         user={user}
       />
@@ -87,12 +78,9 @@ const QuestionExtras = ({
       {(publicCommentsOpen || privateCommentsOpen) && (
         <QuestionComments
           user={user}
+          comments={privateCommentsOpen ? question.privateComments : question.publicComments}
           type={privateCommentsOpen ? 'private' : 'public'}
-          comments={publicCommentsOpen ? question.publicComments : question.privateComments}
           question={question}
-          deleteComment={deleteComment}
-          commentQuestion={commentQuestion}
-          editComment={editComment}
         />
       )}
     </>

@@ -125,6 +125,7 @@ export const modifiers = {
       .select(`${type}Id`, 'questionId')
       .sum('value as votes')
       .having('votes', '>', '-1')
-      .groupBy(`${type}Id`, 'questionId');
+      .groupBy(`${type}Id`, 'questionId')
+      .orderBy('votes', 'desc');
   }
 };

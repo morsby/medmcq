@@ -10,15 +10,17 @@ const QuestionExtraButtons = ({
   privateCommentsOpen,
   user,
   publicCommentsOpen,
+  publicComments,
+  privateComments,
   onPublicCommentsToggle
 }) => {
   return (
     <>
       <Button color={publicCommentsOpen ? 'green' : null} basic onClick={onPublicCommentsToggle}>
         {publicCommentsOpen ? (
-          <Translate id="question.hide_public_comments" data="FIX" />
+          <Translate id="question.hide_public_comments" data={{ n: publicComments }} />
         ) : (
-          <Translate id="question.show_public_comments" data="FIX" />
+          <Translate id="question.show_public_comments" data={{ n: publicComments }} />
         )}
       </Button>
       {user && (
@@ -28,9 +30,9 @@ const QuestionExtraButtons = ({
           onClick={onPrivateCommentsToggle}
         >
           {privateCommentsOpen ? (
-            <Translate id="question.hide_private_comments" data="FIX" />
+            <Translate id="question.hide_private_comments" data={{ n: privateComments }} />
           ) : (
-            <Translate id="question.show_private_comments" data="FIX" />
+            <Translate id="question.show_private_comments" data={{ n: privateComments }} />
           )}
         </Button>
       )}
@@ -49,7 +51,9 @@ QuestionExtraButtons.propTypes = {
   privateCommentsOpen: PropTypes.bool,
   user: PropTypes.object,
   publicCommentsOpen: PropTypes.bool,
-  onPublicCommentsToggle: PropTypes.func
+  onPublicCommentsToggle: PropTypes.func,
+  privateComments: PropTypes.number,
+  publicComments: PropTypes.number
 };
 
 export default QuestionExtraButtons;

@@ -270,6 +270,12 @@ router.get('/:id/questions', async (req, res) => {
       questions = questions.mergeEager('privateComments(own)', {
         userId: req.user.id
       });
+      questions = questions.mergeEager('userSpecialtyVotes(own)', {
+        userId: req.user.id
+      });
+      questions = questions.mergeEager('userTagVotes(own)', {
+        userId: req.user.id
+      });
     }
 
     questions = await questions;

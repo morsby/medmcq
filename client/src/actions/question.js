@@ -82,13 +82,13 @@ export const deleteComment = (questionId, comment_id) => async (dispatch) => {
   });
 };
 
-export const editComment = (questionId, commentId, comment, isPrivate, anonymous) => async (
+export const editComment = (questionId, commentId, comment, isPrivate, isAnonymous) => async (
   dispatch
 ) => {
-  const res = await axios.put(`/api/questions/${questionId}/comment/${commentId}`, {
-    comment,
+  const res = await axios.patch(`/api/questions/${questionId}/comment/${commentId}`, {
+    text: comment,
     isPrivate,
-    anonymous
+    isAnonymous
   });
 
   dispatch({
