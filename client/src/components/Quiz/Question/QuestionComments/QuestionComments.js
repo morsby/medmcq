@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form, TextArea, Button, Message } from 'semantic-ui-react';
 
@@ -21,9 +21,6 @@ import QuestionCommentSingle from './QuestionCommentSingle';
  */
 const QuestionComments = ({
   comments,
-  newComment = '',
-  onCommentType,
-  onCommentPost,
   onDeleteComment,
   onEditComment,
   editingComment,
@@ -32,6 +29,12 @@ const QuestionComments = ({
   privateComment
 }) => {
   let form;
+  const [comment, setComment] = useState('');
+  const onCommentPost = () => {
+    //eslint-disable-next-line no-console
+    console.log(comment);
+  };
+
   if (user) {
     let skrivRet = editingComment ? (
       <Translate id="questionComments.edit_a_comment" />
@@ -46,10 +49,10 @@ const QuestionComments = ({
           <Translate>
             {({ translate }) => (
               <TextArea
-                name="newComment"
+                name="comment"
                 placeholder={translate('questionComments.write_a_comment')}
-                onChange={onCommentType}
-                value={newComment}
+                onChange={(e) => setComment(e.target.value)}
+                value={comment}
               />
             )}
           </Translate>
@@ -65,7 +68,7 @@ const QuestionComments = ({
           )}
           <Button
             onClick={onCommentPost}
-            disabled={newComment.length < 3}
+            disabled={comment.length < 3}
             style={{ margin: '0.5em 1em 0.5em 0' }}
           >
             <Translate id="questionComments.comment" />

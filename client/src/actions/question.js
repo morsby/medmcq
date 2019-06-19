@@ -61,8 +61,8 @@ export const getQuestions = ({ ids = [], quiz = false }) => async (dispatch, get
   }
 };
 
-export const commentQuestion = (id, comment, isPrivate, anonymous) => async (dispatch) => {
-  const res = await axios.put(`/api/questions/${id}/comment`, {
+export const writeComment = (questionId, comment, isPrivate, anonymous) => async (dispatch) => {
+  const res = await axios.post(`/api/questions/${questionId}/comment`, {
     comment,
     isPrivate,
     anonymous
