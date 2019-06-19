@@ -35,7 +35,6 @@ export default createReducer(initialState, {
 
   [types.FETCH_QUESTIONS_SUCCESS]: (state, action) => {
     const normalized = normalize(action.payload, [question]);
-
     return { ...state, ...normalized, isFetching: false };
   },
 

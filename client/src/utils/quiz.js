@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { store } from 'index';
 
 export const smoothScroll = (h, dir = 'up') => {
@@ -39,27 +38,22 @@ export const evalAnswer = (question, userAnswer, answerNo) => {
   }
 };
 
-export const calculateResults = (questions) => {
-  let answered = _.filter(questions, (o) => typeof o.answer === 'number');
-
-  let res;
-
-  if (answered.length === 0) {
-    res = { status: false };
-  } else {
-    let correct = 0;
-    answered.map((question) => {
-      if (question.correctAnswers.includes(question.answer)) correct++;
-      return correct;
-    });
-
-    res = {
-      status: true,
-      n: answered.length,
-      correct,
-      percentage: `${Math.round((correct / answered.length) * 10000) / 100}%`
-    };
+export const calculateResults = (questions, answers) => {
+  let res = {
+    status: true,
+    n: 0,
+    correct: 0
+  };
+  for (var questionId in answers) {
+    res.n++;
+    if (questions.entities.questions[questionId].correctAnswers.includes(answers[questionId]))
+      res.correct++;
   }
+
+  if (res.n === 0) {
+    return { status: false };
+  }
+  res.percentage = `${Math.round((res.correct / res.n) * 10000) / 100}%`;
 
   return res;
 };

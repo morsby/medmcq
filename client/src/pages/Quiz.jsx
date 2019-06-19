@@ -132,8 +132,8 @@ class QuizMain extends Component {
   }
 
   render() {
-    let { questions, answers, user, quiz } = this.props;
-
+    let { questions, user, quiz } = this.props;
+    let { answers } = quiz;
     if (questions.isFetching) {
       return (
         <Translate>
@@ -214,12 +214,8 @@ QuizMain.propTypes = {
   quiz: PropTypes.object,
 
   changeQuestion: PropTypes.func,
-  /**
-   * Fra Redux
-   * Et array indeholdende BOOLEANS for hvert indeks i props.questions.
-   * Benyttes til at farve overblikket grønt/rødt. se answersReducer.js
-   */
-  answers: PropTypes.array,
+
+  answers: PropTypes.object,
 
   /**
    * Fra Redux
@@ -246,7 +242,6 @@ QuizMain.propTypes = {
 function mapStateToProps(state) {
   return {
     quiz: state.quiz,
-    answers: state.answers,
     user: state.auth.user,
     questions: state.questions
   };
