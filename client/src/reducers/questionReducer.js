@@ -5,8 +5,8 @@ import { normalize, schema } from 'normalizr';
 import _ from 'lodash';
 
 const user = new schema.Entity('users');
-const publicComment = new schema.Entity('publicComments', { author: user });
-const privateComment = new schema.Entity('privateComments', { author: user });
+const publicComment = new schema.Entity('publicComments', { user: user });
+const privateComment = new schema.Entity('privateComments', { user: user });
 const examSet = new schema.Entity('examSets');
 const question = new schema.Entity(
   'questions',
@@ -45,6 +45,7 @@ export default createReducer(initialState, {
 
   [types.QUESTION_UPDATE]: (state, action) => {
     const normalized = normalize(action.payload, question);
+    state.entities = _.merge({}, state.entities, normalized.entities);
     state.entities.questions[action.payload.id] = normalized.entities.questions[action.payload.id];
   }
 });

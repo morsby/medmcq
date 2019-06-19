@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-
+import { connect } from 'react-redux';
+import * as actions from 'actions';
 import marked from 'marked';
 import { Comment, Icon, Menu } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
@@ -12,9 +13,26 @@ import { Translate } from 'react-localize-redux';
  * @param {func}    deleteComment Funktion at slette kommentar
  * @param {func}    editComment   Funktion at ændre kommentar
  */
-const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) => {
+const QuestionCommentSingle = ({
+  commentId,
+  type,
+  authors,
+  privateComments = {},
+  publicComments = {},
+  user,
+  editComment,
+  deleteComment,
+  questionId
+}) => {
   const [deleting, setDeleting] = useState(false);
+  let comment;
+  if (type === 'public') {
+    comment = publicComments[commentId];
+  } else {
+    comment = privateComments[commentId];
+  }
 
+  let author = authors[comment.userId];
   if (!user) user = {};
   return (
     <Comment
@@ -30,7 +48,7 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
       <Comment.Content>
         {!comment.anonymous && (
           <Comment.Author as="strong">
-            {comment.user[0].toUpperCase() + comment.user.substring(1)}
+            {author.username[0].toUpperCase() + author.username.substring(1)}
           </Comment.Author>
         )}
         {comment.anonymous && (
@@ -53,7 +71,7 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
             __html: marked(comment.text)
           }}
         />
-        {comment.userId === user.id && (
+        {author.id === user.id && (
           <Menu size="mini" icon="labeled" secondary>
             {!deleting && (
               <Menu.Item onClick={() => setDeleting(true)}>
@@ -72,7 +90,7 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
                 </Menu.Item>
                 <Menu.Item
                   onClick={() => {
-                    deleteComment(comment.id);
+                    deleteComment(questionId, comment.id);
                     setDeleting(false);
                   }}
                 >
@@ -93,10 +111,26 @@ const QuestionCommentSingle = ({ comment, user, deleteComment, editComment }) =>
 };
 
 QuestionCommentSingle.propTypes = {
-  comment: PropTypes.object,
+  commentId: PropTypes.number,
+  type: PropTypes.string,
+  authors: PropTypes.object,
+  privateComments: PropTypes.object,
+  publicComments: PropTypes.object,
   user: PropTypes.object,
+  editComment: PropTypes.func,
   deleteComment: PropTypes.func,
-  editComment: PropTypes.func
+  questionId: PropTypes.number
 };
 
-export default QuestionCommentSingle;
+const mapStateToProps = (state) => ({
+  authors: state.questions.entities.users,
+  publicComments: state.questions.entities.publicComments,
+  privateComments: state.questions.entities.privateComments,
+  user: state.auth.user,
+  questionId: state.quiz.questions[state.quiz.currentQuestion]
+});
+
+export default connect(
+  mapStateToProps,
+  actions
+)(QuestionCommentSingle);

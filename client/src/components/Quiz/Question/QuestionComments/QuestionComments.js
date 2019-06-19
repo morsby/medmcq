@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import * as actions from 'actions';
 import { Form, TextArea, Button, Message } from 'semantic-ui-react';
 
 import { Translate } from 'react-localize-redux';
@@ -26,13 +28,19 @@ const QuestionComments = ({
   editingComment,
   undoEditComment,
   user,
-  privateComment
+  privateComment,
+  question,
+  writeComment,
+  type
 }) => {
   let form;
   const [comment, setComment] = useState('');
+  let isPrivate = type === 'private';
+  let isAnonymous = false;
   const onCommentPost = () => {
-    //eslint-disable-next-line no-console
-    console.log(comment);
+    writeComment(question.id, comment, isPrivate, isAnonymous);
+    // TODO: Vent med at slette kommentar til den ER postet
+    setComment('');
   };
 
   if (user) {
@@ -93,9 +101,9 @@ const QuestionComments = ({
       <div>
         {comments.map((c) => (
           <QuestionCommentSingle
-            key={c.id}
-            comment={c}
-            user={user}
+            key={c}
+            commentId={c}
+            type={type}
             deleteComment={onDeleteComment}
             editComment={onEditComment}
           />
@@ -116,7 +124,13 @@ QuestionComments.propTypes = {
   editingComment: PropTypes.string,
   undoEditComment: PropTypes.func,
   user: PropTypes.object,
-  privateComment: PropTypes.bool
+  privateComment: PropTypes.bool,
+  question: PropTypes.object,
+  writeComment: PropTypes.func,
+  type: PropTypes.string
 };
 
-export default QuestionComments;
+export default connect(
+  null,
+  actions
+)(QuestionComments);

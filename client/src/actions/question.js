@@ -61,38 +61,38 @@ export const getQuestions = ({ ids = [], quiz = false }) => async (dispatch, get
   }
 };
 
-export const writeComment = (questionId, comment, isPrivate, anonymous) => async (dispatch) => {
+export const writeComment = (questionId, text, isPrivate, isAnonymous) => async (dispatch) => {
   const res = await axios.post(`/api/questions/${questionId}/comment`, {
-    comment,
+    text,
     isPrivate,
-    anonymous
+    isAnonymous
   });
   dispatch({
-    type: types.QUESTION_COMMENT_UPDATE,
+    type: types.QUESTION_UPDATE,
     payload: res.data
   });
 };
 
-export const deleteComment = (question_id, comment_id) => async (dispatch) => {
-  const res = await axios.delete(`/api/questions/${question_id}/comment/${comment_id}`);
+export const deleteComment = (questionId, comment_id) => async (dispatch) => {
+  const res = await axios.delete(`/api/questions/${questionId}/comment/${comment_id}`);
 
   dispatch({
-    type: types.QUESTION_COMMENT_UPDATE,
+    type: types.QUESTION_UPDATE,
     payload: res.data
   });
 };
 
-export const editComment = (question_id, comment_id, comment, isPrivate, anonymous) => async (
+export const editComment = (questionId, commentId, comment, isPrivate, anonymous) => async (
   dispatch
 ) => {
-  const res = await axios.put(`/api/questions/${question_id}/comment/${comment_id}`, {
+  const res = await axios.put(`/api/questions/${questionId}/comment/${commentId}`, {
     comment,
     isPrivate,
     anonymous
   });
 
   dispatch({
-    type: types.QUESTION_COMMENT_UPDATE,
+    type: types.QUESTION_UPDATE,
     payload: res.data
   });
 };

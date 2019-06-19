@@ -87,8 +87,8 @@ const QuestionExtras = ({
       {(publicCommentsOpen || privateCommentsOpen) && (
         <QuestionComments
           user={user}
-          isPrivateComment={privateCommentsOpen}
-          comments={question.publicComments}
+          type={privateCommentsOpen ? 'private' : 'public'}
+          comments={publicCommentsOpen ? question.publicComments : question.privateComments}
           question={question}
           deleteComment={deleteComment}
           commentQuestion={commentQuestion}
