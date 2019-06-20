@@ -55,7 +55,7 @@ export const getProfile = (semesterId = null) => async (dispatch, getState) => {
   let res;
   semesterId = semesterId || getState().ui.selection.selectedSemester;
   try {
-    res = await axios.get(`/api/users/${userId}/profile/${semesterId}`);
+    res = await axios.get(`/api/users/${userId}/profile?semesterId=${semesterId}`);
   } catch (err) {
     // eslint-disable-next-line no-console
     console.log(err.response);

@@ -1,7 +1,7 @@
 import express from 'express';
 import { ValidationError, NotFoundError } from 'objection';
 import _ from 'lodash';
-import { errorHandler } from '../middleware/errorHandling';
+import { errorHandler, BadRequest } from '../middleware/errorHandling';
 import { permit } from '../middleware/permission';
 import Question from '../models/question';
 import QuestionUserAnswer from '../models/question_user_answer';
@@ -131,7 +131,7 @@ router.get('/:id', permit({ roles: ['admin'], owner: 'params.id' }), async (req,
 
 /**
  * @swagger
- * /users/:id/profile/:semesterId:
+ * /users/:id/profile:
  *   get:
  *     summary: Fetch one user's activity by id and semesterId
  *     description: >
@@ -145,6 +145,12 @@ router.get('/:id', permit({ roles: ['admin'], owner: 'params.id' }), async (req,
  *       and the `privateComments` do not contain public comments.
  *     tags:
  *       - Users
+ *     parameters:
+ *       - in: query
+ *         name: semesterId
+ *         schema:
+ *           type: string
+ *           description: A semester id
  *     responses:
  *       200:
  *         description: The activity.
@@ -180,12 +186,15 @@ router.get('/:id', permit({ roles: ['admin'], owner: 'params.id' }), async (req,
  *               $ref: "#/components/schemas/Error"
  */
 router.get(
-  '/:userId/profile/:semesterId',
+  '/:userId/profile',
   permit({ roles: ['admin'], owner: 'params.userId' }),
   async (req, res) => {
-    let { userId, semesterId } = req.params;
-
     try {
+      let { userId } = req.params;
+      let { semesterId } = req.query;
+      if (!semesterId)
+        throw new BadRequest({ message: 'You must pass in a semesterId as query parameter' });
+
       // We load the user including answers.
       // TODO: Find en måde at undgå at kalde hente brugeren men i stedet
       // direkte finde svar. Husk parseJson i Models/User.

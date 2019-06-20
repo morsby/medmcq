@@ -66,8 +66,8 @@ describe('users route: not logged in', () => {
     expect(status).toEqual(403);
   });
 
-  test("GET '/:id/profile/1' -- should fail", async () => {
-    let { status, body } = await anon.get(`${userApi}/${newUserId}/profile/1`);
+  test("GET '/:id/profile?semesterId=1' -- should fail", async () => {
+    let { status, body } = await anon.get(`${userApi}/${newUserId}/profile?semesterId=1`);
 
     expect(body.type).toEqual('NotAuthorized');
     expect(status).toEqual(403);
@@ -125,14 +125,14 @@ describe('users route: user', () => {
     expect(body.publicComments).toBeFalsy();
   });
 
-  test("GET '/:id/profile/1' -- should fail (not owner)", async () => {
-    let { status, body } = await user.get(`${userApi}/${adminId}/profile/1`);
+  test("GET '/:id/profile?semesterId=1' -- should fail (not owner)", async () => {
+    let { status, body } = await user.get(`${userApi}/${adminId}/profile?semesterId=1`);
     expect(body.type).toEqual('NotAuthorized');
     expect(status).toEqual(403);
   });
 
-  test("GET '/:id/profile/1' -- should get one user profile (owner)", async () => {
-    let { body } = await user.get(`${userApi}/${userIds[0]}/profile/1`);
+  test("GET '/:id/profile?semesterId=1' -- should get one user profile (owner)", async () => {
+    let { body } = await user.get(`${userApi}/${userIds[0]}/profile?semesterId=1`);
 
     expect(body).toHaveProperty('bookmarks');
     expect(body).toHaveProperty('privateComments');
@@ -193,8 +193,8 @@ describe('users route: admin', () => {
     expect(body.publicComments).toBeFalsy();
   });
 
-  test("GET '/:id/profile/1' -- should get another user profile", async () => {
-    let { body } = await admin.get(`${userApi}/${userIds[1]}/profile/1`);
+  test("GET '/:id/profile?semesterId=1' -- should get another user profile", async () => {
+    let { body } = await admin.get(`${userApi}/${userIds[1]}/profile?semesterId=1`);
 
     expect(body).toHaveProperty('bookmarks');
     expect(body).toHaveProperty('privateComments');
