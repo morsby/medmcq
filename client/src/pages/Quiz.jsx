@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-
+import _ from 'lodash';
 import { withLocalize, Translate } from 'react-localize-redux';
 import quizTranslations from '../Translations/quizTranslations.json';
 
@@ -49,6 +49,12 @@ class QuizMain extends Component {
 
   componentDidMount() {
     document.addEventListener('keydown', this.onKeydown);
+
+    let { quiz, questions } = this.props;
+
+    if (!_.isEqual(quiz.questions, questions.result)) {
+      this.props.getQuestions({ ids: quiz.questions });
+    }
   }
   componentWillUnmount() {
     document.removeEventListener('keydown', this.onKeydown);
@@ -161,7 +167,7 @@ class QuizMain extends Component {
               <h1>
                 <Translate id="quizLoader.noresultsHeader" />
               </h1>
-              <Button onClick={() => this.props.history.push('/')} basic color="blue">
+              <Button onClick={() => this.navigateToPage('root')} basic color="blue">
                 <Translate id="quizLoader.noresults" />
               </Button>
             </Container>
@@ -236,7 +242,8 @@ QuizMain.propTypes = {
   addTranslation: PropTypes.func,
 
   qn: PropTypes.number,
-  questions: PropTypes.object
+  questions: PropTypes.object,
+  getQuestions: PropTypes.func
 };
 
 function mapStateToProps(state) {

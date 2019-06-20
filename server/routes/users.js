@@ -197,10 +197,16 @@ router.get('/:id/profile', permit({ roles: ['admin'], owner: 'params.id' }), asy
           .where('userId', id)
           .distinct('questionId')
       )
-      .eager(Question.defaultEager.replace('publicComments.user, ', ''));
+      .eager(Question.defaultEager)
+      .mergeEager('privateComments(own).user', {
+        userId: id
+      });
 
     // Find questions the user has commented publicly, fetches including other public comments
-    let publicComments = Question.query()
+    let publicComments = QuestionComment.query()
+      .where('userId', id)
+      .andWhere('private', false);
+    let publicCommentsQuestions = Question.query()
       .whereIn(
         'id',
         QuestionComment.query()
@@ -208,10 +214,16 @@ router.get('/:id/profile', permit({ roles: ['admin'], owner: 'params.id' }), asy
           .andWhere('private', false)
           .distinct('questionId')
       )
-      .eager(Question.defaultEager);
+      .eager(Question.defaultEager)
+      .mergeEager('privateComments(own).user', {
+        userId: id
+      });
 
-    // Find questions the usrer has commented privately, ...
-    let privateComments = Question.query()
+    // Find questions the user has commented privately, ...
+    let privateComments = QuestionComment.query()
+      .where('userId', id)
+      .andWhere('private', true);
+    let privateCommentsQuestions = Question.query()
       .whereIn(
         'id',
         QuestionComment.query()
@@ -219,43 +231,60 @@ router.get('/:id/profile', permit({ roles: ['admin'], owner: 'params.id' }), asy
           .andWhere('private', true)
           .distinct('questionId')
       )
-      .eager(Question.defaultEager.replace('publicComments.user, ', ''))
+      .eager(Question.defaultEager)
       .mergeEager('privateComments(own).user', {
         userId: id
       });
 
     // Find questions the user has bookmarked
-    let bookmarks = Question.query()
+    let bookmarks = QuestionBookmark.query().where('userId', id);
+    let bookmarksQuestions = Question.query()
       .whereIn(
         'id',
         QuestionBookmark.query()
           .where('userId', id)
           .distinct('questionId')
       )
-      .eager(Question.defaultEager.replace('publicComments.user, ', ''));
+      .eager(Question.defaultEager)
+      .mergeEager('privateComments(own).user', {
+        userId: id
+      });
 
     // Perform all queries.
-    [answers, answeredQuestions, publicComments, privateComments, bookmarks] = await Promise.all([
+    [
       answers,
       answeredQuestions,
       publicComments,
+      publicCommentsQuestions,
       privateComments,
-      bookmarks
+      privateCommentsQuestions,
+      bookmarks,
+      bookmarksQuestions
+    ] = await Promise.all([
+      answers,
+      answeredQuestions,
+      publicComments,
+      publicCommentsQuestions,
+      privateComments,
+      privateCommentsQuestions,
+      bookmarks,
+      bookmarksQuestions
     ]);
 
     let profile = {};
 
-    answers = _.groupBy(answers, 'questionId');
-
-    answeredQuestions = answeredQuestions.map((question) => ({
-      question,
-      answers: answers[question.id]
-    }));
-
-    profile.answers = answeredQuestions;
+    profile.answers = answers;
     profile.publicComments = publicComments;
     profile.privateComments = privateComments;
     profile.bookmarks = bookmarks;
+
+    profile.questions = _.merge(
+      [],
+      answeredQuestions,
+      publicCommentsQuestions,
+      privateCommentsQuestions,
+      bookmarksQuestions
+    );
 
     res.status(200).json(profile);
   } catch (err) {

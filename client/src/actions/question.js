@@ -19,6 +19,7 @@ export const getQuestions = ({ ids = [], quiz = false }) => async (dispatch, get
   dispatch({ type: types.FETCH_QUESTIONS_REQUEST });
   let res;
   // Hvilke spøgsmål bedes der om?
+  if (ids.length > 0) type = 'ids';
   switch (type) {
     /*
       types:

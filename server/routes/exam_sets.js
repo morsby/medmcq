@@ -261,8 +261,6 @@ router.get('/:id/questions', async (req, res) => {
   try {
     let questions = Question.query()
       .where({ examSetId: id })
-      .select('question.*', 'semester.id as semester')
-      .joinRelation('semester')
       .eager(Question.defaultEager)
       .orderBy('examSetQno');
 

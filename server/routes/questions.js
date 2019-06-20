@@ -98,14 +98,16 @@ router.get('/', async (req, res) => {
     let query = Question.query()
       .select('question.*', 'semester.id as semester')
       .joinRelation('semester')
-      .eager(Question.defaultEager)
-      .orderByRaw('rand()');
+      .eager(Question.defaultEager);
 
     // If requesting ids, get them
     if (ids) {
-      query = query.whereIn('Question.id', ids.split(',').map((id) => Number(id)));
+      query = query
+        .whereIn('Question.id', ids.split(',').map((id) => Number(id)))
+        .orderByRaw(`FIELD(question.id, ${ids})`);
     } else {
-      // Otherwise, filter by results
+      // Otherwise, filter by results and randomize
+      query = query.orderByRaw('rand()');
       if (semesters) query = query.whereIn('semester.id', semesters.split(','));
 
       if (n) query = query.limit(n);
@@ -260,8 +262,6 @@ router.post('/search', async (req, res) => {
 
     const questions = await Question.query()
       .whereRaw('MATCH (text, answer1, answer2, answer3) AGAINST (? IN BOOLEAN MODE)', searchString)
-      .select('question.*', 'semester.id as semester')
-      .joinRelation('semester')
       .eager(Question.defaultEager);
 
     res.status(200).json(questions);
