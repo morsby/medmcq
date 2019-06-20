@@ -1,4 +1,5 @@
 import axios from 'axios';
+import _ from 'lodash';
 import * as types from './types';
 
 export const checkUserAvailability = (field, value) => async () => {
@@ -48,16 +49,20 @@ export const fetchUser = () => async (dispatch) => {
   dispatch({ type: types.AUTH_CURRENT_USER, payload: res.data });
 };
 
-export const getProfile = (userId) => async (dispatch) => {
+export const getProfile = (semesterId = null) => async (dispatch, getState) => {
+  dispatch({ type: types.AUTH_PROFILE_REQUEST });
+  const userId = getState().auth.user.id;
   let res;
+  semesterId = semesterId || getState().ui.selection.selectedSemester;
   try {
-    res = await axios.get(`/api/users/${userId}/profile`);
+    res = await axios.get(`/api/users/${userId}/profile/${semesterId}`);
   } catch (err) {
     // eslint-disable-next-line no-console
     console.log(err.response);
   }
 
-  dispatch({ type: types.AUTH_PROFILE, payload: res.data });
+  dispatch({ type: types.AUTH_PROFILE_SUCCESS, payload: _.omit(res.data, 'questions') });
+  dispatch({ type: types.FETCH_QUESTIONS_SUCCESS, payload: res.data.questions });
 };
 
 export const editProfile = (values, callback) => async () => {

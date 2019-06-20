@@ -10,8 +10,8 @@ export const changeQuestion = (value) => (dispatch) => {
 };
 
 export const startQuiz = () => (dispatch) => {
-  dispatch({ type: types.QUIZ_NAVIGATE, payload: 0 });
   dispatch(getQuestions({ quiz: true }));
+  dispatch({ type: types.QUIZ_NAVIGATE, payload: 0 });
 };
 
 export const answerQuestion = (id, answer, correct, semester, user = null) => (dispatch) => {

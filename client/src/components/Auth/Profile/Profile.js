@@ -4,8 +4,7 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 
 import { connect } from 'react-redux';
 import * as actions from '../../../actions';
-import { urls, semestre } from '../../../utils/common';
-import { semesterIndices } from '../../../utils/auth';
+import { urls } from '../../../utils/common';
 import _ from 'lodash';
 
 import { Container, Tab, Button, Divider } from 'semantic-ui-react';
@@ -18,20 +17,17 @@ import ProfileActivity from './ProfileActivity/ProfileActivity';
 class Profile extends Component {
   constructor(props) {
     super(props);
-    let { semester } = props.settings;
-
     this.state = {
-      activeTab: semesterIndices(semester),
-      semester: semester,
       width: window.innerWidth,
       comments: []
     };
 
     this.handleResize = _.debounce(this.handleResize, 300);
+    this.findActiveIndex = this.findActiveIndex.bind(this);
   }
 
   componentDidMount() {
-    this.props.getProfile(this.props.auth.user.id);
+    this.props.getProfile();
     window.addEventListener('resize', this.handleResize);
   }
 
@@ -42,16 +38,25 @@ class Profile extends Component {
   handleResize = () => this.setState({ width: window.innerWidth });
 
   handleTabChange = (e, { activeIndex }) => {
-    let semester = semesterIndices(activeIndex);
-    this.setState({ activeTab: activeIndex, semester: semester });
+    const { semesters } = this.props.metadata.entities;
+    const semesterId = Number(Object.keys(semesters)[activeIndex]);
+    this.props.changeSelection('selectedSemester', semesterId);
+    this.props.getProfile(semesterId);
   };
 
   handleNavigation = (path) => {
     this.props.history.push(urls[path]);
   };
 
+  findActiveIndex = (semesterId) => {
+    const { semesters } = this.props.metadata.entities;
+    return Object.keys(semesters).indexOf(String(semesterId));
+  };
+
   render() {
-    const { profile, user } = this.props.auth;
+    const { profile, user, isFetching } = this.props.auth;
+    let { selectedSemester } = this.props.ui.selection;
+    let { semesters } = this.props.metadata.entities;
 
     const currentLanguage = this.props.settings.language;
 
@@ -69,11 +74,11 @@ class Profile extends Component {
       }
     };
 
-    _.map(semestre, (e) =>
+    _.map(semesters, (e) =>
       panes.push({
         menuItem: generatePaneLabel(e),
         render: () => (
-          <Tab.Pane>
+          <Tab.Pane loading={isFetching}>
             <ProfileActivity
               answers={profile.answers[e.value]}
               publicComments={profile.publicComments[e.value]}
@@ -108,7 +113,7 @@ class Profile extends Component {
           </h3>
           <Tab
             panes={panes}
-            activeIndex={this.state.activeTab}
+            activeIndex={this.findActiveIndex(selectedSemester)}
             onTabChange={this.handleTabChange}
           />
         </Container>
@@ -118,6 +123,10 @@ class Profile extends Component {
 }
 
 Profile.propTypes = {
+  metadata: PropTypes.object,
+  ui: PropTypes.object,
+  changeSelection: PropTypes.func,
+
   /**
    * Settings object, fra redux
    */
@@ -147,7 +156,9 @@ Profile.propTypes = {
 function mapStateToProps(state) {
   return {
     auth: state.auth,
-    settings: state.settings
+    ui: state.ui,
+    settings: state.settings,
+    metadata: state.metadata
   };
 }
 

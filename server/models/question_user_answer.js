@@ -55,15 +55,18 @@ class QuestionUserAnswer extends BaseModel {
   static get modifiers() {
     return {
       summary: (builder) =>
-        builder.select(
-          '*',
-          builder
-            .modelClass()
-            .relatedQuery('correctAnswers')
-            .where('correctAnswers.answer', ref('questionUserAnswer.answer'))
-            .count('*')
-            .as('correct')
-        )
+        builder
+          .select(
+            'QuestionUserAnswer.*',
+            'question:semester.id as semesterId',
+            builder
+              .modelClass()
+              .relatedQuery('correctAnswers')
+              .where('correctAnswers.answer', ref('questionUserAnswer.answer'))
+              .count('*')
+              .as('correct')
+          )
+          .joinRelation('question.semester')
     };
   }
 }

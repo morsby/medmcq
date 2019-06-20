@@ -131,9 +131,9 @@ router.get('/:id', permit({ roles: ['admin'], owner: 'params.id' }), async (req,
 
 /**
  * @swagger
- * /users/:id/profile:
+ * /users/:id/profile/:semesterId:
  *   get:
- *     summary: Fetch one user's activity by id
+ *     summary: Fetch one user's activity by id and semesterId
  *     description: >
  *       Returns a single user's associated comments (private and public),
  *       answers and bookmarked questions.
@@ -179,118 +179,141 @@ router.get('/:id', permit({ roles: ['admin'], owner: 'params.id' }), async (req,
  *             schema:
  *               $ref: "#/components/schemas/Error"
  */
-router.get('/:id/profile', permit({ roles: ['admin'], owner: 'params.id' }), async (req, res) => {
-  let { id } = req.params;
+router.get(
+  '/:userId/profile/:semesterId',
+  permit({ roles: ['admin'], owner: 'params.userId' }),
+  async (req, res) => {
+    let { userId, semesterId } = req.params;
 
-  try {
-    // We load the user including answers.
-    // TODO: Find en måde at undgå at kalde hente brugeren men i stedet
-    // direkte finde svar. Husk parseJson i Models/User.
-    let answers = QuestionUserAnswer.query()
-      .where('userId', id)
-      .modify('summary');
+    try {
+      // We load the user including answers.
+      // TODO: Find en måde at undgå at kalde hente brugeren men i stedet
+      // direkte finde svar. Husk parseJson i Models/User.
+      let answers = QuestionUserAnswer.query()
+        .where('userId', userId)
+        .andWhere('question:semester.id', semesterId)
+        .joinRelation('question.semester');
 
-    let answeredQuestions = Question.query()
-      .whereIn(
-        'id',
-        QuestionUserAnswer.query()
-          .where('userId', id)
-          .distinct('questionId')
-      )
-      .eager(Question.defaultEager)
-      .mergeEager('privateComments(own).user', {
-        userId: id
-      });
+      let answeredQuestions = Question.query()
+        .whereIn(
+          'id',
+          QuestionUserAnswer.query()
+            .where('userId', userId)
+            .joinRelation('question.semester')
+            .andWhere('question:semester.id', semesterId)
+            .distinct('questionId')
+        )
+        .eager(Question.defaultEager)
+        .mergeEager('privateComments(own).user', {
+          userId: userId
+        });
 
-    // Find questions the user has commented publicly, fetches including other public comments
-    let publicComments = QuestionComment.query()
-      .where('userId', id)
-      .andWhere('private', false);
-    let publicCommentsQuestions = Question.query()
-      .whereIn(
-        'id',
-        QuestionComment.query()
-          .where('userId', id)
-          .andWhere('private', false)
-          .distinct('questionId')
-      )
-      .eager(Question.defaultEager)
-      .mergeEager('privateComments(own).user', {
-        userId: id
-      });
+      // Find questions the user has commented publicly, fetches including other public comments
+      let publicComments = QuestionComment.query()
+        .where('userId', userId)
+        .andWhere('private', false)
+        .andWhere('question:semester.id', semesterId)
+        .joinRelation('question.semester')
+        .select('QuestionComment.id', 'QuestionComment.questionId');
+      let publicCommentsQuestions = Question.query()
+        .whereIn(
+          'id',
+          QuestionComment.query()
+            .where('userId', userId)
+            .andWhere('private', false)
+            .joinRelation('question.semester')
+            .andWhere('question:semester.id', semesterId)
+            .distinct('questionId')
+        )
+        .eager(Question.defaultEager)
+        .mergeEager('privateComments(own).user', {
+          userId: userId
+        });
 
-    // Find questions the user has commented privately, ...
-    let privateComments = QuestionComment.query()
-      .where('userId', id)
-      .andWhere('private', true);
-    let privateCommentsQuestions = Question.query()
-      .whereIn(
-        'id',
-        QuestionComment.query()
-          .where('userId', id)
-          .andWhere('private', true)
-          .distinct('questionId')
-      )
-      .eager(Question.defaultEager)
-      .mergeEager('privateComments(own).user', {
-        userId: id
-      });
+      // Find questions the user has commented privately, ...
+      let privateComments = QuestionComment.query()
+        .where('userId', userId)
+        .andWhere('private', true)
+        .andWhere('question:semester.id', semesterId)
+        .joinRelation('question.semester')
+        .select('QuestionComment.id', 'QuestionComment.questionId');
+      let privateCommentsQuestions = Question.query()
+        .whereIn(
+          'id',
+          QuestionComment.query()
+            .where('userId', userId)
+            .andWhere('private', true)
+            .joinRelation('question.semester')
+            .andWhere('question:semester.id', semesterId)
+            .distinct('questionId')
+        )
+        .eager(Question.defaultEager)
+        .mergeEager('privateComments(own).user', {
+          userId: userId
+        });
 
-    // Find questions the user has bookmarked
-    let bookmarks = QuestionBookmark.query().where('userId', id);
-    let bookmarksQuestions = Question.query()
-      .whereIn(
-        'id',
-        QuestionBookmark.query()
-          .where('userId', id)
-          .distinct('questionId')
-      )
-      .eager(Question.defaultEager)
-      .mergeEager('privateComments(own).user', {
-        userId: id
-      });
+      // Find questions the user has bookmarked
+      let bookmarks = QuestionBookmark.query()
+        .where('userId', userId)
+        .andWhere('question:semester.id', semesterId)
+        .joinRelation('question.semester')
+        .select('QuestionBookmark.id', 'QuestionBookmark.questionId');
+      let bookmarksQuestions = Question.query()
+        .whereIn(
+          'id',
+          QuestionBookmark.query()
+            .where('userId', userId)
+            .joinRelation('question.semester')
+            .andWhere('question:semester.id', semesterId)
+            .distinct('questionId')
+        )
+        .eager(Question.defaultEager)
+        .mergeEager('privateComments(own).user', {
+          userId: userId
+        });
 
-    // Perform all queries.
-    [
-      answers,
-      answeredQuestions,
-      publicComments,
-      publicCommentsQuestions,
-      privateComments,
-      privateCommentsQuestions,
-      bookmarks,
-      bookmarksQuestions
-    ] = await Promise.all([
-      answers,
-      answeredQuestions,
-      publicComments,
-      publicCommentsQuestions,
-      privateComments,
-      privateCommentsQuestions,
-      bookmarks,
-      bookmarksQuestions
-    ]);
+      // Perform all queries.
+      [
+        answers,
+        answeredQuestions,
+        publicComments,
+        publicCommentsQuestions,
+        privateComments,
+        privateCommentsQuestions,
+        bookmarks,
+        bookmarksQuestions
+      ] = await Promise.all([
+        answers,
+        answeredQuestions,
+        publicComments,
+        publicCommentsQuestions,
+        privateComments,
+        privateCommentsQuestions,
+        bookmarks,
+        bookmarksQuestions
+      ]);
 
-    let profile = {};
+      let profile = {};
 
-    profile.answers = answers;
-    profile.publicComments = publicComments;
-    profile.privateComments = privateComments;
-    profile.bookmarks = bookmarks;
+      profile.answers = answers;
+      profile.publicComments = publicComments;
+      profile.privateComments = privateComments;
+      profile.bookmarks = bookmarks;
 
-    profile.questions = _.merge(
-      [],
-      answeredQuestions,
-      publicCommentsQuestions,
-      privateCommentsQuestions,
-      bookmarksQuestions
-    );
+      profile.questions = _.merge(
+        [],
+        answeredQuestions,
+        publicCommentsQuestions,
+        privateCommentsQuestions,
+        bookmarksQuestions
+      );
 
-    res.status(200).json(profile);
-  } catch (err) {
-    errorHandler(err, res);
+      res.status(200).json(profile);
+    } catch (err) {
+      errorHandler(err, res);
+    }
   }
-});
+);
 
 /**
  * @swagger

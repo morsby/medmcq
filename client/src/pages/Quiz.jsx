@@ -52,7 +52,7 @@ class QuizMain extends Component {
 
     let { quiz, questions } = this.props;
 
-    if (!_.isEqual(quiz.questions, questions.result)) {
+    if (!_.isEqual(quiz.questions, questions.result) && !questions.isFetching) {
       this.props.getQuestions({ ids: quiz.questions });
     }
   }

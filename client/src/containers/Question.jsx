@@ -92,7 +92,7 @@ class Question extends PureComponent {
   };
 
   render() {
-    const { question, user, answers } = this.props;
+    let { question, user, answers } = this.props;
     const text = subSupScript(question.text);
 
     return (

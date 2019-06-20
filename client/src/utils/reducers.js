@@ -4,7 +4,7 @@ import { insertOrRemoveFromArray } from './common';
 export const updateSelection = (prevSelection, action) => {
   let { type, value } = action.payload;
   let selection = {};
-  // Vi nulstiller if hvis nyt semester
+  // Vi nulstiller hvis nyt semester
   if (type === 'selectedSemester') {
     selection.selectedSetId = null;
     selection.selectedSpecialtyIds = [];

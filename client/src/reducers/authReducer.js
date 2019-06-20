@@ -8,6 +8,7 @@ import { createReducer } from 'redux-starter-kit';
  */
 const initialState = {
   user: null,
+  isFetching: false,
   profile: {
     answers: {},
     bookmarks: {},
@@ -28,24 +29,24 @@ export default createReducer(initialState, {
     state.user = user;
     if (!user) state.profile = initialState.profile;
   },
-  [types.AUTH_PROFILE]: (state, action) => {
-    // GETs full questions (from API) and the user's answers:
+
+  [types.AUTH_PROFILE_REQUEST]: (state) => {
+    state.isFetching = true;
+  },
+
+  [types.AUTH_PROFILE_SUCCESS]: (state, action) => {
     let { privateComments, publicComments, bookmarks, answers } = action.payload;
-
-    answers = answers.map(({ question, answers }) => ({
-      question,
-      performance: {
-        tries: answers.length,
-        correct: _.sumBy(answers, (answer) => answer.correct),
-        answers: answers.map((answer) => answer.answer)
-      }
-    }));
-
+    let answersSummary = {};
+    answers.forEach((a) => {
+      answersSummary[a.questionId] = { 1: 0, 2: 0, 3: 0 };
+      answersSummary[a.questionId][a.answer]++;
+    });
+    state.isFetching = false;
     state.profile = {
-      answers: _.groupBy(answers, (a) => a.question.examSet.semester.value),
-      bookmarks: _.groupBy(bookmarks, (a) => a.examSet.semester.value),
-      publicComments: _.groupBy(publicComments, (a) => a.examSet.semester.value),
-      privateComments: _.groupBy(privateComments, (a) => a.examSet.semester.value)
+      answers: answersSummary,
+      bookmarks: _.keyBy(bookmarks, (a) => a.questionId),
+      publicComments: _.keyBy(publicComments, (a) => a.questionId),
+      privateComments: _.keyBy(privateComments, (a) => a.questionId)
     };
   }
 });

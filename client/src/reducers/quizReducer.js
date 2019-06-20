@@ -11,10 +11,7 @@ const initialState = {
   questions: [],
   answers: {},
   quizId: null,
-  currentQuestion: null,
-  isFetching: false,
-  didInvalidate: false,
-  lastUpdated: 0
+  currentQuestion: null
 };
 
 /**
