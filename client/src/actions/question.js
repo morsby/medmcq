@@ -4,7 +4,7 @@ import * as types from './types';
 
 const questionApi = '/api/questions';
 
-export const getQuestions = ({ ids = [], quiz = false }) => async (dispatch, getState) => {
+export const getQuestions = ({ ids, quiz = false }) => async (dispatch, getState) => {
   let state = getState();
   let {
     type,
@@ -19,7 +19,16 @@ export const getQuestions = ({ ids = [], quiz = false }) => async (dispatch, get
   dispatch({ type: types.FETCH_QUESTIONS_REQUEST });
   let res;
   // Hvilke spøgsmål bedes der om?
-  if (ids.length > 0) type = 'ids';
+  if (ids) {
+    type = 'ids';
+    if (ids.length < 1) {
+      return dispatch({
+        type: types.FETCH_QUESTIONS_FAILURE,
+        payload: { type: 'NotFound', message: 'No questions found' }
+      });
+    }
+  }
+
   switch (type) {
     /*
       types:

@@ -1,24 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import marked from 'marked';
-
+import _ from 'lodash';
 import { Translate } from 'react-localize-redux';
 import { Table, Checkbox } from 'semantic-ui-react';
 
 /**
  * Component that shows details of a single answered question
  */
-const AnswerDetailsRow = ({ answer, handleClick, checked }) => {
-  let { question } = answer;
-
+const AnswerDetailsRow = ({ answer, question, metadata, handleClick, checked }) => {
+  let { specialties, examSets } = metadata.entities;
   return (
     <Table.Row
       verticalAlign="top"
-      positive={answer.performance.correct === answer.performance.tries}
-      warning={
-        answer.performance.correct < answer.performance.tries && answer.performance.correct > 0
-      }
-      error={answer.performance.correct === 0}
+      positive={answer.correct === answer.tries}
+      warning={answer.correct < answer.tries && answer.correct > 0}
+      error={answer.correct === 0}
     >
       <Table.Cell>
         <Checkbox onChange={() => handleClick(question.id, checked)} checked={checked} />
@@ -31,14 +28,14 @@ const AnswerDetailsRow = ({ answer, handleClick, checked }) => {
         />
       </Table.Cell>
       <Table.Cell collapsing>
-        {question.specialties.map((spec) => spec.specialtyName).join('|')}
+        {_.map(question.specialties, ({ specialtyId }) => specialties[specialtyId].name).join('|')}
       </Table.Cell>
       <Table.Cell collapsing>
-        <Translate id={`profileAnswerDetails.${question.examSet.season}`} />
-        {question.examSet.year}
+        <Translate id={`profileAnswerDetails.${examSets[question.examSetId].season}`} />
+        {examSets[question.examSetId].year}
       </Table.Cell>
       <Table.Cell collapsing textAlign="right">
-        {Math.round((answer.performance.correct / answer.performance.tries) * 100, 2)}%
+        {Math.round((answer.correct / answer.tries) * 100, 2)}%
       </Table.Cell>
     </Table.Row>
   );
@@ -46,7 +43,13 @@ const AnswerDetailsRow = ({ answer, handleClick, checked }) => {
 
 AnswerDetailsRow.propTypes = {
   /**
-   * The answer (including props `question` and `performance`)
+   * The question
+   */
+  question: PropTypes.object,
+
+  metadata: PropTypes.object,
+  /**
+   * The performance and history
    */
   answer: PropTypes.object,
   /**

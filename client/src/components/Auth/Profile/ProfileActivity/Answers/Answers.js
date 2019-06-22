@@ -9,20 +9,13 @@ import AnswerDetails from './AnswerDetails/AnswerDetails';
 /**
  * Component that displays a summary of the answered questions.
  */
-const Answers = ({ answers = [] }) => {
-  // Declare a new state variable, which we'll call "count"
+const Answers = ({ answers = {}, questions = {} }) => {
   const [details, toggleDetails] = useState(false);
 
-  let totalAnswers = answers.length;
-
-  let allRight = _.filter(answers, (a) => a.performance.tries === a.performance.correct);
-
-  let allWrong = _.filter(answers, (a) => a.performance.correct === 0);
-
-  let mixed = _.filter(
-    answers,
-    (a) => a.performance.correct > 0 && a.performance.correct < a.performance.tries
-  );
+  let totalAnswers = Object.keys(answers).length;
+  let allRight = _.filter(answers, (a) => a.tries === a.correct);
+  let allWrong = _.filter(answers, (a) => a.correct === 0);
+  let mixed = _.filter(answers, (a) => a.correct > 0 && a.correct < a.tries);
   return (
     <div>
       <p>
@@ -53,7 +46,7 @@ const Answers = ({ answers = [] }) => {
           <Translate id="profileAnswers.buttons.details.show_details" />
         )}
       </Button>
-      {details && totalAnswers > 0 && <AnswerDetails answers={answers} />}
+      {details && totalAnswers > 0 && <AnswerDetails answers={answers} questions={questions} />}
     </div>
   );
 };
@@ -62,7 +55,9 @@ Answers.propTypes = {
   /**
    * The answers, unfiltered
    */
-  answers: PropTypes.array
+  answers: PropTypes.object,
+
+  questions: PropTypes.object
 };
 
 export default Answers;

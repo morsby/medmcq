@@ -13,10 +13,11 @@ import Comments from './Comments/Comments';
  * A Component that displays profile activities for a single semester.
  */
 const ProfileActivity = ({
-  answers = [],
-  publicComments = [],
-  privateComments = [],
-  bookmarks = []
+  answers = {},
+  publicComments = {},
+  privateComments = {},
+  bookmarks = {},
+  questions = {}
 }) => {
   const [activeIndex, setActiveIndex] = useState(0);
   return (
@@ -29,7 +30,7 @@ const ProfileActivity = ({
             active={activeIndex === 0}
             handleClick={setActiveIndex}
           >
-            <Answers answers={answers} />
+            <Answers answers={answers} questions={questions} />
           </ProfileActivityAccordionElem>
         )}
       </Translate>
@@ -41,7 +42,7 @@ const ProfileActivity = ({
             active={activeIndex === 1}
             handleClick={setActiveIndex}
           >
-            <Comments questions={publicComments} />
+            <Comments comments={publicComments} questions={questions} />
           </ProfileActivityAccordionElem>
         )}
       </Translate>
@@ -53,7 +54,7 @@ const ProfileActivity = ({
             active={activeIndex === 2}
             handleClick={setActiveIndex}
           >
-            <Comments questions={privateComments} type="private" />
+            <Comments comments={privateComments} questions={questions} type="private" />
           </ProfileActivityAccordionElem>
         )}
       </Translate>
@@ -65,7 +66,7 @@ const ProfileActivity = ({
             active={activeIndex === 3}
             handleClick={setActiveIndex}
           >
-            <Bookmarks bookmarks={bookmarks} />
+            <Bookmarks bookmarks={bookmarks} questions={questions} />
           </ProfileActivityAccordionElem>
         )}
       </Translate>
@@ -75,23 +76,28 @@ const ProfileActivity = ({
 
 ProfileActivity.propTypes = {
   /**
-   * An array containing answers for the semester.
+   * An object containing questions
    */
-  answers: PropTypes.array,
+  questions: PropTypes.object,
 
   /**
-   * An arary of public comments
+   * An object containing answers for the semester.
    */
-  publicComments: PropTypes.array,
-  /**
-   * An arary of private comments
-   */
-  privateComments: PropTypes.array,
+  answers: PropTypes.object,
 
   /**
-   * An arary of bookmarked questions comments
+   * An object of public comments
    */
-  bookmarks: PropTypes.array
+  publicComments: PropTypes.object,
+  /**
+   * An object of private comments
+   */
+  privateComments: PropTypes.object,
+
+  /**
+   * An object of bookmarked questions comments
+   */
+  bookmarks: PropTypes.object
 };
 
 export default ProfileActivity;

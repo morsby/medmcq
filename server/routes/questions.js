@@ -136,7 +136,7 @@ router.get('/', async (req, res) => {
       }
     }
     if (req.user) {
-      query = query.mergeEager('privateComments(own)', {
+      query = query.mergeEager('privateComments(own).user', {
         userId: req.user.id
       });
       query = query.mergeEager('userSpecialtyVotes(own)', {
@@ -309,7 +309,7 @@ router.get('/:id', async (req, res) => {
     .eager(Question.defaultEager);
 
   if (req.user) {
-    query = query.mergeEager('privateComments(own)', { userId: req.user.id });
+    query = query.mergeEager('privateComments(own).user', { userId: req.user.id });
     query = query.mergeEager('userSpecialtyVotes(own)', {
       userId: req.user.id
     });
@@ -517,7 +517,7 @@ router.post('/:questionId/comment', permit(), async (req, res) => {
         .select('question.*', 'semester.id as semester')
         .joinRelation('semester')
         .eager(Question.defaultEager)
-        .mergeEager('privateComments(own)', { userId: userId })
+        .mergeEager('privateComments(own).user', { userId: userId })
         .mergeEager('userSpecialtyVotes(own)', {
           userId: userId
         })
@@ -597,7 +597,7 @@ router.patch('/:questionId/comment/:commentId', permit(), async (req, res) => {
         .select('question.*', 'semester.id as semester')
         .joinRelation('semester')
         .eager(Question.defaultEager)
-        .mergeEager('privateComments(own)', { userId: userId })
+        .mergeEager('privateComments(own).user', { userId: userId })
         .mergeEager('userSpecialtyVotes(own)', {
           userId: userId
         })
@@ -647,7 +647,7 @@ router.delete('/:questionId/comment/:commentId', permit(), async (req, res) => {
         .select('question.*', 'semester.id as semester')
         .joinRelation('semester')
         .eager(Question.defaultEager)
-        .mergeEager('privateComments(own)', { userId: userId })
+        .mergeEager('privateComments(own).user', { userId: userId })
         .mergeEager('userSpecialtyVotes(own)', {
           userId: userId
         })
@@ -754,7 +754,7 @@ router.put('/:id/vote', permit(), async (req, res) => {
         .select('question.*', 'semester.id as semester')
         .joinRelation('semester')
         .eager(Question.defaultEager)
-        .mergeEager('privateComments(own)', { userId: userId })
+        .mergeEager('privateComments(own).user', { userId: userId })
         .mergeEager('userSpecialtyVotes(own)', {
           userId: userId
         })

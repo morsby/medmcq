@@ -265,7 +265,7 @@ router.get('/:id/questions', async (req, res) => {
       .orderBy('examSetQno');
 
     if (req.user) {
-      questions = questions.mergeEager('privateComments(own)', {
+      questions = questions.mergeEager('privateComments(own).user', {
         userId: req.user.id
       });
       questions = questions.mergeEager('userSpecialtyVotes(own)', {

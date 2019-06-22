@@ -1,9 +1,8 @@
 import express from 'express';
 import { ValidationError, NotFoundError } from 'objection';
-import _ from 'lodash';
 import { errorHandler, BadRequest } from '../middleware/errorHandling';
 import { permit } from '../middleware/permission';
-import Question from '../models/question';
+
 import QuestionUserAnswer from '../models/question_user_answer';
 import QuestionBookmark from '../models/question_bookmark';
 import QuestionComment from '../models/question_comment';
@@ -203,20 +202,6 @@ router.get(
         .andWhere('question:semester.id', semesterId)
         .joinRelation('question.semester');
 
-      let answeredQuestions = Question.query()
-        .whereIn(
-          'id',
-          QuestionUserAnswer.query()
-            .where('userId', userId)
-            .joinRelation('question.semester')
-            .andWhere('question:semester.id', semesterId)
-            .distinct('questionId')
-        )
-        .eager(Question.defaultEager)
-        .mergeEager('privateComments(own).user', {
-          userId: userId
-        });
-
       // Find questions the user has commented publicly, fetches including other public comments
       let publicComments = QuestionComment.query()
         .where('userId', userId)
@@ -224,20 +209,6 @@ router.get(
         .andWhere('question:semester.id', semesterId)
         .joinRelation('question.semester')
         .select('QuestionComment.id', 'QuestionComment.questionId');
-      let publicCommentsQuestions = Question.query()
-        .whereIn(
-          'id',
-          QuestionComment.query()
-            .where('userId', userId)
-            .andWhere('private', false)
-            .joinRelation('question.semester')
-            .andWhere('question:semester.id', semesterId)
-            .distinct('questionId')
-        )
-        .eager(Question.defaultEager)
-        .mergeEager('privateComments(own).user', {
-          userId: userId
-        });
 
       // Find questions the user has commented privately, ...
       let privateComments = QuestionComment.query()
@@ -246,20 +217,6 @@ router.get(
         .andWhere('question:semester.id', semesterId)
         .joinRelation('question.semester')
         .select('QuestionComment.id', 'QuestionComment.questionId');
-      let privateCommentsQuestions = Question.query()
-        .whereIn(
-          'id',
-          QuestionComment.query()
-            .where('userId', userId)
-            .andWhere('private', true)
-            .joinRelation('question.semester')
-            .andWhere('question:semester.id', semesterId)
-            .distinct('questionId')
-        )
-        .eager(Question.defaultEager)
-        .mergeEager('privateComments(own).user', {
-          userId: userId
-        });
 
       // Find questions the user has bookmarked
       let bookmarks = QuestionBookmark.query()
@@ -267,40 +224,18 @@ router.get(
         .andWhere('question:semester.id', semesterId)
         .joinRelation('question.semester')
         .select('QuestionBookmark.id', 'QuestionBookmark.questionId');
-      let bookmarksQuestions = Question.query()
-        .whereIn(
-          'id',
-          QuestionBookmark.query()
-            .where('userId', userId)
-            .joinRelation('question.semester')
-            .andWhere('question:semester.id', semesterId)
-            .distinct('questionId')
-        )
-        .eager(Question.defaultEager)
-        .mergeEager('privateComments(own).user', {
-          userId: userId
-        });
 
       // Perform all queries.
-      [
+      [answers, publicComments, privateComments, bookmarks] = await Promise.all([
         answers,
-        answeredQuestions,
         publicComments,
-        publicCommentsQuestions,
         privateComments,
-        privateCommentsQuestions,
-        bookmarks,
-        bookmarksQuestions
-      ] = await Promise.all([
-        answers,
-        answeredQuestions,
-        publicComments,
-        publicCommentsQuestions,
-        privateComments,
-        privateCommentsQuestions,
-        bookmarks,
-        bookmarksQuestions
+        bookmarks
       ]);
+      let questionIds = [];
+      [...answers, ...publicComments, ...privateComments, ...bookmarks].map(({ questionId }) =>
+        questionIds.push(questionId)
+      );
 
       let profile = {};
 
@@ -308,14 +243,7 @@ router.get(
       profile.publicComments = publicComments;
       profile.privateComments = privateComments;
       profile.bookmarks = bookmarks;
-
-      profile.questions = _.merge(
-        [],
-        answeredQuestions,
-        publicCommentsQuestions,
-        privateCommentsQuestions,
-        bookmarksQuestions
-      );
+      profile.questions = questionIds;
 
       res.status(200).json(profile);
     } catch (err) {

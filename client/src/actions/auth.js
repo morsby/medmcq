@@ -1,6 +1,6 @@
 import axios from 'axios';
-import _ from 'lodash';
 import * as types from './types';
+import { getQuestions } from './question';
 
 export const checkUserAvailability = (field, value) => async () => {
   let res = await axios.post('/api/user/check-availability', {
@@ -61,8 +61,9 @@ export const getProfile = (semesterId = null) => async (dispatch, getState) => {
     console.log(err.response);
   }
 
-  dispatch({ type: types.AUTH_PROFILE_SUCCESS, payload: _.omit(res.data, 'questions') });
-  dispatch({ type: types.FETCH_QUESTIONS_SUCCESS, payload: res.data.questions });
+  await dispatch(getQuestions({ ids: res.data.questions }));
+  const questions = getState().questions.entities.questions;
+  dispatch({ type: types.AUTH_PROFILE_SUCCESS, payload: { ...res.data, questions } });
 };
 
 export const editProfile = (values, callback) => async () => {

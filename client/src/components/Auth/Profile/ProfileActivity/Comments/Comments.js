@@ -1,21 +1,24 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 
 import ProfileActivityAccordionElem from '../ProfileActivityAccordionElem';
 import CommentsQuestion from './CommentsQuestion';
 
-const Comments = ({ questions = [], type = 'public' }) => {
+const Comments = ({ questions = {}, comments = {}, type = 'public' }) => {
   let [activeIndex, setActiveIndex] = useState(null);
 
-  if (questions.length === 0) return <div>Du har ingen kommentarer på dette semester.</div>;
+  if (Object.keys(comments).length === 0)
+    return <div>Du har ingen kommentarer på dette semester.</div>;
 
   return (
     <div>
-      {questions.map((question, i) => {
-        let questionComments;
-        if (type === 'public') questionComments = question.publicComments;
-        else questionComments = question.privateComments;
+      {_.map(comments, (comment, i, allComments) => {
+        let { questionId } = comment;
 
+        let question = questions[questionId];
+
+        i = Object.keys(allComments).indexOf(i);
         return (
           <ProfileActivityAccordionElem
             key={question.id}
@@ -24,7 +27,7 @@ const Comments = ({ questions = [], type = 'public' }) => {
             index={i}
             handleClick={setActiveIndex}
           >
-            <CommentsQuestion question={question} comments={questionComments} />
+            <CommentsQuestion question={question} type={type} />
           </ProfileActivityAccordionElem>
         );
       })}
@@ -34,9 +37,11 @@ const Comments = ({ questions = [], type = 'public' }) => {
 
 Comments.propTypes = {
   /**
-   * An array of questions that are commented by the user.
+   * An object of questions that are commented by the user.
    */
-  questions: PropTypes.array,
+  questions: PropTypes.object,
+
+  comments: PropTypes.object,
 
   /**
    * Om der vises offentlige eller private kommentarer

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import marked from 'marked';
-
+import _ from 'lodash';
 import { Divider } from 'semantic-ui-react';
 
 /**
@@ -11,7 +11,7 @@ const Bookmarks = ({ bookmarks }) => {
   if (bookmarks.length === 0) return 'Du har ikke bogmærket nogen spørgsmål';
   return (
     <div>
-      {bookmarks.map((bookmark, i) => (
+      {_.map(bookmarks, (bookmark, i) => (
         <div key={bookmark.id}>
           {i > 0 && <Divider />}
           <div dangerouslySetInnerHTML={{ __html: marked(bookmark.text) }} />
@@ -34,9 +34,9 @@ const Bookmarks = ({ bookmarks }) => {
 
 Bookmarks.propTypes = {
   /**
-   * An array of bookmarked questions
+   * An object of bookmarked questions
    */
-  bookmarks: PropTypes.array
+  bookmarks: PropTypes.object
 };
 
 export default Bookmarks;

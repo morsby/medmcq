@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import { Comment } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 
-const CommentsQuestionComment = ({ comment, user = {} }) => {
-  let username = comment.user ? comment.user.username : user.username;
+const CommentsQuestionComment = ({ commentId, user = {}, questions = {}, type = 'public' }) => {
+  let { users } = questions.entities;
+  let comment = questions.entities[`${type}Comments`][commentId];
+  let username = comment.user ? users[comment.userId].username : user.username;
   return (
     <Comment
       style={{
@@ -21,12 +23,15 @@ const CommentsQuestionComment = ({ comment, user = {} }) => {
 };
 
 CommentsQuestionComment.propTypes = {
-  comment: PropTypes.object,
-  user: PropTypes.object
+  commentId: PropTypes.number,
+  questions: PropTypes.object,
+  user: PropTypes.object,
+  type: PropTypes.string
 };
 
 const mapStateToProps = (state) => ({
-  user: state.auth.user
+  user: state.auth.user,
+  questions: state.questions
 });
 
 export default connect(

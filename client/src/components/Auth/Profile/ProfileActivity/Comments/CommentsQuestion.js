@@ -4,7 +4,7 @@ import { Comment } from 'semantic-ui-react';
 
 import CommentsQuestionComment from './CommentsQuestionComment';
 
-const CommentsQuestion = ({ question, comments = [] }) => {
+const CommentsQuestion = ({ question = {}, type = 'public' }) => {
   return (
     <div>
       <ol type="A">
@@ -21,8 +21,8 @@ const CommentsQuestion = ({ question, comments = [] }) => {
 
       <Comment.Group>
         <h5>Kommentarer</h5>
-        {comments.map((comment) => (
-          <CommentsQuestionComment key={comment.id} comment={comment} />
+        {question[`${type}Comments`].map((commentId) => (
+          <CommentsQuestionComment key={commentId} commentId={commentId} type={type} />
         ))}
       </Comment.Group>
     </div>
@@ -31,7 +31,7 @@ const CommentsQuestion = ({ question, comments = [] }) => {
 
 CommentsQuestion.propTypes = {
   question: PropTypes.object,
-  comments: PropTypes.array
+  type: PropTypes.string
 };
 
 export default CommentsQuestion;

@@ -9,6 +9,7 @@ import { createReducer } from 'redux-starter-kit';
 const initialState = {
   user: null,
   isFetching: false,
+  didInvalidate: true,
   profile: {
     answers: {},
     bookmarks: {},
@@ -33,20 +34,33 @@ export default createReducer(initialState, {
   [types.AUTH_PROFILE_REQUEST]: (state) => {
     state.isFetching = true;
   },
+  [types.FETCH_QUESTIONS_REQUEST]: (state) => {
+    state.didInvalidate = true;
+  },
 
   [types.AUTH_PROFILE_SUCCESS]: (state, action) => {
-    let { privateComments, publicComments, bookmarks, answers } = action.payload;
+    let { privateComments, publicComments, bookmarks, answers, questions } = action.payload;
+
     let answersSummary = {};
     answers.forEach((a) => {
-      answersSummary[a.questionId] = { 1: 0, 2: 0, 3: 0 };
-      answersSummary[a.questionId][a.answer]++;
+      if (!questions.hasOwnProperty(a.questionId)) return;
+
+      if (!answersSummary.hasOwnProperty(a.questionId)) {
+        answersSummary[a.questionId] = { history: { 1: 0, 2: 0, 3: 0 }, tries: 0, correct: 0 };
+      }
+
+      answersSummary[a.questionId].tries++;
+      answersSummary[a.questionId].history[a.answer]++;
+      if (questions[a.questionId].correctAnswers.indexOf(a.answer) > -1)
+        answersSummary[a.questionId].correct++;
     });
-    state.isFetching = false;
     state.profile = {
       answers: answersSummary,
       bookmarks: _.keyBy(bookmarks, (a) => a.questionId),
       publicComments: _.keyBy(publicComments, (a) => a.questionId),
       privateComments: _.keyBy(privateComments, (a) => a.questionId)
     };
+    state.isFetching = false;
+    state.didInvalidate = false;
   }
 });

@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import ReactRouterPropTypes from 'react-router-prop-types';
 import { connect } from 'react-redux';
-import * as actions from '../../../../../../actions';
+import { withRouter } from 'react-router-dom';
+import * as actions from 'actions';
 import _ from 'lodash';
 
 import { Table, Button, Divider } from 'semantic-ui-react';
@@ -10,11 +12,12 @@ import { Translate } from 'react-localize-redux';
 import AnswerDetailsHeaderRow from './AnswerDetailsHeaderRow';
 import AnswerDetailsRow from './AnswerDetailsRow';
 import AnswerDetailsFilterButtons from './AnswerDetailsFilterButtons';
+import { insertOrRemoveFromArray, urls } from 'utils/common';
 
 /**
  * Component showing answer details.  Any filtering occurs in this component.
  */
-const AnswerDetails = ({ answers, getQuestions }) => {
+const AnswerDetails = ({ answers, questions, metadata, getQuestions, history }) => {
   const [filter, setFilter] = useState(undefined);
   const [selected, setSelected] = useState([]);
 
@@ -24,27 +27,25 @@ const AnswerDetails = ({ answers, getQuestions }) => {
    * @param  {bool}    checked Is the checkbox already checked? Should we check or uncheck?
    * @return {null}            Returns nothing, simply updates state.
    */
-  const toggleCheckbox = (id, checked) => {
-    checked ? setSelected(_.filter(selected, (el) => el !== id)) : setSelected([...selected, id]);
+  const toggleCheckbox = (id) => {
+    setSelected(insertOrRemoveFromArray(selected, id));
   };
 
   const startQuiz = () => {
-    getQuestions({ type: 'ids', ids: selected });
+    history.push(urls.quiz);
+    getQuestions({ ids: selected, quiz: true });
   };
 
   if (filter) {
     switch (filter) {
       case 'allRight':
-        answers = _.filter(answers, (a) => a.performance.correct === a.performance.tries);
+        answers = _.filter(answers, (a) => a.correct === a.tries);
         break;
       case 'allWrong':
-        answers = _.filter(answers, (a) => a.performance.correct === 0);
+        answers = _.filter(answers, (a) => a.correct === 0);
         break;
       default:
-        answers = _.filter(
-          answers,
-          (a) => a.performance.correct > 0 && a.performance.correct < a.performance.tries
-        );
+        answers = _.filter(answers, (a) => a.correct > 0 && a.correct < a.tries);
     }
   }
 
@@ -63,12 +64,14 @@ const AnswerDetails = ({ answers, getQuestions }) => {
       <Table celled>
         <AnswerDetailsHeaderRow />
         <Table.Body>
-          {_.map(answers, (answer) => (
+          {_.map(answers, (answer, questionId) => (
             <AnswerDetailsRow
-              key={answer.question.id}
+              key={questionId}
               answer={answer}
+              question={questions.entities.questions[questionId]}
+              metadata={metadata}
               handleClick={toggleCheckbox}
-              checked={selected.indexOf(answer.question.id) > -1}
+              checked={selected.indexOf(Number(questionId)) > -1}
             />
           ))}
         </Table.Body>
@@ -81,15 +84,25 @@ AnswerDetails.propTypes = {
   /**
    * Array indeholdende besvarede spørgsmål for semesteret
    */
-  answers: PropTypes.array,
+  answers: PropTypes.object,
 
+  questions: PropTypes.object,
+  metadata: PropTypes.object,
+  history: ReactRouterPropTypes.history,
   /**
    * Henter spørgsmål
    */
   getQuestions: PropTypes.func
 };
 
-export default connect(
-  null,
-  actions
-)(AnswerDetails);
+const mapStateToProps = (state) => ({
+  questions: state.questions,
+  metadata: state.metadata
+});
+
+export default withRouter(
+  connect(
+    mapStateToProps,
+    actions
+  )(AnswerDetails)
+);

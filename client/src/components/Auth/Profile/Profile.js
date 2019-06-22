@@ -27,8 +27,8 @@ class Profile extends Component {
   }
 
   componentDidMount() {
-    this.props.getProfile();
     window.addEventListener('resize', this.handleResize);
+    this.props.getProfile();
   }
 
   componentWillUnmount() {
@@ -54,9 +54,10 @@ class Profile extends Component {
   };
 
   render() {
-    const { profile, user, isFetching } = this.props.auth;
+    const { profile, user, isFetching, didInvalidate } = this.props.auth;
     let { selectedSemester } = this.props.ui.selection;
     let { semesters } = this.props.metadata.entities;
+    let { questions } = this.props.questions.entities;
 
     const currentLanguage = this.props.settings.language;
 
@@ -79,12 +80,15 @@ class Profile extends Component {
         menuItem: generatePaneLabel(e),
         render: () => (
           <Tab.Pane loading={isFetching}>
-            <ProfileActivity
-              answers={profile.answers[e.value]}
-              publicComments={profile.publicComments[e.value]}
-              privateComments={profile.privateComments[e.value]}
-              bookmarks={profile.bookmarks[e.value]}
-            />
+            {!isFetching && !didInvalidate && (
+              <ProfileActivity
+                questions={questions}
+                answers={profile.answers}
+                publicComments={profile.publicComments}
+                privateComments={profile.privateComments}
+                bookmarks={profile.bookmarks}
+              />
+            )}
           </Tab.Pane>
         )
       })
@@ -126,6 +130,7 @@ Profile.propTypes = {
   metadata: PropTypes.object,
   ui: PropTypes.object,
   changeSelection: PropTypes.func,
+  questions: PropTypes.object,
 
   /**
    * Settings object, fra redux
@@ -158,7 +163,8 @@ function mapStateToProps(state) {
     auth: state.auth,
     ui: state.ui,
     settings: state.settings,
-    metadata: state.metadata
+    metadata: state.metadata,
+    questions: state.questions
   };
 }
 
