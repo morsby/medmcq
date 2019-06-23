@@ -10,6 +10,7 @@ import { Table, Checkbox } from 'semantic-ui-react';
  */
 const AnswerDetailsRow = ({ answer, question, metadata, handleClick, checked }) => {
   let { specialties, examSets } = metadata.entities;
+
   return (
     <Table.Row
       verticalAlign="top"
@@ -62,4 +63,4 @@ AnswerDetailsRow.propTypes = {
   checked: PropTypes.bool
 };
 
-export default AnswerDetailsRow;
+export default React.memo(AnswerDetailsRow);

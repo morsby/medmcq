@@ -7,9 +7,10 @@ Siden er lavet med tilladelse fra Institut for Klinisk Medicin, Health, Aarhus U
 ## TODOs
 
 - [x] Bedre struktur af redux state
+- [x] Integrering af voting
 - [ ] Forbedret migrering (p.t. er der fx forvirring omkring tags og tilhørsforhold til semestre)
-- [ ] Integrering af voting
 - [ ] En masse opdatering af redux/frontend
+- [ ] Optimering af visning af besvarede spørgsmål (loading er langsom). Evt. via [react-window](https://github.com/bvaughn/react-window)?
 
 ## Opsætning
 

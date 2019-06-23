@@ -54,8 +54,6 @@ class App extends Component {
 
     // Force refresh af semestre på reload:
     this.props.invalidateMetadata();
-    // Tjek om brugeren er logget ind på reload (kan være logget ud af serveren/invalid cookie m.v.)
-    this.props.fetchUser();
 
     this.props.addTranslation(authTranslations);
 
@@ -78,6 +76,7 @@ class App extends Component {
   }
   render() {
     if (this.state.maintenance) return <MaintenancePage />;
+
     return (
       <BrowserRouter>
         <ErrorBoundary>

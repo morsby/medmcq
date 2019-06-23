@@ -1,16 +1,18 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-
 import { Button, Divider } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 import AnswerDetails from './AnswerDetails/AnswerDetails';
-
 /**
  * Component that displays a summary of the answered questions.
  */
 const Answers = ({ answers = {}, questions = {} }) => {
   const [details, toggleDetails] = useState(false);
+
+  const onToggleDetails = () => {
+    toggleDetails(!details);
+  };
 
   let totalAnswers = Object.keys(answers).length;
   let allRight = _.filter(answers, (a) => a.tries === a.correct);
@@ -39,7 +41,7 @@ const Answers = ({ answers = {}, questions = {} }) => {
       </div>
 
       <Divider hidden />
-      <Button onClick={() => toggleDetails(!details)} disabled={totalAnswers === 0}>
+      <Button onClick={onToggleDetails} disabled={totalAnswers === 0}>
         {details && totalAnswers > 0 ? (
           <Translate id="profileAnswers.buttons.details.hide_details" />
         ) : (

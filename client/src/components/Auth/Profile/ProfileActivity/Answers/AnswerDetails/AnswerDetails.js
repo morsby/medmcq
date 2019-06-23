@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 import { connect } from 'react-redux';
@@ -12,28 +12,23 @@ import { Translate } from 'react-localize-redux';
 import AnswerDetailsHeaderRow from './AnswerDetailsHeaderRow';
 import AnswerDetailsRow from './AnswerDetailsRow';
 import AnswerDetailsFilterButtons from './AnswerDetailsFilterButtons';
-import { urls } from 'utils/common';
+import { urls, insertOrRemoveFromArray } from 'utils/common';
 
 /**
  * Component showing answer details.  Any filtering occurs in this component.
  */
 const AnswerDetails = ({ answers, questions, metadata, getQuestions, history }) => {
   const [filter, setFilter] = useState(undefined);
-  let initialSelectionState = {};
-  for (var questionId in answers) {
-    initialSelectionState[questionId] = false;
-  }
-  const [selected, setSelected] = useState(initialSelectionState);
-
+  const [selected, setSelected] = useState([]);
   /**
    * A small function that toggles the checkbox using React hooks.
    * @param  {integer} id      The question id to toggle.
    * @param  {bool}    checked Is the checkbox already checked? Should we check or uncheck?
    * @return {null}            Returns nothing, simply updates state.
    */
-  const toggleCheckbox = (id) => {
-    setSelected({ ...selected, [id]: !selected[id] });
-  };
+  const toggleCheckbox = useCallback((id) => {
+    setSelected((selected) => insertOrRemoveFromArray(selected, id));
+  }, []);
 
   const startQuiz = async () => {
     history.push(urls.quiz);
@@ -74,7 +69,7 @@ const AnswerDetails = ({ answers, questions, metadata, getQuestions, history }) 
               question={questions.entities.questions[questionId]}
               metadata={metadata}
               handleClick={toggleCheckbox}
-              checked={selected[questionId]}
+              checked={selected.includes(Number(questionId))}
             />
           ))}
         </Table.Body>

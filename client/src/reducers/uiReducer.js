@@ -17,6 +17,12 @@ export const initialState = {
 
 const uiReducer = (state = initialState, action) => {
   switch (action.type) {
+    // Pure UI changes
+    case types.UI_LOADING:
+      return { ...state, isLoading: true };
+    case types.UI_DONE_LOADING:
+      return { ...state, isLoading: false };
+
     // Change settings
     case types.CHANGE_SELECTION:
       return { ...state, selection: updateSelection(state.selection, action) };

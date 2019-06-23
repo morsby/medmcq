@@ -1,6 +1,10 @@
 /* QUIZ REDUCER */
 export const QUIZ_NAVIGATE = 'QUIZ_MAVIGATE';
 
+// UI reducer
+export const UI_LOADING = 'ui_loading';
+export const UI_DONE_LOADING = 'ui_done_loading';
+
 // Metadata reducer
 export const INVALIDATE_METADATA = 'invalidate_metadata';
 export const FETCH_METADATA_REQUEST = 'fetch_metadata_request';
