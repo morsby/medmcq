@@ -81,9 +81,9 @@ class App extends Component {
       <BrowserRouter>
         <ErrorBoundary>
           <ScrollToTop>
+            <NewVersionMessage />
             <Sidebar>
               <Header />
-              <NewVersionMessage />
               <Switch>
                 <Route path={urls.about} component={About} />
                 <Route path={urls.contact} component={Contact} />
