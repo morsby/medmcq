@@ -12,14 +12,18 @@ import { Translate } from 'react-localize-redux';
 import AnswerDetailsHeaderRow from './AnswerDetailsHeaderRow';
 import AnswerDetailsRow from './AnswerDetailsRow';
 import AnswerDetailsFilterButtons from './AnswerDetailsFilterButtons';
-import { insertOrRemoveFromArray, urls } from 'utils/common';
+import { urls } from 'utils/common';
 
 /**
  * Component showing answer details.  Any filtering occurs in this component.
  */
 const AnswerDetails = ({ answers, questions, metadata, getQuestions, history }) => {
   const [filter, setFilter] = useState(undefined);
-  const [selected, setSelected] = useState([]);
+  let initialSelectionState = {};
+  for (var questionId in answers) {
+    initialSelectionState[questionId] = false;
+  }
+  const [selected, setSelected] = useState(initialSelectionState);
 
   /**
    * A small function that toggles the checkbox using React hooks.
@@ -28,12 +32,12 @@ const AnswerDetails = ({ answers, questions, metadata, getQuestions, history }) 
    * @return {null}            Returns nothing, simply updates state.
    */
   const toggleCheckbox = (id) => {
-    setSelected(insertOrRemoveFromArray(selected, id));
+    setSelected({ ...selected, [id]: !selected[id] });
   };
 
-  const startQuiz = () => {
+  const startQuiz = async () => {
     history.push(urls.quiz);
-    getQuestions({ ids: selected, quiz: true });
+    await getQuestions({ ids: selected, quiz: true });
   };
 
   if (filter) {
@@ -48,7 +52,6 @@ const AnswerDetails = ({ answers, questions, metadata, getQuestions, history }) 
         answers = _.filter(answers, (a) => a.correct > 0 && a.correct < a.tries);
     }
   }
-
   // TODO: Tillad sortering
   return (
     <div>
@@ -71,7 +74,7 @@ const AnswerDetails = ({ answers, questions, metadata, getQuestions, history }) 
               question={questions.entities.questions[questionId]}
               metadata={metadata}
               handleClick={toggleCheckbox}
-              checked={selected.indexOf(Number(questionId)) > -1}
+              checked={selected[questionId]}
             />
           ))}
         </Table.Body>

@@ -5,6 +5,7 @@ import * as types from './types';
 const questionApi = '/api/questions';
 
 export const getQuestions = ({ ids, quiz = false }) => async (dispatch, getState) => {
+  dispatch({ type: types.FETCH_QUESTIONS_REQUEST });
   let state = getState();
   let {
     type,
@@ -16,7 +17,6 @@ export const getQuestions = ({ ids, quiz = false }) => async (dispatch, getState
     onlyNew
   } = state.ui.selection;
 
-  dispatch({ type: types.FETCH_QUESTIONS_REQUEST });
   let res;
   // Hvilke spøgsmål bedes der om?
   if (ids) {
