@@ -190,7 +190,6 @@ class QuizMain extends Component {
             onSwipedLeft={this.swiped}
             onSwipedRight={this.swiped}
             flickThreshold={flickNumber}
-            // onSwiped={this.swipeChecker}
           >
             <Question onImgClick={this.onImgClick} imgOpen={this.state.imgOpen} user={user} />
           </Swipeable>

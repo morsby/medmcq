@@ -14,18 +14,8 @@ export const startQuiz = () => (dispatch) => {
   dispatch({ type: types.QUIZ_NAVIGATE, payload: 0 });
 };
 
-export const answerQuestion = (id, answer, correct, semester, user = null) => (dispatch) => {
-  let post = {
-    questionId: id,
-    answer: correct ? 'correct' : 'wrong',
-    answerNo: answer,
-    semester
-  };
-  if (user) axios.post('/api/questions/answer', post);
+export const answerQuestion = (id, answer, correct) => (dispatch) => {
+  axios.post(`/api/questions/${id}/answer`, { answer });
 
   dispatch({ type: types.ANSWER_QUESTION, payload: { id, answer, correct } });
-  dispatch({
-    type: types.AUTH_UPDATE_USER_ANSWERS,
-    payload: { semester, id, correct }
-  });
 };

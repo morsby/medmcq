@@ -74,7 +74,7 @@ class Question extends PureComponent {
    * @param  {number} answer Det der er svaret (1, 2 el. 3)
    */
   onAnswer = (answer) => {
-    let { answerQuestion, question, user } = this.props;
+    let { answerQuestion, question } = this.props;
 
     // If not already answered:
     if (!isAnswered(question)) {
@@ -87,7 +87,7 @@ class Question extends PureComponent {
       }
 
       // Call answerQuestion fra redux
-      answerQuestion(question.id, answer, correct, question.semester, user);
+      answerQuestion(question.id, answer, correct);
     }
   };
 
