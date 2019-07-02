@@ -57,10 +57,8 @@
     "babel-core": "^6.26.3",
     "jest": "^24.8.0",
     "nodemon": "^1.19.1",
+    "ts-jest": "^24.0.2",
     "ts-node": "^8.3.0",
     "webpack": "^4.34.0"
-  },
-  "jest": {
-    "testEnvironment": "node"
   }
 }
