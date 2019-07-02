@@ -4,9 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
-    "dev": "babel-watch server.js",
-    "test": "NODE_ENV=test jest",
+    "start": "node build/server.js",
+    "dev": "nodemon",
+    "test": "",
     "test:w": "jest --watch-all",
     "reset": "knex migrate:rollback --env=test && knex migrate:latest --env=test && knex seed:run --env=test"
   },
@@ -39,14 +39,25 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "supertest": "^4.0.2",
-    "swagger-jsdoc": "^3.2.9"
+    "swagger-jsdoc": "^3.2.9",
+    "typescript": "^3.5.2"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-class-properties": "^7.4.4",
+    "@babel/plugin-proposal-object-rest-spread": "^7.4.4",
     "@babel/plugin-transform-runtime": "^7.4.4",
     "@babel/preset-env": "^7.4.5",
+    "@babel/preset-typescript": "^7.3.3",
+    "@types/body-parser": "^1.17.0",
+    "@types/cookie-parser": "^1.4.1",
+    "@types/express": "^4.17.0",
+    "@types/helmet": "0.0.43",
+    "@types/node": "^12.0.10",
+    "@types/passport": "^1.0.0",
     "babel-core": "^6.26.3",
-    "babel-watch": "^7.0.0",
     "jest": "^24.8.0",
+    "nodemon": "^1.19.1",
+    "ts-node": "^8.3.0",
     "webpack": "^4.34.0"
   },
   "jest": {

@@ -2,4 +2,5 @@
 client/graveyard
 client/src/semantic
 client/build/*
+server/build/*
 !client/build/index.js

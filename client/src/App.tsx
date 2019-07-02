@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { PropTypes } from 'prop-types';
 import { connect } from 'react-redux';
 import './App.css';
 
@@ -8,7 +7,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 // Oversættelse
 import { withLocalize } from 'react-localize-redux';
 import { renderToStaticMarkup } from 'react-dom/server'; // required to initialize react-localize-redux
-import authTranslations from './components/Auth/authTranslations'; // fordi der ikke er en gennemgående component i dette regi
+import authTranslations from './components/Auth/authTranslations.json'; // fordi der ikke er en gennemgående component i dette regi
 
 // HOCs
 import PrivateRoute from './components/Misc/HOC/PrivateRoute';
@@ -45,11 +44,20 @@ import Sidebar from './components/Layout/Sidebar';
 import Footer from './components/Layout/Footer';
 import MaintenancePage from './components/Misc/Utility-pages/MaintenancePage';
 import ErrorBoundary from './components/Misc/Utility-pages/ErrorBoundary';
+import { IReduxState } from 'reducers';
 
-class App extends Component {
+export interface AppProps {
+  invalidateMetadata: Function;
+  addTranslation: Function;
+  initialize: Function;
+  defaultLanguage: string;
+  fetchUser: Function;
+}
+
+class App extends Component<AppProps> {
   state = { maintenance: false };
 
-  constructor(props) {
+  constructor(props: AppProps) {
     super(props);
 
     // Force refresh af semestre på reload:
@@ -108,30 +116,12 @@ class App extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state: any) => ({
   defaultLanguage: state.settings.language
 });
 
-App.propTypes = {
-  // All are about translations
-  // The default language set by react-localize-redux
-  defaultLanguage: PropTypes.string,
-
-  // The func to add translation data
-  addTranslation: PropTypes.func,
-
-  // Initialize the translation, seeding into redux state
-  initialize: PropTypes.func,
-
-  // forces reload of metadata
-  invalidateMetadata: PropTypes.func,
-
-  // fetches the user
-  fetchUser: PropTypes.func
-};
-
 const LocalizedApp = withLocalize(
-  connect(
+  connect<any, any, any>(
     mapStateToProps,
     actions
   )(App)
