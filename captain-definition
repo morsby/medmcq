@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "dockerfileLines": [
       "FROM node:9.3",
-      ADD https://www.google.com /time.now
+      "ADD https://www.google.com /time.now",
       "RUN mkdir -p /usr/src/app",
       "WORKDIR /usr/src/app",
       "COPY ./ /usr/src/app",
