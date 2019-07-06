@@ -9,7 +9,8 @@
     "COPY ./ /usr/src/app",
     "ENV NODE_ENV production",
     "ENV PORT 80",
-    "RUN npm run build",
+    "RUN cd server && npm install",
+    "RUN cd client && npm install",
     "EXPOSE 80",
     "CMD [ \"npm\", \"start\" ]"
   ]
