@@ -1,4 +1,11 @@
 {
   "schemaVersion": 2,
-  "templateId": "node/8.7.0"
+  "dockerfileLines": [
+    "FROM node:8.7.0",
+    "RUN cd server && npm install",
+    "RUN cd client && npm install",
+    "RUN npm run build",
+    "EXPOSE 80",
+    "CMD [ \"npm\", \"run\", \"start\" ]"
+  ]
 }
