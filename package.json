@@ -9,11 +9,14 @@
   },
   "repository": "https://github.com/Morsby/medmcq",
   "scripts": {
+    "start": "node server/build/server.js",
     "server": "cd server && npm run dev",
     "client": "npm run genversion && cd client && npm start",
     "dev": "npm-run-all --parallel server client",
     "update": "git pull && cd server && npm install && cd ../client && npm install",
-    "build": "npm run update && npm run genversion && cd client && npm run build",
+    "build-client": "cd server && npm run build",
+    "build-server": "cd client && npm run build",
+    "build": "npm run genversion && npm-run-all --parallel build-client build-server",
     "genversion": "genversion -e version.js && mv version.js client/src/",
     "lint": "eslint . --fix --ext .js,.jsx,.json",
     "format": "npm-run-all --parallel format:*",
@@ -34,8 +37,8 @@
   },
   "author": "Morsby",
   "license": "MIT",
-  "dependencies": {},
   "devDependencies": {
+    "@types/cookie-session": "^2.0.37",
     "babel-eslint": "^10.0.1",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.3.0",
@@ -46,6 +49,7 @@
     "genversion": "^2.1.1",
     "husky": "^2.3.0",
     "npm-run-all": "^4.1.5",
-    "prettier": "^1.17.1"
+    "prettier": "^1.17.1",
+    "tslint": "^5.18.0"
   }
 }

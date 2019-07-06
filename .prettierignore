@@ -2,5 +2,6 @@
 **/coverage/**
 **/graveyard/
 client/build/
+server/build/
 client/src/semantic/
 client/src/serviceWorker.js
