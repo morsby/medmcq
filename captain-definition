@@ -1,22 +1,18 @@
- {
+{
   "schemaVersion": 2,
   "dockerfileLines": [
-      "FROM node:9.3",
-      "RUN mkdir -p /usr/src/app",
-      "RUN mkdir -p /usr/src/app/server",
-      "RUN mkdir -p /usr/src/app/client",
-      "WORKDIR /usr/src/app",
-      "ENV NODE_ENV production",
-      "ENV PORT 80",
-      "COPY ./package.json /usr/src/app/",
-      "RUN npm install && npm cache clean --force",
-      "COPY ./server/package.json /usr/src/app/server",
-      "RUN cd client && npm install && npm cache clean --force",
-      "COPY ./client/package.json /usr/src/app/client",
-      "RUN cd server && npm install && npm cache clean --force",
-      "COPY ./ /usr/src/app",
-      "RUN npm run build",
-      "EXPOSE 80",
-      "CMD [ \"npm\", \"start\" ]"
+    "FROM node:9.3",
+    "RUN mkdir -p /usr/src/app",
+    "WORKDIR /usr/src/app",
+    "COPY ./package.json /usr/src/app/",
+    "RUN npm install && npm cache clean --force",
+    "COPY ./ /usr/src/app",
+    "ENV NODE_ENV production",
+    "ENV PORT 80",
+    "RUN cd server && npm install",
+    "RUN cd client && npm install",
+    "RUN npm run build",
+    "EXPOSE 80",
+    "CMD [ \"npm\", \"start\" ]"
   ]
- }
+}
