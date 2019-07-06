@@ -3,6 +3,8 @@
   "dockerfileLines": [
       "FROM node:9.3",
       "RUN mkdir -p /usr/src/app",
+      "RUN mkdir -p /usr/src/app/server",
+      "RUN mkdir -p /usr/src/app/client",
       "WORKDIR /usr/src/app",
       "ENV NODE_ENV production",
       "ENV PORT 80",
