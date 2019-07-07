@@ -5,6 +5,8 @@ if (process.env.NODE_ENV === 'test') {
   port = 0;
 }
 
-export { port };
-export const env = process.env.NODE_ENV || 'development';
-export const apiUrl = `http://localhost:${port}/api`;
+module.exports = {
+  port,
+  env: process.env.NODE_ENV || 'development',
+  apiUrl: `http://localhost:${port}/api`
+};
