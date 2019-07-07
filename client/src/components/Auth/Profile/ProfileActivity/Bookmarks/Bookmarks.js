@@ -2,13 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import marked from 'marked';
 import _ from 'lodash';
+import { Translate } from 'react-localize-redux';
 import { Divider } from 'semantic-ui-react';
 
 /**
  * Component that displays questions
  */
 const Bookmarks = ({ bookmarks }) => {
-  if (bookmarks.length === 0) return 'Du har ikke bogmærket nogen spørgsmål';
+  if (Object.keys(bookmarks).length === 0) return <Translate id="profileBookmarks.no_bookmarks" />;
   return (
     <div>
       {_.map(bookmarks, (bookmark, i) => (

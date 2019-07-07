@@ -79,6 +79,19 @@
       }
     }
   },
+  "profileComments": {
+    "no_comments": [
+      "Du har ingen kommentarer på dette semester.",
+      "You have not commented any questions for this semester."
+    ],
+    "comments_header": ["Kommentarer", "Comments"]
+  },
+  "profileBookmarks": {
+    "no_bookmarks": [
+      "Du har ikke bogmærket nogen spørgsmål på dette semester.",
+      "You have not bookmarked any questions for this semester."
+    ]
+  },
   "profileAnswerDetails": {
     "start_quiz_button": [
       "Start en quiz med de valgte spørgsmål (${n})",
