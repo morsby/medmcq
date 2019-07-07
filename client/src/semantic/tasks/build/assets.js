@@ -1,63 +1,35 @@
 /*******************************
- Build Task
- *******************************/
+          Build Task
+*******************************/
 
 var
-  gulp      = require('gulp'),
+  gulp         = require('gulp'),
 
   // gulp dependencies
-  chmod     = require('gulp-chmod'),
-  gulpif    = require('gulp-if'),
-  normalize = require('normalize-path'),
-  print     = require('gulp-print').default,
+  chmod        = require('gulp-chmod'),
+  gulpif       = require('gulp-if'),
 
   // config
-  config    = require('../config/user'),
-  tasks     = require('../config/tasks'),
-  install   = require('../config/project/install'),
+  config       = require('../config/user'),
+  tasks        = require('../config/tasks'),
 
-  log       = tasks.log
+  // shorthand
+  globs        = config.globs,
+  assets       = config.paths.assets,
+  output       = config.paths.output,
+  source       = config.paths.source,
+
+  log          = tasks.log
 ;
 
-function build(src, config) {
-  return gulp.src(src, {base: config.paths.source.themes})
-    .pipe(gulpif(config.hasPermissions, chmod(config.parsedPermissions)))
-    .pipe(gulp.dest(config.paths.output.themes))
-    .pipe(print(log.created))
-    ;
-}
+module.exports = function(callback) {
 
-function buildAssets(src, config, callback) {
-  if (!install.isSetup()) {
-    console.error('Cannot build assets. Run "gulp install" to set-up Semantic');
-    callback();
-    return;
-  }
-
-  if (callback === undefined) {
-    callback = config;
-    config   = src;
-    src      = config.paths.source.themes + '/**/assets/**/*.*';
-  }
+  console.info('Building assets');
 
   // copy assets
-  var assets         = () => build(src, config);
-  assets.displayName = "Building Assets";
+  return gulp.src(source.themes + '/**/assets/**/*.*')
+    .pipe(gulpif(config.hasPermission, chmod(config.permission)))
+    .pipe(gulp.dest(output.themes))
+  ;
 
-  gulp.series(assets)(callback);
-}
-
-module.exports = function (callback) {
-  buildAssets(config, callback);
 };
-
-module.exports.watch = function (type, config) {
-  gulp
-    .watch([normalize(config.paths.source.themes + '/**/assets/**/*.*')])
-    .on('all', function (event, path) {
-      console.log('Change in assets detected');
-      return gulp.series((callback) => buildAssets(path, config, callback))();
-    });
-};
-
-module.exports.buildAssets = buildAssets;
