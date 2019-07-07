@@ -8,4 +8,4 @@ if (env === 'prod') {
   keys = require('./dev');
 }
 
-module.exports = keys;
+module.exports = { ...keys };
