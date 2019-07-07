@@ -87,7 +87,7 @@ const QuestionMetadata = (props) => {
             </Grid.Row>
             <Grid.Row>
               <Translate id="questionMetadata.tags" />{' '}
-              {_.map(question.tags, (t) => {
+              {_.orderBy(question.tags, 'votes', 'desc').map((t) => {
                 let tag = tags[t.tagId];
                 return (
                   <QuestionMetadataLabel
