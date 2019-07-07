@@ -81,8 +81,11 @@ router.get('/', permit({ roles: ['admin'] }), async (req, res) => {
  */
 router.post('/', async (req, res) => {
   try {
+    let { username, email, password } = req.body;
     let newUser = await User.query().insert({
-      ...req.body
+      username,
+      email,
+      password
     });
 
     res.status(200).json(newUser);
@@ -425,5 +428,20 @@ router.delete('/:id', permit({ roles: ['admin'], owner: 'params.id' }), async (r
  *          $ref: "#/components/schemas/Bookmark"
  *
  */
+
+router.post('/check-availability', async (req, res) => {
+  let { field, value } = req.body;
+  let user;
+  if (field && value) {
+    user = await User.query().findOne(field, value);
+  }
+  let availability;
+  if (user) {
+    availability = false;
+  } else {
+    availability = true;
+  }
+  res.json(availability);
+});
 
 export default router;
