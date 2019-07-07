@@ -7,7 +7,7 @@ exports.up = (knex) => {
       .unique();
     table.string('email').unique();
     table.string('password').notNullable();
-    table.integer('reset_password_expires');
+    table.bigInteger('reset_password_expires').unsigned();
     table.string('reset_password_token');
     table.timestamps(true, true);
     table.string('old_id');

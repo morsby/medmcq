@@ -8,5 +8,10 @@ if (process.env.NODE_ENV === 'test') {
 module.exports = {
   port,
   env: process.env.NODE_ENV || 'development',
-  apiUrl: `http://localhost:${port}/api`
+  apiUrl: `http://localhost:${port}/api`,
+  urls: {
+    fromEmail: 'medmcqau@gmail.com',
+    resetPassword: '/nyt-kodeord/',
+    forgotPassword: '/glemt-kodeord/'
+  }
 };
