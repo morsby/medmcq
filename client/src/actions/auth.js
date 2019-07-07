@@ -3,17 +3,18 @@ import * as types from './types';
 import { getQuestions } from './question';
 
 export const checkUserAvailability = (field, value) => async () => {
-  let res = await axios.post('/api/user/check-availability', {
+  let res = await axios.post('/api/users/check-availability', {
     field,
     value
   });
   return res.data;
 };
 
-export const signup = (post) => async () => {
-  let res = await axios.post('/api/user', post);
+export const signup = (post) => async (dispatch) => {
+  console.log(post);
+  let res = await axios.post('/api/users', post);
 
-  // dispatch({ type: types.AUTH_SIGNUP, payload: res.data });
+  dispatch({ type: types.AUTH_SIGNUP, payload: res.data });
   return res.data;
 };
 
@@ -67,7 +68,7 @@ export const getProfile = (semesterId = null) => async (dispatch, getState) => {
 };
 
 export const editProfile = (values, callback) => async () => {
-  let res = await axios.patch('/api/user', values);
+  let res = await axios.patch('/api/users', values);
 
   return callback(res.data);
 };
@@ -94,17 +95,17 @@ export const getAnsweredQuestions = (answers) => async (dispatch) => {
 };
 
 export const forgotPassword = (email, callback) => async () => {
-  let res = await axios.post('/api/user/forgot', { email: email });
+  let res = await axios.post('/api/users/forgot', { email: email });
   return callback(res.data);
 };
 
 export const resetPassword = (token, values, callback) => async () => {
-  let res = await axios.post(`/api/user/reset/${token}`, values);
+  let res = await axios.post(`/api/users/reset/${token}`, values);
   return callback(res.data);
 };
 
 export const manualCompleteSet = (api, user, semester) => async (dispatch) => {
-  const res = await axios.put('/api/user/completedsets/' + user._id, { api, semester });
+  const res = await axios.put('/api/users/completedsets/' + user._id, { api, semester });
 
   dispatch({ type: types.AUTH_CURRENT_USER, payload: res.data });
 };
