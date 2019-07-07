@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Translate } from 'react-localize-redux';
 import _ from 'lodash';
 
 import ProfileActivityAccordionElem from '../ProfileActivityAccordionElem';
@@ -8,8 +9,7 @@ import CommentsQuestion from './CommentsQuestion';
 const Comments = ({ questions = {}, comments = {}, type = 'public' }) => {
   let [activeIndex, setActiveIndex] = useState(null);
 
-  if (Object.keys(comments).length === 0)
-    return <div>Du har ingen kommentarer på dette semester.</div>;
+  if (Object.keys(comments).length === 0) return <Translate id="profileComments.no_comments" />;
 
   return (
     <div>

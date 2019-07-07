@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Comment } from 'semantic-ui-react';
+import { Translate } from 'react-localize-redux';
 
 import CommentsQuestionComment from './CommentsQuestionComment';
 
@@ -20,7 +21,7 @@ const CommentsQuestion = ({ question = {}, type = 'public' }) => {
       </ol>
 
       <Comment.Group>
-        <h5>Kommentarer</h5>
+        <Translate id="profileComments.comments_header" />
         {question[`${type}Comments`].map((commentId) => (
           <CommentsQuestionComment key={commentId} commentId={commentId} type={type} />
         ))}
