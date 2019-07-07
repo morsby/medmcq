@@ -8,10 +8,10 @@ COPY package*.json  ./
 COPY server/package*.json ./server/
 COPY client/package*.json ./client/
 
-RUN npm ci
-RUN ["npm", "run", "installProd"]
+RUN npm ci --only=production
 
 COPY . .
+RUN ["npm", "run", "installProd"]
 
 RUN ["npm", "run", "build"]
 

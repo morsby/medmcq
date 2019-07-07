@@ -13,7 +13,9 @@
     "server": "cd server && npm run dev",
     "client": "npm run genversion && cd client && npm start",
     "dev": "npm-run-all --parallel server client",
-    "installProd": "cd server && npm ci --only=production && cd ../client && npm ci --only=production && cd ..",
+    "installProd": "npm-run-all --parallel installProd:*",
+    "installProd:server": "cd server && npm ci --only=production",
+    "installProd:client": "cd client && npm ci --only=production",
     "build": "npm run genversion && npm-run-all --parallel build:*",
     "build:client": "cd client && npm run build",
     "build:server": "cd server && npm run build",
@@ -35,7 +37,8 @@
   "author": "Morsby",
   "license": "MIT",
   "dependencies": {
-    "genversion": "^2.1.1"
+    "genversion": "^2.1.1",
+    "npm-run-all": "^4.1.5"
   },
   "devDependencies": {
     "@types/cookie-session": "^2.0.37",
@@ -47,7 +50,6 @@
     "eslint-plugin-react": "^7.13.0",
     "eslint-plugin-react-hooks": "^1.6.0",
     "husky": "^2.3.0",
-    "npm-run-all": "^4.1.5",
     "prettier": "^1.17.1",
     "tslint": "^5.18.0"
   }
