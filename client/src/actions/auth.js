@@ -46,6 +46,8 @@ export const fetchUser = () => async (dispatch) => {
     console.log(err.response);
   }
 
+  if (!res.data) return;
+
   dispatch({ type: types.AUTH_CURRENT_USER, payload: res.data });
 };
 
