@@ -1,6 +1,6 @@
 /*!
- * # Fomantic-UI - Popup
- * http://github.com/fomantic/Fomantic-UI/
+ * # Semantic UI - Popup
+ * http://github.com/semantic-org/semantic-ui/
  *
  *
  * Released under the MIT license
@@ -26,8 +26,8 @@
 .ui.popup {
   display: none;
   position: absolute;
-  top: 0;
-  right: 0;
+  top: 0px;
+  right: 0px;
 
   /* Fixes content being squished when inline (moz only) */
   min-width: min-content;
@@ -47,7 +47,7 @@
   box-shadow: @boxShadow;
 }
 .ui.popup > .header {
-  padding: 0;
+  padding: 0em;
 
   font-family: @headerFont;
   font-size: @headerFontSize;
@@ -228,7 +228,7 @@
   box-shadow: @tooltipInvertedBoxShadow;
 }
 [data-tooltip][data-inverted]:after .header {
-  background: @tooltipInvertedHeaderBackground;
+  background-color: @tooltipInvertedHeaderBackground;
   color: @tooltipInvertedHeaderColor;
 }
 
@@ -420,52 +420,16 @@
 }
 
 /*--------------
-    Size
----------------*/
-
-[data-tooltip][data-variation~="mini"]:before,
-[data-tooltip][data-variation~="mini"]:after {
-  font-size: @mini;
-}
-[data-tooltip][data-variation~="tiny"]:before,
-[data-tooltip][data-variation~="tiny"]:after {
-  font-size: @tiny;
-}
-[data-tooltip][data-variation~="small"]:before,
-[data-tooltip][data-variation~="small"]:after {
-  font-size: @small;
-}
-[data-tooltip][data-variation~="medium"]:before,
-[data-tooltip][data-variation~="medium"]:after {
-  font-size: @medium;
-}
-[data-tooltip][data-variation~="large"]:before,
-[data-tooltip][data-variation~="large"]:after {
-  font-size: @large;
-}
-[data-tooltip][data-variation~="huge"]:before,
-[data-tooltip][data-variation~="huge"]:after {
-  font-size: @huge;
-}
-
-/*--------------
-    Basic
----------------*/
-[data-tooltip][data-variation~="basic"]:before {
-  display: none;
-}
-
-/*--------------
      Spacing
 ---------------*/
 
 .ui.popup {
-  margin: 0;
+  margin: 0em;
 }
 
 /* Extending from Top */
 .ui.top.popup {
-  margin: 0 0 @popupDistanceAway;
+  margin: 0em 0em @popupDistanceAway;
 }
 .ui.top.left.popup {
   transform-origin: left bottom;
@@ -479,17 +443,17 @@
 
 /* Extending from Vertical Center */
 .ui.left.center.popup {
-  margin: 0 @popupDistanceAway 0 0;
+  margin: 0em @popupDistanceAway 0em 0em;
   transform-origin: right 50%;
 }
 .ui.right.center.popup {
-  margin: 0 0 0 @popupDistanceAway;
+  margin: 0em 0em 0em @popupDistanceAway;
   transform-origin: left 50%;
 }
 
 /* Extending from Bottom */
 .ui.bottom.popup {
-  margin: @popupDistanceAway 0 0;
+  margin: @popupDistanceAway 0em 0em;
 }
 .ui.bottom.left.popup {
   transform-origin: left top;
@@ -524,7 +488,7 @@
   left: @arrowDistanceFromEdge;
   right: auto;
   bottom: auto;
-  margin-left: 0;
+  margin-left: 0em;
   box-shadow: @bottomArrowBoxShadow;
 }
 
@@ -537,7 +501,7 @@
   right: @arrowDistanceFromEdge;
   bottom: auto;
   left: auto;
-  margin-left: 0;
+  margin-left: 0em;
   box-shadow: @bottomArrowBoxShadow;
 }
 
@@ -558,7 +522,7 @@
   left: @arrowDistanceFromEdge;
   top: auto;
   right: auto;
-  margin-left: 0;
+  margin-left: 0em;
 }
 .ui.top.right.popup {
   margin-right: @boxArrowOffset;
@@ -569,7 +533,7 @@
   right: @arrowDistanceFromEdge;
   top: auto;
   left: auto;
-  margin-left: 0;
+  margin-left: 0em;
 }
 
 /*--- Left Center ---*/
@@ -645,7 +609,7 @@
 }
 
 .ui.visible.popup {
-  transform: translateZ(0);
+  transform: translateZ(0px);
   backface-visibility: hidden;
 }
 

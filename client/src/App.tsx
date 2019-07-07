@@ -44,7 +44,8 @@ import Sidebar from './components/Layout/Sidebar';
 import Footer from './components/Layout/Footer';
 import MaintenancePage from './components/Misc/Utility-pages/MaintenancePage';
 import ErrorBoundary from './components/Misc/Utility-pages/ErrorBoundary';
-import { IReduxState } from 'reducers';
+// bliver ikke brugt?
+//import { IReduxState } from 'reducers';
 
 export interface AppProps {
   invalidateMetadata: Function;
