@@ -11,7 +11,6 @@ export const checkUserAvailability = (field, value) => async () => {
 };
 
 export const signup = (post) => async (dispatch) => {
-  console.log(post);
   let res = await axios.post('/api/users', post);
 
   dispatch({ type: types.AUTH_SIGNUP, payload: res.data });
