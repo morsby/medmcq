@@ -27,7 +27,8 @@
     "validate": "npm-run-all --sequential lint format test",
     "test": "npm-run-all --parallel test:*",
     "test:server": "cd server && npm run test",
-    "test:client": "cd client && npm run test"
+    "test:client": "cd client && npm run test",
+    "install-all": "npm install && cd server && npm install && cd .. && cd client && npm install"
   },
   "husky": {
     "hooks": {
