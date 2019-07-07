@@ -1,6 +1,11 @@
-const dev = require('./dev');
+const { env } = require('./vars');
 
 // TODO: Tilføj if prod/dev
-module.exports = {
-  ...dev
-};
+let keys;
+if (env === 'prod') {
+  keys = require('./prod');
+} else {
+  keys = require('./dev');
+}
+
+module.exports = keys;
