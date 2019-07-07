@@ -23,6 +23,7 @@
   "homepage": "https://github.com/morsby/medmcq#readme",
   "dependencies": {
     "@babel/runtime": "^7.4.5",
+    "@sendgrid/mail": "^6.4.0",
     "@types/body-parser": "^1.17.0",
     "@types/cookie-parser": "^1.4.1",
     "@types/cookie-session": "^2.0.37",
@@ -32,6 +33,7 @@
     "@types/node": "^12.0.10",
     "@types/passport": "^1.0.0",
     "@types/supertest": "^2.0.7",
+    "async-waterfall": "^0.1.5",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.4",
     "cookie-session": "^1.3.3",
