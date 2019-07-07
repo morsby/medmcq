@@ -10,5 +10,5 @@ const dbConnection = {
 
 module.exports = {
   secretKeys: Keygrip(secrets),
-  ...dbConnection
+  dbConnection: dbConnection
 };
