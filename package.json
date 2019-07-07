@@ -16,7 +16,7 @@
     "installProd": "npm-run-all --sequential installProd:*",
     "installProd:server": "cd server && npm ci --only=production",
     "installProd:client": "cd client && npm ci --only=production",
-    "build": "npm run genversion && npm-run-all --parallel build:*",
+    "build": "npm run genversion && npm-run-all --sequential build:*",
     "build:client": "cd client && npm run build",
     "build:server": "cd server && npm run build",
     "genversion": "./node_modules/genversion/bin/genversion.js -e version.js && mv version.js client/src/",
