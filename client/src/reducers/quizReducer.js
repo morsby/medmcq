@@ -11,7 +11,7 @@ const initialState = {
   questions: [],
   answers: {},
   quizId: null,
-  currentQuestion: null
+  currentQuestion: 0
 };
 
 /**
