@@ -356,6 +356,61 @@ router.delete('/:id', permit({ roles: ['admin'], owner: 'params.id' }), async (r
     errorHandler(err, res);
   }
 });
+
+/**
+ * @swagger
+ * /users/check-availability:
+ *   post:
+ *     summary: Checks whether username or email is already taken
+ *     description: >
+ *       Checks if a username or email has already been registered.
+ *       Returns `true` if the requested value is free, `false` if it already exists.
+ *       Field can be `username` or `email`.
+ *     tags:
+ *       - Users
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               field:
+ *                 type: string
+ *               value:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Boolean
+ *         content:
+ *            application/json:
+ *              schema:
+ *                type: boolean
+ *       default:
+ *         description: unexpected error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/Error"
+ */
+router.post('/check-availability', async (req, res) => {
+  try {
+    let { field, value } = req.body;
+    let user;
+    if (field && value) {
+      user = await User.query().findOne(field, value);
+    }
+    let availability;
+    if (user) {
+      availability = false;
+    } else {
+      availability = true;
+    }
+    res.json(availability);
+  } catch (err) {
+    errorHandler(err, res);
+  }
+});
+
 /**
  * @swagger
  * components:
@@ -428,20 +483,5 @@ router.delete('/:id', permit({ roles: ['admin'], owner: 'params.id' }), async (r
  *          $ref: "#/components/schemas/Bookmark"
  *
  */
-
-router.post('/check-availability', async (req, res) => {
-  let { field, value } = req.body;
-  let user;
-  if (field && value) {
-    user = await User.query().findOne(field, value);
-  }
-  let availability;
-  if (user) {
-    availability = false;
-  } else {
-    availability = true;
-  }
-  res.json(availability);
-});
 
 export default router;
