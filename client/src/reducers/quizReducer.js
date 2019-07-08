@@ -22,6 +22,7 @@ export default createReducer(initialState, {
   [types.FETCH_QUESTIONS_SUCCESS]: (state, action) => {
     if (action.quiz) {
       state.questions = action.payload.map((q) => q.id);
+      state.currentQuestion = 0;
       state.answers = {};
     }
   },

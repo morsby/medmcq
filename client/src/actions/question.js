@@ -128,12 +128,13 @@ export const voteAction = (type, questionId, metadataId, vote) => async (dispatc
   });
 };
 
-export const searchQuestion = (semester, search) => async (dispatch) => {
-  const res = await axios.post('/api/questions/search', { search, semester });
+export const searchQuestion = (semester, searchString) => async (dispatch) => {
+  dispatch({ type: types.FETCH_QUESTIONS_REQUEST });
+  const res = await axios.post('/api/questions/search', { semester, searchString });
 
   dispatch({
     type: types.FETCH_QUESTIONS_SUCCESS,
     payload: res.data,
-    questionType: 'random'
+    quiz: true
   });
 };
