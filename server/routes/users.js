@@ -5,7 +5,6 @@ import { permit } from '../middleware/permission';
 import { urls } from '../config/vars';
 import keys from '../config/keys';
 import crypto from 'crypto';
-import waterfall from 'async-waterfall';
 import sgMail from '@sendgrid/mail';
 import createResponse from './_swaggerComponents';
 import QuestionUserAnswer from '../models/question_user_answer';
@@ -422,52 +421,41 @@ router.post('/forgot', async (req, res) => {
     if (!email) {
       throw new BadRequest({ message: 'You need to provide an email' });
     }
-    waterfall(
-      [
-        (done) => {
-          crypto.randomBytes(20, (err, buf) => {
-            const token = buf.toString('hex');
-            done(err, token);
-          });
-        },
-        async (token, done) => {
-          let err;
-          let user;
-          try {
-            user = await User.query().findOne({ email });
-            if (!user) throw new NotFoundError();
-            user = await user.$query().patchAndFetch({
-              resetPasswordToken: token,
-              resetPasswordExpires: Date.now() + 60 * 60 * 1000
-            });
-          } catch (error) {
-            err = error;
-          }
-          done(err, token, user);
-        },
-        (token, user, done) => {
-          sgMail.setApiKey(keys.sendgridApiKey);
-          const msg = {
-            to: user.email,
-            from: urls.fromEmail,
-            templateId: 'd-c18c023d7f7847118f02d342f538c571',
-            dynamic_template_data: {
-              username: user.username,
-              email: user.email,
-              resetLink: `http://${req.headers.host}${urls.resetPassword}${token}`,
-              forgotLink: `http://${req.headers.host}${urls.forgotPassword}`
-            }
-          };
-          sgMail.send(msg);
-          done();
-        }
-      ],
-      (err) => {
-        if (err) return errorHandler(err, res);
-        res.json(createResponse({ type: 'success' }));
+
+    // Generate reset token
+    const token = crypto.randomBytes(20).toString('hex');
+
+    // Find the user
+    let user;
+
+    user = await User.query().findOne({ email });
+    if (!user) throw new NotFoundError();
+
+    // Update reset information
+    user = await user.$query().patchAndFetch({
+      resetPasswordToken: token,
+      resetPasswordExpires: Date.now() + 60 * 60 * 1000
+    });
+
+    // Send mail
+    sgMail.setApiKey(keys.sendgridApiKey);
+    const msg = {
+      to: user.email,
+      from: urls.fromEmail,
+      templateId: 'd-c18c023d7f7847118f02d342f538c571',
+      dynamic_template_data: {
+        username: user.username,
+        email: user.email,
+        resetLink: `http://${urls.dev || req.headers.host}${urls.resetPassword}${token}`,
+        forgotLink: `http://${urls.dev || req.headers.host}${urls.forgotPassword}`
       }
-    );
+    };
+    sgMail.send(msg);
+
+    // Send response
+    res.json(createResponse('resetPasswordRequestSuccess'));
   } catch (err) {
+    // Catch any error
     errorHandler(err, res);
   }
 });
