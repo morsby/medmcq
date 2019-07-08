@@ -85,18 +85,6 @@ class LoginForm extends Component {
                     <Message negative>{translate('loginForm.errs.login_failed')}</Message>
                   )}
                   <Divider hidden />
-                  <Message warning visible>
-                    <Message.Header>Mellemrum i brugernavne</Message.Header>
-                    <p>
-                      Vi har fjernet alle mellemrum fra brugernavne. Har du før logget ind med et
-                      brugernavn, skal du blot fjerne dette for at logge ind.
-                    </p>
-                    <p>
-                      Indtil sommerferien kan du dog stadig logge ind, som du plejer <em>med</em>{' '}
-                      mellemrum.
-                    </p>
-                  </Message>
-                  <Divider hidden />
                   <Button floated="left" disabled={pristine || invalid} positive>
                     {translate('loginForm.login')}
                   </Button>
