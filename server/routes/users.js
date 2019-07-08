@@ -415,7 +415,7 @@ router.post('/check-availability', async (req, res) => {
   }
 });
 
-router.post('/forgot', async (req, res) => {
+router.post('/forgot-password', async (req, res) => {
   let { email } = req.body;
   try {
     if (!email) {
@@ -456,6 +456,49 @@ router.post('/forgot', async (req, res) => {
     res.json(createResponse('resetPasswordRequestSuccess'));
   } catch (err) {
     // Catch any error
+    errorHandler(err, res);
+  }
+});
+
+router.post('/reset-password', async (req, res) => {
+  try {
+    let { resetPasswordToken, password } = req.body;
+
+    // Check if required fields are provided
+    if (!resetPasswordToken || !password) {
+      throw new BadRequest({
+        message: 'You must provide a password reset token and a new password'
+      });
+    }
+    // Find the user with correct token and expire time
+    const user = await User.query()
+      .findOne({ resetPasswordToken })
+      .andWhere('resetPasswordExpires', '>', Date.now());
+    if (!user)
+      throw new NotFoundError({
+        message:
+          'Reset-token er ikke gyldigt. Bed om et nyt via formularen "Jeg har glemt min kode" og prøv igen.'
+      });
+
+    // Reset password
+    await user.$query().patch({ password, resetPasswordToken: null, resetPasswordExpires: null });
+
+    // Send mail
+    sgMail.setApiKey(keys.sendgridApiKey);
+    const msg = {
+      to: user.email,
+      from: urls.fromEmail,
+      templateId: 'd-df2ec6ed439b4e63a57d4ae6877721d7',
+      dynamic_template_data: {
+        username: user.username,
+        email: user.email
+      }
+    };
+    sgMail.send(msg);
+
+    // Send response
+    res.json(createResponse('resetPasswordSuccess'));
+  } catch (err) {
     errorHandler(err, res);
   }
 });
