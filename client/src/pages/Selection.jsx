@@ -77,7 +77,7 @@ class SelectionMain extends Component {
     if (err.length === 0) {
       // Hvis vi er ved at søge
       if (this.state.search !== '') {
-        this.props.searchQuestion(this.props.settings.semester, this.state.search);
+        this.props.searchQuestion(this.props.ui.selection.selectedSemester, this.state.search);
         return this.props.history.push(urls.quiz);
       }
 

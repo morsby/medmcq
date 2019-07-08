@@ -242,6 +242,9 @@ router.post('/', permit({ roles: ['admin'] }), async (req, res) => {
  *               searchString:
  *                 type: string
  *                 example: 'appendicit'
+ *               semester:
+ *                 type: integer
+ *                 description: Semester ID to search within.
  *     responses:
  *       200:
  *         description: The matched questions.
@@ -258,11 +261,18 @@ router.post('/', permit({ roles: ['admin'] }), async (req, res) => {
  */
 router.post('/search', async (req, res) => {
   try {
-    let { searchString } = req.body;
+    let { searchString, semester } = req.body;
 
-    const questions = await Question.query()
-      .whereRaw('MATCH (text, answer1, answer2, answer3) AGAINST (? IN BOOLEAN MODE)', searchString)
-      .eager(Question.defaultEager);
+    let questions = Question.query()
+      .joinRelation('semester')
+      .whereRaw(
+        'MATCH (text, answer1, answer2, answer3) AGAINST (? IN BOOLEAN MODE)',
+        searchString
+      );
+
+    if (semester) questions = questions.andWhere({ 'semester.id': semester });
+
+    questions = await questions.eager(Question.defaultEager);
 
     res.status(200).json(questions);
   } catch (err) {
