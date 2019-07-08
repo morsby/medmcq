@@ -453,7 +453,12 @@ router.post('/forgot-password', async (req, res) => {
     sgMail.send(msg);
 
     // Send response
-    res.json(createResponse('resetPasswordRequestSuccess'));
+    res.json(
+      createResponse(
+        'resetPasswordRequestSuccess',
+        'Du modtager snarest en mail med instruktioner. / You will soon recieve an email with instructions.'
+      )
+    );
   } catch (err) {
     // Catch any error
     errorHandler(err, res);
@@ -497,7 +502,12 @@ router.post('/reset-password', async (req, res) => {
     sgMail.send(msg);
 
     // Send response
-    res.json(createResponse('resetPasswordSuccess'));
+    res.json(
+      createResponse(
+        'resetPasswordSuccess',
+        'Dit kodeord er blevet nulstillet. / Your password has been reset.'
+      )
+    );
   } catch (err) {
     errorHandler(err, res);
   }
