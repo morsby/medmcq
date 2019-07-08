@@ -429,7 +429,11 @@ router.post('/forgot-password', async (req, res) => {
     let user;
 
     user = await User.query().findOne({ email });
-    if (!user) throw new NotFoundError();
+    if (!user)
+      throw new NotFoundError({
+        type: 'UserNotFound',
+        message: 'Der blev ikke fundet en bruger.'
+      });
 
     // Update reset information
     user = await user.$query().patchAndFetch({

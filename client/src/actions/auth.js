@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import * as types from './types';
 import { getQuestions } from './question';
 
@@ -19,31 +20,22 @@ export const signup = (post) => async (dispatch) => {
 
 export const login = (post) => async (dispatch) => {
   post.username = post.username.toLowerCase();
-  let response;
 
-  await axios
-    .post('/api/auth', post)
-    .then(function(res) {
-      // handle success
-      dispatch(fetchUser());
-      response = res.data;
-      return res.data;
-    })
-    .catch(function(error) {
-      // eslint-disable-next-line
-      alert(error);
-    });
-
-  return response;
+  try {
+    let response = await axios.post('/api/auth', post);
+    dispatch(fetchUser());
+    return response.data;
+  } catch ({ response }) {
+    toast.error(response.data.message);
+  }
 };
 
 export const fetchUser = () => async (dispatch) => {
   let res;
   try {
     res = await axios.get('/api/auth');
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.log(err.response);
+  } catch ({ response }) {
+    toast.error(response.data.message);
   }
 
   if (!res.data) return;
@@ -58,9 +50,8 @@ export const getProfile = (semesterId = null) => async (dispatch, getState) => {
   semesterId = semesterId || getState().ui.selection.selectedSemester;
   try {
     res = await axios.get(`/api/users/${userId}/profile?semesterId=${semesterId}`);
-  } catch (err) {
-    // eslint-disable-next-line no-console
-    console.log(err.response);
+  } catch ({ response }) {
+    toast.error(response.data.message);
   }
 
   await dispatch(getQuestions({ ids: res.data.questions }));
@@ -96,13 +87,25 @@ export const getAnsweredQuestions = (answers) => async (dispatch) => {
 };
 
 export const forgotPassword = (email, callback) => async () => {
-  let res = await axios.post('/api/users/forgot-password', { email: email });
+  let res;
+  try {
+    res = await axios.post('/api/users/forgot-password', { email: email });
+  } catch ({ response }) {
+    res = response;
+    toast.error(response.data.message);
+  }
   return callback(res.data);
 };
 
 export const resetPassword = (resetPasswordToken, values, callback) => async () => {
-  let res = await axios.post('/api/users/reset-password', { resetPasswordToken, ...values });
-  return callback(res.data.message);
+  let res;
+  try {
+    await axios.post('/api/users/reset-password', { resetPasswordToken, ...values });
+  } catch ({ response }) {
+    res = response;
+    toast.error(response.data.message);
+  }
+  return callback(res.data);
 };
 
 export const manualCompleteSet = (api, user, semester) => async (dispatch) => {
