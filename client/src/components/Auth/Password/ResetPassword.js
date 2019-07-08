@@ -82,10 +82,10 @@ class ResetPassword extends Component {
                       </Field>
                       {message && (
                         <Message
-                          negative={message.type === 'error'}
-                          positive={message.type === 'success'}
+                          positive={message.type === 'resetPasswordSuccess'}
+                          negative={message.type !== 'resetPasswordSuccess'}
                         >
-                          {message.data}
+                          {message.message}
                         </Message>
                       )}
                       <Divider hidden />

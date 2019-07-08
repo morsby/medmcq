@@ -44,7 +44,7 @@ class ForgotPassword extends Component {
             </Form.Field>
             {message && (
               <Message negative={message.type === 'error'} positive={message.type === 'success'}>
-                {message.data}
+                {message.message}
               </Message>
             )}
             <Button type="submit">Send email</Button>

@@ -94,13 +94,13 @@ export const getAnsweredQuestions = (answers) => async (dispatch) => {
 };
 
 export const forgotPassword = (email, callback) => async () => {
-  let res = await axios.post('/api/users/forgot', { email: email });
+  let res = await axios.post('/api/users/forgot-password', { email: email });
   return callback(res.data);
 };
 
-export const resetPassword = (token, values, callback) => async () => {
-  let res = await axios.post(`/api/users/reset/${token}`, values);
-  return callback(res.data);
+export const resetPassword = (resetPasswordToken, values, callback) => async () => {
+  let res = await axios.post('/api/users/reset-password', { resetPasswordToken, ...values });
+  return callback(res.data.message);
 };
 
 export const manualCompleteSet = (api, user, semester) => async (dispatch) => {
