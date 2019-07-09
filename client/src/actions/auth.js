@@ -66,6 +66,7 @@ export const editProfile = (values) => async (_dispatch, getState) => {
   try {
     await axios.patch(`/api/users/${auth.user.id}`, values);
 
+    // TODO: FIX MSG
     toast.success(translate('loginForm.password'));
   } catch ({ response }) {
     toast.error('ProfileUpdateFailed');
