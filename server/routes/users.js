@@ -300,6 +300,7 @@ router.get(
  */
 router.patch('/:id', permit({ roles: ['admin'], owner: 'params.id' }), async (req, res) => {
   let { id } = req.params;
+  let { email, password } = req.body;
 
   try {
     // Hvis der ikke er nogle data med i req.body smider vi en fejl
@@ -311,7 +312,7 @@ router.patch('/:id', permit({ roles: ['admin'], owner: 'params.id' }), async (re
       });
     }
 
-    let user = await User.query().patchAndFetchById(id, req.body);
+    let user = await User.query().patchAndFetchById(id, { email, password });
     if (!user) throw new NotFoundError();
     res.status(200).json(user);
   } catch (err) {

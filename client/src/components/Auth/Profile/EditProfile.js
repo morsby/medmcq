@@ -21,20 +21,15 @@ import { Translate } from 'react-localize-redux';
  *  - fetchUser (der tjekker login)
  */
 class EditProfile extends Component {
-  state = { message: null };
-
   handleNavigation = (path) => {
     this.props.history.push(urls[path]);
   };
 
   onSubmit = async (values) => {
-    await this.props.editProfile(values, (data) => {
-      this.setState({ message: data });
-    });
+    await this.props.editProfile(values);
   };
 
   render() {
-    let { message } = this.state;
     return (
       <div className="flex-container">
         <Container className="content">
@@ -124,14 +119,7 @@ class EditProfile extends Component {
                           </div>
                         )}
                       </Field>
-                      {message && (
-                        <Message
-                          negative={message.type === 'error'}
-                          positive={message.type === 'success'}
-                        >
-                          {message.data}
-                        </Message>
-                      )}
+
                       <Divider hidden />
 
                       <Button disabled={pristine || invalid}>
