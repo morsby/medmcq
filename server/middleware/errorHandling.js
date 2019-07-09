@@ -75,7 +75,7 @@ export const errorHandler = (err, res) => {
   } else if (err instanceof NotFoundError) {
     res.status(404).send({
       message: err.message,
-      type: 'NotFound',
+      type: err.data.type || 'NotFound',
       data: {}
     });
   } else if (err instanceof UniqueViolationError) {

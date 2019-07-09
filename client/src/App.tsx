@@ -16,6 +16,9 @@ import ScrollToTop from './components/Misc/HOC/ScrollToTop';
 // Diverse
 import ErrorPage from './components/Misc/Utility-pages/404';
 import Print from './components/Misc/Utility-pages/Print/Print';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 // Selections
 import Selection from './pages/Selection';
 
@@ -91,6 +94,16 @@ class App extends Component<AppProps> {
         <ErrorBoundary>
           <ScrollToTop>
             <NewVersionMessage />
+            <ToastContainer
+              position="top-center"
+              autoClose={5000}
+              hideProgressBar={false}
+              newestOnTop
+              closeOnClick
+              rtl={false}
+              draggable
+              pauseOnHover
+            />
             <Sidebar>
               <Header />
               <Switch>

@@ -300,6 +300,7 @@ router.get(
  */
 router.patch('/:id', permit({ roles: ['admin'], owner: 'params.id' }), async (req, res) => {
   let { id } = req.params;
+  let { email, password } = req.body;
 
   try {
     // Hvis der ikke er nogle data med i req.body smider vi en fejl
@@ -311,7 +312,7 @@ router.patch('/:id', permit({ roles: ['admin'], owner: 'params.id' }), async (re
       });
     }
 
-    let user = await User.query().patchAndFetchById(id, req.body);
+    let user = await User.query().patchAndFetchById(id, { email, password });
     if (!user) throw new NotFoundError();
     res.status(200).json(user);
   } catch (err) {
@@ -429,7 +430,11 @@ router.post('/forgot-password', async (req, res) => {
     let user;
 
     user = await User.query().findOne({ email });
-    if (!user) throw new NotFoundError();
+    if (!user)
+      throw new NotFoundError({
+        type: 'UserNotFound',
+        message: 'Der blev ikke fundet en bruger.'
+      });
 
     // Update reset information
     user = await user.$query().patchAndFetch({
