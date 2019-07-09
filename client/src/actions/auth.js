@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { getTranslate } from 'react-localize-redux';
 import * as types from './types';
 import { getQuestions } from './question';
 
@@ -59,10 +60,16 @@ export const getProfile = (semesterId = null) => async (dispatch, getState) => {
   dispatch({ type: types.AUTH_PROFILE_SUCCESS, payload: { ...res.data, questions } });
 };
 
-export const editProfile = (values, callback) => async () => {
-  let res = await axios.patch('/api/users', values);
+export const editProfile = (values) => async (_dispatch, getState) => {
+  let { auth, localize } = getState();
+  const translate = getTranslate(localize);
+  try {
+    await axios.patch(`/api/users/${auth.user.id}`, values);
 
-  return callback(res.data);
+    toast.success(translate('loginForm.password'));
+  } catch ({ response }) {
+    toast.error('ProfileUpdateFailed');
+  }
 };
 
 export const getAnsweredQuestions = (answers) => async (dispatch) => {
