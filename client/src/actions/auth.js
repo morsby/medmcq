@@ -24,11 +24,27 @@ export const login = (post) => async (dispatch) => {
 
   try {
     let response = await axios.post('/api/auth', post);
+    toast.success('LoginSuccess');
     dispatch(fetchUser());
     return response.data;
   } catch ({ response }) {
     toast.error(response.data.message);
   }
+};
+
+export const logout = () => async (dispatch) => {
+  try {
+    let res = await axios.get('/api/auth/logout');
+    if (res.data.type === 'LogoutSuccess') {
+      toast.success(res.data.type);
+    } else {
+      toast.error('Something bad happened ...');
+    }
+  } catch ({ response }) {
+    toast.error(response.data.type);
+  }
+
+  dispatch(fetchUser());
 };
 
 export const fetchUser = () => async (dispatch) => {
@@ -38,8 +54,6 @@ export const fetchUser = () => async (dispatch) => {
   } catch ({ response }) {
     toast.error(response.data.message);
   }
-
-  if (!res.data) return;
 
   dispatch({ type: types.AUTH_CURRENT_USER, payload: res.data });
 };
