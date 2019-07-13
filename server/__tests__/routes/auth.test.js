@@ -26,7 +26,7 @@ describe('auth route', () => {
     let response = await agent.get(`${authApi}/logout`);
 
     let res = response.body;
-    expect(res.type).toEqual('LogoutSucess');
+    expect(res.type).toEqual('LogoutSuccess');
   });
 
   test("POST '/' -- should fail with wrong password", async () => {
