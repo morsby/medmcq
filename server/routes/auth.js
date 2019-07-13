@@ -122,7 +122,7 @@ router.post('/', (req, res, next) => {
 router.get('/logout', permit(), function(req, res) {
   req.logout();
   req.session = null;
-  res.json(createResponse('LogoutSucess', 'Logged out succesfully.'));
+  res.json(createResponse('LogoutSuccess', 'Logged out succesfully.'));
   // res.redirect("/logout");
 });
 

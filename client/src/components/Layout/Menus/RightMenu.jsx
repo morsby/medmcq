@@ -8,7 +8,7 @@ import * as actions from '../../../actions';
 import Flag from 'react-flagkit';
 
 const RightMenu = (props) => {
-  const { user, history, languages } = props;
+  const { user, history, languages, logout } = props;
 
   const onNavigation = (path) => {
     history.push(urls[path]);
@@ -46,7 +46,7 @@ const RightMenu = (props) => {
           </strong>
         </Menu.Item>
         <Menu.Item>
-          <Button inverted onClick={() => (window.location.href = '/api/auth/logout')}>
+          <Button inverted onClick={logout}>
             <Translate id="header.logout" />
           </Button>
         </Menu.Item>
