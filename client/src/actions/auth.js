@@ -50,12 +50,14 @@ export const getProfile = (semesterId = null) => async (dispatch, getState) => {
   let res;
   semesterId = semesterId || getState().ui.selection.selectedSemester;
   try {
-    res = await axios.get(`/api/users/${userId}/profile?semesterId=${semesterId}`);
+    [res] = await Promise.all([
+      axios.get(`/api/users/${userId}/profile?semesterId=${semesterId}`),
+      dispatch(getQuestions({ profile: true }))
+    ]);
   } catch ({ response }) {
     toast.error(response.data.message);
   }
 
-  await dispatch(getQuestions({ ids: res.data.questions }));
   const questions = getState().questions.entities.questions;
   dispatch({ type: types.AUTH_PROFILE_SUCCESS, payload: { ...res.data, questions } });
 };
