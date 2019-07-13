@@ -240,8 +240,10 @@ router.get(
         bookmarks
       ]);
       let questionIds = [];
-      [...answers, ...publicComments, ...privateComments, ...bookmarks].map(({ questionId }) =>
-        questionIds.push(questionId)
+      [...answers, ...publicComments, ...privateComments, ...bookmarks].forEach(
+        ({ questionId }) => {
+          if (!questionIds.includes(questionId)) questionIds.push(questionId);
+        }
       );
 
       let profile = {};

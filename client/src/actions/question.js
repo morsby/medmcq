@@ -4,7 +4,10 @@ import * as types from './types';
 
 const questionApi = '/api/questions';
 
-export const getQuestions = ({ ids, quiz = false }) => async (dispatch, getState) => {
+export const getQuestions = ({ ids, profile = false, quiz = false }) => async (
+  dispatch,
+  getState
+) => {
   dispatch({ type: types.FETCH_QUESTIONS_REQUEST });
   let state = getState();
   let {
@@ -29,10 +32,15 @@ export const getQuestions = ({ ids, quiz = false }) => async (dispatch, getState
     }
   }
 
+  if (profile) {
+    type = 'profile';
+  }
+
   switch (type) {
     /*
       types:
         - ids
+        - profile
         - set
         - random
         - specialer/tags
@@ -41,6 +49,9 @@ export const getQuestions = ({ ids, quiz = false }) => async (dispatch, getState
     case 'ids':
     case 'specific':
       res = await axios.get(questionApi, { params: { ids: ids.join(',') } });
+      break;
+    case 'profile':
+      res = await axios.get(questionApi, { params: { profile, semesters: selectedSemester } });
       break;
     case 'set':
       res = await axios.get(`/api/exam_sets/${selectedSetId}/questions`);

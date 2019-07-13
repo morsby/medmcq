@@ -22,8 +22,9 @@ const router = express.Router();
  *       Returns a list of questions.
  *       Only accessible to admins if requesting more than 300 questions without
  *       ids.<br><br>
- *       If ids are provided, all other parameters are ignored. Otherwise,
- *       query parameters are combined and only questions fulfulling all
+ *       If `ids` are provided, all other parameters are ignored. <br>
+ *       If `profile` is true, only this and `semesters` are evaluated.<br>
+ *       Otherwise, query parameters are combined and only questions fulfulling all
  *       requirements are selected (i.e. an *inner join*\/*andWhere* is performed
  *       on each parameter).
  *     tags:
@@ -33,7 +34,14 @@ const router = express.Router();
  *         name: ids
  *         schema:
  *           type: string
+ *           example: 1,2,3
  *           description: A comma separated list of ids to fetch.
+ *       - in: query
+ *         name: profile
+ *         schema:
+ *           type: boolean
+ *           example: true
+ *           description: Fetches questions related to the user (through `req.user`).
  *       - in: query
  *         name: n
  *         schema:
@@ -84,10 +92,10 @@ const router = express.Router();
  */
 router.get('/', async (req, res) => {
   let user = req.user || {};
-  let { ids, n, semesters, onlyNew, specialties, tags } = req.query;
+  let { profile, ids, n, semesters, onlyNew, specialties, tags } = req.query;
   try {
     // If user is not allowed to query >300 questions, we throw an error
-    if (!ids && (!n || n > 300) && ['admin', 'creator'].indexOf(user.role) === -1) {
+    if (!ids && !profile && (!n || n > 300) && ['admin', 'creator'].indexOf(user.role) === -1) {
       throw new NotAuthorized({
         message: `You requested too many questions. The limit for non-admins is 300 (you requested ${req
           .query.n || 'all'}).`,
@@ -105,6 +113,38 @@ router.get('/', async (req, res) => {
       query = query
         .whereIn('Question.id', ids.split(',').map((id) => Number(id)))
         .orderByRaw(`FIELD(question.id, ${ids})`);
+    } else if (profile) {
+      if (!req.user)
+        throw new BadRequest({
+          type: 'NotLoggedIn',
+          message: 'You must be logged in to access this request.'
+        });
+
+      if (semesters) {
+        query = query.whereIn('semester.id', semesters.split(','));
+      }
+
+      query = query.andWhere((builder) =>
+        builder
+          .whereIn(
+            'Question.id',
+            QuestionBookmark.query()
+              .where('userId', user.id)
+              .distinct('questionId')
+          )
+          .orWhereIn(
+            'Question.id',
+            QuestionComment.query()
+              .where('userId', user.id)
+              .distinct('questionId')
+          )
+          .orWhereIn(
+            'Question.id',
+            QuestionUserAnswer.query()
+              .where('userId', user.id)
+              .distinct('questionId')
+          )
+      );
     } else {
       // Otherwise, filter by results and randomize
       query = query.orderByRaw('rand()');
