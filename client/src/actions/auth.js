@@ -132,8 +132,8 @@ export const resetPassword = (resetPasswordToken, values, callback) => async () 
   return callback(res.data);
 };
 
-export const manualCompleteSet = (api, user, semester) => async (dispatch) => {
-  const res = await axios.put('/api/users/completedsets/' + user._id, { api, semester });
+export const manualCompleteSet = (setId, userId) => async (dispatch) => {
+  await axios.put('/api/users/completedsets/' + userId, { setId });
 
-  dispatch({ type: types.AUTH_CURRENT_USER, payload: res.data });
+  await dispatch(fetchUser());
 };
