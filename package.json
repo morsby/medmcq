@@ -19,7 +19,7 @@
     "build": "npm run genversion && npm-run-all --sequential build:*",
     "build:server": "cd server && npm run build",
     "build:client": "cd client && npm run build",
-    "genversion": "./node_modules/genversion/bin/genversion.js -e version.js && mv version.js client/src/",
+    "genversion": "genversion -e version.js && mv version.js client/src/",
     "lint": "eslint . --fix --ext .ts,.tsx,.js,.jsx,.json",
     "format": "npm-run-all --parallel format:*",
     "format:json": "prettier --list-different  --write \"**/*.json\"",
