@@ -17,7 +17,7 @@ import { Container, Header, Divider, Button, Message, Input, Checkbox } from 'se
 import SelectionSemesterSelector from 'components/SelectionSettings/SelectionSemesterSelector';
 import SelectionNSelector from 'components/SelectionSettings/SelectionNSelector';
 import SelectionSetSelector from 'components/SelectionSettings/SelectionSetSelector/SelectionSetSelector';
-import SelectionSpecialtiesSelector from 'components/SelectionSettings/SelectionSpecialtiesSelector/SelectionSpecialtiesSelector';
+import SelectionSpecialtiesSelector from 'components/SelectionSettings/SelectionMetadataSelector/SelectionMetadataSelector';
 import SelectionTypeSelector from 'components/SelectionSettings/SelectionTypeSelector';
 import SelectionUniqueSelector from 'components/SelectionSettings/SelectionUniqueSelector';
 import SelectionMessage from 'components/SelectionSettings/SelectionMessage';
