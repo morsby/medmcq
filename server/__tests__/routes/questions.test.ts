@@ -1,13 +1,18 @@
 import _ from 'lodash';
-const request = require('supertest');
-const server = require('../../server');
+import request from 'supertest';
 const questionApi = '/api/questions';
+let server;
+let agent;
 
 // Settings vars to reuse across tests
-const agent = request.agent(server);
 let firstQuestionId;
 let newQuestionId;
 let newCommentId;
+
+beforeEach(() => {
+  server = require('../../server');
+  agent = request.agent(server);
+});
 
 afterEach(() => {
   server.close();

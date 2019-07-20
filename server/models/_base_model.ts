@@ -1,6 +1,6 @@
 import { DBErrors } from 'objection-db-errors';
-const { Model } = require('objection');
-const visibilityPlugin = require('objection-visibility').default;
+import { Model } from 'objection';
+import visibilityPlugin from 'objection-visibility';
 export const hiddenCols = ['oldId', 'createdAt', 'updatedAt'];
 
 /**
@@ -27,14 +27,14 @@ export default class BaseModel extends DBErrors(visibilityPlugin(Model)) {
  * A custom query builder that allows passing arguments to filters/modifiers.
  * @extends Objection.Model.QueryBuilder
  */
-export class CustomQueryBuilder extends Model.QueryBuilder {
+export class CustomQueryBuilder<M extends Model> extends Model.QueryBuilder<M, M[]> {
   /**
    * Merging arguments into context to use in eager expressions.
    * @param  {string} expr A RelationExpression to eager load.
    * @param  {object} args The filters to apply to the eager
    * @return {object}      The eager method(?)
    */
-  eager(expr, args) {
+  eager(expr: string, args: object): this {
     if (args) {
       this.mergeContext({ namedFilterArgs: args });
     }
@@ -47,19 +47,19 @@ export class CustomQueryBuilder extends Model.QueryBuilder {
    * @param  {object} args The filters to apply to the modify
    * @return {object}      The modify method(?)
    */
-  modify(expr, args) {
+  modify: any = (expr: any, args: any) => {
     if (args) {
       this.mergeContext({ namedFilterArgs: args });
     }
     return super.modify(expr);
-  }
+  };
 
   /**
    * Method to get the named filters in eager and modify expressions.
    * @param  {string} filterName The name of the filter
    * @return {object}            The filters
    */
-  namedFilterArgs(filterName) {
+  namedFilterArgs(filterName: string): object {
     return (this.context().namedFilterArgs || {})[filterName];
   }
 }

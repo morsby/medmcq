@@ -1,14 +1,19 @@
-const request = require('supertest');
-const server = require('../../server');
+import request from 'supertest';
 const userApi = '/api/users';
+let server;
 
-const admin = request.agent(server);
-const user = request.agent(server);
-const anon = request.agent(server);
+let admin;
+let user;
+let anon;
 // Settings vars to reuse across tests
 let newUserId, adminId, userIds;
 
-beforeAll(async () => {
+beforeEach(async () => {
+  server = require('../../server');
+  admin = request.agent(server);
+  user = request.agent(server);
+  anon = request.agent(server);
+
   let res = await admin
     .post('/api/auth')
     .send({ username: 'TestAdmin', password: 'TestPassword123' });

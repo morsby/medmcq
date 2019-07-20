@@ -40,7 +40,8 @@ module.exports = function(passport) {
           });
         }
 
-        const passwordValid = await user.verifyPassword(password);
+        const passwordValid = await User.verifyPassword(password);
+        console.log(passwordValid);
         let error;
         if (!passwordValid) {
           error = { message: 'Incorrect password' };

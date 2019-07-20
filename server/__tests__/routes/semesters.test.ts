@@ -1,16 +1,20 @@
-const request = require('supertest');
-const server = require('../../server');
+import request from 'supertest';
 const semesterApi = '/api/semesters';
-
-afterEach(() => {
-  server.close();
-});
-
-// For at gemme sessions
-const user = request.agent(server);
-const admin = request.agent(server);
+let server;
+let user;
+let admin;
 
 describe('semesters route', () => {
+  beforeEach(() => {
+    server = require('../../server');
+    user = request.agent(server);
+    admin = request.agent(server);
+  });
+
+  afterEach(() => {
+    server.close();
+  });
+
   // Settings vars to reuse across tests
   let firstSemesterId, newSemesterId;
 

@@ -1,15 +1,19 @@
 import _ from 'lodash';
-const request = require('supertest');
-const server = require('../../server');
+import request from 'supertest';
 const tagApi = '/api/tags';
-
-const agent = request.agent(server);
-
-afterEach(() => {
-  server.close();
-});
+let server;
+let agent;
 
 describe('tags route', () => {
+  beforeEach(() => {
+    server = require('../../server');
+    agent = request.agent(server);
+  });
+
+  afterEach(() => {
+    server.close();
+  });
+
   // Settings vars to reuse across tests
   let firstTagId, newTagId;
 

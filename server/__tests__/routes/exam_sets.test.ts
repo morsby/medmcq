@@ -1,12 +1,55 @@
 import request from 'supertest';
-import server from '../../server';
+import ExamSet from '../../models/exam_set';
+import Semester from '../../models/semester';
+import User from '../../models/user';
+import UserRole from './../../models/user_role';
 const examSetApi = '/api/exam_sets';
-const agent = request.agent(server);
-afterEach(() => {
-  server.close();
-});
+let server;
+let agent;
+let username = 'abc';
+let password = '123abc';
 
 describe('exam_sets route', () => {
+  beforeEach(async () => {
+    server = require('../../server');
+    agent = request.agent(server);
+
+    await UserRole.query().insert({
+      id: 2,
+      name: 'admin',
+      level: 100
+    });
+    await User.query().insert({
+      username,
+      password,
+      roleId: 2
+    });
+    await Semester.query().insert({
+      id: 2,
+      value: 8,
+      name: 'Abdomen',
+      shortName: 'Abd'
+    });
+    await ExamSet.query().insertGraph([
+      { year: 2018, season: 'E', semesterId: 2 },
+      { year: 2018, season: 'F', semesterId: 2 },
+      { year: 2018, season: 'F', semesterId: 2 }
+    ]);
+
+    const res = await agent.post('/api/auth').send({ username, password });
+    const { type } = res.body;
+
+    expect(type).toEqual('LoginSuccess');
+  });
+
+  afterEach(async () => {
+    await UserRole.query().delete();
+    await User.query().delete();
+    await ExamSet.query().delete();
+    await Semester.query().delete();
+    server.close();
+  });
+
   // Settings vars so they can be reused across tests
   let firstExamSetId, newExamSetId, semesterId;
 
@@ -18,7 +61,7 @@ describe('exam_sets route', () => {
     firstExamSetId = examSets[0].id;
     semesterId = examSets[0].semesterId;
 
-    expect(examSets.length).toEqual(4);
+    expect(examSets.length).toEqual(3);
     expect(examSets[0]).toHaveProperty('semester');
   });
 
@@ -36,7 +79,7 @@ describe('exam_sets route', () => {
   });
 
   test("POST '/' -- should post a new exam set", async () => {
-    await agent.post('/api/auth').send({ username: 'TestAdmin', password: 'TestPassword123' });
+    await agent.post('/api/auth').send({ username, password });
 
     let { body } = await agent.post(examSetApi).send({
       semesterId,

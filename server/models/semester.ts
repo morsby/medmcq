@@ -1,6 +1,13 @@
 import BaseModel from './_base_model';
 const { Model } = require('objection');
 
+interface Semester {
+  id: number;
+  value: number;
+  name: string;
+  shortName: 'Abd';
+}
+
 class Semester extends BaseModel {
   static get tableName() {
     return 'semester';
@@ -94,3 +101,4 @@ class Semester extends BaseModel {
 }
 
 module.exports = Semester;
+export default Semester;
