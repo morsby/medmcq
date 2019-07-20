@@ -1,24 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import _ from 'lodash';
 
-import { Form, Radio, Divider, Icon } from 'semantic-ui-react';
+import { Form, Radio, Divider, Icon, Loader } from 'semantic-ui-react';
 
 import { Translate } from 'react-localize-redux';
-import { connect } from 'react-redux';
 import { manualCompleteSet } from 'actions/auth';
+import { useDispatch, useSelector } from 'react-redux';
 
-const SetRadioButton = ({
-  set,
-  onChange,
-  completedSetsCount,
-  selectedSet,
-  user,
-  api,
-  manualCompleteSet,
-  semester
-}) => {
+const SetRadioButton = ({ set, onChange, selectedSet }) => {
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.auth.user);
+  const [manualLoading, setManualLoading] = useState(false);
+
+  const handleManualCompletion = async () => {
+    setManualLoading(true);
+    await dispatch(manualCompleteSet(set.id, user.id));
+    setManualLoading(false);
+  };
+
   return (
     <Form.Group key={set.api}>
       <Form.Field>
@@ -44,19 +45,19 @@ const SetRadioButton = ({
                   name="selectedSetId"
                   onChange={onChange}
                 />{' '}
-                {<Icon name="check" color={!completedSetsCount && user ? 'green' : 'grey'} />}
-                {user && (
+                {
+                  // TODO: Udregn færdiggjorte sæt
+                }
+                {<Icon name="check" color="grey" />}
+                {user && !manualLoading && (
                   <Icon
                     name="check"
-                    onClick={() => manualCompleteSet(api, user, semester)}
+                    onClick={handleManualCompletion}
                     style={{ cursor: 'pointer' }}
-                    color={
-                      _.indexOf((user.completedSets || {})[semester] || [], api) !== -1
-                        ? 'orange'
-                        : 'grey'
-                    }
+                    color={_.find(user.manualCompletedSets, { id: set.id }) ? 'orange' : 'grey'}
                   />
                 )}
+                {manualLoading && <Loader active inline size="mini" />}
                 <Divider vertical hidden />
               </>
             );
@@ -82,13 +83,4 @@ SetRadioButton.propTypes = {
   semester: PropTypes.string
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    manualCompleteSet: (api, user, semester) => dispatch(manualCompleteSet(api, user, semester))
-  };
-};
-
-export default connect(
-  null,
-  mapDispatchToProps
-)(SetRadioButton);
+export default SetRadioButton;

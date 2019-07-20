@@ -11,6 +11,7 @@ import QuestionUserAnswer from '../models/question_user_answer';
 import QuestionBookmark from '../models/question_bookmark';
 import QuestionComment from '../models/question_comment';
 import User from '../models/user';
+import ManualCompletedSet from './../models/manual_completed_set';
 const router = express.Router();
 
 /**
@@ -319,6 +320,33 @@ router.patch('/:id', permit({ roles: ['admin'], owner: 'params.id' }), async (re
     res.status(200).json(user);
   } catch (err) {
     errorHandler(err, res);
+  }
+});
+
+router.put('/completedSets/:userId', async (req, res) => {
+  const userId = req.params.userId;
+  const setId = req.body.setId;
+
+  try {
+    if (
+      await ManualCompletedSet.query()
+        .where('userId', '=', userId)
+        .andWhere('setId', '=', setId)
+        .first()
+    ) {
+      await ManualCompletedSet.query()
+        .delete()
+        .where('userId', '=', userId)
+        .andWhere('setId', '=', setId);
+      return res.status(200).send(`Set with ID ${setId} has been uncompleted by user ${userId}`);
+    }
+
+    await ManualCompletedSet.query()
+      .insert({ setId, userId })
+      .where('userId', '=', userId);
+    res.status(200).send(`Set with ID ${setId} has been completed by user ${userId}`);
+  } catch (error) {
+    console.log(new Error(error));
   }
 });
 

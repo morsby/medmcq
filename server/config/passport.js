@@ -18,7 +18,8 @@ module.exports = function(passport) {
   passport.deserializeUser(async (id, done) => {
     User.query()
       .findById(id)
-      .joinRelation('role')
+      .joinRelation('[role]')
+      .joinEager('manualCompletedSets')
       .select('user.*', 'role.name as role')
       .then((user, err) => {
         done(err, user || null);

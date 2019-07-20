@@ -41,6 +41,7 @@ class User extends Password(BaseModel) {
     const UserRole = require('./user_role');
     const SpecialtyVote = require('./question_specialty_vote');
     const TagVote = require('./question_tag_vote');
+    const ExamSet = require('./exam_set');
 
     return {
       comments: {
@@ -49,6 +50,19 @@ class User extends Password(BaseModel) {
         join: {
           from: 'questionComment.userId',
           to: 'user.id'
+        }
+      },
+
+      manualCompletedSets: {
+        relation: Model.ManyToManyRelation,
+        modelClass: ExamSet,
+        join: {
+          from: 'user.id',
+          through: {
+            from: 'manualCompletedSets.userId',
+            to: 'manualCompletedSets.setId'
+          },
+          to: 'semesterExamSet.id'
         }
       },
 
@@ -61,6 +75,7 @@ class User extends Password(BaseModel) {
         },
         modify: (builder) => builder.where({ private: false })
       },
+
       privateComments: {
         relation: Model.HasManyRelation,
         modelClass: QuestionComment,
