@@ -47,6 +47,7 @@
     "sass": "node-sass --watch --output src/styles/css --source-map true --source-map-contents src/styles/scss/main.scss"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.136",
     "case-sensitive-paths-webpack-plugin": "^2.2.0",
     "concurrently": "^4.1.1",
     "cross-env": "^5.2.0",
