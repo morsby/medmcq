@@ -40,27 +40,27 @@ const SelectionSpecialtiesSelector = () => {
     dispatch(uiActions.changeSelection(type, value));
   };
 
-  const convertMetadataToTree = () => {
-    return _.filter(metadata.tags, (t) => !t.parentId && t.semesterId === selectedSemester).map(
-      (t) => ({
+  useEffect(() => {
+    const convertMetadataToTree = () => {
+      return _.filter(metadata.tags, (t) => !t.parentId && t.semesterId === selectedSemester).map(
+        (t) => ({
+          title: `${t.name} (${t.questionCount})`,
+          key: t.id,
+          children: getChildrenOfMetadata(t.id)
+        })
+      );
+    };
+
+    const getChildrenOfMetadata: any = (tagId: number) => {
+      return _.filter(metadata.tags, (t) => t.parentId === tagId).map((t) => ({
         title: `${t.name} (${t.questionCount})`,
         key: t.id,
         children: getChildrenOfMetadata(t.id)
-      })
-    );
-  };
+      }));
+    };
 
-  const getChildrenOfMetadata: any = (tagId: number) => {
-    return _.filter(metadata.tags, (t) => t.parentId === tagId).map((t) => ({
-      title: `${t.name} (${t.questionCount})`,
-      key: t.id,
-      children: getChildrenOfMetadata(t.id)
-    }));
-  };
-
-  useEffect(() => {
     setTagTree(convertMetadataToTree());
-  }, [convertMetadataToTree]);
+  }, [metadata.tags, selectedSemester]);
 
   const renderTreeNodes = (tags: IMetadataSelectionObject[]) =>
     tags.map((item: IMetadataSelectionObject) => {
@@ -71,7 +71,7 @@ const SelectionSpecialtiesSelector = () => {
           </Tree.TreeNode>
         );
       }
-      return <Tree.TreeNode {...item} />;
+      return <Tree.TreeNode key={item.key} {...item} />;
     });
 
   if (!selectedSemester) {
