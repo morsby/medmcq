@@ -18,5 +18,5 @@ exports.up = function(knex) {
 };
 
 exports.down = function(knex) {
-  return knex.schema.dropTable('completed_sets');
+  return knex.schema.dropTable('manual_completed_sets');
 };
