@@ -27,7 +27,11 @@ export default class BaseModel extends DBErrors(visibilityPlugin(Model)) {
  * A custom query builder that allows passing arguments to filters/modifiers.
  * @extends Objection.Model.QueryBuilder
  */
-export class CustomQueryBuilder<M extends Model> extends Model.QueryBuilder<M, M[]> {
+export class CustomQueryBuilder<M extends Model, RM = M[], RV = number> extends Model.QueryBuilder<
+  M,
+  RM,
+  RV
+> {
   /**
    * Merging arguments into context to use in eager expressions.
    * @param  {string} expr A RelationExpression to eager load.
