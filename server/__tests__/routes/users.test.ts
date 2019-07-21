@@ -1,27 +1,33 @@
 import request from 'supertest';
+import { createUsers } from './functions/creation';
+import UserRole from '../../models/user_role';
+import User from '../../models/user';
 const userApi = '/api/users';
-let server;
 
+let server;
 let admin;
 let user;
 let anon;
-// Settings vars to reuse across tests
-let newUserId, adminId, userIds;
+let username;
 
 beforeEach(async () => {
   server = require('../../server');
   admin = request.agent(server);
   user = request.agent(server);
   anon = request.agent(server);
+  username = 'user';
 
-  let res = await admin
-    .post('/api/auth')
-    .send({ username: 'TestAdmin', password: 'TestPassword123' });
+  await createUsers();
 
-  adminId = res.id;
+  let res = await admin.post('/api/auth').send({ username: 'admin', password: '123abc' });
+  expect(res.body.type).toBe('LoginSuccess');
+  res = await user.post('/api/auth').send({ username: 'user', password: '123abc' });
+  expect(res.body.type).toBe('LoginSuccess');
 });
 
-afterEach(() => {
+afterEach(async () => {
+  await User.query().delete();
+  await UserRole.query().delete();
   server.close();
 });
 
@@ -31,31 +37,27 @@ afterEach(() => {
  ==============================
  */
 describe('users route: not logged in', () => {
-  test("GET '/' -- should fail for non-admin", async () => {
+  it("GET '/' -- should fail for non-admin", async () => {
     let { body, status } = await anon.get(userApi);
 
     expect(status).toEqual(403);
     expect(body.type).toEqual('NotAuthorized');
   });
 
-  test("POST '/' -- should insert a new user", async () => {
+  it("POST '/' -- should insert a new user", async () => {
+    const username = 'user2';
+
     let { body } = await anon.post(userApi).send({
-      username: 'TestPost',
-      email: 'test@post.dk',
-      password: 'TestPassword123'
+      username,
+      email: 'user2@test.dk',
+      password: '123abc'
     });
 
-    await anon.post(userApi).send({
-      username: 'TestPost2',
-      password: 'TestPassword123'
-    });
-
-    userIds = [body.id, body.id + 1];
-    expect(body.username).toEqual('TestPost');
+    expect(body.username).toEqual(username);
     expect(body.password).toBeFalsy();
   });
 
-  test("POST '/' -- should fail with missing props", async () => {
+  it("POST '/' -- should fail with missing props", async () => {
     let { status, body } = await anon.post(userApi).send({
       username: 'Should fail'
     });
@@ -64,22 +66,22 @@ describe('users route: not logged in', () => {
     expect(body.type).toEqual('ModelValidation');
   });
 
-  test("GET '/:id' -- should fail", async () => {
-    let { status, body } = await anon.get(`${userApi}/${userIds[0]}`);
+  it("GET '/:id' -- should fail", async () => {
+    let { status, body } = await anon.get(`${userApi}/2`);
 
     expect(body.type).toEqual('NotAuthorized');
     expect(status).toEqual(403);
   });
 
-  test("GET '/:id/profile?semesterId=1' -- should fail", async () => {
-    let { status, body } = await anon.get(`${userApi}/${newUserId}/profile?semesterId=1`);
+  it("GET '/:id/profile?semesterId=1' -- should fail", async () => {
+    let { status, body } = await anon.get(`${userApi}/1/profile?semesterId=1`);
 
     expect(body.type).toEqual('NotAuthorized');
     expect(status).toEqual(403);
   });
 
-  test("PATCH '/:id' -- should fail", async () => {
-    let { status, body } = await anon.patch(`${userApi}/${newUserId}`).send({
+  it("PATCH '/:id' -- should fail", async () => {
+    let { status, body } = await anon.patch(`${userApi}/1`).send({
       username: 'NewUsername'
     });
 
@@ -87,8 +89,8 @@ describe('users route: not logged in', () => {
     expect(status).toEqual(403);
   });
 
-  test("DELETE '/:id' -- should fail", async () => {
-    let { status, body } = await anon.delete(`${userApi}/${newUserId}`);
+  it("DELETE '/:id' -- should fail", async () => {
+    let { status, body } = await anon.delete(`${userApi}/1`);
 
     expect(body.type).toEqual('NotAuthorized');
     expect(status).toEqual(403);
@@ -101,43 +103,37 @@ describe('users route: not logged in', () => {
  ==============================
  */
 describe('users route: user', () => {
-  test("POST '/auth' -- should log a user in", async () => {
-    let { body } = await user
-      .post('/api/auth')
-      .send({ username: 'TestPost', password: 'TestPassword123' });
+  it("POST '/auth' -- should log a user in", async () => {});
 
-    expect(body.data.username).toEqual('TestPost');
-  });
-
-  test("GET '/' -- should fail for user", async () => {
+  it("GET '/' -- should fail for user", async () => {
     let { body, status } = await user.get(userApi);
 
     expect(status).toEqual(403);
     expect(body.type).toEqual('NotAuthorized');
   });
 
-  test("GET '/:id' -- should fail (not owner)", async () => {
-    let { status, body } = await anon.get(`${userApi}/${adminId}`);
+  it("GET '/:id' -- should fail (not owner)", async () => {
+    let { status, body } = await anon.get(`${userApi}/1`);
 
     expect(body.type).toEqual('NotAuthorized');
     expect(status).toEqual(403);
   });
 
-  test("GET '/:id' -- should get one user (owner)", async () => {
-    let { body } = await user.get(`${userApi}/${userIds[0]}`);
+  it("GET '/:id' -- should get one user (owner)", async () => {
+    let { body } = await user.get(`${userApi}/2`);
 
-    expect(body.username).toEqual('TestPost');
+    expect(body.username).toEqual(username);
     expect(body.publicComments).toBeFalsy();
   });
 
-  test("GET '/:id/profile?semesterId=1' -- should fail (not owner)", async () => {
-    let { status, body } = await user.get(`${userApi}/${adminId}/profile?semesterId=1`);
+  it("GET '/:id/profile?semesterId=1' -- should fail (not owner)", async () => {
+    let { status, body } = await user.get(`${userApi}/1/profile?semesterId=1`);
     expect(body.type).toEqual('NotAuthorized');
     expect(status).toEqual(403);
   });
 
-  test("GET '/:id/profile?semesterId=1' -- should get one user profile (owner)", async () => {
-    let { body } = await user.get(`${userApi}/${userIds[0]}/profile?semesterId=1`);
+  it("GET '/:id/profile?semesterId=1' -- should get one user profile (owner)", async () => {
+    let { body } = await user.get(`${userApi}/2/profile?semesterId=1`);
 
     expect(body).toHaveProperty('bookmarks');
     expect(body).toHaveProperty('privateComments');
@@ -146,29 +142,32 @@ describe('users route: user', () => {
     expect(body).toHaveProperty('questions');
   });
 
-  test("PATCH '/:id' -- should fail (not owner)", async () => {
-    let { body, status } = await user.patch(`${userApi}/${adminId}`).send({
+  it("PATCH '/:id' -- should fail (not owner)", async () => {
+    let { body, status } = await user.patch(`${userApi}/1`).send({
       username: 'NewUsername'
     });
     expect(body.type).toEqual('NotAuthorized');
     expect(status).toEqual(403);
   });
 
-  test("PATCH '/:id' -- should patch user", async () => {
-    let { body } = await user.patch(`${userApi}/${userIds[0]}`).send({
-      username: 'TestBruger2'
+  it("PATCH '/:id' -- should patch user", async () => {
+    const username = 'user3';
+
+    let { body } = await user.patch(`${userApi}/2`).send({
+      username
     });
-    expect(body.username).toEqual('TestBruger2');
+
+    expect(body.username).toEqual(username);
   });
 
-  test("DELETE '/:id' -- should fail (not owner)", async () => {
-    let { status, body } = await user.delete(`${userApi}/${adminId}`);
+  it("DELETE '/:id' -- should fail (not owner)", async () => {
+    let { status, body } = await user.delete(`${userApi}/1`);
     expect(body.type).toEqual('NotAuthorized');
     expect(status).toEqual(403);
   });
 
-  test("DELETE '/:id' -- should delete a user", async () => {
-    let { body } = await user.delete(`${userApi}/${userIds[0]}`);
+  it("DELETE '/:id' -- should delete a user", async () => {
+    let { body } = await user.delete(`${userApi}/2`);
     expect(body.type).toEqual('deleteUser');
   });
 });
@@ -179,42 +178,37 @@ describe('users route: user', () => {
  ==============================
  */
 describe('users route: admin', () => {
-  test("GET '/' -- should get all users", async () => {
+  it("GET '/' -- should get all users", async () => {
     let response = await admin.get(userApi);
     let users = response.body;
 
-    expect(users.map((user) => user.username)).toEqual([
-      'TestAdmin',
-      'TestEditor',
-      'TestBruger',
-      'TestPost2'
-    ]);
+    expect(users.map((user) => user.username)).toEqual(['admin', 'user']);
   });
 
-  test("GET '/:id' -- should get another user", async () => {
-    let { body } = await admin.get(`${userApi}/${userIds[1]}`);
+  it("GET '/:id' -- should get another user", async () => {
+    let { body } = await admin.get(`${userApi}/2`);
 
-    expect(body.username).toEqual('TestPost2');
+    expect(body.username).toEqual(username);
     expect(body.publicComments).toBeFalsy();
   });
 
-  test("GET '/:id/profile?semesterId=1' -- should get another user profile", async () => {
-    let { body } = await admin.get(`${userApi}/${userIds[1]}/profile?semesterId=1`);
+  it("GET '/:id/profile?semesterId=1' -- should get another user profile", async () => {
+    let { body } = await admin.get(`${userApi}/2/profile?semesterId=1`);
 
     expect(body).toHaveProperty('bookmarks');
     expect(body).toHaveProperty('privateComments');
     expect(body).toHaveProperty('publicComments');
   });
 
-  test("PATCH '/:id' -- should patch another user", async () => {
-    let { body } = await admin.patch(`${userApi}/${userIds[1]}`).send({
+  it("PATCH '/:id' -- should patch another user", async () => {
+    let { body } = await admin.patch(`${userApi}/2`).send({
       username: 'NewUsername'
     });
     expect(body.username).toEqual('NewUsername');
   });
 
-  test("DELETE '/:id' -- should delete another user", async () => {
-    let { body } = await admin.delete(`${userApi}/${userIds[1]}`);
+  it("DELETE '/:id' -- should delete another user", async () => {
+    let { body } = await admin.delete(`${userApi}/2`);
     expect(body.type).toEqual('deleteUser');
   });
 });

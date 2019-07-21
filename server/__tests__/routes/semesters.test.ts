@@ -36,7 +36,7 @@ describe('semesters route', () => {
     server.close();
   });
 
-  test("GET '/' -- should get all 4 semesters in the right order", async () => {
+  it("GET '/' -- should get all 4 semesters in the right order", async () => {
     let response = await request(server).get(semesterApi);
     let semesters = response.body;
 
@@ -48,7 +48,7 @@ describe('semesters route', () => {
     ]);
   });
 
-  test("POST '/' -- should fail because user not permitted", async () => {
+  it("POST '/' -- should fail because user not permitted", async () => {
     let { status, body } = await user.post(semesterApi).send({
       value: 12,
       name: 'Test',
@@ -58,7 +58,7 @@ describe('semesters route', () => {
     expect(body.type).toEqual('NotAuthorized');
   });
 
-  test("POST '/' -- should insert a new semester", async () => {
+  it("POST '/' -- should insert a new semester", async () => {
     let { body } = await admin.post(semesterApi).send({
       value: 12,
       name: 'Test',
@@ -68,7 +68,7 @@ describe('semesters route', () => {
     expect(body.name).toEqual('Test');
   });
 
-  test("POST '/' -- should fail with missing props", async () => {
+  it("POST '/' -- should fail with missing props", async () => {
     let { status, body } = await admin.post(semesterApi).send({
       name: 'Should fail'
     });
@@ -77,7 +77,7 @@ describe('semesters route', () => {
     expect(body.type).toEqual('ModelValidation');
   });
 
-  test("GET '/:id' -- should get one semester", async () => {
+  it("GET '/:id' -- should get one semester", async () => {
     let { body } = await request(server).get(`${semesterApi}/1`);
 
     expect(body.value).toEqual(7);
@@ -89,7 +89,7 @@ describe('semesters route', () => {
     expect(body).toHaveProperty('tags');
   });
 
-  test("PATCH '/:id' -- should fail as user", async () => {
+  it("PATCH '/:id' -- should fail as user", async () => {
     let { status, body } = await user.patch(`${semesterApi}/1`).send({
       name: 'NewName'
     });
@@ -97,20 +97,20 @@ describe('semesters route', () => {
     expect(body.type).toEqual('NotAuthorized');
   });
 
-  test("PATCH '/:id' -- should patch a semester as admin", async () => {
+  it("PATCH '/:id' -- should patch a semester as admin", async () => {
     let { body } = await admin.patch(`${semesterApi}/1`).send({
       name: 'NewName'
     });
     expect(body.name).toEqual('NewName');
   });
 
-  test("DELETE '/:id' -- should fail as user", async () => {
+  it("DELETE '/:id' -- should fail as user", async () => {
     let { status, body } = await user.delete(`${semesterApi}/1`);
     expect(status).toEqual(403);
     expect(body.type).toEqual('NotAuthorized');
   });
 
-  test("DELETE '/:id' -- should delete a semester as admin", async () => {
+  it("DELETE '/:id' -- should delete a semester as admin", async () => {
     let { body } = await admin.delete(`${semesterApi}/1`);
     expect(body.type).toEqual('deleteSemester');
   });

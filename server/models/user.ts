@@ -25,6 +25,7 @@ class User extends BaseModel {
   };
 
   $beforeUpdate = async () => {
+    if (!this.password) return;
     this.password = await bcrypt.hash(this.password, 10);
   };
 

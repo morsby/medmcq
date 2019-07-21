@@ -21,26 +21,28 @@ export const createUsers = async () => {
   // Create users
   await UserRole.query().insertGraph([
     {
-      id: 1,
+      id: 2,
       name: 'admin',
       level: 100
     },
     {
-      id: 2,
+      id: 4,
       name: 'user',
       level: 1
     }
   ]);
   await User.query().insertGraph([
     {
+      id: 1,
       username: 'admin',
       password: '123abc',
-      roleId: 1
+      roleId: 2
     },
     {
+      id: 2,
       username: 'user',
       password: '123abc',
-      roleId: 2
+      roleId: 4
     }
   ]);
 };

@@ -33,7 +33,7 @@ describe('specialties route', () => {
     server.close();
   });
 
-  test("GET '/' -- should get all specialties", async () => {
+  it("GET '/' -- should get all specialties", async () => {
     let response = await request(server).get(specialtyApi);
     let specialties = response.body;
 
@@ -41,7 +41,7 @@ describe('specialties route', () => {
     expect(typeof specialties[0].name).toBe('string');
   });
 
-  test("POST '/' -- should fail because not admin", async () => {
+  it("POST '/' -- should fail because not admin", async () => {
     let { body, status } = await request(server)
       .post(specialtyApi)
       .send({
@@ -53,7 +53,7 @@ describe('specialties route', () => {
     expect(status).toEqual(403);
   });
 
-  test("POST '/' -- should insert a new specialty", async () => {
+  it("POST '/' -- should insert a new specialty", async () => {
     let { body } = await admin.post(specialtyApi).send({
       name: 'Test',
       semesterId: 4
@@ -62,7 +62,7 @@ describe('specialties route', () => {
     expect(body.name).toEqual('Test');
   });
 
-  test("POST '/' -- should fail with missing props", async () => {
+  it("POST '/' -- should fail with missing props", async () => {
     let { status, body } = await admin.post(specialtyApi).send({
       name: 'Should fail'
     });
@@ -71,7 +71,7 @@ describe('specialties route', () => {
     expect(body.type).toEqual('ModelValidation');
   });
 
-  test("GET '/:id' -- should get one specialty", async () => {
+  it("GET '/:id' -- should get one specialty", async () => {
     let { body } = await request(server).get(`${specialtyApi}/1`);
 
     expect(body.semesterId).toEqual(1);
@@ -81,7 +81,7 @@ describe('specialties route', () => {
     expect(Array.isArray(body.questions)).toBe(true);
   });
 
-  test("PATCH '/:id' -- should fail because not admin", async () => {
+  it("PATCH '/:id' -- should fail because not admin", async () => {
     let { status, body } = await request(server)
       .patch(`${specialtyApi}/1`)
       .send({
@@ -91,20 +91,20 @@ describe('specialties route', () => {
     expect(body.type).toEqual('NotAuthorized');
   });
 
-  test("PATCH '/:id' -- should patch a specialty", async () => {
+  it("PATCH '/:id' -- should patch a specialty", async () => {
     let { body } = await admin.patch(`${specialtyApi}/1`).send({
       name: 'NewName'
     });
     expect(body.name).toEqual('NewName');
   });
 
-  test("DELETE '/:id' -- should fail because not admin", async () => {
+  it("DELETE '/:id' -- should fail because not admin", async () => {
     let { body, status } = await request(server).delete(`${specialtyApi}/1`);
     expect(status).toEqual(403);
     expect(body.type).toEqual('NotAuthorized');
   });
 
-  test("DELETE '/:id' -- should delete a specialty", async () => {
+  it("DELETE '/:id' -- should delete a specialty", async () => {
     let { body } = await admin.delete(`${specialtyApi}/1`);
     expect(body.type).toEqual('deleteSpecialty');
   });
