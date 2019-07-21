@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import request from 'supertest';
 import { createUsers, createSemesters } from '../../_testconfigs_/functions/creation';
 import UserRole from '../../models/user_role';

@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import request from 'supertest';
 import sample_specialties from '../../_testconfigs_/data/sample_specialties';
 import Specialty from '../../models/specialty';
