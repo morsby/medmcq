@@ -9,7 +9,12 @@ import QuestionComment from '../models/question_comment';
 import QuestionUserAnswer from '../models/question_user_answer';
 import QuestionSpecialtyVote from '../models/question_specialty_vote';
 import QuestionTagVote from '../models/question_tag_vote';
+import sgMail from '@sendgrid/mail';
 import { errorHandler, NotAuthorized, BadRequest } from '../middleware/errorHandling';
+import Semester from '../models/semester';
+import ExamSet from '../models/exam_set';
+const keys = require('../config/keys');
+const { urls } = require('../config/vars');
 
 const router = express.Router();
 
@@ -959,6 +964,73 @@ router.delete('/:id/bookmark', permit(), async (req, res) => {
   } catch (err) {
     errorHandler(err, res);
   }
+});
+
+router.post('/report', async (req, res) => {
+  let { type, data } = req.body;
+
+  let msg;
+  sgMail.setApiKey(keys.sendgridApiKey);
+
+  let to = urls.issue;
+
+  let from = `medMCQ-app <${urls.fromEmail}>`;
+
+  const semester = await Semester.query().findById(data.question.semester);
+  const examSet = await ExamSet.query().findById(data.question.examSetId);
+
+  if (type === 'error_report') {
+    let { report, question } = data;
+    report = report.replace(/(.)\n(.)/g, '$1<br>$2');
+
+    msg = {
+      to,
+      from,
+      subject: `Fejl i spørgsmål med id ${question.id}`,
+      text: `
+Der er blevet rapporteret en fejl i følgende spørgsmål:
+- ID: ${question.id}
+- Semester: ${semester.value}
+- Sæt: ${examSet.year}/${examSet.season}
+- Spørgsmålnummer: ${question.examSetQno}
+- Korrekte svar: ${JSON.stringify(question.correctAnswers)}
+<hr>
+<strong>Indrapporteringen lyder:</strong>
+${report}
+<hr>
+<strong>Spørgsmålet lyder:</strong>
+${question.text}<br>
+A. ${question.answer1}<br>
+B. ${question.answer2}<br>
+C. ${question.answer3}
+`
+    };
+  } else if (type === 'suggest_tag') {
+    let { tag, question } = data;
+    msg = {
+      to,
+      from,
+      subject: `Nyt tag foreslået: ${tag}`,
+      text: `
+Der er blevet foreslået et nyt tag: ${tag}.
+Det blev foreslået til spørgsmålet: 
+- ID: ${question.id}
+- Semester: ${semester.value}
+- Sæt: ${examSet.year}/${examSet.season}
+- Spørgsmålnummer: ${question.n}
+- Korrekte svar: ${JSON.stringify(question.correctAnswers)}
+${question.text}<br>
+A. ${question.answer1}<br>
+B. ${question.answer2}<br>
+C. ${question.answer3}
+`
+    };
+  } else {
+    res.status(400).json({ type: 'error', message: 'missing type' });
+  }
+  sgMail.send(msg);
+
+  res.status(200).json({ type: 'success', message: 'report_made' });
 });
 
 /**
