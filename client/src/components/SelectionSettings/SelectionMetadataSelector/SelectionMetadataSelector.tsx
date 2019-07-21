@@ -34,7 +34,7 @@ const SelectionSpecialtiesSelector = () => {
   const { selectedSemester, selectedSpecialtyIds, selectedTagIds } = selection;
   const semester = metadata.semesters[selectedSemester];
   const dispatch = useDispatch();
-  const [tagTree, setTagTree]: [IMetadataEntity[] | null, Function] = useState(null);
+  const [tagTree, setTagTree]: [IMetadataSelectionObject[] | null, Function] = useState(null);
 
   const onChange = (value: string[], type: string) => {
     dispatch(uiActions.changeSelection(type, value));
