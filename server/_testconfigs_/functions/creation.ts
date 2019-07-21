@@ -93,15 +93,19 @@ export const createSpecialties = async () => {
 };
 
 export const cleanUp = async () => {
-  await ExamSet.query().delete();
-  await Question.query().delete();
-  await QuestionComment.query().delete();
-  await User.query().delete();
-  await UserRole.query().delete();
-  await Tag.query().delete();
-  await QuestionTagVote.query().delete();
-  await Specialty.query().delete();
-  await QuestionCorrectAnswer.query().delete();
-  await QuestionBookmark.query().delete();
-  await Semester.query().delete();
+  try {
+    await ExamSet.query().delete();
+    await Question.query().delete();
+    await QuestionComment.query().delete();
+    await User.query().delete();
+    await UserRole.query().delete();
+    await Tag.query().delete();
+    await QuestionTagVote.query().delete();
+    await Specialty.query().delete();
+    await QuestionCorrectAnswer.query().delete();
+    await QuestionBookmark.query().delete();
+    await Semester.query().delete();
+  } catch (error) {
+    throw new Error(error);
+  }
 };
