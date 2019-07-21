@@ -15,6 +15,7 @@ module.exports = {
     fromEmail: 'medmcqau@gmail.com',
     resetPassword: '/nyt-kodeord/',
     forgotPassword: '/glemt-kodeord/',
-    dev: env === 'development' ? 'localhost:3000' : false
+    dev: env === 'development' ? 'localhost:3000' : false,
+    issue: 'medmcq@fire.fundersclub.com'
   }
 };

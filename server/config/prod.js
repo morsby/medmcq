@@ -10,5 +10,6 @@ const dbConnection = {
 
 module.exports = {
   secretKeys: Keygrip(secrets),
+  sendgridApiKey: process.env.SENDGRID,
   dbConnection: dbConnection
 };
