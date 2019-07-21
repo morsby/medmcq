@@ -346,7 +346,6 @@ router.put('/completedSets/:userId', async (req, res) => {
       .where('userId', '=', userId);
     res.status(200).send(`Set with ID ${setId} has been completed by user ${userId}`);
   } catch (error) {
-    // eslint-disable-next-line no-console
     console.log(new Error(error));
   }
 });
