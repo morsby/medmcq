@@ -100,7 +100,6 @@ export const cleanUp = async () => {
   await UserRole.query().delete();
   await Tag.query().delete();
   await QuestionTagVote.query().delete();
-  await QuestionTagVote.query().delete();
   await Specialty.query().delete();
   await QuestionCorrectAnswer.query().delete();
   await QuestionBookmark.query().delete();

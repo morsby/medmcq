@@ -32,8 +32,6 @@ describe('exam_sets route', () => {
     server.close();
   });
 
-  // Settings vars so they can be reused across tests
-
   it("should get all 3 exam sets from GET '/'", async () => {
     let response = await request(server).get(examSetApi);
     let examSets = response.body;
@@ -61,7 +59,6 @@ describe('exam_sets route', () => {
       season: 'F',
       year: 2018
     });
-    console.log(body);
 
     expect(body.semesterId).toEqual(2);
     expect(body.year).toEqual(2018);
