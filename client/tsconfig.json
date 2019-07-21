@@ -1,10 +1,17 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "noEmit": true,
     "jsx": "preserve",
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "strict": true
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ]
 }
