@@ -1,5 +1,11 @@
 import BaseModel from './_base_model';
-const { Model } = require('objection');
+import { Model } from 'objection';
+
+interface UserRole {
+  id: number;
+  name: string;
+  level: number;
+}
 
 class UserRole extends BaseModel {
   static get tableName() {
@@ -36,3 +42,4 @@ class UserRole extends BaseModel {
 }
 
 module.exports = UserRole;
+export default UserRole;

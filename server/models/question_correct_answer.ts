@@ -1,5 +1,12 @@
 import BaseModel from './_base_model';
 const { Model } = require('objection');
+
+interface QuestionCorrectAnswer {
+  id: number;
+  answer: number;
+  questionId: number;
+}
+
 class QuestionCorrectAnswer extends BaseModel {
   static get tableName() {
     return 'questionCorrectAnswer';
@@ -41,3 +48,4 @@ class QuestionCorrectAnswer extends BaseModel {
 }
 
 module.exports = QuestionCorrectAnswer;
+export default QuestionCorrectAnswer;

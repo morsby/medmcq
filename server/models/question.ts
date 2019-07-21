@@ -1,5 +1,5 @@
 import BaseModel, { CustomQueryBuilder, modifiers } from './_base_model';
-const { Model } = require('objection');
+import { Model } from 'objection';
 
 class Question extends BaseModel {
   static get tableName() {
@@ -152,3 +152,4 @@ class Question extends BaseModel {
 }
 
 module.exports = Question;
+export default Question;

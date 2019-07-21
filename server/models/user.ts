@@ -1,13 +1,17 @@
 import BaseModel, { hiddenCols } from './_base_model';
-
-const { Model } = require('objection');
-const Password = require('objection-password')({
-  rounds: 10
-});
+import bcrypt from 'bcrypt';
+import { Model } from 'objection';
 
 // TODO: pre-migration: Password skal slåes fra under migrering
 
-class User extends Password(BaseModel) {
+interface User {
+  id: number;
+  username: string;
+  password: string;
+  roleId: number;
+}
+
+class User extends BaseModel {
   static get hidden() {
     return [...hiddenCols, 'password', 'resetPasswordToken', 'resetPasswordExpires'];
   }
@@ -15,6 +19,19 @@ class User extends Password(BaseModel) {
   static get tableName() {
     return 'user';
   }
+
+  $beforeInsert = async () => {
+    this.password = await bcrypt.hash(this.password, 10);
+  };
+
+  $beforeUpdate = async () => {
+    if (!this.password) return;
+    this.password = await bcrypt.hash(this.password, 10);
+  };
+
+  verifyPassword = (password: string) => {
+    return bcrypt.compare(password, this.password);
+  };
 
   static get jsonSchema() {
     return {
@@ -135,3 +152,4 @@ class User extends Password(BaseModel) {
 }
 
 module.exports = User;
+export default User;
