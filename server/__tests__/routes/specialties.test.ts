@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import request from 'supertest';
-import sample_specialties from './data/sample_specialties';
+import sample_specialties from '../../_testconfigs_/data/sample_specialties';
 import Specialty from '../../models/specialty';
-import { createUsers, createSemesters } from './functions/creation';
+import { createUsers, createSemesters } from '../../_testconfigs_/functions/creation';
 import User from '../../models/user';
 import UserRole from '../../models/user_role';
 import Semester from '../../models/semester';

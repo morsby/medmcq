@@ -1,53 +1,34 @@
 import request from 'supertest';
 import ExamSet from '../../models/exam_set';
-import Semester from '../../models/semester';
-import User from '../../models/user';
-import UserRole from './../../models/user_role';
 import Question from '../../models/question';
-import sampleQuestions from './data/sample_questions';
-import sampleExamSets from './data/sample_exam_sets';
+import sampleQuestions from '../../_testconfigs_/data/sample_questions';
+import sampleExamSets from '../../_testconfigs_/data/sample_exam_sets';
+import { createSemesters, createUsers, cleanUp } from '../../_testconfigs_/functions/creation';
 const examSetApi = '/api/exam_sets';
 let server;
-let agent;
-let username = 'abc';
+let admin;
+let username = 'admin';
 let password = '123abc';
 
 describe('exam_sets route', () => {
   beforeEach(async () => {
     server = require('../../server');
-    agent = request.agent(server);
+    admin = request.agent(server);
 
-    await UserRole.query().insert({
-      id: 1,
-      name: 'admin',
-      level: 100
-    });
-    await User.query().insert({
-      username,
-      password,
-      roleId: 1
-    });
-    await Semester.query().insert({
-      id: 1,
-      value: 8,
-      name: 'Abdomen',
-      shortName: 'Abd'
-    });
+    await createUsers();
+    await createSemesters();
     await ExamSet.query().insertGraph(sampleExamSets);
     await Question.query().insertGraph(sampleQuestions);
 
-    const res = await agent.post('/api/auth').send({ username, password });
+    // Login admin
+    const res = await admin.post('/api/auth').send({ username, password });
     const { type } = res.body;
 
     expect(type).toEqual('LoginSuccess');
   });
 
   afterEach(async () => {
-    await UserRole.query().delete();
-    await User.query().delete();
-    await ExamSet.query().delete();
-    await Semester.query().delete();
-    await Question.query().delete();
+    await cleanUp();
     server.close();
   });
 
@@ -75,20 +56,19 @@ describe('exam_sets route', () => {
   });
 
   it("should post a new exam set to POST '/'", async () => {
-    await agent.post('/api/auth').send({ username, password });
-
-    let { body } = await agent.post(examSetApi).send({
+    let { body } = await admin.post(examSetApi).send({
       semesterId: 2,
       season: 'F',
       year: 2018
     });
+    console.log(body);
 
     expect(body.semesterId).toEqual(2);
     expect(body.year).toEqual(2018);
   });
 
   it("should fail with missing props at POST '/'", async () => {
-    let { status, body } = await agent.post(examSetApi).send({
+    let { status, body } = await admin.post(examSetApi).send({
       season: 'F',
       year: 2099
     });
@@ -100,12 +80,12 @@ describe('exam_sets route', () => {
   it("should get one exam set from GET '/:id'", async () => {
     let { body } = await request(server).get(`${examSetApi}/1`);
 
-    expect(body.semesterId).toEqual(2);
+    expect(body.semesterId).toEqual(1);
     expect(body).toHaveProperty('semester');
   });
 
   it("should patch a examSet at PATCH '/:id'", async () => {
-    let { body } = await agent.patch(`${examSetApi}/1`).send({
+    let { body } = await admin.patch(`${examSetApi}/1`).send({
       season: 'E'
     });
     expect(body.season).toEqual('E');
@@ -122,7 +102,7 @@ describe('exam_sets route', () => {
   });
 
   it("should delete a examSet at DELETE '/:id'", async () => {
-    let { body } = await agent.delete(`${examSetApi}/1`);
+    let { body } = await admin.delete(`${examSetApi}/1`);
     expect(body.type).toEqual('deleteExamSet');
   });
 

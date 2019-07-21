@@ -1,39 +1,28 @@
 import _ from 'lodash';
 import request from 'supertest';
-import Question from './../../models/question';
-import ExamSet from './../../models/exam_set';
-import Semester from './../../models/semester';
-import UserRole from './../../models/user_role';
-import User from '../../models/user';
-import QuestionComment from './../../models/question_comment';
-import QuestionTagVote from './../../models/question_tag_vote';
-import Tag from './../../models/tag';
-import Specialty from '../../models/specialty';
-import QuestionCorrectAnswer from '../../models/question_correct_answer';
 import QuestionBookmark from '../../models/question_bookmark';
-import { createUsers, createSemesters, createQuestions } from './functions/creation';
+import { cleanUp, createUsers, createQuestions } from '../../_testconfigs_/functions/creation';
 const questionApi = '/api/questions';
 let server;
-let agent;
+let admin;
 
 // Settings vars to reuse across tests
 let username;
 let password;
 
 beforeEach(async () => {
-  username = 'abc';
+  username = 'admin';
   password = '123abc';
 
   server = require('../../server');
-  agent = request.agent(server);
+  admin = request.agent(server);
 
   // Insert needed data
   await createUsers();
-  await createSemesters();
   await createQuestions();
 
   // Login admin before each test
-  let res = await agent.post('/api/auth').send({ username, password });
+  let res = await admin.post('/api/auth').send({ username, password });
   let { type } = res.body;
 
   expect(type).toEqual('LoginSuccess');
@@ -41,18 +30,7 @@ beforeEach(async () => {
 
 afterEach(async () => {
   // Cleanup
-  await Semester.query().delete();
-  await ExamSet.query().delete();
-  await Question.query().delete();
-  await QuestionComment.query().delete();
-  await User.query().delete();
-  await UserRole.query().delete();
-  await Tag.query().delete();
-  await QuestionTagVote.query().delete();
-  await QuestionTagVote.query().delete();
-  await Specialty.query().delete();
-  await QuestionCorrectAnswer.query().delete();
-  await QuestionBookmark.query().delete();
+  await cleanUp();
   server.close();
 });
 
@@ -80,9 +58,9 @@ describe('questions route', () => {
   });
 
   it("GET '/' -- should complete because admin", async () => {
-    await agent.post('/api/auth').send({ username, password });
+    await admin.post('/api/auth').send({ username, password });
 
-    let { body } = await agent.get(questionApi);
+    let { body } = await admin.get(questionApi);
     expect(body.length).toEqual(5);
     // Testes her fordi vi alligevel er logget ind.
     expect(body[0]).toHaveProperty('privateComments');
@@ -112,7 +90,7 @@ describe('questions route', () => {
   });
 
   it("POST '/' -- should insert new question", async () => {
-    let { body } = await agent.post(questionApi).send({
+    let { body } = await admin.post(questionApi).send({
       text: 'Test',
       answer1: 'Svar 1',
       answer2: 'Svar 2',
@@ -127,7 +105,7 @@ describe('questions route', () => {
   });
 
   it("POST '/' -- should fail with invalid correct answer", async () => {
-    let { status, body } = await agent.post(questionApi).send({
+    let { status, body } = await admin.post(questionApi).send({
       text: 'Test',
       answer1: 'Svar 1',
       answer2: 'Svar 2',
@@ -142,7 +120,7 @@ describe('questions route', () => {
   });
 
   it("POST '/' -- should fail with duplicated correct answers", async () => {
-    let { status, body } = await agent.post(questionApi).send({
+    let { status, body } = await admin.post(questionApi).send({
       text: 'Test',
       answer1: 'Svar 1',
       answer2: 'Svar 2',
@@ -190,14 +168,14 @@ describe('questions route', () => {
   });
 
   it("PATCH '/:id' -- should patch an existing question", async () => {
-    let { body } = await agent.patch(`${questionApi}/1`).send({ text: 'Test af patch' });
+    let { body } = await admin.patch(`${questionApi}/1`).send({ text: 'Test af patch' });
 
     expect(body.text).toEqual('Test af patch');
     expect(body.id).toEqual(1);
   });
 
   it("PUT '/:id/vote' -- should vote for a specialty", async () => {
-    let { body } = await agent
+    let { body } = await admin
       .put(`${questionApi}/1/vote`)
       .send({ type: 'specialty', id: 1, value: 1 });
 
@@ -206,7 +184,7 @@ describe('questions route', () => {
   });
 
   it("PUT '/:id/vote' -- should delete votes when providing value = 'delete'", async () => {
-    let { body } = await agent
+    let { body } = await admin
       .put(`${questionApi}/1/vote`)
       .send({ type: 'specialty', id: 1, value: 'delete' });
 
@@ -233,7 +211,7 @@ describe('questions route', () => {
   });
 
   it("POST '/:id/answer' -- WITH auth -- should save an answer to the database", async () => {
-    let { body } = await agent.post(`${questionApi}/1/answer`).send({ answer: 2 });
+    let { body } = await admin.post(`${questionApi}/1/answer`).send({ answer: 2 });
 
     expect(body.type).toEqual('QuestionAnswerSuccess');
     expect(body.data.question.id).toEqual(1);
@@ -250,14 +228,14 @@ describe('questions route', () => {
 
   it("POST '/:id/bookmark' -- should insert a bookmark", async () => {
     await QuestionBookmark.query().delete();
-    let { status, body } = await agent.post(`${questionApi}/1/bookmark`);
+    let { status, body } = await admin.post(`${questionApi}/1/bookmark`);
 
     expect(status).toEqual(200);
     expect(body.type).toEqual('QuestionBookmarkSuccess');
   });
 
   it("POST '/:id/bookmark' -- should fail because already bookmarked", async () => {
-    let { status, body } = await agent.post(`${questionApi}/1/bookmark`);
+    let { status, body } = await admin.post(`${questionApi}/1/bookmark`);
 
     expect(status).toEqual(409);
     expect(body.type).toEqual('UniqueViolation');
@@ -271,14 +249,14 @@ describe('questions route', () => {
   });
 
   it("DELETE '/:id/bookmark' -- should delete a bookmark", async () => {
-    let { status, body } = await agent.delete(`${questionApi}/1/bookmark`);
+    let { status, body } = await admin.delete(`${questionApi}/1/bookmark`);
 
     expect(status).toEqual(200);
     expect(body.type).toEqual('QuestionBookmarkDeleteSuccess');
   });
 
   it("POST '/:id/comment' -- should insert a comment", async () => {
-    let { status, body } = await agent
+    let { status, body } = await admin
       .post(`${questionApi}/1/comment`)
       .send({ text: 'Dette er en test', isPrivate: false, isAnonymous: false });
 
@@ -295,7 +273,7 @@ describe('questions route', () => {
   });
 
   it("PATCH '/:id/comment/:commentId' -- should patch a comment", async () => {
-    let { status, body } = await agent.patch(`${questionApi}/1/comment/1`).send({
+    let { status, body } = await admin.patch(`${questionApi}/1/comment/1`).send({
       text: 'opdateret text',
       isPrivate: false,
       isAnonymous: false
@@ -306,7 +284,7 @@ describe('questions route', () => {
   });
 
   it("DELETE '/:id/comment/:commentId' -- should delete a comment", async () => {
-    let { status, body } = await agent.delete(`${questionApi}/1/comment/1`);
+    let { status, body } = await admin.delete(`${questionApi}/1/comment/1`);
 
     expect(status).toEqual(200);
     expect(body.publicComments).toHaveLength(0);
@@ -319,7 +297,7 @@ describe('questions route', () => {
   });
 
   it("DELETE '/:id' -- should delete a question", async () => {
-    let { body } = await agent.delete(`${questionApi}/1`);
+    let { body } = await admin.delete(`${questionApi}/1`);
 
     expect(body.type).toEqual('deleteQuestion');
     expect(body.message).toEqual('Succesfully deleted 1 question');

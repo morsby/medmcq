@@ -1,10 +1,10 @@
 import _ from 'lodash';
 import request from 'supertest';
-import { createUsers, createSemesters } from './functions/creation';
+import { createUsers, createSemesters } from '../../_testconfigs_/functions/creation';
 import UserRole from '../../models/user_role';
 import User from '../../models/user';
 import Tag from '../../models/tag';
-import sample_tags from './data/sample_tags';
+import sample_tags from '../../_testconfigs_/data/sample_tags';
 import Semester from '../../models/semester';
 const tagApi = '/api/tags';
 let server;

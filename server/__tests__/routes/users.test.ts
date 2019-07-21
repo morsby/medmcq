@@ -1,7 +1,7 @@
 import request from 'supertest';
-import { createUsers } from './functions/creation';
 import UserRole from '../../models/user_role';
 import User from '../../models/user';
+import { createUsers } from '../../_testconfigs_/functions/creation';
 const userApi = '/api/users';
 
 let server;

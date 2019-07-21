@@ -2,7 +2,7 @@ import request from 'supertest';
 import Semester from '../../models/semester';
 import UserRole from '../../models/user_role';
 import User from '../../models/user';
-import { createUsers, createSemesters } from './functions/creation';
+import { createSemesters, createUsers } from '../../_testconfigs_/functions/creation';
 const authApi = '/api/auth';
 const semesterApi = '/api/semesters';
 let server;
