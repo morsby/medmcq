@@ -30,7 +30,11 @@ interface IMetadataSelectionObject {
  */
 const SelectionSpecialtiesSelector = () => {
   const selection = useSelector((state: IReduxState) => state.ui.selection);
-  const metadata = useSelector((state: IReduxState) => state.metadata.entities);
+  const metadata: {
+    specialties: IMetadataEntity[];
+    tags: IMetadataEntity[];
+    semesters: any;
+  } = useSelector((state: IReduxState) => state.metadata.entities);
   const { selectedSemester, selectedSpecialtyIds, selectedTagIds } = selection;
   const semester = metadata.semesters[selectedSemester];
   const dispatch = useDispatch();
