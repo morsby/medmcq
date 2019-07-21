@@ -1,5 +1,5 @@
 import BaseModel from './_base_model';
-const { Model } = require('objection');
+import { Model } from 'objection';
 
 /**
  * The model for an exam set.
@@ -26,7 +26,7 @@ class ExamSet extends BaseModel {
 
       properties: {
         id: { type: 'integer' },
-        year: { type: 'integer', minimum: '2010', maximum: 2100 },
+        year: { type: 'integer', minimum: 2010, maximum: 2100 },
         season: { type: 'string', pattern: '^[EF]$' },
         semesterId: { type: 'integer' }
       }
@@ -63,3 +63,4 @@ class ExamSet extends BaseModel {
 }
 
 module.exports = ExamSet;
+export default ExamSet;

@@ -1,5 +1,11 @@
 import BaseModel from './_base_model';
-const { Model } = require('objection');
+import { Model } from 'objection';
+
+interface QuestionBookmark {
+  id: number;
+  userId: number;
+  questionId: number;
+}
 
 class QuestionBookmark extends BaseModel {
   static get tableName() {
@@ -43,3 +49,4 @@ class QuestionBookmark extends BaseModel {
 }
 
 module.exports = QuestionBookmark;
+export default QuestionBookmark;
