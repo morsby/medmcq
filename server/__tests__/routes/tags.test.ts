@@ -1,33 +1,40 @@
 import _ from 'lodash';
 import request from 'supertest';
+import { createUsers, createSemesters } from './functions/creation';
+import UserRole from '../../models/user_role';
+import User from '../../models/user';
+import Tag from '../../models/tag';
+import sample_tags from './data/sample_tags';
+import Semester from '../../models/semester';
 const tagApi = '/api/tags';
 let server;
-let agent;
+let admin;
 
 describe('tags route', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     server = require('../../server');
-    agent = request.agent(server);
+    admin = request.agent(server);
+
+    await createUsers();
+    await createSemesters();
+    await Tag.query().insertGraph(sample_tags);
+    const res = await admin.post('/api/auth').send({ username: 'admin', password: '123abc' });
+    expect(res.body.type).toBe('LoginSuccess');
   });
 
-  afterEach(() => {
+  afterEach(async () => {
+    await User.query().delete();
+    await UserRole.query().delete();
+    await Tag.query().delete();
+    await Semester.query().delete();
     server.close();
   });
-
-  // Settings vars to reuse across tests
-  let firstTagId, newTagId;
 
   it("GET '/' -- should get all tags", async () => {
     let response = await request(server).get(tagApi);
     let tags = response.body;
 
-    // To reuse the id without making a second API call -- id can change if rerunning seeds
-    firstTagId = tags[0].id;
-    let sortedTags = _.sortBy(tags, ['name']);
-    let seededTags = require('../../seeds/data/13_sample_tags.json');
-    seededTags = seededTags.map((s) => s.name).sort();
-
-    expect(sortedTags.map((sem) => sem.name)).toEqual(seededTags);
+    expect(tags.length).toBe(5);
   });
 
   it("POST '/' -- should fail non-admin", async () => {
@@ -43,19 +50,16 @@ describe('tags route', () => {
   });
 
   it("POST '/' -- should insert a new tag", async () => {
-    await agent.post('/api/auth').send({ username: 'TestAdmin', password: 'TestPassword123' });
-
-    let { body } = await agent.post(tagApi).send({
+    let { body } = await admin.post(tagApi).send({
       name: 'Test',
       semesterId: 4
     });
-    newTagId = body.id;
     expect(body.semesterId).toEqual(4);
     expect(body.name).toEqual('Test');
   });
 
   it("POST '/' -- should fail with missing props", async () => {
-    let { status, body } = await agent.post(tagApi).send({
+    let { status, body } = await admin.post(tagApi).send({
       name: 'Should fail'
     });
 
@@ -64,7 +68,7 @@ describe('tags route', () => {
   });
 
   it("GET '/:id' -- should get one tag", async () => {
-    let { body } = await request(server).get(`${tagApi}/${firstTagId}`);
+    let { body } = await request(server).get(`${tagApi}/1`);
 
     expect(body.name).toEqual('Paraklinik');
     expect(body.semesterId).toEqual(1);
@@ -75,7 +79,7 @@ describe('tags route', () => {
 
   it("PATCH '/:id' -- should fail non-admin", async () => {
     let { status, body } = await request(server)
-      .patch(`${tagApi}/${newTagId}`)
+      .patch(`${tagApi}/1`)
       .send({
         name: 'NewName'
       });
@@ -84,20 +88,20 @@ describe('tags route', () => {
   });
 
   it("PATCH '/:id' -- should patch a tag", async () => {
-    let { body } = await agent.patch(`${tagApi}/${newTagId}`).send({
+    let { body } = await admin.patch(`${tagApi}/1`).send({
       name: 'NewName'
     });
     expect(body.name).toEqual('NewName');
   });
 
   it("DELETE '/:id' -- should fail non-admin", async () => {
-    let { status, body } = await request(server).delete(`${tagApi}/${newTagId}`);
+    let { status, body } = await request(server).delete(`${tagApi}/1`);
     expect(body.type).toEqual('NotAuthorized');
     expect(status).toEqual(403);
   });
 
   it("DELETE '/:id' -- should delete a tag", async () => {
-    let { body } = await agent.delete(`${tagApi}/${newTagId}`);
+    let { body } = await admin.delete(`${tagApi}/1`);
     expect(body.type).toEqual('deleteTag');
   });
 });

@@ -64,10 +64,6 @@ export const createQuestions = async () => {
     text: 'comment text',
     private: false
   });
-  await Tag.query().insertGraph(sample_tags);
-  await QuestionTagVote.query().insertGraph(sample_tag_votes);
-  await Specialty.query().insertGraph(sample_specialties);
-  await QuestionSpecialtyVote.query().insertGraph(sample_specialty_votes);
   await QuestionCorrectAnswer.query().insert({
     id: 1,
     answer: 1,
@@ -78,4 +74,17 @@ export const createQuestions = async () => {
     userId: 1,
     questionId: 1
   });
+
+  await createTags();
+  await createSpecialties();
+};
+
+export const createTags = async () => {
+  await Tag.query().insertGraph(sample_tags);
+  await QuestionTagVote.query().insertGraph(sample_tag_votes);
+};
+
+export const createSpecialties = async () => {
+  await Specialty.query().insertGraph(sample_specialties);
+  await QuestionSpecialtyVote.query().insertGraph(sample_specialty_votes);
 };
