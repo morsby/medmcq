@@ -1,7 +1,7 @@
 import BaseModel from './_base_model';
 const { Model } = require('objection');
 
-class Specialty extends BaseModel {
+class Tag extends BaseModel {
   static get tableName() {
     return 'questionTag';
   }
@@ -49,4 +49,5 @@ class Specialty extends BaseModel {
   }
 }
 
-module.exports = Specialty;
+module.exports = Tag;
+export default Tag;

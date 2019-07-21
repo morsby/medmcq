@@ -50,3 +50,4 @@ class Specialty extends BaseModel {
 }
 
 module.exports = Specialty;
+export default Specialty;

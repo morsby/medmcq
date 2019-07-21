@@ -1,6 +1,14 @@
 import BaseModel, { CustomQueryBuilder, modifiers } from './_base_model';
 const { Model } = require('objection');
 
+interface QuestionComment {
+  id: number;
+  userId: number;
+  questionId: number;
+  text: string;
+  private: boolean;
+}
+
 class QuestionComment extends BaseModel {
   static get tableName() {
     return 'questionComment';
@@ -62,3 +70,4 @@ class QuestionComment extends BaseModel {
 }
 
 module.exports = QuestionComment;
+export default QuestionComment;

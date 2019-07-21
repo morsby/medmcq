@@ -40,6 +40,7 @@
     "@types/bcrypt": "^3.0.0",
     "@types/cookie-session": "^2.0.37",
     "@types/jest": "^24.0.15",
+    "@types/lodash": "^4.14.136",
     "babel-eslint": "10.0.1",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.3.0",

@@ -5,6 +5,7 @@ import { Model } from 'objection';
 // TODO: pre-migration: Password skal slåes fra under migrering
 
 interface User {
+  id: number;
   username: string;
   password: string;
   roleId: number;

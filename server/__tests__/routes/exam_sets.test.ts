@@ -4,7 +4,8 @@ import Semester from '../../models/semester';
 import User from '../../models/user';
 import UserRole from './../../models/user_role';
 import Question from '../../models/question';
-import sampleQuestions from './data/20_sample_questions';
+import sampleQuestions from './data/sample_questions';
+import sampleExamSets from './data/sample_exam_sets';
 const examSetApi = '/api/exam_sets';
 let server;
 let agent;
@@ -17,26 +18,22 @@ describe('exam_sets route', () => {
     agent = request.agent(server);
 
     await UserRole.query().insert({
-      id: 2,
+      id: 1,
       name: 'admin',
       level: 100
     });
     await User.query().insert({
       username,
       password,
-      roleId: 2
+      roleId: 1
     });
     await Semester.query().insert({
-      id: 2,
+      id: 1,
       value: 8,
       name: 'Abdomen',
       shortName: 'Abd'
     });
-    await ExamSet.query().insertGraph([
-      { id: 1, year: 2018, season: 'E', semesterId: 2 },
-      { id: 2, year: 2018, season: 'F', semesterId: 2 },
-      { id: 3, year: 2018, season: 'F', semesterId: 2 }
-    ]);
+    await ExamSet.query().insertGraph(sampleExamSets);
     await Question.query().insertGraph(sampleQuestions);
 
     const res = await agent.post('/api/auth').send({ username, password });
@@ -56,7 +53,7 @@ describe('exam_sets route', () => {
 
   // Settings vars so they can be reused across tests
 
-  test("GET '/' -- should get all 3 exam sets", async () => {
+  it("should get all 3 exam sets from GET '/'", async () => {
     let response = await request(server).get(examSetApi);
     let examSets = response.body;
 
@@ -64,7 +61,7 @@ describe('exam_sets route', () => {
     expect(examSets[0]).toHaveProperty('semester');
   });
 
-  test("POST '/' -- should fail because not authed", async () => {
+  it("should fail because not authed at POST '/'", async () => {
     let { body, status } = await request(server)
       .post(examSetApi)
       .send({
@@ -77,7 +74,7 @@ describe('exam_sets route', () => {
     expect(body.type).toEqual('NotAuthorized');
   });
 
-  test("POST '/' -- should post a new exam set", async () => {
+  it("should post a new exam set to POST '/'", async () => {
     await agent.post('/api/auth').send({ username, password });
 
     let { body } = await agent.post(examSetApi).send({
@@ -90,7 +87,7 @@ describe('exam_sets route', () => {
     expect(body.year).toEqual(2018);
   });
 
-  test("POST '/' -- should fail with missing props", async () => {
+  it("should fail with missing props at POST '/'", async () => {
     let { status, body } = await agent.post(examSetApi).send({
       season: 'F',
       year: 2099
@@ -100,21 +97,21 @@ describe('exam_sets route', () => {
     expect(body.type).toEqual('ModelValidation');
   });
 
-  test("GET '/:id' -- should get one exam set", async () => {
+  it("should get one exam set from GET '/:id'", async () => {
     let { body } = await request(server).get(`${examSetApi}/1`);
 
     expect(body.semesterId).toEqual(2);
     expect(body).toHaveProperty('semester');
   });
 
-  test("PATCH '/:id' -- should patch a examSet", async () => {
+  it("should patch a examSet at PATCH '/:id'", async () => {
     let { body } = await agent.patch(`${examSetApi}/1`).send({
       season: 'E'
     });
     expect(body.season).toEqual('E');
   });
 
-  test("PATCH '/:id' -- should fail because not authed", async () => {
+  it("should fail because not authed at PATCH '/:id'", async () => {
     let { status, body } = await request(server)
       .patch(`${examSetApi}/1`)
       .send({
@@ -124,18 +121,18 @@ describe('exam_sets route', () => {
     expect(body.type).toEqual('NotAuthorized');
   });
 
-  test("DELETE '/:id' -- should delete a examSet", async () => {
+  it("should delete a examSet at DELETE '/:id'", async () => {
     let { body } = await agent.delete(`${examSetApi}/1`);
     expect(body.type).toEqual('deleteExamSet');
   });
 
-  test("DELETE '/:id' -- should delete a examSet", async () => {
+  it("should delete a examSet at DELETE '/:id'", async () => {
     let { status, body } = await request(server).delete(`${examSetApi}/1`);
     expect(status).toEqual(403);
     expect(body.type).toEqual('NotAuthorized');
   });
 
-  test("GET '/:id/questions' -- should get questions for the exam set", async () => {
+  it("should get questions for the exam set at GET '/:id/questions'", async () => {
     let { body } = await request(server).get(`${examSetApi}/1/questions`);
 
     expect(body.length).toEqual(5);

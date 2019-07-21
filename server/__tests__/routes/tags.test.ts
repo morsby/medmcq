@@ -17,7 +17,7 @@ describe('tags route', () => {
   // Settings vars to reuse across tests
   let firstTagId, newTagId;
 
-  test("GET '/' -- should get all tags", async () => {
+  it("GET '/' -- should get all tags", async () => {
     let response = await request(server).get(tagApi);
     let tags = response.body;
 
@@ -30,7 +30,7 @@ describe('tags route', () => {
     expect(sortedTags.map((sem) => sem.name)).toEqual(seededTags);
   });
 
-  test("POST '/' -- should fail non-admin", async () => {
+  it("POST '/' -- should fail non-admin", async () => {
     let { status, body } = await request(server)
       .post(tagApi)
       .send({
@@ -42,7 +42,7 @@ describe('tags route', () => {
     expect(status).toEqual(403);
   });
 
-  test("POST '/' -- should insert a new tag", async () => {
+  it("POST '/' -- should insert a new tag", async () => {
     await agent.post('/api/auth').send({ username: 'TestAdmin', password: 'TestPassword123' });
 
     let { body } = await agent.post(tagApi).send({
@@ -54,7 +54,7 @@ describe('tags route', () => {
     expect(body.name).toEqual('Test');
   });
 
-  test("POST '/' -- should fail with missing props", async () => {
+  it("POST '/' -- should fail with missing props", async () => {
     let { status, body } = await agent.post(tagApi).send({
       name: 'Should fail'
     });
@@ -63,7 +63,7 @@ describe('tags route', () => {
     expect(body.type).toEqual('ModelValidation');
   });
 
-  test("GET '/:id' -- should get one tag", async () => {
+  it("GET '/:id' -- should get one tag", async () => {
     let { body } = await request(server).get(`${tagApi}/${firstTagId}`);
 
     expect(body.name).toEqual('Paraklinik');
@@ -73,7 +73,7 @@ describe('tags route', () => {
     expect(Array.isArray(body.questions)).toBe(true);
   });
 
-  test("PATCH '/:id' -- should fail non-admin", async () => {
+  it("PATCH '/:id' -- should fail non-admin", async () => {
     let { status, body } = await request(server)
       .patch(`${tagApi}/${newTagId}`)
       .send({
@@ -83,20 +83,20 @@ describe('tags route', () => {
     expect(status).toEqual(403);
   });
 
-  test("PATCH '/:id' -- should patch a tag", async () => {
+  it("PATCH '/:id' -- should patch a tag", async () => {
     let { body } = await agent.patch(`${tagApi}/${newTagId}`).send({
       name: 'NewName'
     });
     expect(body.name).toEqual('NewName');
   });
 
-  test("DELETE '/:id' -- should fail non-admin", async () => {
+  it("DELETE '/:id' -- should fail non-admin", async () => {
     let { status, body } = await request(server).delete(`${tagApi}/${newTagId}`);
     expect(body.type).toEqual('NotAuthorized');
     expect(status).toEqual(403);
   });
 
-  test("DELETE '/:id' -- should delete a tag", async () => {
+  it("DELETE '/:id' -- should delete a tag", async () => {
     let { body } = await agent.delete(`${tagApi}/${newTagId}`);
     expect(body.type).toEqual('deleteTag');
   });
