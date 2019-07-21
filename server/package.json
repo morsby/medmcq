@@ -8,8 +8,7 @@
     "dev": "nodemon",
     "build": "tsc -p tsconfig.json",
     "test": "NODE_ENV=test jest",
-    "test:w": "jest --watch-all --verbose --bail",
-    "reset": "knex migrate:rollback --env=test && knex migrate:latest --env=test && knex seed:run --env=test"
+    "test:w": "jest --watch-all --verbose --bail"
   },
   "repository": {
     "type": "git",

@@ -5,7 +5,7 @@ interface Semester {
   id: number;
   value: number;
   name: string;
-  shortName: 'Abd';
+  shortName: string;
 }
 
 class Semester extends BaseModel {

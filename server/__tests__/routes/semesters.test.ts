@@ -1,29 +1,44 @@
 import request from 'supertest';
+import Semester from '../../models/semester';
+import UserRole from '../../models/user_role';
+import User from '../../models/user';
+import { createUsers, createSemesters } from './functions/creation';
+const authApi = '/api/auth';
 const semesterApi = '/api/semesters';
 let server;
 let user;
 let admin;
 
 describe('semesters route', () => {
-  beforeEach(() => {
+  beforeEach(async () => {
     server = require('../../server');
     user = request.agent(server);
     admin = request.agent(server);
+
+    await createUsers();
+    await createSemesters();
+
+    // Login before each test
+    let res = await admin.post(authApi).send({ username: 'admin', password: '123abc' });
+    let { type } = res.body;
+    expect(type).toEqual('LoginSuccess');
+
+    let res2 = await user.post(authApi).send({ username: 'user', password: '123abc' });
+    let { type: type2 } = res2.body;
+
+    expect(type2).toEqual('LoginSuccess');
   });
 
-  afterEach(() => {
+  afterEach(async () => {
+    await Semester.query().delete();
+    await User.query().delete();
+    await UserRole.query().delete();
     server.close();
   });
-
-  // Settings vars to reuse across tests
-  let firstSemesterId, newSemesterId;
 
   test("GET '/' -- should get all 4 semesters in the right order", async () => {
     let response = await request(server).get(semesterApi);
     let semesters = response.body;
-
-    // To reuse the id without making a second API call -- id can change if rerunning seeds
-    firstSemesterId = semesters[0].id;
 
     expect(semesters.map((sem) => sem.name)).toEqual([
       'Inflammation',
@@ -34,27 +49,21 @@ describe('semesters route', () => {
   });
 
   test("POST '/' -- should fail because user not permitted", async () => {
-    await user.post('/api/auth').send({ username: 'TestBruger', password: 'TestPassword123' });
-
     let { status, body } = await user.post(semesterApi).send({
       value: 12,
       name: 'Test',
       shortName: 'Testing2'
     });
-    newSemesterId = body.id;
     expect(status).toEqual(403);
     expect(body.type).toEqual('NotAuthorized');
   });
 
   test("POST '/' -- should insert a new semester", async () => {
-    await admin.post('/api/auth').send({ username: 'TestAdmin', password: 'TestPassword123' });
-
     let { body } = await admin.post(semesterApi).send({
       value: 12,
       name: 'Test',
       shortName: 'Testing2'
     });
-    newSemesterId = body.id;
     expect(body.value).toEqual(12);
     expect(body.name).toEqual('Test');
   });
@@ -69,7 +78,7 @@ describe('semesters route', () => {
   });
 
   test("GET '/:id' -- should get one semester", async () => {
-    let { body } = await request(server).get(`${semesterApi}/${firstSemesterId}`);
+    let { body } = await request(server).get(`${semesterApi}/1`);
 
     expect(body.value).toEqual(7);
     expect(body.name).toEqual('Inflammation');
@@ -81,7 +90,7 @@ describe('semesters route', () => {
   });
 
   test("PATCH '/:id' -- should fail as user", async () => {
-    let { status, body } = await user.patch(`${semesterApi}/${newSemesterId}`).send({
+    let { status, body } = await user.patch(`${semesterApi}/1`).send({
       name: 'NewName'
     });
     expect(status).toEqual(403);
@@ -89,20 +98,20 @@ describe('semesters route', () => {
   });
 
   test("PATCH '/:id' -- should patch a semester as admin", async () => {
-    let { body } = await admin.patch(`${semesterApi}/${newSemesterId}`).send({
+    let { body } = await admin.patch(`${semesterApi}/1`).send({
       name: 'NewName'
     });
     expect(body.name).toEqual('NewName');
   });
 
   test("DELETE '/:id' -- should fail as user", async () => {
-    let { status, body } = await user.delete(`${semesterApi}/${newSemesterId}`);
+    let { status, body } = await user.delete(`${semesterApi}/1`);
     expect(status).toEqual(403);
     expect(body.type).toEqual('NotAuthorized');
   });
 
   test("DELETE '/:id' -- should delete a semester as admin", async () => {
-    let { body } = await admin.delete(`${semesterApi}/${newSemesterId}`);
+    let { body } = await admin.delete(`${semesterApi}/1`);
     expect(body.type).toEqual('deleteSemester');
   });
 });

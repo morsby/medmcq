@@ -1,23 +1,17 @@
 import _ from 'lodash';
 import request from 'supertest';
 import Question from './../../models/question';
-import sampleQuestions from './data/sample_questions';
 import ExamSet from './../../models/exam_set';
-import sampleExamSets from './data/sample_exam_sets';
 import Semester from './../../models/semester';
 import UserRole from './../../models/user_role';
 import User from '../../models/user';
 import QuestionComment from './../../models/question_comment';
 import QuestionTagVote from './../../models/question_tag_vote';
 import Tag from './../../models/tag';
-import sample_tags from './data/sample_tags';
-import sample_tag_votes from './data/sample_tag_votes';
-import QuestionSpecialtyVote from '../../models/question_specialty_vote';
-import sample_specialty_votes from './data/sample_specialty_votes';
 import Specialty from '../../models/specialty';
-import sample_specialties from './data/sample_specialties';
 import QuestionCorrectAnswer from '../../models/question_correct_answer';
 import QuestionBookmark from '../../models/question_bookmark';
+import { createUsers, createSemesters, createQuestions } from './functions/creation';
 const questionApi = '/api/questions';
 let server;
 let agent;
@@ -34,46 +28,9 @@ beforeEach(async () => {
   agent = request.agent(server);
 
   // Insert needed data
-  await UserRole.query().insert({
-    id: 1,
-    name: 'admin',
-    level: 100
-  });
-  await User.query().insert({
-    id: 1,
-    username,
-    password,
-    roleId: 1
-  });
-  await Semester.query().insert({
-    id: 1,
-    value: 8,
-    name: 'Abdomen',
-    shortName: 'Abd'
-  });
-  await ExamSet.query().insertGraph(sampleExamSets);
-  await Question.query().insertGraph(sampleQuestions);
-  await QuestionComment.query().insert({
-    id: 1,
-    userId: 1,
-    questionId: 1,
-    text: 'comment text',
-    private: false
-  });
-  await Tag.query().insertGraph(sample_tags);
-  await QuestionTagVote.query().insertGraph(sample_tag_votes);
-  await Specialty.query().insertGraph(sample_specialties);
-  await QuestionSpecialtyVote.query().insertGraph(sample_specialty_votes);
-  await QuestionCorrectAnswer.query().insert({
-    id: 1,
-    answer: 1,
-    questionId: 1
-  });
-  await QuestionBookmark.query().insert({
-    id: 1,
-    userId: 1,
-    questionId: 1
-  });
+  await createUsers();
+  await createSemesters();
+  await createQuestions();
 
   // Login admin before each test
   let res = await agent.post('/api/auth').send({ username, password });
