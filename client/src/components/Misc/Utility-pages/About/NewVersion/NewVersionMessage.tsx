@@ -1,8 +1,7 @@
 import React, { useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { withLocalize, Translate } from 'react-localize-redux';
+import { withLocalize, Translate, LocalizeContextProps } from 'react-localize-redux';
 
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import * as actions from '../../../../../actions';
 import { Message } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
@@ -11,20 +10,30 @@ import { urls } from '../../../../../utils/common';
 import newVersionMessageTranslations from './newVersionMessageTranslations.json';
 
 import { version } from '../../../../../version';
+import { IReduxState } from 'reducers';
 
-const LinkToAbout = () => (
-  <Link to={urls.about}>
-    <Translate id="newVersionOutNow.aboutLink" />
-  </Link>
-);
+export interface LinkToAboutProps {}
 
-const NewVersionMessage = ({ addTranslation, prevVersion, changeSettings }) => {
+const LinkToAbout: React.SFC<LinkToAboutProps> = () => {
+  return (
+    <Link to={urls.about}>
+      <Translate id="newVersionOutNow.aboutLink" />
+    </Link>
+  );
+};
+
+export interface NewVersionMessageProps extends LocalizeContextProps {}
+
+const NewVersionMessage: React.SFC<NewVersionMessageProps> = ({ addTranslation }) => {
+  const dispatch = useDispatch();
+  const prevVersion = useSelector((state: IReduxState) => state.settings.version);
+
   useEffect(() => {
     addTranslation(newVersionMessageTranslations);
   });
 
   const handleDismiss = () => {
-    changeSettings({ type: 'version', value: version });
+    dispatch(actions.changeSettings({ type: 'version', value: version }));
   };
 
   if (version !== prevVersion) {
@@ -35,7 +44,7 @@ const NewVersionMessage = ({ addTranslation, prevVersion, changeSettings }) => {
           width: '80%',
           bottom: '15px',
           left: '10%',
-          zIndex: '999'
+          zIndex: 999
         }}
       >
         <Message info onDismiss={handleDismiss} attached floating>
@@ -51,19 +60,4 @@ const NewVersionMessage = ({ addTranslation, prevVersion, changeSettings }) => {
   }
 };
 
-NewVersionMessage.propTypes = {
-  version: PropTypes.string,
-  changeSettings: PropTypes.func,
-  addTranslation: PropTypes.func
-};
-
-const mapStateToProps = (state) => ({
-  prevVersion: state.settings.version
-});
-
-export default withLocalize(
-  connect(
-    mapStateToProps,
-    actions
-  )(NewVersionMessage)
-);
+export default withLocalize(NewVersionMessage);
