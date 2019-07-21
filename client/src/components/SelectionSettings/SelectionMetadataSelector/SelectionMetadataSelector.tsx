@@ -106,7 +106,7 @@ const SelectionSpecialtiesSelector = () => {
                   (s) => (
                     <Tree.TreeNode
                       title={`${s.name} (${s.questionCount})`}
-                      key={s.id}
+                      key={String(s.id)}
                       dataRef={s}
                     ></Tree.TreeNode>
                   )
