@@ -74,7 +74,7 @@ export const createQuestions = async () => {
   });
   await QuestionBookmark.query().insert({
     id: 1,
-    userId: 1,
+    userId: 2, // Should be the same as user
     questionId: 1
   });
 
@@ -97,13 +97,13 @@ export const cleanUp = async () => {
     await ExamSet.query().delete();
     await Question.query().delete();
     await QuestionComment.query().delete();
+    await QuestionBookmark.query().delete();
     await User.query().delete();
     await UserRole.query().delete();
     await Tag.query().delete();
     await QuestionTagVote.query().delete();
     await Specialty.query().delete();
     await QuestionCorrectAnswer.query().delete();
-    await QuestionBookmark.query().delete();
     await Semester.query().delete();
   } catch (error) {
     throw new Error(error);
