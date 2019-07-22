@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import axios from 'axios';
 import * as types from './types';
+import { Dispatch } from 'redux';
 
 const questionApi = '/api/questions';
 
@@ -48,6 +49,7 @@ export const getQuestions = ({ ids, profile = false, quiz = false }) => async (
 
     case 'ids':
     case 'specific':
+      console.log(ids);
       res = await axios.get(questionApi, { params: { ids: ids.join(',') } });
       break;
     case 'profile':
@@ -148,4 +150,22 @@ export const searchQuestion = (semester, searchString) => async (dispatch) => {
     payload: res.data,
     quiz: true
   });
+};
+
+export const createBookmark = (questionId: Number) => async (dispatch: Dispatch) => {
+  try {
+    await axios.post(`/api/questions/${questionId}/bookmark`);
+    dispatch(types.CREATE_BOOKMARK(questionId));
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const removeBookmark = (questionId: number) => async (dispatch: Dispatch) => {
+  try {
+    await axios.delete(`/api/questions/${questionId}/bookmark`);
+    dispatch(types.REMOVE_BOOKMARK(questionId));
+  } catch (error) {
+    console.log(error);
+  }
 };

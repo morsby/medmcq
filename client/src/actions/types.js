@@ -1,3 +1,5 @@
+import { createAction } from 'redux-starter-kit';
+
 /* QUIZ REDUCER */
 export const QUIZ_NAVIGATE = 'QUIZ_MAVIGATE';
 
@@ -49,3 +51,5 @@ export const AUTH_UPDATE_USER_ANSWERS = 'AUTH_UPDATE_USER_ANSWERS';
 
 export const LOAD_SETS = 'LOAD_SETS';
 export const LOAD_SETS_FINISH = 'LOAD_SETS_FINISH';
+export const CREATE_BOOKMARK = createAction('CREATE_BOOKMARK');
+export const REMOVE_BOOKMARK = createAction('REMOVE_BOOKMARK');

@@ -15,16 +15,16 @@ const Bookmarks = ({ bookmarks }) => {
       {_.map(bookmarks, (bookmark, i) => (
         <div key={bookmark.id}>
           {i > 0 && <Divider />}
-          <div dangerouslySetInnerHTML={{ __html: marked(bookmark.text) }} />
+          <div dangerouslySetInnerHTML={{ __html: marked(bookmark.question.text) }} />
           <ol type="A">
-            <li className={bookmark.correctAnswers.indexOf(1) > -1 ? 'svar-korrekt' : ''}>
-              {bookmark.answer1}
+            <li className={bookmark.question.correctAnswers.indexOf(1) > -1 ? 'svar-korrekt' : ''}>
+              {bookmark.question.answer1}
             </li>
-            <li className={bookmark.correctAnswers.indexOf(2) > -1 ? 'svar-korrekt' : ''}>
-              {bookmark.answer2}
+            <li className={bookmark.question.correctAnswers.indexOf(2) > -1 ? 'svar-korrekt' : ''}>
+              {bookmark.question.answer2}
             </li>
-            <li className={bookmark.correctAnswers.indexOf(3) > -1 ? 'svar-korrekt' : ''}>
-              {bookmark.answer3}
+            <li className={bookmark.question.correctAnswers.indexOf(3) > -1 ? 'svar-korrekt' : ''}>
+              {bookmark.question.answer3}
             </li>
           </ol>
         </div>

@@ -1,4 +1,4 @@
-import BaseModel from './_base_model';
+import BaseModel, { modifiers, CustomQueryBuilder } from './_base_model';
 import { Model } from 'objection';
 
 interface QuestionBookmark {
@@ -11,6 +11,11 @@ class QuestionBookmark extends BaseModel {
   static get tableName() {
     return 'questionBookmark';
   }
+
+  static get QueryBuilder() {
+    return CustomQueryBuilder;
+  }
+
   static get jsonSchema() {
     return {
       type: 'object',
@@ -45,6 +50,16 @@ class QuestionBookmark extends BaseModel {
         }
       }
     };
+  }
+
+  static get modifiers() {
+    return {
+      own: (builder) => modifiers.belongsToUser(builder)
+    };
+  }
+
+  static get defaultEager() {
+    return '[user, question]';
   }
 }
 

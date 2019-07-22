@@ -46,5 +46,13 @@ export default createReducer(initialState, {
     const normalized = normalize(action.payload, question);
     state.entities = _.merge({}, state.entities, normalized.entities);
     state.entities.questions[action.payload.id] = normalized.entities.questions[action.payload.id];
+  },
+
+  [types.CREATE_BOOKMARK]: (state, action) => {
+    state.entities.questions[action.payload].isBookmarked = action.payload;
+  },
+
+  [types.REMOVE_BOOKMARK]: (state, action) => {
+    state.entities.questions[action.payload].isBookmarked = false;
   }
 });
