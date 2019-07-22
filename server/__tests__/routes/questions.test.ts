@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import request from 'supertest';
-import QuestionBookmark from '../../models/question_bookmark';
 import { cleanUp, createUsers, createQuestions } from '../../_testconfigs_/functions/creation';
 const questionApi = '/api/questions';
 let server;
@@ -224,35 +223,6 @@ describe('questions route', () => {
 
     expect(status).toEqual(400);
     expect(body.type).toEqual('ModelValidation');
-  });
-
-  it("POST '/:id/bookmark' -- should insert a bookmark", async () => {
-    await QuestionBookmark.query().delete();
-    let { status, body } = await admin.post(`${questionApi}/1/bookmark`);
-
-    expect(status).toEqual(200);
-    expect(body.type).toEqual('QuestionBookmarkSuccess');
-  });
-
-  it("POST '/:id/bookmark' -- should fail because already bookmarked", async () => {
-    let { status, body } = await admin.post(`${questionApi}/1/bookmark`);
-
-    expect(status).toEqual(409);
-    expect(body.type).toEqual('UniqueViolation');
-  });
-
-  it("POST '/:id/bookmark' -- should fail because not logged in", async () => {
-    let { status, body } = await request(server).post(`${questionApi}/1/bookmark`);
-
-    expect(status).toEqual(403);
-    expect(body.type).toEqual('NotAuthorized');
-  });
-
-  it("DELETE '/:id/bookmark' -- should delete a bookmark", async () => {
-    let { status, body } = await admin.delete(`${questionApi}/1/bookmark`);
-
-    expect(status).toEqual(200);
-    expect(body.type).toEqual('QuestionBookmarkDeleteSuccess');
   });
 
   it("POST '/:id/comment' -- should insert a comment", async () => {
