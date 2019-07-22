@@ -180,6 +180,7 @@ router.get('/', async (req, res) => {
         );
       }
     }
+
     if (req.user) {
       query = query.mergeEager('privateComments(own).user', {
         userId: req.user.id
@@ -190,7 +191,11 @@ router.get('/', async (req, res) => {
       query = query.mergeEager('userTagVotes(own)', {
         userId: req.user.id
       });
+      query = query.mergeEager('isBookmarked(own)', {
+        userId: req.user.id
+      });
     }
+
     let questions = await query;
 
     res.status(200).json(questions);
@@ -317,7 +322,24 @@ router.post('/search', async (req, res) => {
 
     if (semester) questions = questions.andWhere({ 'semester.id': semester });
 
-    questions = await questions.eager(Question.defaultEager);
+    questions = questions.eager(Question.defaultEager);
+
+    if (req.user) {
+      questions = questions.mergeEager('privateComments(own).user', {
+        userId: req.user.id
+      });
+      questions = questions.mergeEager('userSpecialtyVotes(own)', {
+        userId: req.user.id
+      });
+      questions = questions.mergeEager('userTagVotes(own)', {
+        userId: req.user.id
+      });
+      questions = questions.mergeEager('isBookmarked(own)', {
+        userId: req.user.id
+      });
+    }
+
+    questions = await questions;
 
     res.status(200).json(questions);
   } catch (err) {

@@ -135,8 +135,7 @@ class Question extends BaseModel {
         join: {
           from: 'questionBookmark.questionId',
           to: 'question.id'
-        },
-        modify: (builder) => builder.select('questionId')
+        }
       }
     };
   }
@@ -148,7 +147,7 @@ class Question extends BaseModel {
   }
 
   static get defaultEager() {
-    return '[correctAnswers, semester, publicComments.user, specialties(active), tags(active), isBookmarked(own)]';
+    return '[correctAnswers, semester, publicComments.user, specialties(active), tags(active)]';
   }
 
   $formatJson(json) {
