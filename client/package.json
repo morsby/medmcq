@@ -39,12 +39,11 @@
     "typescript": "^3.5.3"
   },
   "scripts": {
-    "start": "concurrently \"react-scripts start\" \"npm run sass\"",
+    "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "cross-env CI=true react-scripts test --env=jsdom",
     "test:w": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject",
-    "sass": "node-sass --watch --output src/styles/css --source-map true --source-map-contents src/styles/scss/main.scss"
+    "eject": "react-scripts eject"
   },
   "devDependencies": {
     "@types/lodash": "^4.14.136",

@@ -17,7 +17,7 @@ import LocalizedApp from './App';
 import LoadingPage from './components/Misc/Utility-pages/LoadingPage';
 
 // STYLING
-import './styles/css/main.css';
+import './styles/scss/main.scss';
 import './semantic/dist/semantic.min.css';
 // Lightbox css
 import 'react-image-lightbox/style.css'; // This only needs to be imported once in your app
