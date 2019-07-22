@@ -145,7 +145,7 @@ class QuizMain extends Component {
         <Translate>
           {({ translate }) => (
             <QuizLoader
-              handleRetry={() => alert('Ikke implementeret')}
+              handleRetry={() => this.navigateToPage('root')}
               handleAbort={() => this.navigateToPage('root')}
               text={{
                 retry: translate('quizLoader.retry'),

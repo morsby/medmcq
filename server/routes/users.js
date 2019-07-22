@@ -231,7 +231,7 @@ router.get(
         .where('userId', userId)
         .andWhere('question:semester.id', semesterId)
         .joinRelation('question.semester')
-        .select('QuestionBookmark.id', 'QuestionBookmark.questionId');
+        .eager('question.[correctAnswers]');
 
       // Perform all queries.
       [answers, publicComments, privateComments, bookmarks] = await Promise.all([

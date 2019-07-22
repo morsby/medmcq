@@ -1,5 +1,6 @@
 import BaseModel, { CustomQueryBuilder, modifiers } from './_base_model';
 import { Model } from 'objection';
+import QuestionBookmark from '../models/question_bookmark';
 
 class Question extends BaseModel {
   static get tableName() {
@@ -127,6 +128,15 @@ class Question extends BaseModel {
           from: 'questionTagVote.questionId',
           to: 'question.id'
         }
+      },
+      isBookmarked: {
+        relation: Model.HasOneRelation,
+        modelClass: QuestionBookmark,
+        join: {
+          from: 'questionBookmark.questionId',
+          to: 'question.id'
+        },
+        modify: (builder) => builder.select('questionId')
       }
     };
   }
@@ -138,7 +148,7 @@ class Question extends BaseModel {
   }
 
   static get defaultEager() {
-    return '[correctAnswers, semester, publicComments.user, specialties(active), tags(active)]';
+    return '[correctAnswers, semester, publicComments.user, specialties(active), tags(active), isBookmarked(own)]';
   }
 
   $formatJson(json) {

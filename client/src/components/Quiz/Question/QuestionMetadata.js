@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { PropTypes } from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import * as actions from 'actions/index';
 import _ from 'lodash';
 import { isAnswered } from 'utils/quiz';
 
-import { Grid, Button, Input, Message } from 'semantic-ui-react';
+import { Grid, Button, Input, Message, Icon } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 import QuestionAnsweredCounter from './QuestionMetadata/QuestionAnsweredCounter';
 import QuestionMetadataLabel from './QuestionMetadata/QuestionMetadataLabel';
 import QuestionMetadataDropdown from './QuestionMetadata/QuestionMetadataDropdown';
 
 const QuestionMetadata = (props) => {
+  const dispatch = useDispatch();
   const { question, user, metadata } = props;
   const [newTag, setNewTag] = useState('');
   const [addingNewTag, setAddingNewTag] = useState(false);
@@ -145,6 +146,22 @@ const QuestionMetadata = (props) => {
                 </>
               )}
               {suggestTagMessage && <Message color="green">{suggestTagMessage}</Message>}
+            </Grid.Column>
+            <Grid.Column width={5} textAlign="right">
+              <span style={{ color: 'grey' }}>Gem spørgsmål - </span>
+              <Icon
+                style={{ cursor: 'pointer' }}
+                onClick={() => {
+                  if (question.isBookmarked) {
+                    dispatch(actions.removeBookmark(question.id));
+                  } else {
+                    dispatch(actions.createBookmark(question.id));
+                  }
+                }}
+                color={question.isBookmarked ? 'green' : 'grey'}
+                name="flag"
+                size="large"
+              />
             </Grid.Column>
           </Grid.Row>
         </>
