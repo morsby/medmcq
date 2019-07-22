@@ -110,6 +110,7 @@
     ],
     "cancel": ["Fortryd", "Cancel"],
     "about_page": ["om siden", "about page"],
-    "suggest_tag": ["Foreslå nyt tag", "Suggest new tag"]
+    "suggest_tag": ["Foreslå nyt tag", "Suggest new tag"],
+    "share": ["Del", "Share"]
   }
 }

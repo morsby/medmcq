@@ -13,7 +13,8 @@ export const urls = {
   editProfile: '/profil/rediger',
   forgotPassword: '/glemt-kodeord', // HVIS DENNE ÆNDRES SKAL OGSÅ ÆNDRES I API'ens config/urls.js
   resetPassword: '/nyt-kodeord',
-  print: '/print'
+  print: '/print',
+  quizShareRoute: '/quiz/:ids'
 };
 
 export const semestre = [

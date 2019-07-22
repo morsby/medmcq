@@ -4,12 +4,14 @@ import { connect, useDispatch } from 'react-redux';
 import * as actions from 'actions/index';
 import _ from 'lodash';
 import { isAnswered } from 'utils/quiz';
+import CopyToClipBoard from 'react-copy-to-clipboard';
 
 import { Grid, Button, Input, Message, Icon } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 import QuestionAnsweredCounter from './QuestionMetadata/QuestionAnsweredCounter';
 import QuestionMetadataLabel from './QuestionMetadata/QuestionMetadataLabel';
 import QuestionMetadataDropdown from './QuestionMetadata/QuestionMetadataDropdown';
+import { toast } from 'react-toastify';
 
 const QuestionMetadata = (props) => {
   const dispatch = useDispatch();
@@ -114,13 +116,25 @@ const QuestionMetadata = (props) => {
           </>
         )}
       </Grid.Column>
+      <Grid.Column width={5} style={{ textAlign: 'right' }}>
+        <Grid.Row style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
+          <CopyToClipBoard
+            text={`https://medmcq.au.dk/quiz/${question.id}`}
+            onCopy={() =>
+              toast('Kopieret til clipboard', { autoClose: 2000, type: toast.TYPE.SUCCESS })
+            }
+          >
+            <Button basic color="blue">
+              <Translate id="voting.share" />
+            </Button>
+          </CopyToClipBoard>
+          {user && isAnswered(question) && (
+            <QuestionAnsweredCounter user={user} question={question} />
+          )}
+        </Grid.Row>
+      </Grid.Column>
       {user && isAnswered(question) && (
         <>
-          <Grid.Column width={5} style={{ textAlign: 'right' }}>
-            <Grid.Row>
-              <QuestionAnsweredCounter user={user} question={question} />
-            </Grid.Row>
-          </Grid.Column>
           <Grid.Row>
             <Grid.Column>
               {!addingNewTag && (

@@ -5,7 +5,7 @@ import { Dispatch } from 'redux';
 
 const questionApi = '/api/questions';
 
-export const getQuestions = ({ ids, profile = false, quiz = false }) => async (
+export const getQuestions = ({ ids, quiz = true, profile = !quiz }) => async (
   dispatch,
   getState
 ) => {

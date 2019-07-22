@@ -5,8 +5,10 @@ import _ from 'lodash';
 
 import ProfileActivityAccordionElem from '../ProfileActivityAccordionElem';
 import CommentsQuestion from './CommentsQuestion';
+import { Button } from 'semantic-ui-react';
+import { withRouter } from 'react-router';
 
-const Comments = ({ questions = {}, comments = {}, type = 'public' }) => {
+const Comments = ({ questions = {}, comments = {}, type = 'public', history }) => {
   let [activeIndex, setActiveIndex] = useState(null);
 
   if (Object.keys(comments).length === 0) return <Translate id="profileComments.no_comments" />;
@@ -20,15 +22,22 @@ const Comments = ({ questions = {}, comments = {}, type = 'public' }) => {
 
         i = Object.keys(allComments).indexOf(i);
         return (
-          <ProfileActivityAccordionElem
-            key={question.id}
-            title={question.text}
-            active={i === activeIndex}
-            index={i}
-            handleClick={setActiveIndex}
-          >
-            <CommentsQuestion question={question} type={type} />
-          </ProfileActivityAccordionElem>
+          <>
+            <ProfileActivityAccordionElem
+              key={question.id}
+              title={question.text}
+              active={i === activeIndex}
+              index={i}
+              handleClick={setActiveIndex}
+            >
+              <CommentsQuestion question={question} type={type} />
+            </ProfileActivityAccordionElem>
+            <div style={{ textAlign: 'center', margin: '1rem' }}>
+              <Button basic color="black" onClick={() => history.push(`/quiz/${question.id}`)}>
+                <Translate id="profileActivity.accordionElements.accordionButton" />
+              </Button>
+            </div>
+          </>
         );
       })}
     </div>
@@ -46,6 +55,7 @@ Comments.propTypes = {
   /**
    * Om der vises offentlige eller private kommentarer
    */
-  type: PropTypes.string
+  type: PropTypes.string,
+  history: PropTypes.object
 };
-export default Comments;
+export default withRouter(Comments);

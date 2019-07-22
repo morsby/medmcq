@@ -47,6 +47,7 @@ import Sidebar from './components/Layout/Sidebar';
 import Footer from './components/Layout/Footer';
 import MaintenancePage from './components/Misc/Utility-pages/MaintenancePage';
 import ErrorBoundary from './components/Misc/Utility-pages/ErrorBoundary';
+import QuizShareRoute from 'components/Quiz/QuizShareRoute';
 // bliver ikke brugt?
 //import { IReduxState } from 'reducers';
 
@@ -109,6 +110,7 @@ class App extends Component<AppProps> {
               <Switch>
                 <Route path={urls.about} component={About} />
                 <Route path={urls.contact} component={Contact} />
+                <Route path={urls.quizShareRoute} component={QuizShareRoute} />
                 <Route path={urls.quiz} component={Quiz} />
                 <Route path={urls.signup} component={Signup} />
                 <Route path={urls.login} component={Login} />
