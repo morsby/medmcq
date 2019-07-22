@@ -48,7 +48,8 @@
       "answers": ["Besvarede spørgsmål", "Answered questions"],
       "publicComments": ["Offentlige kommentarer", "Public comments"],
       "privateComments": ["Private kommentarer", "Private comments"],
-      "bookmarks": ["Bogmærkede spørgsmål", "Bookmarked questions"]
+      "bookmarks": ["Bogmærkede spørgsmål", "Bookmarked questions"],
+      "accordionButton": ["Gå til spørgsmål", "Go to question"]
     }
   },
   "profileAnswers": {

@@ -25,6 +25,7 @@
     "react-hooks/exhaustive-deps": "warn",
     "no-dupe-args": "off",
     "no-redeclare": "off",
-    "no-console": "off"
+    "no-console": "off",
+    "react/prop-types": 0
   }
 }
