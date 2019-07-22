@@ -24,6 +24,7 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "no-dupe-args": "off",
-    "no-redeclare": "off"
+    "no-redeclare": "off",
+    "no-console": "off"
   }
 }
