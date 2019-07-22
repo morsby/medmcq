@@ -939,7 +939,11 @@ router.post('/:id/answer', async (req, res) => {
  */
 router.post('/:id/bookmark', permit(), async (req, res) => {
   let questionId = Number(req.params.id);
+
   try {
+    const exists = await QuestionBookmark.query().findOne({ userId: req.user.id, questionId });
+    if (exists) return res.status(404).json(createResponse('Bookmark already exists'));
+
     await QuestionBookmark.query().insert({ userId: req.user.id, questionId });
 
     res.status(200).json(createResponse('QuestionBookmarkSuccess'));
