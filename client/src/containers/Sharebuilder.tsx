@@ -14,7 +14,7 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
         textAlign="center"
       >
         <h1>Share builder</h1>
-        <h4>Indsæt ID'er eller links, adskilt af komma</h4>
+        <h4>{"Indsæt ID'er eller links, adskilt af komma"}</h4>
         <Form>
           <Form.TextArea></Form.TextArea>
           <Form.Button>Opret link</Form.Button>

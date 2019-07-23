@@ -37,7 +37,6 @@ const QuizShareRoute: React.SFC<QuizShareRouteProps> = ({ match, history }) => {
     fetchQuestions();
   }, [dispatch, history, match.params.id, match.params.ids]);
 
-  console.log(questions);
   if (error) {
     toast(error.message + ' from id', { autoClose: 3000, type: toast.TYPE.ERROR });
     history.push('/');
