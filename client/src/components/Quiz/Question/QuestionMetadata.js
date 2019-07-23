@@ -12,6 +12,7 @@ import QuestionAnsweredCounter from './QuestionMetadata/QuestionAnsweredCounter'
 import QuestionMetadataLabel from './QuestionMetadata/QuestionMetadataLabel';
 import QuestionMetadataDropdown from './QuestionMetadata/QuestionMetadataDropdown';
 import { toast } from 'react-toastify';
+import { withRouter } from 'react-router';
 
 const QuestionMetadata = (props) => {
   const dispatch = useDispatch();
@@ -119,7 +120,7 @@ const QuestionMetadata = (props) => {
       <Grid.Column width={5} style={{ textAlign: 'right' }}>
         <Grid.Row style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
           <CopyToClipBoard
-            text={`https://medmcq.au.dk/quiz/${question.id}`}
+            text={`${window.location.href.split(/\/quiz/)[0]}/quiz/${question.id}`}
             onCopy={() =>
               toast('Kopieret til clipboard', { autoClose: 2000, type: toast.TYPE.SUCCESS })
             }
@@ -202,7 +203,9 @@ QuestionMetadata.propTypes = {
   voteAction: PropTypes.func
 };
 
-export default connect(
-  mapStateToProps,
-  actions
-)(QuestionMetadata);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    actions
+  )(QuestionMetadata)
+);
