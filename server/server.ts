@@ -5,7 +5,7 @@ import cookieSession from 'cookie-session';
 import passport from 'passport';
 import helmet from 'helmet';
 import express from 'express';
-import keys from './config/keys.js';
+const keys = require('./config/keys.js');
 const app = express();
 
 /**
