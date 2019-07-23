@@ -15,7 +15,7 @@ module.exports = {
     ...baseConfig,
     connection: dbConnection.test
   },
-  prod: {
+  production: {
     ...baseConfig,
     connection: dbConnection
   }
