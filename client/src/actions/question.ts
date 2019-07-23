@@ -49,7 +49,6 @@ export const getQuestions = ({ ids, quiz = true, profile = !quiz }) => async (
 
     case 'ids':
     case 'specific':
-      console.log(ids);
       res = await axios.get(questionApi, { params: { ids: ids.join(',') } });
       break;
     case 'profile':
