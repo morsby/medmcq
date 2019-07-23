@@ -14,9 +14,6 @@
     "client": "npm run genversion && cd client && npm start",
     "dev": "npm-run-all --parallel server client",
     "install-all": "npm install && cd server && npm install && cd .. && cd client && npm install",
-    "installProd": "npm run installProd:server && npm run installProd:client",
-    "installProd:server": "cd server && npm ci --only=production",
-    "installProd:client": "cd client && npm ci --only=production",
     "build": "npm run genversion && npm-run-all --sequential build:*",
     "build:server": "cd server && npm run build",
     "build:client": "cd client && npm run build",
@@ -29,7 +26,7 @@
     "test": "npm-run-all --parallel test:*",
     "test:server": "cd server && npm run test",
     "test:client": "cd client && npm run test",
-    "heroku-prebuild": "npm run installProd"
+    "heroku-prebuild": "npm run install-all"
   },
   "husky": {
     "hooks": {
