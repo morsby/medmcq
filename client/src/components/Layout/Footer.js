@@ -45,10 +45,6 @@ const Footer = (props) => {
               </p>
               <Icon name="heartbeat" />
               <Translate id="footer.developed_by" />
-              <p>
-                <Icon name="beer" />
-                <Translate id="footer.maintained_by" />
-              </p>
             </Grid.Column>
             <Grid.Column largeScreen={4} computer={4} tablet={6} mobile={16}>
               <Menu secondary vertical inverted fluid>
