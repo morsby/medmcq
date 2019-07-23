@@ -21,7 +21,6 @@ const knexConfig = require('./knexfile')[env];
 const knex = Knex(knexConfig);
 Model.knex(knex);
 
-// test
 /**
  * ================================
  * Other setup
