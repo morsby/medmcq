@@ -1,0 +1,18 @@
+{
+  "toast": {
+    "auth": {
+      "loginSuccess": ["Du er blevet logget ind", "You have been logged in"],
+      "loginError": ["Noget gik galt med dit login", "Something went wrong with your login"],
+      "logoutSuccess": ["Du er blevet logget ud", "You have been logged out"],
+      "logoutError": ["Noget gik galt med at logge ud", "Something went wrong with your logout"],
+      "fetchUserError": ["Kunne ikke hente brugeren", "Could not fetch the user"],
+      "fetchProfileError": ["Kunne ikke hente profilen", "Could not fetch the profile"]
+    },
+    "editProfile": {
+      "success": ["Din profil er blevet redigeret", "Your profile has been edited"],
+      "error": ["Der gik noget galt med din redigering", "Something went wrong with your edit"]
+    },
+    "genericError": ["Noget gik galt", "Something went wrong"],
+    "share": ["Linket er kopieret til clipboardet", "The link has been copied to the clipboard"]
+  }
+}

@@ -72,7 +72,7 @@ class EditProfile extends Component {
                                 {meta.error}
                               </Message>
                             )}
-                            {meta.touched && !meta.error && (
+                            {!meta.error && (
                               <Message warning visible>
                                 {translate('signup.form_fields.email_not_required_message')}
                               </Message>

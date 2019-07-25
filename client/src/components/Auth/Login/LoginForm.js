@@ -28,6 +28,9 @@ class LoginForm extends Component {
   onSubmit = async (values) => {
     let login = await this.props.login(values);
 
+    if (!login.type) {
+      return this.setState({ error: 'Login mislykkedes' });
+    }
     if (login.type === 'LoginSuccess') {
       return this.handleNavigation('root');
     } else {
