@@ -1,8 +1,7 @@
 import axios from 'axios';
-import { toast } from 'react-toastify';
-import { getTranslate } from 'react-localize-redux';
 import * as types from './types';
 import { getQuestions } from './question';
+import { makeToast } from './ui';
 
 export const checkUserAvailability = (field, value) => async () => {
   let res = await axios.post('/api/users/check-availability', {
@@ -24,11 +23,11 @@ export const login = (post) => async (dispatch) => {
 
   try {
     let response = await axios.post('/api/auth', post);
-    toast.success('LoginSuccess');
+    dispatch(makeToast('toast.auth.loginSuccess', 'success'));
     dispatch(fetchUser());
     return response.data;
   } catch ({ response }) {
-    toast.error(response.data.message);
+    dispatch(makeToast('toast.auth.loginError', 'error'));
   }
 };
 
@@ -36,12 +35,12 @@ export const logout = () => async (dispatch) => {
   try {
     let res = await axios.get('/api/auth/logout');
     if (res.data.type === 'LogoutSuccess') {
-      toast.success(res.data.type);
+      dispatch(makeToast('toast.auth.logoutSuccess', 'success'));
     } else {
-      toast.error('Something bad happened ...');
+      dispatch(makeToast('toast.auth.logoutError', 'error'));
     }
   } catch ({ response }) {
-    toast.error(response.data.type);
+    dispatch(makeToast('toast.auth.logoutError', 'error'));
   }
 
   dispatch(fetchUser());
@@ -52,7 +51,7 @@ export const fetchUser = () => async (dispatch) => {
   try {
     res = await axios.get('/api/auth');
   } catch ({ response }) {
-    toast.error(response.data.message);
+    dispatch(makeToast('toast.auth.fetchUserError', 'error'));
   }
 
   dispatch({ type: types.AUTH_CURRENT_USER, payload: res.data });
@@ -69,23 +68,24 @@ export const getProfile = (semesterId = null) => async (dispatch, getState) => {
       dispatch(getQuestions({ profile: true }))
     ]);
   } catch ({ response }) {
-    toast.error(response.data.message);
+    dispatch(makeToast('toast.auth.fetchProfileError', 'error'));
   }
 
   const questions = getState().questions.entities.questions;
   dispatch({ type: types.AUTH_PROFILE_SUCCESS, payload: { ...res.data, questions } });
 };
 
-export const editProfile = (values) => async (_dispatch, getState) => {
-  let { auth, localize } = getState();
-  const translate = getTranslate(localize);
+export const editProfile = (values) => async (dispatch, getState) => {
+  let { auth } = getState();
   try {
     await axios.patch(`/api/users/${auth.user.id}`, values);
 
     // TODO: FIX MSG
-    toast.success(translate('loginForm.password'));
+
+    dispatch(makeToast('toast.editProfile.success', 'success'));
+    dispatch(fetchUser());
   } catch ({ response }) {
-    toast.error('ProfileUpdateFailed');
+    dispatch(makeToast('toast.editProfile.error', 'error'));
   }
 };
 
@@ -110,24 +110,24 @@ export const getAnsweredQuestions = (answers) => async (dispatch) => {
   });
 };
 
-export const forgotPassword = (email, callback) => async () => {
+export const forgotPassword = (email, callback) => async (dispatch) => {
   let res;
   try {
     res = await axios.post('/api/users/forgot-password', { email: email });
   } catch ({ response }) {
     res = response;
-    toast.error(response.data.message);
+    dispatch(makeToast('toast.genericError', 'success'));
   }
   return callback(res.data);
 };
 
-export const resetPassword = (resetPasswordToken, values, callback) => async () => {
+export const resetPassword = (resetPasswordToken, values, callback) => async (dispatch) => {
   let res;
   try {
     await axios.post('/api/users/reset-password', { resetPasswordToken, ...values });
   } catch ({ response }) {
     res = response;
-    toast.error(response.data.message);
+    dispatch(makeToast('toast.genericError', 'success'));
   }
   return callback(res.data);
 };
