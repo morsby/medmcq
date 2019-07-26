@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import Dropdown from 'antd/lib/dropdown';
@@ -9,19 +9,54 @@ import { Icon } from 'semantic-ui-react';
 const { SubMenu } = Menu;
 
 const QuestionMetadataDropdown = ({ options, onChange, type }) => {
-  const handleDropdownPick = ({ key }) => {
-    onChange(key);
+  const [tagTree, setTagTree] = useState(null);
+
+  const handleDropdownPick = (id) => {
+    onChange(id);
   };
+
+  useEffect(() => {
+    const convertMetadataToTree = () => {
+      return _.filter(options, (t) => !t.parentId).map((t) => ({
+        title: t.name,
+        key: t.id,
+        children: getChildrenOfMetadata(t.id)
+      }));
+    };
+
+    const getChildrenOfMetadata = (tagId) => {
+      return _.filter(options, (t) => t.parentId === tagId).map((t) => ({
+        title: t.name,
+        key: t.id,
+        children: getChildrenOfMetadata(t.id)
+      }));
+    };
+
+    setTagTree(convertMetadataToTree());
+  }, [options]);
 
   const createDropdownItems = (tags) => {
     let items = [];
 
     for (const t of tags) {
-      items.push(
-        <Menu.Item onClick={handleDropdownPick} key={t.id}>
-          {t.name}
-        </Menu.Item>
-      );
+      console.log(t);
+      if (t.children.length > 0) {
+        items.push(
+          <SubMenu
+            onTitleClick={() => handleDropdownPick(t.key)}
+            title={t.title.charAt(0).toUpperCase() + t.title.slice(1)}
+            key={t.key}
+          >
+            {createDropdownItems(t.children)}
+          </SubMenu>
+        );
+      } else {
+        items.push(
+          <Menu.Item onClick={() => handleDropdownPick(t.key)} key={t.key}>
+            {t.title}
+          </Menu.Item>
+        );
+      }
     }
 
     if (items.length === 0) {
@@ -35,12 +70,14 @@ const QuestionMetadataDropdown = ({ options, onChange, type }) => {
     if (type === 'tag') {
       let dropdown = [];
 
-      const groupedTags = _.groupBy(options, (t) => t.category);
-
-      for (const key in groupedTags) {
+      for (const t of tagTree) {
         dropdown.push(
-          <SubMenu title={key.charAt(0).toUpperCase() + key.slice(1)} key={key}>
-            {createDropdownItems(groupedTags[key])}
+          <SubMenu
+            onTitleClick={() => handleDropdownPick(t.key)}
+            title={t.title.charAt(0).toUpperCase() + t.title.slice(1)}
+            key={t.key}
+          >
+            {createDropdownItems(t.children)}
           </SubMenu>
         );
       }
@@ -49,16 +86,17 @@ const QuestionMetadataDropdown = ({ options, onChange, type }) => {
     }
 
     if (type === 'specialty') {
-      return _.map(options, (o) => {
+      return _.map(options, (s) => {
         return (
-          <Menu.Item onClick={handleDropdownPick} key={o.id}>
-            {o.name}
+          <Menu.Item onClick={() => handleDropdownPick(s.key)} key={s.id}>
+            {s.name}
           </Menu.Item>
         );
       });
     }
   };
 
+  if (!tagTree) return null;
   return (
     <span
       style={{
