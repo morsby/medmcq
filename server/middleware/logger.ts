@@ -4,11 +4,18 @@ const router = express.Router();
 
 router.use(async (req, res, next) => {
   if (req.url.includes('api')) {
+    let body = req.body;
+
+    // If password is passed, do not log it
+    if (body.password) {
+      delete body.password;
+    }
+
     await Logger.query().insert({
       method: req.method,
       url: req.url,
       query: req.query ? JSON.stringify(req.query) : null,
-      body: req.body ? JSON.stringify(req.body) : null
+      body: body
     });
   }
 
