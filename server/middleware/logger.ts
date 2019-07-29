@@ -15,7 +15,7 @@ router.use(async (req, res, next) => {
       method: req.method,
       url: req.url,
       query: req.query ? JSON.stringify(req.query) : null,
-      body: body
+      body: JSON.stringify(body)
     });
   }
 
