@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.use(async (req, res, next) => {
   if (req.url.includes('api')) {
-    let body = req.body;
+    let body = { ...req.body };
 
     // If password is passed, do not log it
     if (body.password) {
