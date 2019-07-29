@@ -4,7 +4,8 @@ const { dbConnection } = require('./config/keys');
 let baseConfig = {
   client: 'mysql',
   charset: 'utf8_unicode_ci',
-  ...knexSnakeCaseMappers()
+  ...knexSnakeCaseMappers(),
+  migrations: 'server/migrations'
 };
 module.exports = {
   development: {
