@@ -3,6 +3,10 @@ import Logger from '../models/logger';
 const router = express.Router();
 
 router.use(async (req, res, next) => {
+  if (req.url.includes('api/migrate')) {
+    return next();
+  }
+
   if (req.url.includes('api')) {
     let body = { ...req.body };
 
