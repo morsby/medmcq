@@ -8,7 +8,7 @@ Siden er lavet med tilladelse fra Institut for Klinisk Medicin, Health, Aarhus U
 
 - [x] Bedre struktur af redux state
 - [x] Integrering af voting
-- [ ] Forbedret migrering (p.t. er der fx forvirring omkring tags og tilhørsforhold til semestre)
+- [x] Forbedret migrering (p.t. er der fx forvirring omkring tags og tilhørsforhold til semestre)
 - [ ] En masse opdatering af redux/frontend
 - [ ] Optimering af visning af besvarede spørgsmål (loading er langsom). Evt. via [react-window](https://github.com/bvaughn/react-window)? [CSS overflow-x](https://www.w3schools.com/cssref/css3_pr_overflow-x.asp) sat til auto bør også virke, uden ekstra dependencies.
 
