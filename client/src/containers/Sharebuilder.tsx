@@ -16,7 +16,8 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
     userInput.forEach((input) => {
       const numbers = input.match(/\d+/g);
 
-      // Vi tager det sidste nummer i linket, for altid at ramme det korrekte ID (eksempelvis hvis man deler inde i et share-link eller fra localhost:3000)
+      // Vi tager det sidste nummer i linket, for altid at ramme det korrekte ID
+      // (eksempelvis hvis man deler inde i et share-link eller fra localhost:3000)
       ids.push(numbers[numbers.length - 1]);
     });
 
@@ -52,12 +53,11 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
         )}
         {error && !error.message.includes('a foreign key constraint fails') && (
           <Message color="red">
-            <b> Der er gået noget galt, er du sikker på at alle dine links er korrekte? {} </b>
+            <b>Der er gået noget galt, er du sikker på at alle dine links er korrekte?</b>{' '}
             <span>
               Fejlbeskeden er:
               <br /> {error.message}
             </span>
-            )}
           </Message>
         )}
         {data && (
