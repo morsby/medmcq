@@ -25,6 +25,7 @@ const QuizShareBuilderLoader: React.SFC<QuizShareBuilderLoader> = ({ match }) =>
       await dispatch({ type: types.QUIZ_NAVIGATE, payload: 0 });
     };
 
+    // Når ID'er er hentet gennem useQuery, så henter vi spørgsmålene fra ID'erne normalt
     if (!loading) {
       fetchQuestions();
     }

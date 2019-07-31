@@ -2,6 +2,8 @@ import { gql } from 'apollo-server-express';
 import ShareLink from '../../models/shareLink';
 import crypto from 'crypto';
 
+// Husk altid extend på alle typer af queries, da det er et krav for modularitet af graphql
+// (måske i fremtiden det ikke behøves)
 export const typeDefs = gql`
   extend type Query {
     shareLink(shareId: String): [String]
@@ -19,6 +21,8 @@ export const resolvers = {
         .where('shareId', '=', shareId)
         .select('questionId');
 
+      // Hent spørgsmåls ID'er fra det share,
+      // da questions så igen hentes fra frontend (gennem normal ID logik)
       let questionIds = [];
       ids.forEach((id) => {
         questionIds.push(id.questionId);
@@ -35,6 +39,7 @@ export const resolvers = {
         .join('')
         .substring(0, 10);
 
+      // Opret links, så der kan sættes flere ind i SQL
       let links: any = [];
       for (const id of questionIds) {
         links.push({
@@ -47,6 +52,7 @@ export const resolvers = {
         .insertGraphAndFetch(links)
         .first();
 
+      // Da shareID er det samme for alle, returneres blot det første tilbage
       return shareLink.shareId;
     }
   }
