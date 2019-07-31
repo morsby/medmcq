@@ -11,8 +11,8 @@ import { Translate } from 'react-localize-redux';
 import QuestionAnsweredCounter from './QuestionMetadata/QuestionAnsweredCounter';
 import QuestionMetadataLabel from './QuestionMetadata/QuestionMetadataLabel';
 import QuestionMetadataDropdown from './QuestionMetadata/QuestionMetadataDropdown';
-import { toast } from 'react-toastify';
 import { withRouter } from 'react-router';
+import { makeToast } from 'actions/index';
 
 const QuestionMetadata = (props) => {
   const dispatch = useDispatch();
@@ -121,9 +121,7 @@ const QuestionMetadata = (props) => {
         <Grid.Row style={{ display: 'flex', justifyContent: 'center', alignContent: 'center' }}>
           <CopyToClipBoard
             text={`${window.location.href.split(/\/quiz/)[0]}/quiz/${question.id}`}
-            onCopy={() =>
-              toast('Kopieret til clipboard', { autoClose: 2000, type: toast.TYPE.SUCCESS })
-            }
+            onCopy={() => dispatch(makeToast('toast.share', 'success'))}
           >
             <Button basic color="blue">
               <Translate id="voting.share" />

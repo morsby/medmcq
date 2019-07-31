@@ -5,6 +5,7 @@ import cookieSession from 'cookie-session';
 import passport from 'passport';
 import helmet from 'helmet';
 import express from 'express';
+import logger from './middleware/logger';
 const keys = require('./config/keys.js');
 const app = express();
 
@@ -18,7 +19,7 @@ const app = express();
 const { Model } = require('objection');
 const Knex = require('knex');
 const knexConfig = require('./knexfile')[env];
-const knex = Knex(knexConfig);
+export const knex = Knex(knexConfig);
 Model.knex(knex);
 
 // test
@@ -29,7 +30,6 @@ Model.knex(knex);
  */
 
 app.use(helmet());
-
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
@@ -48,6 +48,7 @@ require('./config/passport')(passport); // pass passport for configuration
 
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
+app.use(logger); // Logging of all requests
 
 // Real routes
 const routes = require('./routes');

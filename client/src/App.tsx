@@ -8,6 +8,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { withLocalize } from 'react-localize-redux';
 import { renderToStaticMarkup } from 'react-dom/server'; // required to initialize react-localize-redux
 import authTranslations from './components/Auth/authTranslations.json'; // fordi der ikke er en gennemgående component i dette regi
+import toastTranslations from 'Translations/toastTranslations.json';
 
 // HOCs
 import PrivateRoute from './components/Misc/HOC/PrivateRoute';
@@ -71,6 +72,7 @@ class App extends Component<AppProps> {
     this.props.invalidateMetadata();
 
     this.props.addTranslation(authTranslations);
+    this.props.addTranslation(toastTranslations);
 
     const languages = ['dk', 'gb'];
     const defaultLanguage = this.props.defaultLanguage || languages[0];
@@ -99,7 +101,7 @@ class App extends Component<AppProps> {
             <NewVersionMessage />
             <ToastContainer
               position="top-center"
-              autoClose={5000}
+              autoClose={3000}
               hideProgressBar={false}
               newestOnTop
               closeOnClick
