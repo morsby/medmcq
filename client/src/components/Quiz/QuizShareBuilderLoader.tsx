@@ -1,10 +1,13 @@
 import React, { useEffect } from 'react';
 import { RouteComponentProps } from 'react-router';
-import { useDispatch, useSelector } from 'react-redux';
-import { IReduxState } from 'reducers';
+import { useDispatch } from 'react-redux';
 import LoadingPage from 'components/Misc/Utility-pages/LoadingPage';
 import Quiz from 'pages/Quiz';
 import * as types from '../../actions/types';
+import { useQuery } from 'react-apollo-hooks';
+import { getQuestions } from 'actions';
+import { fetchQuestionIdsFromShareLink as query_fetchQuestionIdsFromShareLink } from 'queries/shareLink';
+import ErrorBoundary from 'components/Misc/Utility-pages/ErrorBoundary';
 
 export interface QuizShareBuilderLoader extends RouteComponentProps {
   match: any;
@@ -12,21 +15,23 @@ export interface QuizShareBuilderLoader extends RouteComponentProps {
 
 const QuizShareBuilderLoader: React.SFC<QuizShareBuilderLoader> = ({ match }) => {
   const dispatch = useDispatch();
-  const isFetching = useSelector((state: IReduxState) => state.questions.isFetching);
-  const questions = useSelector((state: IReduxState) => state.questions.entities.questions);
+  const { data, error, loading } = useQuery(query_fetchQuestionIdsFromShareLink, {
+    variables: { shareId: match.params.id }
+  });
 
   useEffect(() => {
     const fetchQuestions = async () => {
-      const ids = match.params.id;
-      // Hent sharelink ud fra shared
-      // Tæl antal af besøg til dette link
+      await dispatch(getQuestions({ ids: data.shareLink, quiz: true }));
       await dispatch({ type: types.QUIZ_NAVIGATE, payload: 0 });
     };
 
-    fetchQuestions();
-  }, [dispatch, match.params.id, match.params.ids]);
+    if (!loading) {
+      fetchQuestions();
+    }
+  }, [data, dispatch, loading, match.params.id, match.params.ids]);
 
-  if (isFetching || (questions && questions.length < 1)) return <LoadingPage />;
+  if (loading) return <LoadingPage />;
+  if (error) return <ErrorBoundary />;
   return <Quiz />;
 };
 

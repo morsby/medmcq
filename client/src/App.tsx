@@ -114,8 +114,8 @@ class App extends Component<AppProps> {
               <Switch>
                 <Route path={urls.about} component={About} />
                 <Route path={urls.contact} component={Contact} />
-                <Route path={'/quiz/share/:id'} component={QuizShareBuilderLoader} />
-                <Route path={'/quiz/share'} component={Sharebuilder} />
+                <Route path={'/share/:id'} component={QuizShareBuilderLoader} />
+                <Route path={'/share'} component={Sharebuilder} />
                 <Route path={urls.quizShareRoute} component={QuizShareRoute} />
                 <Route path={urls.quiz} component={Quiz} />
                 <Route path={urls.signup} component={Signup} />
