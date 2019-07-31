@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import * as actions from 'actions';
 import { Form, TextArea, Button, Message } from 'semantic-ui-react';
 
 import { Translate } from 'react-localize-redux';
 
 import QuestionCommentSingle from './QuestionCommentSingle';
+import { makeToast } from 'actions';
 
 /**
  * Viser kommentarer til et spørgsmål
@@ -28,20 +29,30 @@ const QuestionComments = ({
   let form;
   const [editCommentId, setEditCommentId] = useState(null);
   const [comment, setComment] = useState('');
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
 
-  const onCommentPost = () => {
+  const onCommentPost = async () => {
     let isPrivate = type === 'private';
     let isAnonymous = false;
+    setLoading(true);
 
-    if (editCommentId) {
-      editComment(question.id, editCommentId, comment, isPrivate, isAnonymous);
-      setEditCommentId(null);
-    } else {
-      writeComment(question.id, comment, isPrivate, isAnonymous);
+    try {
+      if (editCommentId) {
+        await editComment(question.id, editCommentId, comment, isPrivate, isAnonymous);
+        setEditCommentId(null);
+      } else {
+        await writeComment(question.id, comment, isPrivate, isAnonymous);
+      }
+
+      // TODO: Vent med at slette kommentar til den ER postet
+      setComment('');
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      dispatch(makeToast('toast.genericError', 'error'));
+      console.log(error);
     }
-
-    // TODO: Vent med at slette kommentar til den ER postet
-    setComment('');
   };
 
   const onEditComment = (comment) => {
@@ -82,18 +93,18 @@ const QuestionComments = ({
           )}
           <Button
             onClick={onCommentPost}
-            disabled={comment.length < 3}
+            disabled={comment.length < 3 || loading}
             style={{ margin: '0.5em 1em 0.5em 0' }}
+            loading={loading}
           >
             <Translate id="questionComments.comment" />
           </Button>
           {editCommentId && (
             <Button
               negative
-              onClick={() => {
-                setEditCommentId(null);
-                setComment('');
-              }}
+              onClick={() => setEditCommentId(null)}
+              disabled={loading}
+              loading={loading}
             >
               <Translate id="questionComments.undo_edit" />
             </Button>

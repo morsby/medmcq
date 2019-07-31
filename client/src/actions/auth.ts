@@ -54,6 +54,8 @@ export const fetchUser = () => async (dispatch) => {
     dispatch(makeToast('toast.auth.fetchUserError', 'error'));
   }
 
+  if (!res) return;
+
   dispatch({ type: types.AUTH_CURRENT_USER, payload: res.data });
 };
 
