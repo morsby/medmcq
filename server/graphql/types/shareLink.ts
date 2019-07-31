@@ -10,13 +10,13 @@ export const typeDefs = gql`
   }
 
   extend type Mutation {
-    createShareLink(questionIds: [String]!, published: Boolean): String
+    createShareLink(questionIds: [String]!): String
   }
 `;
 
 export const resolvers = {
   Query: {
-    shareLink: async (args, { shareId }) => {
+    shareLink: async (_args, { shareId }) => {
       const ids = await ShareLink.query()
         .where('shareId', '=', shareId)
         .select('questionId');
@@ -33,11 +33,17 @@ export const resolvers = {
   },
 
   Mutation: {
-    createShareLink: async (args, { questionIds }) => {
+    createShareLink: async (_args, { questionIds }) => {
       const randomId = crypto
         .randomBytes(16)
         .join('')
         .substring(0, 10);
+
+      // HVIS det utænkeligt skulle ske, at ID'et er det samme
+      const alreadyExists = await ShareLink.query()
+        .where('shareId', '=', randomId)
+        .first();
+      if (alreadyExists) throw new Error('The random ID already exists (one in a million error!)');
 
       // Opret links, så der kan sættes flere ind i SQL
       let links: any = [];
