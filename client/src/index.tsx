@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 // GraphQL
 import { ApolloProvider } from 'react-apollo-hooks';
-import { client } from 'apolloClient';
+import apolloClient from 'apolloClient';
 // Redux
 import { Provider } from 'react-redux';
 import { createMigrate, persistStore, persistReducer } from 'redux-persist';
@@ -44,7 +44,7 @@ const persistConfig = {
   stateReconciler: autoMergeLevel2, // see "Merge Process" section for details.
   version: 7,
   migrate: createMigrate(migrations),
-  whitelist: ['quiz', 'questions', 'metadata', 'ui', 'settings'] // to disable persists
+  whitelist: ['quiz', 'questions', 'metadata', 'ui', 'settings', 'shareBuilder'] // to disable persists
 };
 
 const pReducer = persistReducer(persistConfig, reducers);
@@ -68,7 +68,7 @@ export const persistor = persistStore(store);
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate loading={<LoadingPage />} persistor={persistor}>
-      <ApolloProvider client={client}>
+      <ApolloProvider client={apolloClient}>
         <LocalizeProvider store={store}>
           <LocalizedApp />
         </LocalizeProvider>

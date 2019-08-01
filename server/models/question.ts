@@ -74,7 +74,7 @@ class Question extends BaseModel {
       },
 
       semester: {
-        relation: Model.ManyToManyRelation,
+        relation: Model.HasOneThroughRelation,
         modelClass: Semester,
         join: {
           from: 'question.examSetId',
@@ -147,7 +147,7 @@ class Question extends BaseModel {
   }
 
   static get defaultEager() {
-    return '[correctAnswers, semester, publicComments.user, specialties(active), tags(active)]';
+    return '[correctAnswers, semester, publicComments.user, specialties(active), tags(active), examSet]';
   }
 
   $formatJson(json) {

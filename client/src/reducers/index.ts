@@ -6,6 +6,7 @@ import authReducer from './authReducer';
 import questionReducer from './questionReducer';
 import metadataReducer from './metadataReducer';
 import uiReducer from './uiReducer';
+import shareBuilderReducer, { IShareBuilderState } from 'reducers/shareBuilderReducer';
 
 export interface IReduxState {
   // TODO: Skal types ud fra reducers
@@ -16,6 +17,7 @@ export interface IReduxState {
   settings: any;
   auth: any;
   localize: any;
+  shareBuilder: IShareBuilderState;
 }
 
 export default combineReducers({
@@ -27,5 +29,6 @@ export default combineReducers({
   quiz: quizReducer,
   settings: settingsReducer,
   auth: authReducer,
-  localize: localizeReducer
+  localize: localizeReducer,
+  shareBuilder: shareBuilderReducer
 });

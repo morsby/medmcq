@@ -53,3 +53,4 @@ export const LOAD_SETS = 'LOAD_SETS';
 export const LOAD_SETS_FINISH = 'LOAD_SETS_FINISH';
 export const CREATE_BOOKMARK = createAction('CREATE_BOOKMARK');
 export const REMOVE_BOOKMARK = createAction('REMOVE_BOOKMARK');
+export const CHANGE_PICKED = createAction('CHANGE_PICKED');
