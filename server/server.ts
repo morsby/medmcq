@@ -6,6 +6,7 @@ import passport from 'passport';
 import helmet from 'helmet';
 import express from 'express';
 import logger from './middleware/logger';
+import apolloClient from './graphql/apolloServer';
 const keys = require('./config/keys.js');
 const app = express();
 
@@ -32,6 +33,7 @@ Model.knex(knex);
 app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+apolloClient.applyMiddleware({ app });
 
 // For logins:
 app.use(cookieParser()); // read cookies (needed for auth)

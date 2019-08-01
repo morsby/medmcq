@@ -1,0 +1,31 @@
+.react-tagsinput {
+  background-color: #fff;
+  overflow: hidden;
+  padding-left: 5px;
+  padding-top: 5px;
+  margin: 2rem;
+}
+
+.react-tagsinput-tag {
+  background-color: #006bc9;
+  border-radius: 2px;
+  border: 1px solid black;
+  color: white;
+  display: inline-block;
+  font-family: sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  margin-bottom: 5px;
+  margin-right: 5px;
+  padding: 5px;
+}
+
+.react-tagsinput-remove {
+  cursor: pointer;
+  font-weight: bold;
+  color: white;
+}
+
+.react-tagsinput-tag a::before {
+  content: ' ×';
+}

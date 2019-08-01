@@ -1,6 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
+// GraphQL
+import { ApolloProvider } from 'react-apollo-hooks';
+import { client } from 'apolloClient';
 // Redux
 import { Provider } from 'react-redux';
 import { createMigrate, persistStore, persistReducer } from 'redux-persist';
@@ -65,9 +68,11 @@ export const persistor = persistStore(store);
 ReactDOM.render(
   <Provider store={store}>
     <PersistGate loading={<LoadingPage />} persistor={persistor}>
-      <LocalizeProvider store={store}>
-        <LocalizedApp />
-      </LocalizeProvider>
+      <ApolloProvider client={client}>
+        <LocalizeProvider store={store}>
+          <LocalizedApp />
+        </LocalizeProvider>
+      </ApolloProvider>
     </PersistGate>
   </Provider>,
   document.querySelector('#root')
