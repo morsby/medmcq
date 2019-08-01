@@ -27,7 +27,6 @@ interface filter {
 
 const Sharebuilder: React.SFC<SharebuilderProps> = ({ history }) => {
   const dispatch = useDispatch();
-  const [userInput, setUserInput] = useState([]);
   const [filter, setFilter]: [filter, Function] = useState({
     semester: 4,
     text: '',
@@ -39,11 +38,10 @@ const Sharebuilder: React.SFC<SharebuilderProps> = ({ history }) => {
   const semesters = useSelector((state: IReduxState) => state.metadata.entities.semesters);
   const specialties = useSelector((state: IReduxState) => state.metadata.entities.specialties);
   const tags = useSelector((state: IReduxState) => state.metadata.entities.tags);
-  const [
-    createShareLink,
-    { loading: createLinkLoading, data: createLinkData, error: createLinkError }
-  ] = useMutation(query_createShareLink);
-  const { loading, data, error } = useQuery(queries.fetchFilteredQuestions, { variables: filter });
+  const [createShareLink, { loading: createLinkLoading, data: createLinkData }] = useMutation(
+    query_createShareLink
+  );
+  const { loading, data } = useQuery(queries.fetchFilteredQuestions, { variables: filter });
   const { data: pickedQuestions, loading: idsLoading } = useQuery(queries.getQuestionsFromIds, {
     variables: { ids: picked }
   });
@@ -211,12 +209,19 @@ const Sharebuilder: React.SFC<SharebuilderProps> = ({ history }) => {
           Opret link
         </Button>
         {createLinkData && (
-          <p>
-            Dette er dit link:{' '}
-            <a href={window.location.href + '/' + createLinkData.createShareLink}>
-              {window.location.href + '/' + createLinkData.createShareLink}
-            </a>
-          </p>
+          <div style={{ border: '2px solid grey', padding: '1rem', margin: '1rem' }}>
+            <h3>
+              Dette er dit link:{' '}
+              <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href={window.location.href + '/' + createLinkData.createShareLink}
+              >
+                {window.location.href + '/' + createLinkData.createShareLink}
+              </a>
+            </h3>
+            <p>Linket åbner i et nyt vindue. Husk at gemme det hvis du skal bruge det igen.</p>
+          </div>
         )}
         <Divider />
         <label>Semester</label>
