@@ -87,7 +87,7 @@ const QuestionMetadataDropdown = ({ options, onChange, type }) => {
     if (type === 'specialty') {
       return _.map(options, (s) => {
         return (
-          <Menu.Item onClick={() => handleDropdownPick(s.key)} key={s.id}>
+          <Menu.Item onClick={() => handleDropdownPick(s.id)} key={s.id}>
             {s.name}
           </Menu.Item>
         );
