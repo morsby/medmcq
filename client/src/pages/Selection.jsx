@@ -109,7 +109,7 @@ class SelectionMain extends Component {
       <div className="flex-container">
         <Container className="content">
           <Header as="h1" style={{ textAlign: 'center' }}>
-            medMcq
+            MedMcq
           </Header>
           <Divider />
           <SelectionSemesterSelector

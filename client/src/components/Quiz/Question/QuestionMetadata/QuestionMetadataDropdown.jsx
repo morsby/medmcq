@@ -39,7 +39,6 @@ const QuestionMetadataDropdown = ({ options, onChange, type }) => {
     let items = [];
 
     for (const t of tags) {
-      console.log(t);
       if (t.children.length > 0) {
         items.push(
           <SubMenu
