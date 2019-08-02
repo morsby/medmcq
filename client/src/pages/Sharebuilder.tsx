@@ -64,7 +64,9 @@ const Sharebuilder: React.SFC<SharebuilderProps> = ({ history }) => {
   };
 
   const handleChange = (value: string, type: keyof filter) => {
-    setIsFilterChanged(true);
+    if (!isFilterChanged) {
+      setIsFilterChanged(true);
+    }
     setFilter((prevFilter) => ({ ...prevFilter, [type]: value }));
   };
 
