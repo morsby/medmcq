@@ -88,7 +88,7 @@ const Sharebuilder: React.SFC<SharebuilderProps> = ({ history }) => {
     dispatch(actions.changePicked(newPick));
   };
 
-  // Function til at skabe linket, når man har bygget færdigt
+  // Function til at skabe linket, når man har bygget færdigt - kalder useMutation
   const handleCreateLink = () => {
     createShareLink({ variables: { questionIds: picked } });
   };
