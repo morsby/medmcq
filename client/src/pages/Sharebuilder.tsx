@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Segment, Dropdown, Divider } from 'semantic-ui-react';
 import { useMutation, useQuery } from 'react-apollo-hooks';
 import { createShareLink as query_createShareLink } from 'queries/shareLink';
@@ -34,13 +34,6 @@ const Sharebuilder: React.SFC<SharebuilderProps> = ({ history }) => {
     specialties: [],
     id: ''
   });
-  const [queryFilter, setQueryFilter]: [filter, Function] = useState({
-    semester: 999,
-    text: '',
-    tags: [],
-    specialties: [],
-    id: ''
-  });
   const [isFilterChanged, setIsFilterChanged] = useState(false);
   const picked = useSelector((state: IReduxState) => state.shareBuilder.picked);
   const semesters = useSelector((state: IReduxState) => state.metadata.entities.semesters);
@@ -55,7 +48,13 @@ const Sharebuilder: React.SFC<SharebuilderProps> = ({ history }) => {
 
   // Hvis tomt filter, søger vi på et ikke-eksisterende semester
   const useFetchQuestions = () => {
-    const { loading, data } = useQuery(queries.fetchFilteredQuestions, { variables: queryFilter });
+    let newFilter;
+    if (!isFilterChanged) {
+      newFilter = { semester: 999 };
+    } else {
+      newFilter = filter;
+    }
+    const { loading, data } = useQuery(queries.fetchFilteredQuestions, { variables: newFilter });
     return { loading, data };
   };
   const { loading, data } = useFetchQuestions();
@@ -64,27 +63,10 @@ const Sharebuilder: React.SFC<SharebuilderProps> = ({ history }) => {
     createShareLink({ variables: { questionIds: picked } });
   };
 
-  useEffect(() => {
-    const changeFilter = () => {
-      if (!isFilterChanged) {
-        return;
-      } else {
-        setQueryFilter(filter);
-      }
-    };
-
-    const debounceFilter = _.debounce(changeFilter, 2000);
-
-    debounceFilter.cancel();
-
-    debounceFilter();
-  }, [filter, isFilterChanged]);
-
   const handleChange = (value: string, type: keyof filter) => {
     if (!isFilterChanged) {
       setIsFilterChanged(true);
     }
-
     setFilter((prevFilter) => ({ ...prevFilter, [type]: value }));
   };
 
