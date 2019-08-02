@@ -41,7 +41,21 @@ const Sharebuilder: React.SFC<SharebuilderProps> = ({ history }) => {
   const [createShareLink, { loading: createLinkLoading, data: createLinkData }] = useMutation(
     query_createShareLink
   );
-  const { loading, data } = useQuery(queries.fetchFilteredQuestions, { variables: filter });
+
+  // Hvis tomt filter, søger vi på et ikke-eksisterende semester
+  const useFetchQuestions = () => {
+    let { text, tags, specialties, id } = filter;
+    let newFilter;
+    if (!text && tags.length === 0 && specialties.length === 0 && !id) {
+      newFilter = { semester: 999 };
+    } else {
+      newFilter = filter;
+    }
+    const { loading, data } = useQuery(queries.fetchFilteredQuestions, { variables: newFilter });
+    return { loading, data };
+  };
+  const { loading, data } = useFetchQuestions();
+
   const { data: pickedQuestions, loading: idsLoading } = useQuery(queries.getQuestionsFromIds, {
     variables: { ids: picked }
   });
