@@ -26,7 +26,6 @@ interface IFilter {
 }
 
 const Sharebuilder: React.SFC<SharebuilderProps> = ({ history }) => {
-  const dispatch = useDispatch();
   const [filter, setFilter]: [IFilter, Function] = useState({
     semester: 4,
     text: '',
@@ -41,10 +40,13 @@ const Sharebuilder: React.SFC<SharebuilderProps> = ({ history }) => {
     specialties: [],
     id: ''
   });
+  // Redux
+  const dispatch = useDispatch();
   const picked = useSelector((state: IReduxState) => state.shareBuilder.picked);
   const semesters = useSelector((state: IReduxState) => state.metadata.entities.semesters);
   const specialties = useSelector((state: IReduxState) => state.metadata.entities.specialties);
   const tags = useSelector((state: IReduxState) => state.metadata.entities.tags);
+  // GraphQL
   const [createShareLink, { loading: createLinkLoading, data: createLinkData }] = useMutation(
     query_createShareLink
   );
@@ -52,20 +54,15 @@ const Sharebuilder: React.SFC<SharebuilderProps> = ({ history }) => {
     variables: { ids: picked }
   });
   const { loading, data } = useQuery(queries.fetchFilteredQuestions, { variables: queryFilter });
-
-  // Debounce filter, for ikke at query på hvert keystroke
-  const changeQueryFilter = (filter: IFilter) => {
-    setQueryFilter(filter);
-  };
+  // Debounce filter, for ikke at query på hvert keystroke (delay er 1 sekund, som angivet herunder)
   const debounceQueryFilter = useCallback(
-    _.debounce((filter: IFilter) => changeQueryFilter(filter), 1000),
+    _.debounce((filter: IFilter) => setQueryFilter(filter), 1000),
     []
   );
 
-  const handleCreateLink = () => {
-    createShareLink({ variables: { questionIds: picked } });
-  };
-
+  // UseEffect til at skifte query filteret, men kun hvis man faktisk har valgt filtre
+  // Er en lidt "omstændig" måde at undgå at useQuery bliver kaldt uden parameters,
+  // da det henter alle spørgsmål. Bedre implementering søges.. ;)
   useEffect(() => {
     const { text, tags, specialties, id } = filter;
     if (text || tags.length > 0 || specialties.length > 0 || id) {
@@ -77,6 +74,7 @@ const Sharebuilder: React.SFC<SharebuilderProps> = ({ history }) => {
     setFilter((prevFilter) => ({ ...prevFilter, [type]: value }));
   };
 
+  // Kalder redux når man har valgt et spørgsmål, og lægger det her (under shareBuilder reducer -> picked)
   const handlePick = (value) => {
     const index = _.indexOf(picked, value);
 
@@ -88,6 +86,11 @@ const Sharebuilder: React.SFC<SharebuilderProps> = ({ history }) => {
     const newPick = picked.concat(value);
 
     dispatch(actions.changePicked(newPick));
+  };
+
+  // Function til at skabe linket, når man har bygget færdigt
+  const handleCreateLink = () => {
+    createShareLink({ variables: { questionIds: picked } });
   };
 
   const columns = [
