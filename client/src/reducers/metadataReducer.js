@@ -25,6 +25,7 @@ export default createReducer(initialState, {
    */
   [types.INVALIDATE_METADATA]: (state) => {
     state.didInvalidate = true;
+    state.isFetching = false;
   },
   /*
    * Når et API-kald til at hente metadata starter
