@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import _ from 'lodash';
 import { IReduxState } from 'reducers';
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -39,12 +39,21 @@ const SelectionSetSelector = () => {
         </p>
       )}
 
-      {semester.examSets.map((setId) => {
-        let set = metadata.entities.examSets[setId];
-        return (
-          <SetRadioButton key={set.id} set={set} selectedSet={selectedSetId} onChange={onChange} />
-        );
-      })}
+      {_(semester.examSets)
+        .sortBy((setId) => metadata.entities.examSets[setId].year)
+        .reverse()
+        .value()
+        .map((setId) => {
+          const set = metadata.entities.examSets[setId];
+          return (
+            <SetRadioButton
+              key={set.id}
+              set={set}
+              selectedSet={selectedSetId}
+              onChange={onChange}
+            />
+          );
+        })}
     </Form>
   );
 };
