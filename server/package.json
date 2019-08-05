@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node build/server.js",
+    "start": "node -r tsconfig-paths/register build/server.js",
     "dev": "nodemon",
     "build": "tsc -p tsconfig.json",
     "test": "NODE_ENV=test jest --runInBand --bail --forceExit --detectOpenHandles",
