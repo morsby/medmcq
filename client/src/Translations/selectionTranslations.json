@@ -50,6 +50,10 @@
     "header": [
       "For ${semester}. semester er der følgende eksamenssæt at vælge mellem:",
       "For the ${semester}th semester, the following exam sets can be selected:"
+    ],
+    "subtitle": [
+      "Tryk på fluebenet længst til højre for sættet, for manualt at sætte det som færdigt.",
+      "Click on the rightmost tickmark to manually set the set as completed."
     ]
   },
   "selectionSpecialtiesSelector": {
