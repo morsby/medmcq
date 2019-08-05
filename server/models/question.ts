@@ -152,8 +152,8 @@ class Question extends BaseModel {
 
   $formatJson(json) {
     json = super.$formatJson(json);
-    if (json.semester && Array.isArray(json.semester)) {
-      json.semester = json.semester[0].id;
+    if (json.semester) {
+      json.semester = json.semester.id;
     }
 
     return json;
