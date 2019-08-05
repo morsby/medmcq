@@ -217,6 +217,7 @@ const Sharebuilder: React.SFC<SharebuilderProps> = ({ history }) => {
           columns={columns}
           loading={idsLoading}
           dataSource={!idsLoading ? pickedQuestions.questions : null}
+          expandedRowRender={(record) => <ExtendedRow record={record} />}
         />
         <Divider hidden />
         <Button type="primary" disabled={createLinkLoading} onClick={handleCreateLink}>
