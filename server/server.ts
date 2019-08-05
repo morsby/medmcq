@@ -33,7 +33,6 @@ Model.knex(knex);
 app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-apolloClient.applyMiddleware({ app });
 
 // For logins:
 app.use(cookieParser()); // read cookies (needed for auth)
@@ -51,6 +50,9 @@ require('./config/passport')(passport); // pass passport for configuration
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(logger); // Logging of all requests
+
+// GraphQL
+apolloClient.applyMiddleware({ app });
 
 // Real routes
 const routes = require('./routes');

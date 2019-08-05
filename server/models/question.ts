@@ -1,8 +1,26 @@
 import BaseModel, { CustomQueryBuilder, modifiers } from './_base_model';
 import { Model } from 'objection';
-import QuestionBookmark from '../models/question_bookmark';
+import QuestionBookmark from './question_bookmark';
+import ExamSet from './exam_set';
+import Semester from './semester';
+import QuestionComment from './question_comment';
 
 class Question extends BaseModel {
+  readonly id!: number;
+  oldId: string;
+  text: string;
+  image: string;
+  answer1: string;
+  answer2: string;
+  answer3: string;
+  examSetQno: number;
+  examSetId: number;
+
+  examSet: ExamSet;
+  semester: Semester;
+  publicComments: QuestionComment;
+  privateComments: QuestionComment;
+
   static get tableName() {
     return 'question';
   }
@@ -74,7 +92,7 @@ class Question extends BaseModel {
       },
 
       semester: {
-        relation: Model.ManyToManyRelation,
+        relation: Model.HasOneThroughRelation,
         modelClass: Semester,
         join: {
           from: 'question.examSetId',
@@ -147,7 +165,7 @@ class Question extends BaseModel {
   }
 
   static get defaultEager() {
-    return '[correctAnswers, semester, publicComments.user, specialties(active), tags(active)]';
+    return '[correctAnswers, semester, examSet, publicComments.user, specialties(active), tags(active)]';
   }
 
   $formatJson(json) {
