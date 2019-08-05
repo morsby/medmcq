@@ -213,12 +213,14 @@ const Sharebuilder: React.SFC<SharebuilderProps> = ({ history }) => {
       >
         <h1>Opret Quiz</h1>
         <label>Valg</label>
-        <Table
-          columns={columns}
-          loading={idsLoading}
-          dataSource={!idsLoading ? pickedQuestions.questions : null}
-          expandedRowRender={(record) => <ExtendedRow record={record} />}
-        />
+        <div style={{ overflowX: 'auto' }}>
+          <Table
+            columns={columns}
+            loading={idsLoading}
+            dataSource={!idsLoading ? pickedQuestions.questions : null}
+            expandedRowRender={(record) => <ExtendedRow record={record} />}
+          />
+        </div>
         <Divider hidden />
         <Button type="primary" disabled={createLinkLoading} onClick={handleCreateLink}>
           Opret link
@@ -254,13 +256,15 @@ const Sharebuilder: React.SFC<SharebuilderProps> = ({ history }) => {
           selection
         ></Dropdown>
         <Divider />
-        <Table
-          rowKey={(record: any) => record.id}
-          dataSource={!loading ? data.questions : null}
-          loading={loading}
-          columns={columns}
-          expandedRowRender={(record) => <ExtendedRow record={record} />}
-        ></Table>
+        <div style={{ overflowX: 'auto' }}>
+          <Table
+            rowKey={(record: any) => record.id}
+            dataSource={!loading ? data.questions : null}
+            loading={loading}
+            columns={columns}
+            expandedRowRender={(record) => <ExtendedRow record={record} />}
+          ></Table>
+        </div>
       </Segment>
     </div>
   );
