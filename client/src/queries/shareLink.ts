@@ -8,7 +8,7 @@ export const fetchQuestionIdsFromShareLink = gql`
 `;
 
 export const createShareLink = gql`
-  mutation CreateShareLink($questionIds: [String]!) {
+  mutation CreateShareLink($questionIds: [Int]!) {
     createShareLink(questionIds: $questionIds)
   }
 `;

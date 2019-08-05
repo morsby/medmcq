@@ -7,3 +7,4 @@ export * from './question';
 export * from './quiz';
 export * from './metadata';
 export * from './ui';
+export * from './shareBuilder';

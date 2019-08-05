@@ -50,7 +50,7 @@ import MaintenancePage from './components/Misc/Utility-pages/MaintenancePage';
 import ErrorBoundary from './components/Misc/Utility-pages/ErrorBoundary';
 import QuizShareRoute from 'components/Quiz/QuizShareRoute';
 import QuizShareBuilderLoader from 'components/Quiz/QuizShareBuilderLoader';
-import Sharebuilder from 'containers/Sharebuilder';
+import Sharebuilder from 'pages/Sharebuilder';
 // bliver ikke brugt?
 //import { IReduxState } from 'reducers';
 

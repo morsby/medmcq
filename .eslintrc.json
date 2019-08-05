@@ -7,9 +7,9 @@
     "jest": true,
     "serviceworker": true
   },
-  "plugins": ["react", "react-hooks", "json"],
+  "plugins": ["react", "react-hooks", "json", "@typescript-eslint"],
   "extends": ["eslint:recommended", "plugin:react/recommended", "plugin:prettier/recommended"],
-  "parser": "babel-eslint",
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "sourceType": "module",
     "ecmaVersion": 2018
@@ -27,6 +27,7 @@
     "no-redeclare": "off",
     "no-console": "warn",
     "react/prop-types": 0,
-    "no-unused-vars": "warn"
+    "no-unused-vars": "warn",
+    "react/display-name": "off"
   }
 }
