@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Segment, Dropdown, Divider } from 'semantic-ui-react';
 import { useMutation, useQuery } from 'react-apollo-hooks';
 import { createShareLink as query_createShareLink } from 'queries/shareLink';
@@ -17,7 +17,7 @@ import 'antd/lib/button/style/css';
 
 export interface SharebuilderProps extends RouteComponentProps {}
 
-interface filter {
+interface IFilter {
   semester: number;
   text: string;
   tags: [string?];
@@ -26,34 +26,55 @@ interface filter {
 }
 
 const Sharebuilder: React.SFC<SharebuilderProps> = ({ history }) => {
-  const dispatch = useDispatch();
-  const [filter, setFilter]: [filter, Function] = useState({
+  const [filter, setFilter]: [IFilter, Function] = useState({
     semester: 4,
     text: '',
     tags: [],
     specialties: [],
     id: ''
   });
+  const [queryFilter, setQueryFilter]: [IFilter, Function] = useState({
+    semester: 999,
+    text: '',
+    tags: [],
+    specialties: [],
+    id: ''
+  });
+  // Redux
+  const dispatch = useDispatch();
   const picked = useSelector((state: IReduxState) => state.shareBuilder.picked);
   const semesters = useSelector((state: IReduxState) => state.metadata.entities.semesters);
   const specialties = useSelector((state: IReduxState) => state.metadata.entities.specialties);
   const tags = useSelector((state: IReduxState) => state.metadata.entities.tags);
+  // GraphQL
   const [createShareLink, { loading: createLinkLoading, data: createLinkData }] = useMutation(
     query_createShareLink
   );
-  const { loading, data } = useQuery(queries.fetchFilteredQuestions, { variables: filter });
   const { data: pickedQuestions, loading: idsLoading } = useQuery(queries.getQuestionsFromIds, {
     variables: { ids: picked }
   });
+  const { loading, data } = useQuery(queries.fetchFilteredQuestions, { variables: queryFilter });
+  // Debounce filter, for ikke at query på hvert keystroke (delay er 1 sekund, som angivet herunder)
+  const debounceQueryFilter = useCallback(
+    _.debounce((filter: IFilter) => setQueryFilter(filter), 1000),
+    []
+  );
 
-  const handleCreateLink = () => {
-    createShareLink({ variables: { questionIds: picked } });
-  };
+  // UseEffect til at skifte query filteret, men kun hvis man faktisk har valgt filtre
+  // Er en lidt "omstændig" måde at undgå at useQuery bliver kaldt uden parameters,
+  // da det henter alle spørgsmål. Bedre implementering søges.. ;)
+  useEffect(() => {
+    const { text, tags, specialties, id } = filter;
+    if (text || tags.length > 0 || specialties.length > 0 || id) {
+      debounceQueryFilter(filter);
+    }
+  }, [debounceQueryFilter, filter]);
 
-  const handleChange = (value: string, type: keyof filter) => {
+  const handleChange = (value: string, type: keyof IFilter) => {
     setFilter((prevFilter) => ({ ...prevFilter, [type]: value }));
   };
 
+  // Kalder redux når man har valgt et spørgsmål, og lægger det her (under shareBuilder reducer -> picked)
   const handlePick = (value) => {
     const index = _.indexOf(picked, value);
 
@@ -67,25 +88,17 @@ const Sharebuilder: React.SFC<SharebuilderProps> = ({ history }) => {
     dispatch(actions.changePicked(newPick));
   };
 
+  // Function til at skabe linket, når man har bygget færdigt - kalder useMutation
+  const handleCreateLink = () => {
+    createShareLink({ variables: { questionIds: picked } });
+  };
+
   const columns = [
-    // {
-    //   title: 'År',
-    //   dataIndex: 'yeay',
-    //   key: 'year',
-    //   filterDropdown: <SearchDropdown />,
-    //   filterIcon: <Icon type="search" />
-    // },
-    // {
-    //   title: 'Sæson',
-    //   dataIndex: 'season',
-    //   key: 'season',
-    //   filterIcon: <Icon type="search" style={{ color: filter.question ? '#1890ff' : undefined }} />
-    // },
     {
       title: 'ID',
       dataIndex: 'id',
       key: 'id',
-      filterIcon: <Icon type="search" style={{ color: filter.text ? '#1890ff' : undefined }} />,
+      filterIcon: <Icon type="search" style={{ color: filter.id ? '#1890ff' : undefined }} />,
       filterDropdown: (
         <SearchDropdown
           onChange={(value) => handleChange(value, 'id')}
@@ -134,7 +147,12 @@ const Sharebuilder: React.SFC<SharebuilderProps> = ({ history }) => {
           type="dropdown"
         />
       ),
-      filterIcon: <Icon type="search" style={{ color: filter.text ? '#1890ff' : undefined }} />,
+      filterIcon: (
+        <Icon
+          type="search"
+          style={{ color: filter.specialties.length > 0 ? '#1890ff' : undefined }}
+        />
+      ),
       render: (record) => <p>{_.map(record, (s) => specialties[s.specialtyId].name).join(', ')}</p>
     },
     {
@@ -156,7 +174,9 @@ const Sharebuilder: React.SFC<SharebuilderProps> = ({ history }) => {
           type="dropdown"
         />
       ),
-      filterIcon: <Icon type="search" style={{ color: filter.text ? '#1890ff' : undefined }} />,
+      filterIcon: (
+        <Icon type="search" style={{ color: filter.tags.length > 0 ? '#1890ff' : undefined }} />
+      ),
       render: (record) => (
         <p>
           {_(record)
@@ -182,12 +202,6 @@ const Sharebuilder: React.SFC<SharebuilderProps> = ({ history }) => {
         </>
       )
     }
-    // {
-    //   title: 'Tags',
-    //   dataIndex: 'tags',
-    //   key: 'tags',
-    //   filterIcon: <Icon type="search" style={{ color: filter.question ? '#1890ff' : undefined }} />
-    // }
   ];
 
   return (
@@ -240,6 +254,7 @@ const Sharebuilder: React.SFC<SharebuilderProps> = ({ history }) => {
         ></Dropdown>
         <Divider />
         <Table
+          rowKey={(record: any) => record.id}
           dataSource={!loading ? data.questions : null}
           loading={loading}
           columns={columns}

@@ -3,7 +3,7 @@ import Question from 'models/question';
 
 export const typeDefs = gql`
   extend type Query {
-    questions(filter: FilterInput, ids: [Int]): [Question]
+    questions(filter: FilterInput, ids: [Int]): [Question!]
   }
 
   input FilterInput {

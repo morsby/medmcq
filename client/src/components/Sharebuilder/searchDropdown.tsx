@@ -28,12 +28,7 @@ const SearchDropdown: React.SFC<SearchDropdownProps> = ({ value, onChange, type,
   if (type === 'search')
     return (
       <div style={{ padding: 8, width: 300 }}>
-        <Input
-          placeholder={'Søg'}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          style={{ marginBottom: 8, display: 'block' }}
-        />
+        <Input placeholder={'Søg'} value={value} onChange={(e) => onChange(e.target.value)} />
       </div>
     );
 };
