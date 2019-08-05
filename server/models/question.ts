@@ -4,6 +4,7 @@ import QuestionBookmark from './question_bookmark';
 import ExamSet from './exam_set';
 import Semester from './semester';
 import QuestionComment from './question_comment';
+import QuestionCorrectAnswer from './question_correct_answer';
 
 class Question extends BaseModel {
   readonly id!: number;
@@ -18,8 +19,9 @@ class Question extends BaseModel {
 
   examSet: ExamSet;
   semester: Semester;
-  publicComments: QuestionComment;
-  privateComments: QuestionComment;
+  publicComments: [QuestionComment];
+  privateComments: [QuestionComment];
+  correctAnswers: [QuestionCorrectAnswer];
 
   static get tableName() {
     return 'question';
