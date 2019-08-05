@@ -7,6 +7,6 @@
     "baseUrl": "./",
     "sourceMap": true
   },
-  "include": ["./**/*"],
+  "include": ["./"],
   "exclude": ["./__tests__", "./build"]
 }
