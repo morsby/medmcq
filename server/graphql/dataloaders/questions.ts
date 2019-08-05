@@ -32,7 +32,7 @@ export const privateCommentsLoader = async (user: User, ids: [number]) => {
     .andWhere('userId', user.id)
     .andWhere('private', true);
 
-  return ids.map((id) => comments.find((x) => x.questionId === id));
+  return ids.map((id) => comments.filter((x) => x.questionId === id));
 };
 
 export default {
