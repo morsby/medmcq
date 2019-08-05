@@ -10,7 +10,9 @@ const initialState = {
   /**
    * App version
    */
-  version: '0.0.1'
+  version: '0.0.1',
+  // Is it the users first time? Then display description modal.
+  firstTime: true
 };
 /**
  * createReducer er en funktion fra redux-starter-kit, der laver en IMMUTABLE
@@ -23,5 +25,8 @@ export default createReducer(initialState, {
   [types.CHANGE_SETTINGS]: (state, action) => {
     let { type, value } = action.payload;
     state[type] = value;
+  },
+  [types.SET_FIRST_TIME]: (state, action) => {
+    state.firstTime = action.payload;
   }
 });

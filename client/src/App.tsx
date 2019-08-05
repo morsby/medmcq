@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import './App.css';
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
@@ -51,6 +50,7 @@ import ErrorBoundary from './components/Misc/Utility-pages/ErrorBoundary';
 import QuizShareRoute from 'components/Quiz/QuizShareRoute';
 import QuizShareBuilderLoader from 'components/Quiz/QuizShareBuilderLoader';
 import Sharebuilder from 'pages/Sharebuilder';
+import FirstTimeModal from 'components/Misc/Utility-pages/About/FirstTimeModal';
 // bliver ikke brugt?
 //import { IReduxState } from 'reducers';
 
@@ -109,6 +109,7 @@ class App extends Component<AppProps> {
               draggable
               pauseOnHover
             />
+            <FirstTimeModal />
             <Sidebar>
               <Header />
               <Switch>

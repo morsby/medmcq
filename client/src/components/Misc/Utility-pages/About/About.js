@@ -3,14 +3,17 @@ import PropTypes from 'prop-types';
 import ReactRouterPropTypes from 'react-router-prop-types';
 
 import { withLocalize, Translate } from 'react-localize-redux';
+import * as types from 'actions/types';
 import aboutTranslations from './aboutTranslations';
 
-import { Container, Message, Divider } from 'semantic-ui-react';
+import { Container, Divider, Button } from 'semantic-ui-react';
+import { useDispatch } from 'react-redux';
 
 /**
  * Component til siden "Om-siden".
  */
 const About = ({ addTranslation }) => {
+  const dispatch = useDispatch();
   addTranslation(aboutTranslations);
 
   return (
@@ -19,12 +22,9 @@ const About = ({ addTranslation }) => {
         <h1>
           <Translate id="about.header" />
         </h1>
-        <Message warning>
-          <Message.Header>
-            <Translate id="about.notice.header" />
-          </Message.Header>
-          <Translate id="about.notice.body" />
-        </Message>
+        <Button onClick={() => dispatch(types.SET_FIRST_TIME(true))}>
+          <Translate id="about.openFirstTimeAgain" />
+        </Button>
 
         <h2>
           <Translate id="changelog.header" />

@@ -33,6 +33,7 @@ export const QUESTION_REPORT = 'question_report';
 
 /* SETTINGS REDUCER */
 export const CHANGE_SETTINGS = 'change_settings';
+export const SET_FIRST_TIME = createAction('SET_FIRST_TIME');
 
 /* SELECTION REDUCER */
 export const CHANGE_SELECTION = 'change_selection';
