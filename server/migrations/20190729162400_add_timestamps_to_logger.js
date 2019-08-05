@@ -1,6 +1,6 @@
 exports.up = function(knex) {
   return knex.schema.table('logger', (t) => {
-    t.timestamps();
+    t.timestamps(true, true);
   });
 };
 
