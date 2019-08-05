@@ -30,11 +30,10 @@ describe('sharebuilder', () => {
       .send({
         query: `
             mutation {
-               createShareLink(questionIds: "${[questionId]}")
+               createShareLink(questionIds: ${[questionId]})
             }
         `
-      })
-      .expect(200);
+      });
 
     expect(result.error.text).toBeUndefined();
     expect(result.body.error).toBeUndefined();
