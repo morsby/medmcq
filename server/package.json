@@ -21,7 +21,6 @@
   },
   "homepage": "https://github.com/morsby/medmcq#readme",
   "dependencies": {
-    "@babel/runtime": "^7.5.4",
     "@sendgrid/mail": "^6.4.0",
     "@types/body-parser": "^1.17.0",
     "@types/cookie-parser": "^1.4.1",
@@ -53,12 +52,6 @@
     "typescript": "^3.5.3"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-class-properties": "^7.5.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.5.4",
-    "@babel/plugin-transform-runtime": "^7.5.0",
-    "@babel/preset-env": "^7.5.4",
-    "@babel/preset-typescript": "^7.3.3",
-    "babel-core": "^6.26.3",
     "jest": "^24.8.0",
     "nodemon": "^1.19.1",
     "supertest": "^4.0.2",
