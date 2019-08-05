@@ -13,7 +13,7 @@ exports.up = function(knex) {
       .references('semester_exam_set.id')
       .onUpdate('CASCADE')
       .onDelete('CASCADE');
-    t.timestamps();
+    t.timestamps(true, true);
   });
 };
 

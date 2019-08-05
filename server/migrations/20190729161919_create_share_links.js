@@ -10,7 +10,7 @@ exports.up = function(knex) {
       .references('question.id')
       .onUpdate('CASCADE')
       .onDelete('CASCADE');
-    t.timestamps();
+    t.timestamps(true, true);
   });
 };
 
