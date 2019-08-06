@@ -111,11 +111,11 @@ export const resolvers = {
         .groupBy('question.id');
 
       if (filter.year) {
-        query = query.where('examSet.year', '=', filter.year);
+        query = query.andWhere('examSet.year', '=', filter.year);
       }
 
       if (filter.season) {
-        query = query.where('examSet.season', '=', filter.season);
+        query = query.andWhere('examSet.season', '=', filter.season);
       }
 
       if (filter.specialties && filter.specialties.length > 0) {
@@ -133,7 +133,7 @@ export const resolvers = {
       }
 
       if (filter.text) {
-        query = query.whereRaw(
+        query = query.andWhereRaw(
           'MATCH (text, answer1, answer2, answer3) AGAINST (? IN BOOLEAN MODE)',
           filter.text
         );
