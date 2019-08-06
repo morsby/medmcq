@@ -41,7 +41,7 @@ class LoginForm extends Component {
   // TODO: Autocomplete
   render() {
     return (
-      <div>
+      <>
         <Translate>
           {({ translate }) => (
             <Form
@@ -96,15 +96,21 @@ class LoginForm extends Component {
             />
           )}
         </Translate>
-        <div style={{ float: 'right' }}>
-          <Button onClick={() => this.handleNavigation('forgotPassword')} color="blue">
-            <Translate id="loginForm.forgot_password" />
-          </Button>
-          <Button onClick={() => this.handleNavigation('signup')}>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'flex-end'
+          }}
+        >
+          <Button color="blue" onClick={() => this.handleNavigation('signup')}>
             <Translate id="loginForm.signup" />
           </Button>
+          <Button onClick={() => this.handleNavigation('forgotPassword')}>
+            <Translate id="loginForm.forgot_password" />
+          </Button>
         </div>
-      </div>
+      </>
     );
   }
 }
