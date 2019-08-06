@@ -8,6 +8,7 @@ import { breakpoints } from '../../utils/common';
 import styles from './Header.module.css';
 import RightMenu from './Menus/RightMenu';
 import LeftMenu from './Menus/LeftMenu';
+import { withRouter } from 'react-router';
 
 // TODO: Evt. fjern connect - men skal så modtage `user` via parents
 
@@ -15,23 +16,29 @@ import LeftMenu from './Menus/LeftMenu';
  * Header-component. Viser headeren og tjekker at brugeren er logget ind.
  */
 
-const Header = () => {
+const Header = ({ history }) => {
+  const handleNavigation = (url) => {
+    history.push(url);
+  };
+
   return (
     <Responsive as="header" minWidth={breakpoints.mobile}>
       <h2 className={styles.onprint}>
         <Translate id="header.credit" />
       </h2>
       <Menu className={styles.noprint} inverted color="blue" attached borderless>
-        <LeftMenu />
+        <LeftMenu handleNavigation={handleNavigation} />
         <Menu.Menu position="right">
-          <RightMenu />
+          <RightMenu handleNavigation={handleNavigation} />
         </Menu.Menu>
       </Menu>
     </Responsive>
   );
 };
 
-export default connect(
-  null,
-  actions
-)(Header);
+export default withRouter(
+  connect(
+    null,
+    actions
+  )(Header)
+);

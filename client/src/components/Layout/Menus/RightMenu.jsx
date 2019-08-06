@@ -1,18 +1,12 @@
 import React from 'react';
 import { withLocalize, Translate } from 'react-localize-redux';
 import { Menu, Icon, Button } from 'semantic-ui-react';
-import { withRouter } from 'react-router';
-import { urls } from '../../../utils/common';
 import { connect } from 'react-redux';
 import * as actions from '../../../actions';
 import Flag from 'react-flagkit';
 
 const RightMenu = (props) => {
-  const { user, history, languages, logout } = props;
-
-  const onNavigation = (path) => {
-    history.push(urls[path]);
-  };
+  const { user, languages, logout, handleNavigation } = props;
 
   const changeLang = (lang) => {
     props.setActiveLanguage(lang);
@@ -35,7 +29,7 @@ const RightMenu = (props) => {
     return (
       <>
         {languages.map((lang) => generateFlag(lang))}
-        <Menu.Item onClick={() => onNavigation('profile')}>
+        <Menu.Item onClick={() => handleNavigation('/profil')}>
           <strong>
             <Translate
               id="header.greeting"
@@ -46,7 +40,13 @@ const RightMenu = (props) => {
           </strong>
         </Menu.Item>
         <Menu.Item>
-          <Button inverted onClick={logout}>
+          <Button
+            inverted
+            onClick={() => {
+              logout();
+              return handleNavigation('/');
+            }}
+          >
             <Translate id="header.logout" />
           </Button>
         </Menu.Item>
@@ -56,7 +56,7 @@ const RightMenu = (props) => {
     return (
       <>
         {languages.map((lang) => generateFlag(lang))}
-        <Menu.Item onClick={() => onNavigation('login')}>
+        <Menu.Item onClick={() => handleNavigation('/login')}>
           <Icon name="doctor" /> <Translate id="header.login" />
         </Menu.Item>
       </>
@@ -71,11 +71,9 @@ function mapStateToProps(state) {
   };
 }
 
-export default withRouter(
-  withLocalize(
-    connect(
-      mapStateToProps,
-      actions
-    )(RightMenu)
-  )
+export default withLocalize(
+  connect(
+    mapStateToProps,
+    actions
+  )(RightMenu)
 );

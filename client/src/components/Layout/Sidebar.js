@@ -9,7 +9,7 @@ import RightMenu from './Menus/RightMenu';
 import { withRouter } from 'react-router';
 import { Translate } from 'react-localize-redux';
 
-const Sidebar = (props) => {
+const Sidebar = ({ history, children }) => {
   const [visible, setVisible] = useState(false);
   const [width, setWidth] = useState(window.innerWidth);
 
@@ -20,6 +20,11 @@ const Sidebar = (props) => {
 
     return window.removeEventListener('resize', setWidth(window.innerWidth));
   }, []);
+
+  const handleNavigation = (url) => {
+    setVisible(false);
+    history.push(url);
+  };
 
   useEffect(() => {
     setVisible(false);
@@ -50,11 +55,11 @@ const Sidebar = (props) => {
           <Icon name="close" inverted size="large" />
           <Translate id="header.close" />
         </Menu.Item>
-        <Menu.Item onClick={() => props.history.push('/')}>
+        <Menu.Item onClick={() => handleNavigation('/')}>
           <Icon name="home" />
           <Translate id="header.home" />
         </Menu.Item>
-        <RightMenu />
+        <RightMenu handleNavigation={handleNavigation} />
       </SemanticSidebar>
 
       <SemanticSidebar.Pusher
@@ -68,14 +73,14 @@ const Sidebar = (props) => {
               <Icon name="bars" inverted size="large" />
             </Menu.Item>
             <Menu.Menu position="right">
-              <Menu.Item onClick={() => props.history.push('/')}>
+              <Menu.Item onClick={() => handleNavigation('/')}>
                 <Image src={logo} style={{ height: '30px' }} />
               </Menu.Item>
             </Menu.Menu>
           </Menu>
         )}
 
-        {props.children}
+        {children}
       </SemanticSidebar.Pusher>
     </SemanticSidebar.Pushable>
   );
