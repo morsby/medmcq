@@ -109,7 +109,6 @@ export const modifiers = {
         'Question.id',
         `${type}.questionId`
       )
-      .select('Question.*')
       .groupBy('question.id')
       .whereIn(`${type}.${typeSingular}_id`, ids);
   },
