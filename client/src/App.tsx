@@ -68,6 +68,9 @@ class App extends Component<AppProps> {
   constructor(props: AppProps) {
     super(props);
 
+    // Hent brugeren
+    this.props.fetchUser();
+
     // Force refresh af semestre på reload:
     this.props.invalidateMetadata();
 
@@ -87,10 +90,6 @@ class App extends Component<AppProps> {
     });
   }
 
-  componentDidMount() {
-    // Simple fix to update user onLoad
-    this.props.fetchUser();
-  }
   render() {
     if (this.state.maintenance) return <MaintenancePage />;
 

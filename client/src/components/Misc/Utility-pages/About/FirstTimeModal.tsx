@@ -15,9 +15,10 @@ export interface FirstTimeModalProps extends LocalizeContextProps {}
 const FirstTimeModal: React.SFC<FirstTimeModalProps> = ({ addTranslation }) => {
   addTranslation(aboutTranslations);
   const dispatch = useDispatch();
-  const user = useSelector((state: IReduxState) => state.auth.user);
+  const { user, isFetching } = useSelector((state: IReduxState) => state.auth);
   const isFirstTime = useSelector((state: IReduxState) => state.settings.firstTime);
 
+  if (user || isFetching) return null;
   const handleClose = () => {
     dispatch(types.SET_FIRST_TIME(false));
   };
