@@ -22,7 +22,6 @@ const FirstTimeModal: React.SFC<FirstTimeModalProps> = ({ addTranslation }) => {
     dispatch(types.SET_FIRST_TIME(false));
   };
 
-  if (user) return null;
   return (
     <Modal
       style={{
