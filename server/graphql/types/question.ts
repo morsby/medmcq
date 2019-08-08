@@ -100,38 +100,40 @@ export const resolvers = {
     },
 
     Question: (_root, { id }, ctxt) => {
-      return ctxt.questionLoaders.questionLoader.load(id);
+      return ctxt.questionLoaders.questionsByIds.load(id);
     }
   },
 
   Question: {
     text: async ({ id }, _, ctxt) => {
-      const { text } = await ctxt.questionLoaders.questionLoader.load(id);
+      const { text } = await ctxt.questionLoaders.questionsByIds.load(id);
       return text;
     },
 
     answer1: async ({ id }, _, ctxt) => {
-      const { answer1 } = await ctxt.questionLoaders.questionLoader.load(id);
+      const { answer1 } = await ctxt.questionLoaders.questionsByIds.load(id);
       return answer1;
     },
     answer2: async ({ id }, _, ctxt) => {
-      const { answer2 } = await ctxt.questionLoaders.questionLoader.load(id);
+      const { answer2 } = await ctxt.questionLoaders.questionsByIds.load(id);
       return answer2;
     },
     answer3: async ({ id }, _, ctxt) => {
-      const { answer3 } = await ctxt.questionLoaders.questionLoader.load(id);
+      const { answer3 } = await ctxt.questionLoaders.questionsByIds.load(id);
       return answer3;
     },
     correctAnswers: async (question, _, ctxt) => {
-      const answers = await ctxt.questionLoaders.correctAnswersLoader.load(question.id);
+      const answers = await ctxt.questionLoaders.correctAnswersByQuestionIds.load(question.id);
       return answers.map((a) => a.answer);
     },
-    examSet: async (question, _, ctxt) => ctxt.questionLoaders.examSetLoader.load(question),
-    semester: async (question, _, ctxt) => ctxt.questionLoaders.semesterLoader.load(question),
+    examSet: async (question, _, ctxt) => ctxt.questionLoaders.examSetByQuestions.load(question),
+    semester: async (question, _, ctxt) => ctxt.questionLoaders.semesterByQuestions.load(question),
     publicComments: async (question, _, ctxt) =>
-      ctxt.questionLoaders.publicCommentsLoader.load(question),
+      ctxt.questionLoaders.publicCommentsByQuestions.load(question),
     privateComments: async (question, _, ctxt) =>
-      ctxt.questionLoaders.privateCommentsLoader.load(question.id)
+      ctxt.questionLoaders.privateCommentsByQuestionIds.load(question.id),
+    specialties: async (question, _, ctxt) =>
+      ctxt.questionLoaders.specialtiesByQuestionIds.load(question.id)
   },
 
   Mutation: {

@@ -1,25 +1,28 @@
 import DataLoader from 'dataloader';
-import questionLoaders from './questions';
+import * as questionLoaders from './questions';
 import User from '../../models/user';
 import Question from '../../models/question';
 // se https://github.com/graphql/dataloader#creating-a-new-dataloader-per-request
 const generateLoaders = (user: User) => ({
   questionLoaders: {
-    questionLoader: new DataLoader((ids: [number]) => questionLoaders.questionLoader(ids)),
-    correctAnswersLoader: new DataLoader((ids: [number]) =>
-      questionLoaders.correctAnswersLoader(ids)
+    questionsByIds: new DataLoader((ids: number[]) => questionLoaders.questionsByIds(ids)),
+    correctAnswersByQuestionIds: new DataLoader((ids: number[]) =>
+      questionLoaders.correctAnswersByQuestionIds(ids)
     ),
-    examSetLoader: new DataLoader((questions: [Question]) =>
-      questionLoaders.examSetLoader(questions)
+    examSetByQuestions: new DataLoader((questions: Question[]) =>
+      questionLoaders.examSetByQuestions(questions)
     ),
-    semesterLoader: new DataLoader((questions: [Question]) =>
-      questionLoaders.semesterLoader(questions)
+    semesterByQuestions: new DataLoader((questions: Question[]) =>
+      questionLoaders.semesterByQuestions(questions)
     ),
-    publicCommentsLoader: new DataLoader((questions: [Question]) =>
-      questionLoaders.publicCommentsLoader(questions)
+    publicCommentsByQuestions: new DataLoader((questions: Question[]) =>
+      questionLoaders.publicCommentsByQuestions(questions)
     ),
-    privateCommentsLoader: new DataLoader((ids: [number]) =>
-      questionLoaders.privateCommentsLoader(user, ids)
+    privateCommentsByQuestionIds: new DataLoader((ids: number[]) =>
+      questionLoaders.privateCommentsByQuestionIds(user, ids)
+    ),
+    specialtiesByQuestionIds: new DataLoader((ids: number[]) =>
+      questionLoaders.specialtiesByQuestionIds(user, ids)
     )
   }
 });
