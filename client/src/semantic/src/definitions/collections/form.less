@@ -1,6 +1,6 @@
 /*!
- * # Fomantic-UI - Form
- * http://github.com/fomantic/Fomantic-UI/
+ * # Semantic UI - Form
+ * http://github.com/semantic-org/semantic-ui/
  *
  *
  * Released under the MIT license
@@ -49,12 +49,12 @@
 
 .ui.form .field:last-child,
 .ui.form .fields:last-child .field {
-  margin-bottom: 0;
+  margin-bottom: 0em;
 }
 
 .ui.form .fields .field {
   clear: both;
-  margin: 0;
+  margin: 0em;
 }
 
 
@@ -112,10 +112,10 @@
 .ui.form input[type="file"],
 .ui.form input[type="url"] {
   font-family: @inputFont;
-  margin: 0;
+  margin: 0em;
   outline: none;
   -webkit-appearance: none;
-  -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
+  tap-highlight-color:  rgba(255, 255, 255, 0);
 
   line-height: @inputLineHeight;
   padding: @inputPadding;
@@ -130,13 +130,13 @@
 }
 
 /* Text Area */
-.ui.input textarea,
 .ui.form textarea {
-  margin: 0;
+  margin: 0em;
   -webkit-appearance: none;
-  -webkit-tap-highlight-color:  rgba(255, 255, 255, 0);
+  tap-highlight-color:  rgba(255, 255, 255, 0);
 
   padding: @textAreaPadding;
+  font-size: @textAreaFontSize;
   background: @textAreaBackground;
   border: @textAreaBorder;
   outline: none;
@@ -145,7 +145,6 @@
   box-shadow: @inputBoxShadow;
   transition: @textAreaTransition;
   font-size: @textAreaFontSize;
-  font-family: @inputFont;
   line-height: @textAreaLineHeight;
   resize: @textAreaResize;
 }
@@ -158,54 +157,6 @@
 .ui.form textarea,
 .ui.form input[type="checkbox"] {
   vertical-align: @checkboxVerticalAlign;
-}
-
-/*--------------------
-    Checkbox margin
----------------------*/
-
-.ui.form .fields:not(.grouped):not(.inline) .field:not(:only-child) .ui.checkbox {
-  margin-top: @inputLineHeight + @checkboxFieldTopMargin;
-}
-.ui.form .fields:not(.grouped):not(.inline) .field:not(:only-child) .ui.toggle.checkbox {
-  margin-top: @inputLineHeight + @checkboxToggleFieldTopMargin;
-}
-.ui.form .fields:not(.grouped):not(.inline) .field:not(:only-child) .ui.slider.checkbox {
-  margin-top: @inputLineHeight + @checkboxSliderFieldTopMargin;
-}
-.ui.ui.form .field .fields .field:not(:only-child) .ui.checkbox {
-  margin-top: @checkboxFieldTopMargin / 2;
-}
-.ui.ui.form .field .fields .field:not(:only-child) .ui.toggle.checkbox {
-  margin-top: @checkboxToggleFieldTopMargin / 2;
-}
-.ui.ui.form .field .fields .field:not(:only-child) .ui.slider.checkbox {
-  margin-top: @checkboxSliderFieldTopMargin / 2;
-}
-
-/*--------------------
-      Transparent
----------------------*/
-
-.ui.form .field .transparent.input:not(.icon) input,
-.ui.form .field input.transparent,
-.ui.form .field textarea.transparent {
-  padding: @transparentPadding;
-}
-
-.ui.form .field input.transparent,
-.ui.form .field textarea.transparent {
-  border-color: transparent !important;
-  background-color: transparent !important;
-  box-shadow: none !important;
-}
-
-.ui.form .field.error .transparent.input input,
-.ui.form .field.error .transparent.input textarea,
-.ui.form .field.error input.transparent,
-.ui.form .field.error textarea.transparent {
-  background-color: @transparentFormErrorBackground !important;
-  color: @transparentFormErrorColor !important;
 }
 
 /*--------------------------
@@ -240,7 +191,6 @@
 
 /* Block */
 .ui.form .field > .selection.dropdown {
-  min-width: auto;
   width: 100%;
 }
 .ui.form .field > .selection.dropdown > .dropdown.icon {
@@ -293,7 +243,7 @@
 .ui.form .two.fields .ui.input input,
 .ui.form .wide.field .ui.input input {
   flex: 1 0 auto;
-  width: 0;
+  width: 0px;
 }
 
 
@@ -303,14 +253,13 @@
 
 .ui.form .success.message,
 .ui.form .warning.message,
-.ui.form .error.message,
-.ui.form .error.message:empty {
+.ui.form .error.message {
   display: none;
 }
 
 /* Assumptions */
 .ui.form .message:first-child {
-  margin-top: 0;
+  margin-top: 0px;
 }
 
 /*--------------------
@@ -330,11 +279,11 @@
 }
 .ui.form .inline.fields .field .prompt:before,
 .ui.form .inline.field .prompt:before {
-  border-width: 0 0 @inlinePromptBorderWidth @inlinePromptBorderWidth;
+  border-width: 0px 0px @inlinePromptBorderWidth @inlinePromptBorderWidth;
   bottom: auto;
   right: auto;
   top: 50%;
-  left: 0;
+  left: 0em;
 }
 
 
@@ -347,19 +296,19 @@
 ---------------------*/
 
 .ui.form .field.field input:-webkit-autofill {
-  box-shadow: 0 0 0 100px @inputAutoFillBackground inset !important;
+  box-shadow: 0px 0px 0px 100px @inputAutoFillBackground inset !important;
   border-color: @inputAutoFillBorder !important;
 }
 
 /* Focus */
 .ui.form .field.field input:-webkit-autofill:focus {
-  box-shadow: 0 0 0 100px @inputAutoFillFocusBackground inset !important;
+  box-shadow: 0px 0px 0px 100px @inputAutoFillFocusBackground inset !important;
   border-color: @inputAutoFillFocusBorder !important;
 }
 
 /* Error */
 .ui.form .error.error input:-webkit-autofill {
-  box-shadow: 0 0 0 100px @inputAutoFillErrorBackground inset !important;
+  box-shadow: 0px 0px 0px 100px @inputAutoFillErrorBackground inset !important;
   border-color: @inputAutoFillErrorBorder !important;
 }
 
@@ -555,6 +504,7 @@
   border-color: @inputErrorFocusBorder;
   color: @inputErrorFocusColor;
 
+  -webkit-appearance: none;
   box-shadow: @inputErrorFocusBoxShadow;
 }
 
@@ -667,18 +617,13 @@
 .ui.loading.form:before {
   position: absolute;
   content: '';
-  top: 0;
-  left: 0;
+  top: 0%;
+  left: 0%;
   background: @loaderDimmerColor;
   width: 100%;
   height: 100%;
   z-index: @loaderDimmerZIndex;
 }
-
-.ui.loading.form.segments:before {
-  border-radius: @defaultBorderRadius;
-}
-
 .ui.loading.form:after {
   position: absolute;
   content: '';
@@ -689,14 +634,29 @@
   width: @loaderSize;
   height: @loaderSize;
 
-  animation: loader @loaderSpeed infinite linear;
-  border: @loaderLineWidth solid @loaderLineColor;
+  animation: form-spin @loaderSpeed linear;
+  animation-iteration-count: infinite;
+
   border-radius: @circularRadius;
 
-  box-shadow: 0 0 0 1px transparent;
+  border-color: @loaderLineColor @loaderFillColor @loaderFillColor @loaderFillColor;
+  border-style: solid;
+  border-width: @loaderLineWidth;
+
+  box-shadow: 0px 0px 0px 1px transparent;
   visibility: visible;
   z-index: @loaderLineZIndex;
 }
+
+@keyframes form-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 
 /*******************************
          Element Types
@@ -710,8 +670,7 @@
 .ui.form .required.fields.grouped > label:after,
 .ui.form .required.field > label:after,
 .ui.form .required.fields:not(.grouped) > .field > .checkbox:after,
-.ui.form .required.field > .checkbox:after,
-.ui.form label.required:after {
+.ui.form .required.field > .checkbox:after {
   margin: @requiredMargin;
   content: @requiredContent;
   color: @requiredColor;
@@ -719,8 +678,7 @@
 
 .ui.form .required.fields:not(.grouped) > .field > label:after,
 .ui.form .required.fields.grouped > label:after,
-.ui.form .required.field > label:after,
-.ui.form label.required:after {
+.ui.form .required.field > label:after {
   display: inline-block;
   vertical-align: top;
 }
@@ -728,7 +686,7 @@
 .ui.form .required.fields:not(.grouped) > .field > .checkbox:after,
 .ui.form .required.field > .checkbox:after {
   position: absolute;
-  top: 0;
+  top: 0%;
   left: 100%;
 }
 
@@ -755,12 +713,7 @@
 .ui.inverted.form .inline.field > p {
   color: @invertedLabelColor;
 }
-.ui.inverted.loading.form {
-  color: @invertedLoaderLineColor;
-}
-.ui.inverted.loading.form:before {
-  background: @loaderInvertedDimmerColor;
-}
+
 /* Inverted Field */
 .ui.inverted.form input:not([type]),
 .ui.inverted.form input[type="date"],
@@ -780,6 +733,7 @@
   box-shadow: @invertedInputBoxShadow;
 }
 
+
 /*--------------------
      Field Groups
 ---------------------*/
@@ -790,7 +744,7 @@
   margin: @groupedMargin;
 }
 .ui.form .grouped.fields:last-child {
-  margin-bottom: 0;
+  margin-bottom: 0em;
 }
 
 .ui.form .grouped.fields > label {
@@ -805,7 +759,7 @@
 .ui.form .grouped.inline.fields .field {
   display: block;
   margin: @groupedFieldMargin;
-  padding: 0;
+  padding: 0em;
 }
 
 /*--------------------
@@ -893,7 +847,7 @@
   .ui.form:not(.unstackable) .ten.fields:not(.unstackable) > .fields,
   .ui.form:not(.unstackable) .ten.fields:not(.unstackable) > .field {
     width: @oneColumn !important;
-    margin: 0 0 @rowDistance;
+    margin: 0em 0em @rowDistance;
   }
 }
 
@@ -982,7 +936,7 @@
     width: @oneColumn !important;
   }
   .ui.form .fields {
-    margin-bottom: 0;
+    margin-bottom: 0em;
   }
 }
 
@@ -1005,7 +959,7 @@
   align-items: center;
 }
 .ui.form .inline.fields .field {
-  margin: 0;
+  margin: 0em;
   padding: @inlineFieldsMargin;
 }
 
@@ -1017,8 +971,8 @@
 .ui.form .inline.field > p {
   display: inline-block;
   width: auto;
-  margin-top: 0;
-  margin-bottom: 0;
+  margin-top: 0em;
+  margin-bottom: 0em;
   vertical-align: baseline;
   font-size: @inlineLabelFontSize;
   font-weight: @inlineLabelFontWeight;
@@ -1039,8 +993,8 @@
   display: inline-block;
   width: auto;
 
-  margin-top: 0;
-  margin-bottom: 0;
+  margin-top: 0em;
+  margin-bottom: 0em;
 
   vertical-align: middle;
   font-size: @inlineInputSize;
@@ -1049,11 +1003,11 @@
 /* Label */
 .ui.form .inline.fields .field > :first-child,
 .ui.form .inline.field > :first-child {
-  margin: 0 @inlineLabelDistance 0 0;
+  margin: 0em @inlineLabelDistance 0em 0em;
 }
 .ui.form .inline.fields .field > :only-child,
 .ui.form .inline.field > :only-child {
-  margin: 0;
+  margin: 0em;
 }
 
 /* Wide */
@@ -1093,58 +1047,6 @@
   font-size: @huge;
 }
 .ui.massive.form {
-  font-size: @massive;
-}
-
-/* Dropdown */
-.ui.mini.form .field .dropdown {
-  font-size: @mini;
-}
-.ui.tiny.form .field .dropdown {
-  font-size: @tiny;
-}
-.ui.small.form .field .dropdown {
-  font-size: @small;
-}
-.ui.form .field .dropdown {
-  font-size: @medium;
-}
-.ui.large.form .field .dropdown {
-  font-size: @large;
-}
-.ui.big.form .field .dropdown {
-  font-size: @big;
-}
-.ui.huge.form .field .dropdown {
-  font-size: @huge;
-}
-.ui.massive.form .field .dropdown {
-  font-size: @massive;
-}
-
-/* Dropdown Items */
-.ui.mini.form .field .dropdown .menu > .item {
-  font-size: @mini;
-}
-.ui.tiny.form .field .dropdown .menu > .item {
-  font-size: @tiny;
-}
-.ui.small.form .field .dropdown .menu > .item {
-  font-size: @small;
-}
-.ui.form .field .dropdown .menu > .item {
-  font-size: @medium;
-}
-.ui.large.form .field .dropdown .menu > .item {
-  font-size: @large;
-}
-.ui.big.form .field .dropdown .menu > .item {
-  font-size: @big;
-}
-.ui.huge.form .field .dropdown .menu > .item {
-  font-size: @huge;
-}
-.ui.massive.form .field .dropdown .menu > .item {
   font-size: @massive;
 }
 
