@@ -1,6 +1,5 @@
 import { gql } from 'apollo-server-express';
 import Question from '../../models/question';
-
 // Husk altid extend på alle typer af queries, da det er et krav for modularitet af graphql
 // (måske i fremtiden det ikke behøves)
 export const typeDefs = gql`
@@ -12,7 +11,7 @@ export const typeDefs = gql`
     answer1: String
     answer2: String
     answer3: String
-    correctAnswers: [Int]
+    correctAnswers: [CorrectAnswer]
     examSetQno: Int
     examSet: ExamSet
     semester: Semester
@@ -42,12 +41,6 @@ export const typeDefs = gql`
   type Comment {
     id: ID
     text: String
-  }
-
-  type CorrectAnswer {
-    id: ID
-    answer: Int
-    questionId: ID
   }
 
   input QuestionFilter {
@@ -100,40 +93,44 @@ export const resolvers = {
     },
 
     Question: (_root, { id }, ctxt) => {
-      return ctxt.questionLoaders.questionsByIds.load(id);
+      return ctxt.dataloaders.questions.questionsByIds.load(id);
     }
   },
 
   Question: {
     text: async ({ id }, _, ctxt) => {
-      const { text } = await ctxt.questionLoaders.questionsByIds.load(id);
+      const { text } = await ctxt.dataloaders.questions.questionsByIds.load(id);
       return text;
     },
 
     answer1: async ({ id }, _, ctxt) => {
-      const { answer1 } = await ctxt.questionLoaders.questionsByIds.load(id);
+      const { answer1 } = await ctxt.dataloaders.questions.questionsByIds.load(id);
       return answer1;
     },
     answer2: async ({ id }, _, ctxt) => {
-      const { answer2 } = await ctxt.questionLoaders.questionsByIds.load(id);
+      const { answer2 } = await ctxt.dataloaders.questions.questionsByIds.load(id);
       return answer2;
     },
     answer3: async ({ id }, _, ctxt) => {
-      const { answer3 } = await ctxt.questionLoaders.questionsByIds.load(id);
+      const { answer3 } = await ctxt.dataloaders.questions.questionsByIds.load(id);
       return answer3;
     },
-    correctAnswers: async (question, _, ctxt) => {
-      const answers = await ctxt.questionLoaders.correctAnswersByQuestionIds.load(question.id);
-      return answers.map((a) => a.answer);
+    correctAnswers: async ({ id }, _args, ctxt) => {
+      const answers = await ctxt.dataloaders.correctAnswers.byQuestionIds.load(id);
+      console.log(answers);
+      console.log(id);
+      return answers.map((a) => ({ id: a.id }));
     },
-    examSet: async (question, _, ctxt) => ctxt.questionLoaders.examSetByQuestions.load(question),
-    semester: async (question, _, ctxt) => ctxt.questionLoaders.semesterByQuestions.load(question),
+    examSet: async (question, _, ctxt) =>
+      ctxt.dataloaders.questions.examSetByQuestions.load(question),
+    semester: async (question, _, ctxt) =>
+      ctxt.dataloaders.questions.semesterByQuestions.load(question),
     publicComments: async (question, _, ctxt) =>
-      ctxt.questionLoaders.publicCommentsByQuestions.load(question),
+      ctxt.dataloaders.questions.publicCommentsByQuestions.load(question),
     privateComments: async (question, _, ctxt) =>
-      ctxt.questionLoaders.privateCommentsByQuestionIds.load(question.id),
+      ctxt.dataloaders.questions.privateCommentsByQuestionIds.load(question.id),
     specialties: async (question, _, ctxt) =>
-      ctxt.questionLoaders.specialtiesByQuestionIds.load(question.id)
+      ctxt.dataloaders.questions.specialtiesByQuestionIds.load(question.id)
   },
 
   Mutation: {

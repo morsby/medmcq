@@ -1,15 +1,9 @@
 import Question from '../../models/question';
 import QuestionComment from '../../models/question_comment';
-import QuestionCorrectAnswer from '../../models/question_correct_answer';
 import User from '../../models/user';
 import QuestionSpecialtyVote from 'models/question_specialty_vote';
 
 export const questionsByIds = async (ids: number[]) => Question.query().findByIds(ids);
-
-export const correctAnswersByQuestionIds = async (ids: number[]) => {
-  const answers = await QuestionCorrectAnswer.query().whereIn('questionId', ids);
-  return ids.map((id) => answers.filter((x) => x.questionId === id));
-};
 
 export const examSetByQuestions = async (questions: Question[]) => {
   const questionsWithExamSets = await Question.loadRelated(questions, 'examSet');
@@ -37,11 +31,12 @@ export const privateCommentsByQuestionIds = async (user: User, ids: number[]) =>
 };
 
 export const specialtiesByQuestionIds = async (user: User, ids: number[]) => {
-  const specialties = await QuestionSpecialtyVote.query()
+  /* const specialties = await QuestionSpecialtyVote.query()
     .whereIn('questionId', ids)
     .groupBy('specialtyId')
     .sum('vote as votes')
     .having();
 
-  return specialties;
+  return specialties; */
+  return [];
 };

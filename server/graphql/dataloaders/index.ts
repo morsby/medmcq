@@ -1,14 +1,12 @@
 import DataLoader from 'dataloader';
 import * as questionLoaders from './questions';
+import * as correctAnswerLoaders from './question_correct_answers';
 import User from '../../models/user';
 import Question from '../../models/question';
 // se https://github.com/graphql/dataloader#creating-a-new-dataloader-per-request
 const generateLoaders = (user: User) => ({
-  questionLoaders: {
+  questions: {
     questionsByIds: new DataLoader((ids: number[]) => questionLoaders.questionsByIds(ids)),
-    correctAnswersByQuestionIds: new DataLoader((ids: number[]) =>
-      questionLoaders.correctAnswersByQuestionIds(ids)
-    ),
     examSetByQuestions: new DataLoader((questions: Question[]) =>
       questionLoaders.examSetByQuestions(questions)
     ),
@@ -23,6 +21,13 @@ const generateLoaders = (user: User) => ({
     ),
     specialtiesByQuestionIds: new DataLoader((ids: number[]) =>
       questionLoaders.specialtiesByQuestionIds(user, ids)
+    )
+  },
+
+  correctAnswers: {
+    byIds: new DataLoader((ids: number[]) => correctAnswerLoaders.correctAnswersByIds(ids)),
+    byQuestionIds: new DataLoader((questionIds: number[]) =>
+      correctAnswerLoaders.correctAnswersByQuestionIds(questionIds)
     )
   }
 });
