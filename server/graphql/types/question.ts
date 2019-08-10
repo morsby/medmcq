@@ -11,7 +11,7 @@ export const typeDefs = gql`
     answer1: String
     answer2: String
     answer3: String
-    correctAnswers: [CorrectAnswer]
+    correctAnswers: [Int]
     examSetQno: Int
     examSet: ExamSet
     semester: Semester
@@ -117,9 +117,7 @@ export const resolvers = {
     },
     correctAnswers: async ({ id }, _args, ctxt) => {
       const answers = await ctxt.dataloaders.correctAnswers.byQuestionIds.load(id);
-      console.log(answers);
-      console.log(id);
-      return answers.map((a) => ({ id: a.id }));
+      return answers.map((a) => a.answer);
     },
     examSet: async (question, _, ctxt) =>
       ctxt.dataloaders.questions.examSetByQuestions.load(question),
