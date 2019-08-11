@@ -6,6 +6,11 @@ import { Model } from 'objection';
  * @extends BaseModel
  */
 class ExamSet extends BaseModel {
+  id: number;
+  season: string;
+  year: number;
+  semesterId: number;
+
   /**
    * The name of the table in the database
    * @type {String}

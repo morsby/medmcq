@@ -23,7 +23,9 @@ export const typeDefs = gql`
   }
 
   extend type Query {
-    CorrectAnswer(id: Int, questionId: Int): CorrectAnswer
+    CorrectAnswer(id: Int): CorrectAnswer
+
+    CorrectAnswersByQuestionId(questionId: Int): [CorrectAnswer]
 
     allCorrectAnswers(
       page: Int
@@ -51,16 +53,22 @@ export const typeDefs = gql`
 
 export const resolvers = {
   Query: {
-    allCorrectAnswers: async () => {
-      return await QuestionCorrectAnswer.query().select('id');
-    },
+    allCorrectAnswers: async () => QuestionCorrectAnswer.query().select('id'),
 
-    CorrectAnswer: (_root, { id }) => ({ id })
+    CorrectAnswer: (_root, { id }) => ({ id }),
+
+    CorrectAnswersByQuestionId: (_root, { questionId }) =>
+      QuestionCorrectAnswer.query()
+        .where('questionId', questionId)
+        .select('id')
   },
 
   CorrectAnswer: {
+    questionId: async (parent, _args, ctxt) => {
+      const { questionId } = await ctxt.dataloaders.correctAnswers.byIds.load(parent.id);
+      return questionId;
+    },
     answer: async (parent, _args, ctxt) => {
-      console.log(parent, _args);
       const { answer } = await ctxt.dataloaders.correctAnswers.byIds.load(parent.id);
       return answer;
     }

@@ -10,12 +10,6 @@ export const examSetByQuestions = async (questions: Question[]) => {
   return questionsWithExamSets.map((question) => question.examSet);
 };
 
-export const semesterByQuestions = async (questions: Question[]) => {
-  const questionsWithSemesters = await Question.loadRelated(questions, 'semester');
-
-  return questionsWithSemesters.map((q) => q.semester);
-};
-
 export const publicCommentsByQuestions = async (questions: Question[]) => {
   const questionsWithPublicComments = await Question.loadRelated(questions, 'publicComments');
   return questionsWithPublicComments.map((q) => q.publicComments);

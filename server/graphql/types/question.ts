@@ -21,17 +21,6 @@ export const typeDefs = gql`
     privateComments: [Comment]
   }
 
-  type ExamSet {
-    id: ID
-    year: Int
-    season: String
-  }
-
-  type Semester {
-    id: ID
-    value: Int
-    name: String
-  }
   type SpecialtyVote {
     id: ID
   }
@@ -115,14 +104,14 @@ export const resolvers = {
       const { answer3 } = await ctxt.dataloaders.questions.questionsByIds.load(id);
       return answer3;
     },
+    // TODO: få en bedre nesting af denne
     correctAnswers: async ({ id }, _args, ctxt) => {
       const answers = await ctxt.dataloaders.correctAnswers.byQuestionIds.load(id);
       return answers.map((a) => a.answer);
     },
     examSet: async (question, _, ctxt) =>
       ctxt.dataloaders.questions.examSetByQuestions.load(question),
-    semester: async (question, _, ctxt) =>
-      ctxt.dataloaders.questions.semesterByQuestions.load(question),
+    semester: async (question, _, ctxt) => ctxt.dataloaders.semesters.byQuestions.load(question),
     publicComments: async (question, _, ctxt) =>
       ctxt.dataloaders.questions.publicCommentsByQuestions.load(question),
     privateComments: async (question, _, ctxt) =>
