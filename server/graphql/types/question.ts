@@ -1,10 +1,12 @@
-import { gql } from 'apollo-server-express';
+import { ApolloServer, gql } from 'apollo-server';
+import { buildFederatedSchema } from '@apollo/federation';
+import dataloaders from '../dataloaders';
 import Question from '../../models/question';
 // Husk altid extend på alle typer af queries, da det er et krav for modularitet af graphql
 // (måske i fremtiden det ikke behøves)
 export const typeDefs = gql`
-  type Question {
-    id: Int
+  type Question @key(fields: "id") {
+    id: Int!
     oldId: String
     text: String
     image: String
@@ -19,6 +21,14 @@ export const typeDefs = gql`
     tags: [TagVote]
     publicComments: [Comment]
     privateComments: [Comment]
+  }
+
+  extend type ExamSet @key(fields: "id") {
+    id: Int! @external
+  }
+
+  extend type Semester @key(fields: "id") {
+    id: Int! @external
   }
 
   type SpecialtyVote {
@@ -48,7 +58,7 @@ export const typeDefs = gql`
     count: Int!
   }
 
-  extend type Query {
+  type Query {
     Question(id: ID!): Question
 
     allQuestions(
@@ -87,6 +97,9 @@ export const resolvers = {
   },
 
   Question: {
+    __resolveReference: (question, { dataloaders }) => {
+      return dataloaders.questions.questionsByIds(question.id);
+    },
     text: async ({ id }, _, ctxt) => {
       const { text } = await ctxt.dataloaders.questions.questionsByIds.load(id);
       return text;
@@ -109,8 +122,10 @@ export const resolvers = {
       const answers = await ctxt.dataloaders.correctAnswers.byQuestionIds.load(id);
       return answers.map((a) => a.answer);
     },
-    examSet: async (question, _, ctxt) =>
-      ctxt.dataloaders.questions.examSetByQuestions.load(question),
+    examSet: async ({ id }, _args, ctxt) => {
+      const { examSetId } = await ctxt.dataloaders.questions.questionsByIds.load(id);
+      return { __typename: 'ExamSet', id: examSetId };
+    },
     semester: async (question, _, ctxt) => ctxt.dataloaders.semesters.byQuestions.load(question),
     publicComments: async (question, _, ctxt) =>
       ctxt.dataloaders.questions.publicCommentsByQuestions.load(question),
@@ -126,3 +141,8 @@ export const resolvers = {
     }
   }
 };
+
+export const server = new ApolloServer({
+  schema: buildFederatedSchema([{ typeDefs, resolvers }]),
+  context: ({ req }) => ({ dataloaders: dataloaders(Number(req.headers['user-id'])) })
+});

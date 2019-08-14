@@ -15,16 +15,16 @@ export const publicCommentsByQuestions = async (questions: Question[]) => {
   return questionsWithPublicComments.map((q) => q.publicComments);
 };
 
-export const privateCommentsByQuestionIds = async (user: User, ids: number[]) => {
+export const privateCommentsByQuestionIds = async (userId: number, ids: number[]) => {
   const comments = await QuestionComment.query()
     .whereIn('questionId', ids)
-    .andWhere('userId', user.id)
+    .andWhere('userId', userId)
     .andWhere('private', true);
 
   return ids.map((id) => comments.filter((x) => x.questionId === id));
 };
 
-export const specialtiesByQuestionIds = async (user: User, ids: number[]) => {
+export const specialtiesByQuestionIds = async (userId: number, ids: number[]) => {
   /* const specialties = await QuestionSpecialtyVote.query()
     .whereIn('questionId', ids)
     .groupBy('specialtyId')

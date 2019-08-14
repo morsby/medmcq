@@ -1,11 +1,13 @@
-import { gql } from 'apollo-server-express';
+import { ApolloServer, gql } from 'apollo-server';
+import { buildFederatedSchema } from '@apollo/federation';
+import dataloaders from '../dataloaders';
 import ExamSet from '../../models/exam_set';
 
 // Husk altid extend på alle typer af queries, da det er et krav for modularitet af graphql
 // (måske i fremtiden det ikke behøves)
 export const typeDefs = gql`
-  type ExamSet {
-    id: ID
+  type ExamSet @key(fields: "id") {
+    id: Int!
     season: String
     year: Int
     semester: Semester
@@ -22,7 +24,17 @@ export const typeDefs = gql`
     user_id: ID
   }
 
-  extend type Query {
+  type Semester @key(fields: "id") {
+    id: Int!
+    value: Int
+    name: String
+  }
+
+  type ListMetadata {
+    count: Int!
+  }
+
+  type Query {
     ExamSet(id: Int): ExamSet
 
     allExamSets(
@@ -42,7 +54,7 @@ export const typeDefs = gql`
     ): ListMetadata
   }
 
-  extend type Mutation {
+  type Mutation {
     createExamSet(title: String!, views: Int!, user_id: ID!): ExamSet
     updateExamSet(id: ID!, title: String!, views: Int!, user_id: ID!): ExamSet
     deleteExamSet(id: ID!): ExamSet
@@ -56,17 +68,20 @@ export const resolvers = {
   },
 
   ExamSet: {
-    season: async ({ id }, _args, ctxt) => {
-      const { season } = await ctxt.dataloaders.examSets.byIds.load(id);
+    __resolveReference: (examSet, { dataloaders }) => {
+      return dataloaders.examSets.byIds.load(examSet.id);
+    },
+    season: async ({ id }, _args, { dataloaders }) => {
+      const { season } = await dataloaders.examSets.byIds.load(id);
       return season;
     },
-    year: async ({ id }, _args, ctxt) => {
-      const { year } = await ctxt.dataloaders.examSets.byIds.load(id);
+    year: async ({ id }, _args, { dataloaders }) => {
+      const { year } = await dataloaders.examSets.byIds.load(id);
       return year;
     },
-    semester: async ({ id }, _args, ctxt) => {
-      const { semesterId } = await ctxt.dataloaders.examSets.byIds.load(id);
-      return ctxt.dataloaders.semesters.byIds.load(semesterId);
+    semester: async ({ id }, _args, { dataloaders }) => {
+      const { semesterId } = await dataloaders.examSets.byIds.load(id);
+      return dataloaders.semesters.byIds.load(semesterId);
     }
   },
 
@@ -76,3 +91,8 @@ export const resolvers = {
     }
   }
 };
+
+export const server = new ApolloServer({
+  schema: buildFederatedSchema([{ typeDefs, resolvers }]),
+  context: ({ req }) => ({ dataloaders: dataloaders(Number(req.headers['user-id'])) })
+});

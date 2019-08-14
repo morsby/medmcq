@@ -6,7 +6,7 @@ import * as examSetLoaders from './exam_sets';
 import User from '../../models/user';
 import Question from '../../models/question';
 // se https://github.com/graphql/dataloader#creating-a-new-dataloader-per-request
-const generateLoaders = (user: User) => ({
+const generateLoaders = (userId: number) => ({
   questions: {
     questionsByIds: new DataLoader((ids: number[]) => questionLoaders.questionsByIds(ids)),
     examSetByQuestions: new DataLoader((questions: Question[]) =>
@@ -16,10 +16,10 @@ const generateLoaders = (user: User) => ({
       questionLoaders.publicCommentsByQuestions(questions)
     ),
     privateCommentsByQuestionIds: new DataLoader((ids: number[]) =>
-      questionLoaders.privateCommentsByQuestionIds(user, ids)
+      questionLoaders.privateCommentsByQuestionIds(userId, ids)
     ),
     specialtiesByQuestionIds: new DataLoader((ids: number[]) =>
-      questionLoaders.specialtiesByQuestionIds(user, ids)
+      questionLoaders.specialtiesByQuestionIds(userId, ids)
     )
   },
 
