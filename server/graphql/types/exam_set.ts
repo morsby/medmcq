@@ -24,10 +24,8 @@ export const typeDefs = gql`
     user_id: ID
   }
 
-  type Semester @key(fields: "id") {
-    id: Int!
-    value: Int
-    name: String
+  extend type Semester @key(fields: "id") {
+    id: Int! @external
   }
 
   type ListMetadata {
@@ -81,7 +79,7 @@ export const resolvers = {
     },
     semester: async ({ id }, _args, { dataloaders }) => {
       const { semesterId } = await dataloaders.examSets.byIds.load(id);
-      return dataloaders.semesters.byIds.load(semesterId);
+      return { __typename: 'Semester', id: semesterId };
     }
   },
 

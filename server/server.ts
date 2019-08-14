@@ -54,8 +54,10 @@ app.use(logger); // Logging of all requests
 // GraphQL
 import { server as questionQLServer } from './graphql/types/question';
 import { server as examSetQLServer } from './graphql/types/exam_set';
+import { server as semesterQLServer } from './graphql/types/semester';
 questionQLServer.listen(4001);
 examSetQLServer.listen(4002);
+semesterQLServer.listen(4003);
 apolloClient.applyMiddleware({ app });
 
 // Real routes

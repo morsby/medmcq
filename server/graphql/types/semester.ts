@@ -1,11 +1,13 @@
-import { gql } from 'apollo-server-express';
+import { ApolloServer, gql } from 'apollo-server';
+import { buildFederatedSchema } from '@apollo/federation';
+import dataloaders from '../dataloaders';
 import Semester from '../../models/semester';
 
 // Husk altid extend på alle typer af queries, da det er et krav for modularitet af graphql
 // (måske i fremtiden det ikke behøves)
 export const typeDefs = gql`
-  type Semester {
-    id: ID
+  type Semester @key(fields: "id") {
+    id: Int!
     value: Int
     name: String
   }
@@ -21,7 +23,11 @@ export const typeDefs = gql`
     user_id: ID
   }
 
-  extend type Query {
+  type ListMetadata {
+    count: Int!
+  }
+
+  type Query {
     Semester(id: Int): Semester
 
     allSemesters(
@@ -41,7 +47,7 @@ export const typeDefs = gql`
     ): ListMetadata
   }
 
-  extend type Mutation {
+  type Mutation {
     createSemester(title: String!, views: Int!, user_id: ID!): Semester
     updateSemester(id: ID!, title: String!, views: Int!, user_id: ID!): Semester
     deleteSemester(id: ID!): Semester
@@ -55,6 +61,10 @@ export const resolvers = {
   },
 
   Semester: {
+    __resolveReference: (semester, { dataloaders }) => {
+      return dataloaders.semesters.byIds.load(semester.id);
+    },
+
     value: async (parent, _args, ctxt) => {
       const { value } = await ctxt.dataloaders.semesters.byIds.load(parent.id);
       return value;
@@ -71,3 +81,8 @@ export const resolvers = {
     }
   }
 };
+
+export const server = new ApolloServer({
+  schema: buildFederatedSchema([{ typeDefs, resolvers }]),
+  context: ({ req }) => ({ dataloaders: dataloaders(Number(req.headers['user-id'])) })
+});

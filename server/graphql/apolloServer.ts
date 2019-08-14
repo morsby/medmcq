@@ -4,7 +4,8 @@ import { ApolloGateway, RemoteGraphQLDataSource } from '@apollo/gateway';
 const gateway = new ApolloGateway({
   serviceList: [
     { name: 'questions', url: 'http://localhost:4001' },
-    { name: 'examSets', url: 'http://localhost:4002' }
+    { name: 'examSets', url: 'http://localhost:4002' },
+    { name: 'semesters', url: 'http://localhost:4003' }
     // more services
   ],
   buildService({ name, url }) {
