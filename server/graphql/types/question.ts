@@ -78,7 +78,7 @@ export const typeDefs = gql`
 export const resolvers = {
   Query: {
     allQuestions: async () => {
-      return await Question.query().select('id');
+      return await Question.query().select('id', 'examSetId');
     },
 
     Question: (_root, { id }, ctxt) => {
