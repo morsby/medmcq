@@ -222,7 +222,11 @@ const Sharebuilder: React.SFC<SharebuilderProps> = ({ history }) => {
           />
         </div>
         <Divider hidden />
-        <Button type="primary" disabled={createLinkLoading || picked.length < 1} onClick={handleCreateLink}>
+        <Button
+          type="primary"
+          disabled={createLinkLoading || picked.length < 1}
+          onClick={handleCreateLink}
+        >
           Opret link
         </Button>
         {createLinkData && (
