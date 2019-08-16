@@ -137,8 +137,22 @@ const SelectionSpecialtiesSelector = () => {
             </Translate>
             {tagSearch && metadata.tags && (
               <Tree
-                checkedKeys={selectedTagIds}
-                onCheck={(tags: any) => onChange([...tags, ...selectedTagIds], 'selectedTagIds')}
+                checkedKeys={_.filter(
+                  metadata.tags,
+                  (t: any) =>
+                    t.semesterId === selectedSemester &&
+                    t.name.toLowerCase().includes(tagSearch.toLowerCase()) &&
+                    selectedTagIds.includes(String(t.id))
+                ).map((t) => String(t.id))}
+                onCheck={(tags: any, { node }) => {
+                  onChange(
+                    [
+                      ...tags,
+                      ..._.filter(selectedTagIds, (id) => id !== String(node.props.dataRef.id))
+                    ],
+                    'selectedTagIds'
+                  ); // Ovenstående er en ret omstændig måde at få ID'er fra det filtrerede array til at også virke med det ikke filtrerede (da ID'er ikke vil eksistere i træet, når de udelukkes i søgning)
+                }}
                 checkable
               >
                 {_(metadata.tags)
