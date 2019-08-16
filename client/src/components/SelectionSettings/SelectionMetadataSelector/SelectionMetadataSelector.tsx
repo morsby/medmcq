@@ -5,7 +5,7 @@ import 'antd/lib/tree/style/css';
 
 import { Translate } from 'react-localize-redux';
 
-import { Form, Header, Message, Grid } from 'semantic-ui-react';
+import { Form, Header, Message, Grid, Input } from 'semantic-ui-react';
 import { IReduxState } from 'reducers';
 import * as uiActions from './../../../actions/ui';
 import _ from 'lodash';
@@ -39,6 +39,7 @@ const SelectionSpecialtiesSelector = () => {
   const semester = metadata.semesters[selectedSemester];
   const dispatch = useDispatch();
   const [tagTree, setTagTree]: [IMetadataSelectionObject[] | null, Function] = useState(null);
+  const [tagSearch, setTagSearch] = useState('');
 
   const onChange = (value: string[], type: string) => {
     dispatch(uiActions.changeSelection(type, value));
@@ -67,7 +68,7 @@ const SelectionSpecialtiesSelector = () => {
   }, [metadata.tags, selectedSemester]);
 
   const renderTreeNodes = (tags: IMetadataSelectionObject[]) =>
-    tags.map((item: IMetadataSelectionObject) => {
+    _.sortBy(tags, (t) => t.title).map((item: IMetadataSelectionObject) => {
       if (item.children) {
         return (
           <Tree.TreeNode title={item.title} key={item.key} dataRef={item}>
@@ -123,7 +124,41 @@ const SelectionSpecialtiesSelector = () => {
                 data={{ semester: semester.value }}
               />
             </Header>
-            {tagTree && (
+            <Translate>
+              {({ translate }) => (
+                <Input
+                  onChange={(e) => {
+                    setTagSearch(e.target.value);
+                  }}
+                  fluid
+                  placeholder={translate('selectionSpecialtiesSelector.search')}
+                />
+              )}
+            </Translate>
+            {tagSearch && metadata.tags && (
+              <Tree
+                checkedKeys={selectedTagIds}
+                onCheck={(tags: any) => onChange([...tags, ...selectedTagIds], 'selectedTagIds')}
+                checkable
+              >
+                {_(metadata.tags)
+                  .filter(
+                    (t) =>
+                      t.semesterId === selectedSemester &&
+                      t.name.toLowerCase().includes(tagSearch.toLowerCase())
+                  )
+                  .sortBy((t) => t.name)
+                  .value()
+                  .map((t) => (
+                    <Tree.TreeNode
+                      title={`${t.name} (${t.questionCount})`}
+                      key={String(t.id)}
+                      dataRef={t}
+                    ></Tree.TreeNode>
+                  ))}
+              </Tree>
+            )}
+            {!tagSearch && tagTree && (
               <Tree
                 checkedKeys={selectedTagIds}
                 onCheck={(tags: any) => onChange(tags, 'selectedTagIds')}
@@ -135,7 +170,6 @@ const SelectionSpecialtiesSelector = () => {
           </Grid.Row>
         </Grid.Column>
       </Grid>
-
       <Message info>
         <Translate id="selectionSpecialtiesSelector.tags_explanation" />
       </Message>
