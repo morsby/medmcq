@@ -7,7 +7,7 @@ import QuestionComment from './question_comment';
 import QuestionCorrectAnswer from './question_correct_answer';
 
 class Question extends BaseModel {
-  readonly id!: number;
+  readonly id: number;
   oldId: string;
   text: string;
   image: string;

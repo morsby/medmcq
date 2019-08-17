@@ -55,11 +55,13 @@ app.use(logger); // Logging of all requests
 import { server as questionQLServer } from './graphql/types/question';
 import { server as examSetQLServer } from './graphql/types/exam_set';
 import { server as semesterQLServer } from './graphql/types/semester';
-questionQLServer.listen(4001);
-examSetQLServer.listen(4002);
-semesterQLServer.listen(4003);
+// Ugly fix for multiple port usages in graphQl
+if (env !== 'test') {
+  questionQLServer.listen(4001);
+  examSetQLServer.listen(4002);
+  semesterQLServer.listen(4003);
+}
 apolloClient.applyMiddleware({ app });
-
 // Real routes
 const routes = require('./routes');
 app.use('/api', routes);
