@@ -6,7 +6,8 @@ const gateway = new ApolloGateway({
   serviceList: [
     { name: 'questions', url: 'http://localhost:4001' },
     { name: 'examSets', url: 'http://localhost:4002' },
-    { name: 'semesters', url: 'http://localhost:4003' }
+    { name: 'semesters', url: 'http://localhost:4003' },
+    { name: 'comments', url: 'http://localhost:4004' }
     // more services
   ],
   buildService({ name, url }) {

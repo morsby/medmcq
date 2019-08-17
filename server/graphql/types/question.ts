@@ -19,8 +19,6 @@ export const typeDefs = gql`
     examSetQno: Int
     specialties: [SpecialtyVote]
     tags: [TagVote]
-    publicComments: [Comment]
-    privateComments: [Comment]
   }
 
   extend type ExamSet @key(fields: "id") {
@@ -40,10 +38,6 @@ export const typeDefs = gql`
   }
   type TagVote {
     id: ID
-  }
-  type Comment {
-    id: ID
-    text: String
   }
 
   input QuestionFilter {

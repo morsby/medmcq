@@ -3,6 +3,7 @@ import * as questionLoaders from './questions';
 import * as correctAnswerLoaders from './question_correct_answers';
 import * as semesterLoaders from './semesters';
 import * as examSetLoaders from './exam_sets';
+import * as commentLoaders from './comments';
 import Question from '../../models/question';
 
 // se https://github.com/graphql/dataloader#creating-a-new-dataloader-per-request
@@ -43,6 +44,13 @@ const generateLoaders = (userId: number) => ({
       examSetLoaders.examSetByQuestions(questions)
     ),
     bySemesterIds: new DataLoader((ids: number[]) => examSetLoaders.examSetBySemesterIds(ids))
+  },
+
+  comments: {
+    byIds: new DataLoader((ids: number[]) => commentLoaders.commentByIds(ids)),
+    byQuestionIds: new DataLoader((ids: number[]) =>
+      commentLoaders.commentByQuestionIdsAndUser(ids, userId)
+    )
   }
 });
 
