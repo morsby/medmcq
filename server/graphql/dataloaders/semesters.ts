@@ -1,13 +1,17 @@
 import Semester from '../../models/semester';
-import Question from '../../models/question';
+import ExamSet from '../../models/exam_set';
 
 export const semesterByIds = async (ids: number[]) => {
   const semesters = await Semester.query().whereIn('id', ids);
   return ids.map((id) => semesters.find((x) => x.id === id));
 };
 
-export const semesterByQuestions = async (questions: Question[]) => {
-  const questionsWithSemesters = await Question.loadRelated(questions, 'semester');
+export const semestersByExamSetIds = async (examSetIds: number[]) => {
+  const semesters = await ExamSet.query()
+    .whereIn('semesterExamSet.id', examSetIds)
+    .joinRelation('semester')
+    .select('semester.*')
+    .select('semesterExamSet.id as examSetId');
 
-  return questionsWithSemesters.map((q) => q.semester);
+  return examSetIds.map((id) => semesters.find((x: ExamSet) => x['examSetId'] === id));
 };

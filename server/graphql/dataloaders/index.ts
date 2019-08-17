@@ -3,23 +3,23 @@ import * as questionLoaders from './questions';
 import * as correctAnswerLoaders from './question_correct_answers';
 import * as semesterLoaders from './semesters';
 import * as examSetLoaders from './exam_sets';
-import User from '../../models/user';
 import Question from '../../models/question';
+
 // se https://github.com/graphql/dataloader#creating-a-new-dataloader-per-request
-const generateLoaders = (user: User) => ({
+const generateLoaders = (userId: number) => ({
   questions: {
     questionsByIds: new DataLoader((ids: number[]) => questionLoaders.questionsByIds(ids)),
-    examSetByQuestions: new DataLoader((questions: Question[]) =>
-      questionLoaders.examSetByQuestions(questions)
-    ),
+    byExamSetIds: new DataLoader((ids: number[]) => questionLoaders.questionsByExamSetIds(ids)),
+    bySemesterIds: new DataLoader((ids: number[]) => questionLoaders.questionsBySemesterIds(ids)),
+
     publicCommentsByQuestions: new DataLoader((questions: Question[]) =>
       questionLoaders.publicCommentsByQuestions(questions)
     ),
     privateCommentsByQuestionIds: new DataLoader((ids: number[]) =>
-      questionLoaders.privateCommentsByQuestionIds(user, ids)
+      questionLoaders.privateCommentsByQuestionIds(userId, ids)
     ),
     specialtiesByQuestionIds: new DataLoader((ids: number[]) =>
-      questionLoaders.specialtiesByQuestionIds(user, ids)
+      questionLoaders.specialtiesByQuestionIds(userId, ids)
     )
   },
 
@@ -32,8 +32,8 @@ const generateLoaders = (user: User) => ({
 
   semesters: {
     byIds: new DataLoader((ids: number[]) => semesterLoaders.semesterByIds(ids)),
-    byQuestions: new DataLoader((questions: Question[]) =>
-      semesterLoaders.semesterByQuestions(questions)
+    byExamSetIds: new DataLoader((examSetIds: number[]) =>
+      semesterLoaders.semestersByExamSetIds(examSetIds)
     )
   },
 
@@ -41,7 +41,8 @@ const generateLoaders = (user: User) => ({
     byIds: new DataLoader((ids: number[]) => examSetLoaders.examSetByIds(ids)),
     byQuestions: new DataLoader((questions: Question[]) =>
       examSetLoaders.examSetByQuestions(questions)
-    )
+    ),
+    bySemesterIds: new DataLoader((ids: number[]) => examSetLoaders.examSetBySemesterIds(ids))
   }
 });
 

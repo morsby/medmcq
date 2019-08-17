@@ -1,14 +1,30 @@
-import { gql } from 'apollo-server-express';
+import { ApolloServer, gql } from 'apollo-server';
+import { buildFederatedSchema } from '@apollo/federation';
+
 import Semester from '../../models/semester';
+import { subserviceContext } from '../apolloServer';
 
 // Husk altid extend på alle typer af queries, da det er et krav for modularitet af graphql
 // (måske i fremtiden det ikke behøves)
 export const typeDefs = gql`
-  type Semester {
-    id: ID
+  type Semester @key(fields: "id") {
+    id: Int!
     value: Int
     name: String
   }
+
+  extend type Question @key(fields: "id") {
+    id: Int! @external
+    examSetId: Int @external
+    semester: Semester @requires(fields: "examSetId")
+  }
+
+  extend type ExamSet @key(fields: "id") {
+    id: Int! @external
+    semesterId: Int! @external
+    semester: Semester @requires(fields: "semesterId")
+  }
+
   input SemesterFilter {
     q: String
     id: ID
@@ -21,7 +37,11 @@ export const typeDefs = gql`
     user_id: ID
   }
 
-  extend type Query {
+  type ListMetadata {
+    count: Int!
+  }
+
+  type Query {
     Semester(id: Int): Semester
 
     allSemesters(
@@ -41,7 +61,7 @@ export const typeDefs = gql`
     ): ListMetadata
   }
 
-  extend type Mutation {
+  type Mutation {
     createSemester(title: String!, views: Int!, user_id: ID!): Semester
     updateSemester(id: ID!, title: String!, views: Int!, user_id: ID!): Semester
     deleteSemester(id: ID!): Semester
@@ -55,6 +75,10 @@ export const resolvers = {
   },
 
   Semester: {
+    __resolveReference: (semester, { dataloaders }) => {
+      return dataloaders.semesters.byIds.load(semester.id);
+    },
+
     value: async (parent, _args, ctxt) => {
       const { value } = await ctxt.dataloaders.semesters.byIds.load(parent.id);
       return value;
@@ -65,9 +89,19 @@ export const resolvers = {
     }
   },
 
+  Question: {
+    semester: ({ examSetId }, _args, ctxt) =>
+      ctxt.dataloaders.semesters.byExamSetIds.load(examSetId)
+  },
+
   Mutation: {
     createCorrectAnswer: async () => {
       return 'done';
     }
   }
 };
+
+export const server = new ApolloServer({
+  schema: buildFederatedSchema([{ typeDefs, resolvers }]),
+  context: ({ req }) => subserviceContext(req)
+});

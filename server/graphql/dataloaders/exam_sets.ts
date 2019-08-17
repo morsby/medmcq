@@ -11,3 +11,8 @@ export const examSetByQuestions = async (questions: Question[]) => {
 
   return questionsWithExamSets.map((q) => q.examSet);
 };
+
+export const examSetBySemesterIds = async (ids: number[]) => {
+  const examSets = await ExamSet.query().whereIn('semesterId', ids);
+  return ids.map((id) => examSets.filter((x) => x.semesterId === id));
+};
