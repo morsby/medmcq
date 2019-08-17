@@ -8,9 +8,9 @@ import ExamSet from '../../models/exam_set';
 export const typeDefs = gql`
   type ExamSet @key(fields: "id") {
     id: Int!
+    semesterId: Int!
     season: String
     year: Int
-    semester: Semester
   }
   input ExamSetFilter {
     q: String
@@ -22,6 +22,12 @@ export const typeDefs = gql`
     views_gt: Int
     views_gte: Int
     user_id: ID
+  }
+
+  extend type Question @key(fields: "id") {
+    id: Int! @external
+    examSetId: Int @external
+    examSet: ExamSet @requires(fields: "examSetId")
   }
 
   extend type Semester @key(fields: "id") {
@@ -82,7 +88,11 @@ export const resolvers = {
       return { __typename: 'Semester', id: semesterId };
     }
   },
-
+  Question: {
+    examSet: async ({ examSetId }, _args, ctxt) => {
+      return { __typename: 'ExamSet', id: examSetId };
+    }
+  },
   Mutation: {
     createCorrectAnswer: async () => {
       return 'done';

@@ -14,21 +14,12 @@ export const typeDefs = gql`
     answer2: String
     answer3: String
     correctAnswers: [Int]
+    examSetId: Int
     examSetQno: Int
-    examSet: ExamSet
-    semester: Semester
     specialties: [SpecialtyVote]
     tags: [TagVote]
     publicComments: [Comment]
     privateComments: [Comment]
-  }
-
-  extend type ExamSet @key(fields: "id") {
-    id: Int! @external
-  }
-
-  extend type Semester @key(fields: "id") {
-    id: Int! @external
   }
 
   type SpecialtyVote {
@@ -98,7 +89,7 @@ export const resolvers = {
 
   Question: {
     __resolveReference: (question, { dataloaders }) => {
-      return dataloaders.questions.questionsByIds(question.id);
+      return dataloaders.questions.questionsByIds.load(question.id);
     },
     text: async ({ id }, _, ctxt) => {
       const { text } = await ctxt.dataloaders.questions.questionsByIds.load(id);
@@ -122,11 +113,6 @@ export const resolvers = {
       const answers = await ctxt.dataloaders.correctAnswers.byQuestionIds.load(id);
       return answers.map((a) => a.answer);
     },
-    examSet: async ({ id }, _args, ctxt) => {
-      const { examSetId } = await ctxt.dataloaders.questions.questionsByIds.load(id);
-      return { __typename: 'ExamSet', id: examSetId };
-    },
-    semester: async (question, _, ctxt) => ctxt.dataloaders.semesters.byQuestions.load(question),
     publicComments: async (question, _, ctxt) =>
       ctxt.dataloaders.questions.publicCommentsByQuestions.load(question),
     privateComments: async (question, _, ctxt) =>

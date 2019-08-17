@@ -11,6 +11,19 @@ export const typeDefs = gql`
     value: Int
     name: String
   }
+
+  extend type Question @key(fields: "id") {
+    id: Int! @external
+    examSetId: Int @external
+    semester: Semester @requires(fields: "examSetId")
+  }
+
+  extend type ExamSet @key(fields: "id") {
+    id: Int! @external
+    semesterId: Int! @external
+    semester: Semester @requires(fields: "semesterId")
+  }
+
   input SemesterFilter {
     q: String
     id: ID
@@ -73,6 +86,11 @@ export const resolvers = {
       const { name } = await ctxt.dataloaders.semesters.byIds.load(parent.id);
       return name;
     }
+  },
+
+  Question: {
+    semester: ({ examSetId }, _args, ctxt) =>
+      ctxt.dataloaders.semesters.byExamSetIds.load(examSetId)
   },
 
   Mutation: {
