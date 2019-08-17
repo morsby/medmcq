@@ -26,11 +26,13 @@ export const typeDefs = gql`
   extend type ExamSet @key(fields: "id") {
     id: Int! @external
     questions: [Question]
+    questionCount: Float
   }
 
   extend type Semester @key(fields: "id") {
     id: Int! @external
     questions: [Question]
+    questionCount: Float
   }
 
   type SpecialtyVote {
@@ -56,7 +58,7 @@ export const typeDefs = gql`
     user_id: ID
   }
 
-  type ListMetadata {
+  type qListMetadata {
     count: Int!
   }
 
@@ -77,7 +79,7 @@ export const typeDefs = gql`
       sortField: String
       sortOrder: String
       filter: QuestionFilter
-    ): ListMetadata
+    ): qListMetadata
   }
 
   extend type Mutation {
@@ -89,13 +91,11 @@ export const typeDefs = gql`
 
 export const resolvers = {
   Query: {
-    allQuestions: async () => {
-      return await Question.query().select('id', 'examSetId');
-    },
+    allQuestions: async () => Question.query().select('id'),
 
-    Question: (_root, { id }, ctxt) => {
-      return ctxt.dataloaders.questions.questionsByIds.load(id);
-    }
+    Question: (_root, { id }, ctxt) => ctxt.dataloaders.questions.questionsByIds.load(id),
+
+    _allQuestionsMeta: async () => Question.query().select('id')
   },
 
   Question: {
@@ -131,12 +131,27 @@ export const resolvers = {
     specialties: async (question, _, ctxt) =>
       ctxt.dataloaders.questions.specialtiesByQuestionIds.load(question.id)
   },
+
+  qListMetadata: {
+    count: (questions) => questions.length
+  },
+
+  // Relations
   ExamSet: {
-    questions: async ({ id }, _args, { dataloaders }) => dataloaders.questions.byExamSetIds.load(id)
+    questions: async ({ id }, _args, { dataloaders }) =>
+      dataloaders.questions.byExamSetIds.load(id),
+    questionCount: async ({ id }, _args, { dataloaders }) => {
+      const questions = await dataloaders.questions.byExamSetIds.load(id);
+      return questions.length;
+    }
   },
   Semester: {
     questions: async ({ id }, _args, { dataloaders }) =>
-      dataloaders.questions.bySemesterIds.load(id)
+      dataloaders.questions.bySemesterIds.load(id),
+    questionCount: async ({ id }, _args, { dataloaders }) => {
+      const questions = await dataloaders.questions.bySemesterIds.load(id);
+      return questions.length;
+    }
   },
 
   Mutation: {
