@@ -13,3 +13,11 @@ export const commentByQuestionIdsAndUser = async (questionIds: number[], userId:
 
   return questionIds.map((id) => comments.filter((x) => x.questionId === id));
 };
+
+export const commentByUserIds = async (userIds: number[]) => {
+  const comments = await Comment.query()
+    .whereIn('userId', userIds)
+    .orderBy('id', 'asc');
+
+  return userIds.map((id) => comments.filter((x) => x.userId === id));
+};

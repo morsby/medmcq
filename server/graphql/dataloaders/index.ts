@@ -4,6 +4,7 @@ import * as correctAnswerLoaders from './question_correct_answers';
 import * as semesterLoaders from './semesters';
 import * as examSetLoaders from './exam_sets';
 import * as commentLoaders from './comments';
+import * as userLoaders from './users';
 import Question from '../../models/question';
 
 // se https://github.com/graphql/dataloader#creating-a-new-dataloader-per-request
@@ -50,7 +51,12 @@ const generateLoaders = (userId: number) => ({
     byIds: new DataLoader((ids: number[]) => commentLoaders.commentByIds(ids)),
     byQuestionIds: new DataLoader((ids: number[]) =>
       commentLoaders.commentByQuestionIdsAndUser(ids, userId)
-    )
+    ),
+    byUserIds: new DataLoader((ids: number[]) => commentLoaders.commentByUserIds(ids))
+  },
+
+  users: {
+    byIds: new DataLoader((ids: number[]) => userLoaders.userByIds(ids))
   }
 });
 

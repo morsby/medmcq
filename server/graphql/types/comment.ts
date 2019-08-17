@@ -28,6 +28,12 @@ export const typeDefs = gql`
     privateComments: [Comment]
   }
 
+  extend type User @key(fields: "id") {
+    id: Int! @external
+    publicComments: [Comment]
+    privateComments: [Comment]
+  }
+
   input CommentFilter {
     q: String
     id: ID
@@ -105,6 +111,16 @@ export const resolvers = {
     },
     privateComments: async ({ id: questionId }, _args, { dataloaders }) => {
       const comments = await dataloaders.comments.byQuestionIds.load(questionId);
+      return comments.filter((c) => c.private == true);
+    }
+  },
+  User: {
+    publicComments: async ({ id: userId }, _args, { dataloaders }) => {
+      const comments = await dataloaders.comments.byUserIds.load(userId);
+      return comments.filter((c) => c.private == false);
+    },
+    privateComments: async ({ id: userId }, _args, { dataloaders }) => {
+      const comments = await dataloaders.comments.byUserIds.load(userId);
       return comments.filter((c) => c.private == true);
     }
   },

@@ -128,7 +128,7 @@ class User extends BaseModel {
           from: 'user.roleId',
           to: 'userRole.id'
         },
-        modify: (builder) => builder.select('id', 'name')
+        modify: (builder) => builder.select('id', 'name', 'level')
       },
 
       specialtyVotes: {

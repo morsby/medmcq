@@ -7,7 +7,8 @@ const gateway = new ApolloGateway({
     { name: 'questions', url: 'http://localhost:4001' },
     { name: 'examSets', url: 'http://localhost:4002' },
     { name: 'semesters', url: 'http://localhost:4003' },
-    { name: 'comments', url: 'http://localhost:4004' }
+    { name: 'comments', url: 'http://localhost:4004' },
+    { name: 'users', url: 'http://localhost:4005' }
     // more services
   ],
   buildService({ name, url }) {
@@ -32,7 +33,10 @@ export default new ApolloServer({
   subscriptions: false
 });
 
-export const subserviceContext = (req) => ({
-  dataloaders: dataloaders(Number(req.headers['user-id'])),
-  userId: req.headers['user-id']
-});
+export const subserviceContext = (req) => {
+  const userId = Number(req.headers['user-id']);
+  return {
+    dataloaders: dataloaders(userId),
+    userId
+  };
+};

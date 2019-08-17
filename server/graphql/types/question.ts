@@ -33,6 +33,12 @@ export const typeDefs = gql`
     questionCount: Float
   }
 
+  extend type Comment @key(fields: "id") {
+    id: Int! @external
+    questionId: Int! @external
+    question: Question @requires(fields: "questionId")
+  }
+
   type SpecialtyVote {
     id: ID
   }
@@ -146,6 +152,12 @@ export const resolvers = {
       const questions = await dataloaders.questions.bySemesterIds.load(id);
       return questions.length;
     }
+  },
+  Comment: {
+    question: async ({ questionId }, _args, { dataloaders }) => ({
+      __typename: 'Question',
+      id: questionId
+    })
   },
 
   Mutation: {
