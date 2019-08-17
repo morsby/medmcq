@@ -1,7 +1,8 @@
 import { ApolloServer, gql } from 'apollo-server';
 import { buildFederatedSchema } from '@apollo/federation';
-import dataloaders from '../dataloaders';
+
 import Semester from '../../models/semester';
+import { subserviceContext } from '../apolloServer';
 
 // Husk altid extend på alle typer af queries, da det er et krav for modularitet af graphql
 // (måske i fremtiden det ikke behøves)
@@ -102,5 +103,5 @@ export const resolvers = {
 
 export const server = new ApolloServer({
   schema: buildFederatedSchema([{ typeDefs, resolvers }]),
-  context: ({ req }) => ({ dataloaders: dataloaders(Number(req.headers['user-id'])) })
+  context: ({ req }) => subserviceContext(req)
 });

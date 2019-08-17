@@ -1,13 +1,28 @@
 import Question from '../../models/question';
+import ExamSet from '../../models/exam_set';
 import QuestionComment from '../../models/question_comment';
-import User from '../../models/user';
 import QuestionSpecialtyVote from 'models/question_specialty_vote';
 
 export const questionsByIds = async (ids: number[]) => Question.query().findByIds(ids);
 
-export const examSetByQuestions = async (questions: Question[]) => {
-  const questionsWithExamSets = await Question.loadRelated(questions, 'examSet');
-  return questionsWithExamSets.map((question) => question.examSet);
+export const questionsByExamSetIds = async (ids: number[]) => {
+  const questions = await Question.query().whereIn('examSetId', ids);
+  return ids.map((id) => questions.filter((q) => q.examSetId === id));
+};
+
+export const questionsBySemesterIds = async (ids: number[]) => {
+  const questions = await Question.query()
+    .whereIn(
+      'examSetId',
+      ExamSet.query()
+        .whereIn('semesterId', ids)
+        .select('id as examSetId')
+    )
+    .joinRelation('semester')
+    .select('question.*')
+    .select('semester.id as semesterId');
+
+  return ids.map((id) => questions.filter((q: Question) => q['semesterId'] === id));
 };
 
 export const publicCommentsByQuestions = async (questions: Question[]) => {

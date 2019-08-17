@@ -4,13 +4,14 @@ import * as correctAnswerLoaders from './question_correct_answers';
 import * as semesterLoaders from './semesters';
 import * as examSetLoaders from './exam_sets';
 import Question from '../../models/question';
+
 // se https://github.com/graphql/dataloader#creating-a-new-dataloader-per-request
 const generateLoaders = (userId: number) => ({
   questions: {
     questionsByIds: new DataLoader((ids: number[]) => questionLoaders.questionsByIds(ids)),
-    examSetByQuestions: new DataLoader((questions: Question[]) =>
-      questionLoaders.examSetByQuestions(questions)
-    ),
+    byExamSetIds: new DataLoader((ids: number[]) => questionLoaders.questionsByExamSetIds(ids)),
+    bySemesterIds: new DataLoader((ids: number[]) => questionLoaders.questionsBySemesterIds(ids)),
+
     publicCommentsByQuestions: new DataLoader((questions: Question[]) =>
       questionLoaders.publicCommentsByQuestions(questions)
     ),
@@ -40,7 +41,8 @@ const generateLoaders = (userId: number) => ({
     byIds: new DataLoader((ids: number[]) => examSetLoaders.examSetByIds(ids)),
     byQuestions: new DataLoader((questions: Question[]) =>
       examSetLoaders.examSetByQuestions(questions)
-    )
+    ),
+    bySemesterIds: new DataLoader((ids: number[]) => examSetLoaders.examSetBySemesterIds(ids))
   }
 });
 

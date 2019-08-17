@@ -1,6 +1,6 @@
 import { ApolloServer, gql } from 'apollo-server';
 import { buildFederatedSchema } from '@apollo/federation';
-import dataloaders from '../dataloaders';
+import { subserviceContext } from '../apolloServer';
 import ExamSet from '../../models/exam_set';
 
 // Husk altid extend på alle typer af queries, da det er et krav for modularitet af graphql
@@ -12,6 +12,18 @@ export const typeDefs = gql`
     season: String
     year: Int
   }
+
+  extend type Question @key(fields: "id") {
+    id: Int! @external
+    examSetId: Int @external
+    examSet: ExamSet @requires(fields: "examSetId")
+  }
+
+  extend type Semester @key(fields: "id") {
+    id: Int! @external
+    examSets: [ExamSet] @requires(fields: "id")
+  }
+
   input ExamSetFilter {
     q: String
     id: ID
@@ -22,16 +34,6 @@ export const typeDefs = gql`
     views_gt: Int
     views_gte: Int
     user_id: ID
-  }
-
-  extend type Question @key(fields: "id") {
-    id: Int! @external
-    examSetId: Int @external
-    examSet: ExamSet @requires(fields: "examSetId")
-  }
-
-  extend type Semester @key(fields: "id") {
-    id: Int! @external
   }
 
   type ListMetadata {
@@ -89,9 +91,12 @@ export const resolvers = {
     }
   },
   Question: {
-    examSet: async ({ examSetId }, _args, ctxt) => {
+    examSet: async ({ examSetId }) => {
       return { __typename: 'ExamSet', id: examSetId };
     }
+  },
+  Semester: {
+    examSets: async ({ id }, _args, { dataloaders }) => dataloaders.examSets.bySemesterIds.load(id)
   },
   Mutation: {
     createCorrectAnswer: async () => {
@@ -102,5 +107,5 @@ export const resolvers = {
 
 export const server = new ApolloServer({
   schema: buildFederatedSchema([{ typeDefs, resolvers }]),
-  context: ({ req }) => ({ dataloaders: dataloaders(Number(req.headers['user-id'])) })
+  context: ({ req }) => subserviceContext(req)
 });

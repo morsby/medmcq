@@ -1,5 +1,6 @@
 import { ApolloServer } from 'apollo-server-express';
 import { ApolloGateway, RemoteGraphQLDataSource } from '@apollo/gateway';
+import dataloaders from './dataloaders';
 
 const gateway = new ApolloGateway({
   serviceList: [
@@ -28,4 +29,9 @@ export default new ApolloServer({
     return { user };
   },
   subscriptions: false
+});
+
+export const subserviceContext = (req) => ({
+  dataloaders: dataloaders(Number(req.headers['user-id'])),
+  userId: req.headers['user-id']
 });

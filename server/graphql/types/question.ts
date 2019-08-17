@@ -1,7 +1,8 @@
 import { ApolloServer, gql } from 'apollo-server';
 import { buildFederatedSchema } from '@apollo/federation';
-import dataloaders from '../dataloaders';
+
 import Question from '../../models/question';
+import { subserviceContext } from '../apolloServer';
 // Husk altid extend på alle typer af queries, da det er et krav for modularitet af graphql
 // (måske i fremtiden det ikke behøves)
 export const typeDefs = gql`
@@ -20,6 +21,16 @@ export const typeDefs = gql`
     tags: [TagVote]
     publicComments: [Comment]
     privateComments: [Comment]
+  }
+
+  extend type ExamSet @key(fields: "id") {
+    id: Int! @external
+    questions: [Question]
+  }
+
+  extend type Semester @key(fields: "id") {
+    id: Int! @external
+    questions: [Question]
   }
 
   type SpecialtyVote {
@@ -120,6 +131,13 @@ export const resolvers = {
     specialties: async (question, _, ctxt) =>
       ctxt.dataloaders.questions.specialtiesByQuestionIds.load(question.id)
   },
+  ExamSet: {
+    questions: async ({ id }, _args, { dataloaders }) => dataloaders.questions.byExamSetIds.load(id)
+  },
+  Semester: {
+    questions: async ({ id }, _args, { dataloaders }) =>
+      dataloaders.questions.bySemesterIds.load(id)
+  },
 
   Mutation: {
     createQuestion: async () => {
@@ -130,5 +148,5 @@ export const resolvers = {
 
 export const server = new ApolloServer({
   schema: buildFederatedSchema([{ typeDefs, resolvers }]),
-  context: ({ req }) => ({ dataloaders: dataloaders(Number(req.headers['user-id'])) })
+  context: ({ req }) => subserviceContext(req)
 });
