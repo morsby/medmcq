@@ -1,6 +1,7 @@
-import { ApolloServer, gql } from 'apollo-server';
+import { ApolloServer, gql, AuthenticationError } from 'apollo-server';
 import { buildFederatedSchema } from '@apollo/federation';
 import { subserviceContext } from '../apolloServer';
+import User from '../../models/user';
 import Comment from '../../models/question_comment';
 
 // Husk altid extend på alle typer af queries, da det er et krav for modularitet af graphql
@@ -79,7 +80,18 @@ export const typeDefs = gql`
 
 export const resolvers = {
   Query: {
-    allComments: async () => Comment.query().select('id'),
+    allComments: async (_root, _args, { userId }) => {
+      const user = await User.query()
+        .findById(userId)
+        .joinRelation('role')
+        .select('user.*')
+        .select('role.level as level');
+      if ((user || {})['level'] >= 100) {
+        return Comment.query().select('id');
+      } else {
+        throw new AuthenticationError('not authorized');
+      }
+    },
     Comment: (_root, { id }) => ({ id })
   },
 

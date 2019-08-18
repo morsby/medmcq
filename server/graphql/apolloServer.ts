@@ -34,7 +34,12 @@ export default new ApolloServer({
 });
 
 export const subserviceContext = (req) => {
-  const userId = Number(req.headers['user-id']);
+  let userId = req.headers['user-id'];
+  if (userId == Number(userId)) {
+    userId = Number(userId);
+  } else {
+    userId = null;
+  }
   return {
     dataloaders: dataloaders(userId),
     userId
