@@ -4,15 +4,6 @@ import { subserviceContext } from '../apolloServer';
 import User from '../../models/user';
 import Comment from '../../models/question_comment';
 
-// Husk altid extend på alle typer af queries, da det er et krav for modularitet af graphql
-// (måske i fremtiden det ikke behøves)
-/*
-  extend type User @key(fields: "id") {
-    id: Int! @external
-    publicComments: [Comment]
-    privateComments: [Comment]
-  }
-  */
 export const typeDefs = gql`
   type Comment @key(fields: "id") {
     id: Int!

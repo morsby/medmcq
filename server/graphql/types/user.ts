@@ -3,9 +3,6 @@ import { buildFederatedSchema } from '@apollo/federation';
 import { subserviceContext } from '../apolloServer';
 import User from '../../models/user';
 
-// Husk altid extend på alle typer af queries, da det er et krav for modularitet af graphql
-// (måske i fremtiden det ikke behøves)
-
 export const typeDefs = gql`
   type User @key(fields: "id") {
     id: Int!

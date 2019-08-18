@@ -4,8 +4,6 @@ import { buildFederatedSchema } from '@apollo/federation';
 import Semester from '../../models/semester';
 import { subserviceContext } from '../apolloServer';
 
-// Husk altid extend på alle typer af queries, da det er et krav for modularitet af graphql
-// (måske i fremtiden det ikke behøves)
 export const typeDefs = gql`
   type Semester @key(fields: "id") {
     id: Int!

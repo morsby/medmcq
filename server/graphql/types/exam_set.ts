@@ -3,8 +3,6 @@ import { buildFederatedSchema } from '@apollo/federation';
 import { subserviceContext } from '../apolloServer';
 import ExamSet from '../../models/exam_set';
 
-// Husk altid extend på alle typer af queries, da det er et krav for modularitet af graphql
-// (måske i fremtiden det ikke behøves)
 export const typeDefs = gql`
   type ExamSet @key(fields: "id") {
     id: Int!
