@@ -50,7 +50,9 @@ router.get('/', async (req, res) => {
  *     tags:
  *       - Exam sets
  *     requestBody:
- *       description: semesterId must refer to an actual semester
+ *       description: >
+ *         `semesterId` must refer to an actual semester.
+ *         `questions` need only contain `text, answer1, answer2, answer3, correctAnswers (in an array of objects with property 'answer') and examSetQno.`
  *       required: true
  *       content:
  *         application/json:
@@ -63,6 +65,8 @@ router.get('/', async (req, res) => {
  *                 type: string
  *               semesterId:
  *                 type: integer
+ *               questions:
+ *                 $ref: "#/components/schemas/Questions"
  *     responses:
  *       200:
  *         description: The created semester
