@@ -105,6 +105,10 @@ export const resolvers = {
     createdAt: async ({ id }, _args, { dataloaders }) => {
       const { createdAt } = await dataloaders.comments.byIds.load(id);
       return new Date(createdAt).toISOString();
+    },
+    private: async ({ id }, _args, { dataloaders }) => {
+      const comment = await dataloaders.comments.byIds.load(id);
+      return comment.private;
     }
   },
   Question: {

@@ -34,7 +34,7 @@ export const typeDefs = gql`
     user_id: ID
   }
 
-  type ListMetadata {
+  type eListMetadata {
     count: Int!
   }
 
@@ -55,7 +55,7 @@ export const typeDefs = gql`
       sortField: String
       sortOrder: String
       filter: ExamSetFilter
-    ): ListMetadata
+    ): eListMetadata
   }
 
   type Mutation {
@@ -68,7 +68,8 @@ export const typeDefs = gql`
 export const resolvers = {
   Query: {
     allExamSets: async () => ExamSet.query().select('id'),
-    ExamSet: (_root, { id }) => ({ id })
+    ExamSet: (_root, { id }) => ({ id }),
+    _allExamSetsMeta: async () => ExamSet.query().select('id')
   },
 
   ExamSet: {
@@ -83,9 +84,9 @@ export const resolvers = {
       const { year } = await dataloaders.examSets.byIds.load(id);
       return year;
     },
-    semester: async ({ id }, _args, { dataloaders }) => {
+    semesterId: async ({ id }, _args, { dataloaders }) => {
       const { semesterId } = await dataloaders.examSets.byIds.load(id);
-      return { __typename: 'Semester', id: semesterId };
+      return semesterId;
     }
   },
   Question: {
@@ -95,6 +96,9 @@ export const resolvers = {
   },
   Semester: {
     examSets: async ({ id }, _args, { dataloaders }) => dataloaders.examSets.bySemesterIds.load(id)
+  },
+  eListMetadata: {
+    count: (examSets) => examSets.length
   },
   Mutation: {
     createCorrectAnswer: async () => {

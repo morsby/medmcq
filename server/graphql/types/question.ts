@@ -123,10 +123,6 @@ export const resolvers = {
       const answers = await ctxt.dataloaders.correctAnswers.byQuestionIds.load(id);
       return answers.map((a) => a.answer);
     },
-    publicComments: async (question, _, ctxt) =>
-      ctxt.dataloaders.questions.publicCommentsByQuestions.load(question),
-    privateComments: async (question, _, ctxt) =>
-      ctxt.dataloaders.questions.privateCommentsByQuestionIds.load(question.id),
     specialties: async (question, _, ctxt) =>
       ctxt.dataloaders.questions.specialtiesByQuestionIds.load(question.id)
   },
@@ -153,7 +149,7 @@ export const resolvers = {
     }
   },
   Comment: {
-    question: async ({ questionId }, _args, { dataloaders }) => ({
+    question: async ({ questionId }) => ({
       __typename: 'Question',
       id: questionId
     })

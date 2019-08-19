@@ -86,6 +86,12 @@ export const resolvers = {
       return name;
     }
   },
+  ExamSet: {
+    semester: async ({ id }, _args, { dataloaders }) => {
+      const { semesterId } = await dataloaders.examSets.byIds.load(id);
+      return { __typename: 'Semester', id: semesterId };
+    }
+  },
 
   Question: {
     semester: ({ examSetId }, _args, ctxt) =>
