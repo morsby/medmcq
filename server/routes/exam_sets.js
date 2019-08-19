@@ -79,7 +79,7 @@ router.get('/', async (req, res) => {
  */
 router.post('/', permit({ roles: ['admin'] }), async (req, res) => {
   try {
-    const newSemester = await ExamSet.query().insert({
+    const newSemester = await ExamSet.query().insertGraphAndFetch({
       ...req.body,
       year: Number(req.body.year)
     });
