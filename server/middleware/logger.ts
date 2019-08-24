@@ -14,13 +14,24 @@ router.use(async (req, res, next) => {
     if (body.password) {
       delete body.password;
     }
-
-    await Logger.query().insert({
-      method: req.method,
-      url: req.url,
-      query: req.query ? JSON.stringify(req.query) : null,
-      body: req.body ? JSON.stringify(body) : null
-    });
+    try {
+      await Logger.query().insert({
+        method: req.method,
+        url: req.url,
+        query: req.query ? JSON.stringify(req.query) : null,
+        body: req.body ? JSON.stringify(body) : null
+      });
+    } catch (err) {
+      let { code, sqlMessage } = err.nativeError;
+      if (code === 'ER_DATA_TOO_LONG') {
+        console.error({
+          code,
+          sqlMessage
+        });
+      } else {
+        console.error(err);
+      }
+    }
   }
 
   next();
