@@ -1,5 +1,0 @@
-**/node_modules
-**/.git
-server/build
-client/build
-npm-debug.log
