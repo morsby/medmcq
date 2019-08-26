@@ -6,6 +6,7 @@ let baseConfig = {
   charset: 'utf8_unicode_ci',
   ...knexSnakeCaseMappers()
 };
+console.log(dbConnection);
 module.exports = {
   development: {
     ...baseConfig,
