@@ -18,5 +18,9 @@ module.exports = {
   production: {
     ...baseConfig,
     connection: dbConnection
+  },
+  travis: {
+    ...baseConfig,
+    connection: dbConnection
   }
 };

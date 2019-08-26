@@ -22,8 +22,9 @@ router.use(async (req, res, next) => {
         body: req.body ? JSON.stringify(body) : null
       });
     } catch (err) {
-      let { code, sqlMessage } = err.nativeError;
+      let code = (err.nativeError || {}).code;
       if (code === 'ER_DATA_TOO_LONG') {
+        let { sqlMessage } = err.nativeError;
         console.error({
           code,
           sqlMessage
