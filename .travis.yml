@@ -12,8 +12,8 @@ cache:
     - server/node_modules
     - client/node_modules
 before_install:
-  - npm run update-all
+  - npm update
 install:
-  - npm run install-all
+  - npm install
 script:
   - npm run validate
