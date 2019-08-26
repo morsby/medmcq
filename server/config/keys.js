@@ -2,10 +2,10 @@ const { env } = require('./vars');
 
 // TODO: Tilføj if prod/dev
 let keys;
-if (env === 'development') {
-  keys = require('./dev');
-} else {
+if (env === 'production') {
   keys = require('./prod');
+} else {
+  keys = require('./dev');
 }
 
 module.exports = { ...keys };
