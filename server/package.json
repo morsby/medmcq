@@ -7,9 +7,8 @@
     "start": "node -r tsconfig-paths/register build/server.js",
     "dev": "nodemon",
     "build": "tsc -p tsconfig.json",
-    "test": "NODE_ENV=test jest --runInBand --bail --forceExit --detectOpenHandles",
-    "test:w": "jest --watchAll --verbose --runInBand --bail",
-    "migrate-latest": "knex migrate:latest"
+    "test": "jest --runInBand --bail --forceExit --detectOpenHandles",
+    "test:w": "jest --watchAll --verbose --runInBand --bail"
   },
   "repository": {
     "type": "git",
