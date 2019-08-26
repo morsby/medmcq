@@ -4,8 +4,7 @@ node_js:
   - '10'
 branches:
   only:
-    - master
-    - develop
+    - travis
 cache:
   directories:
     - node_modules
