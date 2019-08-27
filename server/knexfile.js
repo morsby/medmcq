@@ -6,7 +6,6 @@ let baseConfig = {
   charset: 'utf8_unicode_ci',
   ...knexSnakeCaseMappers()
 };
-console.log(dbConnection);
 module.exports = {
   development: {
     ...baseConfig,
@@ -22,6 +21,6 @@ module.exports = {
   },
   travis: {
     ...baseConfig,
-    connection: dbConnection
+    connection: { ...dbConnection, version: '8.0' }
   }
 };

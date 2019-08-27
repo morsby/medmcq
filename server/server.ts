@@ -20,8 +20,6 @@ const app = express();
 const { Model } = require('objection');
 const Knex = require('knex');
 const knexConfig = require('./knexfile')[env];
-console.log(env);
-console.log(knexConfig);
 export const knex = Knex(knexConfig);
 Model.knex(knex);
 
