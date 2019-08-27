@@ -3,6 +3,7 @@ const { dbConnection } = require('./config/keys');
 
 let baseConfig = {
   client: 'mysql',
+  version: '8.0',
   charset: 'utf8_unicode_ci',
   ...knexSnakeCaseMappers()
 };
@@ -21,6 +22,6 @@ module.exports = {
   },
   travis: {
     ...baseConfig,
-    connection: { ...dbConnection, version: '8.0' }
+    connection: { ...dbConnection }
   }
 };
