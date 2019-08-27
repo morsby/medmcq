@@ -8,6 +8,8 @@ const dbConnection = {
   database: process.env.DB_DB
 };
 
+console.log(dbConnection);
+
 module.exports = {
   secretKeys: Keygrip(secrets),
   sendgridApiKey: process.env.SENDGRID,
