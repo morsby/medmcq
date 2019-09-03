@@ -53,8 +53,7 @@ import Sharebuilder from 'pages/Sharebuilder';
 import { toast } from 'react-toastify';
 import FirstTimeToast from 'components/Misc/Utility-pages/About/FirstTime/FirstTimeToast';
 import FirstTime from 'components/Misc/Utility-pages/About/FirstTime/FirstTime';
-// bliver ikke brugt?
-//import { IReduxState } from 'reducers';
+import { IReduxState } from 'reducers/index.js';
 
 export interface AppProps {
   invalidateMetadata: Function;
@@ -94,9 +93,10 @@ class App extends Component<AppProps> {
     });
 
     if (this.props.firstTime) {
-      toast.success(<FirstTimeToast />, {
+      toast.success(<FirstTimeToast language={defaultLanguage} />, {
         autoClose: false,
-        onClose: () => this.props.setFirstTime(false)
+        onClose: () => this.props.setFirstTime(false),
+        closeOnClick: false
       });
     }
   }
@@ -149,7 +149,7 @@ class App extends Component<AppProps> {
   }
 }
 
-const mapStateToProps = (state: any) => ({
+const mapStateToProps = (state: IReduxState) => ({
   defaultLanguage: state.settings.language,
   firstTime: state.settings.firstTime
 });

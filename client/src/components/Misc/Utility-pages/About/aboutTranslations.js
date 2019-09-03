@@ -360,6 +360,13 @@ export default {
       'Du ønskes held og lykke med eksamenslæsningen og god fornøjelse fra os - Sigurd Morsby og Thomas Jensen',
       'We wish you good luck with your exam-reading and hope that you have a blast - Sigurd Morsby and Thomas Jensen'
     ],
-    begin: ['Begynd', 'Begin']
+    begin: ['Begynd', 'Begin'],
+    toastTitle: ['Velkommen til medMCQ!', 'Welcome to medMCQ!'],
+    toast: [
+      'Om du er her for første gang, eller har brugt siden længe, så ser her for nogle gode tips og tricks!',
+      'Whether you are here for the first time, or are a veteran of the site, then look here for some useful features and tips!'
+    ],
+    toastShowMe: ['Vis mig det!', 'Show me!'],
+    toastNoThanks: ['Ellers tak', 'No thank you']
   }
 };
