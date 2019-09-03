@@ -50,7 +50,9 @@ import ErrorBoundary from './components/Misc/Utility-pages/ErrorBoundary';
 import QuizShareRoute from 'components/Quiz/QuizShareRoute';
 import QuizShareBuilderLoader from 'components/Quiz/QuizShareBuilderLoader';
 import Sharebuilder from 'pages/Sharebuilder';
-import FirstTimeModal from 'components/Misc/Utility-pages/About/FirstTimeModal';
+import { toast } from 'react-toastify';
+import FirstTimeToast from 'components/Misc/Utility-pages/About/FirstTime/FirstTimeToast';
+import FirstTime from 'components/Misc/Utility-pages/About/FirstTime/FirstTime';
 // bliver ikke brugt?
 //import { IReduxState } from 'reducers';
 
@@ -60,6 +62,8 @@ export interface AppProps {
   initialize: Function;
   defaultLanguage: string;
   fetchUser: Function;
+  firstTime: boolean;
+  setFirstTime: Function;
 }
 
 class App extends Component<AppProps> {
@@ -88,6 +92,13 @@ class App extends Component<AppProps> {
         defaultLanguage
       }
     });
+
+    if (this.props.firstTime) {
+      toast.success(<FirstTimeToast />, {
+        autoClose: false,
+        onClose: () => this.props.setFirstTime(false)
+      });
+    }
   }
 
   render() {
@@ -108,10 +119,10 @@ class App extends Component<AppProps> {
               draggable
               pauseOnHover
             />
-            <FirstTimeModal />
             <Sidebar>
               <Header />
               <Switch>
+                <Route path={'/firsttime'} component={FirstTime} />
                 <Route path={urls.about} component={About} />
                 <Route path={urls.contact} component={Contact} />
                 <Route path={'/share/:id'} component={QuizShareBuilderLoader} />
@@ -139,7 +150,8 @@ class App extends Component<AppProps> {
 }
 
 const mapStateToProps = (state: any) => ({
-  defaultLanguage: state.settings.language
+  defaultLanguage: state.settings.language,
+  firstTime: state.settings.firstTime
 });
 
 const LocalizedApp = withLocalize(

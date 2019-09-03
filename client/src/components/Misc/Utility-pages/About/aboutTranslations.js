@@ -1,7 +1,7 @@
 export default {
   about: {
     header: ['Om siden', 'About this site'],
-    openFirstTimeAgain: ['Åben informationssiden igen', 'Open the information page again'],
+    openFirstTimeAgain: ['Gå til informationssiden', 'Go to the information page'],
     contactInfo: [
       'Forbedringer, rettelser eller ideer bedes rettes til mailadressen: <a href="mailto:medmcq@fire.fundersclub.com">medmcq@fire.fundersclub.com</a>.',
       'For improvements, edits or ideas please contant us at the following email: <a href="mailto:medmcq@fire.fundersclub.com">medmcq@fire.fundersclub.com</a>'
@@ -234,5 +234,132 @@ export default {
 </ul>
       `
     ]
+  },
+  firstTime: {
+    title: [
+      `
+        <h1>Kære bruger. Velkommen til medMCQ!</h1>
+        <p>
+          Hvis du er ny bruger af siden så anbefaler vi dig at læse følgende. Selv hvis du er habil
+          bruger, så kan det også være du finder funktioner, som du ikke kender til.
+          <br />
+          Nogle af sidens funktioner afhænger af, om du opretter en gratis bruger eller ej.
+        </p>
+      `,
+      `
+      <h1>Dear user. Welcome to medMCQ!</h1>
+      <p>
+        If you are a new user, we recommend that you read the following page. Even if you are a seasoned user, it is likely that you will find features that you didn't know about.
+        <br />
+        Some of the features of the page depend on whether you create a free user or not.
+      </p>
+    `
+    ],
+    withoutUserTitle: ['Uden bruger', 'Without user'],
+    withoutUser: [
+      `
+    <ul>
+        <li>
+        <b>Valg af spørgsmål tilfældigt</b>, ud fra specialer eller tags eller ud fra hele
+        eksamenssæt
+        </li>
+        <li>
+        <b>Besvarelse af 1000-vis af spørgsmål</b> fra tidligere eksamenssæt - helt gratis
+        og uden begrænsning!
+        </li>
+        <li>
+        <b>Dele spørgsmål</b> med din læsegruppe eller underviser gennem direkte links.
+        </li>
+        <li>
+        <b>Læsning af kommentarer</b> under spørgsmålene, blandt de 100-vis af kommentarer,
+        der er blevet skrevet på siden. Mange kommentarer indeholder gode forklaringer og
+        tips til spørgsmålene.
+        </li>
+    </ul>
+    `,
+      `
+    <ul>
+        <li>
+        <b>Choice of questions randomly</b>,based on specialties or tags or from the entire exam set.
+        </li>
+        <li>
+        <b>Answering of thousands of questions</b> from previous exam sets - completely free and without limitation
+        </li>
+        <li>
+        <b>Sharing of questions</b> with your study group or through direct links.
+        </li>
+        <li>
+        <b>Ability to read comments</b> below each question, among the countless of comments that users have left on the site. Many comments contain useful descriptions or tips for the questions.
+        </li>
+    </ul>
+    `
+    ],
+    withUserTitle: [
+      `
+    <h2>Med bruger</h2>
+      <h5>
+        Du behøver ikke oprette en gratis bruger, men vær opmærksom på, at du med en (helt gratis!) bruger får
+        flere funktioner. Du kan:
+      </h5>
+      `,
+      `
+      <h2>With a user</h2>
+        <h5>
+          You do not have to create a user, but be aware that you with a (totally free!) user will get access to more features. You can:
+        </h5>
+        `
+    ],
+    withUser: [
+      `
+    <ul>
+    <li>
+      <b>Skrive kommentarer:</b> Du vil have mulighed under spørgsmålene at skrive
+      kommentarer til at hjælpe medstuderende med at forstå et spørgsmål. Vi anbefaler på
+      det kraftigste at du bidrager til fællesskabet med din viden, da det både hjælper
+      din egen forståelse og andres. Når vi hjælper hinanden går det hele en del nemmere.
+      Du kan endda skrive kommentarer helt anonymt!
+    </li>
+    <li>
+      Skrive <b>private kommentarer:</b> Selvom vi anbefaler at skrive offentlige eller
+      anonyme kommentarer, sådan at alle for gavn af din viden, så har du med en bruger
+      også mulighed for at skrive private kommentarer, som du kun selv kan se.
+    </li>
+    <li>
+      <b>Gemme spørgsmål</b>, så du kan vende tilbage til dem senere.
+    </li>
+    <li>
+      <b>Stemme på specialer og tags</b>, for at kategorisere spørgsmålene.
+    </li>
+    <li>
+      <b>Tilgå din profilside</b> med statistik over hvilke spørgsmål du har besvaret, og
+      hvordan det er gået.
+    </li>
+  </ul>
+`,
+      `
+<ul>
+<li>
+  <b>Write comments</b> You will get the ability to, below the questions, write comments to help your fellow students understand a question. We wholeheartedly recommend that you contribute with your knowledge, as it both helps your own but also other's understanding of the question. When we help eachother, everything works out for the better. You can even write comments totally anonymous!
+</li>
+<li>
+  Write <b>private comments</b>. Even though we recommend that you write public or anonymous comments, that benefit everyone, you can with a user create private commments only you have access to.
+</li>
+<li>
+  <b>Save questions</b>, so you can come back to them later.
+</li>
+<li>
+  <b>Vote on specialties and tags</b>, to categorize questions.
+</li>
+<li>
+  <b>Access your profile page</b> that includes statistics based on which questions answered, and how well you are doing.
+</li>
+</ul>
+`
+    ],
+    haveFun: [
+      'Du ønskes held og lykke med eksamenslæsningen og god fornøjelse fra os - Sigurd Morsby og Thomas Jensen',
+      'We wish you good luck with your exam-reading and hope that you have a blast - Sigurd Morsby and Thomas Jensen'
+    ],
+    begin: ['Begynd', 'Begin']
   }
 };
