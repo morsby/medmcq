@@ -119,6 +119,18 @@ export const editComment = (questionId, commentId, comment, isPrivate, isAnonymo
   });
 };
 
+export const likeComment = (commentId: number, userId: number) => async (dispatch) => {
+  const res = await axios.post(`/api/questions/comments/${commentId}/like`);
+
+  if (res.status === 204) {
+    // Comment has been unliked
+    dispatch(types.COMMENT_UNLIKE({ userId, commentId }));
+  } else {
+    // Comment has been liked
+    dispatch(types.COMMENT_LIKE({ userId, commentId }));
+  }
+};
+
 export const questionReport = ({ type, data }) => (dispatch) => {
   axios.post('/api/questions/report', { type, data });
   dispatch({ type: types.QUESTION_REPORT });

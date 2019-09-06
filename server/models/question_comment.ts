@@ -58,6 +58,19 @@ class QuestionComment extends BaseModel {
           from: 'questionComment.questionId',
           to: 'question.id'
         }
+      },
+      likes: {
+        relation: Model.ManyToManyRelation,
+        modelClass: User,
+        join: {
+          from: 'questionComment.id',
+          through: {
+            from: 'questionCommentLike.commentId',
+            to: 'questionCommentLike.userId'
+          },
+          to: 'user.id'
+        },
+        modify: (builder) => builder.select('username', 'id')
       }
     };
   }

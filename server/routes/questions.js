@@ -13,6 +13,7 @@ import sgMail from '@sendgrid/mail';
 import { errorHandler, NotAuthorized, BadRequest } from '../middleware/errorHandling';
 import Semester from '../models/semester';
 import ExamSet from '../models/exam_set';
+import QuestionCommentLike from 'models/question_comment_like';
 const keys = require('../config/keys');
 const { urls } = require('../config/vars');
 
@@ -733,6 +734,44 @@ router.delete('/:questionId/comment/:commentId', permit(), async (req, res) => {
     } else {
       throw new NotFoundError();
     }
+  } catch (err) {
+    errorHandler(err, res);
+  }
+});
+
+/**
+ * @swagger
+ * /questions/comments/:commentId/like:
+ *   post:
+ *     summary: Like a comment
+ *     description: Likes a comment.
+ *     tags:
+ *       - Question comments
+ *     responses:
+ *       200:
+ *         description: An object consisting of userId and commentId.
+ *       default:
+ *         description: unexpected error
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/Error"
+ */
+router.post('/comments/:commentId/like', permit(), async (req, res) => {
+  let { commentId } = req.params;
+  commentId = Number(commentId);
+  let userId = req.user.id;
+
+  try {
+    const exists = await QuestionCommentLike.query().findById([userId, commentId]);
+    if (exists) {
+      await QuestionCommentLike.query()
+        .delete()
+        .where({ userId, commentId });
+      return res.status(204).send('Deleted');
+    }
+    const result = await QuestionCommentLike.query().insertAndFetch({ userId, commentId });
+    res.status(200).send(result);
   } catch (err) {
     errorHandler(err, res);
   }

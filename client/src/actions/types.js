@@ -20,6 +20,8 @@ export const FETCH_QUESTIONS_FAILURE = 'fetch_questions_failure';
 export const ANSWER_QUESTION = 'answer_question';
 export const POST_QUESTION = 'post_question';
 export const QUESTION_UPDATE = 'question_update';
+export const COMMENT_LIKE = createAction('COMMENT_LIKE');
+export const COMMENT_UNLIKE = createAction('COMMENT_UNLIKE');
 
 // Gamle types
 
