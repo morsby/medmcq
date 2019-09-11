@@ -40,7 +40,7 @@ const FirstTimeToast: React.SFC<FirstTimeToastProps> = ({
         <Button basic inverted onClick={handleClick}>
           <Translate id="firstTime.toastShowMe" />
         </Button>
-        <Button basic inverted onClick={() => closeToast}>
+        <Button basic inverted onClick={() => closeToast()}>
           <Translate id="firstTime.toastNoThanks" />
         </Button>
       </div>
