@@ -5,12 +5,13 @@ import ReactRouterPropTypes from 'react-router-prop-types';
 import { withLocalize, Translate } from 'react-localize-redux';
 import aboutTranslations from './aboutTranslations';
 
-import { Container, Message, Divider } from 'semantic-ui-react';
+import { Container, Divider, Button } from 'semantic-ui-react';
+import { withRouter } from 'react-router';
 
 /**
  * Component til siden "Om-siden".
  */
-const About = ({ addTranslation }) => {
+const About = ({ addTranslation, history }) => {
   addTranslation(aboutTranslations);
 
   return (
@@ -19,12 +20,9 @@ const About = ({ addTranslation }) => {
         <h1>
           <Translate id="about.header" />
         </h1>
-        <Message warning>
-          <Message.Header>
-            <Translate id="about.notice.header" />
-          </Message.Header>
-          <Translate id="about.notice.body" />
-        </Message>
+        <Button basic color="green" onClick={() => history.push('/firsttime')}>
+          <Translate id="about.openFirstTimeAgain" />
+        </Button>
 
         <h2>
           <Translate id="changelog.header" />
@@ -59,4 +57,4 @@ About.propTypes = {
   addTranslation: PropTypes.func
 };
 
-export default withLocalize(About);
+export default withRouter(withLocalize(About));

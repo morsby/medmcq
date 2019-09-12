@@ -206,9 +206,6 @@ class SelectionMain extends Component {
 
           <SelectionMessage user={user} type={type} />
 
-          <Message warning>
-            <Translate id="selection.static.front-disclaimer" />
-          </Message>
           <Divider hidden />
         </Container>
       </div>

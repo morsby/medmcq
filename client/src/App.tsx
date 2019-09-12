@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import './App.css';
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
@@ -51,8 +50,10 @@ import ErrorBoundary from './components/Misc/Utility-pages/ErrorBoundary';
 import QuizShareRoute from 'components/Quiz/QuizShareRoute';
 import QuizShareBuilderLoader from 'components/Quiz/QuizShareBuilderLoader';
 import Sharebuilder from 'pages/Sharebuilder';
-// bliver ikke brugt?
-//import { IReduxState } from 'reducers';
+import { toast } from 'react-toastify';
+import FirstTimeToast from 'components/Misc/Utility-pages/About/FirstTime/FirstTimeToast';
+import FirstTime from 'components/Misc/Utility-pages/About/FirstTime/FirstTime';
+import { IReduxState } from 'reducers/index.js';
 
 export interface AppProps {
   invalidateMetadata: Function;
@@ -60,6 +61,8 @@ export interface AppProps {
   initialize: Function;
   defaultLanguage: string;
   fetchUser: Function;
+  firstTime: boolean;
+  setFirstTime: Function;
 }
 
 class App extends Component<AppProps> {
@@ -67,6 +70,9 @@ class App extends Component<AppProps> {
 
   constructor(props: AppProps) {
     super(props);
+
+    // Hent brugeren
+    this.props.fetchUser();
 
     // Force refresh af semestre på reload:
     this.props.invalidateMetadata();
@@ -85,12 +91,16 @@ class App extends Component<AppProps> {
         defaultLanguage
       }
     });
+
+    if (this.props.firstTime) {
+      toast.success(<FirstTimeToast language={defaultLanguage} />, {
+        autoClose: false,
+        onClose: () => this.props.setFirstTime(false),
+        closeOnClick: false
+      });
+    }
   }
 
-  componentDidMount() {
-    // Simple fix to update user onLoad
-    this.props.fetchUser();
-  }
   render() {
     if (this.state.maintenance) return <MaintenancePage />;
 
@@ -112,6 +122,7 @@ class App extends Component<AppProps> {
             <Sidebar>
               <Header />
               <Switch>
+                <Route path={'/firsttime'} component={FirstTime} />
                 <Route path={urls.about} component={About} />
                 <Route path={urls.contact} component={Contact} />
                 <Route path={'/share/:id'} component={QuizShareBuilderLoader} />
@@ -138,8 +149,9 @@ class App extends Component<AppProps> {
   }
 }
 
-const mapStateToProps = (state: any) => ({
-  defaultLanguage: state.settings.language
+const mapStateToProps = (state: IReduxState) => ({
+  defaultLanguage: state.settings.language,
+  firstTime: state.settings.firstTime
 });
 
 const LocalizedApp = withLocalize(

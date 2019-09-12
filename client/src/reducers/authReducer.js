@@ -23,11 +23,15 @@ const initialState = {
  * version af state. Se dokumentation på: https://goo.gl/wJZmMX
  */
 export default createReducer(initialState, {
-  [types.AUTH_CURRENT_USER]: (state, action) => {
+  [types.AUTH_FETCH_USER_REQUEST]: (state) => {
+    state.isFetching = true;
+  },
+  [types.AUTH_FETCH_USER_SUCCESS]: (state, action) => {
     // Modtages en bruger? Ellers sender vi null
     let user = action.payload ? action.payload : null;
 
     state.user = user;
+    state.isFetching = false;
     if (!user) state.profile = initialState.profile;
   },
 
