@@ -6,3 +6,10 @@ export const changeSettings = (settings) => (dispatch) => {
     payload: settings
   });
 };
+
+export const setFirstTime = (firstTime) => (dispatch) => {
+  dispatch({
+    type: types.SET_FIRST_TIME,
+    payload: firstTime
+  });
+};

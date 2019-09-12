@@ -5,7 +5,8 @@
     "noEmit": true,
     "jsx": "preserve",
     "baseUrl": "src",
-    "strict": false
+    "strict": false,
+    "isolatedModules": true
   },
   "include": ["src"]
 }

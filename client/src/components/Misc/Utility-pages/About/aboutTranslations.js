@@ -1,84 +1,15 @@
 export default {
   about: {
     header: ['Om siden', 'About this site'],
+    openFirstTimeAgain: ['Gå til informationssiden', 'Go to the information page'],
     contactInfo: [
       'Forbedringer, rettelser eller ideer bedes rettes til mailadressen: <a href="mailto:medmcq@fire.fundersclub.com">medmcq@fire.fundersclub.com</a>.',
       'For improvements, edits or ideas please contant us at the following email: <a href="mailto:medmcq@fire.fundersclub.com">medmcq@fire.fundersclub.com</a>'
     ],
-    notice: {
-      header: ['Bemærk', 'Notice'],
-      body: [
-        `<p>
-            Denne side er et frivilligt arbejdsredskab til dig der
-            vil teste dine MCQ-færdigheder inden for de medicinske
-            specialer der bliver undervist i på Abdomen- og
-            Inflammationssemesteret på kandidatuddannelsen i medicin
-            ved Aarhus Universitet.
-        </p>
-
-        <p>
-            MCQ-spørgsmål med svar, som du finder her på siden, er
-            alle fra tidligere eksamener afholdt på de to semestre.
-            Af samme årsag skal du derfor være opmærksom på:
-            <ol>
-                <li>
-                    At ’korrekte’ svar kan have ændret sig siden.
-                    Hvad der har været et korrekt svar til en
-                    MCQ-eksamen i 2015, vil kunne være et forkert
-                    svar i dag.
-                </li>
-                <li>
-                    At pensum kan have ændret sig siden. Du vil
-                    altså kunne opleve spørgsmål, der relaterer sig
-                    til sygdomme som du ikke længere vil blive
-                    eksamineret i. Omvendt kan du også opleve, at
-                    der ikke er spørgsmålseksempler på sygdomme som
-                    du vil kunne blive eksamineret i, i dag.
-                </li>
-                <li>
-                    At flere spørgsmål fra tidligere eksamener har
-                    været lavet under forudsætning af at
-                    eksaminationen var med ’åben bog’ (eksamen med
-                    hjælpemidler). Pt. er de fleste MCQ-eksamener
-                    med ’lukket bog’, dvs. uden hjælpemidler. Dette
-                    kan bl.a. have indflydelse på
-                    kompleksitetsgraden af spørgsmålene.
-                </li>
-            </ol>
-        </p>
-
-        <p>
-            Det er altid dit eget ansvar at holde dig ovenfor
-            stående for øje og du vil derfor ikke kunne få medhold i
-            en evt. eksamens-klagesag, med baggrund i denne sides
-            materialer. Hverken Institut for Klinisk Medicin, Aarhus
-            Universitet eller udvikler af systemet, Sigurd Morsby
-            Larsen, efterredigerer spørgsmål og svar hvorfor
-            spørgsmål og svar fremstår som da de blev anvendt ved
-            den konkrete MCQ-eksamen.
-        </p>`,
-        `<p>
-                This site is a voluntary work tool for anyone wishing to test their MCQ skills within the medical specialties taught and examined in the Inflammation, Abdominal, Cardiovacular and GOP-semesters of the master's degree medical programme at Aarhus University.
-            </p>
-            <p>MCQ questions and answers found on this site are all from previous examinations. For this reason, you must bear in mind that:
-            <ol>
-                <li>
-                    'Correct' answers may have changed since. What was a correct answer at a MCQ exam in 2015 may be a wrong answer today.
-                </li>
-                <li>
-                    The curriculum may have changed since. That is, you may encounter questions related to diseases you cannot be examined in. Likewise, you may never encounter a question about a disease that you <em>can</em> be examined in.
-                </li>
-                <li>
-                    Multiple questions from previous examinations have been posed under the presumption that the examination was an 'open book examination' (with aids). As of now, most MCQ exams are 'closed book' (without aids). This may influence e.g. the complexity of the questions.
-                </li>
-            </ol>
-        </p>
-        
-        <p>
-            It is always your responsibility to keep the above in mind and a potential examination complaint will not be sustained by referring to this site. Neither The Department of Clinical Medicine, Aarhus University or developer of the system, Sigurd Morsby Larsen, edit questions or answers. As such, questions and answers appear as when posed at the specific MCQ examination
-        </p>`
-      ]
-    },
+    frontDisclaimer: [
+      '<p>medMCQ besidder MCQ-eksamenspørgsmål fra tidligere semestre og du bør derfor være opmærksom på:</p><ol><li>Nogle besvarelser kan være forældet ift. hvad vil være korrekt i dag.</li><li>Pensum kan siden være ændret, hvorfor du kan møde spørgsmål der ligger uden for pensum. Der kan også være elementer af pensum, som der ikke er spørgsmål indenfor.</li><li>Flere af spørgsmålene er udviklet til MCQ-eksamener med hjælpemidler. Derfor kan du opleve at spørgsmålene har et højere kompleksitetsniveau.</li></ol>',
+      '<p>Welcome to medMCQ. You can test your abilities within different semesters and different medical specialties. Since the site contains MCQ examination questions from earlier semesters, you should be aware that</p><ol><li>Some answers might be outdated.</li><li>The curriculum may be different today, which means that some questions may be irrelevant for your upcoming exam and some areas of relevance may not be covered by the questions.</li><li>Some of the questions were for an examination where aid was permitted, which means you may experience a higher level of complexity in the questions.</li></ol>'
+    ],
     privacy: {
       header: ['Privatliv og cookies', 'Privacy and cookies'],
       body: [
@@ -303,5 +234,139 @@ export default {
 </ul>
       `
     ]
+  },
+  firstTime: {
+    title: [
+      `
+        <h1>Kære bruger. Velkommen til medMCQ!</h1>
+        <p>
+          Hvis du er ny bruger af siden så anbefaler vi dig at læse følgende. Selv hvis du er habil
+          bruger, så kan det også være du finder funktioner, som du ikke kender til.
+          <br />
+          Nogle af sidens funktioner afhænger af, om du opretter en gratis bruger eller ej.
+        </p>
+      `,
+      `
+      <h1>Dear user. Welcome to medMCQ!</h1>
+      <p>
+        If you are a new user, we recommend that you read the following page. Even if you are a seasoned user, it is likely that you will find features that you didn't know about.
+        <br />
+        Some of the features of the page depend on whether you create a free user or not.
+      </p>
+    `
+    ],
+    withoutUserTitle: ['Uden bruger', 'Without user'],
+    withoutUser: [
+      `
+    <ul>
+        <li>
+        <b>Valg af spørgsmål tilfældigt</b>, ud fra specialer eller tags eller ud fra hele
+        eksamenssæt
+        </li>
+        <li>
+        <b>Besvarelse af 1000-vis af spørgsmål</b> fra tidligere eksamenssæt - helt gratis
+        og uden begrænsning!
+        </li>
+        <li>
+        <b>Dele spørgsmål</b> med din læsegruppe eller underviser gennem direkte links.
+        </li>
+        <li>
+        <b>Læsning af kommentarer</b> under spørgsmålene, blandt de 100-vis af kommentarer,
+        der er blevet skrevet på siden. Mange kommentarer indeholder gode forklaringer og
+        tips til spørgsmålene.
+        </li>
+    </ul>
+    `,
+      `
+    <ul>
+        <li>
+        <b>Choice of questions randomly</b>,based on specialties or tags or from the entire exam set.
+        </li>
+        <li>
+        <b>Answering of thousands of questions</b> from previous exam sets - completely free and without limitation
+        </li>
+        <li>
+        <b>Sharing of questions</b> with your study group or through direct links.
+        </li>
+        <li>
+        <b>Ability to read comments</b> below each question, among the countless of comments that users have left on the site. Many comments contain useful descriptions or tips for the questions.
+        </li>
+    </ul>
+    `
+    ],
+    withUserTitle: [
+      `
+    <h2>Med bruger</h2>
+      <h5>
+        Du behøver ikke oprette en gratis bruger, men vær opmærksom på, at du med en (helt gratis!) bruger får
+        flere funktioner. Du kan:
+      </h5>
+      `,
+      `
+      <h2>With a user</h2>
+        <h5>
+          You do not have to create a user, but be aware that you with a (totally free!) user will get access to more features. You can:
+        </h5>
+        `
+    ],
+    withUser: [
+      `
+    <ul>
+    <li>
+      <b>Skrive kommentarer:</b> Du vil have mulighed under spørgsmålene at skrive
+      kommentarer til at hjælpe medstuderende med at forstå et spørgsmål. Vi anbefaler på
+      det kraftigste at du bidrager til fællesskabet med din viden, da det både hjælper
+      din egen forståelse og andres. Når vi hjælper hinanden går det hele en del nemmere.
+      Du kan endda skrive kommentarer helt anonymt!
+    </li>
+    <li>
+      Skrive <b>private kommentarer:</b> Selvom vi anbefaler at skrive offentlige eller
+      anonyme kommentarer, sådan at alle for gavn af din viden, så har du med en bruger
+      også mulighed for at skrive private kommentarer, som du kun selv kan se.
+    </li>
+    <li>
+      <b>Gemme spørgsmål</b>, så du kan vende tilbage til dem senere.
+    </li>
+    <li>
+      <b>Stemme på specialer og tags</b>, for at kategorisere spørgsmålene.
+    </li>
+    <li>
+      <b>Tilgå din profilside</b> med statistik over hvilke spørgsmål du har besvaret, og
+      hvordan det er gået.
+    </li>
+  </ul>
+`,
+      `
+<ul>
+<li>
+  <b>Write comments</b> You will get the ability to, below the questions, write comments to help your fellow students understand a question. We wholeheartedly recommend that you contribute with your knowledge, as it both helps your own but also other's understanding of the question. When we help eachother, everything works out for the better. You can even write comments totally anonymous!
+</li>
+<li>
+  Write <b>private comments</b>. Even though we recommend that you write public or anonymous comments, that benefit everyone, you can with a user create private commments only you have access to.
+</li>
+<li>
+  <b>Save questions</b>, so you can come back to them later.
+</li>
+<li>
+  <b>Vote on specialties and tags</b>, to categorize questions.
+</li>
+<li>
+  <b>Access your profile page</b> that includes statistics based on which questions answered, and how well you are doing.
+</li>
+</ul>
+`
+    ],
+    haveFun: [
+      'Du ønskes held og lykke med eksamenslæsningen og god fornøjelse fra os - Sigurd Morsby og Thomas Jensen',
+      'We wish you good luck with your exam-reading and hope that you have a blast - Sigurd Morsby and Thomas Jensen'
+    ],
+    begin: ['Begynd', 'Begin'],
+    toastTitle: ['Velkommen til medMCQ!', 'Welcome to medMCQ!'],
+    toast: [
+      'Om du er her for første gang, eller har brugt siden længe, så ser her for nogle gode tips og tricks!',
+      'Whether you are here for the first time, or are a veteran of the site, then look here for some useful features and tips!'
+    ],
+    toastShowMe: ['Vis mig det!', 'Show me!'],
+    toastNoThanks: ['Ellers tak', 'No thank you']
   }
 };
