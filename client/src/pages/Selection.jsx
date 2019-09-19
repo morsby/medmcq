@@ -198,8 +198,8 @@ class SelectionMain extends Component {
             <SelectionUniqueSelector onlyNew={onlyNew} onChange={this.onSettingsChange} />
           )}
 
-          {calculateResults(this.props.questions).status === 'in_progress' && (
-            <Button onClick={() => this.handleSubmit('cont')}>
+          {this.props.questions.result.length > 0 && (
+            <Button basic color="orange" onClick={() => this.handleSubmit('cont')}>
               <Translate id="selection.static.continue_quiz" />
             </Button>
           )}
