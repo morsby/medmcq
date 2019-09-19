@@ -5,7 +5,7 @@ import QuestionComments from './QuestionComments/QuestionComments';
 import { PropTypes } from 'prop-types';
 import QuestionExtraButtons from './QuestionExtras/QuestionExtraButtons';
 
-const QuestionExtras = ({ user, question, width, questionReport, qn }) => {
+const QuestionExtras = ({ user, question, width, questionReport }) => {
   const [privateCommentsOpen, setPrivateCommentsOpen] = useState(false);
   const [publicCommentsOpen, setPublicCommentsOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
@@ -18,7 +18,7 @@ const QuestionExtras = ({ user, question, width, questionReport, qn }) => {
     setReportOpen(false);
     setReportSent(false);
     setReport('');
-  }, [qn]);
+  }, [question]);
 
   /** Vis/skjul formular til rapportering af spørgsmål */
   const onReportToggle = () => {
@@ -94,8 +94,7 @@ QuestionExtras.propTypes = {
   questionReport: PropTypes.func, // Redux
   deleteComment: PropTypes.func, // Redux
   commentQuestion: PropTypes.func, // Redux
-  editComment: PropTypes.func, // Redux
-  qn: PropTypes.number
+  editComment: PropTypes.func // Redux
 };
 
 export default QuestionExtras;

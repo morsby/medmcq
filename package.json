@@ -28,11 +28,6 @@
     "test:client": "cd client && npm run test",
     "heroku-prebuild": "npm run install-all"
   },
-  "husky": {
-    "hooks": {
-      "pre-push": "npm run validate"
-    }
-  },
   "author": "Morsby",
   "license": "MIT",
   "dependencies": {
@@ -59,7 +54,6 @@
     "eslint-plugin-react": "^7.13.0",
     "eslint-plugin-react-hooks": "^1.6.0",
     "eslint-plugin-typescript": "^0.14.0",
-    "husky": "^3.0.0",
     "prettier": "^1.18.2",
     "tslint": "^5.18.0",
     "typescript-eslint-parser": "^22.0.0"
