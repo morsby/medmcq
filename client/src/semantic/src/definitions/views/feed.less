@@ -1,6 +1,6 @@
 /*!
- * # Fomantic-UI - Feed
- * http://github.com/fomantic/Fomantic-UI/
+ * # Semantic UI - Feed
+ * http://github.com/semantic-org/semantic-ui/
  *
  *
  * Released under the MIT license
@@ -25,10 +25,10 @@
   margin: @margin;
 }
 .ui.feed:first-child {
-  margin-top: 0;
+  margin-top: 0em;
 }
 .ui.feed:last-child {
-  margin-bottom: 0;
+  margin-bottom: 0em;
 }
 
 
@@ -47,11 +47,11 @@
   border-top: @eventDivider;
 }
 .ui.feed > .event:first-child {
-  border-top: 0;
-  padding-top: 0;
+  border-top: 0px;
+  padding-top: 0em;
 }
 .ui.feed > .event:last-child {
-  padding-bottom: 0;
+  padding-bottom: 0em;
 }
 
 /* Event Label */
@@ -114,6 +114,7 @@
   font-weight: @dateFontWeight;
   font-size: @dateFontSize;
   font-style: @dateFontStyle;
+  color: @dateColor;
 }
 
 /*--------------
@@ -218,7 +219,7 @@
 .ui.feed > .event > .content .meta > *:after {
   content: @metadataDivider;
   color: @metadataDividerColor;
-  top: 0;
+  top: 0em;
   left: @metadataDividerOffset;
   opacity: 1;
   position: absolute;
@@ -238,7 +239,7 @@
 
 /* First element */
 .ui.feed > .event > .content .meta > :first-child {
-  margin-left: 0;
+  margin-left: 0em;
 }
 .ui.feed > .event > .content .meta > :first-child::after {
   display: none;
@@ -273,28 +274,5 @@
 .ui.large.feed {
   font-size: @large;
 }
-
-/*------------------
-      Inverted
--------------------*/
-
-.ui.inverted.feed > .event {
-  background: @black;
-}
-
-.ui.inverted.feed > .event > .content .date,
-.ui.inverted.feed > .event > .content .meta .like {
-  color: @invertedLightTextColor;
-}
-
-.ui.inverted.feed > .event > .content .summary,
-.ui.inverted.feed > .event > .content .extra.text {
-  color: @invertedTextColor;
-}
-
-.ui.inverted.feed > .event > .content .meta .like:hover {
-  color: @invertedSelectedTextColor;
-}
-
 
 .loadUIOverrides();
