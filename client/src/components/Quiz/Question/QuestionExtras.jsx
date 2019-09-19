@@ -18,7 +18,7 @@ const QuestionExtras = ({ user, question, width, questionReport }) => {
     setReportOpen(false);
     setReportSent(false);
     setReport('');
-  }, [question]);
+  }, [question.id]);
 
   /** Vis/skjul formular til rapportering af spørgsmål */
   const onReportToggle = () => {
