@@ -15,6 +15,7 @@ import QuestionAnswerButtons from '../components/Quiz/Question/QuestionAnswerBut
 import QuestionImage from '../components/Quiz/Question/QuestionImage';
 import QuestionMetadata from '../components/Quiz/Question/QuestionMetadata';
 import QuestionExtras from '../components/Quiz/Question/QuestionExtras';
+const initialAnswerTime = 0;
 
 /**
  * Component ansvarlig for at vise selve spørgsmålet, evt. billeder, kommentarer
@@ -27,7 +28,7 @@ class Question extends PureComponent {
      * Current window width
      */
     width: window.innerWidth,
-    answerTime: 1
+    answerTime: initialAnswerTime
   };
   answerTimeInterval;
 
@@ -45,11 +46,7 @@ class Question extends PureComponent {
 
   componentDidUpdate(prevProps) {
     if (!_.isEqual(prevProps.question, this.props.question)) {
-      clearInterval(this.answerTimeInterval);
-      this.setState({ answerTime: 1 });
-      this.answerTimeInterval = setInterval(() => {
-        this.setState((prevState) => ({ answerTime: prevState.answerTime + 1 }));
-      }, 1000);
+      this.setState({ answerTime: initialAnswerTime });
     }
   }
 
@@ -57,7 +54,7 @@ class Question extends PureComponent {
     document.removeEventListener('keydown', this.onKeydown);
     window.removeEventListener('resize', this.handleResize);
     clearInterval(this.answerTimeInterval);
-    this.setState({ answerTime: 1 });
+    this.setState({ answerTime: initialAnswerTime });
   }
 
   /**

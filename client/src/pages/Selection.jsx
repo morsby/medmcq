@@ -7,7 +7,6 @@ import * as actions from 'actions';
 import _ from 'lodash';
 
 import { breakpoints, urls } from 'utils/common';
-import { calculateResults } from 'utils/quiz';
 
 import selectionTranslations from 'Translations/selectionTranslations.json';
 import { withLocalize, Translate } from 'react-localize-redux';
