@@ -26,7 +26,8 @@
     "test": "npm-run-all --parallel test:*",
     "test:server": "cd server && npm run test",
     "test:client": "cd client && npm run test",
-    "heroku-prebuild": "npm run install-all"
+    "prebuild": "npm run install-all",
+    "postbuild": "cd server && knex migrate:latest"
   },
   "author": "Morsby",
   "license": "MIT",
