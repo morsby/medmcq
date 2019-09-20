@@ -27,7 +27,7 @@
     "test:server": "cd server && npm run test",
     "test:client": "cd client && npm run test",
     "prebuild": "npm run install-all",
-    "postbuild": "cd server && knex migrate:latest"
+    "postbuild": "cd server && npm run migrate-latest"
   },
   "author": "Morsby",
   "license": "MIT",
