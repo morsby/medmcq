@@ -1,30 +1,24 @@
 import BaseModel from './_base_model';
-const { Model, ref } = require('objection');
+import { Model, ref } from 'objection';
+import Question from 'models/question';
+import User from 'models/user';
+import QuestionCorrectAnswer from 'models/question_correct_answer';
+
+interface QuestionUserAnswer {
+  id: number;
+  questionId: number;
+  question: Question;
+  user: User;
+  correctAnswers: QuestionCorrectAnswer;
+  answerTime: number;
+}
 
 class QuestionUserAnswer extends BaseModel {
   static get tableName() {
     return 'questionUserAnswer';
   }
 
-  static get jsonSchema() {
-    return {
-      type: 'object',
-      required: ['userId', 'questionId', 'answer'],
-
-      properties: {
-        id: { type: 'integer' },
-        userId: { type: ['integer', 'null'] },
-        questionId: { type: 'integer' },
-        answer: { type: 'integer' }
-      }
-    };
-  }
-
   static get relationMappings() {
-    const Question = require('./question');
-    const QuestionCorrectAnswer = require('./question_correct_answer');
-    const User = require('./user');
-
     return {
       user: {
         relation: Model.BelongsToOneRelation,

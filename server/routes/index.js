@@ -8,7 +8,6 @@ import specialtyRoutes from './specialties';
 import semesterRoutes from './semesters';
 import tagRoutes from './tags';
 import userRoutes from './users';
-import migrationRoutes from './migrate';
 
 const app = express();
 
@@ -48,6 +47,5 @@ app.use('/semesters', semesterRoutes);
 app.use('/specialties', specialtyRoutes);
 app.use('/tags', tagRoutes);
 app.use('/users', userRoutes);
-app.use('/migrate', migrationRoutes);
 
 module.exports = app;

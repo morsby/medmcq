@@ -26,8 +26,10 @@ class Question extends PureComponent {
     /**
      * Current window width
      */
-    width: window.innerWidth
+    width: window.innerWidth,
+    answerTime: 1
   };
+  answerTimeInterval;
 
   constructor(props) {
     super(props);
@@ -36,11 +38,26 @@ class Question extends PureComponent {
   componentDidMount() {
     document.addEventListener('keydown', this.onKeydown);
     window.addEventListener('resize', this.handleResize);
+    this.answerTimeInterval = setInterval(() => {
+      this.setState((prevState) => ({ answerTime: prevState.answerTime + 1 }));
+    }, 1000);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!_.isEqual(prevProps.question, this.props.question)) {
+      clearInterval(this.answerTimeInterval);
+      this.setState({ answerTime: 1 });
+      this.answerTimeInterval = setInterval(() => {
+        this.setState((prevState) => ({ answerTime: prevState.answerTime + 1 }));
+      }, 1000);
+    }
   }
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.onKeydown);
     window.removeEventListener('resize', this.handleResize);
+    clearInterval(this.answerTimeInterval);
+    this.setState({ answerTime: 1 });
   }
 
   /**
@@ -75,6 +92,7 @@ class Question extends PureComponent {
    */
   onAnswer = (answer) => {
     let { answerQuestion, question } = this.props;
+    const { answerTime } = this.state;
 
     // If not already answered:
     if (!isAnswered(question)) {
@@ -87,7 +105,7 @@ class Question extends PureComponent {
       }
 
       // Call answerQuestion fra redux
-      answerQuestion(question.id, answer, correct);
+      answerQuestion(question.id, answer, correct, answerTime);
     }
   };
 
