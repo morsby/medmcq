@@ -884,7 +884,6 @@ router.put('/:id/vote', permit(), async (req, res) => {
 router.post('/:id/answer', async (req, res) => {
   const questionId = Number(req.params.id);
   let { answer, answerTime } = req.body;
-  if (answerTime > 180) answerTime = 180; // Vi logger ikke svartid på over 3 minutter, da det må være fordi brugeren er gået fra computeren ved så lang tid.
 
   const userId = (req.user || {}).id || null;
 
