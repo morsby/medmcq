@@ -921,16 +921,18 @@ router.put('/:id/vote', permit(), async (req, res) => {
  *               $ref: "#/components/schemas/Error"
  */
 router.post('/:id/answer', async (req, res) => {
-  let questionId = Number(req.params.id);
-  let { answer } = req.body;
+  const questionId = Number(req.params.id);
+  let { answer, answerTime } = req.body;
+  if (answerTime > 60) answerTime = 60; // Vi logger ikke svartid på over 1 minut, da det må være fordi brugeren er gået fra computeren ved så lang tid.
 
-  let userId = (req.user || {}).id || null;
+  const userId = (req.user || {}).id || null;
 
   try {
     await QuestionUserAnswer.query().insert({
       questionId,
       userId,
-      answer
+      answer,
+      answerTime
     });
 
     const question = await Question.query()
@@ -940,7 +942,8 @@ router.post('/:id/answer', async (req, res) => {
     res.status(200).send(
       createResponse('QuestionAnswerSuccess', 'Succesfully saved answer', {
         answer,
-        question
+        question,
+        answerTime
       })
     );
   } catch (err) {

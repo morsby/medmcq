@@ -7,7 +7,6 @@ import * as actions from 'actions';
 import _ from 'lodash';
 
 import { breakpoints, urls } from 'utils/common';
-import { calculateResults } from 'utils/quiz';
 
 import selectionTranslations from 'Translations/selectionTranslations.json';
 import { withLocalize, Translate } from 'react-localize-redux';
@@ -198,17 +197,14 @@ class SelectionMain extends Component {
             <SelectionUniqueSelector onlyNew={onlyNew} onChange={this.onSettingsChange} />
           )}
 
-          {calculateResults(this.props.questions).status === 'in_progress' && (
-            <Button onClick={() => this.handleSubmit('cont')}>
+          {this.props.questions.result.length > 0 && (
+            <Button basic color="orange" onClick={() => this.handleSubmit('cont')}>
               <Translate id="selection.static.continue_quiz" />
             </Button>
           )}
 
           <SelectionMessage user={user} type={type} />
 
-          <Message warning>
-            <Translate id="selection.static.front-disclaimer" />
-          </Message>
           <Divider hidden />
         </Container>
       </div>

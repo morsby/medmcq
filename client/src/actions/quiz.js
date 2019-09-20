@@ -14,8 +14,8 @@ export const startQuiz = () => (dispatch) => {
   dispatch({ type: types.QUIZ_NAVIGATE, payload: 0 });
 };
 
-export const answerQuestion = (id, answer, correct) => (dispatch) => {
-  axios.post(`/api/questions/${id}/answer`, { answer });
+export const answerQuestion = (id, answer, correct, answerTime) => (dispatch) => {
+  axios.post(`/api/questions/${id}/answer`, { answer, answerTime });
 
   dispatch({ type: types.ANSWER_QUESTION, payload: { id, answer, correct } });
 };
