@@ -11,7 +11,8 @@ const initialState = {
   questions: [],
   answers: {},
   quizId: null,
-  currentQuestion: 0
+  currentQuestion: 0,
+  didInvalidate: false
 };
 
 /**
@@ -24,6 +25,12 @@ export default createReducer(initialState, {
       state.questions = action.payload.map((q) => q.id);
       state.currentQuestion = 0;
       state.answers = {};
+      state.didInvalidate = false;
+    } else {
+      // Hvis vi henter nogle spørgsmål, der ikke hører til quizzen, gør
+      // vi quizzen invalid, så Quiz.tsx ved, at den skal bede om at genhente
+      // spørgsmålene.
+      state.didInvalidate = true;
     }
   },
 
