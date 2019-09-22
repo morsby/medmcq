@@ -56,7 +56,7 @@ class QuizMain extends Component {
     og vi ikke er ved at hente nye spørgsmål, henter vi spørgsmål igen:
     */
     if (quiz.didInvalidate && !questions.isFetching) {
-      this.props.getQuestions({ ids: quiz.questions });
+      this.props.getQuestions({ ids: quiz.questions, refetch: true });
     }
   }
   componentWillUnmount() {

@@ -23,8 +23,11 @@ export default createReducer(initialState, {
   [types.FETCH_QUESTIONS_SUCCESS]: (state, action) => {
     if (action.quiz) {
       state.questions = action.payload.map((q) => q.id);
-      state.currentQuestion = 0;
-      state.answers = {};
+      console.log(action);
+      if (!action.refetch) {
+        state.currentQuestion = 0;
+        state.answers = {};
+      }
       state.didInvalidate = false;
     } else {
       // Hvis vi henter nogle spørgsmål, der ikke hører til quizzen, gør
