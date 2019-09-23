@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as actions from '../actions';
-import _ from 'lodash';
 import { withLocalize, Translate } from 'react-localize-redux';
 import quizTranslations from '../Translations/quizTranslations.json';
 
@@ -52,8 +51,12 @@ class QuizMain extends Component {
 
     let { quiz, questions } = this.props;
 
-    if (!_.isEqual(quiz.questions, questions.result) && !questions.isFetching) {
-      this.props.getQuestions({ ids: quiz.questions });
+    /*
+    Hvis quizzen er invalid (dvs. vi har hentet spørgsmål via fx profilsiden)
+    og vi ikke er ved at hente nye spørgsmål, henter vi spørgsmål igen:
+    */
+    if (quiz.didInvalidate && !questions.isFetching) {
+      this.props.getQuestions({ ids: quiz.questions, refetch: true });
     }
   }
   componentWillUnmount() {
@@ -139,8 +142,12 @@ class QuizMain extends Component {
 
   render() {
     let { questions, user, quiz } = this.props;
-    let { answers } = quiz;
-    if (questions.isFetching) {
+    let { answers, didInvalidate } = quiz;
+    /* 
+    Hvis vi er ved at hente spørgsmål eller quizzen er invalid (-- i så fald henter vi nye spørgsmål
+    i componentDidMount) 
+    */
+    if (questions.isFetching || didInvalidate) {
       return (
         <Translate>
           {({ translate }) => (
