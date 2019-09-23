@@ -70,7 +70,7 @@ class QuestionComment extends BaseModel {
           },
           to: 'user.id'
         },
-        modify: (builder) => builder.select('username', 'id')
+        modify: (builder) => builder.select('username', 'userId')
       }
     };
   }

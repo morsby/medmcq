@@ -759,18 +759,20 @@ router.delete('/:questionId/comment/:commentId', permit(), async (req, res) => {
  */
 router.post('/comments/:commentId/like', permit(), async (req, res) => {
   let { commentId } = req.params;
-  commentId = Number(commentId);
   let userId = req.user.id;
 
   try {
-    const exists = await QuestionCommentLike.query().findById([userId, commentId]);
+    const exists = await QuestionCommentLike.query().findById([commentId, userId]);
     if (exists) {
       await QuestionCommentLike.query()
-        .delete()
-        .where({ userId, commentId });
+        .where({ userId, commentId })
+        .delete();
       return res.status(204).send('Deleted');
     }
-    const result = await QuestionCommentLike.query().insertAndFetch({ userId, commentId });
+    const result = await QuestionCommentLike.query().insertAndFetch({
+      userId,
+      commentId
+    });
     res.status(200).send(result);
   } catch (err) {
     errorHandler(err, res);

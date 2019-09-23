@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect, useDispatch } from 'react-redux';
 import * as actions from 'actions';
 import marked from 'marked';
-import { Comment, Icon, Menu } from 'semantic-ui-react';
+import { Comment, Icon, Menu, Loader } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 import _ from 'lodash';
 /**
@@ -36,7 +36,6 @@ const QuestionCommentSingle = ({
   }
 
   const handleLike = async () => {
-    console.log('liking');
     setLikeLoading(true);
 
     await dispatch(actions.likeComment(commentId, user.id));
@@ -68,16 +67,21 @@ const QuestionCommentSingle = ({
             <Translate id="questionCommentSingle.anonymous" />
           </Comment.Author>
         )}
-        {'   '}
-        <Icon
-          name="thumbs up"
-          color={_.findIndex(comment.likes, { userId: user.id }) !== -1 ? 'green' : 'grey'}
-          style={user.id ? { cursor: 'pointer' } : {}}
-          onClick={handleLike}
-        />{' '}
-        <span style={{ color: 'grey' }}>{comment.likes.length}</span>
         <Comment.Metadata style={{ color: 'rgb(140, 140, 140)' }}>
           {new Date(comment.createdAt).toLocaleString('da-DK')}
+          <br />
+          {likeLoading && <Loader active inline size="mini" />}
+          {user.id && !likeLoading && author.id !== user.id && (
+            <Icon
+              name="thumbs up outline"
+              color={_.findIndex(comment.likes, { userId: user.id }) !== -1 ? 'green' : 'grey'}
+              style={user.id ? { cursor: 'pointer' } : {}}
+              onClick={handleLike}
+            />
+          )}{' '}
+          <span style={{ color: 'grey' }}>
+            {(author.id === user.id || !user.id) && 'Likes:'} {comment.likes.length}
+          </span>
         </Comment.Metadata>
         {comment.private ? (
           <Comment.Metadata style={{ color: 'rgb(140, 140, 140)' }}>
@@ -90,7 +94,7 @@ const QuestionCommentSingle = ({
             __html: marked(comment.text)
           }}
         />
-        {author.id === user.id && (
+        {author.id === user.id && !likeLoading && (
           <Menu size="mini" icon="labeled" secondary>
             {!deleting && (
               <Menu.Item onClick={() => setDeleting(true)}>

@@ -1,8 +1,8 @@
 import { Model } from 'objection';
 
 class QuestionCommentLike extends Model {
-  static tableName = 'question_comment_like';
-  static idColumn = ['user_id', 'comment_id'];
+  static tableName = 'questionCommentLike';
+  static idColumn = ['commentId', 'userId'];
 }
 
 export default QuestionCommentLike;
