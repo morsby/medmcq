@@ -125,9 +125,12 @@ export const likeComment = (commentId: number, userId: number) => async (dispatc
   if (res.status === 204) {
     // Comment has been unliked
     dispatch(types.COMMENT_UNLIKE({ userId, commentId }));
-  } else {
+  } else if (res.status === 200) {
     // Comment has been liked
     dispatch(types.COMMENT_LIKE({ userId, commentId }));
+  } else {
+    // Something went wrong
+    console.error('Something went wrong when trying to like a comment');
   }
 };
 
