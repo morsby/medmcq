@@ -760,6 +760,7 @@ router.delete('/:questionId/comment/:commentId', permit(), async (req, res) => {
 router.post('/comments/:commentId/like', permit(), async (req, res) => {
   let { commentId } = req.params;
   let userId = req.user.id;
+  if (!userId) return res.status(400).send('User is not provided');
 
   try {
     const exists = await QuestionCommentLike.query().findById([commentId, userId]);
