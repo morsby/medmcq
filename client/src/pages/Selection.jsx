@@ -19,7 +19,6 @@ import SelectionSetSelector from 'components/SelectionSettings/SelectionSetSelec
 import SelectionSpecialtiesSelector from 'components/SelectionSettings/SelectionMetadataSelector/SelectionMetadataSelector';
 import SelectionTypeSelector from 'components/SelectionSettings/SelectionTypeSelector';
 import SelectionUniqueSelector from 'components/SelectionSettings/SelectionUniqueSelector';
-import SelectionMessage from 'components/SelectionSettings/SelectionMessage';
 
 /**
  * Hovedsiden til at håndtere alle valg af spørgsmål.
@@ -202,8 +201,6 @@ class SelectionMain extends Component {
               <Translate id="selection.static.continue_quiz" />
             </Button>
           )}
-
-          <SelectionMessage user={user} type={type} />
 
           <Divider hidden />
         </Container>
