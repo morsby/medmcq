@@ -12,7 +12,6 @@ import QuestionBookmark from '../models/question_bookmark';
 import QuestionComment from '../models/question_comment';
 import User from '../models/user';
 import ManualCompletedSet from './../models/manual_completed_set';
-import QuestionCommentLike from 'models/question_comment_like';
 const router = express.Router();
 
 /**
