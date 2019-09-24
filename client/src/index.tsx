@@ -35,14 +35,15 @@ const migrations: any = {
       questions: state.questions
     };
   },
-  7: () => ({})
+  7: () => ({}),
+  8: () => ({})
 };
 
 const persistConfig = {
   key: 'medMCQ',
   storage: storage,
   stateReconciler: autoMergeLevel2, // see "Merge Process" section for details.
-  version: 7,
+  version: 8,
   migrate: createMigrate(migrations),
   whitelist: ['quiz', 'questions', 'metadata', 'ui', 'settings', 'shareBuilder'] // to disable persists
 };
