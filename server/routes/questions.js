@@ -579,12 +579,13 @@ router.post('/:questionId/comment', permit(), async (req, res) => {
 
   try {
     const updatedQuestion = await transaction(Question.knex(), async (trx) => {
-      let { isPrivate, text } = req.body;
+      let { isPrivate, text, isAnonymous } = req.body;
       const comment = {
         userId,
         questionId,
         text,
-        private: isPrivate
+        private: isPrivate,
+        anonymous: isAnonymous
       };
 
       await QuestionComment.query(trx).insert(comment);
@@ -656,12 +657,13 @@ router.patch('/:questionId/comment/:commentId', permit(), async (req, res) => {
 
   try {
     const updatedQuestion = await transaction(Question.knex(), async (trx) => {
-      let { isPrivate, text } = req.body;
+      let { isPrivate, text, isAnonymous } = req.body;
       const comment = {
         userId,
         questionId,
         text,
-        private: isPrivate
+        private: isPrivate,
+        anonymous: isAnonymous
       };
 
       await QuestionComment.query(trx)

@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect, useDispatch } from 'react-redux';
 import * as actions from 'actions';
-import { Form, TextArea, Button, Message } from 'semantic-ui-react';
+import { Form, TextArea, Button, Message, Checkbox } from 'semantic-ui-react';
 
 import { Translate } from 'react-localize-redux';
 
@@ -17,24 +17,26 @@ import { makeToast } from 'actions';
  * @param {func}  onCommentType     Funktion til at ændre kommentar-tekst
  * @param {object} user             Brugeren
  */
-const QuestionComments = ({
-  comments,
-  user,
-  privateComment,
-  question,
-  writeComment,
-  editComment,
-  type
-}) => {
-  let form;
+const QuestionComments = ({ comments, user, question, writeComment, editComment, type }) => {
+  const dispatch = useDispatch();
   const [editCommentId, setEditCommentId] = useState(null);
   const [comment, setComment] = useState('');
   const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
+  const [isAnonymous, setIsAnonymous] = useState(false);
+  let form;
+
+  useEffect(() => {
+    setIsAnonymous(false);
+    setComment('');
+  }, [question]);
+
+  // Hvis brugeren skifter fra public til privat (eller omvendt), mens der skrives
+  useEffect(() => {
+    setIsAnonymous(false);
+  }, [type]);
 
   const onCommentPost = async () => {
     let isPrivate = type === 'private';
-    let isAnonymous = false;
     setLoading(true);
 
     try {
@@ -51,13 +53,14 @@ const QuestionComments = ({
     } catch (error) {
       setLoading(false);
       dispatch(makeToast('toast.genericError', 'error'));
-      console.log(error);
+      console.error(error);
     }
   };
 
   const onEditComment = (comment) => {
     setEditCommentId(comment.id);
     setComment(comment.text);
+    setIsAnonymous(comment.anonymous);
   };
 
   if (user) {
@@ -81,12 +84,12 @@ const QuestionComments = ({
               />
             )}
           </Translate>
-          {!privateComment && (
+          {type === 'public' && (
             <Message info>
               <Translate id="questionComments.public_comment_info" />
             </Message>
           )}
-          {privateComment && (
+          {type === 'private' && (
             <Message info>
               <Translate id="questionComments.private_comment_info" />
             </Message>
@@ -94,7 +97,6 @@ const QuestionComments = ({
           <Button
             onClick={onCommentPost}
             disabled={comment.length < 3 || loading}
-            style={{ margin: '0.5em 1em 0.5em 0' }}
             loading={loading}
           >
             <Translate id="questionComments.comment" />
@@ -109,6 +111,18 @@ const QuestionComments = ({
               <Translate id="questionComments.undo_edit" />
             </Button>
           )}
+          {type === 'public' && (
+            <Translate>
+              {({ translate }) => (
+                <Checkbox
+                  style={{ marginLeft: '5px' }}
+                  checked={isAnonymous}
+                  onChange={() => setIsAnonymous(!isAnonymous)}
+                  label={translate('questionComments.anonymous')}
+                />
+              )}
+            </Translate>
+          )}
         </Form>
       </div>
     );
@@ -119,6 +133,7 @@ const QuestionComments = ({
       </Message>
     );
   }
+
   return (
     <div>
       <div>
