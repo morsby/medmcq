@@ -57,14 +57,13 @@ const QuestionCommentSingle = ({
       }}
     >
       <Comment.Content>
-        {!comment.anonymous && (
-          <Comment.Author as="strong">
-            {author.username[0].toUpperCase() + author.username.substring(1)}
-          </Comment.Author>
-        )}
-        {comment.anonymous && (
+        {comment.anonymous ? (
           <Comment.Author as="strong">
             <Translate id="questionCommentSingle.anonymous" />
+          </Comment.Author>
+        ) : (
+          <Comment.Author as="strong">
+            {author.username[0].toUpperCase() + author.username.substring(1)}
           </Comment.Author>
         )}
         <Comment.Metadata style={{ color: 'rgb(140, 140, 140)' }}>

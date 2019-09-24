@@ -7,6 +7,7 @@ interface QuestionComment {
   questionId: number;
   text: string;
   private: boolean;
+  updatedAt: Date;
 }
 
 class QuestionComment extends BaseModel {
@@ -73,6 +74,10 @@ class QuestionComment extends BaseModel {
         modify: (builder) => builder.select('username', 'userId')
       }
     };
+  }
+
+  $beforeUpdate() {
+    this.updatedAt = new Date();
   }
 
   static get modifiers() {

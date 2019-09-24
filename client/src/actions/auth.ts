@@ -68,7 +68,7 @@ export const getProfile = (semesterId = null) => async (dispatch, getState) => {
   try {
     [res] = await Promise.all([
       axios.get(`/api/users/${userId}/profile?semesterId=${semesterId}`),
-      dispatch(getQuestions({ profile: true }))
+      dispatch(getQuestions({ quiz: false }))
     ]);
   } catch ({ response }) {
     dispatch(makeToast('toast.auth.fetchProfileError', 'error'));
