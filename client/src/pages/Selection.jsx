@@ -143,6 +143,9 @@ class SelectionMain extends Component {
               <h3>
                 <Translate id="search.title" />
               </h3>
+              <p>
+                <Translate id="search.description" />
+              </p>
               <Input
                 value={this.state.search}
                 onChange={this.searchHandler}
@@ -188,16 +191,23 @@ class SelectionMain extends Component {
               })}
             </Message>
           )}
-          <Button color="green" basic onClick={() => this.handleSubmit('new')}>
-            Start!
-          </Button>
           {window.innerWidth < breakpoints.mobile && <Divider hidden />}
           {user && type !== 'set' && (
             <SelectionUniqueSelector onlyNew={onlyNew} onChange={this.onSettingsChange} />
           )}
 
+          <Button
+            style={{ cursor: 'pointer' }}
+            fluid
+            color="green"
+            basic
+            onClick={() => this.handleSubmit('new')}
+          >
+            Start!
+          </Button>
+          <div style={{ height: '5px' }} />
           {this.props.questions.result.length > 0 && (
-            <Button basic color="orange" onClick={() => this.handleSubmit('cont')}>
+            <Button basic fluid color="orange" onClick={() => this.handleSubmit('cont')}>
               <Translate id="selection.static.continue_quiz" />
             </Button>
           )}

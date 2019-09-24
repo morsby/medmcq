@@ -102,6 +102,10 @@
   },
   "search": {
     "title": ["Søg", "Search"],
-    "placeholder": ["Ét ord eller sammenhængende sætning.", "One word or combined sentence."]
+    "description": [
+      "Søg efter indhold i spørgsmål eller svar. Du kan søge efter flere ord samtidig. Ønskes søgning efter hele sætninger, så omslut sætningen med quotes, således: \"sætning\".",
+      "Search for content in questions or answers. You can search for multiple words simultaneously. If searching for whole sentences, wrap the sentence in quotes, like so: \"sentence\"."
+    ],
+    "placeholder": ["Søg...", "Search..."]
   }
 }
