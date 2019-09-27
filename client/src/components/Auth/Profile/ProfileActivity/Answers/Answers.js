@@ -7,7 +7,7 @@ import AnswerDetails from './AnswerDetails/AnswerDetails';
 /**
  * Component that displays a summary of the answered questions.
  */
-const Answers = ({ answers = {}, questions = {} }) => {
+const Answers = ({ answers = {}, questions = {}, privateComments = [], publicComments = [] }) => {
   const [details, toggleDetails] = useState(false);
 
   const onToggleDetails = () => {
@@ -22,7 +22,13 @@ const Answers = ({ answers = {}, questions = {} }) => {
     <div>
       <p>
         <Translate id="profileAnswers.summary" data={{ total: totalAnswers }} />
+        <br />
+        <Translate
+          id="profileAnswers.comments"
+          data={{ pub: publicComments.length, pri: privateComments.length }}
+        />
       </p>
+      <Divider />
       <div>
         <p>
           <Translate id="profileAnswers.answers.header" />

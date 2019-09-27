@@ -8,6 +8,7 @@ import ProfileActivityAccordionElem from './ProfileActivityAccordionElem';
 import Answers from './Answers/Answers';
 import Bookmarks from './Bookmarks/Bookmarks';
 import Comments from './Comments/Comments';
+import _ from 'lodash';
 
 /**
  * A Component that displays profile activities for a single semester.
@@ -30,7 +31,12 @@ const ProfileActivity = ({
             active={activeIndex === 0}
             handleClick={setActiveIndex}
           >
-            <Answers answers={answers} questions={questions} />
+            <Answers
+              answers={answers}
+              questions={questions}
+              publicComments={_.map(publicComments, (c) => c.id)}
+              privateComments={_.map(privateComments, (c) => c.id)}
+            />
           </ProfileActivityAccordionElem>
         )}
       </Translate>
