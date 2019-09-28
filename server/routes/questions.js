@@ -767,7 +767,9 @@ router.post('/comments/:commentId/like', permit(), async (req, res) => {
   try {
     const exists = await QuestionCommentLike.query().findById([commentId, userId]);
     if (exists) {
-      await QuestionCommentLike.query().deleteById(exists.id);
+      await QuestionCommentLike.query()
+        .where({ userId, commentId })
+        .delete();
       return res.status(204).send('Deleted');
     }
     const result = await QuestionCommentLike.query().insertAndFetch({
