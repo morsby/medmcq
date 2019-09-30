@@ -2,18 +2,13 @@ sudo: false
 language: node_js
 node_js:
   - '10'
-branches:
-  only:
-    - travis
 cache:
   directories:
     - node_modules
     - server/node_modules
     - client/node_modules
-migrate:
-  - npm run migrate-travis
 before_install:
-  - npm run update-all
+  - npm run migrate-travis
 install:
   - npm run install-all
 script:
