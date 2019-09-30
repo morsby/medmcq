@@ -7,10 +7,10 @@ cache:
     - node_modules
     - server/node_modules
     - client/node_modules
-before_install:
-  - npm run migrate-travis
 install:
   - npm run install-all
+before_script:
+  - npm run migrate-travis
 script:
   - npm run validate
 env:
