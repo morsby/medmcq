@@ -33,6 +33,7 @@ export const QUESTION_REPORT = 'question_report';
 
 /* SETTINGS REDUCER */
 export const CHANGE_SETTINGS = 'change_settings';
+export const SET_FIRST_TIME = createAction('SET_FIRST_TIME');
 
 /* SELECTION REDUCER */
 export const CHANGE_SELECTION = 'change_selection';
@@ -43,7 +44,8 @@ export const FETCH_SEMESTERS_FAILURE = 'fetch_semesters_failure';
 
 /* AUTH REDUCER */
 export const AUTH_SIGNUP = 'auth_signup';
-export const AUTH_CURRENT_USER = 'auth_current_user';
+export const AUTH_FETCH_USER_SUCCESS = 'auth_fetch_user_success';
+export const AUTH_FETCH_USER_REQUEST = 'auth_fetch_user_request';
 export const AUTH_GET_ANSWERED_QUESTIONS = 'auth_get_answered_questions';
 export const AUTH_PROFILE_REQUEST = 'auth_profile_request';
 export const AUTH_PROFILE_SUCCESS = 'auth_profile_success';

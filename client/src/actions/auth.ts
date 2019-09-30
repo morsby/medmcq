@@ -47,6 +47,7 @@ export const logout = () => async (dispatch) => {
 };
 
 export const fetchUser = () => async (dispatch) => {
+  dispatch({ type: types.AUTH_FETCH_USER_REQUEST });
   let res;
   try {
     res = await axios.get('/api/auth');
@@ -56,7 +57,7 @@ export const fetchUser = () => async (dispatch) => {
 
   if (!res) return;
 
-  dispatch({ type: types.AUTH_CURRENT_USER, payload: res.data });
+  dispatch({ type: types.AUTH_FETCH_USER_SUCCESS, payload: res.data });
 };
 
 export const getProfile = (semesterId = null) => async (dispatch, getState) => {
@@ -67,7 +68,7 @@ export const getProfile = (semesterId = null) => async (dispatch, getState) => {
   try {
     [res] = await Promise.all([
       axios.get(`/api/users/${userId}/profile?semesterId=${semesterId}`),
-      dispatch(getQuestions({ profile: true }))
+      dispatch(getQuestions({ quiz: false }))
     ]);
   } catch ({ response }) {
     dispatch(makeToast('toast.auth.fetchProfileError', 'error'));

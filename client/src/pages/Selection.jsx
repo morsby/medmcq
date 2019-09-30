@@ -7,7 +7,6 @@ import * as actions from 'actions';
 import _ from 'lodash';
 
 import { breakpoints, urls } from 'utils/common';
-import { calculateResults } from 'utils/quiz';
 
 import selectionTranslations from 'Translations/selectionTranslations.json';
 import { withLocalize, Translate } from 'react-localize-redux';
@@ -20,7 +19,6 @@ import SelectionSetSelector from 'components/SelectionSettings/SelectionSetSelec
 import SelectionSpecialtiesSelector from 'components/SelectionSettings/SelectionMetadataSelector/SelectionMetadataSelector';
 import SelectionTypeSelector from 'components/SelectionSettings/SelectionTypeSelector';
 import SelectionUniqueSelector from 'components/SelectionSettings/SelectionUniqueSelector';
-import SelectionMessage from 'components/SelectionSettings/SelectionMessage';
 
 /**
  * Hovedsiden til at håndtere alle valg af spørgsmål.
@@ -145,6 +143,9 @@ class SelectionMain extends Component {
               <h3>
                 <Translate id="search.title" />
               </h3>
+              <p>
+                <Translate id="search.description" />
+              </p>
               <Input
                 value={this.state.search}
                 onChange={this.searchHandler}
@@ -190,25 +191,27 @@ class SelectionMain extends Component {
               })}
             </Message>
           )}
-          <Button color="green" basic onClick={() => this.handleSubmit('new')}>
-            Start!
-          </Button>
           {window.innerWidth < breakpoints.mobile && <Divider hidden />}
           {user && type !== 'set' && (
             <SelectionUniqueSelector onlyNew={onlyNew} onChange={this.onSettingsChange} />
           )}
 
-          {calculateResults(this.props.questions).status === 'in_progress' && (
-            <Button onClick={() => this.handleSubmit('cont')}>
+          <Button
+            style={{ cursor: 'pointer' }}
+            fluid
+            color="green"
+            basic
+            onClick={() => this.handleSubmit('new')}
+          >
+            Start!
+          </Button>
+          <div style={{ height: '5px' }} />
+          {this.props.questions.result.length > 0 && (
+            <Button basic fluid color="orange" onClick={() => this.handleSubmit('cont')}>
               <Translate id="selection.static.continue_quiz" />
             </Button>
           )}
 
-          <SelectionMessage user={user} type={type} />
-
-          <Message warning>
-            <Translate id="selection.static.front-disclaimer" />
-          </Message>
           <Divider hidden />
         </Container>
       </div>

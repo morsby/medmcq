@@ -91,20 +91,24 @@ const QuestionMetadata = (props) => {
             </Grid.Row>
             <Grid.Row>
               <Translate id="questionMetadata.tags" />{' '}
-              {_.orderBy(question.tags, 'votes', 'desc').map((t) => {
-                let tag = tags[t.tagId];
-                return (
-                  <QuestionMetadataLabel
-                    type="tag"
-                    key={tag.id}
-                    metadata={tag}
-                    user={user}
-                    question={question}
-                  >
-                    {tag.name}
-                  </QuestionMetadataLabel>
-                );
-              })}
+              {_(question.tags)
+                .map((t) => tags[t.tagId])
+                .filter((t) => !!t.parentId)
+                .orderBy('votes', 'desc')
+                .map((t) => {
+                  return (
+                    <QuestionMetadataLabel
+                      type="tag"
+                      key={t.id}
+                      metadata={t}
+                      user={user}
+                      question={question}
+                    >
+                      {t.name}
+                    </QuestionMetadataLabel>
+                  );
+                })
+                .value()}
               {user && (
                 <QuestionMetadataDropdown
                   type="tag"

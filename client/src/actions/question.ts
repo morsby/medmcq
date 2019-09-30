@@ -5,10 +5,12 @@ import { Dispatch } from 'redux';
 
 const questionApi = '/api/questions';
 
-export const getQuestions = ({ ids = null, quiz = true, profile = !quiz }) => async (
-  dispatch,
-  getState
-) => {
+export const getQuestions = ({
+  ids = null,
+  quiz = true,
+  profile = !quiz,
+  refetch = false
+}) => async (dispatch, getState) => {
   dispatch({ type: types.FETCH_QUESTIONS_REQUEST });
   let state = getState();
   let {
@@ -73,7 +75,8 @@ export const getQuestions = ({ ids = null, quiz = true, profile = !quiz }) => as
     dispatch({
       type: types.FETCH_QUESTIONS_SUCCESS,
       payload: res.data,
-      quiz
+      quiz,
+      refetch
     });
   } else {
     dispatch({

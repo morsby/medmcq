@@ -579,12 +579,13 @@ router.post('/:questionId/comment', permit(), async (req, res) => {
 
   try {
     const updatedQuestion = await transaction(Question.knex(), async (trx) => {
-      let { isPrivate, text } = req.body;
+      let { isPrivate, text, isAnonymous } = req.body;
       const comment = {
         userId,
         questionId,
         text,
-        private: isPrivate
+        private: isPrivate,
+        anonymous: isAnonymous
       };
 
       await QuestionComment.query(trx).insert(comment);
@@ -656,12 +657,13 @@ router.patch('/:questionId/comment/:commentId', permit(), async (req, res) => {
 
   try {
     const updatedQuestion = await transaction(Question.knex(), async (trx) => {
-      let { isPrivate, text } = req.body;
+      let { isPrivate, text, isAnonymous } = req.body;
       const comment = {
         userId,
         questionId,
         text,
-        private: isPrivate
+        private: isPrivate,
+        anonymous: isAnonymous
       };
 
       await QuestionComment.query(trx)
@@ -882,16 +884,17 @@ router.put('/:id/vote', permit(), async (req, res) => {
  *               $ref: "#/components/schemas/Error"
  */
 router.post('/:id/answer', async (req, res) => {
-  let questionId = Number(req.params.id);
-  let { answer } = req.body;
+  const questionId = Number(req.params.id);
+  let { answer, answerTime } = req.body;
 
-  let userId = (req.user || {}).id || null;
+  const userId = (req.user || {}).id || null;
 
   try {
     await QuestionUserAnswer.query().insert({
       questionId,
       userId,
-      answer
+      answer,
+      answerTime
     });
 
     const question = await Question.query()
@@ -901,7 +904,8 @@ router.post('/:id/answer', async (req, res) => {
     res.status(200).send(
       createResponse('QuestionAnswerSuccess', 'Succesfully saved answer', {
         answer,
-        question
+        question,
+        answerTime
       })
     );
   } catch (err) {

@@ -27,7 +27,7 @@ const QuestionReport = ({ report, handleChange, handleSubmit, reportSent, questi
             )}
             {question.disclaimer && <Message color="yellow">{question.disclaimer}</Message>}
             <Message>
-              <Translate id="questionReport.checkIssue" data={{ link: question._id }} />
+              <Translate id="questionReport.checkIssue" data={{ link: question.id }} />
             </Message>
             <Form.Field>
               <Form.TextArea
@@ -45,7 +45,7 @@ const QuestionReport = ({ report, handleChange, handleSubmit, reportSent, questi
                 onChange={() => setChecked(!checked)}
                 label={
                   <label>
-                    <Translate id="questionReport.checkbox" data={{ link: question._id }} />
+                    <Translate id="questionReport.checkbox" data={{ link: question.id }} />
                   </label>
                 }
               />

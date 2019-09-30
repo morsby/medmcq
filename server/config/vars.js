@@ -1,10 +1,11 @@
 let port = process.env.PORT || 3001;
 
-const env = process.env.NODE_ENV || 'development';
 // for random port
-if (env === 'test') {
+if (process.env.NODE_ENV === 'test') {
   port = 0;
 }
+
+const env = process.env.NODE_ENV || 'development';
 
 module.exports = {
   port,

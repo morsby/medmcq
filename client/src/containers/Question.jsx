@@ -15,6 +15,7 @@ import QuestionAnswerButtons from '../components/Quiz/Question/QuestionAnswerBut
 import QuestionImage from '../components/Quiz/Question/QuestionImage';
 import QuestionMetadata from '../components/Quiz/Question/QuestionMetadata';
 import QuestionExtras from '../components/Quiz/Question/QuestionExtras';
+const initialAnswerTime = 0;
 
 /**
  * Component ansvarlig for at vise selve spørgsmålet, evt. billeder, kommentarer
@@ -26,8 +27,10 @@ class Question extends PureComponent {
     /**
      * Current window width
      */
-    width: window.innerWidth
+    width: window.innerWidth,
+    answerTime: initialAnswerTime
   };
+  answerTimeInterval;
 
   constructor(props) {
     super(props);
@@ -36,11 +39,22 @@ class Question extends PureComponent {
   componentDidMount() {
     document.addEventListener('keydown', this.onKeydown);
     window.addEventListener('resize', this.handleResize);
+    this.answerTimeInterval = setInterval(() => {
+      this.setState((prevState) => ({ answerTime: prevState.answerTime + 1 }));
+    }, 1000);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (!_.isEqual(prevProps.question, this.props.question)) {
+      this.setState({ answerTime: initialAnswerTime });
+    }
   }
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.onKeydown);
     window.removeEventListener('resize', this.handleResize);
+    clearInterval(this.answerTimeInterval);
+    this.setState({ answerTime: initialAnswerTime });
   }
 
   /**
@@ -75,6 +89,7 @@ class Question extends PureComponent {
    */
   onAnswer = (answer) => {
     let { answerQuestion, question } = this.props;
+    const { answerTime } = this.state;
 
     // If not already answered:
     if (!isAnswered(question)) {
@@ -87,7 +102,7 @@ class Question extends PureComponent {
       }
 
       // Call answerQuestion fra redux
-      answerQuestion(question.id, answer, correct);
+      answerQuestion(question.id, answer, correct, answerTime);
     }
   };
 

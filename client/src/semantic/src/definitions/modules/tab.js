@@ -1,6 +1,6 @@
 /*!
- * # Fomantic-UI - Tab
- * http://github.com/fomantic/Fomantic-UI/
+ * # Semantic UI - Tab
+ * http://github.com/semantic-org/semantic-ui/
  *
  *
  * Released under the MIT license
@@ -11,13 +11,6 @@
 ;(function ($, window, document, undefined) {
 
 'use strict';
-
-$.isWindow = $.isWindow || function(obj) {
-  return obj != null && obj === obj.window;
-};
-$.isFunction = $.isFunction || function(obj) {
-  return typeof obj === "function" && typeof obj.nodeType !== "number";
-};
 
 window = (typeof window != 'undefined' && window.Math == Math)
   ? window
@@ -58,7 +51,6 @@ $.fn.tab = function(parameters) {
         metadata        = settings.metadata,
         selector        = settings.selector,
         error           = settings.error,
-        regExp          = settings.regExp,
 
         eventNamespace  = '.' + settings.namespace,
         moduleNamespace = 'module-' + settings.namespace,
@@ -276,13 +268,6 @@ $.fn.tab = function(parameters) {
           }
         },
 
-        escape: {
-          string: function(text) {
-            text =  String(text);
-            return text.replace(regExp.escape, '\\$&');
-          }
-        },
-
         set: {
           auto: function() {
             var
@@ -394,7 +379,6 @@ $.fn.tab = function(parameters) {
             }
             else if(tabPath.search('/') == -1 && tabPath !== '') {
               // look for in page anchor
-              tabPath = module.escape.string(tabPath);
               $anchor     = $('#' + tabPath + ', a[name="' + tabPath + '"]');
               currentPath = $anchor.closest('[data-tab]').data(metadata.tab);
               $tab        = module.get.tabElement(currentPath);
@@ -636,7 +620,7 @@ $.fn.tab = function(parameters) {
           },
           defaultPath: function(tabPath) {
             var
-              $defaultNav = $allModules.filter('[data-' + metadata.tab + '^="' + module.escape.string(tabPath) + '/"]').eq(0),
+              $defaultNav = $allModules.filter('[data-' + metadata.tab + '^="' + tabPath + '/"]').eq(0),
               defaultTab  = $defaultNav.data(metadata.tab) || false
             ;
             if( defaultTab ) {
@@ -655,7 +639,7 @@ $.fn.tab = function(parameters) {
           },
           navElement: function(tabPath) {
             tabPath = tabPath || activeTabPath;
-            return $allModules.filter('[data-' + metadata.tab + '="' + module.escape.string(tabPath) + '"]');
+            return $allModules.filter('[data-' + metadata.tab + '="' + tabPath + '"]');
           },
           tabElement: function(tabPath) {
             var
@@ -667,8 +651,8 @@ $.fn.tab = function(parameters) {
             tabPath        = tabPath || activeTabPath;
             tabPathArray   = module.utilities.pathToArray(tabPath);
             lastTab        = module.utilities.last(tabPathArray);
-            $fullPathTab   = $tabs.filter('[data-' + metadata.tab + '="' + module.escape.string(tabPath) + '"]');
-            $simplePathTab = $tabs.filter('[data-' + metadata.tab + '="' + module.escape.string(lastTab) + '"]');
+            $fullPathTab   = $tabs.filter('[data-' + metadata.tab + '="' + tabPath + '"]');
+            $simplePathTab = $tabs.filter('[data-' + metadata.tab + '="' + lastTab + '"]');
             return ($fullPathTab.length > 0)
               ? $fullPathTab
               : $simplePathTab
@@ -686,7 +670,7 @@ $.fn.tab = function(parameters) {
             });
           },
           last: function(array) {
-            return Array.isArray(array)
+            return $.isArray(array)
               ? array[ array.length - 1]
               : false
             ;
@@ -701,7 +685,7 @@ $.fn.tab = function(parameters) {
             ;
           },
           arrayToPath: function(pathArray) {
-            return Array.isArray(pathArray)
+            return $.isArray(pathArray)
               ? pathArray.join('/')
               : false
             ;
@@ -858,7 +842,7 @@ $.fn.tab = function(parameters) {
           else if(found !== undefined) {
             response = found;
           }
-          if(Array.isArray(returnedValue)) {
+          if($.isArray(returnedValue)) {
             returnedValue.push(response);
           }
           else if(returnedValue !== undefined) {
@@ -945,10 +929,6 @@ $.fn.tab.settings = {
     legacyInit : 'onTabInit has been renamed to onFirstLoad in 2.0, please adjust your code.',
     legacyLoad : 'onTabLoad has been renamed to onLoad in 2.0. Please adjust your code',
     state      : 'History requires Asual\'s Address library <https://github.com/asual/jquery-address>'
-  },
-
-  regExp : {
-    escape   : /[-[\]{}()*+?.,\\^$|#\s:=@]/g
   },
 
   metadata : {
