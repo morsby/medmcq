@@ -222,7 +222,7 @@ describe('questions route', () => {
       .send({ answer: 'Forkert' });
 
     expect(status).toEqual(400);
-    expect(body.type).toEqual('ModelValidation');
+    expect(body.type).toEqual('InvalidData');
   });
 
   it("POST '/:id/comment' -- should insert a comment", async () => {
