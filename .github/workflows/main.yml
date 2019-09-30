@@ -10,6 +10,7 @@ jobs:
       DB_HOST: localhost
       DB_DB: test
       NODE_ENV: github
+    runs-on: ubuntu-latest
     steps:
       - uses: mirromutth/mysql-action@v1.1
         with:
