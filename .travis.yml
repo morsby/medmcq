@@ -1,25 +1,28 @@
 sudo: false
 language: node_js
 node_js:
-  - '10'
+- '10'
 branches:
   only:
-    - travis
+  - travis
 cache:
   directories:
-    - node_modules
-    - server/node_modules
-    - client/node_modules
+  - node_modules
+  - server/node_modules
+  - client/node_modules
 before_install:
-  - npm run update-all
+- npm run update-all
 install:
-  - npm run install-all
+- npm run install-all
 script:
-  - npm run validate
+- npm run validate
 env:
   global:
-    - NODE_ENV=travis
-    - DB_DB=test
-    - KEYGRIP_SECRETS="secret1 test2 aha3"
-    - MIGRATION_PASS="undefined"
-    - SENDGRID="NotUsed"
+  - NODE_ENV=travis
+  - DB_DB=test
+  - KEYGRIP_SECRETS="secret1 test2 aha3"
+  - MIGRATION_PASS="undefined"
+  - SENDGRID="NotUsed"
+  - secure: iopgdAwdNceoLfGkIh31J/y0f2FmpTFLWcAmujWqH/ZVcHgUjtpZ3TQOkGG3bG3/zhQvEB1W81DSB46li8Rx4iRYtq+MwDmPB6cVpf3LlpzXQ9q4gjLWIiJCON1fUOmcs8JfsEb7T9h7gM7kiH1Mz5ym2uVZatHmA4vJBiZoms81E3YdWuB0p4YO1lpLaitsc+0v+JkEMhub6nrkUxNuiTpVzVk263uVI57Oz4Au3pDI1CnN1ypTDbDft/L5hMV96YUszmZ1zmviPAiZUCibyTzFIH33IDHDdftS5mhykxGBISLI21O2eexh6b0vWWSdi6GmFhudlX5queQXDK6ueml7bmJM+3ieuAWaFDjP3Ew5BinQCUBa8m96TBfU5+U+sHl7ROThLt+HtziXAWDD7k3a+qSTTpzJUvPOn9+qtFlo4WVIjng3Zi46MR/N4ev2aBrjiME8WQ05aiN0/auu73ZtlgvcKL5mdUVApVLySM7SS/hAA9qTt/FPJ8eFNLi2sqoeEAFdsZRry7cXmCA7SGVRm544+JJnAqd0ycvvVFr26y90j/0ZrEh0VpIfpkaA73ckHUSBwbguha7TpzYQFobKOuyvyabtQYYUm13WPwylO5vxOG5ZlQMivVgeuaXD00D+VVcBxhcnrXofjjdpbyUinOI87j2ifVaclRdgCW4=
+  - secure: YAv86CEQbb0Pt6QXFvM810v4XEFxKbK/wUmGtJ5/2anlrU+hTfLehMiPPVvHUxxrgpbQneJE1GjGzjvumn/w5VRg4mNr8zE82BrxuNg+oa1Rims3cHkggQHoZQI1nr2mGfLA6KEjMxzhj6byf9M43BqhYeqdnAUvB4a2ipM4kl0Y8jtO0CxamMyda4U7WSiZaoOZdTHSGMWwQpkw0GtGRYETV5+GeMeVrFHjVB4T2BPFElgxxN/HKgTpDFePWKTLwWYPlJutO3sF/znfvOHAv5mEh48NkVlQGMVDREVZCPfTS101fVjfmVhcJJt9nei/Bt/nrRe6KUxA9JsHbsvIECPwOgtBVSkX/6z/P+SpS/QGOIhBDlnN29WLGbiDnctlrRTlbd7du8/WGCn4EQwLvmm1K9yyl+9A+L3f5M+elzNe9cboGtFMvpw8oauAS882y32PKx998LlWzb+6YO0qwnluyLMCwt0yFmVGSV4Al83aF9OiNzNvfu3k/+q9QAIyDQA+1GDCxrMh0iZoxLyi2XDT9In+gVvDoJzqPxBd02MiGhY29yZrrhq365avLN8vd9YsGwt6HfghNZOQdfFAieN4UFdcp8T7PSu1fBjBMM1f3oTpTMC1HJmPcuY+1Js+jGxVpcC2dz4xsQRieuYXsNPERcsr7XKPyIz4l41TvKU=
+  - secure: fCeGdpvN1pD0NK13MpuQ9IJfY8nuu3qeZ/pI9QNWFjQJfMszH1TqF0IlQzEfJa+krNKsvcDbkphz76rB1ERzCSDzXGPyDduVaSiDMK4fKQCk3C5Gua0eaqzZClwZC7O4YUDCXnVi/6ILO2nc/5DaOiQTOCCZ6G01URtmyTMrZG4Ew7+yF9ORzJO45lf70IHvmXim02ogruDoHxsWpflrJ9OMWGAmVsBs4KyElyWGyZDwXcEYj5E0GL+msXll0EqBjUn7sGn/1IGRGu5idupWhhtRlwM9vUbDwIkjnqjc5jEn+RXnpZkOE17Lyj9akkHkWNpWURop0aCbYyucCS54Ac5rf2GHrzIby7c5tLRLP5+XhU7+6DYesM1s+rFMzjxc17dJDa+UAPELllLrhYxmkKZ9uZHynq3waVYwVR24tDOVSjcGtgUtZEEk+xQZIHyv+w9A3C/vb/A0Z8EBDgyrNsy0Vck8aeSeml7s97JcaCMQvI68S635gpXsmVAxnIJe7wktWYI8DPAHE6MCcSX7a44EnLclqme/8XsWq1evIbTr9RNRyH7L9gmVlbHOZ6uOhsoF1iOcoVEKZJduurcUZWdjuTZFVmBiRfrRhHfk2HZa6SNWYtLHgUEOYtxsyaZzSQ0KDuICNiMMpN7EwkGlgu4GGCdutK9p7iin1BZTu5M=
