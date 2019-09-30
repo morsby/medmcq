@@ -4,6 +4,8 @@ const { env } = require('./vars');
 let keys;
 if (env === 'production') {
   keys = require('./prod');
+} else if (env === 'test') {
+  keys = require('./dev') || require('./prod');
 } else {
   keys = require('./dev');
 }
