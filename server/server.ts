@@ -67,7 +67,7 @@ app.get('*', (req, res) => {
 // START SERVEREN
 const server = app.listen(port);
 
-if (env !== 'test') {
+if (env !== 'test' && env !== 'travis') {
   // eslint-disable-next-line no-console
   console.log(`Server is live on http://localhost:${port}`);
 }
