@@ -1,9 +1,25 @@
 name: 'Test'
-on: pull_request
+on: 
+  pull_request
+  push:
+    branches:
+      - master
 
 jobs:
+
+  install:
+    name: Install
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@master
+        with:
+          node-version: '10.x'
+      - run: npm run install-all
+
   test:
     name: Test
+    needs: install
     env:
       DB_USER: root
       DB_PASS: rootpass
@@ -12,14 +28,13 @@ jobs:
       NODE_ENV: github
     runs-on: ubuntu-latest
     steps:
-      - uses: mirromutth/mysql-action@v1.1
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@master
+        with:
+          node-version: '10.x'
+      - uses: mirromutth/mysql-action@master
         with:
           mysql version: '8.0'
           mysql root password: rootpass
-      - uses: actions/checkout@master
-      - uses: actions/setup-node@v1
-        with:
-          node-version: '10.x'
       - run: cd server && knex migrate:latest --env github
-      - run: npm run install-all
       - run: npm run validate
