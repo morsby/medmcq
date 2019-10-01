@@ -16,8 +16,8 @@ jobs:
     name: Test
     needs: install
     env:
-      DB_USER: root
-      DB_PASS: rootpass
+      DB_USER: testuser
+      DB_PASS: testpass
       DB_HOST: localhost
       DB_DB: test
       NODE_ENV: github
@@ -32,10 +32,11 @@ jobs:
       - uses: mirromutth/mysql-action@master
         with:
           mysql version: '8.0'
-          mysql root password: rootpass
+          mysql user: testuser
+          mysql password: testpass
           host port: 3889
           container port: 3889
-      - run: mysql --port 3889 -u root -prootpass -e 'CREATE DATABASE IF NOT EXISTS test; ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'rootpass';'
+      - run: mysql --port 3889 -u testuser -ptestpass -e 'CREATE DATABASE IF NOT EXISTS test; ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'testpass';'
       - run: cd server && npm i knex && npx knex migrate:latest --env github
       - run: npm run validate
 
