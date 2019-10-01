@@ -22,6 +22,7 @@ jobs:
       DB_DB: test
       NODE_ENV: github
       DB_PORT: 3888
+      KEYGRIP_SECRETS: secret1 test2 aha3
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -34,5 +35,5 @@ jobs:
           mysql root password: rootpass
           host port: 3888
           container port: 3889
-      - run: cd server && npm i knex && npm i -g knex && knex migrate:latest --env github
+      - run: cd server && npx knex migrate:latest --env github
       - run: npm run validate
