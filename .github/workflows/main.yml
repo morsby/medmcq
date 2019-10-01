@@ -21,7 +21,7 @@ jobs:
       DB_HOST: localhost
       DB_DB: test
       NODE_ENV: github
-      DB_PORT: 3888
+      DB_PORT: 3889
       KEYGRIP_SECRETS: secret1 test2 aha3
     runs-on: ubuntu-latest
     steps:
@@ -31,7 +31,7 @@ jobs:
           node-version: '10.x'
       - uses: mirromutth/mysql-action@master
         with:
-          mysql version: '8.0'
+          mysql version: '5.7'
           mysql root password: rootpass
           host port: 3888
           container port: 3889
