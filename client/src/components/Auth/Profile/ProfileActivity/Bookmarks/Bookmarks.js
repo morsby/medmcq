@@ -4,15 +4,28 @@ import marked from 'marked';
 import _ from 'lodash';
 import { Translate } from 'react-localize-redux';
 import { Divider, Button } from 'semantic-ui-react';
-import { withRouter } from 'react-router';
+import { useDispatch } from 'react-redux';
+import { getQuestions } from 'actions';
+import { useHistory } from 'react-router';
 
 /**
  * Component that displays questions
  */
-const Bookmarks = ({ bookmarks, history }) => {
+const Bookmarks = ({ bookmarks }) => {
+  const dispatch = useDispatch();
+  const history = useHistory();
   if (Object.keys(bookmarks).length === 0) return <Translate id="profileBookmarks.no_bookmarks" />;
+
+  const openAll = async () => {
+    await dispatch(getQuestions({ ids: _.map(bookmarks, (bookmark) => bookmark.id) }));
+    history.push('/quiz');
+  };
+
   return (
     <div>
+      <Button onClick={openAll}>
+        <Translate id="profileActivity.accordionElements.startAll" />
+      </Button>
       {_.map(bookmarks, (bookmark, i) => (
         <div key={bookmark.id}>
           {i > 0 && <Divider />}
@@ -51,4 +64,4 @@ Bookmarks.propTypes = {
   history: PropTypes.object
 };
 
-export default withRouter(Bookmarks);
+export default Bookmarks;
