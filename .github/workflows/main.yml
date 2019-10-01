@@ -37,3 +37,14 @@ jobs:
           container port: 3889
       - run: cd server && npm i knex && npx knex migrate:latest --env github
       - run: npm run validate
+
+  build:
+    name: Build
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@master
+      - uses: actions/setup-node@master
+        with:
+          node-version: '10.x'
+      - run: npm run build

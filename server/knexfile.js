@@ -18,5 +18,9 @@ module.exports = {
   production: {
     ...baseConfig,
     connection: dbConnection
+  },
+  github: {
+    ...baseConfig,
+    connection: dbConnection
   }
 };
