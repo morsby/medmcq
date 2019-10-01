@@ -63,6 +63,12 @@ const QuestionComments = ({ comments, user, question, writeComment, editComment,
     setIsAnonymous(comment.anonymous);
   };
 
+  const undoEdit = () => {
+    setComment('');
+    setEditCommentId(null);
+    setIsAnonymous(false);
+  };
+
   if (user) {
     let skrivRet = editCommentId ? (
       <Translate id="questionComments.edit_a_comment" />
@@ -102,12 +108,7 @@ const QuestionComments = ({ comments, user, question, writeComment, editComment,
             <Translate id="questionComments.comment" />
           </Button>
           {editCommentId && (
-            <Button
-              negative
-              onClick={() => setEditCommentId(null)}
-              disabled={loading}
-              loading={loading}
-            >
+            <Button negative onClick={undoEdit} disabled={loading} loading={loading}>
               <Translate id="questionComments.undo_edit" />
             </Button>
           )}
