@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { withRouter, RouteComponentProps } from 'react-router';
+import { useHistory } from 'react-router';
 import { Button } from 'semantic-ui-react';
 import {
   withLocalize,
@@ -11,16 +11,16 @@ import aboutTranslations from 'components/Misc/Utility-pages/About/aboutTranslat
 import { useDispatch, useSelector } from 'react-redux';
 import { IReduxState } from 'reducers';
 
-export interface FirstTimeToastProps extends RouteComponentProps, LocalizeContextProps {
+export interface FirstTimeToastProps extends LocalizeContextProps {
   closeToast?: Function;
   language: string;
 }
 
 const FirstTimeToast: React.SFC<FirstTimeToastProps> = ({
   closeToast,
-  history,
   addTranslation
 }) => {
+  const history = useHistory();
   const language = useSelector((state: IReduxState) => state.settings.language);
   const [changedLanguage, setChangedLanguage] = useState(false);
   const dispatch = useDispatch();
@@ -60,4 +60,4 @@ const FirstTimeToast: React.SFC<FirstTimeToastProps> = ({
   );
 };
 
-export default withLocalize(withRouter(FirstTimeToast));
+export default withLocalize(FirstTimeToast);
