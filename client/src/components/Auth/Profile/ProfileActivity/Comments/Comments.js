@@ -6,15 +6,27 @@ import _ from 'lodash';
 import ProfileActivityAccordionElem from '../ProfileActivityAccordionElem';
 import CommentsQuestion from './CommentsQuestion';
 import { Button } from 'semantic-ui-react';
-import { withRouter } from 'react-router';
+import { useHistory } from 'react-router';
+import { useDispatch } from 'react-redux';
+import { getQuestions } from 'actions';
 
-const Comments = ({ questions = {}, comments = {}, type = 'public', history }) => {
+const Comments = ({ questions = {}, comments = {}, type = 'public' }) => {
+  const dispatch = useDispatch();
+  const history = useHistory();
   let [activeIndex, setActiveIndex] = useState(null);
 
   if (Object.keys(comments).length === 0) return <Translate id="profileComments.no_comments" />;
 
+  const startAll = async () => {
+    await dispatch(getQuestions({ ids: _.map(comments, (comment) => comment.questionId) }));
+    history.push('/quiz');
+  };
+
   return (
     <div>
+      <Button style={{ marginBottom: '1rem' }} onClick={startAll}>
+        <Translate id="profileActivity.accordionElements.startAll"></Translate>
+      </Button>
       {_.map(comments, (comment, i, allComments) => {
         let { questionId } = comment;
 
@@ -22,7 +34,7 @@ const Comments = ({ questions = {}, comments = {}, type = 'public', history }) =
 
         i = Object.keys(allComments).indexOf(i);
         return (
-          <>
+          <div>
             <ProfileActivityAccordionElem
               key={question.id}
               title={question.text}
@@ -37,7 +49,7 @@ const Comments = ({ questions = {}, comments = {}, type = 'public', history }) =
                 <Translate id="profileActivity.accordionElements.accordionButton" />
               </Button>
             </div>
-          </>
+          </div>
         );
       })}
     </div>
@@ -58,4 +70,4 @@ Comments.propTypes = {
   type: PropTypes.string,
   history: PropTypes.object
 };
-export default withRouter(Comments);
+export default Comments;
