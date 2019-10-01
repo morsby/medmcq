@@ -10,12 +10,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import { IReduxState } from 'reducers';
 import _ from 'lodash';
 import SearchDropdown from 'components/Sharebuilder/searchDropdown';
-import { RouteComponentProps } from 'react-router';
 import * as actions from 'actions/index';
 import 'antd/lib/table/style/css';
 import 'antd/lib/button/style/css';
+import { useHistory } from 'react-router';
 
-export interface SharebuilderProps extends RouteComponentProps {}
+export interface SharebuilderProps {}
 
 interface IFilter {
   semester: number;
@@ -25,7 +25,8 @@ interface IFilter {
   id: string;
 }
 
-const Sharebuilder: React.SFC<SharebuilderProps> = ({ history }) => {
+const Sharebuilder: React.SFC<SharebuilderProps> = () => {
+  const history = useHistory();
   const [filter, setFilter]: [IFilter, Function] = useState({
     semester: 4,
     text: '',
