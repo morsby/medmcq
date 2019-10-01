@@ -21,6 +21,7 @@ jobs:
       DB_HOST: localhost
       DB_DB: test
       NODE_ENV: github
+      DB_PORT: 3888
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
@@ -31,5 +32,7 @@ jobs:
         with:
           mysql version: '8.0'
           mysql root password: rootpass
+          host port: 3888
+          container port: 3889
       - run: cd server && knex migrate:latest --env github
       - run: npm run validate
