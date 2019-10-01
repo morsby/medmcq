@@ -34,5 +34,5 @@ jobs:
           mysql root password: rootpass
           host port: 3888
           container port: 3889
-      - run: cd server && npm i knex && knex migrate:latest --env github
+      - run: cd server && npm i knex && npm i -g knex && knex migrate:latest --env github
       - run: npm run validate
