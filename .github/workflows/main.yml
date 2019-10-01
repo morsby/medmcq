@@ -1,12 +1,7 @@
 name: 'Test'
-on: 
-  pull_request
-  push:
-    branches:
-      - master
+on: [push, pull_request]
 
 jobs:
-
   install:
     name: Install
     runs-on: ubuntu-latest
