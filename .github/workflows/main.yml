@@ -33,7 +33,7 @@ jobs:
         with:
           mysql version: '5.7'
           mysql root password: rootpass
-          host port: 3888
+          host port: 3889
           container port: 3889
       - run: cd server && npm i knex && npx knex migrate:latest --env github
       - run: npm run validate
