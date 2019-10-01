@@ -35,6 +35,7 @@ jobs:
           mysql root password: rootpass
           host port: 3889
           container port: 3889
+      - run: mysql --port 3889 -u root -prootpass -e 'CREATE DATABASE IF NOT EXISTS test;'
       - run: cd server && npm i knex && npx knex migrate:latest --env github
       - run: npm run validate
 
