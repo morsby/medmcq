@@ -1,5 +1,5 @@
 name: 'Test'
-on: [push, pull_request]
+on: pull_request
 
 jobs:
   install:
@@ -34,6 +34,5 @@ jobs:
           mysql root password: rootpass
           host port: 3888
           container port: 3889
-      - run: npm i -g knex
-      - run: cd server && knex migrate:latest --env github
+      - run: cd server && npm i knex && knex migrate:latest --env github
       - run: npm run validate
