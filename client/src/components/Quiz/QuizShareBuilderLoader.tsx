@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { RouteComponentProps } from 'react-router';
+import { useParams } from 'react-router';
 import { useDispatch } from 'react-redux';
 import LoadingPage from 'components/Misc/Utility-pages/LoadingPage';
 import Quiz from 'pages/Quiz';
@@ -9,14 +9,14 @@ import { getQuestions } from 'actions';
 import { fetchQuestionIdsFromShareLink as query_fetchQuestionIdsFromShareLink } from 'queries/shareLink';
 import ErrorBoundary from 'components/Misc/Utility-pages/ErrorBoundary';
 
-export interface QuizShareBuilderLoader extends RouteComponentProps {
-  match: any;
+export interface QuizShareBuilderLoader {
 }
 
-const QuizShareBuilderLoader: React.SFC<QuizShareBuilderLoader> = ({ match }) => {
+const QuizShareBuilderLoader: React.SFC<QuizShareBuilderLoader> = () => {
+  const params: any = useParams();
   const dispatch = useDispatch();
   const { data, error, loading } = useQuery(query_fetchQuestionIdsFromShareLink, {
-    variables: { shareId: match.params.id }
+    variables: { shareId: params.id }
   });
 
   useEffect(() => {
@@ -29,7 +29,7 @@ const QuizShareBuilderLoader: React.SFC<QuizShareBuilderLoader> = ({ match }) =>
     if (!loading) {
       fetchQuestions();
     }
-  }, [data, dispatch, loading, match.params.id, match.params.ids]);
+  }, [data, dispatch, loading, params.id]);
 
   if (loading) return <LoadingPage />;
   if (error) return <ErrorBoundary />;
