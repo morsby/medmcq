@@ -6,11 +6,12 @@ import selectionGif from 'images/aboutGifs/selectionGif.gif';
 import commentGif from 'images/aboutGifs/commentGif.gif';
 import profileGif from 'images/aboutGifs/profileGif.gif';
 import metadataGif from 'images/aboutGifs/metadataGif.gif';
-import { RouteComponentProps } from 'react-router';
+import { useHistory } from 'react-router';
 
-export interface FirstTimeModalProps extends LocalizeContextProps, RouteComponentProps {}
+export interface FirstTimeModalProps extends LocalizeContextProps {}
 
-const FirstTimeModal: React.SFC<FirstTimeModalProps> = ({ addTranslation, history }) => {
+const FirstTimeModal: React.SFC<FirstTimeModalProps> = ({ addTranslation }) => {
+  const history = useHistory();
   addTranslation(aboutTranslations);
 
   return (
