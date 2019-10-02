@@ -17,6 +17,7 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: '10.x'
+      - run: docker-compose rm -v
       - run: npm run install-all
 
   test:
