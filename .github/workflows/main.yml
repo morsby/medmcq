@@ -36,7 +36,6 @@ jobs:
       DB_HOST: localhost
       DB_DB: test
       NODE_ENV: github
-      DB_PORT: ${{ job.services.mysql.ports['3306'] }}
       KEYGRIP_SECRETS: secret1 test2 aha3
     runs-on: ubuntu-latest
     steps:
@@ -45,8 +44,8 @@ jobs:
         with:
           node-version: '10.x'
       - run: mysql --port ${{ job.services.mysql.ports['3306'] }} -u root -prootpass -e 'CREATE DATABASE IF NOT EXISTS test; ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'rootpass';'
-      - run: cd server && npm i knex && npx knex migrate:latest --env github
-      - run: npm run validate
+      - run: DB_PORT=${{ job.services.mysql.ports['3306'] }} cd server && npm i knex && npx knex migrate:latest --env github
+      - run: DB_PORT=${{ job.services.mysql.ports['3306'] }} npm run validate
 
   build:
     name: Build
