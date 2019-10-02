@@ -44,7 +44,7 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: '10.x'
-      - run: mysql -h mysql --port ${{ job.services.mysql.ports['3306'] }} -u root -prootpass -e 'CREATE DATABASE IF NOT EXISTS test; ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'rootpass';'
+      - run: mysql --port ${{ job.services.mysql.ports['3306'] }} -u root -prootpass -e 'CREATE DATABASE IF NOT EXISTS test; ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'rootpass';'
       - run: DB_PORT=${{ job.services.mysql.ports['3306'] }} cd server && npm i knex && npx knex migrate:latest --env github
       - run: DB_PORT=${{ job.services.mysql.ports['3306'] }} npm run validate
 
