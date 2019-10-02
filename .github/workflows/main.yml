@@ -22,6 +22,7 @@ jobs:
   test:
     name: Test
     needs: install
+    volumes: my-datavolume
     services:
       mysql:
         image: mysql:8.0
@@ -30,6 +31,8 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: rootpass
           MYSQL_DATABASE: test
+        volumes:
+          - my-datavolume:/var/lib/mysql
     env:
       DB_USER: root
       DB_PASS: rootpass
