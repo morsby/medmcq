@@ -22,7 +22,6 @@ jobs:
   test:
     name: Test
     needs: install
-    volumes: my-datavolume
     services:
       mysql:
         image: mysql:8.0
@@ -31,8 +30,6 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: rootpass
           MYSQL_DATABASE: test
-        volumes:
-          - my-datavolume:/var/lib/mysql
     env:
       DB_USER: root
       DB_PASS: rootpass
@@ -47,6 +44,7 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: '10.x'
+      - run: /user/bin/docker docker-compose rm -v
       - run: sudo mysql --port 8888 -u root -prootpass -e 'CREATE DATABASE IF NOT EXISTS test; ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'rootpass';'
       - run: cd server && npm i knex && npx knex migrate:latest --env github
       - run: npm run validate
