@@ -22,13 +22,21 @@ jobs:
   test:
     name: Test
     needs: install
+    services:
+      mysql:
+        image: mysql:8.0
+        ports:
+          - 3306
+        env:
+          MYSQL_ROOT_PASSWORD: rootpass
+          MYSQL_DATABASE: test
     env:
       DB_USER: root
       DB_PASS: rootpass
       DB_HOST: localhost
       DB_DB: test
       NODE_ENV: github
-      DB_PORT: 3889
+      DB_PORT: ${{ job.services.mysql.ports['3306'] }}
       KEYGRIP_SECRETS: secret1 test2 aha3
     runs-on: ubuntu-latest
     steps:
@@ -36,13 +44,7 @@ jobs:
       - uses: actions/setup-node@master
         with:
           node-version: '10.x'
-      - uses: mirromutth/mysql-action@master
-        with:
-          mysql version: '8.0'
-          mysql root password: rootpass
-          host port: 3889
-          container port: 3889
-      - run: mysql --port 3889 -u root -prootpass -e 'CREATE DATABASE IF NOT EXISTS test; ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'rootpass';'
+      - run: mysql --port ${{ job.services.mysql.ports['3306'] }} -u root -prootpass -e 'CREATE DATABASE IF NOT EXISTS test; ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'rootpass';'
       - run: cd server && npm i knex && npx knex migrate:latest --env github
       - run: npm run validate
 
