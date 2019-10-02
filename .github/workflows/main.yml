@@ -24,7 +24,7 @@ jobs:
     needs: install
     services:
       mysql:
-        image: mysql:8.0
+        image: mysql:5.7
         ports:
           - '8888:3306'
         env:
