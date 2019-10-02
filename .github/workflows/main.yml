@@ -30,7 +30,7 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: rootpass
           MYSQL_DATABASE: test
-          MYSQL_ROOT_HOST: '%'
+          MYSQL_ROOT_HOST: 'localhost'
     env:
       DB_USER: root
       DB_PASS: rootpass
