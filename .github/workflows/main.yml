@@ -18,6 +18,7 @@ jobs:
         with:
           node-version: '10.x'
       - run: npm run install-all
+      - run: npm i -g npm-run-all
 
   test:
     name: Test
@@ -47,7 +48,7 @@ jobs:
           node-version: '10.x'
       - run: mysql -h 127.0.0.1 --port 8888 -u root -ppassword -e 'CREATE DATABASE IF NOT EXISTS test;'
       - run: mysql -h 127.0.0.1 --port 8888 -u root -ppassword -e "ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY 'password';"
-      - run: cd server && npm i knex && npx knex migrate:latest --env github
+      - run: cd server && npx knex migrate:latest --env github
       - run: npm run validate
 
   build:
