@@ -2,6 +2,7 @@
 import axios from 'axios';
 import * as types from './types';
 import { Dispatch } from 'redux';
+import { makeToast } from './ui';
 
 const questionApi = '/api/questions';
 
@@ -125,16 +126,10 @@ export const editComment = (questionId, commentId, comment, isPrivate, isAnonymo
 export const likeComment = (commentId: number, userId: number) => async (dispatch) => {
   const res = await axios.post(`/api/questions/comments/${commentId}/like`);
 
-  if (res.status === 204) {
-    // Comment has been unliked
-    dispatch(types.COMMENT_UNLIKE({ userId, commentId }));
-  } else if (res.status === 200) {
-    // Comment has been liked
-    dispatch(types.COMMENT_LIKE({ userId, commentId }));
-  } else {
-    // Something went wrong
-    console.error('Something went wrong when trying to like a comment');
-  }
+  if (res.status === 204) return dispatch(types.COMMENT_UNLIKE({ userId, commentId })); // Comment has been unliked
+  if (res.status === 200) return dispatch(types.COMMENT_LIKE({ userId, commentId })); // Comment has been liked
+
+  dispatch(makeToast('toast.commentLike.error', 'error')); // Something went wrong
 };
 
 export const questionReport = ({ type, data }) => (dispatch) => {

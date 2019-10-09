@@ -70,17 +70,17 @@ const QuestionCommentSingle = ({
           {new Date(comment.createdAt).toLocaleString('da-DK')}
           <br />
           {likeLoading && <Loader active inline size="mini" />}
-          {user.id && !likeLoading && author.id !== user.id && (
+          {user.id && !likeLoading && author.id !== user.id ? (
             <Icon
               name="thumbs up outline"
               color={_.findIndex(comment.likes, { userId: user.id }) !== -1 ? 'green' : 'grey'}
               style={user.id ? { cursor: 'pointer' } : {}}
               onClick={handleLike}
             />
-          )}{' '}
-          <span style={{ color: 'grey' }}>
-            {(author.id === user.id || !user.id) && 'Likes:'} {comment.likes.length}
-          </span>
+          ) : (
+            <Icon disabled name="thumbs up outline" />
+          )}
+          <span style={{ color: 'grey' }}>{comment.likes.length}</span>
         </Comment.Metadata>
         {comment.private ? (
           <Comment.Metadata style={{ color: 'rgb(140, 140, 140)' }}>
