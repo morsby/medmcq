@@ -1,4 +1,5 @@
 # AU medMCQ
+[![Build Status](https://travis-ci.org/morsby/medmcq.svg?branch=master)](https://travis-ci.org/morsby/medmcq)
 
 Dette er en webapp bygget som en Express-server med React ovenpå. Den bruges af medicinstuderende på Aarhus Universitet til repetition af multiple choice question (MCQ) eksaminer.
 
