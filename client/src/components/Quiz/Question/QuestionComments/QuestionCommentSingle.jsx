@@ -23,7 +23,8 @@ const QuestionCommentSingle = ({
   user,
   onEditComment,
   deleteComment,
-  questionId
+  questionId,
+  mostLiked
 }) => {
   const dispatch = useDispatch();
   const [deleting, setDeleting] = useState(false);
@@ -63,7 +64,8 @@ const QuestionCommentSingle = ({
           </Comment.Author>
         ) : (
           <Comment.Author as="strong">
-            {author.username[0].toUpperCase() + author.username.substring(1)}
+            {author.username[0].toUpperCase() + author.username.substring(1)}{' '}
+            {mostLiked && <Icon color="green" name="star outline" />}
           </Comment.Author>
         )}
         <Comment.Metadata style={{ color: 'rgb(140, 140, 140)' }}>
