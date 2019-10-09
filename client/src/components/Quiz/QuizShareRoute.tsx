@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { RouteComponentProps } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { getQuestions } from 'actions';
 import { IReduxState } from 'reducers';
@@ -7,12 +6,13 @@ import LoadingPage from 'components/Misc/Utility-pages/LoadingPage';
 import Quiz from 'pages/Quiz';
 import * as types from '../../actions/types';
 import { toast } from 'react-toastify';
+import { useHistory, useParams } from 'react-router';
 
-export interface QuizShareRouteProps extends RouteComponentProps {
-  match: any;
-}
+export interface QuizShareRouteProps {}
 
-const QuizShareRoute: React.SFC<QuizShareRouteProps> = ({ match, history }) => {
+const QuizShareRoute: React.SFC<QuizShareRouteProps> = () => {
+  const history = useHistory();
+  const params: any = useParams();
   const dispatch = useDispatch();
   const isFetching = useSelector((state: IReduxState) => state.questions.isFetching);
   const questions = useSelector((state: IReduxState) => state.questions.entities.questions);
@@ -20,7 +20,7 @@ const QuizShareRoute: React.SFC<QuizShareRouteProps> = ({ match, history }) => {
 
   useEffect(() => {
     const fetchQuestions = async () => {
-      const ids = match.params.ids.split(',');
+      const ids = params.ids.split(',');
 
       // Check if valid ids
       ids.forEach((id: string | number) => {
@@ -35,7 +35,7 @@ const QuizShareRoute: React.SFC<QuizShareRouteProps> = ({ match, history }) => {
     };
 
     fetchQuestions();
-  }, [dispatch, history, match.params.id, match.params.ids]);
+  }, [dispatch, history, params.ids]);
 
   if (error) {
     toast(error.message + ' from id', { autoClose: 3000, type: toast.TYPE.ERROR });

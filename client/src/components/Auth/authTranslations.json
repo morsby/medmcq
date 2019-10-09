@@ -49,17 +49,22 @@
       "publicComments": ["Offentlige kommentarer", "Public comments"],
       "privateComments": ["Private kommentarer", "Private comments"],
       "bookmarks": ["Bogmærkede spørgsmål", "Bookmarked questions"],
-      "accordionButton": ["Gå til spørgsmål", "Go to question"]
+      "accordionButton": ["Gå til spørgsmål", "Go to question"],
+      "startAll": ["Start alle", "Start all"]
     }
   },
   "profileAnswers": {
     "summary": [
-      "Du har svaret på ${total} forskellige spørgsmål",
-      "You have answered a total of ${total} different questions"
+      "Du har svaret på ${total} forskellige spørgsmål.",
+      "You have answered a total of ${total} different questions."
+    ],
+    "comments": [
+      "Du har skrevet ${pub} offentlige kommentarer og ${pri} private kommentarer.",
+      "You have written ${pub} public comments and ${pri} private comments."
     ],
     "semester": ["${n}. semester (${name})", "${n}th semester (${name})"],
     "answers": {
-      "header": ["Af dem har du svaret", "Of these, you have answered"],
+      "header": ["Du har svaret", "You have answered"],
       "correct": [
         "<span class=\"correct\">rigtigt</span> <em>hver</em> gang på ${n} spørgsmål",
         "<span class=\"correct\">correctly</span> <em>every</em> time on ${n} questions"
