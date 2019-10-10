@@ -19,9 +19,7 @@ script:
 env:
   global:
     - NODE_ENV=travis
-    - DB_DB=test
+    - DB_URL=mysql://root@127.0.0.1:3306/test
     - KEYGRIP_SECRETS="secret1 test2 aha3"
     - MIGRATION_PASS="undefined"
     - SENDGRID="NotUsed"
-    - DB_USER="root"
-    - DB_HOST="127.0.0.1"
