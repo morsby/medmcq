@@ -1,5 +1,6 @@
 import BaseModel from './_base_model';
-const { Model } = require('objection');
+import { Model } from 'objection';
+import Question from './question';
 
 interface QuestionCorrectAnswer {
   id: number;
@@ -24,8 +25,6 @@ class QuestionCorrectAnswer extends BaseModel {
     };
   }
   static get relationMappings() {
-    const Question = require('./question');
-
     return {
       question: {
         relation: Model.BelongsToOneRelation,

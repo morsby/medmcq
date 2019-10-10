@@ -1,5 +1,7 @@
 import BaseModel from './_base_model';
 import { Model } from 'objection';
+import Question from './question';
+import Semester from './semester';
 
 /**
  * The model for an exam set.
@@ -38,9 +40,6 @@ class ExamSet extends BaseModel {
    * @type {object}
    */
   static get relationMappings() {
-    const Question = require('./question');
-    const Semester = require('./semester');
-
     return {
       semester: {
         relation: Model.BelongsToOneRelation,

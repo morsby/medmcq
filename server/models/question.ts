@@ -1,6 +1,12 @@
 import BaseModel, { CustomQueryBuilder, modifiers } from './_base_model';
 import { Model } from 'objection';
 import QuestionBookmark from '../models/question_bookmark';
+import ExamSet from './exam_set';
+import Semester from './semester';
+import QuestionComment from './question_comment';
+import QuestionCorrectAnswer from './question_correct_answer';
+import QuestionSpecialtyVote from './question_specialty_vote';
+import QuestionTagVote from './question_tag_vote';
 
 class Question extends BaseModel {
   static get tableName() {
@@ -39,12 +45,6 @@ class Question extends BaseModel {
   }
 
   static get relationMappings() {
-    const ExamSet = require('./exam_set');
-    const Semester = require('./semester');
-    const QuestionComment = require('./question_comment');
-    const QuestionCorrectAnswer = require('./question_correct_answer');
-    const QuestionSpecialtyVote = require('./question_specialty_vote');
-    const QuestionTagVote = require('./question_tag_vote');
     return {
       specialties: {
         relation: Model.HasManyRelation,

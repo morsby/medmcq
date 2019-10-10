@@ -1,5 +1,8 @@
 import BaseModel, { CustomQueryBuilder, modifiers } from './_base_model';
-const { Model } = require('objection');
+import { Model } from 'objection';
+import Question from './question';
+import User from './user';
+import Specialty from './specialty';
 
 class QuestionSpecialtyVote extends BaseModel {
   static get tableName() {
@@ -26,10 +29,6 @@ class QuestionSpecialtyVote extends BaseModel {
   }
 
   static get relationMappings() {
-    const Question = require('./question');
-    const User = require('./user');
-    const Specialty = require('./specialty');
-
     return {
       user: {
         relation: Model.BelongsToOneRelation,

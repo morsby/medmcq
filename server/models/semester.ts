@@ -1,5 +1,9 @@
 import BaseModel from './_base_model';
-const { Model } = require('objection');
+import { Model } from 'objection';
+import ExamSet from './exam_set';
+import Question from './question';
+import Specialty from './specialty';
+import Tag from './tag';
 
 interface Semester {
   id: number;
@@ -28,11 +32,6 @@ class Semester extends BaseModel {
   }
 
   static get relationMappings() {
-    const ExamSet = require('./exam_set');
-    const Question = require('./question');
-    const Specialty = require('./specialty');
-    const Tag = require('./tag');
-
     return {
       examSets: {
         relation: Model.HasManyRelation,

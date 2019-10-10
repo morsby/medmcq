@@ -65,4 +65,4 @@ class QuestionUserAnswer extends BaseModel {
   }
 }
 
-module.exports = QuestionUserAnswer;
+export default QuestionUserAnswer;

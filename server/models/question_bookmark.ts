@@ -1,5 +1,7 @@
 import BaseModel, { modifiers, CustomQueryBuilder } from './_base_model';
 import { Model } from 'objection';
+import Question from './question';
+import User from './user';
 
 interface QuestionBookmark {
   id: number;
@@ -29,9 +31,6 @@ class QuestionBookmark extends BaseModel {
     };
   }
   static get relationMappings() {
-    const Question = require('./question');
-    const User = require('./user');
-
     return {
       user: {
         relation: Model.BelongsToOneRelation,
