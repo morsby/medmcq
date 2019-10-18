@@ -48,4 +48,4 @@ app.use('/specialties', specialtyRoutes);
 app.use('/tags', tagRoutes);
 app.use('/users', userRoutes);
 
-module.exports = app;
+export default app;

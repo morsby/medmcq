@@ -1,5 +1,6 @@
 import BaseModel from './_base_model';
 import { Model } from 'objection';
+import User from './user';
 
 interface UserRole {
   id: number;
@@ -26,8 +27,6 @@ class UserRole extends BaseModel {
   }
 
   static get relationMappings() {
-    const User = require('./user');
-
     return {
       users: {
         relation: Model.HasManyRelation,

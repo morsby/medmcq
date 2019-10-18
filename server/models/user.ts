@@ -1,6 +1,13 @@
 import BaseModel, { hiddenCols } from './_base_model';
 import bcrypt from 'bcrypt';
 import { Model } from 'objection';
+import QuestionComment from './question_comment';
+import QuestionBookmark from './question_bookmark';
+import QuestionUserAnswer from './question_user_answer';
+import UserRole from './user_role';
+import SpecialtyVote from './question_specialty_vote';
+import TagVote from './question_tag_vote';
+import ExamSet from './exam_set';
 
 // TODO: pre-migration: Password skal slåes fra under migrering
 
@@ -52,14 +59,6 @@ class User extends BaseModel {
   }
 
   static get relationMappings() {
-    const QuestionComment = require('./question_comment');
-    const QuestionBookmark = require('./question_bookmark');
-    const QuestionUserAnswer = require('./question_user_answer');
-    const UserRole = require('./user_role');
-    const SpecialtyVote = require('./question_specialty_vote');
-    const TagVote = require('./question_tag_vote');
-    const ExamSet = require('./exam_set');
-
     return {
       comments: {
         relation: Model.HasManyRelation,
