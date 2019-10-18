@@ -99,5 +99,4 @@ class Semester extends BaseModel {
   }
 }
 
-module.exports = Semester;
 export default Semester;

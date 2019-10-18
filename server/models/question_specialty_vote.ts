@@ -69,5 +69,4 @@ class QuestionSpecialtyVote extends BaseModel {
   }
 }
 
-module.exports = QuestionSpecialtyVote;
 export default QuestionSpecialtyVote;

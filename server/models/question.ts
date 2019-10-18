@@ -160,5 +160,4 @@ class Question extends BaseModel {
   }
 }
 
-module.exports = Question;
 export default Question;

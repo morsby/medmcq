@@ -86,5 +86,4 @@ class QuestionComment extends BaseModel {
   }
 }
 
-module.exports = QuestionComment;
 export default QuestionComment;

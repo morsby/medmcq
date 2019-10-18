@@ -48,5 +48,4 @@ class Tag extends BaseModel {
   }
 }
 
-module.exports = Tag;
 export default Tag;

@@ -62,5 +62,4 @@ class QuestionBookmark extends BaseModel {
   }
 }
 
-module.exports = QuestionBookmark;
 export default QuestionBookmark;
