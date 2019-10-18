@@ -1,25 +1,27 @@
-import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cookieSession from 'cookie-session';
-import passport from 'passport';
-import helmet from 'helmet';
-import express from 'express';
-import logger from './middleware/logger';
-import apolloClient from './graphql/apolloServer';
+import bodyParser from 'body-parser';
 import dotEnv from 'dotenv-flow';
+import express from 'express';
+import helmet from 'helmet';
 import keygrip from 'keygrip';
-import { Model } from 'objection';
 import Knex from 'knex';
-import routes from './routes';
+
+import apolloClient from './graphql/apolloServer';
+import { Model } from 'objection';
+import logger from './middleware/logger';
+import passport from 'passport';
 import path from 'path';
-dotEnv.config({ node_env: process.env.NODE_ENV || 'development' });
-const app = express();
-const env = process.env.NODE_ENV || 'development';
+import routes from './routes';
+
 const port = process.env.PORT || 3001;
+const env = process.env.NODE_ENV || 'development';
+dotEnv.config({ node_env: env });
+const app = express();
 
 // Database
-const knexConfig = require('./knexfile')[env];
-export const knex = Knex(knexConfig);
+const knexConfig = require('./knexfile');
+const knex = Knex(knexConfig);
 Model.knex(knex);
 
 // middleware
