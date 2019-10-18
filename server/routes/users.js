@@ -2,8 +2,7 @@ import express from 'express';
 import { ValidationError, NotFoundError } from 'objection';
 import { errorHandler, BadRequest } from '../middleware/errorHandling';
 import { permit } from '../middleware/permission';
-import { urls } from '../config/vars';
-import keys from '../config/keys';
+import { urls } from '../misc/vars';
 import crypto from 'crypto';
 import sgMail from '@sendgrid/mail';
 import createResponse from './_swaggerComponents';
@@ -474,7 +473,7 @@ router.post('/forgot-password', async (req, res) => {
     });
 
     // Send mail
-    sgMail.setApiKey(keys.sendgridApiKey);
+    sgMail.setApiKey(process.env.SENDGRID);
     const msg = {
       to: user.email,
       from: urls.fromEmail,
@@ -525,7 +524,7 @@ router.post('/reset-password', async (req, res) => {
     await user.$query().patch({ password, resetPasswordToken: null, resetPasswordExpires: null });
 
     // Send mail
-    sgMail.setApiKey(keys.sendgridApiKey);
+    sgMail.setApiKey(process.env.SENDGRID);
     const msg = {
       to: user.email,
       from: urls.fromEmail,
