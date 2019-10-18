@@ -14,7 +14,6 @@ import { errorHandler, NotAuthorized, BadRequest } from '../middleware/errorHand
 import Semester from '../models/semester';
 import ExamSet from '../models/exam_set';
 import QuestionCommentLike from 'models/question_comment_like';
-const keys = require('../config/keys');
 const { urls } = require('../config/vars');
 
 const router = express.Router();
@@ -1042,7 +1041,7 @@ router.post('/report', async (req, res) => {
   let { type, data } = req.body;
 
   let msg;
-  sgMail.setApiKey(keys.sendgridApiKey);
+  sgMail.setApiKey(process.env.SENDGRID);
 
   let to = urls.issue;
 

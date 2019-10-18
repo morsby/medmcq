@@ -1,22 +1,26 @@
 const { knexSnakeCaseMappers } = require('objection');
-const { dbConnection } = require('./config/keys');
 
 let baseConfig = {
   client: 'mysql',
+  version: '8.0',
   charset: 'utf8_unicode_ci',
   ...knexSnakeCaseMappers()
 };
 module.exports = {
   development: {
     ...baseConfig,
-    connection: dbConnection.dev
+    connection: process.env.DB_URL
   },
   test: {
     ...baseConfig,
-    connection: dbConnection.test
+    connection: process.env.DB_URL
   },
   production: {
     ...baseConfig,
-    connection: dbConnection
+    connection: process.env.DB_URL
+  },
+  travis: {
+    ...baseConfig,
+    connection: process.env.DB_URL
   }
 };

@@ -1,5 +1,7 @@
 import BaseModel from './_base_model';
-const { Model } = require('objection');
+import { Model } from 'objection';
+import QuestionSpecialtyVote from './question_specialty_vote';
+import Semester from './semester';
 
 class Specialty extends BaseModel {
   static get tableName() {
@@ -20,9 +22,6 @@ class Specialty extends BaseModel {
   }
 
   static get relationMappings() {
-    const QuestionSpecialtyVote = require('./question_specialty_vote');
-    const Semester = require('./semester');
-
     return {
       questions: {
         relation: Model.HasManyRelation,
