@@ -14,7 +14,7 @@ import { errorHandler, NotAuthorized, BadRequest } from '../middleware/errorHand
 import Semester from '../models/semester';
 import ExamSet from '../models/exam_set';
 import QuestionCommentLike from 'models/question_comment_like';
-const { urls } = require('../config/vars');
+import { urls } from '../misc/vars';
 
 const router = express.Router();
 
