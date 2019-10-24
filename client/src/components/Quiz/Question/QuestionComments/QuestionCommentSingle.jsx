@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import * as actions from 'actions';
 import marked from 'marked';
-import { Comment, Icon, Menu } from 'semantic-ui-react';
+import { Comment, Icon, Menu, Loader } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
+import _ from 'lodash';
 /**
  * Component der viser den enkelte kommentar
  * Props fra QuestionComments.js.
@@ -22,15 +23,26 @@ const QuestionCommentSingle = ({
   user,
   onEditComment,
   deleteComment,
-  questionId
+  questionId,
+  mostLiked
 }) => {
+  const dispatch = useDispatch();
   const [deleting, setDeleting] = useState(false);
+  const [likeLoading, setLikeLoading] = useState(false);
   let comment;
   if (type === 'public') {
     comment = publicComments[commentId];
   } else {
     comment = privateComments[commentId];
   }
+
+  const handleLike = async () => {
+    setLikeLoading(true);
+
+    await dispatch(actions.likeComment(commentId, user.id));
+
+    setLikeLoading(false);
+  };
 
   let author = authors[comment.userId];
   if (!user) user = {};
@@ -52,25 +64,38 @@ const QuestionCommentSingle = ({
           </Comment.Author>
         ) : (
           <Comment.Author as="strong">
-            {author.username[0].toUpperCase() + author.username.substring(1)}
+            {author.username[0].toUpperCase() + author.username.substring(1)}{' '}
+            {mostLiked && <Icon color="green" name="star outline" />}
           </Comment.Author>
         )}
         <Comment.Metadata style={{ color: 'rgb(140, 140, 140)' }}>
           {new Date(comment.createdAt).toLocaleString('da-DK')}
+          <br />
+          {likeLoading && <Loader active inline size="mini" />}
+          {user.id && !likeLoading && author.id !== user.id ? (
+            <Icon
+              name="thumbs up outline"
+              color={_.findIndex(comment.likes, { userId: user.id }) !== -1 ? 'green' : 'grey'}
+              style={user.id ? { cursor: 'pointer' } : {}}
+              onClick={handleLike}
+            />
+          ) : (
+            <Icon disabled name="thumbs up outline" />
+          )}
+          <span style={{ color: 'grey' }}>{comment.likes.length}</span>
         </Comment.Metadata>
         {comment.private ? (
           <Comment.Metadata style={{ color: 'rgb(140, 140, 140)' }}>
             <Translate id="question.private_comment" />
           </Comment.Metadata>
         ) : null}
-
         <Comment.Text
           style={{ marginTop: '1em', fontSize: '15px' }}
           dangerouslySetInnerHTML={{
             __html: marked(comment.text)
           }}
         />
-        {author.id === user.id && (
+        {author.id === user.id && !likeLoading && (
           <Menu size="mini" icon="labeled" secondary>
             {!deleting && (
               <Menu.Item onClick={() => setDeleting(true)}>

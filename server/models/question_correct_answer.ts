@@ -46,5 +46,4 @@ class QuestionCorrectAnswer extends BaseModel {
   }
 }
 
-module.exports = QuestionCorrectAnswer;
 export default QuestionCorrectAnswer;

@@ -54,5 +54,14 @@ export default createReducer(initialState, {
 
   [types.REMOVE_BOOKMARK]: (state, action) => {
     state.entities.questions[action.payload].isBookmarked = false;
+  },
+  [types.COMMENT_LIKE]: (state, action) => {
+    state.entities.publicComments[action.payload.commentId].likes.push(action.payload);
+  },
+  [types.COMMENT_UNLIKE]: (state, action) => {
+    const index = _.findIndex(state.entities.publicComments[action.payload.commentId].likes, {
+      commentId: action.payload.commentId
+    });
+    state.entities.publicComments[action.payload.commentId].likes.splice(index, 1);
   }
 });

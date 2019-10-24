@@ -1,6 +1,7 @@
 import BaseModel, { hiddenCols } from './_base_model';
 import bcrypt from 'bcrypt';
 import { Model } from 'objection';
+import QuestionCommentLike from './question_comment_like';
 import QuestionComment from './question_comment';
 import QuestionBookmark from './question_bookmark';
 import QuestionUserAnswer from './question_user_answer';
@@ -144,6 +145,18 @@ class User extends BaseModel {
         join: {
           from: 'questionTagVote.userId',
           to: 'user.id'
+        }
+      },
+      likes: {
+        relation: Model.ManyToManyRelation,
+        modelClass: QuestionCommentLike,
+        join: {
+          from: 'user.id',
+          through: {
+            from: 'questionComment.userId',
+            to: 'questionComment.id'
+          },
+          to: 'questionCommentLike.commentId'
         }
       }
     };

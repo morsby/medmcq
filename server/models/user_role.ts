@@ -40,5 +40,4 @@ class UserRole extends BaseModel {
   }
 }
 
-module.exports = UserRole;
 export default UserRole;

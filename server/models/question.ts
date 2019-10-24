@@ -147,7 +147,7 @@ class Question extends BaseModel {
   }
 
   static get defaultEager() {
-    return '[correctAnswers, semester, publicComments.user, specialties(active), tags(active), examSet]';
+    return '[correctAnswers, semester, publicComments.[user, likes], specialties(active), tags(active), examSet]';
   }
 
   $formatJson(json) {
@@ -160,5 +160,4 @@ class Question extends BaseModel {
   }
 }
 
-module.exports = Question;
 export default Question;
