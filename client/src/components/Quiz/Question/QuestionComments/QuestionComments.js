@@ -60,7 +60,7 @@ const QuestionComments = ({ comments, user, question, writeComment, editComment,
   const onEditComment = (comment) => {
     setEditCommentId(comment.id);
     setComment(comment.text);
-    setIsAnonymous(comment.anonymous);
+    setIsAnonymous(!!comment.anonymous);
   };
 
   const undoEdit = () => {
@@ -71,22 +71,28 @@ const QuestionComments = ({ comments, user, question, writeComment, editComment,
 
   const generateComments = () => {
     let mostLiked = 1;
+    let returnedComments = [];
 
-    for (let comment of comments) {
-      if (publicComments[comment].likes.length > mostLiked)
-        mostLiked = publicComments[comment].likes.length;
+    for (let c of comments) {
+      const isPrivate = type === 'private';
+
+      if (!isPrivate && publicComments[c].likes.length > mostLiked) {
+        mostLiked = publicComments[c].likes.length;
+      }
+
+      returnedComments.push(
+        <QuestionCommentSingle
+          key={c}
+          commentId={c}
+          questionId={question.id}
+          type={type}
+          onEditComment={onEditComment}
+          mostLiked={!isPrivate && publicComments[c].likes.length === mostLiked}
+        />
+      );
     }
 
-    return comments.map((c) => (
-      <QuestionCommentSingle
-        key={c}
-        commentId={c}
-        questionId={question.id}
-        type={type}
-        onEditComment={onEditComment}
-        mostLiked={publicComments[c].likes.length === mostLiked}
-      />
-    ));
+    return returnedComments;
   };
 
   if (user) {
