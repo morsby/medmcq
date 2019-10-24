@@ -27,6 +27,7 @@ const QuestionCommentSingle = ({
   mostLiked
 }) => {
   const dispatch = useDispatch();
+  const isPrivate = type === 'private';
   const [deleting, setDeleting] = useState(false);
   const [likeLoading, setLikeLoading] = useState(false);
   let comment;
@@ -45,7 +46,6 @@ const QuestionCommentSingle = ({
   };
 
   let author = authors[comment.userId];
-  if (!user) user = {};
   return (
     <Comment
       key={comment.id}
@@ -65,38 +65,42 @@ const QuestionCommentSingle = ({
         ) : (
           <Comment.Author as="strong">
             {author.username[0].toUpperCase() + author.username.substring(1)}{' '}
-            {mostLiked && <Icon color="green" name="star outline" />}
+            {!isPrivate && mostLiked && <Icon color="green" name="star outline" />}
           </Comment.Author>
         )}
         <Comment.Metadata style={{ color: 'rgb(140, 140, 140)' }}>
           {new Date(comment.createdAt).toLocaleString('da-DK')}
-          <br />
-          {likeLoading && <Loader active inline size="mini" />}
-          {user.id && !likeLoading && author.id !== user.id ? (
-            <Icon
-              name="thumbs up outline"
-              color={_.findIndex(comment.likes, { userId: user.id }) !== -1 ? 'green' : 'grey'}
-              style={user.id ? { cursor: 'pointer' } : {}}
-              onClick={handleLike}
-            />
-          ) : (
-            <Icon disabled name="thumbs up outline" />
+          {!isPrivate && (
+            <>
+              <br />
+              {likeLoading && <Loader active inline size="mini" />}
+              {!likeLoading && user && author.id !== user.id ? (
+                <Icon
+                  name="thumbs up outline"
+                  color={_.findIndex(comment.likes, { userId: user.id }) !== -1 ? 'green' : 'grey'}
+                  style={user.id ? { cursor: 'pointer' } : {}}
+                  onClick={handleLike}
+                />
+              ) : (
+                <Icon disabled name="thumbs up outline" />
+              )}
+              <span style={{ color: 'grey' }}>{comment.likes.length}</span>
+            </>
           )}
-          <span style={{ color: 'grey' }}>{comment.likes.length}</span>
         </Comment.Metadata>
-        {comment.private ? (
+        {isPrivate && (
           <Comment.Metadata style={{ color: 'rgb(140, 140, 140)' }}>
             <Translate id="question.private_comment" />
           </Comment.Metadata>
-        ) : null}
+        )}
         <Comment.Text
           style={{ marginTop: '1em', fontSize: '15px' }}
           dangerouslySetInnerHTML={{
             __html: marked(comment.text)
           }}
         />
-        {author.id === user.id && !likeLoading && (
-          <Menu size="mini" icon="labeled" secondary>
+        {user && user.id === author.id && !likeLoading && (
+          <Menu size="tiny" icon="labeled" secondary>
             {!deleting && (
               <Menu.Item onClick={() => setDeleting(true)}>
                 <Icon name="trash" color="red" />
