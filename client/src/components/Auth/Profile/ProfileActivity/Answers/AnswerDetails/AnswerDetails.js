@@ -38,16 +38,16 @@ const AnswerDetails = ({ answers, questions, metadata, getQuestions, history }) 
   if (filter) {
     switch (filter) {
       case 'allRight':
-        answers = _.filter(answers, (a) => a.correct === a.tries);
+        answers = _.pickBy(answers, (a) => a.correct === a.tries);
         break;
       case 'allWrong':
-        answers = _.filter(answers, (a) => a.correct === 0);
+        answers = _.pickBy(answers, (a) => a.correct === 0);
         break;
       default:
-        answers = _.filter(answers, (a) => a.correct > 0 && a.correct < a.tries);
+        answers = _.pickBy(answers, (a) => a.correct > 0 && a.correct < a.tries);
     }
   }
-  // TODO: Tillad sortering
+
   return (
     <div>
       <Divider hidden />
