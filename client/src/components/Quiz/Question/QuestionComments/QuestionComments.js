@@ -2,9 +2,7 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import * as actions from 'actions';
-import { Form, Button, Message, Checkbox } from 'semantic-ui-react';
-import SimpleMDE from 'react-simplemde-editor';
-import 'easymde/dist/easymde.min.css';
+import { Form, TextArea, Button, Message, Checkbox } from 'semantic-ui-react';
 
 import { Translate } from 'react-localize-redux';
 
@@ -104,16 +102,11 @@ const QuestionComments = ({ comments, user, question, writeComment, editComment,
         <Form>
           <Translate>
             {({ translate }) => (
-              <SimpleMDE
+              <TextArea
                 name="comment"
                 placeholder={translate('questionComments.write_a_comment')}
-                onChange={(value) => setComment(value)}
+                onChange={(e) => setComment(e.target.value)}
                 value={comment}
-                options={{
-                  spellChecker: false,
-                  hideIcons: ['heading', 'quote'],
-                  minHeight: '100px'
-                }}
               />
             )}
           </Translate>
