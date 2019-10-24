@@ -4,26 +4,32 @@ import { cleanUp, createUsers, createQuestions } from '../../_testconfigs_/funct
 const questionApi = '/api/questions';
 let server;
 let admin;
+let user;
 
 // Settings vars to reuse across tests
-let username;
+let adminUsername;
+let userUsername;
 let password;
 
 beforeEach(async () => {
-  username = 'admin';
+  adminUsername = 'admin';
+  userUsername = 'user';
   password = '123abc';
 
   server = require('../../server');
   admin = request.agent(server);
+  user = request.agent(server);
 
   // Insert needed data
   await createUsers();
   await createQuestions();
 
-  // Login admin before each test
-  let res = await admin.post('/api/auth').send({ username, password });
+  // Login admin and user before each test
+  let res = await admin.post('/api/auth').send({ username: adminUsername, password });
   let { type } = res.body;
-
+  expect(type).toEqual('LoginSuccess');
+  res = await user.post('/api/auth').send({ username: userUsername, password });
+  type = res.body.type;
   expect(type).toEqual('LoginSuccess');
 });
 
@@ -57,7 +63,7 @@ describe('questions route', () => {
   });
 
   it("GET '/' -- should complete because admin", async () => {
-    await admin.post('/api/auth').send({ username, password });
+    await admin.post('/api/auth').send({ username: adminUsername, password });
 
     let { body } = await admin.get(questionApi);
     expect(body.length).toEqual(5);
@@ -271,5 +277,42 @@ describe('questions route', () => {
 
     expect(body.type).toEqual('deleteQuestion');
     expect(body.message).toEqual('Succesfully deleted 1 question');
+  });
+});
+
+describe('Question comment likes', () => {
+  it('should like a comment', async () => {
+    const { status, body } = await user.post(`${questionApi}/comments/1/like`);
+
+    expect(status).toBe(200);
+    expect(body).toMatchObject({ commentId: 1, userId: 2 });
+  });
+
+  it('should remove a like, if comment is already liked', async () => {
+    // Creating comment
+    let { status, body } = await user.post(`${questionApi}/comments/1/like`);
+    expect(status).toBe(200);
+    expect(body).toMatchObject({ commentId: 1, userId: 2 });
+
+    // Removing comment
+    const result = await user.post(`${questionApi}/comments/1/like`);
+    status = result.status;
+    body = result.body;
+    expect(status).toBe(204);
+    expect(body).toMatchObject({});
+  });
+
+  it('should not be able to like, when no user is provided', async () => {
+    const { status, body } = await request(server).post(`${questionApi}/comments/1/like`);
+
+    expect(status).toBe(403);
+    expect(body).toHaveProperty('type', 'NotAuthorized');
+  });
+
+  it('should throw an error, if wrong commentId is provided', async () => {
+    const { status, body } = await user.post(`${questionApi}/comments/asdf/like`);
+
+    expect(status).toBe(500);
+    expect(body).toHaveProperty('type', 'UnknownError');
   });
 });

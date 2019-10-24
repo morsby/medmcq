@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { connect, useDispatch } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import * as actions from 'actions';
 import { Form, TextArea, Button, Message, Checkbox } from 'semantic-ui-react';
 
@@ -19,6 +19,7 @@ import { makeToast } from 'actions';
  */
 const QuestionComments = ({ comments, user, question, writeComment, editComment, type }) => {
   const dispatch = useDispatch();
+  const publicComments = useSelector((state) => state.questions.entities.publicComments);
   const [editCommentId, setEditCommentId] = useState(null);
   const [comment, setComment] = useState('');
   const [loading, setLoading] = useState(false);
@@ -53,7 +54,6 @@ const QuestionComments = ({ comments, user, question, writeComment, editComment,
     } catch (error) {
       setLoading(false);
       dispatch(makeToast('toast.genericError', 'error'));
-      console.error(error);
     }
   };
 
@@ -67,6 +67,26 @@ const QuestionComments = ({ comments, user, question, writeComment, editComment,
     setComment('');
     setEditCommentId(null);
     setIsAnonymous(false);
+  };
+
+  const generateComments = () => {
+    let mostLiked = 1;
+
+    for (let comment of comments) {
+      if (publicComments[comment].likes.length > mostLiked)
+        mostLiked = publicComments[comment].likes.length;
+    }
+
+    return comments.map((c) => (
+      <QuestionCommentSingle
+        key={c}
+        commentId={c}
+        questionId={question.id}
+        type={type}
+        onEditComment={onEditComment}
+        mostLiked={publicComments[c].likes.length === mostLiked}
+      />
+    ));
   };
 
   if (user) {
@@ -137,17 +157,7 @@ const QuestionComments = ({ comments, user, question, writeComment, editComment,
 
   return (
     <div>
-      <div>
-        {comments.map((c) => (
-          <QuestionCommentSingle
-            key={c}
-            commentId={c}
-            questionId={question.id}
-            type={type}
-            onEditComment={onEditComment}
-          />
-        ))}
-      </div>
+      <div>{generateComments()}</div>
       {form}
     </div>
   );

@@ -19,7 +19,7 @@ module.exports = function(passport) {
     User.query()
       .findById(id)
       .joinRelation('[role]')
-      .joinEager('manualCompletedSets')
+      .joinEager('[manualCompletedSets, likes]')
       .select('user.*', 'role.name as role')
       .then((user, err) => {
         done(err, user || null);

@@ -61,5 +61,4 @@ class ExamSet extends BaseModel {
   }
 }
 
-module.exports = ExamSet;
 export default ExamSet;

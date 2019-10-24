@@ -12,6 +12,12 @@
       "success": ["Din profil er blevet redigeret", "Your profile has been edited"],
       "error": ["Der gik noget galt med din redigering", "Something went wrong with your edit"]
     },
+    "commentLike": {
+      "error": [
+        "Der gik noget galt med dit like af den comment. Prøv igen.",
+        "Something went wrong with liking the comment. Try again."
+      ]
+    },
     "genericError": ["Noget gik galt", "Something went wrong"],
     "share": ["Linket er kopieret til clipboardet", "The link has been copied to the clipboard"]
   }

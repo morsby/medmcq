@@ -40,6 +40,9 @@ const RightMenu = (props) => {
           </strong>
         </Menu.Item>
         <Menu.Item>
+          <Icon name="thumbs up outline" /> {user.likes.length}
+        </Menu.Item>
+        <Menu.Item>
           <Button
             inverted
             onClick={() => {
