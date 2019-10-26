@@ -66,4 +66,5 @@ class QuestionTagVote extends BaseModel {
   }
 }
 
+module.exports = QuestionTagVote;
 export default QuestionTagVote;
