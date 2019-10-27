@@ -20,7 +20,7 @@ const AnswerDetails = ({ answers }) => {
   const [search, setSearch] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [selected, setSelected] = useState([]);
-  const questions = useSelector((state) => state.questions);
+  const questions = useSelector((state) => state.questions.entities.questions);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -63,14 +63,11 @@ const AnswerDetails = ({ answers }) => {
   }
 
   if (isSearching) {
-    answers = _.pickBy(answers, (a, questionId) =>
-      questions.entities.questions[questionId].text.includes(search)
-    );
+    answers = _.pickBy(answers, (a, questionId) => questions[questionId].text.includes(search));
   }
 
   return (
     <div>
-      <Divider hidden />
       <Button basic color="green" onClick={startQuiz} disabled={selected.length === 0}>
         <Translate id="profileAnswerDetails.start_quiz_button" data={{ n: selected.length }} />
       </Button>
@@ -90,7 +87,12 @@ const AnswerDetails = ({ answers }) => {
         )}
       </Translate>
 
-      <AnswersDetailsTable answers={answers} toggleCheckbox={toggleCheckbox} selected={selected} />
+      <AnswersDetailsTable
+        answers={answers}
+        toggleCheckbox={toggleCheckbox}
+        selected={selected}
+        questions={questions}
+      />
     </div>
   );
 };

@@ -12,15 +12,16 @@ export interface AnswersDetailsTableProps {
   answers: any[];
   toggleCheckbox: Function;
   selected: any[];
+  questions: any[];
 }
 
 const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
   answers,
   toggleCheckbox,
-  selected
+  selected,
+  questions
 }) => {
   const history = useHistory();
-  const questions = useSelector((state: IReduxState) => state.questions.entities.questions);
   const { specialties, examSets, tags } = useSelector(
     (state: IReduxState) => state.metadata.entities
   );
@@ -95,6 +96,7 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
   return (
     <div style={{ overflowX: 'auto' }}>
       <Table
+        bordered
         columns={columns}
         dataSource={_.map(answers, (a, questionId) => ({ ...a, questionId }))}
         expandedRowRender={(record) => {
