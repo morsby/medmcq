@@ -1,25 +1,29 @@
 import React, { useState, useCallback } from 'react';
-import PropTypes from 'prop-types';
-import ReactRouterPropTypes from 'react-router-prop-types';
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import * as actions from 'actions';
 import _ from 'lodash';
 
-import { Table, Button, Divider } from 'semantic-ui-react';
+import { Button, Divider } from 'semantic-ui-react';
+import { Input } from 'antd';
 import { Translate } from 'react-localize-redux';
 
-import AnswerDetailsHeaderRow from './AnswerDetailsHeaderRow';
-import AnswerDetailsRow from './AnswerDetailsRow';
 import AnswerDetailsFilterButtons from './AnswerDetailsFilterButtons';
 import { urls, insertOrRemoveFromArray } from 'utils/common';
+import { useHistory } from 'react-router';
+import AnswersDetailsTable from './AnswersDetailsTable';
 
 /**
  * Component showing answer details.  Any filtering occurs in this component.
  */
-const AnswerDetails = ({ answers, questions, metadata, getQuestions, history }) => {
+const AnswerDetails = ({ answers }) => {
   const [filter, setFilter] = useState(undefined);
+  const [search, setSearch] = useState('');
+  const [isSearching, setIsSearching] = useState(false);
   const [selected, setSelected] = useState([]);
+  const questions = useSelector((state) => state.questions);
+  const dispatch = useDispatch();
+  const history = useHistory();
+
   /**
    * A small function that toggles the checkbox using React hooks.
    * @param  {integer} id      The question id to toggle.
@@ -32,7 +36,17 @@ const AnswerDetails = ({ answers, questions, metadata, getQuestions, history }) 
 
   const startQuiz = async () => {
     history.push(urls.quiz);
-    await getQuestions({ ids: selected, quiz: true });
+    await dispatch(actions.getQuestions({ ids: selected, quiz: true }));
+  };
+
+  const handleSearch = (search) => {
+    if (search.length > 1) {
+      setIsSearching(true);
+    } else {
+      setIsSearching(false);
+    }
+
+    setSearch(search);
   };
 
   if (filter) {
@@ -48,10 +62,16 @@ const AnswerDetails = ({ answers, questions, metadata, getQuestions, history }) 
     }
   }
 
+  if (isSearching) {
+    answers = _.pickBy(answers, (a, questionId) =>
+      questions.entities.questions[questionId].text.includes(search)
+    );
+  }
+
   return (
     <div>
       <Divider hidden />
-      <Button onClick={startQuiz} disabled={selected.length === 0}>
+      <Button basic color="green" onClick={startQuiz} disabled={selected.length === 0}>
         <Translate id="profileAnswerDetails.start_quiz_button" data={{ n: selected.length }} />
       </Button>
       <h4>
@@ -59,48 +79,20 @@ const AnswerDetails = ({ answers, questions, metadata, getQuestions, history }) 
       </h4>
 
       <AnswerDetailsFilterButtons handleClick={setFilter} />
-      <Table celled>
-        <AnswerDetailsHeaderRow />
-        <Table.Body>
-          {_.map(answers, (answer, questionId) => (
-            <AnswerDetailsRow
-              key={questionId}
-              answer={answer}
-              question={questions.entities.questions[questionId]}
-              metadata={metadata}
-              handleClick={toggleCheckbox}
-              checked={selected.includes(Number(questionId))}
-            />
-          ))}
-        </Table.Body>
-      </Table>
+      <Divider />
+      <Translate>
+        {({ translate }) => (
+          <Input
+            placeholder={translate('profileAnswerDetails.search')}
+            onChange={(e) => handleSearch(e.target.value)}
+            value={search}
+          />
+        )}
+      </Translate>
+
+      <AnswersDetailsTable answers={answers} toggleCheckbox={toggleCheckbox} selected={selected} />
     </div>
   );
 };
 
-AnswerDetails.propTypes = {
-  /**
-   * Array indeholdende besvarede spørgsmål for semesteret
-   */
-  answers: PropTypes.object,
-
-  questions: PropTypes.object,
-  metadata: PropTypes.object,
-  history: ReactRouterPropTypes.history,
-  /**
-   * Henter spørgsmål
-   */
-  getQuestions: PropTypes.func
-};
-
-const mapStateToProps = (state) => ({
-  questions: state.questions,
-  metadata: state.metadata
-});
-
-export default withRouter(
-  connect(
-    mapStateToProps,
-    actions
-  )(AnswerDetails)
-);
+export default AnswerDetails;

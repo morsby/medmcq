@@ -117,7 +117,8 @@
       "performance": ["Din svarprocent", "Your results"]
     },
     "E": ["E", "Autumn "],
-    "F": ["F", "Spring "]
+    "F": ["F", "Spring "],
+    "search": ["Søg...", "Search..."]
   },
   "editProfile": {
     "header": ["Redigér profil", "Edit profile"],
