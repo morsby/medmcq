@@ -16,10 +16,7 @@ export interface FirstTimeToastProps extends LocalizeContextProps {
   language: string;
 }
 
-const FirstTimeToast: React.SFC<FirstTimeToastProps> = ({
-  closeToast,
-  addTranslation
-}) => {
+const FirstTimeToast: React.SFC<FirstTimeToastProps> = ({ closeToast, addTranslation }) => {
   const history = useHistory();
   const language = useSelector((state: IReduxState) => state.settings.language);
   const [changedLanguage, setChangedLanguage] = useState(false);
