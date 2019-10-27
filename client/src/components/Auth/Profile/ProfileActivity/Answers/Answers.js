@@ -47,7 +47,7 @@ const Answers = ({ answers = {}, questions = {}, privateComments = [], publicCom
       </div>
 
       <Divider hidden />
-      <Button onClick={onToggleDetails} disabled={totalAnswers === 0}>
+      <Button basic color="blue" onClick={onToggleDetails} disabled={totalAnswers === 0}>
         {details && totalAnswers > 0 ? (
           <Translate id="profileAnswers.buttons.details.hide_details" />
         ) : (
