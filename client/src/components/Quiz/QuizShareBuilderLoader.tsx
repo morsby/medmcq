@@ -9,8 +9,7 @@ import { getQuestions } from 'actions';
 import { fetchQuestionIdsFromShareLink as query_fetchQuestionIdsFromShareLink } from 'queries/shareLink';
 import ErrorBoundary from 'components/Misc/Utility-pages/ErrorBoundary';
 
-export interface QuizShareBuilderLoader {
-}
+export interface QuizShareBuilderLoader {}
 
 const QuizShareBuilderLoader: React.SFC<QuizShareBuilderLoader> = () => {
   const params: any = useParams();

@@ -47,7 +47,7 @@ export default createReducer(initialState, {
 
     let answersSummary = {};
     answers.forEach((a) => {
-      if (!questions.hasOwnProperty(a.questionId)) return;
+      if (!Object.prototype.hasOwnProperty.call(questions, a.questionId)) return;
 
       if (!answersSummary.hasOwnProperty(a.questionId)) {
         answersSummary[a.questionId] = { history: { 1: 0, 2: 0, 3: 0 }, tries: 0, correct: 0 };
