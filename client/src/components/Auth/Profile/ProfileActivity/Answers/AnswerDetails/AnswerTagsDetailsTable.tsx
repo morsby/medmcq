@@ -20,7 +20,11 @@ const AnswerTagsDetailsTable: React.SFC<AnswerTagsDetailsTableProps> = ({ answer
   const dispatch = useDispatch();
   const history = useHistory();
 
-  const getPercentCorrect = (record) => Math.round((record.correct / record.tries) * 100);
+  const getPercentCorrect = (record) => {
+    const percent = Math.round((record.correct / record.tries) * 100);
+    if (isNaN(percent)) return 0;
+    return percent;
+  };
 
   const getColor = (record) => {
     const percent = getPercentCorrect(record);
@@ -67,7 +71,6 @@ const AnswerTagsDetailsTable: React.SFC<AnswerTagsDetailsTableProps> = ({ answer
   const columns = [
     {
       title: 'Tag',
-      sorter: (a, b) => a.name - b.name,
       render: (record) => (
         <p
           style={{ color: '#1890ff', cursor: 'pointer' }}
@@ -75,7 +78,8 @@ const AnswerTagsDetailsTable: React.SFC<AnswerTagsDetailsTableProps> = ({ answer
         >
           {record.name}
         </p>
-      )
+      ),
+      sorter: (a, b) => a.name.localeCompare(b.name)
     },
     {
       title: 'Korrekt',
