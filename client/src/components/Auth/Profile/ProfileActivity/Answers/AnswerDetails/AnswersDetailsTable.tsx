@@ -81,7 +81,7 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
         ))
     },
     {
-      title: <Translate id="profileAnswerDetails.table_headers.performance" />,
+      title: <Translate id="profileAnswerDetails.table_headers.set" />,
       render: (record) => (
         <>
           <Translate
