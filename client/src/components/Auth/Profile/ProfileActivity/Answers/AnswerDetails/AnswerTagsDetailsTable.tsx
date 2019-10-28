@@ -12,13 +12,13 @@ export interface AnswerTagsDetailsTableProps {
 }
 
 const AnswerTagsDetailsTable: React.SFC<AnswerTagsDetailsTableProps> = ({ answers }) => {
-  const questions = useSelector((state: IReduxState) => state.questions.entities.questions);
-  let { tags } = useSelector((state: IReduxState) => state.metadata.entities);
   const [answeredTags, setAnsweredTags] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const selectedSemester = useSelector((state: IReduxState) => state.ui.selection.selectedSemester);
-  const dispatch = useDispatch();
   const history = useHistory();
+  const dispatch = useDispatch();
+  const questions = useSelector((state: IReduxState) => state.questions.entities.questions);
+  const selectedSemester = useSelector((state: IReduxState) => state.ui.selection.selectedSemester);
+  let { tags } = useSelector((state: IReduxState) => state.metadata.entities);
+  tags = _.filter(tags, { semesterId: selectedSemester });
 
   const getPercentCorrect = (record) => {
     const percent = Math.round((record.correct / record.tries) * 100);
@@ -44,7 +44,6 @@ const AnswerTagsDetailsTable: React.SFC<AnswerTagsDetailsTableProps> = ({ answer
 
   useEffect(() => {
     const answeredTags = {};
-    tags = _.filter(tags, { semesterId: selectedSemester });
 
     // Insert tags into answeredTags
     for (let tag of tags) {
@@ -105,7 +104,14 @@ const AnswerTagsDetailsTable: React.SFC<AnswerTagsDetailsTableProps> = ({ answer
   ];
 
   return (
-    <Table loading={answeredTags.length < 1} bordered columns={columns} dataSource={answeredTags} />
+    <div style={{ overflowX: 'auto' }}>
+      <Table
+        loading={answeredTags.length < 1}
+        bordered
+        columns={columns}
+        dataSource={answeredTags}
+      />
+    </div>
   );
 };
 
