@@ -7,6 +7,7 @@ export const initialState = {
     type: 'random',
     n: 10,
     onlyNew: false,
+    onlyWrong: false,
     selectedSemester: 1,
     selectedSetId: null,
     selectedSpecialtyIds: [],
