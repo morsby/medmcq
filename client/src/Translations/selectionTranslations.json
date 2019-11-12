@@ -90,6 +90,12 @@
       "Give me only questions that I have not previously answered."
     ]
   },
+  "selectionWrongSelector": {
+    "label": [
+      "Giv mig ikke spørgsmål, jeg har svaret rigtigt på",
+      "Do not give me questions, I have answered correctly."
+    ]
+  },
   "selectionMessage": {
     "available_lower_than_requested": [
       "Bemærk, at såfremt de valgte indstillinger resulterer i færre spørgsmål end det ønskede antal, får du blot alle tilgængelige spørgsmål. Er antallet af spørgsmål 0, vælges ligeligt blandt alle.",

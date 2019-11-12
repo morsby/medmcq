@@ -62,6 +62,14 @@ const router = express.Router();
  *             user has *not* previously answered.
  *           example: true
  *       - in: query
+ *         name: onlyWrong
+ *         schema:
+ *           type: boolean
+ *           description: >
+ *             If the `req.user` object is present, only selects questions the
+ *             user has previously answered *incorrectly*.
+ *           example: true
+ *       - in: query
  *         name: semesters
  *         schema:
  *           type: string
@@ -97,7 +105,7 @@ const router = express.Router();
  */
 router.get('/', async (req, res) => {
   let user = req.user || {};
-  let { profile, ids, n, semesters, onlyNew, specialties, tags } = req.query;
+  let { profile, ids, n, semesters, onlyNew, specialties, tags, onlyWrong } = req.query;
   try {
     // If user is not allowed to query >300 questions, we throw an error
     if (!ids && !profile && (!n || n > 300) && ['admin', 'creator'].indexOf(user.role) === -1) {
@@ -171,7 +179,20 @@ router.get('/', async (req, res) => {
         });
       }
 
-      if (req.user && onlyNew) {
+      if (req.user && onlyWrong) {
+        const correctAnswers = QuestionUserAnswer.query()
+          .where({ userId: req.user.id })
+          .join(
+            'questionCorrectAnswer',
+            'questionUserAnswer.questionId',
+            '=',
+            'questionCorrectAnswer.questionId'
+          )
+          .where('questionUserAnswer.answer', '=', 'questionCorrectAnswer.answer')
+          .select('questionUserAnswer.questionId');
+
+        query = query.whereNotIn('question.id', correctAnswers);
+      } else if (req.user && onlyNew) {
         query = query.whereNotIn(
           'question.id',
           QuestionUserAnswer.query()

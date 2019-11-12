@@ -21,7 +21,8 @@ export const getQuestions = ({
     selectedTagIds,
     selectedSetId,
     n,
-    onlyNew
+    onlyNew,
+    onlyWrong
   } = state.ui.selection;
 
   let res;
@@ -67,7 +68,8 @@ export const getQuestions = ({
           specialties: (selectedSpecialtyIds || []).join(',') || undefined,
           tags: (selectedTagIds || []).join(',') || undefined,
           n: n || undefined,
-          onlyNew: onlyNew || undefined
+          onlyNew: onlyNew || undefined,
+          onlyWrong: onlyWrong || undefined
         }
       });
   }
