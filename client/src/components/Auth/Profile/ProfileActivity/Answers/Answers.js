@@ -4,11 +4,13 @@ import _ from 'lodash';
 import { Button, Divider } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 import AnswerDetails from './AnswerDetails/AnswerDetails';
+import AnswerTagsDetailsTable from './AnswerDetails/AnswerTagsDetailsTable';
 /**
  * Component that displays a summary of the answered questions.
  */
 const Answers = ({ answers = {}, questions = {}, privateComments = [], publicComments = [] }) => {
   const [details, toggleDetails] = useState(false);
+  const [tagDetailsOpen, setTagsDetailsOpen] = useState(false);
 
   const onToggleDetails = () => {
     toggleDetails(!details);
@@ -47,14 +49,19 @@ const Answers = ({ answers = {}, questions = {}, privateComments = [], publicCom
       </div>
 
       <Divider hidden />
-      <Button onClick={onToggleDetails} disabled={totalAnswers === 0}>
+      <Button basic color="blue" onClick={onToggleDetails} disabled={totalAnswers === 0}>
         {details && totalAnswers > 0 ? (
           <Translate id="profileAnswers.buttons.details.hide_details" />
         ) : (
           <Translate id="profileAnswers.buttons.details.show_details" />
         )}
       </Button>
+      <Button basic color="blue" onClick={() => setTagsDetailsOpen((prevState) => !prevState)}>
+        {!tagDetailsOpen ? 'Vis Tag Detaljer' : 'Skjul Tag Detaljer'}
+      </Button>
+      <Divider hidden />
       {details && totalAnswers > 0 && <AnswerDetails answers={answers} questions={questions} />}
+      {tagDetailsOpen && <AnswerTagsDetailsTable answers={answers} />}
     </div>
   );
 };

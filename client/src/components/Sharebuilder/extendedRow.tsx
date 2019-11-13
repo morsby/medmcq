@@ -6,8 +6,6 @@ export interface ExtendedRowProps {
 }
 
 const ExtendedRow: React.SFC<ExtendedRowProps> = ({ record }) => {
-  console.log(record);
-
   return (
     <>
       <p

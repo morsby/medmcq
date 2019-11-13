@@ -10,5 +10,13 @@ export const updateSelection = (prevSelection, action) => {
   }
   selection[type] = value;
 
+  // Skift checkboxene afhængigt af type, da disse ikke overlapper
+  if (type === 'onlyNew') {
+    selection.onlyWrong = false;
+  }
+  if (type === 'onlyWrong') {
+    selection.onlyNew = false;
+  }
+
   return { ...prevSelection, ...selection };
 };

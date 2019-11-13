@@ -45,7 +45,7 @@ class SelectionMain extends Component {
     let type = name;
     this.setState({ err: [] });
     if (type === 'n' && value) value = Number(value);
-    if (type === 'onlyNew') value = checked;
+    if (type === 'onlyNew' || type === 'onlyWrong') value = checked;
     this.props.changeSelection(type, value);
   }
 
@@ -101,7 +101,15 @@ class SelectionMain extends Component {
 
     let { user, metadata } = this.props;
     let semesters = metadata.entities.semesters || {};
-    let { type, n, selectedSemester, selectedSetId, onlyNew, noPicture } = this.props.ui.selection;
+    let {
+      type,
+      n,
+      selectedSemester,
+      selectedSetId,
+      onlyNew,
+      noPicture,
+      onlyWrong
+    } = this.props.ui.selection;
 
     return (
       <div className="flex-container">
@@ -193,7 +201,11 @@ class SelectionMain extends Component {
           )}
           {window.innerWidth < breakpoints.mobile && <Divider hidden />}
           {user && type !== 'set' && (
-            <SelectionUniqueSelector onlyNew={onlyNew} onChange={this.onSettingsChange} />
+            <SelectionUniqueSelector
+              onlyNew={onlyNew}
+              onlyWrong={onlyWrong}
+              onChange={this.onSettingsChange}
+            />
           )}
 
           <Button

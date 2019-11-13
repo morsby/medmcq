@@ -10,7 +10,8 @@ export const getQuestions = ({
   ids = null,
   quiz = true,
   profile = !quiz,
-  refetch = false
+  refetch = false,
+  commentIds = null
 }) => async (dispatch, getState) => {
   dispatch({ type: types.FETCH_QUESTIONS_REQUEST });
   let state = getState();
@@ -21,7 +22,8 @@ export const getQuestions = ({
     selectedTagIds,
     selectedSetId,
     n,
-    onlyNew
+    onlyNew,
+    onlyWrong
   } = state.ui.selection;
 
   let res;
@@ -67,7 +69,9 @@ export const getQuestions = ({
           specialties: (selectedSpecialtyIds || []).join(',') || undefined,
           tags: (selectedTagIds || []).join(',') || undefined,
           n: n || undefined,
-          onlyNew: onlyNew || undefined
+          onlyNew: onlyNew || undefined,
+          onlyWrong: onlyWrong || undefined,
+          commentIds
         }
       });
   }
