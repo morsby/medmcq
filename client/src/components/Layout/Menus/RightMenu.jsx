@@ -1,24 +1,22 @@
 import React, { useState } from 'react';
 import { withLocalize, Translate } from 'react-localize-redux';
 import { useDispatch, useSelector } from 'react-redux';
-import { useHistory } from 'react-router';
 import { Menu, Icon, Button, Loader } from 'semantic-ui-react';
-import { getQuestions, changeSettings } from 'actions';
+import { getQuestions, changeSettings, logout } from 'actions';
 import Flag from 'react-flagkit';
 import _ from 'lodash';
 
-const RightMenu = ({ languages, logout, handleNavigation, setActiveLanguage }) => {
+const RightMenu = ({ handleNavigation, languages, setActiveLanguage }) => {
   const [loading, setLoading] = useState(false);
   const activeLanguage = useSelector((state) => state.settings.language);
   const user = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
-  const history = useHistory();
 
   const fetchQuestionsByCommentIds = async (commentIds) => {
     setLoading(true);
     commentIds = _.uniq(commentIds);
     await dispatch(getQuestions({ commentIds }));
-    history.push('/quiz');
+    handleNavigation('/quiz');
     setLoading(false);
   };
 
@@ -68,7 +66,7 @@ const RightMenu = ({ languages, logout, handleNavigation, setActiveLanguage }) =
           <Button
             inverted
             onClick={() => {
-              logout();
+              dispatch(logout());
               return handleNavigation('/');
             }}
           >
