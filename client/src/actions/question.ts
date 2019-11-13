@@ -10,7 +10,8 @@ export const getQuestions = ({
   ids = null,
   quiz = true,
   profile = !quiz,
-  refetch = false
+  refetch = false,
+  commentIds = null
 }) => async (dispatch, getState) => {
   dispatch({ type: types.FETCH_QUESTIONS_REQUEST });
   let state = getState();
@@ -69,7 +70,8 @@ export const getQuestions = ({
           tags: (selectedTagIds || []).join(',') || undefined,
           n: n || undefined,
           onlyNew: onlyNew || undefined,
-          onlyWrong: onlyWrong || undefined
+          onlyWrong: onlyWrong || undefined,
+          commentIds
         }
       });
   }

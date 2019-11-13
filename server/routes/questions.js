@@ -105,7 +105,7 @@ const router = express.Router();
  */
 router.get('/', async (req, res) => {
   let user = req.user || {};
-  let { profile, ids, n, semesters, onlyNew, specialties, tags, onlyWrong } = req.query;
+  let { profile, ids, n, semesters, onlyNew, specialties, tags, onlyWrong, commentIds } = req.query;
   try {
     // If user is not allowed to query >300 questions, we throw an error
     if (!ids && !profile && (!n || n > 300) && ['admin', 'creator'].indexOf(user.role) === -1) {
@@ -123,9 +123,13 @@ router.get('/', async (req, res) => {
 
     // If requesting ids, get them
     if (ids) {
-      query = query
-        .whereIn('Question.id', ids.split(',').map((id) => Number(id)))
-        .orderByRaw(`FIELD(question.id, ${ids})`);
+      query = query.whereIn('Question.id', ids.split(',').map((id) => Number(id)));
+    } else if (commentIds) {
+      const questionIds = QuestionComment.query()
+        .findByIds(commentIds)
+        .select('questionId');
+
+      query = query.whereIn('Question.id', questionIds);
     } else if (profile) {
       if (!req.user)
         throw new BadRequest({
