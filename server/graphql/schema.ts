@@ -1,7 +1,9 @@
-import { gql, makeExecutableSchema } from 'apollo-server-express';
+import { gql } from 'apollo-server-express';
 import { merge } from 'lodash';
-import { typeDefs as ShareLink, resolvers as ShareLinkResolvers } from './types/shareLink';
-import { typeDefs as Question, resolvers as QuestionResolvers } from 'graphql/types/question';
+import { typeDefs as ShareLink, resolvers as shareLinkResolvers } from './types/shareLink';
+import { typeDefs as Question, resolvers as questionResolvers } from 'graphql/types/question';
+import { typeDefs as Specialty, resolvers as specialtyResolvers } from 'graphql/types/specialty';
+import { typeDefs as ExamSet, resolvers as examSetResolvers } from 'graphql/types/examSet';
 
 const Query = gql`
   type Query {
@@ -12,9 +14,10 @@ const Query = gql`
   }
 `;
 
-const resolvers = {};
-
-export default makeExecutableSchema({
-  typeDefs: [Query, ShareLink, Question],
-  resolvers: merge(resolvers, ShareLinkResolvers, QuestionResolvers)
-});
+export const typeDefs = [Query, ShareLink, Question, Specialty, ExamSet];
+export const resolvers = merge(
+  shareLinkResolvers,
+  questionResolvers,
+  specialtyResolvers,
+  examSetResolvers
+);

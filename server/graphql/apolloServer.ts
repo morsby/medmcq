@@ -1,4 +1,7 @@
 import { ApolloServer } from 'apollo-server-express';
-import schema from './schema';
+import { resolvers, typeDefs } from './schema';
+import generateLoaders from './dataloaders/index';
 
-export default new ApolloServer({ schema });
+export type Context = ReturnType<typeof generateLoaders>;
+
+export default new ApolloServer({ resolvers, typeDefs, context: () => generateLoaders() });
