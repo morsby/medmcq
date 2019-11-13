@@ -1,20 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { withLocalize, Translate } from 'react-localize-redux';
-import { Menu, Icon, Button } from 'semantic-ui-react';
-import { connect } from 'react-redux';
-import * as actions from '../../../actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { useHistory } from 'react-router';
+import { Menu, Icon, Button, Loader } from 'semantic-ui-react';
+import { getQuestions, changeSettings } from 'actions';
 import Flag from 'react-flagkit';
+import _ from 'lodash';
 
-const RightMenu = (props) => {
-  const { user, languages, logout, handleNavigation } = props;
+const RightMenu = ({ languages, logout, handleNavigation, setActiveLanguage }) => {
+  const [loading, setLoading] = useState(false);
+  const activeLanguage = useSelector((state) => state.settings.language);
+  const user = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const fetchQuestionsByCommentIds = async (commentIds) => {
+    setLoading(true);
+    commentIds = _.uniq(commentIds);
+    await dispatch(getQuestions({ commentIds }));
+    history.push('/quiz');
+    setLoading(false);
+  };
 
   const changeLang = (lang) => {
-    props.setActiveLanguage(lang);
-    props.changeSettings({ type: 'language', value: lang });
+    setActiveLanguage(lang);
+    dispatch(changeSettings({ type: 'language', value: lang }));
   };
 
   const generateFlag = (lang) => {
-    if (lang.code !== props.activeLanguage) {
+    if (lang.code !== activeLanguage) {
       return (
         <Menu.Item onClick={() => changeLang(lang.code)} key={lang.code}>
           <div>
@@ -39,9 +53,17 @@ const RightMenu = (props) => {
             />
           </strong>
         </Menu.Item>
-        <Menu.Item>
-          <Icon name="thumbs up outline" /> {user.likes.length}
-        </Menu.Item>
+        {!loading ? (
+          <Menu.Item
+            onClick={() => fetchQuestionsByCommentIds(user.likes.map((like) => like.commentId))}
+          >
+            <Icon name="thumbs up outline" /> {user.likes.length}
+          </Menu.Item>
+        ) : (
+          <Menu.Item>
+            <Loader active inline size="tiny" />
+          </Menu.Item>
+        )}
         <Menu.Item>
           <Button
             inverted
@@ -67,16 +89,4 @@ const RightMenu = (props) => {
   }
 };
 
-function mapStateToProps(state) {
-  return {
-    user: state.auth.user,
-    activeLanguage: state.settings.language
-  };
-}
-
-export default withLocalize(
-  connect(
-    mapStateToProps,
-    actions
-  )(RightMenu)
-);
+export default withLocalize(RightMenu);
