@@ -25,7 +25,7 @@ import './styles/scss/main.scss';
 import 'react-image-lightbox/style.css'; // This only needs to be imported once in your app
 
 // redux
-import { configureStore, getDefaultMiddleware } from 'redux-starter-kit';
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 
 const migrations: any = {
   6: (state: IReduxState) => {

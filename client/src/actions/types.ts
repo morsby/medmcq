@@ -1,4 +1,4 @@
-import { createAction } from 'redux-starter-kit';
+import { createAction } from '@reduxjs/toolkit';
 
 /* QUIZ REDUCER */
 export const QUIZ_NAVIGATE = 'QUIZ_MAVIGATE';
