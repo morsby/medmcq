@@ -1,6 +1,6 @@
 import * as types from '../actions/types';
 import _ from 'lodash';
-import { createReducer } from 'redux-starter-kit';
+import { createReducer } from '@reduxjs/toolkit';
 
 /**
  * user defaulter til null; burde måske være et tomt object (men så vil mange
@@ -19,7 +19,7 @@ const initialState = {
 };
 
 /**
- * createReducer er en funktion fra redux-starter-kit, der laver en IMMUTABLE
+ * createReducer er en funktion fra @reduxjs/toolkit, der laver en IMMUTABLE
  * version af state. Se dokumentation på: https://goo.gl/wJZmMX
  */
 export default createReducer(initialState, {
@@ -47,9 +47,9 @@ export default createReducer(initialState, {
 
     let answersSummary = {};
     answers.forEach((a) => {
-      if (!questions.hasOwnProperty(a.questionId)) return;
+      if (!Object.prototype.hasOwnProperty.call(questions, a.questionId)) return;
 
-      if (!answersSummary.hasOwnProperty(a.questionId)) {
+      if (!Object.prototype.hasOwnProperty.call(answersSummary, a.questionId)) {
         answersSummary[a.questionId] = { history: { 1: 0, 2: 0, 3: 0 }, tries: 0, correct: 0 };
       }
 

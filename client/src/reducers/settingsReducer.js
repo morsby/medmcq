@@ -1,5 +1,5 @@
 import * as types from '../actions/types';
-import { createReducer } from 'redux-starter-kit';
+import { createReducer } from '@reduxjs/toolkit';
 
 const initialState = {
   /**
@@ -15,7 +15,7 @@ const initialState = {
   firstTime: true
 };
 /**
- * createReducer er en funktion fra redux-starter-kit, der laver en IMMUTABLE
+ * createReducer er en funktion fra @reduxjs/toolkit, der laver en IMMUTABLE
  * version af state. Se dokumentation på: https://goo.gl/wJZmMX
  */
 export default createReducer(initialState, {
