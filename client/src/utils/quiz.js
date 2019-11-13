@@ -64,5 +64,5 @@ export const subSupScript = (text) => {
 
 export const isAnswered = (question) => {
   const state = store.getState();
-  return state.quiz.answers.hasOwnProperty(question.id);
+  return Object.prototype.hasOwnProperty.call(state.quiz.answers, question.id);
 };

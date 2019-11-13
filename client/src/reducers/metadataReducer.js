@@ -1,5 +1,5 @@
 import * as types from '../actions/types';
-import { createReducer } from 'redux-starter-kit';
+import { createReducer } from '@reduxjs/toolkit';
 import { normalize, schema } from 'normalizr';
 
 export const initialState = {

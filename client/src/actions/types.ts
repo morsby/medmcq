@@ -1,4 +1,4 @@
-import { createAction } from 'redux-starter-kit';
+import { createAction } from '@reduxjs/toolkit';
 
 /* QUIZ REDUCER */
 export const QUIZ_NAVIGATE = 'QUIZ_MAVIGATE';
@@ -20,8 +20,8 @@ export const FETCH_QUESTIONS_FAILURE = 'fetch_questions_failure';
 export const ANSWER_QUESTION = 'answer_question';
 export const POST_QUESTION = 'post_question';
 export const QUESTION_UPDATE = 'question_update';
-export const COMMENT_LIKE = createAction('COMMENT_LIKE');
-export const COMMENT_UNLIKE = createAction('COMMENT_UNLIKE');
+export const COMMENT_LIKE = createAction<{ userId: number; commentId: number }>('COMMENT_LIKE');
+export const COMMENT_UNLIKE = createAction<{ userId: number; commentId: number }>('COMMENT_UNLIKE');
 
 // Gamle types
 
@@ -55,6 +55,6 @@ export const AUTH_UPDATE_USER_ANSWERS = 'AUTH_UPDATE_USER_ANSWERS';
 
 export const LOAD_SETS = 'LOAD_SETS';
 export const LOAD_SETS_FINISH = 'LOAD_SETS_FINISH';
-export const CREATE_BOOKMARK = createAction('CREATE_BOOKMARK');
-export const REMOVE_BOOKMARK = createAction('REMOVE_BOOKMARK');
-export const CHANGE_PICKED = createAction('CHANGE_PICKED');
+export const CREATE_BOOKMARK = createAction<number>('CREATE_BOOKMARK');
+export const REMOVE_BOOKMARK = createAction<number>('REMOVE_BOOKMARK');
+export const CHANGE_PICKED = createAction<number[]>('CHANGE_PICKED');

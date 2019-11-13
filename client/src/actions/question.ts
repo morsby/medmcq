@@ -168,7 +168,7 @@ export const searchQuestion = (semester, searchString) => async (dispatch) => {
   });
 };
 
-export const createBookmark = (questionId: Number) => async (dispatch: Dispatch) => {
+export const createBookmark = (questionId: number) => async (dispatch: Dispatch) => {
   try {
     await axios.post(`/api/questions/${questionId}/bookmark`);
     dispatch(types.CREATE_BOOKMARK(questionId));
