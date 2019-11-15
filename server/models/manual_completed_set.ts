@@ -1,6 +1,6 @@
-import BaseModel from './_base_model';
+import { Model } from 'objection';
 
-class manualCompletedSet extends BaseModel {
+class manualCompletedSet extends Model {
   static get tableName() {
     return 'manualCompletedSets';
   }

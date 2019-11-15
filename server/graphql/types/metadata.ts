@@ -3,8 +3,9 @@ import { Context } from 'graphql/apolloServer';
 
 export const typeDefs = gql`
   type TagVote {
-    tagId: Int
-    questionId: Int
+    id: Int
+    tag: Tag
+    question: Question
     votes: Int
   }
 
@@ -18,9 +19,11 @@ export const typeDefs = gql`
 
   type Specialty {
     id: Int
-    question: Question
-    user: User
-    value: Int
+    name: String
+    semester: Semester
+    createdAt: String
+    updatedAt: String
+    oldId: String
   }
 
   type Tag {
@@ -32,10 +35,18 @@ export const typeDefs = gql`
 `;
 
 export const resolvers = {
-  TagVote: {},
+  TagVote: {
+    id: ({ id }) => id,
+    tag: () => {},
+    question: () => {},
+    votes: () => {}
+  },
   SpecialtyVote: {
     id: ({ id }) => id,
-    specialty: ({ id }) => ({ id }),
+    specialty: async ({ id }, _, ctx: Context) => {
+      const specialtyVote = await ctx.metadataLoaders.specialtyVoteLoader.load(id);
+      return { id: specialtyVote.specialtyId };
+    },
     question: async ({ id }, args, ctx: Context) => {
       const specialtyVote = await ctx.metadataLoaders.specialtyVoteLoader.load(id);
       return { id: specialtyVote.questionId };
@@ -47,6 +58,14 @@ export const resolvers = {
     value: async ({ id }, args, ctx: Context) => {
       const specialtyVote = await ctx.metadataLoaders.specialtyVoteLoader.load(id);
       return specialtyVote.value;
+    }
+  },
+  Tag: {},
+  Specialty: {
+    id: ({ id }) => id,
+    name: async ({ id }, _, ctx: Context) => {
+      const specialty = await ctx.metadataLoaders.specialtyLoader.load(id);
+      return specialty.name;
     }
   }
 };

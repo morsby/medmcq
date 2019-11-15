@@ -1,6 +1,10 @@
 import { gql } from 'apollo-server-express';
 import Question from 'models/question';
 import { Context } from 'graphql/apolloServer';
+import QuestionSpecialtyVote from 'models/question_specialty_vote';
+import Comment from 'models/question_comment';
+import QuestionCorrectAnswer from 'models/question_correct_answer';
+import QuestionTagVote from 'models/question_tag_vote';
 
 export const typeDefs = gql`
   extend type Query {
@@ -127,27 +131,31 @@ export const resolvers = {
       return { id: examSet.id };
     },
     publicComments: async ({ id }, _, ctx: Context) => {
-      const publicComments = await ctx.commentLoaders
-        .commentsByQuestionIdLoader({ isPrivate: false })
-        .load(id);
-      return publicComments.map((comment) => ({ id: comment.id }));
+      const publicComments = await Comment.query()
+        .where('questionId', id)
+        .where({ private: 0 });
+      return publicComments.map((pc) => ({ id: pc.id }));
     },
     privateComments: async ({ id }, { userId }, ctx: Context) => {
-      let privateComments = await ctx.commentLoaders
-        .commentsByQuestionIdLoader({ isPrivate: true })
-        .load(id);
-      // Only return the private comments belonging to the user
-      privateComments = privateComments.filter((comment) => comment.userId === userId);
+      let privateComments = await Comment.query().where({
+        questionId: id,
+        private: 1,
+        userId: userId
+      });
       return privateComments.map((comment) => ({ id: comment.id }));
     },
     correctAnswers: async ({ id }, args, ctx: Context) => {
-      return ctx.questionLoaders.correctAnswersByQuestionIdLoader.load(id);
+      const correctAnswers = await QuestionCorrectAnswer.query().where('questionId', id);
+      return correctAnswers.map((ca) => ({ id: ca.id }));
     },
     specialtyVotes: async ({ id }, args, ctx: Context) => {
-      const specialtyVotes = await ctx.metadataLoaders.specialtyVotesByQuestionIdLoader.load(id);
+      const specialtyVotes = await QuestionSpecialtyVote.query().where('questionId', id);
       return specialtyVotes.map((sv) => ({ id: sv.id }));
     },
-    tagVotes: () => {},
+    tagVotes: async ({ id }, _, ctx: Context) => {
+      const tagVotes = await QuestionTagVote.query().where('questionId', id);
+      return tagVotes.map((tv) => ({ id: tv.id }));
+    },
     createdAt: async ({ id }, args, ctx: Context) => {
       const question = await ctx.questionLoaders.questionLoader.load(id);
       return question.createdAt.toISOString();

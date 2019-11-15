@@ -1,16 +1,23 @@
 import QuestionSpecialtyVote from 'models/question_specialty_vote';
-import dataloader from 'dataloader';
+import dataLoader from 'dataloader';
 import Specialty from 'models/specialty';
+import Tag from 'models/tag';
+import QuestionTagVote from 'models/question_tag_vote';
 
 // Batchers ============================================================================
-const batchSpecialtyVotesByQuestionId = async (ids: number[]) => {
-  const specialtyVotes = await QuestionSpecialtyVote.query().whereIn('questionId', ids);
-  return ids.map((id) => specialtyVotes.filter((s) => s.questionId === id));
-};
-
 const batchSpecialties = async (ids: number[]) => {
   const specialties = await Specialty.query().findByIds(ids);
   return ids.map((id) => specialties.find((s) => s.id === id));
+};
+
+const batchTags = async (ids: number[]) => {
+  const tags = await Tag.query().findByIds(ids);
+  return ids.map((id) => tags.find((tag) => tag.id === id));
+};
+
+const batchTagVotes = async (ids: number[]) => {
+  const tagVotes = await QuestionTagVote.query().findByIds(ids);
+  return ids.map((id) => tagVotes.find((t) => t.id === id));
 };
 
 const batchSpecialtyVotes = async (ids: number[]) => {
@@ -19,8 +26,7 @@ const batchSpecialtyVotes = async (ids: number[]) => {
 };
 
 // Loaders ============================================================================
-export const specialtyVotesByQuestionIdLoader = new dataloader((ids: number[]) =>
-  batchSpecialtyVotesByQuestionId(ids)
-);
-export const specialtyLoader = new dataloader((ids: number[]) => batchSpecialties(ids));
-export const specialtyVoteLoader = new dataloader((ids: number[]) => batchSpecialtyVotes(ids));
+export const specialtyLoader = new dataLoader((ids: number[]) => batchSpecialties(ids));
+export const specialtyVoteLoader = new dataLoader((ids: number[]) => batchSpecialtyVotes(ids));
+export const tagLoader = new dataLoader((ids: number[]) => batchTags(ids));
+export const tagVotesLoader = new dataLoader((ids: number[]) => batchTagVotes(ids));
