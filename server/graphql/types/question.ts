@@ -146,7 +146,7 @@ export const resolvers = {
     },
     correctAnswers: async ({ id }, args, ctx: Context) => {
       const correctAnswers = await QuestionCorrectAnswer.query().where('questionId', id);
-      return correctAnswers.map((ca) => ({ id: ca.id }));
+      return correctAnswers;
     },
     specialtyVotes: async ({ id }, args, ctx: Context) => {
       const specialtyVotes = await QuestionSpecialtyVote.query().where('questionId', id);

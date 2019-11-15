@@ -1,16 +1,13 @@
-import cookieParser from 'cookie-parser';
-import cookieSession from 'cookie-session';
 import bodyParser from 'body-parser';
 import dotEnv from 'dotenv-flow';
 import express from 'express';
 import helmet from 'helmet';
-import keygrip from 'keygrip';
 import Knex from 'knex';
+import { Model } from 'objection';
+import cookieParser from 'cookie-parser';
 
 import apolloClient from './graphql/apolloServer';
-import { Model } from 'objection';
 import logger from './middleware/logger';
-import passport from 'passport';
 import path from 'path';
 import routes from './routes';
 
@@ -28,24 +25,9 @@ Model.knex(knex);
 app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(cookieParser());
 apolloClient.applyMiddleware({ app });
 
-// For logins:
-app.use(cookieParser()); // read cookies (needed for auth)
-app.use(
-  cookieSession({
-    name: 'medMCQv1',
-    keys: keygrip(process.env.KEYGRIP_SECRETS.split(' ')),
-    maxAge: 14 * 24 * 60 * 60 * 1000, // 14 days
-    sameSite: true
-  })
-);
-
-// Authentication
-require('middleware/passport')(passport); // pass passport for configuration
-
-app.use(passport.initialize());
-app.use(passport.session()); // persistent login sessions
 app.use(logger); // Logging of all requests
 
 // Real routes
