@@ -27,50 +27,14 @@ export const typeDefs = gql`
     image: String
     oldId: String
     examSetQno: Int
-    semester: Semester
     publicComments: [Comment]
-    correctAnswers: [CorrectAnswer]
+    privateComments(userId: Int!): [Comment]
+    correctAnswers: [Answer]
     specialtyVotes: [SpecialtyVote]
     tagVotes: [TagVote]
     examSet: ExamSet
     createdAt: String
     updatedAt: String
-  }
-
-  type Semester {
-    id: Int
-    value: Int
-    name: String
-    shortName: String
-  }
-
-  type Comment {
-    id: Int
-    text: String
-    private: Int
-    questionId: Int
-    userId: Int
-    createdAt: String
-    updatedAt: String
-    user: User
-  }
-
-  type CorrectAnswer {
-    id: Int
-    answer: Int
-    questionId: Int
-    createdAt: String
-    updatedAt: String
-  }
-
-  type TagVote {
-    tagId: Int
-    questionId: Int
-    votes: Int
-  }
-
-  type User {
-    id: Int
   }
 `;
 
@@ -78,6 +42,8 @@ export const resolvers = {
   Query: {
     questions: async (args, { filter }) => {
       let query = Question.query();
+
+      if (!filter) throw new Error('No arguments for filter provided');
 
       if (filter.ids) return query.findByIds(filter.id);
 
@@ -160,13 +126,25 @@ export const resolvers = {
       const examSet = await ctx.examSetLoaders.examSetsLoader.load(question.examSetId);
       return { id: examSet.id };
     },
-    semester: () => {},
-    publicComments: () => {},
-    correctAnswers: ({ id }, args, ctx: Context) => {
-      return ctx.questionLoaders.correctAnswersLoader.load(id);
+    publicComments: async ({ id }, _, ctx: Context) => {
+      const publicComments = await ctx.commentLoaders
+        .commentsByQuestionIdLoader({ isPrivate: false })
+        .load(id);
+      return publicComments.map((comment) => ({ id: comment.id }));
+    },
+    privateComments: async ({ id }, { userId }, ctx: Context) => {
+      let privateComments = await ctx.commentLoaders
+        .commentsByQuestionIdLoader({ isPrivate: true })
+        .load(id);
+      // Only return the private comments belonging to the user
+      privateComments = privateComments.filter((comment) => comment.userId === userId);
+      return privateComments.map((comment) => ({ id: comment.id }));
+    },
+    correctAnswers: async ({ id }, args, ctx: Context) => {
+      return ctx.questionLoaders.correctAnswersByQuestionIdLoader.load(id);
     },
     specialtyVotes: async ({ id }, args, ctx: Context) => {
-      const specialtyVotes = await ctx.specialtyLoaders.specialtyVotesByQuestionIdLoader.load(id);
+      const specialtyVotes = await ctx.metadataLoaders.specialtyVotesByQuestionIdLoader.load(id);
       return specialtyVotes.map((sv) => ({ id: sv.id }));
     },
     tagVotes: () => {},

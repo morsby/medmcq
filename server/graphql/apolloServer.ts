@@ -1,6 +1,6 @@
 import { ApolloServer } from 'apollo-server-express';
-import { resolvers, typeDefs } from './schema';
-import generateLoaders from './dataloaders/index';
+import { resolvers, typeDefs } from 'graphql/types';
+import generateLoaders from './dataloaders';
 
 export type Context = ReturnType<typeof generateLoaders>;
 

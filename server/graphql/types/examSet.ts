@@ -6,7 +6,7 @@ export const typeDefs = gql`
     id: Int
     year: Int
     season: String
-    semesterId: Int
+    semester: Semester
     createdAt: String
     updatedAt: String
   }
@@ -18,6 +18,14 @@ export const resolvers = {
     year: async ({ id }, args, ctx: Context) => {
       const examSet = await ctx.examSetLoaders.examSetsLoader.load(id);
       return examSet.year;
+    },
+    season: async ({ id }, args, ctx: Context) => {
+      const examSet = await ctx.examSetLoaders.examSetsLoader.load(id);
+      return examSet.season;
+    },
+    semester: async ({ id }, args, ctx: Context) => {
+      const examSet = await ctx.examSetLoaders.examSetsLoader.load(id);
+      return { id: examSet.semesterId };
     }
   }
 };
