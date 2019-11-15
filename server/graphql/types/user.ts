@@ -13,11 +13,18 @@ export const typeDefs = gql`
 
   extend type Mutation {
     login(data: LoginInput): String
+    signup(data: UserInput): String
   }
 
   input LoginInput {
     username: String!
     password: String!
+  }
+
+  input UserInput {
+    username: String!
+    password: String!
+    email: String
   }
 
   type User {
@@ -66,6 +73,10 @@ export const resolvers = {
       const isValidPassword = user.verifyPassword(password);
       if (!isValidPassword) throw new Error('Username or password is invalid');
       user = _.pick(user, ['username', 'email']);
+      return jwt.sign(user, process.env.SECRET);
+    },
+    signup: async (root, { data }) => {
+      const user = User.query().insert(data);
       return jwt.sign(user, process.env.SECRET);
     }
   },

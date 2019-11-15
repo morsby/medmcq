@@ -2,6 +2,7 @@ import axios from 'axios';
 import * as types from './types';
 import { getQuestions } from './question';
 import { makeToast } from './ui';
+import User, { UserSignupInput, UserLoginInput } from 'classes/User';
 
 export const checkUserAvailability = (field, value) => async () => {
   let res = await axios.post('/api/users/check-availability', {
@@ -11,53 +12,38 @@ export const checkUserAvailability = (field, value) => async () => {
   return res.data;
 };
 
-export const signup = (post) => async (dispatch) => {
-  let res = await axios.post('/api/users', post);
+export const signup = async (signupData: UserSignupInput) => async (dispatch) => {
+  const user = await User.signup(signupData);
 
-  dispatch({ type: types.AUTH_SIGNUP, payload: res.data });
-  return res.data;
+  dispatch({ type: types.AUTH_SIGNUP, payload: user });
 };
 
-export const login = (post) => async (dispatch) => {
-  post.username = post.username.toLowerCase();
+export const login = (loginData: UserLoginInput) => async (dispatch) => {
+  loginData.username = loginData.username.toLowerCase();
 
   try {
-    let response = await axios.post('/api/auth', post);
+    const user = await User.login(loginData);
+    if (!user) return dispatch(makeToast('toast.auth.loginError', 'error'));
     dispatch(makeToast('toast.auth.loginSuccess', 'success'));
-    dispatch(fetchUser());
-    return response.data;
+    dispatch(fetchUser(user.id));
   } catch ({ response }) {
     dispatch(makeToast('toast.auth.loginError', 'error'));
   }
 };
 
 export const logout = () => async (dispatch) => {
-  try {
-    let res = await axios.get('/api/auth/logout');
-    if (res.data.type === 'LogoutSuccess') {
-      dispatch(makeToast('toast.auth.logoutSuccess', 'success'));
-    } else {
-      dispatch(makeToast('toast.auth.logoutError', 'error'));
-    }
-  } catch ({ response }) {
-    dispatch(makeToast('toast.auth.logoutError', 'error'));
-  }
-
-  dispatch(fetchUser());
+  // TODO: Remove JWT
 };
 
-export const fetchUser = () => async (dispatch) => {
+export const fetchUser = (userId: number) => async (dispatch) => {
   dispatch({ type: types.AUTH_FETCH_USER_REQUEST });
-  let res;
   try {
-    res = await axios.get('/api/auth');
+    const user = await User.checkUser();
+    if (!user) return dispatch(makeToast('toast.auth.fetchUserError', 'error'));
+    dispatch({ type: types.AUTH_FETCH_USER_SUCCESS, payload: user });
   } catch ({ response }) {
     dispatch(makeToast('toast.auth.fetchUserError', 'error'));
   }
-
-  if (!res) return;
-
-  dispatch({ type: types.AUTH_FETCH_USER_SUCCESS, payload: res.data });
 };
 
 export const getProfile = (semesterId = null) => async (dispatch, getState) => {
@@ -86,7 +72,7 @@ export const editProfile = (values) => async (dispatch, getState) => {
     // TODO: FIX MSG
 
     dispatch(makeToast('toast.editProfile.success', 'success'));
-    dispatch(fetchUser());
+    dispatch(fetchUser(user.id));
   } catch ({ response }) {
     dispatch(makeToast('toast.editProfile.error', 'error'));
   }

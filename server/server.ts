@@ -9,7 +9,6 @@ import cookieParser from 'cookie-parser';
 import apolloClient from './graphql/apolloServer';
 import logger from './middleware/logger';
 import path from 'path';
-import routes from './routes';
 
 const port = process.env.PORT || 3001;
 const env = process.env.NODE_ENV || 'development';
@@ -26,12 +25,12 @@ app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
+
+// Logging of all requests
+app.use(logger);
+
+// GraphQL and routes
 apolloClient.applyMiddleware({ app });
-
-app.use(logger); // Logging of all requests
-
-// Real routes
-app.use('/api', routes);
 
 /* Catch all */
 app.use(express.static(path.join(__dirname, '..', '..', 'client', 'build')));
