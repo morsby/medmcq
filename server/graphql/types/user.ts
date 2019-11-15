@@ -9,11 +9,17 @@ export const typeDefs = gql`
   extend type Query {
     user: User
     checkUser: String
+    checkUsernameAvailability: Boolean
+    profile: Profile
   }
 
   extend type Mutation {
     login(data: LoginInput): String
     signup(data: UserInput): String
+    editUser(data: UserEditInput): String
+    forgotPassword(email: String!): String
+    resetPassword(token: String!, values: String): String
+    manualCompleteSet(setId: Int!, userId: Int!): String
   }
 
   input LoginInput {
@@ -24,6 +30,11 @@ export const typeDefs = gql`
   input UserInput {
     username: String!
     password: String!
+    email: String
+  }
+
+  input UserEditInput {
+    password: String
     email: String
   }
 
