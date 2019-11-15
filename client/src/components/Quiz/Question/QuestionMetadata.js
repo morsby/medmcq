@@ -47,9 +47,9 @@ const QuestionMetadata = (props) => {
   };
 
   let { tags, specialties } = metadata.entities;
-  specialties = _.pickBy(specialties, (s) => s.semesterId === question.semester);
+  specialties = _.pickBy(specialties, (s) => s.semesterId === question.examSet.semester);
   tags = _.pickBy(tags, (t) => t.semesterId === question.semester);
-  let examSet = metadata.entities.examSets[question.examSetId];
+  let examSet = metadata.entities.examSets[question.examSet];
   return (
     <Grid celled stackable columns="equal">
       <Grid.Column>

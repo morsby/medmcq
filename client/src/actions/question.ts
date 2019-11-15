@@ -3,6 +3,8 @@ import axios from 'axios';
 import * as types from './types';
 import { Dispatch } from 'redux';
 import { makeToast } from './ui';
+import Question from 'classes/Question';
+import User from 'classes/User';
 
 const questionApi = '/api/questions';
 
@@ -26,7 +28,7 @@ export const getQuestions = ({
     onlyWrong
   } = state.ui.selection;
 
-  let res;
+  let questions;
   // Hvilke spøgsmål bedes der om?
   if (ids) {
     type = 'ids';
@@ -54,32 +56,30 @@ export const getQuestions = ({
 
     case 'ids':
     case 'specific':
-      res = await axios.get(questionApi, { params: { ids: ids.join(',') } });
+      questions = await Question.fetch({ ids: ids.join(',') });
       break;
     case 'profile':
-      res = await axios.get(questionApi, { params: { profile, semesters: selectedSemester } });
+      questions = await User.getProfileData({ semester: selectedSemester });
       break;
     case 'set':
-      res = await axios.get(`/api/exam_sets/${selectedSetId}/questions`);
+      questions = await Question.fetch({ set: selectedSetId });
       break;
     default:
-      res = await axios.get(questionApi, {
-        params: {
-          semesters: selectedSemester,
-          specialties: (selectedSpecialtyIds || []).join(',') || undefined,
-          tags: (selectedTagIds || []).join(',') || undefined,
-          n: n || undefined,
-          onlyNew: onlyNew || undefined,
-          onlyWrong: onlyWrong || undefined,
-          commentIds
-        }
+      questions = await Question.fetch({
+        semester: selectedSemester,
+        specialties: (selectedSpecialtyIds || []).join(',') || undefined,
+        tags: (selectedTagIds || []).join(',') || undefined,
+        n: n || undefined,
+        onlyNew: onlyNew || undefined,
+        onlyWrong: onlyWrong || undefined,
+        commentIds
       });
   }
 
-  if (res.data.length > 0) {
+  if (questions.length > 0) {
     dispatch({
       type: types.FETCH_QUESTIONS_SUCCESS,
-      payload: res.data,
+      payload: questions,
       quiz,
       refetch
     });

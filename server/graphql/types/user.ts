@@ -4,13 +4,13 @@ import QuestionUserAnswer from 'models/question_user_answer';
 import User from 'models/user';
 import jwt from 'jsonwebtoken';
 import _ from 'lodash';
+import QuestionCommentLike from 'models/question_comment_like';
 
 export const typeDefs = gql`
   extend type Query {
     user: User
-    checkUser: String
+    checkUser: User
     checkUsernameAvailability: Boolean
-    profile: Profile
   }
 
   extend type Mutation {
@@ -61,6 +61,10 @@ export const typeDefs = gql`
     id: Int
   }
 
+  type Profile {
+    id: Int
+  }
+
   type ManualCompletedSet {
     id: Int
   }
@@ -68,12 +72,13 @@ export const typeDefs = gql`
 
 export const resolvers = {
   Query: {
-    user: (_root, _args, ctx: Context) => {
-      return ctx.userLoaders.userLoader.load(ctx.user.id);
+    user: async (_root, _args, ctx: Context) => {
+      const user = await ctx.userLoaders.userLoader.load(ctx.user.id);
+      return { id: user.id };
     },
     checkUser: (root, args, ctx: Context) => {
-      if (!ctx.user) throw new Error('Invalid User');
-      return jwt.sign(ctx.user, process.env.SECRET);
+      if (!ctx.user) throw new Error('No user recieved');
+      return { id: ctx.user.id };
     }
   },
 
@@ -83,7 +88,7 @@ export const resolvers = {
       if (!user) throw new Error('Username or password is invalid');
       const isValidPassword = user.verifyPassword(password);
       if (!isValidPassword) throw new Error('Username or password is invalid');
-      user = _.pick(user, ['username', 'email']);
+      user = _.pick(user, ['id', 'username', 'email']);
       return jwt.sign(user, process.env.SECRET);
     },
     signup: async (root, { data }) => {
@@ -109,6 +114,10 @@ export const resolvers = {
     answers: async ({ id }) => {
       const answers = await QuestionUserAnswer.query().where({ userId: id });
       return answers.map((answer) => ({ id: answer.id }));
+    },
+    likes: async ({ id }) => {
+      const likes = await QuestionCommentLike.query().where({ userId: id });
+      return likes.map((like) => ({ id: [like.commentId, like.userId] }));
     }
   }
 };

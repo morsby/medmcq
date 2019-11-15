@@ -1,14 +1,9 @@
 import dataLoader from 'dataloader';
 import QuestionCommentLike from 'models/question_comment_like';
 
-const batchLikesByCommentId = async (ids: number[]) => {
-  const likes = await QuestionCommentLike.query().whereIn('commentId', ids);
-  return ids.map((id) => likes.filter((like) => like.commentId === id));
-};
-const batchLikesByUserId = async (ids: number[]) => {
-  const likes = await QuestionCommentLike.query().whereIn('userId', ids);
-  return ids.map((id) => likes.filter((like) => like.commentId === id));
+const batchLikes = async (ids: [number, number][]) => {
+  const likes = await QuestionCommentLike.query().findByIds(ids);
+  return ids.map((id) => likes.find((like) => id[0] === like.commentId && id[1] === like.userId));
 };
 
-export const likesByCommentIdLoader = new dataLoader((ids: number[]) => batchLikesByCommentId(ids));
-export const likesByUserIdLoader = new dataLoader((ids: number[]) => batchLikesByUserId(ids));
+export const likesLoader = new dataLoader((ids: [number, number][]) => batchLikes(ids));

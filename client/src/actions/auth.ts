@@ -3,6 +3,7 @@ import * as types from './types';
 import { getQuestions } from './question';
 import { makeToast } from './ui';
 import User, { UserSignupInput, UserLoginInput } from 'classes/User';
+import Question from 'classes/Question';
 
 export const checkUserAvailability = (field, value) => async () => {
   let res = await axios.post('/api/users/check-availability', {
@@ -18,14 +19,10 @@ export const signup = async (signupData: UserSignupInput) => async (dispatch) =>
   dispatch({ type: types.AUTH_SIGNUP, payload: user });
 };
 
-export const login = (loginData: UserLoginInput) => async (dispatch) => {
-  loginData.username = loginData.username.toLowerCase();
-
+export const login = () => async (dispatch) => {
   try {
-    const user = await User.login(loginData);
-    if (!user) return dispatch(makeToast('toast.auth.loginError', 'error'));
+    dispatch(fetchUser());
     dispatch(makeToast('toast.auth.loginSuccess', 'success'));
-    dispatch(fetchUser(user.id));
   } catch ({ response }) {
     dispatch(makeToast('toast.auth.loginError', 'error'));
   }
@@ -35,7 +32,7 @@ export const logout = () => async (dispatch) => {
   // TODO: Remove JWT
 };
 
-export const fetchUser = (userId: number) => async (dispatch) => {
+export const fetchUser = () => async (dispatch) => {
   dispatch({ type: types.AUTH_FETCH_USER_REQUEST });
   try {
     const user = await User.checkUser();
@@ -47,21 +44,19 @@ export const fetchUser = (userId: number) => async (dispatch) => {
 };
 
 export const getProfile = (semesterId = null) => async (dispatch, getState) => {
-  dispatch({ type: types.AUTH_PROFILE_REQUEST });
-  const userId = getState().auth.user.id;
-  let res;
-  semesterId = semesterId || getState().ui.selection.selectedSemester;
   try {
-    [res] = await Promise.all([
-      axios.get(`/api/users/${userId}/profile?semesterId=${semesterId}`),
-      dispatch(getQuestions({ quiz: false }))
-    ]);
+    dispatch({ type: types.AUTH_PROFILE_REQUEST });
+
+    semesterId = semesterId || getState().ui.selection.selectedSemester;
+    await dispatch(getQuestions({ quiz: false }));
+
+    const questions = getState().questions.entities.questions;
+    const profileData = User.getProfileData();
+
+    dispatch({ type: types.AUTH_PROFILE_SUCCESS, payload: { ...profileData, questions } });
   } catch ({ response }) {
     dispatch(makeToast('toast.auth.fetchProfileError', 'error'));
   }
-
-  const questions = getState().questions.entities.questions;
-  dispatch({ type: types.AUTH_PROFILE_SUCCESS, payload: { ...res.data, questions } });
 };
 
 export const editProfile = (values) => async (dispatch, getState) => {
@@ -69,10 +64,8 @@ export const editProfile = (values) => async (dispatch, getState) => {
   try {
     await axios.patch(`/api/users/${auth.user.id}`, values);
 
-    // TODO: FIX MSG
-
     dispatch(makeToast('toast.editProfile.success', 'success'));
-    dispatch(fetchUser(user.id));
+    dispatch(fetchUser());
   } catch ({ response }) {
     dispatch(makeToast('toast.editProfile.error', 'error'));
   }
@@ -82,16 +75,8 @@ export const getAnsweredQuestions = (answers) => async (dispatch) => {
   // Receives an object of objects. Keys of the parent object are question IDs
   let ids = Object.keys(answers);
 
-  let questions = [];
+  const questions = Question.fetch({ ids: ids.map((id) => Number(id)) });
 
-  if (ids.length > 0) {
-    const res = await axios.post('/api/questions/ids', {
-      ids: ids,
-      purpose: 'profile-stats'
-    });
-
-    questions = res.data;
-  }
   dispatch({
     type: types.AUTH_GET_ANSWERED_QUESTIONS,
     answers,

@@ -1,5 +1,6 @@
 import { gql } from 'apollo-server-express';
 import { Context } from 'graphql/apolloServer';
+import QuestionCommentLike from 'models/question_comment_like';
 
 export const typeDefs = gql`
   type Comment {
@@ -37,8 +38,8 @@ export const resolvers = {
       return comment.updatedAt;
     },
     likes: async ({ id }, _, ctx: Context) => {
-      const likes = await ctx.likeLoaders.likesByCommentIdLoader.load(id);
-      return likes.length;
+      const likes = await QuestionCommentLike.query().where({ commentId: id });
+      return likes.map((like) => ({ id: [like.commentId, like.userId] }));
     }
   }
 };

@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import Knex from 'knex';
 import { Model } from 'objection';
 import cookieParser from 'cookie-parser';
+import routes from './routes';
 
 import apolloClient from './graphql/apolloServer';
 import logger from './middleware/logger';
@@ -31,6 +32,7 @@ app.use(logger);
 
 // GraphQL and routes
 apolloClient.applyMiddleware({ app });
+app.use('/api', routes);
 
 /* Catch all */
 app.use(express.static(path.join(__dirname, '..', '..', 'client', 'build')));

@@ -5,6 +5,7 @@ import * as commentLoaders from './commentLoaders';
 import * as userLoaders from './userLoaders';
 import * as likeLoaders from './likeLoaders';
 import * as semesterLoaders from './semesterLoaders';
+import * as answerLoaders from './answerLoaders';
 
 const generateLoaders = () => ({
   questionLoaders,
@@ -13,7 +14,8 @@ const generateLoaders = () => ({
   commentLoaders,
   userLoaders,
   likeLoaders,
-  semesterLoaders
+  semesterLoaders,
+  answerLoaders
 });
 
 export default generateLoaders;

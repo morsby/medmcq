@@ -20,6 +20,10 @@ export const typeDefs = gql`
     season: String
     ids: [Int]
     n: Int
+    set: Int
+    onlyNew: Boolean
+    onlyWrong: Boolean
+    commentIds: [Int]
   }
 
   type Question {
@@ -32,7 +36,7 @@ export const typeDefs = gql`
     oldId: String
     examSetQno: Int
     publicComments: [Comment]
-    privateComments(userId: Int!): [Comment]
+    privateComments: [Comment]
     correctAnswers: [Answer]
     specialtyVotes: [SpecialtyVote]
     tagVotes: [TagVote]
@@ -45,47 +49,57 @@ export const typeDefs = gql`
 export const resolvers = {
   Query: {
     questions: async (args, { filter }) => {
+      let { n, ids, season, year, semester, text, tags, specialties, set } = filter;
+
       let query = Question.query();
 
       if (!filter) throw new Error('No arguments for filter provided');
 
-      if (filter.ids) return query.findByIds(filter.id);
+      if (ids) return query.findByIds(ids);
 
       query = query
         .join('semesterExamSet as examSet', 'question.examSetId', 'examSet.id')
         .join('semester', 'examSet.semesterId', 'semester.id');
 
-      if (filter.semester) {
-        query = query.where('semester.id', '=', filter.semester);
+      if (set) return query.where('examSet.id', set);
+
+      // Start filtering based on other values
+      query = query.orderByRaw('rand()');
+
+      if (!n || n > 300) n = 300; // Man må ikke hente mere end 300
+      query = query.limit(n);
+
+      if (semester) {
+        query = query.where('semester.id', '=', semester);
       }
 
-      if (filter.year) {
-        query = query.where('examSet.year', '=', filter.year);
+      if (year) {
+        query = query.where('examSet.year', '=', year);
       }
 
-      if (filter.season) {
-        query = query.where('examSet.season', '=', filter.season);
+      if (season) {
+        query = query.where('examSet.season', '=', season);
       }
 
-      if (filter.specialties && filter.specialties.length > 0) {
+      if (specialties && specialties.length > 0) {
         query = query
           .join('questionSpecialtyVote as specialtyVote', 'question.id', 'specialtyVote.questionId')
-          .whereIn('specialtyVote.specialtyId', filter.specialties)
+          .whereIn('specialtyVote.specialtyId', specialties)
           .where(function() {
             this.sum('specialtyVote.value as votes').having('votes', '>', '-1');
           });
       }
 
-      if (filter.tags && filter.tags.length > 0) {
+      if (tags && tags.length > 0) {
         query = query
           .join('questionTagVote as tagVote', 'question.id', 'tagVote.questionId')
-          .whereIn('tagVote.tagId', filter.tags)
+          .whereIn('tagVote.tagId', tags)
           .where(function() {
             this.sum('tagVote.value as votes').having('votes', '>', '-1');
           });
       }
 
-      if (filter.text) {
+      if (text) {
         query = query.whereRaw(
           'MATCH (text, answer1, answer2, answer3) AGAINST (? IN BOOLEAN MODE)',
           filter.text
@@ -136,11 +150,11 @@ export const resolvers = {
         .where({ private: 0 });
       return publicComments.map((pc) => ({ id: pc.id }));
     },
-    privateComments: async ({ id }, { userId }, ctx: Context) => {
+    privateComments: async ({ id }, args, ctx: Context) => {
       let privateComments = await Comment.query().where({
         questionId: id,
         private: 1,
-        userId: userId
+        userId: ctx.user.id
       });
       return privateComments.map((comment) => ({ id: comment.id }));
     },
