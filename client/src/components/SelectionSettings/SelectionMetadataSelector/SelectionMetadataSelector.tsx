@@ -9,12 +9,13 @@ import { Form, Header, Message, Grid, Input } from 'semantic-ui-react';
 import { IReduxState } from 'reducers';
 import * as uiActions from './../../../actions/ui';
 import _ from 'lodash';
+import Semester from 'classes/Semester';
 
 interface IMetadataEntity {
   id: number;
   name: string;
-  semesterId: number;
-  parentId: number;
+  semester: Semester;
+  parent: { id: number };
   questionCount: number;
 }
 
@@ -47,7 +48,7 @@ const SelectionSpecialtiesSelector = () => {
 
   useEffect(() => {
     const convertMetadataToTree = () => {
-      return _.filter(metadata.tags, (t) => !t.parentId && t.semesterId === selectedSemester).map(
+      return _.filter(metadata.tags, (t) => !t.parent.id && t.semester.id === selectedSemester).map(
         (t) => ({
           title: `${t.name} (${t.questionCount})`,
           key: t.id,
@@ -57,7 +58,7 @@ const SelectionSpecialtiesSelector = () => {
     };
 
     const getChildrenOfMetadata: any = (tagId: number) => {
-      return _.filter(metadata.tags, (t) => t.parentId === tagId).map((t) => ({
+      return _.filter(metadata.tags, (t) => t.parent.id === tagId).map((t) => ({
         title: `${t.name} (${t.questionCount})`,
         key: t.id,
         children: getChildrenOfMetadata(t.id)
@@ -103,7 +104,7 @@ const SelectionSpecialtiesSelector = () => {
                 checkedKeys={selectedSpecialtyIds}
                 onCheck={(specialties: any) => onChange(specialties, 'selectedSpecialtyIds')}
               >
-                {_.filter(metadata.specialties, (s) => s.semesterId === selectedSemester).map(
+                {_.filter(metadata.specialties, (s) => s.semester.id === selectedSemester).map(
                   (s) => (
                     <Tree.TreeNode
                       title={`${s.name} (${s.questionCount})`}
@@ -158,7 +159,7 @@ const SelectionSpecialtiesSelector = () => {
                 {_(metadata.tags)
                   .filter(
                     (t) =>
-                      t.semesterId === selectedSemester &&
+                      t.semester.id === selectedSemester &&
                       t.name.toLowerCase().includes(tagSearch.toLowerCase())
                   )
                   .sortBy((t) => t.name)
@@ -174,8 +175,8 @@ const SelectionSpecialtiesSelector = () => {
             )}
             {!tagSearch && tagTree && (
               <Tree
-                checkedKeys={selectedTagIds}
-                onCheck={(tags: any) => onChange(tags, 'selectedTagIds')}
+                checkedKeys={selectedTagIds.map((tagId) => String(tagId))}
+                onCheck={(tags: any) => onChange(tags.map((tag) => Number(tag)), 'selectedTagIds')}
                 checkable
               >
                 {renderTreeNodes(tagTree)}

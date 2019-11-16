@@ -43,27 +43,30 @@ export default createReducer(initialState, {
   },
 
   [types.AUTH_PROFILE_SUCCESS]: (state, action) => {
-    let { privateComments, publicComments, bookmarks, answers, questions } = action.payload;
+    const { questions, privateComments, publicComments, bookmarks, answers } = action.payload;
+    console.log(action.payload);
 
     let answersSummary = {};
     answers.forEach((a) => {
-      if (!Object.prototype.hasOwnProperty.call(questions, a.questionId)) return;
+      if (!Object.prototype.hasOwnProperty.call(questions, a.question.id)) return;
 
-      if (!Object.prototype.hasOwnProperty.call(answersSummary, a.questionId)) {
-        answersSummary[a.questionId] = { history: { 1: 0, 2: 0, 3: 0 }, tries: 0, correct: 0 };
+      if (!Object.prototype.hasOwnProperty.call(answersSummary, a.question.id)) {
+        answersSummary[a.question.id] = { history: { 1: 0, 2: 0, 3: 0 }, tries: 0, correct: 0 };
       }
+      answersSummary[a.question.id].tries++;
+      answersSummary[a.question.id].history[a.answer]++;
 
-      answersSummary[a.questionId].tries++;
-      answersSummary[a.questionId].history[a.answer]++;
-      if (questions[a.questionId].correctAnswers.indexOf(a.answer) > -1)
-        answersSummary[a.questionId].correct++;
+      if (questions[a.question.id].correctAnswers.indexOf(a.answer) > -1)
+        answersSummary[a.question.id].correct++;
     });
+
     state.profile = {
       answers: answersSummary,
-      bookmarks: _.keyBy(bookmarks, (a) => a.questionId),
-      publicComments: _.keyBy(publicComments, (a) => a.questionId),
-      privateComments: _.keyBy(privateComments, (a) => a.questionId)
+      bookmarks: _.keyBy(bookmarks, (a) => a.question.id),
+      publicComments: _.keyBy(publicComments, (a) => a.question.id),
+      privateComments: _.keyBy(privateComments, (a) => a.question.id)
     };
+
     state.isFetching = false;
     state.didInvalidate = false;
   }

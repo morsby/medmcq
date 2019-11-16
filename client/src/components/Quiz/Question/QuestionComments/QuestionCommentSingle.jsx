@@ -45,7 +45,7 @@ const QuestionCommentSingle = ({
     setLikeLoading(false);
   };
 
-  let author = authors[comment.userId];
+  const author = authors[comment.user];
   return (
     <Comment
       key={comment.id}

@@ -1,5 +1,7 @@
 import { gql } from 'apollo-server-express';
 import { Context } from 'graphql/apolloServer';
+import QuestionTagVote from 'models/question_tag_vote';
+import QuestionSpecialtyVote from 'models/question_specialty_vote';
 
 export const typeDefs = gql`
   type TagVote {
@@ -24,13 +26,18 @@ export const typeDefs = gql`
     createdAt: String
     updatedAt: String
     oldId: String
+    questionCount: Int
   }
 
   type Tag {
     id: Int
-    question: Question
-    user: User
-    value: Int
+    name: String
+    semester: Semester
+    createdAt: String
+    updatedAt: String
+    oldId: String
+    parent: Tag
+    questionCount: Int
   }
 `;
 
@@ -60,12 +67,50 @@ export const resolvers = {
       return specialtyVote.value;
     }
   },
-  Tag: {},
+  Tag: {
+    id: ({ id }) => id,
+    name: async ({ id }, _, ctx: Context) => {
+      const tag = await ctx.metadataLoaders.tagLoader.load(id);
+      return tag.name;
+    },
+    semester: async ({ id }, _, ctx: Context) => {
+      const tag = await ctx.metadataLoaders.tagLoader.load(id);
+      return { id: tag.semesterId };
+    },
+    parent: async ({ id }, _, ctx: Context) => {
+      const tag = await ctx.metadataLoaders.tagLoader.load(id);
+      return { id: tag.parentId };
+    },
+    questionCount: async ({ id }, _, ctx: Context) => {
+      const questions = await QuestionTagVote.query()
+        .where({ tagId: id })
+        .distinct('questionId')
+        .where(function() {
+          this.sum('tagVote.value as votes').having('votes', '>', '-1');
+        });
+
+      return questions.length;
+    }
+  },
   Specialty: {
     id: ({ id }) => id,
     name: async ({ id }, _, ctx: Context) => {
       const specialty = await ctx.metadataLoaders.specialtyLoader.load(id);
       return specialty.name;
+    },
+    semester: async ({ id }, _, ctx: Context) => {
+      const specialty = await ctx.metadataLoaders.specialtyLoader.load(id);
+      return { id: specialty.semesterId };
+    },
+    questionCount: async ({ id }, _, ctx: Context) => {
+      const questions = await QuestionSpecialtyVote.query()
+        .where({ specialtyId: id })
+        .distinct('questionId')
+        .where(function() {
+          this.sum('specialtyVote.value as votes').having('votes', '>', '-1');
+        });
+
+      return questions.length;
     }
   }
 };

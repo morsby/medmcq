@@ -24,6 +24,7 @@ export const typeDefs = gql`
     onlyNew: Boolean
     onlyWrong: Boolean
     commentIds: [Int]
+    profile: Boolean
   }
 
   type Question {
@@ -37,7 +38,7 @@ export const typeDefs = gql`
     examSetQno: Int
     publicComments: [Comment]
     privateComments: [Comment]
-    correctAnswers: [Answer]
+    correctAnswers: [Int]
     specialtyVotes: [SpecialtyVote]
     tagVotes: [TagVote]
     examSet: ExamSet
@@ -66,7 +67,7 @@ export const resolvers = {
       // Start filtering based on other values
       query = query.orderByRaw('rand()');
 
-      if (!n || n > 300) n = 300; // Man må ikke hente mere end 300
+      if (!n || n > 300) n = 300; // Man må ikke hente mere end 300, medmindre man henter til profilen
       query = query.limit(n);
 
       if (semester) {
@@ -151,6 +152,7 @@ export const resolvers = {
       return publicComments.map((pc) => ({ id: pc.id }));
     },
     privateComments: async ({ id }, args, ctx: Context) => {
+      if (!ctx.user) return null;
       let privateComments = await Comment.query().where({
         questionId: id,
         private: 1,
@@ -160,7 +162,7 @@ export const resolvers = {
     },
     correctAnswers: async ({ id }, args, ctx: Context) => {
       const correctAnswers = await QuestionCorrectAnswer.query().where('questionId', id);
-      return correctAnswers;
+      return correctAnswers.map((ca) => ca.answer);
     },
     specialtyVotes: async ({ id }, args, ctx: Context) => {
       const specialtyVotes = await QuestionSpecialtyVote.query().where('questionId', id);

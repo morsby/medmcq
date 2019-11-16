@@ -1,6 +1,6 @@
-import axios from 'axios';
 import * as types from './types';
 import _ from 'lodash';
+import Semester from 'classes/Semester';
 
 export const invalidateMetadata = () => (dispatch) => {
   dispatch({ type: types.INVALIDATE_METADATA });
@@ -25,8 +25,12 @@ export const getMetadata = () => async (dispatch, getState) => {
     });
 
     try {
-      const { data: metadata } = await axios.get('/api/semesters');
-      dispatch({ type: types.FETCH_METADATA_SUCCESS, payload: metadata, timestamp: Date.now() });
+      const semesters = await Semester.fetchAll();
+      dispatch({
+        type: types.FETCH_METADATA_SUCCESS,
+        payload: semesters,
+        timestamp: Date.now()
+      });
     } catch (err) {
       dispatch({ type: types.FETCH_METADATA_FAILURE, error: err });
     }

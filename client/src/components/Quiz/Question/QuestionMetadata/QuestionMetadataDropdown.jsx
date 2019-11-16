@@ -17,7 +17,7 @@ const QuestionMetadataDropdown = ({ options, onChange, type }) => {
 
   useEffect(() => {
     const convertMetadataToTree = () => {
-      return _.filter(options, (t) => !t.parentId).map((t) => ({
+      return _.filter(options, (t) => !t.parent.id).map((t) => ({
         title: t.name,
         key: t.id,
         children: getChildrenOfMetadata(t.id)
@@ -25,7 +25,7 @@ const QuestionMetadataDropdown = ({ options, onChange, type }) => {
     };
 
     const getChildrenOfMetadata = (tagId) => {
-      return _.filter(options, (t) => t.parentId === tagId).map((t) => ({
+      return _.filter(options, (t) => t.parent.id === tagId).map((t) => ({
         title: t.name,
         key: t.id,
         children: getChildrenOfMetadata(t.id)

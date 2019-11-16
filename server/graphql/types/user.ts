@@ -5,6 +5,8 @@ import User from 'models/user';
 import jwt from 'jsonwebtoken';
 import _ from 'lodash';
 import QuestionCommentLike from 'models/question_comment_like';
+import QuestionBookmark from 'models/question_bookmark';
+import QuestionComment from 'models/question_comment';
 
 export const typeDefs = gql`
   extend type Query {
@@ -44,13 +46,13 @@ export const typeDefs = gql`
     password: String
     role: Role
     bookmarks: [Bookmark]
-    answers: [Answer]
+    answers(semester: Int): [Answer]
     specialtyVotes: [SpecialtyVote]
     tagVotes: [TagVote]
     likes: [Like]
     manualCompletedSets: [ManualCompletedSet]
-    publicComments: [Comment]
-    privateComments: [Comment]
+    publicComments(semester: Int): [Comment]
+    privateComments(semester: Int): [Comment]
   }
 
   type Role {
@@ -59,6 +61,8 @@ export const typeDefs = gql`
 
   type Bookmark {
     id: Int
+    question: Question
+    user: User
   }
 
   type Profile {
@@ -111,13 +115,60 @@ export const resolvers = {
       const user = await ctx.userLoaders.userLoader.load(id);
       return { id: user.roleId };
     },
-    answers: async ({ id }) => {
-      const answers = await QuestionUserAnswer.query().where({ userId: id });
+    answers: async ({ id }, { semester }) => {
+      let query = QuestionUserAnswer.query().where({ userId: id });
+
+      if (semester) {
+        query = query
+          .join('question', 'questionUserAnswer.questionId', 'question.id')
+          .join('semesterExamSet', 'question.examSetId', 'semesterExamSet.id')
+          .where('semesterExamSet.semesterId', semester);
+      }
+
+      const answers = await query;
       return answers.map((answer) => ({ id: answer.id }));
     },
     likes: async ({ id }) => {
       const likes = await QuestionCommentLike.query().where({ userId: id });
       return likes.map((like) => ({ id: [like.commentId, like.userId] }));
+    },
+    bookmarks: async ({ id }, args, ctx: Context) => {
+      const bookmarks = await QuestionBookmark.query().where({ userId: id });
+      return bookmarks.map((bookmark) => ({ id: bookmark.id }));
+    },
+    publicComments: async ({ id }, { semester }, ctx: Context) => {
+      let query = QuestionComment.query().where({ userId: id, private: 0 });
+
+      if (semester) {
+        query = query
+          .join('question', 'questionComment.questionId', 'question.id')
+          .join('semesterExamSet', 'question.examSetId', 'semesterExamSet.id')
+          .where('semesterExamSet.semesterId', semester);
+      }
+
+      const publicComments = await query;
+      return publicComments.map((pubC) => ({ id: pubC.id }));
+    },
+    privateComments: async ({ id }, { semester }, ctx: Context) => {
+      let query = QuestionComment.query().where({ userId: id, private: 1 });
+
+      if (semester) {
+        query = query
+          .join('question', 'questionComment.questionId', 'question.id')
+          .join('semesterExamSet', 'question.examSetId', 'semesterExamSet.id')
+          .where('semesterExamSet.semesterId', semester);
+      }
+
+      const privateComments = await query;
+      return privateComments.map((priC) => ({ id: priC.id }));
+    }
+  },
+
+  Bookmark: {
+    id: ({ id }) => id,
+    question: async ({ id }, args, ctx: Context) => {
+      const bookmark = await ctx.userLoaders.bookmarkLoader.load(id);
+      return { id: bookmark.questionId };
     }
   }
 };

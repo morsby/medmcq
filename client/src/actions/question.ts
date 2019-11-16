@@ -4,9 +4,6 @@ import * as types from './types';
 import { Dispatch } from 'redux';
 import { makeToast } from './ui';
 import Question from 'classes/Question';
-import User from 'classes/User';
-
-const questionApi = '/api/questions';
 
 export const getQuestions = ({
   ids = null,
@@ -56,10 +53,8 @@ export const getQuestions = ({
 
     case 'ids':
     case 'specific':
-      questions = await Question.fetch({ ids: ids.join(',') });
-      break;
-    case 'profile':
-      questions = await User.getProfileData({ semester: selectedSemester });
+      ids = ids.map((id) => Number(id));
+      questions = await Question.fetch({ ids });
       break;
     case 'set':
       questions = await Question.fetch({ set: selectedSetId });
@@ -67,11 +62,11 @@ export const getQuestions = ({
     default:
       questions = await Question.fetch({
         semester: selectedSemester,
-        specialties: (selectedSpecialtyIds || []).join(',') || undefined,
-        tags: (selectedTagIds || []).join(',') || undefined,
-        n: n || undefined,
-        onlyNew: onlyNew || undefined,
-        onlyWrong: onlyWrong || undefined,
+        specialties: selectedSpecialtyIds,
+        tags: selectedTagIds,
+        n: n,
+        onlyNew: onlyNew,
+        onlyWrong: onlyWrong,
         commentIds
       });
   }

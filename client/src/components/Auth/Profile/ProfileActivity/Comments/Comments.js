@@ -28,9 +28,7 @@ const Comments = ({ questions = {}, comments = {}, type = 'public' }) => {
         <Translate id="profileActivity.accordionElements.startAll"></Translate>
       </Button>
       {_.map(comments, (comment, i, allComments) => {
-        let { questionId } = comment;
-
-        let question = questions[questionId];
+        const question = questions[comment.question.id];
 
         i = Object.keys(allComments).indexOf(i);
         return (

@@ -11,6 +11,7 @@ export const typeDefs = gql`
     createdAt: String
     updatedAt: String
     likes: [Like]
+    question: Question
   }
 `;
 
@@ -40,6 +41,10 @@ export const resolvers = {
     likes: async ({ id }, _, ctx: Context) => {
       const likes = await QuestionCommentLike.query().where({ commentId: id });
       return likes.map((like) => ({ id: [like.commentId, like.userId] }));
+    },
+    question: async ({ id }, _, ctx: Context) => {
+      const comment = await ctx.commentLoaders.commentsLoader.load(id);
+      return { id: comment.questionId };
     }
   }
 };

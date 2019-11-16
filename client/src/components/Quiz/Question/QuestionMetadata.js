@@ -49,6 +49,7 @@ const QuestionMetadata = (props) => {
   let { tags, specialties } = metadata.entities;
   specialties = _.pickBy(specialties, (s) => s.semesterId === question.examSet.semester);
   tags = _.pickBy(tags, (t) => t.semesterId === question.semester);
+  console.log(question);
   let examSet = metadata.entities.examSets[question.examSet];
   return (
     <Grid celled stackable columns="equal">
@@ -93,7 +94,7 @@ const QuestionMetadata = (props) => {
               <Translate id="questionMetadata.tags" />{' '}
               {_(question.tags)
                 .map((t) => tags[t.tagId])
-                .filter((t) => !!t.parentId)
+                .filter((t) => !!t.parent.id)
                 .orderBy('votes', 'desc')
                 .map((t) => {
                   return (

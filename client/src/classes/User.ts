@@ -74,7 +74,7 @@ class User {
   };
 
   static getAnsweredQuestions = async () => {
-    const res = await client.query<Partial<User>>({
+    const res = await client.query<{ user: Partial<User> }>({
       query: gql`
         query {
           user {
@@ -91,15 +91,15 @@ class User {
       `
     });
 
-    return res.data.answers;
+    return res.data.user;
   };
 
-  static getProfileData = async (filter?: { semester: number }) => {
-    const res = await client.query<Partial<User>>({
+  static getProfileData = async (options: { semester: number }) => {
+    const res = await client.query<{ user: Partial<User> }>({
       query: gql`
-        query {
+        query($semester: Int) {
           user {
-            answers {
+            answers(semester: $semester) {
               id
               answer
               answerTime
@@ -107,12 +107,27 @@ class User {
                 id
               }
             }
+            publicComments(semester: $semester) {
+              id
+              text
+              question {
+                id
+              }
+            }
+            privateComments(semester: $semester) {
+              id
+              text
+              question {
+                id
+              }
+            }
           }
         }
-      `
+      `,
+      variables: { semester: options.semester }
     });
 
-    return res.data;
+    return res.data.user;
   };
 }
 

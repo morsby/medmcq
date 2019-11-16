@@ -46,14 +46,14 @@ export const fetchUser = () => async (dispatch) => {
 export const getProfile = (semesterId = null) => async (dispatch, getState) => {
   try {
     dispatch({ type: types.AUTH_PROFILE_REQUEST });
+    const user = await User.getProfileData({ semester: semesterId });
 
     semesterId = semesterId || getState().ui.selection.selectedSemester;
-    await dispatch(getQuestions({ quiz: false }));
+    await dispatch(getQuestions({ ids: user.answers.map((a) => a.question.id) }));
 
     const questions = getState().questions.entities.questions;
-    const profileData = User.getProfileData();
 
-    dispatch({ type: types.AUTH_PROFILE_SUCCESS, payload: { ...profileData, questions } });
+    dispatch({ type: types.AUTH_PROFILE_SUCCESS, payload: { ...user, questions } });
   } catch ({ response }) {
     dispatch(makeToast('toast.auth.fetchProfileError', 'error'));
   }

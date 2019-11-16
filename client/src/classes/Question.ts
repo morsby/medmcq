@@ -16,6 +16,10 @@ interface QuestionFilterInput {
   commentIds: number[];
 }
 
+interface Question {
+  id: number;
+}
+
 class Question {
   static fetch = async (filter: Partial<QuestionFilterInput>) => {
     const res = await client.query<{ questions: Question[] }>({
@@ -32,6 +36,34 @@ class Question {
             answer2
             answer3
             image
+            correctAnswers
+            publicComments {
+              id
+              text
+              user {
+                id
+                username
+              }
+              likes {
+                commentId
+                userId
+              }
+            }
+            privateComments {
+              id
+              text
+              user {
+                id
+                username
+              }
+              likes {
+                commentId
+                userId
+              }
+            }
+            examSet {
+              id
+            }
           }
         }
       `,
