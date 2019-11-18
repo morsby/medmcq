@@ -81,7 +81,7 @@ export const resolvers = {
       return { id: user.id };
     },
     checkUser: (root, args, ctx: Context) => {
-      if (!ctx.user) throw new Error('No user recieved');
+      if (!ctx.user) return null;
       return { id: ctx.user.id };
     }
   },

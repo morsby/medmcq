@@ -36,14 +36,14 @@ export const fetchUser = () => async (dispatch) => {
   dispatch({ type: types.AUTH_FETCH_USER_REQUEST });
   try {
     const user = await User.checkUser();
-    if (!user) return dispatch(makeToast('toast.auth.fetchUserError', 'error'));
+    if (!user) return;
     dispatch({ type: types.AUTH_FETCH_USER_SUCCESS, payload: user });
   } catch ({ response }) {
     dispatch(makeToast('toast.auth.fetchUserError', 'error'));
   }
 };
 
-export const getProfile = (semesterId = null) => async (dispatch, getState) => {
+export const getProfile = (semesterId = 1) => async (dispatch, getState) => {
   try {
     dispatch({ type: types.AUTH_PROFILE_REQUEST });
     const user = await User.getProfileData({ semester: semesterId });

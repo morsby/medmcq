@@ -69,15 +69,15 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
     {
       title: <Translate id="profileAnswerDetails.table_headers.specialty" />,
       render: (record) =>
-        _.map(questions[record.questionId].specialties, ({ specialtyId }) => (
-          <Tag color="blue">{specialties[specialtyId].name}</Tag>
+        _.map(questions[record.questionId].specialties, (specialty) => (
+          <Tag color="blue">{specialties[specialty.id].name}</Tag>
         ))
     },
     {
       title: 'Tags',
       render: (record) =>
-        _.map(questions[record.questionId].tags, ({ tagId }) => (
-          <Tag color="geekblue">{tags[tagId].name}</Tag>
+        _.map(questions[record.questionId].tags, (tag) => (
+          <Tag color="geekblue">{tags[tag.id].name}</Tag>
         ))
     },
     {
@@ -85,9 +85,9 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
       render: (record) => (
         <>
           <Translate
-            id={`profileAnswerDetails.${examSets[questions[record.questionId].examSetId].season}`}
+            id={`profileAnswerDetails.${examSets[questions[record.questionId].examSet].season}`}
           />
-          {examSets[questions[record.questionId].examSetId].year}
+          {examSets[questions[record.questionId].examSet].year}
         </>
       )
     }

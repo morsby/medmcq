@@ -18,7 +18,7 @@ const AnswerTagsDetailsTable: React.SFC<AnswerTagsDetailsTableProps> = ({ answer
   const questions = useSelector((state: IReduxState) => state.questions.entities.questions);
   const selectedSemester = useSelector((state: IReduxState) => state.ui.selection.selectedSemester);
   let { tags } = useSelector((state: IReduxState) => state.metadata.entities);
-  tags = _.filter(tags, { semesterId: selectedSemester });
+  tags = _.filter(tags, (t) => t.semester.id === selectedSemester);
 
   const getPercentCorrect = (record) => {
     const percent = Math.round((record.correct / record.tries) * 100);
@@ -58,14 +58,16 @@ const AnswerTagsDetailsTable: React.SFC<AnswerTagsDetailsTableProps> = ({ answer
     // For each answer, add the count to answeredTags
     _.map(answers, (answer, questionId) => {
       for (let tag of _.map<any>(questions[questionId].tags)) {
-        answeredTags[tag.tagId].correct += answer.correct;
-        answeredTags[tag.tagId].tries += answer.tries;
+        if (answeredTags[tag.id]) {
+          answeredTags[tag.id].correct += answer.correct;
+          answeredTags[tag.id].tries += answer.tries;
+        }
       }
     });
 
     // Send the array to state, to refresh table
     setAnsweredTags(_.map(answeredTags));
-  }, []);
+  }, [tags, answers]);
 
   const columns = [
     {

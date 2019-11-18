@@ -41,6 +41,8 @@ export const typeDefs = gql`
     correctAnswers: [Int]
     specialtyVotes: [SpecialtyVote]
     tagVotes: [TagVote]
+    specialties: [Specialty]
+    tags: [Tag]
     examSet: ExamSet
     createdAt: String
     updatedAt: String
@@ -179,6 +181,26 @@ export const resolvers = {
     updatedAt: async ({ id }, args, ctx: Context) => {
       const question = await ctx.questionLoaders.questionLoader.load(id);
       return question.updatedAt.toISOString();
+    },
+    specialties: async ({ id }, args, ctx: Context) => {
+      const question = await ctx.questionLoaders.questionLoader.load(id);
+      const specialties = await QuestionSpecialtyVote.query()
+        .where({ questionId: question.id })
+        .where(function() {
+          this.sum('specialtyVote.value as votes').having('votes', '>', '-1');
+        });
+
+      return specialties.map((s) => ({ id: s.specialtyId }));
+    },
+    tags: async ({ id }, args, ctx: Context) => {
+      const question = await ctx.questionLoaders.questionLoader.load(id);
+      const tags = await QuestionTagVote.query()
+        .where({ questionId: question.id })
+        .where(function() {
+          this.sum('tagVote.value as votes').having('votes', '>', '-1');
+        });
+
+      return tags.map((t) => ({ id: t.tagId }));
     }
   }
 };

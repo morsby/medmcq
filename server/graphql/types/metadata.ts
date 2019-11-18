@@ -44,7 +44,9 @@ export const typeDefs = gql`
 export const resolvers = {
   TagVote: {
     id: ({ id }) => id,
-    tag: () => {},
+    tag: () => {
+      // TODO
+    },
     question: () => {},
     votes: () => {}
   },

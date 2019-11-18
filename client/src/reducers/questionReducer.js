@@ -18,10 +18,10 @@ const question = new schema.Entity(
   {
     processStrategy: (ent) => ({
       ...ent,
-      specialties: _.keyBy(ent.specialties, 'specialtyId'),
-      tags: _.keyBy(ent.tags, 'tagId'),
-      userSpecialtyVotes: _.keyBy(ent.userSpecialtyVotes, 'specialtyId'),
-      userTagVotes: _.keyBy(ent.userTagVotes, 'tagId')
+      specialties: _.keyBy(ent.specialties, (s) => s.id),
+      tags: _.keyBy(ent.tags, (t) => t.id),
+      userSpecialtyVotes: _.keyBy(ent.userSpecialtyVotes, (sv) => sv.id),
+      userTagVotes: _.keyBy(ent.userTagVotes, (tv) => tv.id)
     })
   }
 );

@@ -32,6 +32,27 @@ class Question {
               id
               season
             }
+            specialties {
+              id
+            }
+            tags {
+              id
+            }
+            specialtyVotes {
+              id
+              specialty {
+                id
+              }
+            }
+            tagVotes {
+              id
+              tag {
+                id
+                parent {
+                  id
+                }
+              }
+            }
             answer1
             answer2
             answer3

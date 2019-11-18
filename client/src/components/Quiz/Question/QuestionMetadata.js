@@ -67,8 +67,8 @@ const QuestionMetadata = (props) => {
           <>
             <Grid.Row style={{ margin: '7px 0 7px 0' }}>
               <Translate id="questionMetadata.specialty" />{' '}
-              {_.orderBy(question.specialties, 'votes', 'desc').map((s) => {
-                let spec = specialties[s.specialtyId] || {};
+              {_.orderBy(question.specialtyVotes, 'votes', 'desc').map((s) => {
+                let spec = specialties[s.specialty.id] || {};
                 return (
                   <QuestionMetadataLabel
                     key={spec.id}
@@ -92,9 +92,9 @@ const QuestionMetadata = (props) => {
             </Grid.Row>
             <Grid.Row>
               <Translate id="questionMetadata.tags" />{' '}
-              {_(question.tags)
-                .map((t) => tags[t.tagId])
-                .filter((t) => !!t.parent.id)
+              {_(question.tagVotes)
+                .map((t) => tags[t.tag.id])
+                .filter((t) => !!t.tag.parent.id)
                 .orderBy('votes', 'desc')
                 .map((t) => {
                   return (

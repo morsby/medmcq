@@ -44,14 +44,17 @@ export default createReducer(initialState, {
 
   [types.AUTH_PROFILE_SUCCESS]: (state, action) => {
     const { questions, privateComments, publicComments, bookmarks, answers } = action.payload;
-    console.log(action.payload);
 
     let answersSummary = {};
     answers.forEach((a) => {
       if (!Object.prototype.hasOwnProperty.call(questions, a.question.id)) return;
 
       if (!Object.prototype.hasOwnProperty.call(answersSummary, a.question.id)) {
-        answersSummary[a.question.id] = { history: { 1: 0, 2: 0, 3: 0 }, tries: 0, correct: 0 };
+        answersSummary[a.question.id] = {
+          history: { 1: 0, 2: 0, 3: 0 },
+          tries: 0,
+          correct: 0
+        };
       }
       answersSummary[a.question.id].tries++;
       answersSummary[a.question.id].history[a.answer]++;

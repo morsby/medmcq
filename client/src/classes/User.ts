@@ -110,6 +110,10 @@ class User {
             publicComments(semester: $semester) {
               id
               text
+              user {
+                id
+                username
+              }
               question {
                 id
               }
@@ -117,8 +121,22 @@ class User {
             privateComments(semester: $semester) {
               id
               text
+              user {
+                id
+                username
+              }
               question {
                 id
+              }
+            }
+            bookmarks {
+              question {
+                id
+                text
+                correctAnswers
+                answer1
+                answer2
+                answer3
               }
             }
           }
