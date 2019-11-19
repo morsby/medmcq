@@ -69,7 +69,7 @@ export const resolvers = {
       // Start filtering based on other values
       query = query.orderByRaw('rand()');
 
-      if (!n || n > 300) n = 300; // Man må ikke hente mere end 300, medmindre man henter til profilen
+      if (!n || n > 300) n = 300; // Man må ikke hente mere end 300
       query = query.limit(n);
 
       if (semester) {
