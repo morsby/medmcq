@@ -5,7 +5,7 @@ import 'antd/lib/tree/style/css';
 
 import { Translate } from 'react-localize-redux';
 
-import { Form, Header, Message, Grid, Input } from 'semantic-ui-react';
+import { Form, Header, Message, Grid, Input, Button } from 'semantic-ui-react';
 import { IReduxState } from 'reducers';
 import * as uiActions from './../../../actions/ui';
 import _ from 'lodash';
@@ -98,21 +98,33 @@ const SelectionSpecialtiesSelector = () => {
               />
             </Header>
             {metadata.specialties && (
-              <Tree
-                checkable
-                checkedKeys={selectedSpecialtyIds}
-                onCheck={(specialties: any) => onChange(specialties, 'selectedSpecialtyIds')}
-              >
-                {_.filter(metadata.specialties, (s) => s.semesterId === selectedSemester).map(
-                  (s) => (
-                    <Tree.TreeNode
-                      title={`${s.name} (${s.questionCount})`}
-                      key={String(s.id)}
-                      dataRef={s}
-                    ></Tree.TreeNode>
-                  )
-                )}
-              </Tree>
+              <>
+                <Tree
+                  checkable
+                  checkedKeys={selectedSpecialtyIds}
+                  onCheck={(specialties: any) => onChange(specialties, 'selectedSpecialtyIds')}
+                >
+                  {_.filter(metadata.specialties, (s) => s.semesterId === selectedSemester).map(
+                    (s) => (
+                      <Tree.TreeNode
+                        title={`${s.name} (${s.questionCount})`}
+                        key={String(s.id)}
+                        dataRef={s}
+                      ></Tree.TreeNode>
+                    )
+                  )}
+                </Tree>
+                <div style={{ textAlign: 'center' }}>
+                  <Button
+                    onClick={() => onChange([], 'selectedSpecialtyIds')}
+                    size="small"
+                    fluid
+                    basic
+                  >
+                    <Translate id="selectionSpecialtiesSelector.clear" />
+                  </Button>
+                </div>
+              </>
             )}
           </Grid.Row>
         </Grid.Column>
@@ -173,20 +185,24 @@ const SelectionSpecialtiesSelector = () => {
               </Tree>
             )}
             {!tagSearch && tagTree && (
-              <Tree
-                checkedKeys={selectedTagIds}
-                onCheck={(tags: any) => onChange(tags, 'selectedTagIds')}
-                checkable
-              >
-                {renderTreeNodes(tagTree)}
-              </Tree>
+              <>
+                <Tree
+                  checkedKeys={selectedTagIds}
+                  onCheck={(tags: any) => onChange(tags, 'selectedTagIds')}
+                  checkable
+                >
+                  {renderTreeNodes(tagTree)}
+                </Tree>
+                <div style={{ textAlign: 'center' }}>
+                  <Button onClick={() => onChange([], 'selectedTagIds')} size="small" fluid basic>
+                    <Translate id="selectionSpecialtiesSelector.clear" />
+                  </Button>
+                </div>
+              </>
             )}
           </Grid.Row>
         </Grid.Column>
       </Grid>
-      <Message info>
-        <Translate id="selectionSpecialtiesSelector.tags_explanation" />
-      </Message>
     </Form>
   );
 };
