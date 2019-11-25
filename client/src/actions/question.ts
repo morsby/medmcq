@@ -42,11 +42,6 @@ export const getQuestions = ({
     type = 'profile';
   }
 
-  if (type === 'random') {
-    selectedTagIds = null;
-    selectedSpecialtyIds = null;
-  }
-
   switch (type) {
     /*
       types:
@@ -57,7 +52,6 @@ export const getQuestions = ({
         - specialer/tags
        */
 
-    case 'ids':
     case 'specific':
       res = await axios.get(questionApi, { params: { ids: ids.join(',') } });
       break;
@@ -67,6 +61,9 @@ export const getQuestions = ({
     case 'set':
       res = await axios.get(`/api/exam_sets/${selectedSetId}/questions`);
       break;
+    case 'random':
+      selectedTagIds = null;
+      selectedSpecialtyIds = null;
     default:
       res = await axios.get(questionApi, {
         params: {
