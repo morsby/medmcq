@@ -42,6 +42,11 @@ export const getQuestions = ({
     type = 'profile';
   }
 
+  if (type === 'random') {
+    selectedTagIds = null;
+    selectedSpecialtyIds = null;
+  }
+
   switch (type) {
     /*
       types:
