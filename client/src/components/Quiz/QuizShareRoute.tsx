@@ -12,7 +12,7 @@ export interface QuizShareRouteProps {}
 
 const QuizShareRoute: React.SFC<QuizShareRouteProps> = () => {
   const history = useHistory();
-  const params: any = useParams();
+  const params = useParams<{ ids: string }>();
   const dispatch = useDispatch();
   const isFetching = useSelector((state: IReduxState) => state.questions.isFetching);
   const questions = useSelector((state: IReduxState) => state.questions.entities.questions);
