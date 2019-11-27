@@ -4,7 +4,8 @@ let baseConfig = {
   client: 'mysql',
   version: '8.0',
   charset: 'utf8_unicode_ci',
-  ...knexSnakeCaseMappers()
+  ...knexSnakeCaseMappers(),
+  timezone: 'utc+2'
 };
 
 module.exports = {
