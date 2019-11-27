@@ -10,6 +10,7 @@ interface QuestionComment {
   text: string;
   private: boolean;
   updatedAt: Date;
+  createdAt: Date;
 }
 
 class QuestionComment extends BaseModel {
