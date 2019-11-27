@@ -52,6 +52,9 @@ export const getQuestions = ({
         - specialer/tags
        */
 
+    case 'ids':
+      res = await axios.get(questionApi, { params: { ids: ids.join(',') } });
+      break;
     case 'specific':
       res = await axios.get(questionApi, { params: { ids: ids.join(',') } });
       break;
