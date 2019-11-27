@@ -79,6 +79,10 @@ class QuestionComment extends BaseModel {
     this.updatedAt = new Date();
   }
 
+  $beforeInsert() {
+    this.createdAt = new Date();
+  }
+
   static get modifiers() {
     return {
       own: (builder) => modifiers.belongsToUser(builder)
