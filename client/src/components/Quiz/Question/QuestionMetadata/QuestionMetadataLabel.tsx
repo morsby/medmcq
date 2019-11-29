@@ -64,10 +64,8 @@ const QuestionMetadataLabel: React.SFC<QuestionMetadataLabelProps> = ({
   }
 
   const label = (
-    <Label
-      style={{ marginTop: '2px', backgroundColor: !childrenTagged() ? 'gold' : undefined }}
-      size="small"
-    >
+    <Label style={{ marginTop: '2px' }} size="small">
+      {user && !childrenTagged() && <Icon name="chevron circle up" color="yellow" />}
       {children}
       {user && (
         <>
