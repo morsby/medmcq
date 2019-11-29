@@ -48,7 +48,9 @@
     "answered": [
       "Du har svaret rigtigt ${correct} ud af ${wrong} gange (${percent}%)",
       "You have answered correctly ${correct} out of ${wrong} times (${percent}%)"
-    ]
+    ],
+    "addTag": ["Tilføj tag", "Add tag"],
+    "addSpecialty": ["Tilføj speciale", "Add specialty"]
   },
   "questionReport": {
     "label": ["Hvad er fejlen?", "What's the error?"],
