@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
 import { useDispatch } from 'react-redux';
 import LoadingPage from 'components/Misc/Utility-pages/LoadingPage';
-import Quiz from 'pages/Quiz';
+import Quiz from 'components/Quiz/Quiz';
 import * as types from '../../actions/types';
 import { useQuery } from 'react-apollo-hooks';
 import { getQuestions } from 'actions';

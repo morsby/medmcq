@@ -7,7 +7,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { withLocalize } from 'react-localize-redux';
 import { renderToStaticMarkup } from 'react-dom/server'; // required to initialize react-localize-redux
 import authTranslations from './components/Auth/authTranslations.json'; // fordi der ikke er en gennemgående component i dette regi
-import toastTranslations from 'Translations/toastTranslations.json';
+import toastTranslations from 'components/Misc/toastTranslations.json';
 
 // HOCs
 import PrivateRoute from './components/Misc/HOC/PrivateRoute';
@@ -20,10 +20,10 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // Selections
-import Selection from './pages/Selection';
+import Selection from './components/Selection/Selection';
 
 // Selve quizzen
-import Quiz from './pages/Quiz';
+import Quiz from './components/Quiz/Quiz';
 import About from './components/Misc/Utility-pages/About/About';
 import Contact from './components/Misc/Utility-pages/Contact';
 
@@ -49,7 +49,7 @@ import MaintenancePage from './components/Misc/Utility-pages/MaintenancePage';
 import ErrorBoundary from './components/Misc/Utility-pages/ErrorBoundary';
 import QuizShareRoute from 'components/Quiz/QuizShareRoute';
 import QuizShareBuilderLoader from 'components/Quiz/QuizShareBuilderLoader';
-import Sharebuilder from 'pages/Sharebuilder';
+import Sharebuilder from 'components/Sharebuilder/Sharebuilder';
 import { toast } from 'react-toastify';
 import FirstTimeToast from 'components/Misc/Utility-pages/About/FirstTime/FirstTimeToast';
 import FirstTime from 'components/Misc/Utility-pages/About/FirstTime/FirstTime';

@@ -1,20 +1,20 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as actions from '../actions';
+import * as actions from 'actions';
 import marked from 'marked';
 
 import _ from 'lodash';
-import { imageURL, breakpoints } from '../utils/common';
+import { imageURL, breakpoints } from 'utils/common';
 
-import { subSupScript, isAnswered } from '../utils/quiz';
+import { subSupScript, isAnswered } from 'utils/quiz';
 
 import { Container, Grid, Divider, Segment, Responsive } from 'semantic-ui-react';
 
-import QuestionAnswerButtons from '../components/Quiz/Question/QuestionAnswerButtons';
-import QuestionImage from '../components/Quiz/Question/QuestionImage';
-import QuestionMetadata from '../components/Quiz/Question/QuestionMetadata';
-import QuestionExtras from '../components/Quiz/Question/QuestionExtras';
+import QuestionAnswerButtons from 'components/Quiz/Question/QuestionAnswerButtons';
+import QuestionImage from 'components/Quiz/Question/QuestionImage';
+import QuestionMetadata from 'components/Quiz/Question/QuestionMetadata';
+import QuestionExtras from 'components/Quiz/Question/QuestionExtras';
 const initialAnswerTime = 0;
 
 /**
@@ -109,6 +109,7 @@ class Question extends PureComponent {
   render() {
     let { question, user, answers } = this.props;
     const text = subSupScript(question.text);
+    console.log(question);
 
     return (
       <Container className="question">

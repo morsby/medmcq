@@ -8,17 +8,17 @@ import _ from 'lodash';
 
 import { breakpoints, urls } from 'utils/common';
 
-import selectionTranslations from 'Translations/selectionTranslations.json';
+import selectionTranslations from './selectionTranslations.json';
 import { withLocalize, Translate } from 'react-localize-redux';
 
 import { Container, Header, Divider, Button, Message, Input, Checkbox } from 'semantic-ui-react';
 
-import SelectionSemesterSelector from 'components/SelectionSettings/SelectionSemesterSelector';
-import SelectionNSelector from 'components/SelectionSettings/SelectionNSelector';
-import SelectionSetSelector from 'components/SelectionSettings/SelectionSetSelector/SelectionSetSelector';
-import SelectionMetadataSelector from 'components/SelectionSettings/SelectionMetadataSelector/SelectionMetadataSelector';
-import SelectionTypeSelector from 'components/SelectionSettings/SelectionTypeSelector';
-import SelectionUniqueSelector from 'components/SelectionSettings/SelectionUniqueSelector';
+import SelectionSemesterSelector from 'components/Selection/SelectionSemesterSelector';
+import SelectionNSelector from 'components/Selection/SelectionNSelector';
+import SelectionSetSelector from 'components/Selection/SelectionSetSelector/SelectionSetSelector';
+import SelectionMetadataSelector from 'components/Selection/SelectionMetadataSelector/SelectionMetadataSelector';
+import SelectionTypeSelector from 'components/Selection/SelectionTypeSelector';
+import SelectionUniqueSelector from 'components/Selection/SelectionUniqueSelector';
 
 /**
  * Hovedsiden til at håndtere alle valg af spørgsmål.
