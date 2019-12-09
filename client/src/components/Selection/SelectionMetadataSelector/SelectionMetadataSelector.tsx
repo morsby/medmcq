@@ -5,7 +5,7 @@ import 'antd/lib/tree/style/css';
 
 import { Translate } from 'react-localize-redux';
 
-import { Form, Header, Message, Grid, Input, Button } from 'semantic-ui-react';
+import { Form, Header, Grid, Input, Button } from 'semantic-ui-react';
 import { IReduxState } from 'reducers';
 import * as uiActions from './../../../actions/ui';
 import _ from 'lodash';

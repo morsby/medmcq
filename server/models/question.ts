@@ -7,6 +7,7 @@ import QuestionComment from './question_comment';
 import QuestionCorrectAnswer from './question_correct_answer';
 import QuestionSpecialtyVote from './question_specialty_vote';
 import QuestionTagVote from './question_tag_vote';
+import QuestionImage from './question_image';
 
 class Question extends BaseModel {
   static get tableName() {
@@ -34,7 +35,6 @@ class Question extends BaseModel {
         id: { type: 'integer' },
         oldId: { type: 'string' },
         text: { type: 'string' },
-        image: { type: 'string' },
         answer1: { type: 'string' },
         answer2: { type: 'string' },
         answer3: { type: 'string' },
@@ -83,6 +83,15 @@ class Question extends BaseModel {
             to: 'semesterExamSet.semesterId'
           },
           to: 'semester.id'
+        }
+      },
+
+      images: {
+        relation: Model.HasManyRelation,
+        modelClass: QuestionImage,
+        join: {
+          from: 'question.id',
+          to: 'questionImage.questionId'
         }
       },
 
@@ -147,7 +156,7 @@ class Question extends BaseModel {
   }
 
   static get defaultEager() {
-    return '[correctAnswers, semester, publicComments.[user, likes], specialties(active), tags(active), examSet]';
+    return '[correctAnswers, semester, publicComments.[user, likes], specialties(active), tags(active), examSet, images]';
   }
 
   $formatJson(json) {
