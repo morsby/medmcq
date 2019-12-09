@@ -91,7 +91,7 @@ const QuestionMetadataLabel: React.SFC<QuestionMetadataLabelProps> = ({
     return (
       <Popup position="top center" flowing hoverable trigger={label}>
         {tagChildren.map((tag) => (
-          <Button loading={buttonLoading} size="tiny" onClick={() => vote(1, tag.id)}>
+          <Button key={tag.id} loading={buttonLoading} size="tiny" onClick={() => vote(1, tag.id)}>
             {tag.name}
           </Button>
         ))}
