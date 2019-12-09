@@ -109,7 +109,6 @@ class Question extends PureComponent {
   render() {
     let { question, user, answers } = this.props;
     const text = subSupScript(question.text);
-    console.log(question);
 
     return (
       <Container className="question">
@@ -136,13 +135,11 @@ class Question extends PureComponent {
                   />
                 </Responsive>
               </Grid.Column>
-              {question.image && (
+              {question.images.length > 0 && (
                 <Grid.Column>
-                  <QuestionImage
-                    img={imageURL(question.image)}
-                    onClick={this.props.onImgClick}
-                    imgOpen={this.props.imgOpen}
-                  />
+                  {question.images.map((image) => (
+                    <QuestionImage key={image.id} img={imageURL(image.link)} />
+                  ))}
                 </Grid.Column>
               )}
             </Grid.Row>
@@ -226,8 +223,7 @@ Question.propTypes = {
    */
   editSpecialties: PropTypes.func,
 
-  imgOpen: PropTypes.bool,
-  onImgClick: PropTypes.func
+  imgOpen: PropTypes.bool
 };
 
 const mapStateToProps = (state) => ({

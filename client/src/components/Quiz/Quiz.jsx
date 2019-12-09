@@ -43,7 +43,6 @@ class QuizMain extends Component {
 
     this.swiped = this.swiped.bind(this);
     this.onKeydown = this.onKeydown.bind(this);
-    this.onImgClick = this.onImgClick.bind(this);
   }
 
   componentDidMount() {
@@ -133,13 +132,6 @@ class QuizMain extends Component {
     }
   }
 
-  /** Håndtering af pop-up af billeder **/
-  onImgClick() {
-    this.setState((prevState) => {
-      return { imgOpen: !prevState.imgOpen };
-    });
-  }
-
   render() {
     let { questions, user, quiz } = this.props;
     let { answers, didInvalidate } = quiz;
@@ -198,7 +190,7 @@ class QuizMain extends Component {
             onSwipedRight={this.swiped}
             flickThreshold={flickNumber}
           >
-            <Question onImgClick={this.onImgClick} imgOpen={this.state.imgOpen} user={user} />
+            <Question imgOpen={this.state.imgOpen} user={user} />
           </Swipeable>
 
           <QuizNavigator
