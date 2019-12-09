@@ -559,7 +559,7 @@ export const breakpoints = {
 };
 
 export const imageURL = (image) => {
-  if (image.match('cloudinary')) {
+  if (image.match(/http|https/)) {
     return image;
   } else {
     return `/images/${image}`;

@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { Checkbox, Divider } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';

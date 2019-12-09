@@ -1,4 +1,6 @@
 const { knexSnakeCaseMappers } = require('objection');
+const dotEnv = require('dotenv-flow');
+dotEnv.config({ default_node_env: 'development' });
 
 let baseConfig = {
   client: 'mysql',

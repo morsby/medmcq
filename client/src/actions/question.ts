@@ -43,15 +43,6 @@ export const getQuestions = ({
   }
 
   switch (type) {
-    /*
-      types:
-        - ids
-        - profile
-        - set
-        - random
-        - specialer/tags
-       */
-
     case 'ids':
       res = await axios.get(questionApi, { params: { ids: ids.join(',') } });
       break;
@@ -67,6 +58,7 @@ export const getQuestions = ({
     case 'random':
       selectedTagIds = null;
       selectedSpecialtyIds = null;
+    // eslint-disable-next-line
     default:
       res = await axios.get(questionApi, {
         params: {
