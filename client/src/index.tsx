@@ -28,27 +28,17 @@ import 'react-image-lightbox/style.css'; // This only needs to be imported once 
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 
 const migrations: any = {
-  6: (state: IReduxState) => {
-    return {
-      auth: state.auth,
-      questions: state.questions
-    };
-  },
-  7: () => ({}),
-  8: (state: IReduxState) => ({
-    auth: state.auth,
-    settings: state.settings,
-    ui: state.ui,
-    shareBuilder: state.shareBuilder
-  }),
-  9: () => ({})
+  10: (state: IReduxState) => ({
+    ...state,
+    questions: null
+  })
 };
 
 const persistConfig = {
   key: 'medMCQ',
   storage: storage,
   stateReconciler: autoMergeLevel2, // see "Merge Process" section for details.
-  version: 9,
+  version: 10,
   migrate: createMigrate(migrations),
   whitelist: ['quiz', 'questions', 'metadata', 'ui', 'settings', 'shareBuilder'] // to disable persists
 };
