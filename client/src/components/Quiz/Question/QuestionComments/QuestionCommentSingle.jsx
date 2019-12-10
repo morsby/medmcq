@@ -69,7 +69,10 @@ const QuestionCommentSingle = ({
           </Comment.Author>
         )}
         <Comment.Metadata style={{ color: 'rgb(140, 140, 140)' }}>
-          {new Date(comment.createdAt).toLocaleString('da-DK')}
+          {new Date(comment.createdAt).toLocaleString('da-DK', {
+            timeStyle: 'short',
+            dateStyle: 'short'
+          })}
           {!isPrivate && (
             <>
               <br />
