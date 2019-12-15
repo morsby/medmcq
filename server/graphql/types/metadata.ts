@@ -4,21 +4,6 @@ import QuestionTagVote from 'models/question_tag_vote';
 import QuestionSpecialtyVote from 'models/question_specialty_vote';
 
 export const typeDefs = gql`
-  type TagVote {
-    id: Int
-    tag: Tag
-    question: Question
-    votes: Int
-  }
-
-  type SpecialtyVote {
-    id: Int
-    specialty: Specialty
-    question: Question
-    user: User
-    value: Int
-  }
-
   type Specialty {
     id: Int
     name: String
@@ -39,6 +24,22 @@ export const typeDefs = gql`
     parent: Tag
     questionCount: Int
   }
+
+  type TagVote {
+    id: Int
+    tag: Tag
+    question: Question
+    user: User
+    votes: Int
+  }
+
+  type SpecialtyVote {
+    id: Int
+    specialty: Specialty
+    question: Question
+    user: User
+    value: Int
+  }
 `;
 
 export const resolvers = {
@@ -48,6 +49,7 @@ export const resolvers = {
       // TODO
     },
     question: () => {},
+    user: () => {},
     votes: () => {}
   },
   SpecialtyVote: {

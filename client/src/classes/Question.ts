@@ -1,5 +1,8 @@
 import client from 'apolloClient';
 import { gql } from 'apollo-boost';
+import Comment from 'classes/Comment';
+import Specialty, { SpecialtyVote } from 'classes/Specialty';
+import Tag, { TagVote } from './Tag';
 
 interface QuestionFilterInput {
   text: string;
@@ -17,7 +20,27 @@ interface QuestionFilterInput {
 }
 
 interface Question {
+  // API
   id: number;
+  text: string;
+  answer1: string;
+  answer2: string;
+  answer3: string;
+  examSetQno: number;
+  examSetId: number;
+  semester: number;
+  correctAnswers: number[];
+  specialties: Specialty[];
+  tags: Tag[];
+  publicComments: Comment[];
+  images: string[];
+  privateComments: Comment[];
+  tagVotes: TagVote[];
+  specialtyVotes: SpecialtyVote[];
+  isBookmarked: boolean;
+  isLiked: boolean;
+  // FrontEnd
+  answer: number;
 }
 
 class Question {

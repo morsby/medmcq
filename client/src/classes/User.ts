@@ -2,6 +2,9 @@ import client from 'apolloClient';
 import jwtDecode from 'jwt-decode';
 import { gql } from 'apollo-boost';
 import Question from './Question';
+import { store } from 'index';
+import Apollo from './Apollo';
+import authReducer from 'redux/reducers/auth';
 
 export interface UserLoginInput {
   username: string;
@@ -28,30 +31,40 @@ interface User {
 
 class User {
   static login = async (data: UserLoginInput) => {
-    const res = await client.mutate<{ login: string }>({
-      mutation: gql`
-        mutation($data: LoginInput) {
-          login(data: $data)
-        }
-      `,
-      variables: { data }
-    });
+    const mutation = gql`
+      mutation($data: LoginInput) {
+        login(data: $data)
+      }
+    `;
 
-    const user = jwtDecode<User>(res.data.login);
-    return { ...user, jwt: res.data.login };
+    const jwt = await Apollo.mutate<string>('login', mutation, { data });
+
+    const user = jwtDecode<User>(jwt);
+    await store.dispatch(authReducer.actions.login(user));
+    return user;
   };
 
-  static logout = () => {};
+  static logout = async () => {
+    const mutation = gql`
+      mutation {
+        logout
+      }
+    `;
+
+    await Apollo.mutate('logout', mutation);
+  };
 
   static signup = async (data: UserSignupInput) => {
-    const jwt = await client.mutate<{ signup: string }>({
-      mutation: gql`
-            mutation(data: LoginInput) { signup(data:$data) }
-        `,
-      variables: { data }
-    });
+    const mutation = gql`
+    mutation(data: LoginInput) 
+    { 
+      signup(data:$data) 
+    }
+`;
 
-    const user = jwtDecode<User>(jwt.data.signup);
+    const jwt = await Apollo.mutate<string>('signup', mutation, { data });
+
+    const user = jwtDecode<User>(jwt);
     return user;
   };
 

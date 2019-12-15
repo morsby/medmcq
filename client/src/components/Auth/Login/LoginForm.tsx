@@ -12,7 +12,6 @@ import { IReduxState } from 'reducers/index.js';
 import User from 'classes/User';
 import { useHistory } from 'react-router';
 import { useCookies } from 'react-cookie';
-import { login } from 'actions';
 
 /**
  * Component der viser login-formularen.
@@ -37,8 +36,6 @@ const LoginForm = () => {
       return setError('Login mislykkedes');
     }
 
-    await setCookie('user', user.jwt);
-    dispatch(login());
     return handleNavigation('root');
   };
 
