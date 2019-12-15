@@ -103,6 +103,10 @@
       "Start en quiz med de valgte spørgsmål (${n})",
       "Start a quiz with the selected questions (${n})"
     ],
+    "start_quiz_all_button": [
+      "Start en quiz med de alle filtrerede spørgsmål (${n})",
+      "Start a quiz with all filtered questions (${n})"
+    ],
     "filter": {
       "header": ["Filtrer svar:", "Filter answers:"],
       "show_all": ["Vis alle", "Show all"],

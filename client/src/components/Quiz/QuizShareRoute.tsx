@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getQuestions } from 'actions';
 import { IReduxState } from 'reducers';
 import LoadingPage from 'components/Misc/Utility-pages/LoadingPage';
-import Quiz from 'pages/Quiz';
+import Quiz from 'components/Quiz/Quiz';
 import * as types from '../../actions/types';
 import { toast } from 'react-toastify';
 import { useHistory, useParams } from 'react-router';
@@ -12,7 +12,7 @@ export interface QuizShareRouteProps {}
 
 const QuizShareRoute: React.SFC<QuizShareRouteProps> = () => {
   const history = useHistory();
-  const params: any = useParams();
+  const params = useParams<{ ids: string }>();
   const dispatch = useDispatch();
   const isFetching = useSelector((state: IReduxState) => state.questions.isFetching);
   const questions = useSelector((state: IReduxState) => state.questions.entities.questions);

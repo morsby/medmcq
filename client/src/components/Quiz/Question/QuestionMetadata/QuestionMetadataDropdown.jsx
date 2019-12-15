@@ -6,6 +6,7 @@ import Menu from 'antd/lib/menu';
 import 'antd/lib/dropdown/style/css';
 import 'antd/lib/menu/style/css';
 import { Icon } from 'semantic-ui-react';
+import { Translate } from 'react-localize-redux';
 const { SubMenu } = Menu;
 
 const QuestionMetadataDropdown = ({ options, onChange, type }) => {
@@ -100,20 +101,22 @@ const QuestionMetadataDropdown = ({ options, onChange, type }) => {
     <span
       style={{
         margin: '5px',
-        padding: '6px',
+        padding: '4px',
         backgroundColor: '#ededed',
         borderRadius: '5px',
         color: '#727272',
-        whiteSpace: 'nowrap',
         display: 'inline-block',
-        fontSize: '12px',
-        fontWeight: '700'
+        fontSize: '11px'
       }}
     >
       <Dropdown overlay={<Menu>{createDropdowns()}</Menu>}>
         <span>
           <Icon name="plus" />
-          Add {type}
+          {type === 'specialty' ? (
+            <Translate id="questionMetadata.addSpecialty" />
+          ) : (
+            <Translate id="questionMetadata.addTag" />
+          )}
           <Icon name="dropdown" />
         </span>
       </Dropdown>

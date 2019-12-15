@@ -18,6 +18,10 @@ class QuestionComment extends Model {
   $beforeUpdate() {
     this.updatedAt = new Date();
   }
+
+  $beforeInsert() {
+    this.createdAt = new Date();
+  }
 }
 
 export default QuestionComment;

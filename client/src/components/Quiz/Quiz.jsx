@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import * as actions from '../actions';
+import * as actions from '../../actions';
 import { withLocalize, Translate } from 'react-localize-redux';
-import quizTranslations from '../Translations/quizTranslations.json';
+import quizTranslations from './quizTranslations.json';
 
 import { Container, Button } from 'semantic-ui-react';
 
 import { Swipeable } from 'react-swipeable';
-import QuizLoader from '../components/Quiz/QuizLoader';
-import Question from '../containers/Question';
-import QuizNavigator from '../components/Quiz/QuizNavigator';
-import QuizSummary from '../components/Quiz/QuizSummary';
+import QuizLoader from './QuizLoader';
+import Question from './Question/Question';
+import QuizNavigator from './QuizNavigator';
+import QuizSummary from './QuizSummary';
 
-import { urls } from '../utils/common';
+import { urls } from '../../utils/common';
 import { withRouter } from 'react-router';
-import { smoothScroll } from '../utils/quiz';
+import { smoothScroll } from '../../utils/quiz';
 
 const flickNumber = 0.1;
 
@@ -43,7 +43,6 @@ class QuizMain extends Component {
 
     this.swiped = this.swiped.bind(this);
     this.onKeydown = this.onKeydown.bind(this);
-    this.onImgClick = this.onImgClick.bind(this);
   }
 
   componentDidMount() {
@@ -133,13 +132,6 @@ class QuizMain extends Component {
     }
   }
 
-  /** Håndtering af pop-up af billeder **/
-  onImgClick() {
-    this.setState((prevState) => {
-      return { imgOpen: !prevState.imgOpen };
-    });
-  }
-
   render() {
     let { questions, user, quiz } = this.props;
     let { answers, didInvalidate } = quiz;
@@ -198,7 +190,7 @@ class QuizMain extends Component {
             onSwipedRight={this.swiped}
             flickThreshold={flickNumber}
           >
-            <Question onImgClick={this.onImgClick} imgOpen={this.state.imgOpen} user={user} />
+            <Question imgOpen={this.state.imgOpen} user={user} />
           </Swipeable>
 
           <QuizNavigator

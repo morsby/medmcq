@@ -11,14 +11,12 @@ import AnswerDetailsTableExtendedRow from './AnswerDetailsTableExtendedRow';
 export interface AnswersDetailsTableProps {
   answers: any[];
   toggleCheckbox: Function;
-  selected: any[];
   questions: any[];
 }
 
 const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
   answers,
   toggleCheckbox,
-  selected,
   questions
 }) => {
   const history = useHistory();
@@ -33,16 +31,6 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
   };
 
   const columns = [
-    {
-      title: '',
-      key: 'questionId',
-      render: (record) => (
-        <Checkbox
-          onChange={() => toggleCheckbox(record.questionId)}
-          checked={selected.includes(record.questionId)}
-        />
-      )
-    },
     {
       title: <Translate id="profileAnswerDetails.table_headers.performance" />,
       render: (record) => (
@@ -60,9 +48,9 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
       render: (record) => (
         <p
           style={{ color: '#1890ff', cursor: 'pointer' }}
-          onClick={() => history.push(`quiz/${record.questionId}`)}
+          onClick={() => history.push(`quiz/${record.key}`)}
         >
-          {questions[record.questionId].text.substr(0, 100)}...
+          {questions[record.key].text.substr(0, 100)}...
         </p>
       )
     },
@@ -93,14 +81,24 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
     }
   ];
 
+  const rowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      console.log(selectedRowKeys);
+      toggleCheckbox(selectedRowKeys);
+    }
+  };
+
   return (
     <div style={{ overflowX: 'auto' }}>
       <Table
+        size="small"
+        rowSelection={rowSelection}
+        rowKey={(record) => record.key}
         bordered
         columns={columns}
-        dataSource={_.map(answers, (a, questionId) => ({ ...a, questionId }))}
+        dataSource={_.map(answers, (a, questionId) => ({ ...a, key: questionId }))}
         expandedRowRender={(record) => {
-          const question = questions[record.questionId];
+          const question = questions[record.key];
 
           return (
             <>

@@ -42,16 +42,10 @@ export const getQuestions = ({
   }
 
   switch (type) {
-    /*
-      types:
-        - ids
-        - profile
-        - set
-        - random
-        - specialer/tags
-       */
-
     case 'ids':
+      ids = ids.map((id) => Number(id));
+      questions = await Question.fetch({ ids });
+      break;
     case 'specific':
       ids = ids.map((id) => Number(id));
       questions = await Question.fetch({ ids });
@@ -59,6 +53,10 @@ export const getQuestions = ({
     case 'set':
       questions = await Question.fetch({ set: selectedSetId });
       break;
+    case 'random':
+      selectedTagIds = null;
+      selectedSpecialtyIds = null;
+    // eslint-disable-next-line
     default:
       questions = await Question.fetch({
         semester: selectedSemester,
@@ -79,7 +77,7 @@ export const getQuestions = ({
       refetch
     });
   } else {
-    dispatch({
+    await dispatch({
       type: types.FETCH_QUESTIONS_FAILURE,
       payload: { type: 'NotFound', message: 'No questions found' }
     });
