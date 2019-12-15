@@ -8,7 +8,7 @@ import { Input } from 'antd';
 import { Translate } from 'react-localize-redux';
 
 import AnswerDetailsFilterButtons from './AnswerDetailsFilterButtons';
-import { urls, insertOrRemoveFromArray } from 'utils/common';
+import { urls } from 'utils/common';
 import { useHistory } from 'react-router';
 import AnswersDetailsTable from './AnswersDetailsTable';
 
@@ -20,23 +20,25 @@ const AnswerDetails = ({ answers }) => {
   const [search, setSearch] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [selected, setSelected] = useState([]);
+  const [quizLoading, setQuizLoading] = useState(false);
   const questions = useSelector((state) => state.questions.entities.questions);
   const dispatch = useDispatch();
   const history = useHistory();
 
   /**
    * A small function that toggles the checkbox using React hooks.
-   * @param  {integer} id      The question id to toggle.
+   * @param  {Array} ids      The question ids (array) to toggle.
    * @param  {bool}    checked Is the checkbox already checked? Should we check or uncheck?
    * @return {null}            Returns nothing, simply updates state.
    */
-  const toggleCheckbox = useCallback((id) => {
-    setSelected((selected) => insertOrRemoveFromArray(selected, id));
+  const toggleCheckbox = useCallback((ids) => {
+    setSelected(ids);
   }, []);
 
-  const startQuiz = async () => {
+  const startQuiz = async (ids) => {
+    setQuizLoading(true);
+    await dispatch(actions.getQuestions({ ids, quiz: true }));
     history.push(urls.quiz);
-    await dispatch(actions.getQuestions({ ids: selected, quiz: true }));
   };
 
   const handleSearch = (search) => {
@@ -68,9 +70,28 @@ const AnswerDetails = ({ answers }) => {
 
   return (
     <div>
-      <Button basic color="green" onClick={startQuiz} disabled={selected.length === 0}>
+      <Button
+        basic
+        color="green"
+        onClick={() => startQuiz(selected)}
+        disabled={selected.length === 0 || quizLoading}
+        loading={quizLoading}
+      >
         <Translate id="profileAnswerDetails.start_quiz_button" data={{ n: selected.length }} />
       </Button>
+      <Button
+        loading={quizLoading}
+        disabled={quizLoading}
+        basic
+        color="green"
+        onClick={() => startQuiz(Object.keys(answers))}
+      >
+        <Translate
+          id="profileAnswerDetails.start_quiz_all_button"
+          data={{ n: Object.keys(answers).length }}
+        />
+      </Button>
+
       <h4>
         <Translate id="profileAnswerDetails.filter.header" />
       </h4>

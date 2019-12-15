@@ -74,14 +74,14 @@ export const getQuestions = ({
   }
 
   if (res.data.length > 0) {
-    dispatch({
+    await dispatch({
       type: types.FETCH_QUESTIONS_SUCCESS,
       payload: res.data,
       quiz,
       refetch
     });
   } else {
-    dispatch({
+    await dispatch({
       type: types.FETCH_QUESTIONS_FAILURE,
       payload: { type: 'NotFound', message: 'No questions found' }
     });
