@@ -11,14 +11,12 @@ import AnswerDetailsTableExtendedRow from './AnswerDetailsTableExtendedRow';
 export interface AnswersDetailsTableProps {
   answers: any[];
   toggleCheckbox: Function;
-  selected: any[];
   questions: any[];
 }
 
 const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
   answers,
   toggleCheckbox,
-  selected,
   questions
 }) => {
   const history = useHistory();
@@ -33,16 +31,6 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
   };
 
   const columns = [
-    {
-      title: '',
-      key: 'questionId',
-      render: (record) => (
-        <Checkbox
-          onChange={() => toggleCheckbox(record.questionId)}
-          checked={selected.includes(record.questionId)}
-        />
-      )
-    },
     {
       title: <Translate id="profileAnswerDetails.table_headers.performance" />,
       render: (record) => (
@@ -60,23 +48,23 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
       render: (record) => (
         <p
           style={{ color: '#1890ff', cursor: 'pointer' }}
-          onClick={() => history.push(`quiz/${record.questionId}`)}
+          onClick={() => history.push(`quiz/${record.key}`)}
         >
-          {questions[record.questionId].text.substr(0, 100)}...
+          {questions[record.key].text.substr(0, 100)}...
         </p>
       )
     },
     {
       title: <Translate id="profileAnswerDetails.table_headers.specialty" />,
       render: (record) =>
-        _.map(questions[record.questionId].specialties, ({ specialtyId }) => (
+        _.map(questions[record.key].specialties, ({ specialtyId }) => (
           <Tag color="blue">{specialties[specialtyId].name}</Tag>
         ))
     },
     {
       title: 'Tags',
       render: (record) =>
-        _.map(questions[record.questionId].tags, ({ tagId }) => (
+        _.map(questions[record.key].tags, ({ tagId }) => (
           <Tag color="geekblue">{tags[tagId].name}</Tag>
         ))
     },
@@ -85,22 +73,32 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
       render: (record) => (
         <>
           <Translate
-            id={`profileAnswerDetails.${examSets[questions[record.questionId].examSetId].season}`}
+            id={`profileAnswerDetails.${examSets[questions[record.key].examSetId].season}`}
           />
-          {examSets[questions[record.questionId].examSetId].year}
+          {examSets[questions[record.key].examSetId].year}
         </>
       )
     }
   ];
 
+  const rowSelection = {
+    onChange: (selectedRowKeys, selectedRows) => {
+      console.log(selectedRowKeys);
+      toggleCheckbox(selectedRowKeys);
+    }
+  };
+
   return (
     <div style={{ overflowX: 'auto' }}>
       <Table
+        size="small"
+        rowSelection={rowSelection}
+        rowKey={(record) => record.key}
         bordered
         columns={columns}
-        dataSource={_.map(answers, (a, questionId) => ({ ...a, questionId }))}
+        dataSource={_.map(answers, (a, questionId) => ({ ...a, key: questionId }))}
         expandedRowRender={(record) => {
-          const question = questions[record.questionId];
+          const question = questions[record.key];
 
           return (
             <>
