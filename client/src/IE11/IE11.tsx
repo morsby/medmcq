@@ -24,8 +24,8 @@ const IE11: React.SFC<IE11Props> = () => {
         Regionscomputere bruger som standard alle internet explorer, men under apps kan man i stedet
         finde Chrome.
         <br />
-        Det anbefales på det kraftigste at skifte, da der er store sikkerhedsmæssige mangler i
-        internet explorer, da den ikke længere modtager opdateringer fra Microsoft.
+        Det anbefales på det kraftigste at skifte. Der er store sikkerhedsmæssige mangler i internet
+        explorer, da den ikke længere modtager opdateringer fra Microsoft.
       </h4>
     </div>
   );
