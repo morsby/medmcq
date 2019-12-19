@@ -38,6 +38,10 @@ export const getQuestions = ({
     }
   }
 
+  if (commentIds) {
+    type = 'commentIds';
+  }
+
   if (profile) {
     type = 'profile';
   }
@@ -45,6 +49,9 @@ export const getQuestions = ({
   switch (type) {
     case 'ids':
       res = await axios.get(questionApi, { params: { ids: ids.join(',') } });
+      break;
+    case 'commentIds':
+      res = await axios.get(questionApi, { params: { commentIds } });
       break;
     case 'specific':
       res = await axios.get(questionApi, { params: { ids: ids.join(',') } });
@@ -67,8 +74,7 @@ export const getQuestions = ({
           tags: (selectedTagIds || []).join(',') || undefined,
           n: n || undefined,
           onlyNew: onlyNew || undefined,
-          onlyWrong: onlyWrong || undefined,
-          commentIds
+          onlyWrong: onlyWrong || undefined
         }
       });
   }
