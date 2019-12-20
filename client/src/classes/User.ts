@@ -177,6 +177,10 @@ class User {
 
     return res.data.user;
   };
+
+  static forgotPassword = async (email: string): Promise<string> => {
+    return 'message';
+  };
 }
 
 export default User;

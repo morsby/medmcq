@@ -1,68 +1,51 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import * as actions from '../../../actions';
+import React, { useState } from 'react';
 
 import { Container, Message, Form, Button } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
+import User from 'classes/User';
 
 /**
  * Component der viser formular til at bede om nyt password
  * @extends Component
  */
-class ForgotPassword extends Component {
-  state = { email: '', message: null };
+export interface ForgotPasswordProps {}
 
-  handleChange = (e, { name, value }) => this.setState({ [name]: value, message: null });
+const ForgotPassword: React.SFC<ForgotPasswordProps> = () => {
+  const [email, setEmail] = useState('');
+  const [message, setMessage] = useState('');
 
-  handleSubmit = () => {
-    const { email } = this.state;
+  const handleChange = (value: string) => setEmail(value);
 
-    this.props.forgotPassword(email, (data) => this.setState({ message: data, email: '' }));
+  const handleSubmit = async () => {
+    const message = await User.forgotPassword(email);
+    setMessage(message);
   };
 
-  render() {
-    let { message } = this.state;
-    return (
-      <div className="flex-container">
-        <Container className="content">
-          <h3>
-            <Translate id="forgotPassword.header" />
-          </h3>
-          <p>
-            <Translate id="forgotPassword.guide" />
-          </p>
-          <Form onSubmit={this.handleSubmit}>
-            <Form.Field>
-              <label>E-mail</label>
-              <Form.Input
-                name="email"
-                placeholder="E-mail"
-                onChange={this.handleChange}
-                value={this.state.email}
-              />
-            </Form.Field>
-            {message && (
-              <Message negative={message.type === 'error'} positive={message.type === 'success'}>
-                {message.message}
-              </Message>
-            )}
-            <Button type="submit">Send email</Button>
-          </Form>
-        </Container>
-      </div>
-    );
-  }
-}
-
-ForgotPassword.propTypes = {
-  /**
-   * Func der nulstiller kodeord og sender en email (via API). Fra redux
-   */
-  forgotPassword: PropTypes.func
+  return (
+    <div className="flex-container">
+      <Container className="content">
+        <h3>
+          <Translate id="forgotPassword.header" />
+        </h3>
+        <p>
+          <Translate id="forgotPassword.guide" />
+        </p>
+        <Form onSubmit={handleSubmit}>
+          <Form.Field>
+            <label>E-mail</label>
+            <Form.Input
+              name="email"
+              placeholder="E-mail"
+              onChange={(e, { value }) => handleChange(value)}
+              value={email}
+            />
+          </Form.Field>
+          {message && <Message>{message}</Message>}
+          <Button type="submit">Send email</Button>
+        </Form>
+      </Container>
+    </div>
+  );
 };
 
-export default connect(
-  null,
-  actions
-)(ForgotPassword);
+export default ForgotPassword;
