@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import IE11 from 'IE11/IE11';
+import IE11 from 'components/IE11/IE11';
 
 /**
  * Handle errormessage on internet explorer

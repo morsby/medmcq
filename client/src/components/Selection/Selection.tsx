@@ -7,16 +7,15 @@ import { withLocalize, Translate, LocalizeContextProps } from 'react-localize-re
 
 import { Container, Header, Divider, Button, Message, Input } from 'semantic-ui-react';
 
-import SelectionSemesterSelector from 'components/Selection/SelectionSemesterSelector';
-import SelectionNSelector from 'components/Selection/SelectionNSelector';
-import SelectionSetSelector from 'components/Selection/SelectionSetSelector/SelectionSetSelector';
-import SelectionMetadataSelector from 'components/Selection/SelectionMetadataSelector/SelectionMetadataSelector';
-import SelectionTypeSelector from 'components/Selection/SelectionTypeSelector';
-import SelectionUniqueSelector from 'components/Selection/SelectionUniqueSelector';
+import SelectionSemesterSelector from 'components/Selection/SelectionComponents/SelectionSemesterSelector';
+import SelectionNSelector from 'components/Selection/SelectionComponents/SelectionNSelector';
+import SelectionSetSelector from 'components/Selection/SelectionComponents/SelectionSetSelector';
+import SelectionMetadataSelector from 'components/Selection/SelectionComponents/SelectionMetadataSelector';
+import SelectionTypeSelector from 'components/Selection/SelectionComponents/SelectionTypeSelector';
+import SelectionUniqueSelector from 'components/Selection/SelectionComponents/SelectionUniqueSelector';
 import { useSelector } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
 import { useHistory } from 'react-router';
-import settingsReducer from 'redux/reducers/settings';
 import Question from 'classes/Question';
 import Quiz from 'classes/Quiz';
 import Semester from 'classes/Semester';
@@ -35,7 +34,7 @@ const Selection: React.SFC<SelectionProps> = ({ addTranslation, translate }) => 
   const ui = useSelector((state: ReduxState) => state.ui);
   const user = useSelector((state: ReduxState) => state.auth.user);
   const quizQuestions = useSelector((state: ReduxState) => state.quiz.questions);
-  const { type, selectedSemester, selectedSetId, onlyNew, onlyWrong, n } = ui.selection;
+  const { type, selectedSemester } = ui.selection;
   const { semesters } = metadata;
   const history = useHistory();
 
@@ -47,20 +46,6 @@ const Selection: React.SFC<SelectionProps> = ({ addTranslation, translate }) => 
   useEffect(() => {
     Metadata.fetchById(selectedSemester);
   }, [selectedSemester]);
-
-  /**
-   * Func der ændrer settings i redux state. Passes via Semantic UI (derfor navnene)
-   * @param  {event} e         Event. Bruges ikke.
-   * @param  {string} name     Den indstilling der ændres
-   * @param  {string} value    Den værdi der sættes
-   */
-  const onSettingsChange = (e, { value, name, checked }) => {
-    let type = name;
-    setErrors([]);
-    if (type === 'n' && value) value = Number(value);
-    if (type === 'onlyNew' || type === 'onlyWrong') value = checked;
-    settingsReducer.actions.changeSettings({ type, value });
-  };
 
   /**
    * Func der (efter validering) henter spørgsmålene

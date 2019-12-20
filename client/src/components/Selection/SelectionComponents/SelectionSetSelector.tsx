@@ -1,15 +1,13 @@
 import React from 'react';
 import _ from 'lodash';
-import { IReduxState } from 'reducers';
 import { useSelector, useDispatch } from 'react-redux';
-
-import * as actions from 'actions';
 
 import SetRadioButton from './SetRadioButton';
 import { Form, Header } from 'semantic-ui-react';
 
 import { Translate } from 'react-localize-redux';
 import { ReduxState } from 'redux/reducers';
+import uiReducer from 'redux/reducers/ui';
 
 const SelectionSetSelector = () => {
   const dispatch = useDispatch();
@@ -22,7 +20,7 @@ const SelectionSetSelector = () => {
   const examSets = useSelector((state: ReduxState) => state.metadata.examSets);
   const user = useSelector((state: ReduxState) => state.auth.user);
   const onChange = (e, { name, value }) => {
-    dispatch(actions.changeSelection(name, value));
+    dispatch(uiReducer.actions.changeSelection({ name, value }));
   };
 
   if (!selectedSemester) {
