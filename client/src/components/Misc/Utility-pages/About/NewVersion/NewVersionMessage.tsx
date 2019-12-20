@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { withLocalize, Translate, LocalizeContextProps } from 'react-localize-redux';
 
 import { useDispatch, useSelector } from 'react-redux';
-import * as actions from '../../../../../actions';
 import { Message } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { urls } from '../../../../../utils/common';
@@ -10,7 +9,8 @@ import { urls } from '../../../../../utils/common';
 import newVersionMessageTranslations from './newVersionMessageTranslations.json';
 
 import { version } from '../../../../../version';
-import { IReduxState } from 'reducers';
+import { ReduxState } from 'redux/reducers';
+import settingsReducer from 'redux/reducers/settings';
 
 export interface LinkToAboutProps {}
 
@@ -26,14 +26,14 @@ export interface NewVersionMessageProps extends LocalizeContextProps {}
 
 const NewVersionMessage: React.SFC<NewVersionMessageProps> = ({ addTranslation }) => {
   const dispatch = useDispatch();
-  const prevVersion = useSelector((state: IReduxState) => state.settings.version);
+  const prevVersion = useSelector((state: ReduxState) => state.settings.version);
 
   useEffect(() => {
     addTranslation(newVersionMessageTranslations);
   });
 
   const handleDismiss = () => {
-    dispatch(actions.changeSettings({ type: 'version', value: version }));
+    dispatch(settingsReducer.actions.changeSettings({ type: 'version', value: version }));
   };
 
   if (version !== prevVersion) {

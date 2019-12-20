@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { updateSelection } from 'utils/reducers';
 
 const initialState = {
   isLoading: false,

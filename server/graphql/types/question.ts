@@ -25,6 +25,7 @@ export const typeDefs = gql`
     onlyWrong: Boolean
     commentIds: [Int]
     profile: Boolean
+    search: String
   }
 
   type Question {
@@ -52,7 +53,7 @@ export const typeDefs = gql`
 export const resolvers = {
   Query: {
     questions: async (args, { filter }) => {
-      let { n, ids, season, year, semester, text, tags, specialties, set } = filter;
+      let { n, ids, season, year, semester, text, tags, specialties, set, search } = filter;
 
       let query = Question.query();
 
@@ -63,18 +64,23 @@ export const resolvers = {
       query = query
         .join('semesterExamSet as examSet', 'question.examSetId', 'examSet.id')
         .join('semester', 'examSet.semesterId', 'semester.id');
+      if (semester) {
+        query = query.where('semester.id', '=', semester);
+      }
 
+      // Specifics
       if (set) return query.where('examSet.id', set);
+      if (search)
+        return query
+          .joinRelation('semester')
+          .whereRaw('MATCH (text, answer1, answer2, answer3) AGAINST (? IN BOOLEAN MODE)', search);
 
       // Start filtering based on other values
+
       query = query.orderByRaw('rand()');
 
       if (!n || n > 300) n = 300; // Man må ikke hente mere end 300
       query = query.limit(n);
-
-      if (semester) {
-        query = query.where('semester.id', '=', semester);
-      }
 
       if (year) {
         query = query.where('examSet.year', '=', year);

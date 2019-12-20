@@ -33,11 +33,8 @@ export const logout = () => async (dispatch) => {
 };
 
 export const fetchUser = () => async (dispatch) => {
-  dispatch({ type: types.AUTH_FETCH_USER_REQUEST });
   try {
-    const user = await User.checkUser();
-    if (!user) return;
-    dispatch({ type: types.AUTH_FETCH_USER_SUCCESS, payload: user });
+    await User.fetch();
   } catch ({ response }) {
     dispatch(makeToast('toast.auth.fetchUserError', 'error'));
   }

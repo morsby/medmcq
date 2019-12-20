@@ -1,63 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Tree } from 'antd';
-import 'antd/lib/tree/style/css';
 
 import { Translate } from 'react-localize-redux';
 
 import { Form, Header, Grid, Input, Button } from 'semantic-ui-react';
-import { IReduxState } from 'reducers';
-import * as uiActions from './../../../actions/ui';
 import _ from 'lodash';
-import Semester from 'classes/Semester';
-
-interface IMetadataEntity {
-  id: number;
-  name: string;
-  semester: Semester;
-  parent: { id: number };
-  questionCount: number;
-}
-
-interface IMetadataSelectionObject {
-  title: string;
-  id: number;
-  key: string;
-  children: [IMetadataSelectionObject];
-}
+import { ReduxState } from 'redux/reducers';
+import 'antd/lib/tree/style/css';
+import UIReducer from 'redux/reducers/ui';
 
 /**
  * Laver en checkbox for hvert speciale.
  */
 const SelectionSpecialtiesSelector = () => {
-  const selection = useSelector((state: IReduxState) => state.ui.selection);
-  const metadata: {
-    specialties: IMetadataEntity[];
-    tags: IMetadataEntity[];
-    semesters: any;
-  } = useSelector((state: IReduxState) => state.metadata.entities);
-  const { selectedSemester, selectedSpecialtyIds, selectedTagIds } = selection;
-  const semester = metadata.semesters[selectedSemester];
   const dispatch = useDispatch();
-  const [tagTree, setTagTree]: [IMetadataSelectionObject[] | null, Function] = useState(null);
+  const { selectedSemester, selectedSpecialtyIds, selectedTagIds } = useSelector(
+    (state: ReduxState) => state.ui.selection
+  );
+  const metadata = useSelector((state: ReduxState) => state.metadata);
+  const semester = metadata.semesters[selectedSemester];
+  const [tagTree, setTagTree] = useState(null);
   const [tagSearch, setTagSearch] = useState('');
 
-  const onChange = (value: string[], type: string) => {
-    dispatch(uiActions.changeSelection(type, value));
+  const handleChange = (value: string[], type: string) => {
+    dispatch(UIReducer.actions.changeSelection({ type, value }));
   };
 
   useEffect(() => {
     const convertMetadataToTree = () => {
-      return _.filter(metadata.tags, (t) => !t.parent.id && t.semester.id === selectedSemester).map(
-        (t) => ({
+      return metadata.tags
+        .filter((t) => !t.parent.id)
+        .map((t) => ({
           title: `${t.name} (${t.questionCount})`,
           key: t.id,
           children: getChildrenOfMetadata(t.id)
-        })
-      );
+        }));
     };
 
-    const getChildrenOfMetadata: any = (tagId: number) => {
+    const getChildrenOfMetadata = (tagId: number) => {
       return _.filter(metadata.tags, (t) => t.parent.id === tagId).map((t) => ({
         title: `${t.name} (${t.questionCount})`,
         key: t.id,
@@ -68,8 +49,8 @@ const SelectionSpecialtiesSelector = () => {
     setTagTree(convertMetadataToTree());
   }, [metadata.tags, selectedSemester]);
 
-  const renderTreeNodes = (tags: IMetadataSelectionObject[]) =>
-    _.sortBy(tags, (t) => t.title).map((item: IMetadataSelectionObject) => {
+  const renderTreeNodes = (tags) =>
+    _.sortBy(tags, (t) => t.title).map((item) => {
       if (item.children) {
         return (
           <Tree.TreeNode title={item.title} key={item.key} dataRef={item}>
@@ -87,6 +68,7 @@ const SelectionSpecialtiesSelector = () => {
       </Header>
     );
   }
+
   return (
     <Form>
       <Grid columns="equal" stackable>
@@ -103,9 +85,11 @@ const SelectionSpecialtiesSelector = () => {
                 <Tree
                   checkable
                   checkedKeys={selectedSpecialtyIds}
-                  onCheck={(specialties: any) => onChange(specialties, 'selectedSpecialtyIds')}
+                  onCheck={(specialties) =>
+                    handleChange(specialties as string[], 'selectedSpecialtyIds')
+                  }
                 >
-                  {_.filter(metadata.specialties, (s) => s.id === selectedSemester).map((s) => (
+                  {metadata.specialties.map((s) => (
                     <Tree.TreeNode
                       title={`${s.name} (${s.questionCount})`}
                       key={String(s.id)}
@@ -115,7 +99,7 @@ const SelectionSpecialtiesSelector = () => {
                 </Tree>
                 <div style={{ textAlign: 'center' }}>
                   <Button
-                    onClick={() => onChange([], 'selectedSpecialtyIds')}
+                    onClick={() => handleChange([], 'selectedSpecialtyIds')}
                     size="small"
                     fluid
                     basic
@@ -156,7 +140,7 @@ const SelectionSpecialtiesSelector = () => {
                     selectedTagIds.includes(String(t.id))
                 ).map((t) => String(t.id))}
                 onCheck={(tags: any, { node }) => {
-                  onChange(
+                  handleChange(
                     [
                       ...tags,
                       ..._.filter(selectedTagIds, (id) => id !== String(node.props.dataRef.id))
@@ -187,13 +171,18 @@ const SelectionSpecialtiesSelector = () => {
               <>
                 <Tree
                   checkedKeys={selectedTagIds}
-                  onCheck={(tags: any) => onChange(tags, 'selectedTagIds')}
+                  onCheck={(tags: any) => handleChange(tags, 'selectedTagIds')}
                   checkable
                 >
                   {renderTreeNodes(tagTree)}
                 </Tree>
                 <div style={{ textAlign: 'center' }}>
-                  <Button onClick={() => onChange([], 'selectedTagIds')} size="small" fluid basic>
+                  <Button
+                    onClick={() => handleChange([], 'selectedTagIds')}
+                    size="small"
+                    fluid
+                    basic
+                  >
                     <Translate id="selectionSpecialtiesSelector.clear" />
                   </Button>
                 </div>

@@ -1,10 +1,12 @@
-import client from 'apolloClient';
 import { gql } from 'apollo-boost';
 import Comment from 'classes/Comment';
 import Specialty, { SpecialtyVote } from 'classes/Specialty';
 import Tag, { TagVote } from './Tag';
+import { store } from 'IndexApp';
+import quizReducer from 'redux/reducers/quiz';
+import Apollo from './Apollo';
 
-interface QuestionFilterInput {
+export interface QuestionFilterInput {
   text: string;
   specialties: number[];
   tags: number[];
@@ -17,6 +19,7 @@ interface QuestionFilterInput {
   onlyNew: boolean;
   onlyWrong: boolean;
   commentIds: number[];
+  search: string;
 }
 
 interface Question {
@@ -44,77 +47,82 @@ interface Question {
 }
 
 class Question {
-  static fetch = async (filter: Partial<QuestionFilterInput>) => {
-    const res = await client.query<{ questions: Question[] }>({
-      query: gql`
-        query($filter: QuestionFilterInput) {
-          questions(filter: $filter) {
+  static questionFragment = gql`
+    fragment QuestionFull on Question {
+      id
+      text
+      examSet {
+        id
+        season
+      }
+      specialties {
+        id
+      }
+      tags {
+        id
+      }
+      specialtyVotes {
+        id
+        specialty {
+          id
+        }
+      }
+      tagVotes {
+        id
+        tag {
+          id
+          parent {
             id
-            text
-            examSet {
-              id
-              season
-            }
-            specialties {
-              id
-            }
-            tags {
-              id
-            }
-            specialtyVotes {
-              id
-              specialty {
-                id
-              }
-            }
-            tagVotes {
-              id
-              tag {
-                id
-                parent {
-                  id
-                }
-              }
-            }
-            answer1
-            answer2
-            answer3
-            image
-            correctAnswers
-            publicComments {
-              id
-              text
-              user {
-                id
-                username
-              }
-              likes {
-                commentId
-                userId
-              }
-            }
-            privateComments {
-              id
-              text
-              user {
-                id
-                username
-              }
-              likes {
-                commentId
-                userId
-              }
-            }
-            examSet {
-              id
-            }
           }
         }
-      `,
-      variables: { filter }
-    });
+      }
+      answer1
+      answer2
+      answer3
+      image
+      correctAnswers
+      publicComments {
+        id
+        text
+        user {
+          id
+          username
+        }
+        likes {
+          commentId
+          userId
+        }
+      }
+      privateComments {
+        id
+        text
+        user {
+          id
+          username
+        }
+        likes {
+          commentId
+          userId
+        }
+      }
+      examSet {
+        id
+      }
+    }
+  `;
 
-    return res.data.questions;
+  static fetch = async (filter: Partial<QuestionFilterInput>) => {
+    const query = gql`
+    query($filter: QuestionFilterInput) {
+      questions(filter: $filter) {
+        ...QuestionFull
+      }
+      ${Question.questionFragment}
+    }
+  `;
+
+    const questions = await Apollo.query<Question[]>('questions', query, { filter });
+    store.dispatch(quizReducer.actions.setQuestions(questions));
   };
 }
 

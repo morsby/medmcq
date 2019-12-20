@@ -11,13 +11,13 @@ import QuestionComment from 'models/question_comment';
 export const typeDefs = gql`
   extend type Query {
     user: User
-    checkUser: User
     checkUsernameAvailability: Boolean
   }
 
   extend type Mutation {
     login(data: LoginInput): String
     signup(data: UserInput): String
+    logout: String
     editUser(data: UserEditInput): String
     forgotPassword(email: String!): String
     resetPassword(token: String!, values: String): String
@@ -43,6 +43,7 @@ export const typeDefs = gql`
   type User {
     id: Int
     username: String
+    email: String
     password: String
     role: Role
     bookmarks: [Bookmark]
@@ -77,23 +78,26 @@ export const typeDefs = gql`
 export const resolvers = {
   Query: {
     user: async (_root, _args, ctx: Context) => {
+      if (!ctx.user) return null;
       const user = await ctx.userLoaders.userLoader.load(ctx.user.id);
       return { id: user.id };
-    },
-    checkUser: (root, args, ctx: Context) => {
-      if (!ctx.user) return null;
-      return { id: ctx.user.id };
     }
   },
 
   Mutation: {
-    login: async (root, { data: { username, password } }) => {
+    login: async (root, { data: { username, password } }, ctx: Context) => {
       let user: Partial<User> = await User.query().findOne({ username });
       if (!user) throw new Error('Username or password is invalid');
       const isValidPassword = user.verifyPassword(password);
       if (!isValidPassword) throw new Error('Username or password is invalid');
       user = _.pick(user, ['id', 'username', 'email']);
-      return jwt.sign(user, process.env.SECRET);
+      const token = jwt.sign(user, process.env.SECRET);
+      ctx.res.cookie('user', token);
+      return 'Logged in';
+    },
+    logout: (root, args, ctx: Context) => {
+      ctx.res.cookie('user', null, { expires: new Date(0) });
+      return 'Logged out';
     },
     signup: async (root, { data }) => {
       const user = User.query().insert(data);

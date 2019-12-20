@@ -6,6 +6,7 @@ import quizReducer from './quiz';
 import settingsReducer from './settings';
 import shareBuilderReducer from './sharebuilder';
 import UIReducer from './ui';
+import { localizeReducer } from 'react-localize-redux';
 
 const rootReducer = combineReducers({
   auth: authReducer.reducer,
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
   quiz: quizReducer.reducer,
   settings: settingsReducer.reducer,
   shareBuilder: shareBuilderReducer.reducer,
-  ui: UIReducer.reducer
+  ui: UIReducer.reducer,
+  localize: localizeReducer
 });
 
 export type ReduxState = ReturnType<typeof rootReducer>;

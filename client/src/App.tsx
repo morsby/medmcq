@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
 // Oversættelse
-import { withLocalize } from 'react-localize-redux';
+import { LocalizeContextProps, withLocalize } from 'react-localize-redux';
 import { renderToStaticMarkup } from 'react-dom/server'; // required to initialize react-localize-redux
 import authTranslations from './components/Auth/authTranslations.json'; // fordi der ikke er en gennemgående component i dette regi
 import toastTranslations from 'components/Misc/toastTranslations.json';
@@ -41,11 +41,9 @@ import ResetPassword from './components/Auth/Password/ResetPassword';
 // NewVersionMessage
 import NewVersionMessage from './components/Misc/Utility-pages/About/NewVersion/NewVersionMessage';
 
-import * as actions from './actions';
 import { urls } from './utils/common';
 import Sidebar from './components/Layout/Sidebar';
 import Footer from './components/Layout/Footer';
-import MaintenancePage from './components/Misc/Utility-pages/MaintenancePage';
 import ErrorBoundary from './components/Misc/Utility-pages/ErrorBoundary';
 import QuizShareRoute from 'components/Quiz/QuizShareRoute';
 import QuizShareBuilderLoader from 'components/Quiz/QuizShareBuilderLoader';
@@ -53,112 +51,91 @@ import Sharebuilder from 'components/Sharebuilder/Sharebuilder';
 import { toast } from 'react-toastify';
 import FirstTimeToast from 'components/Misc/Utility-pages/About/FirstTime/FirstTimeToast';
 import FirstTime from 'components/Misc/Utility-pages/About/FirstTime/FirstTime';
-import { IReduxState } from 'reducers/index.js';
+import User from 'classes/User';
+import { ReduxState } from 'redux/reducers/index';
+import settingsReducer from 'redux/reducers/settings';
 
-export interface AppProps {
-  invalidateMetadata: Function;
-  addTranslation: Function;
-  initialize: Function;
-  defaultLanguage: string;
-  fetchUser: Function;
-  firstTime: boolean;
-  setFirstTime: Function;
-}
+export interface AppProps extends LocalizeContextProps {}
 
-class App extends Component<AppProps> {
-  state = { maintenance: false };
+const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
+  const dispatch = useDispatch();
+  const language = useSelector((state: ReduxState) => state.settings.language);
+  const firstTime = useSelector((state: ReduxState) => state.settings.firstTime);
 
-  constructor(props: AppProps) {
-    super(props);
-
+  useEffect(() => {
     // Hent brugeren
-    this.props.fetchUser();
+    User.fetch();
 
-    // Force refresh af semestre på reload:
-    this.props.invalidateMetadata();
-
-    this.props.addTranslation(authTranslations);
-    this.props.addTranslation(toastTranslations);
+    dispatch(addTranslation(authTranslations));
+    dispatch(addTranslation(toastTranslations));
 
     const languages = ['dk', 'gb'];
-    const defaultLanguage = this.props.defaultLanguage || languages[0];
+    const defaultLanguage = language || languages[0];
 
-    this.props.initialize({
-      languages: [{ name: 'Danish', code: 'dk' }, { name: 'English', code: 'gb' }],
-      options: {
-        renderToStaticMarkup,
-        renderInnerHtml: true,
-        defaultLanguage
-      }
-    });
+    dispatch(
+      initialize({
+        languages: [{ name: 'Danish', code: 'dk' }, { name: 'English', code: 'gb' }],
+        options: {
+          renderToStaticMarkup,
+          renderInnerHtml: true,
+          defaultLanguage
+        }
+      })
+    );
 
-    if (this.props.firstTime) {
+    if (firstTime) {
       toast.success(<FirstTimeToast language={defaultLanguage} />, {
         autoClose: false,
-        onClose: () => this.props.setFirstTime(false),
+        onClose: () => dispatch(settingsReducer.actions.setFirstTime(false)),
         closeOnClick: false
       });
     }
-  }
 
-  render() {
-    if (this.state.maintenance) return <MaintenancePage />;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    return (
-      <BrowserRouter>
-        <ErrorBoundary>
-          <ScrollToTop>
-            <NewVersionMessage />
-            <ToastContainer
-              position="top-center"
-              autoClose={3000}
-              hideProgressBar={false}
-              newestOnTop
-              closeOnClick
-              rtl={false}
-              draggable
-              pauseOnHover
-            />
-            <Sidebar>
-              <Header />
-              <Switch>
-                <Route path={'/firsttime'} component={FirstTime} />
-                <Route path={urls.about} component={About} />
-                <Route path={urls.contact} component={Contact} />
-                <Route path={'/share/:id'} component={QuizShareBuilderLoader} />
-                <Route path={'/share'} component={Sharebuilder} />
-                <Route path={urls.quizShareRoute} component={QuizShareRoute} />
-                <Route path={urls.quiz} component={Quiz} />
-                <Route path={urls.signup} component={Signup} />
-                <Route path={urls.login} component={Login} />
-                <Route path={urls.logout} component={Logout} />
-                <PrivateRoute isLoggedIn={true} path={urls.editProfile} component={EditProfile} />
-                <PrivateRoute path={urls.profile} component={Profile} />
-                <Route path={urls.forgotPassword} component={ForgotPassword} />
-                <Route path={`${urls.resetPassword}/:token`} component={ResetPassword} />
-                <Route path="/print" component={Print} />
-                <Route exact path="/" component={Selection} />
-                <Route component={ErrorPage} />
-              </Switch>
-              <Footer />
-            </Sidebar>
-          </ScrollToTop>
-        </ErrorBoundary>
-      </BrowserRouter>
-    );
-  }
-}
+  return (
+    <BrowserRouter>
+      <ErrorBoundary>
+        <ScrollToTop>
+          <NewVersionMessage />
+          <ToastContainer
+            position="top-center"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop
+            closeOnClick
+            rtl={false}
+            draggable
+            pauseOnHover
+          />
+          <Sidebar>
+            <Header />
+            <Switch>
+              <Route path={'/firsttime'} component={FirstTime} />
+              <Route path={urls.about} component={About} />
+              <Route path={urls.contact} component={Contact} />
+              <Route path={'/share/:id'} component={QuizShareBuilderLoader} />
+              <Route path={'/share'} component={Sharebuilder} />
+              <Route path={urls.quizShareRoute} component={QuizShareRoute} />
+              <Route path={urls.quiz} component={Quiz} />
+              <Route path={urls.signup} component={Signup} />
+              <Route path={urls.login} component={Login} />
+              <Route path={urls.logout} component={Logout} />
+              <PrivateRoute isLoggedIn={true} path={urls.editProfile} component={EditProfile} />
+              <PrivateRoute path={urls.profile} component={Profile} />
+              <Route path={urls.forgotPassword} component={ForgotPassword} />
+              <Route path={`${urls.resetPassword}/:token`} component={ResetPassword} />
+              <Route path="/print" component={Print} />
+              <Route exact path="/" component={Selection} />
+              <Route component={ErrorPage} />
+            </Switch>
+            <Footer />
+          </Sidebar>
+        </ScrollToTop>
+      </ErrorBoundary>
+    </BrowserRouter>
+  );
+};
 
-const mapStateToProps = (state: IReduxState) => ({
-  defaultLanguage: state.settings.language,
-  firstTime: state.settings.firstTime
-});
-
-const LocalizedApp = withLocalize(
-  connect<any, any, any>(
-    mapStateToProps,
-    actions
-  )(App)
-);
-
-export default LocalizedApp;
+export default withLocalize(App);

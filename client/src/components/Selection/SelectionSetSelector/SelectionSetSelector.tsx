@@ -9,19 +9,23 @@ import SetRadioButton from './SetRadioButton';
 import { Form, Header } from 'semantic-ui-react';
 
 import { Translate } from 'react-localize-redux';
+import { ReduxState } from 'redux/reducers';
 
 const SelectionSetSelector = () => {
   const dispatch = useDispatch();
-  const metadata = useSelector((state: IReduxState) => state.metadata);
-  const selection = useSelector((state: IReduxState) => state.ui.selection);
-  const user = useSelector((state: IReduxState) => state.auth.user);
-  const { selectedSemester, selectedSetId } = selection;
-  const semester = metadata.entities.semesters[selectedSemester];
+  const { selectedSemester, selectedSetId } = useSelector(
+    (state: ReduxState) => state.ui.selection
+  );
+  const semester = useSelector((state: ReduxState) =>
+    state.metadata.semesters.find((semester) => semester.id === selectedSemester)
+  );
+  const examSets = useSelector((state: ReduxState) => state.metadata.examSets);
+  const user = useSelector((state: ReduxState) => state.auth.user);
   const onChange = (e, { name, value }) => {
     dispatch(actions.changeSelection(name, value));
   };
 
-  if (!semester) {
+  if (!selectedSemester) {
     return (
       <Header as="h3">
         <Translate id="selectionSetSelector.choose_semester" />
@@ -39,16 +43,15 @@ const SelectionSetSelector = () => {
         </p>
       )}
 
-      {_(semester.examSets)
-        .sortBy((setId) => metadata.entities.examSets[setId].year)
+      {_(examSets)
+        .sortBy((examSet) => examSet.year)
         .reverse()
         .value()
-        .map((setId) => {
-          const set = metadata.entities.examSets[setId];
+        .map((examSet) => {
           return (
             <SetRadioButton
-              key={set.id}
-              set={set}
+              key={examSet.id}
+              set={examSet}
               selectedSet={selectedSetId}
               onChange={onChange}
             />

@@ -1,18 +1,26 @@
 import { ApolloServer } from 'apollo-server-express';
 import { resolvers, typeDefs } from 'graphql/types';
 import generateLoaders from './dataloaders';
-import User from 'models/user';
 import jsonWebToken from 'jsonwebtoken';
-
-export type Context = ReturnType<typeof generateLoaders> & { user: User };
+import User from 'models/user';
+import Express from 'express';
 
 const decodeUser = (jwt: string) => {
   if (!jwt) return null;
   return jsonWebToken.decode(jwt);
 };
 
+const generateContext = (req: Express.Request, res: Express.Response) => ({
+  ...generateLoaders(),
+  user: decodeUser(req.cookies.user) as User,
+  res,
+  req
+});
+
+export type Context = ReturnType<typeof generateContext>;
+
 export default new ApolloServer({
   resolvers,
   typeDefs,
-  context: ({ req }) => ({ ...generateLoaders(), user: decodeUser(req.cookies.user) })
+  context: ({ req, res }) => generateContext(req, res)
 });

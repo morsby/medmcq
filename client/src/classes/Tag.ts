@@ -1,6 +1,13 @@
 import Question from './Question';
+import Semester from 'classes/Semester';
 
-interface Tag {}
+interface Tag {
+  id: number;
+  name: string;
+  semester: Partial<Semester>;
+  parent: Partial<Tag>;
+  questionCount: number;
+}
 
 export interface TagVote {
   id: number;

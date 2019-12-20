@@ -1,56 +1,33 @@
-import client from 'apolloClient';
 import { gql } from 'apollo-boost';
+import Apollo from './Apollo';
+import { store } from 'IndexApp';
+import metadataReducer from 'redux/reducers/metadata';
 
 interface Semester {
   id: number;
   value: number;
   name: string;
   shortName: string;
+  questionCount: number;
 }
 
 class Semester {
   static fetchAll = async () => {
-    const res = await client.query<{ semesters: Semester[] }>({
-      query: gql`
-        query {
-          semesters {
-            id
-            value
-            name
-            shortName
-            examSets {
-              id
-              year
-              season
-              semester {
-                id
-              }
-            }
-            tags {
-              id
-              name
-              semester {
-                id
-              }
-              parent {
-                id
-              }
-              questionCount
-            }
-            specialties {
-              id
-              name
-              semester {
-                id
-              }
-              questionCount
-            }
-          }
+    const query = gql`
+      query {
+        semesters {
+          id
+          value
+          name
+          shortName
+          questionCount
         }
-      `
-    });
+      }
+    `;
 
-    return res.data.semesters;
+    const semesters = await Apollo.query<Semester[]>('semesters', query);
+
+    await store.dispatch(metadataReducer.actions.setSemesters(semesters));
   };
 }
 

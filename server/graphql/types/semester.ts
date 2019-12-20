@@ -4,10 +4,12 @@ import Semester from 'models/semester';
 import ExamSet from 'models/exam_set';
 import Specialty from 'models/specialty';
 import Tag from 'models/tag';
+import Question from 'models/question';
 
 export const typeDefs = gql`
   extend type Query {
     semesters: [Semester]
+    semester(id: Int!): Semester
   }
 
   type Semester {
@@ -18,6 +20,7 @@ export const typeDefs = gql`
     examSets: [ExamSet]
     specialties: [Specialty]
     tags: [Tag]
+    questionCount: Int
   }
 `;
 
@@ -26,6 +29,10 @@ export const resolvers = {
     semesters: async () => {
       const semesters = await Semester.query();
       return semesters.map((semester) => ({ id: semester.id }));
+    },
+    semester: async (root, { id }) => {
+      const semester = await Semester.query().findById(id);
+      return semester;
     }
   },
 
@@ -43,15 +50,24 @@ export const resolvers = {
       const semester = await ctx.semesterLoaders.semesterLoader.load(id);
       return semester.shortName;
     },
-    examSets: async ({ id }, _, ctx: Context) => {
+    questionCount: async ({ id }, _, ctx: Context) => {
+      const examSetIds = ExamSet.query()
+        .where({ semesterId: id })
+        .select('id');
+      const count = await Question.query()
+        .whereIn('examSetId', examSetIds)
+        .count();
+      return count[0]['count(*)']; // Wierd way to get count from Objection/Knex
+    },
+    examSets: async ({ id }) => {
       const examSets = await ExamSet.query().where({ semesterId: id });
       return examSets.map((examSet) => ({ id: examSet.id }));
     },
-    specialties: async ({ id }, _, ctx: Context) => {
+    specialties: async ({ id }) => {
       const specialties = await Specialty.query().where({ semesterId: id });
       return specialties.map((specialty) => ({ id: specialty.id }));
     },
-    tags: async ({ id }, _, ctx: Context) => {
+    tags: async ({ id }) => {
       const tags = await Tag.query().where({ semesterId: id });
       return tags.map((tag) => ({ id: tag.id }));
     }

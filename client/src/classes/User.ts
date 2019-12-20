@@ -2,7 +2,7 @@ import client from 'apolloClient';
 import jwtDecode from 'jwt-decode';
 import { gql } from 'apollo-boost';
 import Question from './Question';
-import { store } from 'index';
+import { store } from 'IndexApp';
 import Apollo from './Apollo';
 import authReducer from 'redux/reducers/auth';
 
@@ -26,7 +26,10 @@ interface UserAnswer {
 
 interface User {
   id: number;
+  username: string;
+  email: string;
   answers: UserAnswer[];
+  likes: number;
 }
 
 class User {
@@ -37,9 +40,23 @@ class User {
       }
     `;
 
-    const jwt = await Apollo.mutate<string>('login', mutation, { data });
+    await Apollo.mutate<string>('login', mutation, { data }); // Sets a JWT as cookie
 
-    const user = jwtDecode<User>(jwt);
+    const query = gql`
+      query {
+        user {
+          id
+          username
+          email
+          likes {
+            commentId
+            userId
+          }
+        }
+      }
+    `;
+
+    const user = await Apollo.query<User>('user', query);
     await store.dispatch(authReducer.actions.login(user));
     return user;
   };
@@ -51,7 +68,7 @@ class User {
       }
     `;
 
-    await Apollo.mutate('logout', mutation);
+    await Apollo.mutate('logout', mutation); // Removes the JWT cookie
   };
 
   static signup = async (data: UserSignupInput) => {
@@ -68,22 +85,22 @@ class User {
     return user;
   };
 
-  static checkUser = async () => {
-    const res = await client.query<{ checkUser: User }>({
-      query: gql`
-        query {
-          checkUser {
-            id
-            username
-            likes {
-              commentId
-            }
+  static fetch = async () => {
+    const query = gql`
+      query {
+        user {
+          id
+          username
+          likes {
+            commentId
           }
         }
-      `
-    });
+      }
+    `;
 
-    return res.data.checkUser;
+    const user = await Apollo.query<User>('user', query);
+
+    await store.dispatch(authReducer.actions.login(user));
   };
 
   static getAnsweredQuestions = async () => {
