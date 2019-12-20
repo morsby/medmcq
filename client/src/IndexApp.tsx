@@ -1,8 +1,6 @@
-/* eslint-disable import/first */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
-
 // GraphQL
 import { ApolloProvider } from 'react-apollo-hooks';
 import apolloClient from 'apolloClient';
@@ -12,7 +10,6 @@ import { createMigrate, persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/es/storage';
 import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2';
 import { PersistGate } from 'redux-persist/lib/integration/react';
-import reducers, { IReduxState } from './reducers';
 
 // Oversættelse
 import { LocalizeProvider } from 'react-localize-redux';
@@ -28,9 +25,10 @@ import 'react-image-lightbox/style.css'; // This only needs to be imported once 
 
 // redux
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import rootReducer, { ReduxState } from 'redux/reducers';
 
 const migrations: any = {
-  10: (state: IReduxState) => ({
+  10: (state: ReduxState) => ({
     ...state,
     questions: null
   })
@@ -45,19 +43,11 @@ const persistConfig = {
   whitelist: ['quiz', 'questions', 'metadata', 'ui', 'settings', 'shareBuilder'] // to disable persists
 };
 
-const pReducer = persistReducer(persistConfig, reducers);
-
-// Redux middleware
-let middleware = getDefaultMiddleware();
-/**
- * removes createSerializableStateInvariantMiddleware which threw a bunch of errs
- * over react-localize-redux and redux-persist.
- */
-if (middleware.length > 1) middleware.pop();
+const pReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: pReducer,
-  middleware,
+  ...getDefaultMiddleware(),
   devTools: { maxAge: 20 }
 });
 
