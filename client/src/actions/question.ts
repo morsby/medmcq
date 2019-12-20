@@ -37,6 +37,10 @@ export const getQuestions = ({
     }
   }
 
+  if (commentIds) {
+    type = 'commentIds';
+  }
+
   if (profile) {
     type = 'profile';
   }
@@ -45,6 +49,9 @@ export const getQuestions = ({
     case 'ids':
       ids = ids.map((id) => Number(id));
       questions = await Question.fetch({ ids });
+      break;
+    case 'commentIds':
+      questions = await Question.fetch({ commentIds });
       break;
     case 'specific':
       ids = ids.map((id) => Number(id));
@@ -63,9 +70,8 @@ export const getQuestions = ({
         specialties: selectedSpecialtyIds,
         tags: selectedTagIds,
         n: n,
-        onlyNew: onlyNew,
-        onlyWrong: onlyWrong,
-        commentIds
+        onlyNew,
+        onlyWrong
       });
   }
 

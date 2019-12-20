@@ -192,7 +192,7 @@ router.get('/', async (req, res) => {
             '=',
             'questionCorrectAnswer.questionId'
           )
-          .where('questionUserAnswer.answer', '=', 'questionCorrectAnswer.answer')
+          .whereRaw('question_user_answer.answer = question_correct_answer.answer')
           .select('questionUserAnswer.questionId');
 
         query = query.whereNotIn('question.id', correctAnswers);

@@ -1,4 +1,4 @@
-import { store } from 'index';
+import { store } from 'IndexApp';
 
 export const smoothScroll = (h, dir = 'up') => {
   let top = window.pageYOffset || document.documentElement.scrollTop;
