@@ -40,9 +40,57 @@ export const typeDefs = gql`
     user: User
     value: Int
   }
+
+  input VoteInput {
+    questionId: Int!
+    metadataId: Int!
+    vote: String
+  }
+
+  extend type Mutation {
+    voteTag(data: VoteInput): TagVote
+    voteSpecialty(data: VoteInput): SpecialtyVote
+  }
 `;
 
 export const resolvers = {
+  Mutation: {
+    voteTag: async (root, { questionId, metadataId, vote }, ctx: Context) => {
+      const exists = await QuestionTagVote.query().findOne({ questionId, tagId: metadataId });
+      let tagVote;
+      if (exists) {
+        tagVote = await QuestionTagVote.query().updateAndFetchById(exists.id, { value: vote });
+      } else {
+        tagVote = await QuestionTagVote.query().insertAndFetch({
+          userId: ctx.user.id,
+          tagId: metadataId,
+          questionId,
+          value: vote
+        });
+      }
+
+      return tagVote || 'Deleted';
+    },
+    voteSpecialty: async (root, { questionId, metadataId, vote }, ctx: Context) => {
+      const exists = await QuestionSpecialtyVote.query().findOne({ questionId, tagId: metadataId });
+      let tagVote;
+      if (exists) {
+        tagVote = await QuestionSpecialtyVote.query().updateAndFetchById(exists.id, {
+          value: vote
+        });
+        await QuestionSpecialtyVote.query().deleteById(exists.id);
+      } else {
+        tagVote = await QuestionSpecialtyVote.query().insertAndFetch({
+          userId: ctx.user.id,
+          specialtyId: metadataId,
+          questionId,
+          value: vote
+        });
+      }
+
+      return tagVote || 'Deleted';
+    }
+  },
   TagVote: {
     id: ({ id }) => id,
     tag: () => {

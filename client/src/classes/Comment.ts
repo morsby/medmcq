@@ -1,8 +1,10 @@
 import User from 'classes/User';
 import Like from './Like';
 import Question from 'classes/Question.js';
-import { gql } from 'apollo-server-express';
+import { gql } from 'apollo-boost';
 import Apollo from './Apollo';
+import { store } from 'IndexApp';
+import questionsReducer from 'redux/reducers/question';
 
 interface Comment {
   id: number;
@@ -23,7 +25,7 @@ interface CommentInput {
 }
 
 class Comment {
-  static fragment = gql`
+  static fragmentFull = gql`
     fragment FullComment on Comment {
       id
       text
@@ -54,6 +56,7 @@ class Comment {
     `;
 
     await Apollo.mutate('deleteComment', mutation, { commentId });
+    store.dispatch(questionsReducer.actions.removeComment({ commentId }));
   };
 
   static edit = (data: CommentInput) => {};
@@ -65,12 +68,11 @@ class Comment {
           ...FullComment
         }
       }
-      ${Comment.fragment}
+      ${Comment.fragmentFull}
     `;
 
     const comment = await Apollo.mutate<Comment>('likeComment', mutation, { commentId });
-
-    return comment;
+    store.dispatch(questionsReducer.actions.editComment({ comment }));
   };
 }
 

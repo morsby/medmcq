@@ -3,8 +3,9 @@ import Apollo from './Apollo';
 import { store } from 'IndexApp';
 import metadataReducer from 'redux/reducers/metadata';
 import ExamSet from './ExamSet';
-import Tag from './Tag';
-import Specialty from './Specialty';
+import Tag, { TagVote } from './Tag';
+import Specialty, { SpecialtyVote } from './Specialty';
+import questionsReducer from 'redux/reducers/question';
 
 interface Metadata {
   examSets: ExamSet[];
@@ -57,6 +58,68 @@ class Metadata {
         examSets: semester.examSets
       })
     );
+  };
+
+  static vote = async ({
+    type,
+    questionId,
+    metadataId,
+    vote
+  }: {
+    type: 'tag' | 'specialty';
+    questionId: number;
+    metadataId: number;
+    vote?: number;
+  }) => {
+    let mutation;
+    let name;
+    if (type === 'tag') {
+      name = 'voteTag';
+      mutation = gql`
+        mutation($data: VoteInput) {
+          voteTag(data: $data) {
+            id
+            tag {
+              id
+            }
+            question {
+              id
+            }
+            user {
+              id
+            }
+            votes
+          }
+        }
+      `;
+    } else if (type === 'specialty') {
+      name = 'voteSpecialty';
+      mutation = gql`
+        mutation($data: VoteInput) {
+          voteSpecialty(data: $data) {
+            id
+            specialty {
+              id
+            }
+            question {
+              id
+            }
+            user {
+              id
+            }
+            votes
+          }
+        }
+      `;
+    }
+
+    const metadataVote = await Apollo.mutate(name, mutation, { questionId, metadataId, vote });
+
+    if (type === 'specialty') {
+      await store.dispatch(questionsReducer.actions.voteSpecialty(metadataVote as SpecialtyVote));
+    } else if (type === 'tag') {
+      await store.dispatch(questionsReducer.actions.voteTag(metadataVote as TagVote));
+    }
   };
 }
 

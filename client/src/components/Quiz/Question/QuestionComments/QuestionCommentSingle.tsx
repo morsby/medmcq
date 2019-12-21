@@ -20,7 +20,7 @@ export interface QuestionCommentSingleProps {
   comment: Comment;
   question: Question;
   type: 'private' | 'public';
-  mostLiked: boolean;
+  mostLiked?: boolean;
   handleEdit: Function;
 }
 

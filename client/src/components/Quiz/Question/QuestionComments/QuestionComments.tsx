@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { connect, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Form, TextArea, Button, Message, Checkbox } from 'semantic-ui-react';
 
 import { Translate } from 'react-localize-redux';
@@ -31,11 +30,17 @@ const QuestionComments: React.SFC<QuestionCommentsProps> = ({ type }) => {
   const question = useSelector(
     (state: ReduxState) => state.questions.questions[currentQuestionNumber]
   );
+  const publicComments = useSelector((state: ReduxState) =>
+    state.questions.comments.filter((comment) => !comment.isPrivate)
+  );
+  const privateComments = useSelector((state: ReduxState) =>
+    state.questions.comments.filter((comment) => comment.isPrivate)
+  );
   const [editCommentId, setEditCommentId] = useState(null);
   const [comment, setComment] = useState('');
   const [loading, setLoading] = useState(false);
   const [isAnonymous, setIsAnonymous] = useState(false);
-  const mostLiked = _.maxBy(question.publicComments, (comment) => comment.likes.length);
+  const mostLiked = _.maxBy(publicComments, (comment) => comment.likes.length);
   const user = useSelector((state: ReduxState) => state.auth.user);
   let form;
 
@@ -80,7 +85,7 @@ const QuestionComments: React.SFC<QuestionCommentsProps> = ({ type }) => {
     }
   };
 
-  const onEditComment = (comment) => {
+  const handleEditComment = (comment) => {
     setEditCommentId(comment.id);
     setComment(comment.text);
     setIsAnonymous(!!comment.anonymous);
@@ -161,24 +166,23 @@ const QuestionComments: React.SFC<QuestionCommentsProps> = ({ type }) => {
   return (
     <div>
       {type === 'private' &&
-        question.privateComments.map((c) => (
+        privateComments.map((c) => (
           <QuestionCommentSingle
             key={c.id}
-            commentId={c.id}
-            questionId={question.id}
             type={type}
-            onEditComment={onEditComment}
-            mostLiked={!c.isPrivate && c.likes.length === mostLiked.likes.length}
+            comment={c}
+            question={question}
+            handleEdit={handleEditComment}
           />
         ))}
       {type === 'public' &&
-        question.publicComments.map((c) => (
+        publicComments.map((c) => (
           <QuestionCommentSingle
             key={c.id}
-            commentId={c.id}
-            questionId={question.id}
+            comment={c}
+            question={question}
             type={type}
-            onEditComment={onEditComment}
+            handleEdit={handleEditComment}
             mostLiked={!c.isPrivate && c.likes.length === mostLiked.likes.length}
           />
         ))}

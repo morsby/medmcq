@@ -1,7 +1,6 @@
 import React from 'react';
 import { Translate } from 'react-localize-redux';
 import { Button, Divider } from 'semantic-ui-react';
-import { PropTypes } from 'prop-types';
 
 const QuestionExtraButtons = ({
   width,
@@ -42,18 +41,6 @@ const QuestionExtraButtons = ({
       </Button>
     </>
   );
-};
-
-QuestionExtraButtons.propTypes = {
-  width: PropTypes.number,
-  onReportToggle: PropTypes.func,
-  onPrivateCommentsToggle: PropTypes.func,
-  privateCommentsOpen: PropTypes.bool,
-  user: PropTypes.object,
-  publicCommentsOpen: PropTypes.bool,
-  onPublicCommentsToggle: PropTypes.func,
-  privateComments: PropTypes.number,
-  publicComments: PropTypes.number
 };
 
 export default QuestionExtraButtons;

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { Icon, Label, Popup, Button } from 'semantic-ui-react';
-import { useSelector, useDispatch } from 'react-redux';
-import { IReduxState } from 'reducers/index';
-import * as actions from 'actions';
+import { useSelector } from 'react-redux';
 import _ from 'lodash';
+import { ReduxState } from 'redux/reducers';
+import Metadata from 'classes/Metadata';
 
 export interface QuestionMetadataLabelProps {
   metadata: { id: number };
@@ -20,19 +20,18 @@ const QuestionMetadataLabel: React.SFC<QuestionMetadataLabelProps> = ({
   type
 }) => {
   const [buttonLoading, setButtonLoading] = useState(false);
-  const dispatch = useDispatch();
-  const tags = useSelector((state: IReduxState) => state.metadata.entities.tags);
-  const tagChildren = _.filter(tags, (tag) => tag.parentId === metadata.id);
+  const tags = useSelector((state: ReduxState) => state.metadata.tags);
+  const tagChildren = _.filter(tags, (tag) => tag.parent.id === metadata.id);
 
-  const vote = async (vote: number | 'delete', metadataId?: number) => {
+  const vote = async (vote: number, metadataId?: number) => {
     setButtonLoading(true);
     if (!metadataId && isVotedOn(metadata) === vote) {
-      vote = 'delete';
+      vote = 0;
     }
     if (metadataId) {
-      await dispatch(actions.voteAction('tag', question.id, metadataId, vote));
+      await Metadata.vote({ questionId: question.id, type, metadataId, vote });
     } else {
-      await dispatch(actions.voteAction(type, question.id, metadata.id, vote));
+      await Metadata.vote({ questionId: question.id, type, metadataId: metadata.id, vote });
     }
     setButtonLoading(false);
   };
