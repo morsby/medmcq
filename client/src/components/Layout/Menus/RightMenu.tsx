@@ -1,28 +1,34 @@
 import React, { useState } from 'react';
-import { withLocalize, Translate } from 'react-localize-redux';
+import { withLocalize, Translate, LocalizeContextProps } from 'react-localize-redux';
 import { useDispatch, useSelector } from 'react-redux';
 import { Menu, Icon, Button, Loader } from 'semantic-ui-react';
-import { getQuestions, changeSettings, logout } from 'actions';
 import Flag from 'react-flagkit';
 import _ from 'lodash';
+import { ReduxState } from 'redux/reducers';
+import Quiz from 'classes/Quiz';
+import settingsReducer from 'redux/reducers/settings';
+import User from 'classes/User';
+import { useHistory } from 'react-router-dom';
 
-const RightMenu = ({ handleNavigation, languages, setActiveLanguage }) => {
+export interface RightMenuProps extends LocalizeContextProps {}
+
+const RightMenu: React.SFC<RightMenuProps> = ({ setActiveLanguage, languages }) => {
   const [loading, setLoading] = useState(false);
-  const activeLanguage = useSelector((state) => state.settings.language);
-  const user = useSelector((state) => state.auth.user);
+  const history = useHistory();
   const dispatch = useDispatch();
+  const activeLanguage = useSelector((state: ReduxState) => state.settings.language);
+  const user = useSelector((state: ReduxState) => state.auth.user);
 
   const fetchQuestionsByCommentIds = async (commentIds) => {
     setLoading(true);
     commentIds = _.uniq(commentIds);
-    await dispatch(getQuestions({ commentIds }));
-    handleNavigation('/quiz');
-    setLoading(false);
+    await Quiz.start({ ids: commentIds });
+    history.push('/quiz');
   };
 
   const changeLang = (lang) => {
     setActiveLanguage(lang);
-    dispatch(changeSettings({ type: 'language', value: lang }));
+    dispatch(settingsReducer.actions.changeSettings({ type: 'language', value: lang }));
   };
 
   const generateFlag = (lang) => {
@@ -41,7 +47,7 @@ const RightMenu = ({ handleNavigation, languages, setActiveLanguage }) => {
     return (
       <>
         {languages.map((lang) => generateFlag(lang))}
-        <Menu.Item onClick={() => handleNavigation('/profil')}>
+        <Menu.Item onClick={() => history.push('/profil')}>
           <strong>
             <Translate
               id="header.greeting"
@@ -66,8 +72,8 @@ const RightMenu = ({ handleNavigation, languages, setActiveLanguage }) => {
           <Button
             inverted
             onClick={() => {
-              dispatch(logout());
-              return handleNavigation('/');
+              User.logout();
+              return history.push('/');
             }}
           >
             <Translate id="header.logout" />
@@ -79,7 +85,7 @@ const RightMenu = ({ handleNavigation, languages, setActiveLanguage }) => {
     return (
       <>
         {languages.map((lang) => generateFlag(lang))}
-        <Menu.Item onClick={() => handleNavigation('/login')}>
+        <Menu.Item onClick={() => history.push('/login')}>
           <Icon name="doctor" /> <Translate id="header.login" />
         </Menu.Item>
       </>

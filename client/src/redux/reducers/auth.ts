@@ -31,13 +31,14 @@ const authReducer = createSlice({
       action: PayloadAction<{
         questions: Question[];
         privateComments: Comment[];
-        publicComments;
+        publicComments: Comment[];
         bookmarks;
         answers;
       }>
     ) => {
       state.profile = action.payload;
-    }
+    },
+    logout: () => {}
   }
 });
 

@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect, useDispatch, useSelector } from 'react-redux';
-import * as actions from 'actions';
 import { Form, TextArea, Button, Message, Checkbox } from 'semantic-ui-react';
 
 import { Translate } from 'react-localize-redux';
 
 import QuestionCommentSingle from './QuestionCommentSingle';
-import { makeToast } from 'actions';
+import makeToast from 'redux/actions/makeToast';
+import { ReduxState } from 'redux/reducers';
+import Comment from 'classes/Comment';
+import _ from 'lodash';
 
 /**
  * Viser kommentarer til et spørgsmål
@@ -17,13 +19,24 @@ import { makeToast } from 'actions';
  * @param {func}  onCommentType     Funktion til at ændre kommentar-tekst
  * @param {object} user             Brugeren
  */
-const QuestionComments = ({ comments, user, question, writeComment, editComment, type }) => {
+export interface QuestionCommentsProps {
+  type: 'private' | 'public';
+}
+
+const QuestionComments: React.SFC<QuestionCommentsProps> = ({ type }) => {
   const dispatch = useDispatch();
-  const publicComments = useSelector((state) => state.questions.entities.publicComments);
+  const currentQuestionNumber = useSelector(
+    (state: ReduxState) => state.quiz.currentQuestionNumber
+  );
+  const question = useSelector(
+    (state: ReduxState) => state.questions.questions[currentQuestionNumber]
+  );
   const [editCommentId, setEditCommentId] = useState(null);
   const [comment, setComment] = useState('');
   const [loading, setLoading] = useState(false);
   const [isAnonymous, setIsAnonymous] = useState(false);
+  const mostLiked = _.maxBy(question.publicComments, (comment) => comment.likes.length);
+  const user = useSelector((state: ReduxState) => state.auth.user);
   let form;
 
   useEffect(() => {
@@ -42,10 +55,20 @@ const QuestionComments = ({ comments, user, question, writeComment, editComment,
 
     try {
       if (editCommentId) {
-        await editComment(question.id, editCommentId, comment, isPrivate, isAnonymous);
+        await Comment.edit({
+          questionId: question.id,
+          commentId: editCommentId,
+          isAnonymous,
+          isPrivate
+        });
         setEditCommentId(null);
       } else {
-        await writeComment(question.id, comment, isPrivate, isAnonymous);
+        await Comment.add({
+          questionId: question.id,
+          commentId: editCommentId,
+          isPrivate,
+          isAnonymous
+        });
       }
 
       // TODO: Vent med at slette kommentar til den ER postet
@@ -69,32 +92,6 @@ const QuestionComments = ({ comments, user, question, writeComment, editComment,
     setIsAnonymous(false);
   };
 
-  const generateComments = () => {
-    let mostLiked = 1;
-    let returnedComments = [];
-
-    for (let c of comments) {
-      const isPrivate = type === 'private';
-
-      if (!isPrivate && publicComments[c].likes.length > mostLiked) {
-        mostLiked = publicComments[c].likes.length;
-      }
-
-      returnedComments.push(
-        <QuestionCommentSingle
-          key={c}
-          commentId={c}
-          questionId={question.id}
-          type={type}
-          onEditComment={onEditComment}
-          mostLiked={!isPrivate && publicComments[c].likes.length === mostLiked}
-        />
-      );
-    }
-
-    return returnedComments;
-  };
-
   if (user) {
     let skrivRet = editCommentId ? (
       <Translate id="questionComments.edit_a_comment" />
@@ -111,7 +108,7 @@ const QuestionComments = ({ comments, user, question, writeComment, editComment,
               <TextArea
                 name="comment"
                 placeholder={translate('questionComments.write_a_comment')}
-                onChange={(e) => setComment(e.target.value)}
+                onChange={(e, { value }) => setComment(value as string)}
                 value={comment}
               />
             )}
@@ -163,24 +160,31 @@ const QuestionComments = ({ comments, user, question, writeComment, editComment,
 
   return (
     <div>
-      <div>{generateComments()}</div>
+      {type === 'private' &&
+        question.privateComments.map((c) => (
+          <QuestionCommentSingle
+            key={c.id}
+            commentId={c.id}
+            questionId={question.id}
+            type={type}
+            onEditComment={onEditComment}
+            mostLiked={!c.isPrivate && c.likes.length === mostLiked.likes.length}
+          />
+        ))}
+      {type === 'public' &&
+        question.publicComments.map((c) => (
+          <QuestionCommentSingle
+            key={c.id}
+            commentId={c.id}
+            questionId={question.id}
+            type={type}
+            onEditComment={onEditComment}
+            mostLiked={!c.isPrivate && c.likes.length === mostLiked.likes.length}
+          />
+        ))}
       {form}
     </div>
   );
 };
 
-QuestionComments.propTypes = {
-  comments: PropTypes.array,
-  // I brug:
-  user: PropTypes.object,
-  privateComment: PropTypes.bool,
-  question: PropTypes.object,
-  writeComment: PropTypes.func,
-  editComment: PropTypes.func,
-  type: PropTypes.string
-};
-
-export default connect(
-  null,
-  actions
-)(QuestionComments);
+export default QuestionComments;

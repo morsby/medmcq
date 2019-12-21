@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { Translate } from 'react-localize-redux';
 import _ from 'lodash';
 
@@ -7,18 +6,26 @@ import ProfileActivityAccordionElem from '../ProfileActivityAccordionElem';
 import CommentsQuestion from './CommentsQuestion';
 import { Button } from 'semantic-ui-react';
 import { useHistory } from 'react-router';
-import { useDispatch } from 'react-redux';
-import { getQuestions } from 'actions';
+import { useDispatch, useSelector } from 'react-redux';
+import CommentClass from 'classes/Comment';
+import Quiz from 'classes/Quiz';
+import { ReduxState } from 'redux/reducers';
 
-const Comments = ({ questions = {}, comments = {}, type = 'public' }) => {
+export interface CommentsProps {
+  comments: CommentClass[];
+  type: string;
+}
+
+const Comments: React.SFC<CommentsProps> = ({ comments, type }) => {
   const dispatch = useDispatch();
+  const questions = useSelector((state: ReduxState) => state.questions.questions);
   const history = useHistory();
   let [activeIndex, setActiveIndex] = useState(null);
 
   if (Object.keys(comments).length === 0) return <Translate id="profileComments.no_comments" />;
 
   const startAll = async () => {
-    await dispatch(getQuestions({ ids: _.map(comments, (comment) => comment.questionId) }));
+    await Quiz.start({ ids: _.map(comments, (comment) => comment.question.id) });
     history.push('/quiz');
   };
 
@@ -27,10 +34,9 @@ const Comments = ({ questions = {}, comments = {}, type = 'public' }) => {
       <Button style={{ marginBottom: '1rem' }} onClick={startAll}>
         <Translate id="profileActivity.accordionElements.startAll"></Translate>
       </Button>
-      {_.map(comments, (comment, i, allComments) => {
+      {comments.map((comment, i) => {
         const question = questions[comment.question.id];
 
-        i = Object.keys(allComments).indexOf(i);
         return (
           <div>
             <ProfileActivityAccordionElem
@@ -54,18 +60,4 @@ const Comments = ({ questions = {}, comments = {}, type = 'public' }) => {
   );
 };
 
-Comments.propTypes = {
-  /**
-   * An object of questions that are commented by the user.
-   */
-  questions: PropTypes.object,
-
-  comments: PropTypes.object,
-
-  /**
-   * Om der vises offentlige eller private kommentarer
-   */
-  type: PropTypes.string,
-  history: PropTypes.object
-};
 export default Comments;

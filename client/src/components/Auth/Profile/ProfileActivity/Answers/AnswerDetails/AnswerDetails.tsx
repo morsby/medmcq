@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import * as actions from 'actions';
 import _ from 'lodash';
 
 import { Button, Divider } from 'semantic-ui-react';
@@ -11,6 +10,8 @@ import AnswerDetailsFilterButtons from './AnswerDetailsFilterButtons';
 import { urls } from 'utils/common';
 import { useHistory } from 'react-router';
 import AnswersDetailsTable from './AnswersDetailsTable';
+import { ReduxState } from 'redux/reducers';
+import Quiz from 'classes/Quiz';
 
 /**
  * Component showing answer details.  Any filtering occurs in this component.
@@ -21,7 +22,7 @@ const AnswerDetails = ({ answers }) => {
   const [isSearching, setIsSearching] = useState(false);
   const [selected, setSelected] = useState([]);
   const [quizLoading, setQuizLoading] = useState(false);
-  const questions = useSelector((state) => state.questions.entities.questions);
+  const questions = useSelector((state: ReduxState) => state.questions.questions);
   const dispatch = useDispatch();
   const history = useHistory();
 
@@ -37,7 +38,7 @@ const AnswerDetails = ({ answers }) => {
 
   const startQuiz = async (ids) => {
     setQuizLoading(true);
-    await dispatch(actions.getQuestions({ ids, quiz: true }));
+    await Quiz.start({ ids });
     history.push(urls.quiz);
   };
 
@@ -101,7 +102,7 @@ const AnswerDetails = ({ answers }) => {
       <Translate>
         {({ translate }) => (
           <Input
-            placeholder={translate('profileAnswerDetails.search')}
+            placeholder={translate('profileAnswerDetails.search') as string}
             onChange={(e) => handleSearch(e.target.value)}
             value={search}
           />
@@ -111,7 +112,6 @@ const AnswerDetails = ({ answers }) => {
       <AnswersDetailsTable
         answers={answers}
         toggleCheckbox={toggleCheckbox}
-        selected={selected}
         questions={questions}
       />
     </div>

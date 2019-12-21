@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Translate, LocalizeContextProps } from 'react-localize-redux';
+import { Translate, LocalizeContextProps, withLocalize } from 'react-localize-redux';
 import quizTranslations from './quizTranslations.json';
 
 import { Container, Button } from 'semantic-ui-react';
@@ -83,7 +83,7 @@ const Quiz: React.SFC<QuizProps> = ({ addTranslation }) => {
       }
     }
 
-    const swiped = (e, deltaX) => {
+    const swiped = (deltaX) => {
       if (imgOpen) return;
 
       // Navigation ved swipes
@@ -158,7 +158,7 @@ i componentDidMount)
             position="top"
           />
 
-          <Swipeable onSwipedLeft={swiped} onSwipedRight={swiped} flickThreshold={flickNumber}>
+          <Swipeable onSwipedLeft={(e) => swiped(e.deltaX)} onSwipedRight={(e) => swiped(e.deltaX)}>
             <QuestionClass />
           </Swipeable>
 
@@ -175,4 +175,4 @@ i componentDidMount)
   };
 };
 
-export default Quiz;
+export default withLocalize(Quiz);

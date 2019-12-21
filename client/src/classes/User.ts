@@ -1,10 +1,10 @@
 import client from 'apolloClient';
-import jwtDecode from 'jwt-decode';
 import { gql } from 'apollo-boost';
 import Question from './Question';
 import { store } from 'IndexApp';
 import Apollo from './Apollo';
 import authReducer from 'redux/reducers/auth';
+import Like from './Like';
 
 export interface UserLoginInput {
   username: string;
@@ -30,7 +30,7 @@ interface User {
   password?: string;
   email: string;
   answers: UserAnswer[];
-  likes: number;
+  likes: Like[];
 }
 
 class User {
@@ -70,6 +70,7 @@ class User {
     `;
 
     await Apollo.mutate('logout', mutation); // Removes the JWT cookie
+    await store.dispatch(authReducer.actions.logout());
   };
 
   static signup = async (data: UserSignupInput) => {

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { Translate } from 'react-localize-redux';
 
 import { Accordion } from 'semantic-ui-react';
@@ -9,24 +8,27 @@ import Answers from './Answers/Answers';
 import Bookmarks from './Bookmarks/Bookmarks';
 import Comments from './Comments/Comments';
 import _ from 'lodash';
+import { useSelector } from 'react-redux';
+import { ReduxState } from 'redux/reducers';
 
 /**
  * A Component that displays profile activities for a single semester.
  */
-const ProfileActivity = ({
-  answers = {},
-  publicComments = {},
-  privateComments = {},
-  bookmarks = {},
-  questions = {}
-}) => {
+export interface ProfileActivityProps {}
+
+const ProfileActivity: React.SFC<ProfileActivityProps> = () => {
+  const { answers, publicComments, privateComments, bookmarks } = useSelector(
+    (state: ReduxState) => state.auth.profile
+  );
+  const questions = useSelector((state: ReduxState) => state.questions.questions);
+
   const [activeIndex, setActiveIndex] = useState(0);
   return (
     <Accordion fluid styled>
       <Translate>
         {({ translate }) => (
           <ProfileActivityAccordionElem
-            title={translate('profileActivity.accordionElements.answers')}
+            title={translate('profileActivity.accordionElements.answers') as string}
             index={0}
             active={activeIndex === 0}
             handleClick={setActiveIndex}
@@ -43,67 +45,41 @@ const ProfileActivity = ({
       <Translate>
         {({ translate }) => (
           <ProfileActivityAccordionElem
-            title={translate('profileActivity.accordionElements.publicComments')}
+            title={translate('profileActivity.accordionElements.publicComments') as string}
             index={1}
             active={activeIndex === 1}
             handleClick={setActiveIndex}
           >
-            <Comments comments={publicComments} questions={questions} />
+            <Comments comments={publicComments} type="public" />
           </ProfileActivityAccordionElem>
         )}
       </Translate>
       <Translate>
         {({ translate }) => (
           <ProfileActivityAccordionElem
-            title={translate('profileActivity.accordionElements.privateComments')}
+            title={translate('profileActivity.accordionElements.privateComments') as string}
             index={2}
             active={activeIndex === 2}
             handleClick={setActiveIndex}
           >
-            <Comments comments={privateComments} questions={questions} type="private" />
+            <Comments comments={privateComments} type="private" />
           </ProfileActivityAccordionElem>
         )}
       </Translate>
       <Translate>
         {({ translate }) => (
           <ProfileActivityAccordionElem
-            title={translate('profileActivity.accordionElements.bookmarks')}
+            title={translate('profileActivity.accordionElements.bookmarks') as string}
             index={3}
             active={activeIndex === 3}
             handleClick={setActiveIndex}
           >
-            <Bookmarks bookmarks={bookmarks} questions={questions} />
+            <Bookmarks />
           </ProfileActivityAccordionElem>
         )}
       </Translate>
     </Accordion>
   );
-};
-
-ProfileActivity.propTypes = {
-  /**
-   * An object containing questions
-   */
-  questions: PropTypes.object,
-
-  /**
-   * An object containing answers for the semester.
-   */
-  answers: PropTypes.object,
-
-  /**
-   * An object of public comments
-   */
-  publicComments: PropTypes.object,
-  /**
-   * An object of private comments
-   */
-  privateComments: PropTypes.object,
-
-  /**
-   * An object of bookmarked questions comments
-   */
-  bookmarks: PropTypes.object
 };
 
 export default ProfileActivity;

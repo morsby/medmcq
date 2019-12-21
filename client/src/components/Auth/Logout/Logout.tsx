@@ -1,29 +1,19 @@
-import { Component } from 'react';
-import PropTypes from 'prop-types';
+import { useEffect } from 'react';
 
-import { connect } from 'react-redux';
+import User from 'classes/User';
+import { useHistory } from 'react-router-dom';
 
-import * as actions from 'actions';
+export interface LogoutProps {}
 
-class Logout extends Component {
-  componentDidMount() {
-    this.props.fetchUser();
-    this.props.history.push('/');
-  }
+const Logout: React.SFC<LogoutProps> = () => {
+  const history = useHistory();
 
-  render() {
-    return null;
-  }
-}
+  useEffect(() => {
+    User.logout();
+    history.push('/');
+  }, []);
 
-Logout.propTypes = {
-  /**
-   * Funktion der opdaterer login-status via redux.
-   */
-  fetchUser: PropTypes.func,
-  history: PropTypes.func
+  return null;
 };
-export default connect(
-  null,
-  actions
-)(Logout);
+
+export default Logout;

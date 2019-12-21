@@ -5,8 +5,8 @@ import _ from 'lodash';
 import { Translate } from 'react-localize-redux';
 import { Divider, Button } from 'semantic-ui-react';
 import { useDispatch } from 'react-redux';
-import { getQuestions } from 'actions';
 import { useHistory } from 'react-router';
+import Quiz from 'classes/Quiz';
 
 /**
  * Component that displays questions
@@ -17,7 +17,7 @@ const Bookmarks = ({ bookmarks }) => {
   if (Object.keys(bookmarks).length === 0) return <Translate id="profileBookmarks.no_bookmarks" />;
 
   const openAll = async () => {
-    await dispatch(getQuestions({ ids: _.map(bookmarks, (bookmark) => bookmark.id) }));
+    Quiz.start({ ids: _.map(bookmarks, (bookmark) => bookmark.id) });
     history.push('/quiz');
   };
 
@@ -28,7 +28,7 @@ const Bookmarks = ({ bookmarks }) => {
       </Button>
       {_.map(bookmarks, (bookmark, i) => (
         <div key={bookmark.id}>
-          {i > 0 && <Divider />}
+          {Number(i) > 0 && <Divider />}
           <div dangerouslySetInnerHTML={{ __html: marked(bookmark.question.text) }} />
           <ol type="A">
             <li className={bookmark.question.correctAnswers.indexOf(1) > -1 ? 'svar-korrekt' : ''}>
