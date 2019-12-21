@@ -1,21 +1,21 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import * as actions from '../../actions';
-import { withLocalize, Translate } from 'react-localize-redux';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { Translate, LocalizeContextProps } from 'react-localize-redux';
 import quizTranslations from './quizTranslations.json';
 
 import { Container, Button } from 'semantic-ui-react';
 
 import { Swipeable } from 'react-swipeable';
 import QuizLoader from './QuizLoader';
-import Question from './Question/Question';
+import QuestionClass from './Question/Question';
 import QuizNavigator from './QuizNavigator';
 import QuizSummary from './QuizSummary';
 
-import { urls } from '../../utils/common';
-import { withRouter } from 'react-router';
+import { useHistory } from 'react-router';
 import { smoothScroll } from '../../utils/quiz';
+import { ReduxState } from 'redux/reducers';
+import quizReducer from 'redux/reducers/quiz';
+import Question from 'classes/Question.js';
 
 const flickNumber = 0.1;
 
@@ -26,94 +26,69 @@ const flickNumber = 0.1;
  *
  *  Props: deklareres og forklares i bunden.
  */
+export interface QuizProps extends LocalizeContextProps {}
 
-class QuizMain extends Component {
-  /**
-   * state:
-   * - qn : Indeholder navigationen (spørgsmålsindeks)
-   */
-  state = { imgOpen: false };
+const Quiz: React.SFC<QuizProps> = ({ addTranslation }) => {
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const { answers, currentQuestionNumber, imgOpen, didInvalidate, questionIds } = useSelector(
+    (state: ReduxState) => state.quiz
+  );
+  const { isFetching } = useSelector((state: ReduxState) => state.questions);
 
-  constructor(props) {
-    super(props);
+  useEffect(() => {
+    addTranslation(quizTranslations);
+  }, []);
 
-    this.props.addTranslation(quizTranslations);
-
-    this.navigateToPage = this.navigateToPage.bind(this);
-
-    this.swiped = this.swiped.bind(this);
-    this.onKeydown = this.onKeydown.bind(this);
-  }
-
-  componentDidMount() {
-    document.addEventListener('keydown', this.onKeydown);
-
-    let { quiz, questions } = this.props;
+  useEffect(() => {
+    document.addEventListener('keydown', handleKeyDown);
 
     /*
     Hvis quizzen er invalid (dvs. vi har hentet spørgsmål via fx profilsiden)
     og vi ikke er ved at hente nye spørgsmål, henter vi spørgsmål igen:
     */
-    if (quiz.didInvalidate && !questions.isFetching) {
-      this.props.getQuestions({ ids: quiz.questions, refetch: true });
+    if (didInvalidate && !isFetching) {
+      Question.fetch({ ids: questionIds, refetch: true });
     }
-  }
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.onKeydown);
-  }
 
-  /**
-   * Den egentlige navigationsfunktion
-   * @param  {number} q det indeks der ønskes navigeret til
-   */
-  onChangeQuestion = (q) => {
-    this.props.changeQuestion(q);
+    return document.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const handleChangeQuestion = (questionNumber: number) => {
+    dispatch(quizReducer.actions.changeQuestion(questionNumber));
 
     smoothScroll();
   };
 
   /**
-   * Navigerer til en side.
-   * @param  {string} path alle URLS bør defineres og kaldes fra 'src/utils/common.js'
+   * Navigation ved piletaster
+   * Tjekker om det aktive element er et TEXTAREA (kommentarfeltet) og
+   * navigerer i så fald IKKE
    */
-  navigateToPage(path) {
-    this.props.history.push(urls[path]);
-  }
+  const handleKeyDown = (e) => {
+    if (imgOpen) return;
 
-  /**
-   * Navigation mellem spørgsmål
-   */
-  onKeydown(e) {
-    if (!this.state.imgOpen) {
-      /**
-       * Navigation ved piletaster
-       * Tjekker om det aktive element er et TEXTAREA (kommentarfeltet) og
-       * navigerer i så fald IKKE
-       */
-      let qn = this.props.quiz.currentQuestion,
-        max = this.props.quiz.questions.length;
-      if (document.activeElement.tagName === 'TEXTAREA') return;
+    const max = questionIds.length;
+    if (document.activeElement.tagName === 'TEXTAREA') return;
 
-      if (e.key === 'ArrowLeft') {
-        if (qn > 0) {
-          smoothScroll();
-          this.props.changeQuestion(qn - 1);
-        }
-      } else if (e.key === 'ArrowRight') {
-        if (qn < max - 1) {
-          smoothScroll();
-          this.props.changeQuestion(qn + 1);
-        }
+    if (e.key === 'ArrowLeft') {
+      if (currentQuestionNumber > 0) {
+        smoothScroll();
+        handleChangeQuestion(currentQuestionNumber - 1);
+      }
+    } else if (e.key === 'ArrowRight') {
+      if (currentQuestionNumber < max - 1) {
+        smoothScroll();
+        handleChangeQuestion(currentQuestionNumber + 1);
       }
     }
-  }
 
-  swiped(e, deltaX) {
-    if (!this.state.imgOpen) {
-      let { questions, qn } = this.props.quiz;
+    const swiped = (e, deltaX) => {
+      if (imgOpen) return;
+
       // Navigation ved swipes
       let min = 0;
-      let max = Object.keys(questions).length;
+      let max = questionIds.length;
 
       let move;
 
@@ -124,33 +99,31 @@ class QuizMain extends Component {
       if (deltaX < -75) {
         move = -1;
       }
+
       if (move >= min && move < max) {
         smoothScroll();
-        this.props.changeQuestion(qn + move);
+        dispatch(quizReducer.actions.changeQuestion(currentQuestionNumber + move));
       }
-      if (move >= min && move < max) this.onChangeQuestion(move);
-    }
-  }
 
-  render() {
-    let { questions, user, quiz } = this.props;
-    let { answers, didInvalidate } = quiz;
+      if (move >= min && move < max) handleChangeQuestion(move);
+    };
+
     /* 
-    Hvis vi er ved at hente spørgsmål eller quizzen er invalid (-- i så fald henter vi nye spørgsmål
-    i componentDidMount) 
-    */
-    if (questions.isFetching || didInvalidate) {
+Hvis vi er ved at hente spørgsmål eller quizzen er invalid (-- i så fald henter vi nye spørgsmål
+i componentDidMount) 
+*/
+    if (isFetching) {
       return (
         <Translate>
           {({ translate }) => (
             <QuizLoader
-              handleRetry={() => this.navigateToPage('root')}
-              handleAbort={() => this.navigateToPage('root')}
+              handleRetry={() => history.push('/')}
+              handleAbort={() => history.push('/')}
               text={{
-                retry: translate('quizLoader.retry'),
-                fetching: translate('quizLoader.fetching'),
-                abort: translate('quizLoader.abort'),
-                long_wait: translate('quizLoader.long_wait')
+                retry: translate('quizLoader.retry') as string,
+                fetching: translate('quizLoader.fetching') as string,
+                abort: translate('quizLoader.abort') as string,
+                long_wait: translate('quizLoader.long_wait') as string
               }}
             />
           )}
@@ -158,7 +131,7 @@ class QuizMain extends Component {
       );
     }
 
-    if (questions.length === 0) {
+    if (questionIds.length === 0) {
       return (
         <div className="flex-container">
           <div className="content">
@@ -166,7 +139,7 @@ class QuizMain extends Component {
               <h1>
                 <Translate id="quizLoader.noresultsHeader" />
               </h1>
-              <Button onClick={() => this.navigateToPage('root')} basic color="blue">
+              <Button onClick={() => history.push('/')} basic color="blue">
                 <Translate id="quizLoader.noresults" />
               </Button>
             </Container>
@@ -179,84 +152,27 @@ class QuizMain extends Component {
       <div className="flex-container">
         <div className="content">
           <QuizNavigator
-            onNavigate={this.onChangeQuestion}
-            qn={quiz.currentQuestion}
-            qmax={quiz.questions.length}
+            onNavigate={handleChangeQuestion}
+            qn={currentQuestionNumber}
+            qmax={questionIds.length}
             position="top"
           />
 
-          <Swipeable
-            onSwipedLeft={this.swiped}
-            onSwipedRight={this.swiped}
-            flickThreshold={flickNumber}
-          >
-            <Question imgOpen={this.state.imgOpen} user={user} />
+          <Swipeable onSwipedLeft={swiped} onSwipedRight={swiped} flickThreshold={flickNumber}>
+            <QuestionClass />
           </Swipeable>
 
           <QuizNavigator
-            onNavigate={this.onChangeQuestion}
-            qn={quiz.currentQuestion}
-            qmax={quiz.questions.length}
+            onNavigate={handleChangeQuestion}
+            qn={currentQuestionNumber}
+            qmax={questionIds.length}
           />
 
-          <QuizSummary
-            questions={questions}
-            answers={answers}
-            clickHandler={this.onChangeQuestion}
-          />
+          <QuizSummary clickHandler={handleChangeQuestion} />
         </div>
       </div>
     );
-  }
-}
-
-QuizMain.propTypes = {
-  /**
-   * fra redux
-   *
-   */
-  quiz: PropTypes.object,
-
-  changeQuestion: PropTypes.func,
-
-  answers: PropTypes.object,
-
-  /**
-   * Fra Redux
-   * Et objekt indeholdende brugeren (id, brugernavn, email, gemte svar mv.)
-   * Se authReducer.js
-   */
-  user: PropTypes.object,
-
-  /**
-   * Fra ReactRouter.
-   * Indeholder nuværende path m.v. - og mulighed for navigation.
-   */
-  history: PropTypes.object,
-
-  /**
-   * Tilføjer quizTranslations i hele app'en
-   */
-  addTranslation: PropTypes.func,
-
-  qn: PropTypes.number,
-  questions: PropTypes.object,
-  getQuestions: PropTypes.func
+  };
 };
 
-function mapStateToProps(state) {
-  return {
-    quiz: state.quiz,
-    user: state.auth.user,
-    questions: state.questions
-  };
-}
-
-export default withRouter(
-  withLocalize(
-    connect(
-      mapStateToProps,
-      actions
-    )(QuizMain)
-  )
-);
+export default Quiz;

@@ -1,10 +1,6 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import ReactRouterPropTypes from 'react-router-prop-types';
 
-import { connect } from 'react-redux';
-import { withRouter } from 'react-router';
-import * as actions from '../../../actions';
+import { useHistory } from 'react-router';
 
 import { emailValid, passwordValid, passwordRepeatValid } from '../../../utils/formValidation';
 
@@ -12,15 +8,21 @@ import { validationRegex } from '../../../utils/common';
 
 import { Form, Field } from 'react-final-form';
 import { Button, Divider, Message } from 'semantic-ui-react';
-import { Translate, getTranslate } from 'react-localize-redux';
+import { Translate, LocalizeContextProps } from 'react-localize-redux';
+import User, { UserSignupInput } from 'classes/User';
 
 /**
  * Component der viser signup-form. Kaldes af ./Signup.js
  * Props ses i bunden.
  */
-const SignupForm = ({ checkUserAvailability, signup, translate, history }) => {
-  let onSubmit = async (values) => {
-    signup(values).then(history.push('/login'));
+export interface SignupFormProps extends LocalizeContextProps {}
+
+const SignupForm: React.SFC<SignupFormProps> = ({ translate }) => {
+  const history = useHistory();
+
+  const handleSubmit = async (values: UserSignupInput) => {
+    await User.signup(values);
+    history.push('/login');
   };
 
   const userAvailable = async (username) => {
@@ -29,7 +31,7 @@ const SignupForm = ({ checkUserAvailability, signup, translate, history }) => {
     } else if (username.length < 3 || !username.match(validationRegex.username)) {
       return translate('signup.errs.username_invalid');
     } else {
-      let available = await checkUserAvailability('username', username);
+      let available = await User.checkAvailable({ username });
 
       return available ? null : translate('signup.errs.username_taken');
     }
@@ -39,14 +41,14 @@ const SignupForm = ({ checkUserAvailability, signup, translate, history }) => {
     let error = emailValid(email);
     if (error) return error;
 
-    let available = await checkUserAvailability('email', email);
+    let available = await User.checkAvailable({ email });
 
     return available ? null : translate('signup.errs.email_taken');
   };
 
   return (
     <Form
-      onSubmit={onSubmit}
+      onSubmit={handleSubmit}
       render={({ handleSubmit, pristine, invalid }) => {
         return (
           <form onSubmit={handleSubmit} className="ui form custom">
@@ -57,7 +59,7 @@ const SignupForm = ({ checkUserAvailability, signup, translate, history }) => {
                   <input
                     {...input}
                     type="text"
-                    placeholder={translate('signup.form_fields.username')}
+                    placeholder={translate('signup.form_fields.username') as string}
                   />
                   {meta.error && meta.touched && (
                     <Message error visible>
@@ -75,7 +77,7 @@ const SignupForm = ({ checkUserAvailability, signup, translate, history }) => {
                   <input
                     {...input}
                     type="email"
-                    placeholder={translate('signup.form_fields.email')}
+                    placeholder={translate('signup.form_fields.email') as string}
                   />
                   {meta.error && meta.touched && (
                     <Message error visible>
@@ -98,7 +100,7 @@ const SignupForm = ({ checkUserAvailability, signup, translate, history }) => {
                   <input
                     {...input}
                     type="password"
-                    placeholder={translate('signup.form_fields.password')}
+                    placeholder={translate('signup.form_fields.password') as string}
                   />
                   {meta.error && meta.touched && (
                     <Message error visible size="small">
@@ -120,7 +122,7 @@ const SignupForm = ({ checkUserAvailability, signup, translate, history }) => {
                   <input
                     {...input}
                     type="password"
-                    placeholder={translate('signup.form_fields.password_repeat')}
+                    placeholder={translate('signup.form_fields.password_repeat') as string}
                   />
                   {meta.error && meta.touched && (
                     <Message error visible>
@@ -141,41 +143,4 @@ const SignupForm = ({ checkUserAvailability, signup, translate, history }) => {
   );
 };
 
-SignupForm.propTypes = {
-  /**
-   * Func der tjekker om brugernavn/email er brugt allerede
-   * Fra redux
-   */
-  checkUserAvailability: PropTypes.func,
-
-  /**
-   * Func der opretter brugeren i DB
-   * Fra redux
-   */
-  signup: PropTypes.func,
-
-  /**
-   * Func der kan oversætte strenge uden for (og inde i) React components
-   * Fra react-localize-redux' Redux helpers
-   */
-  translate: PropTypes.func,
-
-  /**
-   * Fra react-router
-   */
-  history: ReactRouterPropTypes.history
-};
-
-function mapStateToProps(state) {
-  return {
-    currentLanguage: state.settings.language,
-    translate: getTranslate(state.localize)
-  };
-}
-
-export default withRouter(
-  connect(
-    mapStateToProps,
-    actions
-  )(SignupForm)
-);
+export default SignupForm;

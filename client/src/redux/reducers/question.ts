@@ -21,6 +21,11 @@ const questionsReducer = createSlice({
       const index = state.questions.findIndex((question) => question.id === questionId);
       state.questions[index].isBookmarked = isBookmarked;
     },
+    answer: (state, action: PayloadAction<{ questionId: number; answer: number }>) => {
+      const { questionId, answer } = action.payload;
+      const index = state.questions.findIndex((question) => question.id === questionId);
+      state.questions[index].answer = answer;
+    },
     setLiked: (state, action: PayloadAction<{ questionId: number; isLiked: boolean }>) => {
       const { questionId, isLiked } = action.payload;
       const index = state.questions.findIndex((question) => question.id === questionId);

@@ -1,13 +1,11 @@
-import React, { PureComponent } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import * as actions from 'actions';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import marked from 'marked';
 
 import _ from 'lodash';
 import { imageURL, breakpoints } from 'utils/common';
 
-import { subSupScript, isAnswered } from 'utils/quiz';
+import { subSupScript } from 'utils/quiz';
 
 import { Container, Grid, Divider, Segment, Responsive } from 'semantic-ui-react';
 
@@ -15,223 +13,140 @@ import QuestionAnswerButtons from 'components/Quiz/Question/QuestionAnswerButton
 import QuestionImage from 'components/Quiz/Question/QuestionImage';
 import QuestionMetadata from 'components/Quiz/Question/QuestionMetadata';
 import QuestionExtras from 'components/Quiz/Question/QuestionExtras';
-const initialAnswerTime = 0;
+import { ReduxState } from 'redux/reducers/index';
 
 /**
  * Component ansvarlig for at vise selve spørgsmålet, evt. billeder, kommentarer
  * og svar.
  */
+export interface QuestionProps {}
 
-class Question extends PureComponent {
-  state = {
-    /**
-     * Current window width
-     */
-    width: window.innerWidth,
-    answerTime: initialAnswerTime
-  };
-  answerTimeInterval;
+const Question: React.SFC<QuestionProps> = () => {
+  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+  const [answerTime, setAnswerTime] = useState(0);
+  const currentQuestionNumber = useSelector(
+    (state: ReduxState) => state.quiz.currentQuestionNumber
+  );
+  const question = useSelector(
+    (state: ReduxState) => state.questions.questions[currentQuestionNumber]
+  );
+  const answers = useSelector((state: ReduxState) => state.quiz.answers);
+  const user = useSelector((state: ReduxState) => state.auth.user);
 
-  constructor(props) {
-    super(props);
-    this.handleResize = _.debounce(this.handleResize, 300);
-  }
-  componentDidMount() {
-    document.addEventListener('keydown', this.onKeydown);
-    window.addEventListener('resize', this.handleResize);
-    this.answerTimeInterval = setInterval(() => {
+  useEffect(() => {
+    setAnswerTime(0);
+  }, [question]);
+
+  useEffect(() => {
+    let handleResize = () => setInnerWidth(window.innerWidth);
+    handleResize = _.debounce(handleResize, 300);
+
+    window.addEventListener('resize', handleResize);
+
+    return window.removeEventListener('resize', handleResize);
+  }, []);
+
+  useEffect(() => {
+    const answerTimeInterval = setInterval(() => {
       this.setState((prevState) => ({ answerTime: prevState.answerTime + 1 }));
     }, 1000);
-  }
 
-  componentDidUpdate(prevProps) {
-    if (!_.isEqual(prevProps.question, this.props.question)) {
-      this.setState({ answerTime: initialAnswerTime });
-    }
-  }
+    return () => {
+      clearInterval(answerTimeInterval);
+      setAnswerTime(0);
+    };
+  }, [question]);
 
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.onKeydown);
-    window.removeEventListener('resize', this.handleResize);
-    clearInterval(this.answerTimeInterval);
-    this.setState({ answerTime: initialAnswerTime });
-  }
+  useEffect(() => {
+    /**
+     * For at kunne svare med tal på keyboardet
+     * Tager højde for modifier keys (alt, ctrl, meta)
+     */
+    const onKeydown = (e) => {
+      if (
+        !this.props.imgOpen &&
+        !(
+          document.activeElement.tagName === 'TEXTAREA' ||
+          document.activeElement.tagName === 'INPUT'
+        ) &&
+        !e.altKey &&
+        !e.ctrlKey &&
+        !e.metaKey
+      ) {
+        e.preventDefault();
+        let answer = Number(e.key);
 
-  /**
-   * For at kunne svare med tal på keyboardet
-   * Tager højde for modifier keys (alt, ctrl, meta)
-   */
-  onKeydown = (e) => {
-    if (
-      !this.props.imgOpen &&
-      !(
-        document.activeElement.tagName === 'TEXTAREA' || document.activeElement.tagName === 'INPUT'
-      ) &&
-      !e.altKey &&
-      !e.ctrlKey &&
-      !e.metaKey
-    ) {
-      e.preventDefault();
-      let answer = Number(e.key);
-
-      let keys = [1, 2, 3];
-      if (keys.includes(answer)) {
-        this.onAnswer(answer);
+        let keys = [1, 2, 3];
+        if (keys.includes(answer)) {
+          this.onAnswer(answer);
+        }
       }
-    }
-  };
+    };
 
-  handleResize = () => this.setState({ width: window.innerWidth });
+    document.addEventListener('keydown', onKeydown);
 
-  /**
-   * Ansvarlig for at fortælle redux at der er svaret
-   * @param  {number} answer Det der er svaret (1, 2 el. 3)
-   */
-  onAnswer = (answer) => {
-    let { answerQuestion, question } = this.props;
-    const { answerTime } = this.state;
+    return () => {
+      document.removeEventListener('keydown', onKeydown);
+    };
+  }, [question]);
 
-    // If not already answered:
-    if (!isAnswered(question)) {
-      // Er svaret korrekt? Tager højde for flere korrekte svarmuligheder
-      let correct;
-      if (Array.isArray(question.correctAnswer)) {
-        correct = !!question.correctAnswer.includes(answer);
-      } else {
-        correct = question.correctAnswer === answer;
-      }
+  const text = subSupScript(question.text);
+  return (
+    <Container className="question">
+      <Segment>
+        <Grid divided columns="equal" stackable>
+          <Grid.Row>
+            <Grid.Column>
+              <div
+                style={{ fontSize: '18px' }}
+                dangerouslySetInnerHTML={{
+                  __html: marked(text, {
+                    smartypants: true
+                  })
+                }}
+                ref={(ref) => (this._div = ref)}
+              />
+              <Responsive as="div" minWidth={breakpoints.mobile + 1}>
+                <Divider />
 
-      // Call answerQuestion fra redux
-      answerQuestion(question.id, answer, correct, answerTime);
-    }
-  };
-
-  render() {
-    let { question, user, answers } = this.props;
-    const text = subSupScript(question.text);
-
-    return (
-      <Container className="question">
-        <Segment>
-          <Grid divided columns="equal" stackable>
-            <Grid.Row>
-              <Grid.Column>
-                <div
-                  style={{ fontSize: '18px' }}
-                  dangerouslySetInnerHTML={{
-                    __html: marked(text, {
-                      smartypants: true
-                    })
-                  }}
-                  ref={(ref) => (this._div = ref)}
+                <QuestionAnswerButtons
+                  question={question}
+                  answer={answers[question.id]}
+                  onAnswer={this.onAnswer}
                 />
-                <Responsive as="div" minWidth={breakpoints.mobile + 1}>
-                  <Divider />
-
-                  <QuestionAnswerButtons
-                    question={question}
-                    answer={answers[question.id]}
-                    onAnswer={this.onAnswer}
-                  />
-                </Responsive>
+              </Responsive>
+            </Grid.Column>
+            {question.images.length > 0 && (
+              <Grid.Column>
+                {question.images.map((image) => (
+                  <QuestionImage key={image} img={imageURL(image)} />
+                ))}
               </Grid.Column>
-              {question.images.length > 0 && (
-                <Grid.Column>
-                  {question.images.map((image) => (
-                    <QuestionImage key={image.id} img={imageURL(image.link)} />
-                  ))}
-                </Grid.Column>
-              )}
-            </Grid.Row>
-          </Grid>
-          <Responsive as="div" maxWidth={breakpoints.mobile}>
-            <Divider />
-            <QuestionAnswerButtons
-              question={question}
-              answer={answers[question.id]}
-              onAnswer={this.onAnswer}
-            />
-          </Responsive>
-          <QuestionMetadata question={question} user={user} />
-          <QuestionExtras
-            deleteComment={this.props.deleteComment}
-            commentQuestion={this.props.commentQuestion}
-            editComment={this.props.editComment}
-            questionReport={this.props.questionReport}
-            width={this.state.width}
+            )}
+          </Grid.Row>
+        </Grid>
+        <Responsive as="div" maxWidth={breakpoints.mobile}>
+          <Divider />
+          <QuestionAnswerButtons
             question={question}
-            user={user}
+            answer={answers[question.id]}
+            onAnswer={this.onAnswer}
           />
-        </Segment>
-        <Divider hidden />
-      </Container>
-    );
-  }
-}
-
-Question.propTypes = {
-  /**
-   * Det aktuelle spørgsmål. Fra redux
-   * @type {array}
-   */
-  question: PropTypes.object,
-
-  /**
-   * Object af svar. question.id er keys
-   */
-  answers: PropTypes.object,
-
-  /**
-   * Brugeren (hvis nogen). Fra Quiz.js
-   * @type {object}
-   */
-  user: PropTypes.object,
-
-  /**
-   * Action der kaldes ved svar. Fra redux.
-   * @type {func}
-   */
-  answerQuestion: PropTypes.func,
-
-  /**
-   * Action der kaldes ved indrapportering af en fejl i spørgsmålet
-   * @type {func}
-   */
-  questionReport: PropTypes.func,
-
-  /**
-   * Action der kaldes ved ændring af kommentar. Fra redux.
-   * @type {func}
-   */
-  editComment: PropTypes.func,
-
-  /**
-   * Action der kaldes ved kommentar. Fra redux.
-   * @type {func}
-   */
-  commentQuestion: PropTypes.func,
-
-  /**
-   * Action der kaldes ved sletning af kommentar. Fra redux.
-   * @type {func}
-   */
-  deleteComment: PropTypes.func,
-
-  /**
-   * Action der kaldes når der ændres specialer. Fra redux.
-   * @type {func}
-   */
-  editSpecialties: PropTypes.func,
-
-  imgOpen: PropTypes.bool
+        </Responsive>
+        <QuestionMetadata />
+        <QuestionExtras
+          deleteComment={this.props.deleteComment}
+          commentQuestion={this.props.commentQuestion}
+          editComment={this.props.editComment}
+          questionReport={this.props.questionReport}
+          width={this.state.width}
+          question={question}
+          user={user}
+        />
+      </Segment>
+      <Divider hidden />
+    </Container>
+  );
 };
 
-const mapStateToProps = (state) => ({
-  question: state.questions.entities.questions[state.quiz.questions[state.quiz.currentQuestion]],
-  answers: state.quiz.answers
-});
-
-export default connect(
-  mapStateToProps,
-  actions
-)(Question);
+export default Question;

@@ -5,6 +5,7 @@ import QuestionSpecialtyVote from 'models/question_specialty_vote';
 import Comment from 'models/question_comment';
 import QuestionCorrectAnswer from 'models/question_correct_answer';
 import QuestionTagVote from 'models/question_tag_vote';
+import QuestionImage from 'models/question_image';
 
 export const typeDefs = gql`
   extend type Query {
@@ -34,7 +35,7 @@ export const typeDefs = gql`
     answer1: String
     answer2: String
     answer3: String
-    image: String
+    images: [String]
     oldId: String
     examSetQno: Int
     publicComments: [Comment]
@@ -136,9 +137,9 @@ export const resolvers = {
       const question = await ctx.questionLoaders.questionLoader.load(id);
       return question.answer3;
     },
-    image: async ({ id }, args, ctx: Context) => {
-      const question = await ctx.questionLoaders.questionLoader.load(id);
-      return question.image;
+    images: async ({ id }, args, ctx: Context) => {
+      const images = await QuestionImage.query().where({ questionId: id });
+      return images.map((image) => image.link);
     },
     oldId: async ({ id }, args, ctx: Context) => {
       const question = await ctx.questionLoaders.questionLoader.load(id);

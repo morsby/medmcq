@@ -32,7 +32,7 @@
     "react-router-dom": "^5.1.2",
     "react-router-prop-types": "^1.0.4",
     "react-scripts": "^3.3.0",
-    "react-swipeable": "^5.4.0",
+    "react-swipeable": "^5.5.0",
     "react-toastify": "^5.4.0",
     "redux": "^4.0.4",
     "redux-persist": "^6.0.0",

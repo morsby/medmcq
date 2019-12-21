@@ -8,22 +8,23 @@ import { Container, Tab, Button, Divider } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 
 import ProfileActivity from './ProfileActivity/ProfileActivity';
-import { IReduxState } from 'reducers';
 import { useHistory } from 'react-router';
-import { changeSelection, getProfile } from 'actions';
+import { ReduxState } from 'redux/reducers';
+import User from 'classes/User';
+import uiReducer from 'redux/reducers/ui';
 
 export interface ProfileProps {}
 
 const Profile: React.SFC<ProfileProps> = () => {
   const [width, setWidth] = useState(window.innerWidth);
   const { profile, user, isFetching, didInvalidate } = useSelector(
-    (state: IReduxState) => state.auth
+    (state: ReduxState) => state.auth
   );
   const [panes, setPanes] = useState([]);
-  const { selectedSemester } = useSelector((state: IReduxState) => state.ui.selection);
-  const currentLanguage = useSelector((state: IReduxState) => state.settings.language);
-  const { semesters } = useSelector((state: IReduxState) => state.metadata.entities);
-  const { questions } = useSelector((state: IReduxState) => state.questions.entities);
+  const selectedSemester = useSelector((state: ReduxState) => state.ui.selection.selectedSemester);
+  const currentLanguage = useSelector((state: ReduxState) => state.settings.language);
+  const semesters = useSelector((state: ReduxState) => state.metadata.semesters);
+  const questions = useSelector((state: ReduxState) => state.questions);
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -35,13 +36,25 @@ const Profile: React.SFC<ProfileProps> = () => {
 
   useEffect(() => {
     window.addEventListener('resize', handleResize);
-    dispatch(getProfile(selectedSemester));
+    dispatch(User.getProfileData({ semester: selectedSemester }));
 
     return window.removeEventListener('resize', handleResize);
-  }, [selectedSemester]);
+  }, [dispatch, selectedSemester]);
 
   useEffect(() => {
-    const panes = [];
+    const generatePaneLabel = (semester) => {
+      if (width < 480) {
+        return `${semester.value}${currentLanguage === 'dk' ? '.' : 'th'}`;
+      } else if (width < 768) {
+        return `${semester.value}${currentLanguage === 'dk' ? '.' : 'th'} (${semester.name})`;
+      } else {
+        return `${semester.value}${currentLanguage === 'dk' ? '.' : 'th'} semester (${
+          semester.name
+        })`;
+      }
+    };
+
+    let panes = [];
     _.map(semesters, (e) =>
       panes.push({
         menuItem: generatePaneLabel(e),
@@ -62,24 +75,23 @@ const Profile: React.SFC<ProfileProps> = () => {
     );
 
     setPanes(panes);
-  }, [isFetching]);
-
-  const generatePaneLabel = (semester) => {
-    if (width < 480) {
-      return `${semester.value}${currentLanguage === 'dk' ? '.' : 'th'}`;
-    } else if (width < 768) {
-      return `${semester.value}${currentLanguage === 'dk' ? '.' : 'th'} (${semester.name})`;
-    } else {
-      return `${semester.value}${currentLanguage === 'dk' ? '.' : 'th'} semester (${
-        semester.name
-      })`;
-    }
-  };
+  }, [
+    currentLanguage,
+    didInvalidate,
+    isFetching,
+    profile.answers,
+    profile.bookmarks,
+    profile.privateComments,
+    profile.publicComments,
+    questions,
+    semesters,
+    width
+  ]);
 
   const handleTabChange = (e, { activeIndex }) => {
     const semesterId = Number(Object.keys(semesters)[activeIndex]);
-    dispatch(changeSelection('selectedSemester', semesterId));
-    dispatch(getProfile(semesterId));
+    dispatch(uiReducer.actions.changeSelection({ type: 'selectedSemester', value: semesterId }));
+    dispatch(User.getProfileData({ semester: semesterId }));
   };
 
   const handleNavigation = (path) => {

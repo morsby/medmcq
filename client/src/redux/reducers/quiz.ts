@@ -1,25 +1,26 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import Question from 'classes/Question';
 
 const initialState = {
-  questions: [] as Question[],
+  questionIds: [] as number[],
   answers: {},
   quizId: null,
-  currentQuestion: 0,
-  didInvalidate: false
+  currentQuestionNumber: 0,
+  didInvalidate: false,
+  imgOpen: false
 };
 
 const quizReducer = createSlice({
   name: 'quiz',
   initialState,
   reducers: {
-    setQuestions: (state, action: PayloadAction<Question[]>) => {
-      state.questions = action.payload;
+    setQuestionIds: (state, action: PayloadAction<number[]>) => {
+      state.questionIds = action.payload;
     },
-    answer: (state, action: PayloadAction<{ questionId: number; answer: number }>) => {
-      const { questionId, answer } = action.payload;
-      const index = state.questions.findIndex((question) => question.id === questionId);
-      state.questions[index].answer = answer;
+    changeQuestion: (state, action: PayloadAction<number>) => {
+      state.currentQuestionNumber = action.payload;
+    },
+    setImgOpen: (state, action: PayloadAction<boolean>) => {
+      state.imgOpen = action.payload;
     }
   }
 });

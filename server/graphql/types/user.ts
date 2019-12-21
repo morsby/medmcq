@@ -7,11 +7,13 @@ import _ from 'lodash';
 import QuestionCommentLike from 'models/question_comment_like';
 import QuestionBookmark from 'models/question_bookmark';
 import QuestionComment from 'models/question_comment';
+import sgMail from '@sendgrid/mail';
+import { urls } from 'misc/vars';
 
 export const typeDefs = gql`
   extend type Query {
     user: User
-    checkUsernameAvailability: Boolean
+    checkUsernameAvailability(username: String!, email: String): Boolean
   }
 
   extend type Mutation {
@@ -20,7 +22,7 @@ export const typeDefs = gql`
     logout: String
     editUser(data: UserEditInput): String
     forgotPassword(email: String!): String
-    resetPassword(token: String!, values: String): String
+    resetPassword(token: String!, password: String!): String
     manualCompleteSet(setId: Int!, userId: Int!): String
   }
 
@@ -81,6 +83,13 @@ export const resolvers = {
       if (!ctx.user) return null;
       const user = await ctx.userLoaders.userLoader.load(ctx.user.id);
       return { id: user.id };
+    },
+    checkUsernameAvailability: async (root, { username, email }) => {
+      const user = await User.query()
+        .where({ username })
+        .orWhere({ email })
+        .first();
+      return !!user;
     }
   },
 
@@ -102,6 +111,39 @@ export const resolvers = {
     signup: async (root, { data }) => {
       const user = User.query().insert(data);
       return jwt.sign(user, process.env.SECRET);
+    },
+    resetPassword: async (root, { token, password }) => {
+      // Check if required fields are provided
+      if (!token || !password) {
+        throw new Error('You must provide a password reset token and a new password');
+      }
+      // Find the user with correct token and expire time
+      const user = await User.query()
+        .findOne({ resetPasswordToken: token })
+        .andWhere('resetPasswordExpires', '>', Date.now());
+      if (!user)
+        throw new Error(
+          'Reset-token er ikke gyldigt. Bed om et nyt via formularen "Jeg har glemt min kode" og prøv igen.'
+        );
+
+      // Reset password
+      await user.$query().patch({ password, resetPasswordToken: null, resetPasswordExpires: null });
+
+      // Send mail
+      sgMail.setApiKey(process.env.SENDGRID);
+      const msg = {
+        to: user.email,
+        from: urls.fromEmail,
+        templateId: 'd-df2ec6ed439b4e63a57d4ae6877721d7',
+        dynamic_template_data: {
+          username: user.username,
+          email: user.email
+        }
+      };
+      sgMail.send(msg);
+
+      // Send response
+      return 'Dit kodeord er blevet nulstillet. / Your password has been reset.';
     }
   },
 

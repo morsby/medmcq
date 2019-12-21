@@ -1,45 +1,30 @@
-import React from 'react';
-import { PropTypes } from 'prop-types';
+import React, { useState, useEffect } from 'react';
 import { Route, Redirect } from 'react-router-dom';
-import { connect } from 'react-redux';
-import * as actions from '../../../actions';
-import { urls } from '../../../utils/common';
+import { useSelector } from 'react-redux';
+import { urls } from 'utils/common';
 
 import LoadingPage from '../Utility-pages/LoadingPage';
+import { ReduxState } from 'redux/reducers';
+import User from 'classes/User';
 
 /**
  * Higher Order Component der blokerer visse URLS for brugere der ikke er logget ind
  * (fx profilen m.v.)
  */
+export interface PrivateRouteProps {}
 
-class PrivateRoute extends React.Component {
-  state = { loading: true };
+const PrivateRoute: React.SFC<PrivateRouteProps> = () => {
+  const [loading, setLoading] = useState(true);
+  const user = useSelector((state: ReduxState) => state.auth.user);
 
-  componentDidMount() {
-    this.props.fetchUser().then(() => this.setState({ loading: false }));
-  }
-  render() {
-    if (this.state.loading) return <LoadingPage />;
-    if (!this.props.user) {
-      return <Redirect to={urls.login} />;
-    }
-    return <Route {...this.props} />;
-  }
-}
+  useEffect(() => {
+    if (!user) User.fetch();
+    setLoading(false);
+  }, [user]);
 
-PrivateRoute.propTypes = {
-  // Tjekker brugeren
-  fetchUser: PropTypes.func,
-
-  // brugeren (fra redux)
-  user: PropTypes.object
+  if (loading) return <LoadingPage />;
+  if (!user && !loading) return <Redirect to={urls.login} />;
+  return <Route {...this.props} />;
 };
 
-function mapStateToProps(state) {
-  return { user: state.auth.user };
-}
-
-export default connect(
-  mapStateToProps,
-  actions
-)(PrivateRoute);
+export default PrivateRoute;

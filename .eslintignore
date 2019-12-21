@@ -1,8 +1,0 @@
-**/node_modules
-client/graveyard
-client/src/semantic
-client/build/*
-server/build/*
-!client/build/index.js
-**/*.d.ts
-_base_model.ts

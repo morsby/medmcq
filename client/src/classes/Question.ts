@@ -3,8 +3,9 @@ import Comment from 'classes/Comment';
 import Specialty, { SpecialtyVote } from 'classes/Specialty';
 import Tag, { TagVote } from './Tag';
 import { store } from 'IndexApp';
-import quizReducer from 'redux/reducers/quiz';
 import Apollo from './Apollo';
+import questionsReducer from 'redux/reducers/question';
+import quizReducer from 'redux/reducers/quiz';
 
 export interface QuestionFilterInput {
   text: string;
@@ -20,6 +21,7 @@ export interface QuestionFilterInput {
   onlyWrong: boolean;
   commentIds: number[];
   search: string;
+  refetch: boolean;
 }
 
 interface Question {
@@ -79,7 +81,7 @@ class Question {
       answer1
       answer2
       answer3
-      image
+      images
       correctAnswers
       publicComments {
         id
@@ -122,7 +124,12 @@ class Question {
   `;
 
     const questions = await Apollo.query<Question[]>('questions', query, { filter });
-    store.dispatch(quizReducer.actions.setQuestions(questions));
+    await store.dispatch(questionsReducer.actions.setQuestions(questions));
+    if (!filter.refech) {
+      await store.dispatch(
+        quizReducer.actions.setQuestionIds(questions.map((question) => question.id))
+      );
+    }
   };
 }
 

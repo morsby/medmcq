@@ -27,6 +27,7 @@ interface UserAnswer {
 interface User {
   id: number;
   username: string;
+  password?: string;
   email: string;
   answers: UserAnswer[];
   likes: number;
@@ -79,10 +80,8 @@ class User {
     }
 `;
 
-    const jwt = await Apollo.mutate<string>('signup', mutation, { data });
-
-    const user = jwtDecode<User>(jwt);
-    return user;
+    await Apollo.mutate<string>('signup', mutation, { data });
+    await User.fetch();
   };
 
   static fetch = async () => {
@@ -178,8 +177,47 @@ class User {
     return res.data.user;
   };
 
-  static forgotPassword = async (email: string): Promise<string> => {
-    return 'message';
+  static resetPassword = async ({
+    token,
+    password
+  }: {
+    token: string;
+    password: string;
+  }): Promise<string> => {
+    const mutation = gql`
+      mutation($token: String!, $password: String!) {
+        resetPassword(token: $token, password: $password)
+      }
+    `;
+
+    const message = await Apollo.mutate<string>('resetPassword', mutation, { token, password });
+
+    return message;
+  };
+
+  static edit = async (data: Partial<User>) => {
+    const mutation = gql`
+      mutation($data: UserEditInput) {
+        editUser(data: $data)
+      }
+    `;
+
+    await Apollo.mutate('editUser', mutation, { data });
+    await User.fetch();
+  };
+
+  static checkAvailable = async ({ email, password }: Partial<User>) => {
+    const query = gql`
+      query {
+        checkUsernameAvailability(email: "123", username: "123")
+      }
+    `;
+
+    const isAvailable = await Apollo.query<boolean>('checkUsernameAvailability', query, {
+      password,
+      email
+    });
+    return isAvailable;
   };
 }
 
