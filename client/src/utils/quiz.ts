@@ -1,6 +1,8 @@
 import { store } from 'IndexApp';
+import Question from 'classes/Question';
+import { Answer } from 'classes/Quiz';
 
-export const smoothScroll = (h, dir = 'up') => {
+export const smoothScroll = (h?: number, dir = 'up') => {
   let top = window.pageYOffset || document.documentElement.scrollTop;
   let bottom = document.body.scrollHeight;
   let px = 20;
@@ -38,21 +40,27 @@ export const evalAnswer = (question, userAnswer, answerNo) => {
   }
 };
 
-export const calculateResults = (questions, answers) => {
+export const calculateResults = (questions: Question[], answers: Partial<Answer>[]) => {
   let res = {
     status: true,
     n: 0,
-    correct: 0
+    correct: 0,
+    percentage: '0%'
   };
-  for (var questionId in answers) {
+  for (let answer of answers) {
     res.n++;
-    if (questions.entities.questions[questionId].correctAnswers.includes(answers[questionId]))
+    if (
+      questions
+        .find((question) => question.id === answer.questionId)
+        ?.correctAnswers.includes(answer.answer)
+    )
       res.correct++;
   }
 
   if (res.n === 0) {
     return { status: false };
   }
+
   res.percentage = `${Math.round((res.correct / res.n) * 10000) / 100}%`;
 
   return res;

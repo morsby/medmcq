@@ -9,19 +9,19 @@ import QuestionImage from 'models/question_image';
 
 export const typeDefs = gql`
   extend type Query {
-    questions(filter: QuestionFilterInput): [Question!]
+    questions(filter: QuestionFilterInput!): [Question!]
   }
 
   input QuestionFilterInput {
     text: String
-    specialties: [Int]
-    tags: [Int]
-    semester: Int
+    specialtyIds: [Int]
+    tagIds: [Int]
+    semesterId: Int
     year: Int
     season: String
     ids: [Int]
     n: Int
-    set: Int
+    setId: Int
     onlyNew: Boolean
     onlyWrong: Boolean
     commentIds: [Int]
@@ -54,7 +54,7 @@ export const typeDefs = gql`
 export const resolvers = {
   Query: {
     questions: async (args, { filter }) => {
-      let { n, ids, season, year, semester, text, tags, specialties, set, search } = filter;
+      let { n, ids, season, year, semesterId, text, tagIds, specialtyIds, setId, search } = filter;
 
       let query = Question.query();
 
@@ -65,12 +65,12 @@ export const resolvers = {
       query = query
         .join('semesterExamSet as examSet', 'question.examSetId', 'examSet.id')
         .join('semester', 'examSet.semesterId', 'semester.id');
-      if (semester) {
-        query = query.where('semester.id', '=', semester);
+      if (semesterId) {
+        query = query.where('semester.id', '=', semesterId);
       }
 
       // Specifics
-      if (set) return query.where('examSet.id', set);
+      if (setId) return query.where('examSet.id', setId);
       if (search)
         return query
           .joinRelation('semester')
@@ -91,19 +91,19 @@ export const resolvers = {
         query = query.where('examSet.season', '=', season);
       }
 
-      if (specialties && specialties.length > 0) {
+      if (specialtyIds && specialtyIds.length > 0) {
         query = query
           .join('questionSpecialtyVote as specialtyVote', 'question.id', 'specialtyVote.questionId')
-          .whereIn('specialtyVote.specialtyId', specialties)
+          .whereIn('specialtyVote.specialtyId', specialtyIds)
           .where(function() {
             this.sum('specialtyVote.value as votes').having('votes', '>', '-1');
           });
       }
 
-      if (tags && tags.length > 0) {
+      if (tagIds && tagIds.length > 0) {
         query = query
           .join('questionTagVote as tagVote', 'question.id', 'tagVote.questionId')
-          .whereIn('tagVote.tagId', tags)
+          .whereIn('tagVote.tagId', tagIds)
           .where(function() {
             this.sum('tagVote.value as votes').having('votes', '>', '-1');
           });
@@ -161,7 +161,7 @@ export const resolvers = {
       return publicComments.map((pc) => ({ id: pc.id }));
     },
     privateComments: async ({ id }, args, ctx: Context) => {
-      if (!ctx.user) return null;
+      if (!ctx.user) return [];
       let privateComments = await Comment.query().where({
         questionId: id,
         private: 1,

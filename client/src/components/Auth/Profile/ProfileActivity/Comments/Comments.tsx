@@ -8,12 +8,12 @@ import { Button } from 'semantic-ui-react';
 import { useHistory } from 'react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import CommentClass from 'classes/Comment';
-import Quiz from 'classes/Quiz';
 import { ReduxState } from 'redux/reducers';
+import Quiz from 'classes/Quiz';
 
 export interface CommentsProps {
   comments: CommentClass[];
-  type: string;
+  type: 'private' | 'public';
 }
 
 const Comments: React.SFC<CommentsProps> = ({ comments, type }) => {

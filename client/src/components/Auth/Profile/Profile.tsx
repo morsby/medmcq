@@ -17,11 +17,11 @@ export interface ProfileProps {}
 
 const Profile: React.SFC<ProfileProps> = () => {
   const [width, setWidth] = useState(window.innerWidth);
-  const { profile, user, isFetching, didInvalidate } = useSelector(
+  const { profile, user, isFetching, didInvalidate, bookmarks } = useSelector(
     (state: ReduxState) => state.auth
   );
   const [panes, setPanes] = useState([]);
-  const selectedSemester = useSelector((state: ReduxState) => state.ui.selection.selectedSemester);
+  const selectedSemester = useSelector((state: ReduxState) => state.ui.selection.semesterId);
   const currentLanguage = useSelector((state: ReduxState) => state.settings.language);
   const semesters = useSelector((state: ReduxState) => state.metadata.semesters);
   const questions = useSelector((state: ReduxState) => state.questions);
@@ -60,15 +60,7 @@ const Profile: React.SFC<ProfileProps> = () => {
         menuItem: generatePaneLabel(e),
         render: () => (
           <Tab.Pane loading={isFetching}>
-            {!isFetching && !didInvalidate && (
-              <ProfileActivity
-                questions={questions}
-                answers={profile.answers}
-                publicComments={profile.publicComments}
-                privateComments={profile.privateComments}
-                bookmarks={profile.bookmarks}
-              />
-            )}
+            {!isFetching && !didInvalidate && <ProfileActivity />}
           </Tab.Pane>
         )
       })
@@ -80,7 +72,6 @@ const Profile: React.SFC<ProfileProps> = () => {
     didInvalidate,
     isFetching,
     profile.answers,
-    profile.bookmarks,
     profile.privateComments,
     profile.publicComments,
     questions,
@@ -90,7 +81,7 @@ const Profile: React.SFC<ProfileProps> = () => {
 
   const handleTabChange = (e, { activeIndex }) => {
     const semesterId = Number(Object.keys(semesters)[activeIndex]);
-    dispatch(uiReducer.actions.changeSelection({ type: 'selectedSemester', value: semesterId }));
+    dispatch(uiReducer.actions.changeSelection({ type: 'semesterId', value: semesterId }));
     dispatch(User.getProfileData({ semester: semesterId }));
   };
 

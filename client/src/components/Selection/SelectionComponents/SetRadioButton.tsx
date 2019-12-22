@@ -1,27 +1,38 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 
 import _ from 'lodash';
 
 import { Form, Radio, Divider, Icon, Loader } from 'semantic-ui-react';
 
 import { Translate } from 'react-localize-redux';
-import { manualCompleteSet } from 'actions/auth';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import User from 'classes/User';
+import ExamSet from 'classes/ExamSet';
+import { ReduxState } from 'redux/reducers';
+import UIReducer from 'redux/reducers/ui';
 
-const SetRadioButton = ({ set, onChange, selectedSet }) => {
+export interface SetRadioButtonProps {
+  set: ExamSet;
+}
+
+const SetRadioButton: React.SFC<SetRadioButtonProps> = ({ set }) => {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.auth.user);
+  const user = useSelector((state: ReduxState) => state.auth.user);
+  const chosenSetId = useSelector((state: ReduxState) => state.ui.selection.setId);
   const [manualLoading, setManualLoading] = useState(false);
 
   const handleManualCompletion = async () => {
     setManualLoading(true);
-    await dispatch(manualCompleteSet(set.id, user.id));
+    await User.manualCompleteSet({ setId: set.id });
     setManualLoading(false);
   };
 
+  const handleChange = async (setId: number) => {
+    await dispatch(UIReducer.actions.changeSelection({ type: 'setId', value: setId }));
+  };
+
   return (
-    <Form.Group key={set.api}>
+    <Form.Group key={set.id}>
       <Form.Field>
         <Translate>
           {({ activeLanguage = { code: 'dk' } }) => {
@@ -40,10 +51,9 @@ const SetRadioButton = ({ set, onChange, selectedSet }) => {
               <>
                 <Radio
                   label={label}
-                  value={set.id}
-                  checked={set.id === selectedSet}
+                  checked={set.id === chosenSetId}
                   name="selectedSetId"
-                  onChange={onChange}
+                  onChange={() => handleChange(set.id)}
                 />{' '}
                 {
                   // TODO: Udregn færdiggjorte sæt
@@ -66,21 +76,6 @@ const SetRadioButton = ({ set, onChange, selectedSet }) => {
       </Form.Field>
     </Form.Group>
   );
-};
-
-SetRadioButton.propTypes = {
-  set: PropTypes.object,
-  answeredQuestions: PropTypes.object,
-  groupedQuestions: PropTypes.array,
-  selectedSet: PropTypes.number,
-  onChange: PropTypes.func,
-
-  // Ryd op:
-  completedSetsCount: PropTypes.bool,
-  user: PropTypes.object,
-  api: PropTypes.string,
-  manualCompleteSet: PropTypes.func,
-  semester: PropTypes.string
 };
 
 export default SetRadioButton;

@@ -6,7 +6,6 @@ import { toast } from 'react-toastify';
 import { useHistory, useParams } from 'react-router';
 import { ReduxState } from 'redux/reducers';
 import Question from 'classes/Question';
-import QuizClass from 'classes/Quiz';
 
 export interface QuizShareRouteProps {}
 
@@ -31,7 +30,7 @@ const QuizShareRoute: React.SFC<QuizShareRouteProps> = () => {
         }
       });
 
-      await QuizClass.start({ ids });
+      await Question.fetch({ ids });
     };
 
     fetchQuestions();

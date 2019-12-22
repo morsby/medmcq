@@ -5,6 +5,9 @@ import { Button, Divider } from 'semantic-ui-react';
 
 import { evalAnswer, subSupScript } from '../../../utils/quiz';
 import marked from 'marked';
+import Question from 'classes/Question';
+import { useSelector } from 'react-redux';
+import { ReduxState } from 'redux/reducers';
 
 /**
  * Component der viser svarmuligheder.
@@ -13,7 +16,14 @@ import marked from 'marked';
  * @param {func}    onAnswer Func der kaldes når der svares på spg.
  * @param {object}  question Selve spørgsmålet.
  */
-const QuestionAnswerButtons = ({ answer, onAnswer, question }) => {
+export interface QuestionAnswerButtonsProps {
+  answer: number;
+  handleAnswer: Function;
+}
+
+const QuestionAnswerButtons: React.SFC<QuestionAnswerButtonsProps> = ({ handleAnswer, answer }) => {
+  const questionIndex = useSelector((state: ReduxState) => state.quiz.questionIndex);
+  const question = useSelector((state: ReduxState) => state.questions.questions[questionIndex]);
   /**
    * Func der prefixer svarmuligheder med A, B og C samt laver knappen.
    * @param  {Number} answerNo Svarmulighed nr. 1, 2 el. 3
@@ -42,7 +52,7 @@ const QuestionAnswerButtons = ({ answer, onAnswer, question }) => {
     return (
       <Button
         style={{ textAlign: 'left' }}
-        onClick={() => onAnswer(answerNo)}
+        onClick={() => handleAnswer(answerNo)}
         color={evalAnswer(question, answer, answerNo)}
         size="large"
       >
@@ -64,12 +74,6 @@ const QuestionAnswerButtons = ({ answer, onAnswer, question }) => {
       {generateButton(3)}
     </Button.Group>
   );
-};
-
-QuestionAnswerButtons.propTypes = {
-  onAnswer: PropTypes.func.isRequired,
-  question: PropTypes.object.isRequired,
-  answer: PropTypes.number
 };
 
 export default QuestionAnswerButtons;

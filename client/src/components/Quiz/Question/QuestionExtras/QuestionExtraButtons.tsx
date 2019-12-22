@@ -1,18 +1,35 @@
 import React from 'react';
 import { Translate } from 'react-localize-redux';
 import { Button, Divider } from 'semantic-ui-react';
+import { useSelector } from 'react-redux';
+import { ReduxState } from 'redux/reducers';
 
-const QuestionExtraButtons = ({
+export interface QuestionExtraButtonsProps {
+  width: number;
+  onReportToggle: () => void;
+  onPrivateCommentsToggle: () => void;
+  onPublicCommentsToggle: () => void;
+  privateCommentsOpen: boolean;
+  publicCommentsOpen: boolean;
+}
+
+const QuestionExtraButtons: React.SFC<QuestionExtraButtonsProps> = ({
   width,
   onReportToggle,
   onPrivateCommentsToggle,
+  onPublicCommentsToggle,
   privateCommentsOpen,
-  user,
-  publicCommentsOpen,
-  publicComments,
-  privateComments,
-  onPublicCommentsToggle
+  publicCommentsOpen
 }) => {
+  const user = useSelector((state: ReduxState) => state.auth.user);
+  const questionIndex = useSelector((state: ReduxState) => state.quiz.questionIndex);
+  const question = useSelector((state: ReduxState) => state.questions.questions[questionIndex]);
+  const comments = useSelector((state: ReduxState) =>
+    state.questions.comments.filter((comment) => comment.question.id === question.id)
+  );
+  const publicComments = comments.filter((comment) => !comment.isPrivate).length;
+  const privateComments = comments.filter((comment) => comment.isPrivate).length;
+
   return (
     <>
       <Button color={publicCommentsOpen ? 'green' : null} basic onClick={onPublicCommentsToggle}>

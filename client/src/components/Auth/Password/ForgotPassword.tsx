@@ -17,8 +17,10 @@ const ForgotPassword: React.SFC<ForgotPasswordProps> = () => {
   const handleChange = (value: string) => setEmail(value);
 
   const handleSubmit = async () => {
-    const message = await User.forgotPassword(email);
-    setMessage(message);
+    await User.forgotPassword({ email });
+    setMessage(
+      'Hvis emailen eksisterer i vores system, vil du snart modtage en email med instruktioner til at nulstille dit kodeord'
+    );
   };
 
   return (

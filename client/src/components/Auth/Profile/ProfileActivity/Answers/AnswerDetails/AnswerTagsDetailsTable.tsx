@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { IReduxState } from 'reducers';
 import { Table, Tag } from 'antd';
-import * as uiActions from 'actions/ui';
-import * as questionActions from 'actions/question';
 import _ from 'lodash';
 import { useHistory } from 'react-router';
+import { ReduxState } from 'redux/reducers';
+import UIReducer from 'redux/reducers/ui';
+import Question from 'classes/Question';
+import Quiz from 'classes/Quiz';
 
 export interface AnswerTagsDetailsTableProps {
   answers: any[];
@@ -15,10 +16,10 @@ const AnswerTagsDetailsTable: React.SFC<AnswerTagsDetailsTableProps> = ({ answer
   const [answeredTags, setAnsweredTags] = useState([]);
   const history = useHistory();
   const dispatch = useDispatch();
-  const questions = useSelector((state: IReduxState) => state.questions.entities.questions);
-  const selectedSemester = useSelector((state: IReduxState) => state.ui.selection.selectedSemester);
-  const tags = useSelector((state: IReduxState) =>
-    _.filter(state.metadata.entities.tags, { semesterId: selectedSemester })
+  const questions = useSelector((state: ReduxState) => state.questions.questions);
+  const selectedSemester = useSelector((state: ReduxState) => state.ui.selection.semesterId);
+  const tags = useSelector((state: ReduxState) =>
+    state.metadata.tags.filter((tag) => tag.semester.id === selectedSemester)
   );
 
   const getPercentCorrect = (record) => {
@@ -37,9 +38,9 @@ const AnswerTagsDetailsTable: React.SFC<AnswerTagsDetailsTableProps> = ({ answer
   };
 
   const handleTagSelect = async (tagId: number) => {
-    await dispatch(uiActions.changeSelection('selectedTagIds', [tagId]));
-    await dispatch(uiActions.changeSelection('n', 80));
-    await dispatch(questionActions.getQuestions({}));
+    await dispatch(UIReducer.actions.changeSelection({ type: 'tagIds', value: [tagId] }));
+    await dispatch(UIReducer.actions.changeSelection({ type: 'n', value: 80 }));
+    await Quiz.start();
     history.push('/quiz');
   };
 

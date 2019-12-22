@@ -14,7 +14,7 @@ const SelectionUniqueSelector: React.SFC<SelectionUniqueSelectorProps> = () => {
   const { onlyNew, onlyWrong } = useSelector((state: ReduxState) => state.ui.selection);
   const dispatch = useDispatch();
 
-  const handleChange = (checked: boolean, type: string) => {
+  const handleChange = (checked: boolean, type: 'onlyNew' | 'onlyWrong') => {
     dispatch(UIReducer.actions.changeSelection({ type, value: checked }));
   };
 

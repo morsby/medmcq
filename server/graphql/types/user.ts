@@ -9,6 +9,8 @@ import QuestionBookmark from 'models/question_bookmark';
 import QuestionComment from 'models/question_comment';
 import sgMail from '@sendgrid/mail';
 import { urls } from 'misc/vars';
+import ManualCompletedSet from 'models/manual_completed_set';
+import crypto from 'crypto';
 
 export const typeDefs = gql`
   extend type Query {
@@ -24,6 +26,7 @@ export const typeDefs = gql`
     forgotPassword(email: String!): String
     resetPassword(token: String!, password: String!): String
     manualCompleteSet(setId: Int!, userId: Int!): String
+    bookmark(questionId: Int!): String
   }
 
   input LoginInput {
@@ -73,7 +76,7 @@ export const typeDefs = gql`
   }
 
   type ManualCompletedSet {
-    id: Int
+    setId: Int
   }
 `;
 
@@ -144,6 +147,50 @@ export const resolvers = {
 
       // Send response
       return 'Dit kodeord er blevet nulstillet. / Your password has been reset.';
+    },
+    forgotPassword: async (root, { email }, ctx: Context) => {
+      if (!email) {
+        throw new Error('You need to provide an email');
+      }
+
+      // Generate reset token
+      const token = crypto.randomBytes(20).toString('hex');
+
+      // Find the user
+      let user: User;
+
+      user = await User.query().findOne({ email });
+      if (!user) throw new Error('Der blev ikke fundet en bruger.');
+
+      // Update reset information
+      const now = new Date();
+      now.setHours(now.getHours() + 1);
+
+      user = await user.$query().patchAndFetch({
+        resetPasswordToken: token,
+        resetPasswordExpires: now
+      });
+
+      // Send mail
+      sgMail.setApiKey(process.env.SENDGRID);
+      const msg = {
+        to: user.email,
+        from: urls.fromEmail,
+        templateId: 'd-c18c023d7f7847118f02d342f538c571',
+        dynamic_template_data: {
+          username: user.username,
+          email: user.email,
+          resetLink: `http://${ctx.req.headers.host}${urls.resetPassword}${token}`,
+          forgotLink: `http://${ctx.req.headers.host}${urls.forgotPassword}`
+        }
+      };
+      sgMail.send(msg);
+
+      // Send response
+      return 'Success';
+    },
+    bookmark: async (root, { questionId }, ctx: Context) => {
+      await QuestionBookmark.query().insert({ questionId, userId: ctx.user.id });
     }
   },
 
@@ -207,6 +254,10 @@ export const resolvers = {
 
       const privateComments = await query;
       return privateComments.map((priC) => ({ id: priC.id }));
+    },
+    manualCompletedSets: async ({ id }) => {
+      const completedSets = await ManualCompletedSet.query().where({ userId: id });
+      return completedSets.map((completedSet) => completedSet.setId);
     }
   },
 

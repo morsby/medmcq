@@ -7,8 +7,8 @@ interface User {
   password: string;
   roleId: number;
   email?: string;
-  resetPasswordExpires?: number;
-  resetPasswordToken?: number;
+  resetPasswordExpires?: Date;
+  resetPasswordToken?: string;
 }
 
 class User extends Model {

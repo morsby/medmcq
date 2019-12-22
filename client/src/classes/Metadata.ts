@@ -51,13 +51,7 @@ class Metadata {
 
     const semester = await Apollo.query<Metadata>('semester', query, { id });
 
-    await store.dispatch(
-      metadataReducer.actions.setMetadata({
-        tags: semester.tags,
-        specialties: semester.specialties,
-        examSets: semester.examSets
-      })
-    );
+    await store.dispatch(metadataReducer.actions.setMetadata(semester));
   };
 
   static vote = async ({
@@ -120,6 +114,10 @@ class Metadata {
     } else if (type === 'tag') {
       await store.dispatch(questionsReducer.actions.voteTag(metadataVote as TagVote));
     }
+  };
+
+  static suggestTag = ({ tagName, questionId }: { tagName: string; questionId: number }) => {
+    // TODO
   };
 }
 

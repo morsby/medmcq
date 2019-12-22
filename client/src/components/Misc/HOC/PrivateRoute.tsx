@@ -11,9 +11,12 @@ import User from 'classes/User';
  * Higher Order Component der blokerer visse URLS for brugere der ikke er logget ind
  * (fx profilen m.v.)
  */
-export interface PrivateRouteProps {}
+export interface PrivateRouteProps {
+  path: string;
+  component: React.SFC;
+}
 
-const PrivateRoute: React.SFC<PrivateRouteProps> = () => {
+const PrivateRoute: React.SFC<PrivateRouteProps> = (props) => {
   const [loading, setLoading] = useState(true);
   const user = useSelector((state: ReduxState) => state.auth.user);
 
@@ -24,7 +27,7 @@ const PrivateRoute: React.SFC<PrivateRouteProps> = () => {
 
   if (loading) return <LoadingPage />;
   if (!user && !loading) return <Redirect to={urls.login} />;
-  return <Route {...this.props} />;
+  return <Route {...props} />;
 };
 
 export default PrivateRoute;

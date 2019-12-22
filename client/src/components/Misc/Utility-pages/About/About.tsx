@@ -1,18 +1,22 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import ReactRouterPropTypes from 'react-router-prop-types';
+import React, { useEffect } from 'react';
 
-import { withLocalize, Translate } from 'react-localize-redux';
+import { withLocalize, Translate, LocalizeContextProps } from 'react-localize-redux';
 import aboutTranslations from './aboutTranslations';
 
 import { Container, Divider, Button } from 'semantic-ui-react';
-import { withRouter } from 'react-router';
+import { useHistory } from 'react-router-dom';
 
 /**
  * Component til siden "Om-siden".
  */
-const About = ({ addTranslation, history }) => {
-  addTranslation(aboutTranslations);
+export interface AboutProps extends LocalizeContextProps {}
+
+const About: React.SFC<AboutProps> = ({ addTranslation }) => {
+  const history = useHistory();
+
+  useEffect(() => {
+    addTranslation(aboutTranslations);
+  }, []);
 
   return (
     <div className="flex-container">
@@ -44,17 +48,4 @@ const About = ({ addTranslation, history }) => {
   );
 };
 
-About.propTypes = {
-  /**
-   * History
-   * fra react-router
-   */
-  history: ReactRouterPropTypes.history,
-  /**
-   * Func til at tilføje oversættelse.
-   * Fra react-localize-redux
-   */
-  addTranslation: PropTypes.func
-};
-
-export default withRouter(withLocalize(About));
+export default withLocalize(About);

@@ -20,22 +20,15 @@ const questionsReducer = createSlice({
       state.questions = action.payload;
 
       let comments: Comment[] = [];
-      action.payload.forEach((question) =>
-        comments.concat([...question.publicComments, ...question.privateComments])
-      );
+      let tagVotes: TagVote[] = [];
+      let specialtyVotes: SpecialtyVote[] = [];
+      for (let question of action.payload) {
+        comments = comments.concat([...question.publicComments, ...question.privateComments]);
+        specialtyVotes = specialtyVotes.concat(question.specialtyVotes);
+      }
+
       state.comments = comments;
-
-      let tagVotes = [];
-      action.payload.forEach((question) => {
-        tagVotes.concat(question.tagVotes);
-      });
       state.tagVotes = tagVotes;
-
-      let specialtyVotes = [];
-      action.payload.forEach((question) => {
-        specialtyVotes.concat(question.specialtyVotes);
-      });
-
       state.specialtyVotes = specialtyVotes;
     },
     setBookmarked: (
@@ -45,11 +38,6 @@ const questionsReducer = createSlice({
       const { questionId, isBookmarked } = action.payload;
       const index = state.questions.findIndex((question) => question.id === questionId);
       state.questions[index].isBookmarked = isBookmarked;
-    },
-    answer: (state, action: PayloadAction<{ questionId: number; answer: number }>) => {
-      const { questionId, answer } = action.payload;
-      const index = state.questions.findIndex((question) => question.id === questionId);
-      state.questions[index].answer = answer;
     },
     setLiked: (state, action: PayloadAction<{ questionId: number; isLiked: boolean }>) => {
       const { questionId, isLiked } = action.payload;

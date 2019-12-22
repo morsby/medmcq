@@ -6,34 +6,31 @@ import { store } from 'IndexApp';
 import Apollo from './Apollo';
 import questionsReducer from 'redux/reducers/question';
 import quizReducer from 'redux/reducers/quiz';
+import ExamSet from './ExamSet';
 
 export interface QuestionFilterInput {
   text: string;
-  specialties: number[];
-  tags: number[];
-  semester: number;
+  specialtyIds: number[];
+  tagIds: number[];
+  semesterId: number;
   year: number;
   season: string;
   ids: number[];
   n: number;
-  set: number;
+  setId: number;
   onlyNew: boolean;
   onlyWrong: boolean;
   commentIds: number[];
   search: string;
-  refetch: boolean;
 }
 
 interface Question {
-  // API
   id: number;
   text: string;
   answer1: string;
   answer2: string;
   answer3: string;
-  examSetQno: number;
-  examSetId: number;
-  semester: number;
+  examSet: ExamSet;
   correctAnswers: number[];
   specialties: Specialty[];
   tags: Tag[];
@@ -44,8 +41,6 @@ interface Question {
   specialtyVotes: SpecialtyVote[];
   isBookmarked: boolean;
   isLiked: boolean;
-  // FrontEnd
-  answer: number;
 }
 
 class Question {
@@ -55,7 +50,6 @@ class Question {
       text
       examSet {
         id
-        season
       }
       specialties {
         id
@@ -86,6 +80,11 @@ class Question {
       publicComments {
         id
         text
+        isPrivate
+        isAnonymous
+        question {
+          id
+        }
         user {
           id
           username
@@ -98,6 +97,11 @@ class Question {
       privateComments {
         id
         text
+        isPrivate
+        isAnonymous
+        question {
+          id
+        }
         user {
           id
           username
@@ -107,27 +111,25 @@ class Question {
           userId
         }
       }
-      examSet {
-        id
-      }
     }
   `;
 
-  static fetch = async (filter: Partial<QuestionFilterInput>) => {
+  static fetch = async (filter: Partial<QuestionFilterInput>, newQuiz?: boolean) => {
     const query = gql`
-    query($filter: QuestionFilterInput) {
-      questions(filter: $filter) {
-        ...QuestionFull
+      query($filter: QuestionFilterInput!) {
+        questions(filter: $filter) {
+          ...QuestionFull
+        }
       }
       ${Question.questionFragment}
-    }
-  `;
+    `;
 
     const questions = await Apollo.query<Question[]>('questions', query, { filter });
     await store.dispatch(questionsReducer.actions.setQuestions(questions));
-    if (!filter.refech) {
+    if (newQuiz) {
+      await store.dispatch(quizReducer.actions.changeQuestion(0));
       await store.dispatch(
-        quizReducer.actions.setQuestionIds(questions.map((question) => question.id))
+        quizReducer.actions.newQuiz({ questionIds: questions.map((question) => question.id) })
       );
     }
   };

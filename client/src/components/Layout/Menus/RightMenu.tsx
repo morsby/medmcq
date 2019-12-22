@@ -5,16 +5,21 @@ import { Menu, Icon, Button, Loader } from 'semantic-ui-react';
 import Flag from 'react-flagkit';
 import _ from 'lodash';
 import { ReduxState } from 'redux/reducers';
-import Quiz from 'classes/Quiz';
 import settingsReducer from 'redux/reducers/settings';
 import User from 'classes/User';
-import { useHistory } from 'react-router-dom';
+import Question from 'classes/Question';
+import Quiz from 'classes/Quiz';
 
-export interface RightMenuProps extends LocalizeContextProps {}
+export interface RightMenuProps extends LocalizeContextProps {
+  handleNavigation: Function;
+}
 
-const RightMenu: React.SFC<RightMenuProps> = ({ setActiveLanguage, languages }) => {
+const RightMenu: React.SFC<RightMenuProps> = ({
+  setActiveLanguage,
+  languages,
+  handleNavigation
+}) => {
   const [loading, setLoading] = useState(false);
-  const history = useHistory();
   const dispatch = useDispatch();
   const activeLanguage = useSelector((state: ReduxState) => state.settings.language);
   const user = useSelector((state: ReduxState) => state.auth.user);
@@ -23,7 +28,7 @@ const RightMenu: React.SFC<RightMenuProps> = ({ setActiveLanguage, languages }) 
     setLoading(true);
     commentIds = _.uniq(commentIds);
     await Quiz.start({ ids: commentIds });
-    history.push('/quiz');
+    handleNavigation('/quiz');
   };
 
   const changeLang = (lang) => {
@@ -47,7 +52,7 @@ const RightMenu: React.SFC<RightMenuProps> = ({ setActiveLanguage, languages }) 
     return (
       <>
         {languages.map((lang) => generateFlag(lang))}
-        <Menu.Item onClick={() => history.push('/profil')}>
+        <Menu.Item onClick={() => handleNavigation('/profil')}>
           <strong>
             <Translate
               id="header.greeting"
@@ -73,7 +78,7 @@ const RightMenu: React.SFC<RightMenuProps> = ({ setActiveLanguage, languages }) 
             inverted
             onClick={() => {
               User.logout();
-              return history.push('/');
+              return handleNavigation('/');
             }}
           >
             <Translate id="header.logout" />
@@ -85,7 +90,7 @@ const RightMenu: React.SFC<RightMenuProps> = ({ setActiveLanguage, languages }) 
     return (
       <>
         {languages.map((lang) => generateFlag(lang))}
-        <Menu.Item onClick={() => history.push('/login')}>
+        <Menu.Item onClick={() => handleNavigation('/login')}>
           <Icon name="doctor" /> <Translate id="header.login" />
         </Menu.Item>
       </>

@@ -1,23 +1,18 @@
 import React from 'react';
 import { Comment } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
-import { IReduxState } from 'reducers/index.js';
+import { ReduxState } from 'redux/reducers';
 
 export interface CommentsQuestionCommentProps {
   commentId: number;
-  type: string;
+  type: 'private' | 'public';
 }
 
-const CommentsQuestionComment: React.SFC<CommentsQuestionCommentProps> = ({
-  commentId,
-  type = 'public'
-}) => {
-  const questions = useSelector((state: IReduxState) => state.questions);
-  const user = useSelector((state: IReduxState) => state.auth.user);
-
-  const { users } = questions.entities;
-  const comment = questions.entities[`${type}Comments`][commentId];
-  const username = users[commentId] ? users[commentId].username : user.username;
+const CommentsQuestionComment: React.SFC<CommentsQuestionCommentProps> = ({ commentId, type }) => {
+  const comment = useSelector((state: ReduxState) =>
+    state.questions.comments.find((comment) => comment.id === commentId)
+  );
+  const user = useSelector((state: ReduxState) => state.auth.user);
 
   if (!comment) return null;
   return (
@@ -27,7 +22,7 @@ const CommentsQuestionComment: React.SFC<CommentsQuestionCommentProps> = ({
       }}
     >
       <Comment.Content>
-        <Comment.Author as="strong">{username}</Comment.Author>
+        <Comment.Author as="strong">{comment.user.username}</Comment.Author>
         <Comment.Metadata>{new Date(comment.createdAt).toLocaleString()}</Comment.Metadata>
         <Comment.Text>{comment.text}</Comment.Text>
       </Comment.Content>

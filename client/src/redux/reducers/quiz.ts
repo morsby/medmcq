@@ -2,9 +2,9 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState = {
   questionIds: [] as number[],
-  answers: {},
+  answers: [] as { questionId: number; answer: number }[],
   quizId: null,
-  currentQuestionNumber: 0,
+  questionIndex: 0,
   didInvalidate: false,
   imgOpen: false
 };
@@ -17,10 +17,16 @@ const quizReducer = createSlice({
       state.questionIds = action.payload;
     },
     changeQuestion: (state, action: PayloadAction<number>) => {
-      state.currentQuestionNumber = action.payload;
+      state.questionIndex = action.payload;
     },
     setImgOpen: (state, action: PayloadAction<boolean>) => {
       state.imgOpen = action.payload;
+    },
+    newQuiz: (state, action: PayloadAction<{ questionIds: number[] }>) => {
+      state.questionIds = action.payload.questionIds;
+    },
+    answer: (state, action: PayloadAction<{ questionId: number; answer: number }>) => {
+      state.answers.push(action.payload);
     }
   }
 });

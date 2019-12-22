@@ -24,18 +24,15 @@ export interface QuestionCommentsProps {
 
 const QuestionComments: React.SFC<QuestionCommentsProps> = ({ type }) => {
   const dispatch = useDispatch();
-  const currentQuestionNumber = useSelector(
-    (state: ReduxState) => state.quiz.currentQuestionNumber
-  );
+  const currentQuestionNumber = useSelector((state: ReduxState) => state.quiz.questionIndex);
   const question = useSelector(
     (state: ReduxState) => state.questions.questions[currentQuestionNumber]
   );
-  const publicComments = useSelector((state: ReduxState) =>
-    state.questions.comments.filter((comment) => !comment.isPrivate)
+  const comments = useSelector((state: ReduxState) =>
+    state.questions.comments.filter((comment) => comment.question.id === question.id)
   );
-  const privateComments = useSelector((state: ReduxState) =>
-    state.questions.comments.filter((comment) => comment.isPrivate)
-  );
+  const publicComments = comments.filter((comment) => !comment.isPrivate);
+  const privateComments = comments.filter((comment) => comment.isPrivate);
   const [editCommentId, setEditCommentId] = useState(null);
   const [comment, setComment] = useState('');
   const [loading, setLoading] = useState(false);

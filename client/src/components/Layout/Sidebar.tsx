@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { PropTypes } from 'prop-types';
-import ReactRouterPropTypes from 'react-router-prop-types';
 import { Sidebar as SemanticSidebar, Menu, Icon, Image } from 'semantic-ui-react';
 import { breakpoints } from '../../utils/common';
 import styles from './Header.module.css';
 import logo from './logo/aulogo_hvid.png';
 import RightMenu from './Menus/RightMenu';
-import { withRouter } from 'react-router';
 import { Translate } from 'react-localize-redux';
+import { useHistory } from 'react-router-dom';
 
-const Sidebar = ({ history, children }) => {
+export interface SideBarProps {}
+
+const Sidebar: React.SFC<SideBarProps> = ({ children }) => {
+  const history = useHistory();
   const [visible, setVisible] = useState(false);
   const [width, setWidth] = useState(window.innerWidth);
 
@@ -18,7 +19,7 @@ const Sidebar = ({ history, children }) => {
       setWidth(window.innerWidth);
     });
 
-    return window.removeEventListener('resize', setWidth(window.innerWidth));
+    return window.removeEventListener('resize', () => setWidth(window.innerWidth));
   }, []);
 
   const handleNavigation = (url) => {
@@ -86,9 +87,4 @@ const Sidebar = ({ history, children }) => {
   );
 };
 
-Sidebar.propTypes = {
-  history: ReactRouterPropTypes.history,
-  children: PropTypes.node
-};
-
-export default withRouter(Sidebar);
+export default Sidebar;

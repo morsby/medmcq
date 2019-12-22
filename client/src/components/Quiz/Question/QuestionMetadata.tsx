@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { PropTypes } from 'prop-types';
-import { connect, useDispatch } from 'react-redux';
-import * as actions from 'actions/index';
+import { useDispatch, useSelector } from 'react-redux';
 import _ from 'lodash';
 import { isAnswered } from 'utils/quiz';
 import CopyToClipBoard from 'react-copy-to-clipboard';
@@ -11,46 +9,47 @@ import { Translate } from 'react-localize-redux';
 import QuestionAnsweredCounter from './QuestionMetadata/QuestionAnsweredCounter';
 import QuestionMetadataLabel from './QuestionMetadata/QuestionMetadataLabel';
 import QuestionMetadataDropdown from './QuestionMetadata/QuestionMetadataDropdown';
-import { withRouter } from 'react-router';
-import { makeToast } from 'actions/index';
+import makeToast from 'redux/actions/makeToast';
+import { ReduxState } from 'redux/reducers';
+import Metadata from 'classes/Metadata';
+import User from 'classes/User';
 
-const QuestionMetadata = (props) => {
+export interface QuestionMetadataProps {}
+
+const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
   const dispatch = useDispatch();
-  const { question, user, metadata } = props;
   const [newTag, setNewTag] = useState('');
   const [addingNewTag, setAddingNewTag] = useState(false);
   const [suggestTagMessage, setSuggestTagMessage] = useState('');
+  const questionIndex = useSelector((state: ReduxState) => state.quiz.questionIndex);
+  const question = useSelector((state: ReduxState) => state.questions.questions[questionIndex]);
+  const examSet = useSelector((state: ReduxState) =>
+    state.metadata.examSets.find((examSet) => examSet.id === question.examSet.id)
+  );
+  const specialties = useSelector((state: ReduxState) => state.metadata.specialties);
+  const tags = useSelector((state: ReduxState) => state.metadata.tags);
+
+  const user = useSelector((state: ReduxState) => state.auth.user);
 
   const metadataVote = async (type, metadataId) => {
-    await props.voteAction(type, question.id, metadataId, 1);
+    await Metadata.vote({ type, questionId: question.id, metadataId, vote: 1 });
   };
 
   useEffect(() => {
     setSuggestTagMessage('');
-  }, [question, props.metadata]);
+  }, [question]);
 
-  const suggestTag = () => {
-    props.questionReport({
-      type: 'suggest_tag',
-      data: {
-        tag: newTag,
-        question: props.question
-      }
-    });
+  const suggestTag = async () => {
+    await Metadata.suggestTag({ tagName: newTag, questionId: question.id });
     setNewTag('');
     setAddingNewTag(false);
     setSuggestTagMessage('Dit tag er blevet foreslået');
   };
 
-  const handleNewTag = (e, { value }) => {
+  const handleChange = (e, { value }) => {
     setNewTag(value);
   };
 
-  let { tags, specialties } = metadata.entities;
-  specialties = _.pickBy(specialties, (s) => s.semesterId === question.examSet.semester);
-  tags = _.pickBy(tags, (t) => t.semesterId === question.semester);
-  console.log(question);
-  let examSet = metadata.entities.examSets[question.examSet];
   return (
     <Grid celled stackable columns="equal">
       <Grid.Column>
@@ -67,24 +66,25 @@ const QuestionMetadata = (props) => {
           <>
             <Grid.Row style={{ margin: '7px 0 7px 0' }}>
               <Translate id="questionMetadata.specialty" />{' '}
-              {_.orderBy(question.specialtyVotes, 'votes', 'desc').map((s) => {
-                let spec = specialties[s.specialty.id] || {};
+              {_.orderBy(question.specialtyVotes, 'votes', 'desc').map((specialtyVote) => {
+                const specialty = specialties.find(
+                  (specialty) => specialty.id === specialtyVote.id
+                );
                 return (
                   <QuestionMetadataLabel
-                    key={spec.id}
-                    metadata={spec}
+                    key={specialty.id}
+                    metadata={specialty}
                     user={user}
                     question={question}
                     type="specialty"
                   >
-                    {spec.name}
+                    {specialty.name}
                   </QuestionMetadataLabel>
                 );
               })}
               {user && (
                 <QuestionMetadataDropdown
                   type="specialty"
-                  text="Speciale"
                   onChange={(value) => metadataVote('specialty', value)}
                   options={specialties}
                 />
@@ -94,7 +94,7 @@ const QuestionMetadata = (props) => {
               <Translate id="questionMetadata.tags" />{' '}
               {_(question.tagVotes)
                 .map((t) => tags[t.tag.id])
-                .filter((t) => !!t.tag.parent.id)
+                .filter((t) => !!t.parent.id)
                 .orderBy('votes', 'desc')
                 .map((t) => {
                   return (
@@ -113,7 +113,6 @@ const QuestionMetadata = (props) => {
               {user && (
                 <QuestionMetadataDropdown
                   type="tag"
-                  text="Tag"
                   onChange={(value) => metadataVote('tag', value)}
                   options={tags}
                 />
@@ -132,9 +131,7 @@ const QuestionMetadata = (props) => {
               <Translate id="voting.share" />
             </Button>
           </CopyToClipBoard>
-          {user && isAnswered(question) && (
-            <QuestionAnsweredCounter user={user} question={question} />
-          )}
+          {user && isAnswered(question) && <QuestionAnsweredCounter />}
         </Grid.Row>
       </Grid.Column>
       {user && isAnswered(question) && (
@@ -153,7 +150,7 @@ const QuestionMetadata = (props) => {
                     width={5}
                     placeholder="Tag ..."
                     value={newTag}
-                    onChange={handleNewTag}
+                    onChange={handleChange}
                   />
                   <Button basic color="green" onClick={suggestTag}>
                     <Translate id="voting.suggest_tag" />
@@ -171,9 +168,9 @@ const QuestionMetadata = (props) => {
                 style={{ cursor: 'pointer' }}
                 onClick={() => {
                   if (question.isBookmarked) {
-                    dispatch(actions.removeBookmark(question.id));
+                    User.bookmark({ questionId: question.id });
                   } else {
-                    dispatch(actions.createBookmark(question.id));
+                    User.bookmark({ questionId: question.id });
                   }
                 }}
                 color={question.isBookmarked ? 'green' : 'grey'}
@@ -188,27 +185,4 @@ const QuestionMetadata = (props) => {
   );
 };
 
-const mapStateToProps = (state) => {
-  return {
-    metadata: state.metadata,
-
-    // bruges kun til at opdatere på besvarelse
-    answers: state.quiz.answers
-  };
-};
-
-QuestionMetadata.propTypes = {
-  question: PropTypes.object,
-  user: PropTypes.object,
-  questionReport: PropTypes.func,
-  // New props
-  metadata: PropTypes.object,
-  voteAction: PropTypes.func
-};
-
-export default withRouter(
-  connect(
-    mapStateToProps,
-    actions
-  )(QuestionMetadata)
-);
+export default QuestionMetadata;

@@ -6,7 +6,7 @@ import Quiz from 'components/Quiz/Quiz';
 import { useQuery } from 'react-apollo-hooks';
 import { fetchQuestionIdsFromShareLink as query_fetchQuestionIdsFromShareLink } from 'queries/shareLink';
 import ErrorBoundary from 'components/Misc/Utility-pages/ErrorBoundary';
-import QuizClass from 'classes/Quiz';
+import Question from 'classes/Question';
 
 export interface QuizShareBuilderLoader {}
 
@@ -19,7 +19,7 @@ const QuizShareBuilderLoader: React.SFC<QuizShareBuilderLoader> = () => {
 
   useEffect(() => {
     const fetchQuestions = async () => {
-      await dispatch(QuizClass.start({ ids: data.shareLink }));
+      await Question.fetch({ ids: data.shareLink });
     };
 
     // Når ID'er er hentet gennem useQuery, så henter vi spørgsmålene fra ID'erne normalt

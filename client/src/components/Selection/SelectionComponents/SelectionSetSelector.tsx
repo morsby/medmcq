@@ -1,27 +1,20 @@
 import React from 'react';
 import _ from 'lodash';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import SetRadioButton from './SetRadioButton';
 import { Form, Header } from 'semantic-ui-react';
 
 import { Translate } from 'react-localize-redux';
 import { ReduxState } from 'redux/reducers';
-import uiReducer from 'redux/reducers/ui';
 
 const SelectionSetSelector = () => {
-  const dispatch = useDispatch();
-  const { selectedSemester, selectedSetId } = useSelector(
-    (state: ReduxState) => state.ui.selection
-  );
+  const selectedSemester = useSelector((state: ReduxState) => state.ui.selection.semesterId);
   const semester = useSelector((state: ReduxState) =>
     state.metadata.semesters.find((semester) => semester.id === selectedSemester)
   );
   const examSets = useSelector((state: ReduxState) => state.metadata.examSets);
   const user = useSelector((state: ReduxState) => state.auth.user);
-  const onChange = (e, { name, value }) => {
-    dispatch(uiReducer.actions.changeSelection({ name, value }));
-  };
 
   if (!selectedSemester) {
     return (
@@ -46,14 +39,7 @@ const SelectionSetSelector = () => {
         .reverse()
         .value()
         .map((examSet) => {
-          return (
-            <SetRadioButton
-              key={examSet.id}
-              set={examSet}
-              selectedSet={selectedSetId}
-              onChange={onChange}
-            />
-          );
+          return <SetRadioButton key={examSet.id} set={examSet} />;
         })}
     </Form>
   );

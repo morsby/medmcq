@@ -47,7 +47,7 @@ const pReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: pReducer,
-  middleware: getDefaultMiddleware(),
+  middleware: getDefaultMiddleware({ serializableCheck: false }),
   devTools: { maxAge: 20 }
 });
 

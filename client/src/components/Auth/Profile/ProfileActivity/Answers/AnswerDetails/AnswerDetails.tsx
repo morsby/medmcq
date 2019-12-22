@@ -11,6 +11,7 @@ import { urls } from 'utils/common';
 import { useHistory } from 'react-router';
 import AnswersDetailsTable from './AnswersDetailsTable';
 import { ReduxState } from 'redux/reducers';
+import Question from 'classes/Question';
 import Quiz from 'classes/Quiz';
 
 /**
@@ -23,7 +24,6 @@ const AnswerDetails = ({ answers }) => {
   const [selected, setSelected] = useState([]);
   const [quizLoading, setQuizLoading] = useState(false);
   const questions = useSelector((state: ReduxState) => state.questions.questions);
-  const dispatch = useDispatch();
   const history = useHistory();
 
   /**

@@ -9,7 +9,7 @@ import {
 } from 'react-localize-redux';
 import aboutTranslations from 'components/Misc/Utility-pages/About/aboutTranslations';
 import { useDispatch, useSelector } from 'react-redux';
-import { IReduxState } from 'reducers';
+import { ReduxState } from 'redux/reducers';
 
 export interface FirstTimeToastProps extends LocalizeContextProps {
   closeToast?: Function;
@@ -18,7 +18,7 @@ export interface FirstTimeToastProps extends LocalizeContextProps {
 
 const FirstTimeToast: React.SFC<FirstTimeToastProps> = ({ closeToast, addTranslation }) => {
   const history = useHistory();
-  const language = useSelector((state: IReduxState) => state.settings.language);
+  const language = useSelector((state: ReduxState) => state.settings.language);
   const [changedLanguage, setChangedLanguage] = useState(false);
   const dispatch = useDispatch();
   addTranslation(aboutTranslations);

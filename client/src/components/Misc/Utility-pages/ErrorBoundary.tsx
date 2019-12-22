@@ -13,7 +13,7 @@ class ErrorBoundary extends Component {
 
   componentDidCatch(error, info) {
     //eslint-disable-next-line no-console
-    console.log(error, info);
+    console.error(error, info);
   }
 
   render() {
@@ -22,7 +22,7 @@ class ErrorBoundary extends Component {
         <Container textAlign="center">
           <Divider hidden />
           <h1>Hovsa! Der er gået noget galt...</h1>
-          <Button color="blue" onClick={() => (window.location = '/')}>
+          <Button color="blue" onClick={() => (window.location.pathname = '/')}>
             Vend tilbage til forsiden ved at trykke her
           </Button>
           <Divider hidden />
@@ -49,8 +49,4 @@ class ErrorBoundary extends Component {
   }
 }
 
-ErrorBoundary.propTypes = {
-  children: PropTypes.node
-};
-
-export default withRouter(ErrorBoundary);
+export default ErrorBoundary;

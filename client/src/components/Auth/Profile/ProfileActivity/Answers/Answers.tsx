@@ -1,16 +1,24 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import { Button, Divider } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 import AnswerDetails from './AnswerDetails/AnswerDetails';
 import AnswerTagsDetailsTable from './AnswerDetails/AnswerTagsDetailsTable';
+import _ from 'lodash';
+import { useSelector } from 'react-redux';
+import { ReduxState } from 'redux/reducers';
 /**
  * Component that displays a summary of the answered questions.
  */
-const Answers = ({ answers = {}, questions = {}, privateComments = [], publicComments = [] }) => {
+
+export interface AnswersProps {}
+
+const Answers: React.SFC<AnswersProps> = () => {
   const [details, toggleDetails] = useState(false);
   const [tagDetailsOpen, setTagsDetailsOpen] = useState(false);
+  const answers = useSelector((state: ReduxState) => state.auth.profile.answers);
+  const privateComments = useSelector((state: ReduxState) => state.auth.profile.privateComments);
+  const publicComments = useSelector((state: ReduxState) => state.auth.profile.publicComments);
 
   const onToggleDetails = () => {
     toggleDetails(!details);
@@ -60,19 +68,10 @@ const Answers = ({ answers = {}, questions = {}, privateComments = [], publicCom
         {!tagDetailsOpen ? 'Vis Tag Detaljer' : 'Skjul Tag Detaljer'}
       </Button>
       <Divider hidden />
-      {details && totalAnswers > 0 && <AnswerDetails answers={answers} questions={questions} />}
+      {details && totalAnswers > 0 && <AnswerDetails answers={answers} />}
       {tagDetailsOpen && <AnswerTagsDetailsTable answers={answers} />}
     </div>
   );
-};
-
-Answers.propTypes = {
-  /**
-   * The answers, unfiltered
-   */
-  answers: PropTypes.object,
-
-  questions: PropTypes.object
 };
 
 export default Answers;

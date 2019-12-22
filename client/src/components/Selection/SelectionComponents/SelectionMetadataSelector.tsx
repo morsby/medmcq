@@ -15,15 +15,15 @@ import UIReducer from 'redux/reducers/ui';
  */
 const SelectionSpecialtiesSelector = () => {
   const dispatch = useDispatch();
-  const { selectedSemester, selectedSpecialtyIds, selectedTagIds } = useSelector(
+  const { semesterId, specialtyIds, tagIds } = useSelector(
     (state: ReduxState) => state.ui.selection
   );
   const metadata = useSelector((state: ReduxState) => state.metadata);
-  const semester = metadata.semesters[selectedSemester];
+  const semester = metadata.semesters.find((semester) => semester.id === semesterId);
   const [tagTree, setTagTree] = useState(null);
   const [tagSearch, setTagSearch] = useState('');
 
-  const handleChange = (value: string[], type: string) => {
+  const handleChange = (value: string[], type: 'tagIds' | 'specialtyIds') => {
     dispatch(UIReducer.actions.changeSelection({ type, value }));
   };
 
@@ -47,7 +47,7 @@ const SelectionSpecialtiesSelector = () => {
     };
 
     setTagTree(convertMetadataToTree());
-  }, [metadata.tags, selectedSemester]);
+  }, [metadata.tags, semesterId]);
 
   const renderTreeNodes = (tags) =>
     _.sortBy(tags, (t) => t.title).map((item) => {
@@ -61,7 +61,7 @@ const SelectionSpecialtiesSelector = () => {
       return <Tree.TreeNode key={item.key} {...item} />;
     });
 
-  if (!selectedSemester) {
+  if (!semesterId) {
     return (
       <Header as="h3">
         <Translate id="selectionSpecialtiesSelector.choose_semester" />
@@ -84,10 +84,8 @@ const SelectionSpecialtiesSelector = () => {
               <>
                 <Tree
                   checkable
-                  checkedKeys={selectedSpecialtyIds}
-                  onCheck={(specialties) =>
-                    handleChange(specialties as string[], 'selectedSpecialtyIds')
-                  }
+                  checkedKeys={specialtyIds}
+                  onCheck={(specialties) => handleChange(specialties as string[], 'specialtyIds')}
                 >
                   {metadata.specialties.map((s) => (
                     <Tree.TreeNode
@@ -98,12 +96,7 @@ const SelectionSpecialtiesSelector = () => {
                   ))}
                 </Tree>
                 <div style={{ textAlign: 'center' }}>
-                  <Button
-                    onClick={() => handleChange([], 'selectedSpecialtyIds')}
-                    size="small"
-                    fluid
-                    basic
-                  >
+                  <Button onClick={() => handleChange([], 'specialtyIds')} size="small" fluid basic>
                     <Translate id="selectionSpecialtiesSelector.clear" />
                   </Button>
                 </div>
@@ -135,17 +128,14 @@ const SelectionSpecialtiesSelector = () => {
                 checkedKeys={_.filter(
                   metadata.tags,
                   (t: any) =>
-                    t.semesterId === selectedSemester &&
+                    t.semesterId === semesterId &&
                     t.name.toLowerCase().includes(tagSearch.toLowerCase()) &&
-                    selectedTagIds.includes(String(t.id))
+                    tagIds.includes(String(t.id))
                 ).map((t) => String(t.id))}
                 onCheck={(tags: any, { node }) => {
                   handleChange(
-                    [
-                      ...tags,
-                      ..._.filter(selectedTagIds, (id) => id !== String(node.props.dataRef.id))
-                    ],
-                    'selectedTagIds'
+                    [...tags, ..._.filter(tagIds, (id) => id !== String(node.props.dataRef.id))],
+                    'tagIds'
                   ); // Ovenstående er en ret omstændig måde at få ID'er fra det filtrerede array til at også virke med det ikke filtrerede (da ID'er ikke vil eksistere i træet, når de udelukkes i søgning)
                 }}
                 checkable
@@ -153,7 +143,7 @@ const SelectionSpecialtiesSelector = () => {
                 {_(metadata.tags)
                   .filter(
                     (t) =>
-                      t.semester.id === selectedSemester &&
+                      t.semester.id === semesterId &&
                       t.name.toLowerCase().includes(tagSearch.toLowerCase())
                   )
                   .sortBy((t) => t.name)
@@ -170,19 +160,14 @@ const SelectionSpecialtiesSelector = () => {
             {!tagSearch && tagTree && (
               <>
                 <Tree
-                  checkedKeys={selectedTagIds}
-                  onCheck={(tags: any) => handleChange(tags, 'selectedTagIds')}
+                  checkedKeys={tagIds}
+                  onCheck={(tags: any) => handleChange(tags, 'tagIds')}
                   checkable
                 >
                   {renderTreeNodes(tagTree)}
                 </Tree>
                 <div style={{ textAlign: 'center' }}>
-                  <Button
-                    onClick={() => handleChange([], 'selectedTagIds')}
-                    size="small"
-                    fluid
-                    basic
-                  >
+                  <Button onClick={() => handleChange([], 'tagIds')} size="small" fluid basic>
                     <Translate id="selectionSpecialtiesSelector.clear" />
                   </Button>
                 </div>

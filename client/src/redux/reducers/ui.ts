@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { QuestionFilterInput } from 'classes/Question';
 
 const initialState = {
   isLoading: false,
@@ -7,10 +8,10 @@ const initialState = {
     n: 10,
     onlyNew: false,
     onlyWrong: false,
-    selectedSemester: 1,
-    selectedSetId: null,
-    selectedSpecialtyIds: [],
-    selectedTagIds: []
+    semesterId: 1,
+    setId: null,
+    specialtyIds: [],
+    tagIds: []
   },
   error: false
 };
@@ -19,16 +20,20 @@ const UIReducer = createSlice({
   name: 'UI',
   initialState,
   reducers: {
-    changeSelection: (state, action) => {
+    changeSelection: (
+      state,
+      action: PayloadAction<{ type: keyof QuestionFilterInput | 'type'; value: any }>
+    ) => {
       const { type, value } = action.payload;
       const { selection } = state;
 
       // Vi nulstiller hvis nyt semester
-      if (type === 'selectedSemester') {
-        selection.selectedSetId = null;
-        selection.selectedSpecialtyIds = [];
-        selection.selectedTagIds = [];
+      if (type === 'semesterId') {
+        selection.setId = null;
+        selection.specialtyIds = [];
+        selection.tagIds = [];
       }
+
       selection[type] = value;
 
       // Skift checkboxene afhængigt af type, da disse ikke overlapper

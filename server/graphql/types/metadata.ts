@@ -50,6 +50,7 @@ export const typeDefs = gql`
   extend type Mutation {
     voteTag(data: VoteInput): TagVote
     voteSpecialty(data: VoteInput): SpecialtyVote
+    suggestTag(tag: String!, questionId: Int!): String
   }
 `;
 

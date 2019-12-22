@@ -4,15 +4,14 @@ import marked from 'marked';
 import _ from 'lodash';
 import { Translate } from 'react-localize-redux';
 import { Divider, Button } from 'semantic-ui-react';
-import { useDispatch } from 'react-redux';
 import { useHistory } from 'react-router';
+import Question from 'classes/Question';
 import Quiz from 'classes/Quiz';
 
 /**
  * Component that displays questions
  */
 const Bookmarks = ({ bookmarks }) => {
-  const dispatch = useDispatch();
   const history = useHistory();
   if (Object.keys(bookmarks).length === 0) return <Translate id="profileBookmarks.no_bookmarks" />;
 

@@ -14,6 +14,7 @@ import QuestionImage from 'components/Quiz/Question/QuestionImage';
 import QuestionMetadata from 'components/Quiz/Question/QuestionMetadata';
 import QuestionExtras from 'components/Quiz/Question/QuestionExtras';
 import { ReduxState } from 'redux/reducers/index';
+import Quiz from 'classes/Quiz';
 
 /**
  * Component ansvarlig for at vise selve spørgsmålet, evt. billeder, kommentarer
@@ -22,23 +23,27 @@ import { ReduxState } from 'redux/reducers/index';
 export interface QuestionProps {}
 
 const Question: React.SFC<QuestionProps> = () => {
-  const [innerWidth, setInnerWidth] = useState(window.innerWidth);
+  const [width, setWidth] = useState(window.innerWidth);
   const [answerTime, setAnswerTime] = useState(0);
-  const currentQuestionNumber = useSelector(
-    (state: ReduxState) => state.quiz.currentQuestionNumber
-  );
+  const currentQuestionNumber = useSelector((state: ReduxState) => state.quiz.questionIndex);
   const question = useSelector(
     (state: ReduxState) => state.questions.questions[currentQuestionNumber]
   );
-  const answers = useSelector((state: ReduxState) => state.quiz.answers);
-  const user = useSelector((state: ReduxState) => state.auth.user);
+  const answer = useSelector((state: ReduxState) =>
+    state.quiz.answers.find((answer) => answer.questionId === question.id)
+  );
+  const imgOpen = useSelector((state: ReduxState) => state.quiz.imgOpen);
 
   useEffect(() => {
     setAnswerTime(0);
   }, [question]);
 
+  const handleAnswer = (answer: number) => {
+    Quiz.answer({ answer, answerTime, questionId: question.id });
+  };
+
   useEffect(() => {
-    let handleResize = () => setInnerWidth(window.innerWidth);
+    let handleResize = () => setWidth(window.innerWidth);
     handleResize = _.debounce(handleResize, 300);
 
     window.addEventListener('resize', handleResize);
@@ -48,7 +53,7 @@ const Question: React.SFC<QuestionProps> = () => {
 
   useEffect(() => {
     const answerTimeInterval = setInterval(() => {
-      this.setState((prevState) => ({ answerTime: prevState.answerTime + 1 }));
+      setAnswerTime(answerTime + 1);
     }, 1000);
 
     return () => {
@@ -64,7 +69,7 @@ const Question: React.SFC<QuestionProps> = () => {
      */
     const onKeydown = (e) => {
       if (
-        !this.props.imgOpen &&
+        !imgOpen &&
         !(
           document.activeElement.tagName === 'TEXTAREA' ||
           document.activeElement.tagName === 'INPUT'
@@ -78,7 +83,7 @@ const Question: React.SFC<QuestionProps> = () => {
 
         let keys = [1, 2, 3];
         if (keys.includes(answer)) {
-          this.onAnswer(answer);
+          handleAnswer(answer);
         }
       }
     };
@@ -104,16 +109,11 @@ const Question: React.SFC<QuestionProps> = () => {
                     smartypants: true
                   })
                 }}
-                ref={(ref) => (this._div = ref)}
               />
               <Responsive as="div" minWidth={breakpoints.mobile + 1}>
                 <Divider />
 
-                <QuestionAnswerButtons
-                  question={question}
-                  answer={answers[question.id]}
-                  onAnswer={this.onAnswer}
-                />
+                <QuestionAnswerButtons answer={answer?.answer} handleAnswer={handleAnswer} />
               </Responsive>
             </Grid.Column>
             {question.images.length > 0 && (
@@ -127,22 +127,10 @@ const Question: React.SFC<QuestionProps> = () => {
         </Grid>
         <Responsive as="div" maxWidth={breakpoints.mobile}>
           <Divider />
-          <QuestionAnswerButtons
-            question={question}
-            answer={answers[question.id]}
-            onAnswer={this.onAnswer}
-          />
+          <QuestionAnswerButtons handleAnswer={handleAnswer} answer={answer?.answer} />
         </Responsive>
         <QuestionMetadata />
-        <QuestionExtras
-          deleteComment={this.props.deleteComment}
-          commentQuestion={this.props.commentQuestion}
-          editComment={this.props.editComment}
-          questionReport={this.props.questionReport}
-          width={this.state.width}
-          question={question}
-          user={user}
-        />
+        <QuestionExtras width={width} />
       </Segment>
       <Divider hidden />
     </Container>

@@ -9,7 +9,7 @@ export interface SelectionSemesterSelectorProps {}
 
 const SelectionSemesterSelector: React.SFC<SelectionSemesterSelectorProps> = () => {
   const dispatch = useDispatch();
-  const selectedSemester = useSelector((state: ReduxState) => state.ui.selection.selectedSemester);
+  const selectedSemester = useSelector((state: ReduxState) => state.ui.selection.semesterId);
   const semesters = useSelector((state: ReduxState) => state.metadata.semesters);
   const mappedSemesters = semesters.map((semester) => ({
     text: `${semester.value}. semester - ${semester.name}`,
@@ -18,7 +18,7 @@ const SelectionSemesterSelector: React.SFC<SelectionSemesterSelectorProps> = () 
   }));
 
   const handleChange = (value: number) => {
-    dispatch(uiReducer.actions.changeSelection({ type: 'selectedSemester', value }));
+    dispatch(uiReducer.actions.changeSelection({ type: 'semesterId', value }));
   };
 
   return (

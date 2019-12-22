@@ -1,63 +1,35 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Segment, Dropdown, Divider } from 'semantic-ui-react';
-import { useMutation, useQuery } from 'react-apollo-hooks';
-import { createShareLink as query_createShareLink } from 'queries/shareLink';
-import * as queries from 'queries/questions';
 import { Table, Icon, Button } from 'antd';
 import Highlighter from 'react-highlight-words';
 import ExtendedRow from 'components/Sharebuilder/extendedRow';
 import { useSelector, useDispatch } from 'react-redux';
-import { IReduxState } from 'reducers';
-import _ from 'lodash';
 import SearchDropdown from 'components/Sharebuilder/searchDropdown';
-import * as actions from 'actions/index';
-import 'antd/lib/table/style/css';
-import 'antd/lib/button/style/css';
 import { useHistory } from 'react-router';
+import _ from 'lodash';
+import { ReduxState } from 'redux/reducers';
+import shareBuilderReducer from 'redux/reducers/sharebuilder';
+import ShareBuilderClass from 'classes/ShareBuilder';
+import Question, { QuestionFilterInput } from 'classes/Question';
 
 export interface SharebuilderProps {}
 
-interface IFilter {
-  semester: number;
-  text: string;
-  tags: [string?];
-  specialties: [string?];
-  id: string;
-}
-
 const Sharebuilder: React.SFC<SharebuilderProps> = () => {
   const history = useHistory();
-  const [filter, setFilter]: [IFilter, Function] = useState({
-    semester: 4,
-    text: '',
-    tags: [],
-    specialties: [],
-    id: ''
-  });
-  const [queryFilter, setQueryFilter]: [IFilter, Function] = useState({
-    semester: 999,
-    text: '',
-    tags: [],
-    specialties: [],
-    id: ''
-  });
+  const [link, setLink] = useState('');
+  const [filter, setFilter] = useState<Partial<QuestionFilterInput>>({});
   // Redux
   const dispatch = useDispatch();
-  const picked = useSelector((state: IReduxState) => state.shareBuilder.picked);
-  const semesters = useSelector((state: IReduxState) => state.metadata.entities.semesters);
-  const specialties = useSelector((state: IReduxState) => state.metadata.entities.specialties);
-  const tags = useSelector((state: IReduxState) => state.metadata.entities.tags);
-  // GraphQL
-  const [createShareLink, { loading: createLinkLoading, data: createLinkData }] = useMutation(
-    query_createShareLink
-  );
-  const { data: pickedQuestions, loading: idsLoading } = useQuery(queries.getQuestionsFromIds, {
-    variables: { ids: picked }
-  });
-  const { loading, data } = useQuery(queries.fetchFilteredQuestions, { variables: queryFilter });
+  const picked = useSelector((state: ReduxState) => state.shareBuilder.picked);
+  const semesters = useSelector((state: ReduxState) => state.metadata.semesters);
+  const specialties = useSelector((state: ReduxState) => state.metadata.specialties);
+  const tags = useSelector((state: ReduxState) => state.metadata.tags);
+  const pickedQuestions = useSelector((state: ReduxState) => state.questions.questions);
+  const [selectedId, setSelectedId] = useState<null | number>(null);
+
   // Debounce filter, for ikke at query på hvert keystroke (delay er 1 sekund, som angivet herunder)
   const debounceQueryFilter = useCallback(
-    _.debounce((filter: IFilter) => setQueryFilter(filter), 1000),
+    _.debounce((filter: Partial<QuestionFilterInput>) => Question.fetch(filter), 1000),
     []
   );
 
@@ -65,13 +37,15 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
   // Er en lidt "omstændig" måde at undgå at useQuery bliver kaldt uden parameters,
   // da det henter alle spørgsmål. Bedre implementering søges.. ;)
   useEffect(() => {
-    const { text, tags, specialties, id } = filter;
-    if (text || tags.length > 0 || specialties.length > 0 || id) {
+    if (selectedId) {
+      debounceQueryFilter({ ids: [selectedId] });
+    }
+    if (filter.text || filter.tagIds.length > 0 || filter.specialtyIds.length > 0) {
       debounceQueryFilter(filter);
     }
   }, [debounceQueryFilter, filter]);
 
-  const handleChange = (value: string, type: keyof IFilter) => {
+  const handleChange = (value: string, type: keyof QuestionFilterInput) => {
     setFilter((prevFilter) => ({ ...prevFilter, [type]: value }));
   };
 
@@ -81,17 +55,21 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
 
     if (index !== -1)
       return dispatch(
-        actions.changePicked([...picked.slice(0, index), ...picked.slice(index + 1)])
+        shareBuilderReducer.actions.setPicked([
+          ...picked.slice(0, index),
+          ...picked.slice(index + 1)
+        ])
       );
 
     const newPick = picked.concat(value);
 
-    dispatch(actions.changePicked(newPick));
+    dispatch(shareBuilderReducer.actions.setPicked(newPick));
   };
 
   // Function til at skabe linket, når man har bygget færdigt - kalder useMutation
-  const handleCreateLink = () => {
-    createShareLink({ variables: { questionIds: picked } });
+  const handleCreateLink = async () => {
+    const link = await ShareBuilderClass.createShareLink({ questionIds: picked });
+    setLink(link);
   };
 
   const columns = [
@@ -99,11 +77,11 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
       title: 'ID',
       dataIndex: 'id',
       key: 'id',
-      filterIcon: <Icon type="search" style={{ color: filter.id ? '#1890ff' : undefined }} />,
+      filterIcon: <Icon type="search" style={{ color: selectedId ? '#1890ff' : undefined }} />,
       filterDropdown: (
         <SearchDropdown
-          onChange={(value) => handleChange(value, 'id')}
-          value={String(filter.id)}
+          onChange={(value) => setSelectedId(value)}
+          value={String(selectedId)}
           type="search"
         />
       )
@@ -135,23 +113,23 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
       key: 'specialties',
       filterDropdown: (
         <SearchDropdown
-          onChange={(value) => handleChange(value, 'specialties')}
+          onChange={(value) => handleChange(value, 'semesterId')}
           options={_(specialties)
-            .filter((s) => s.semesterId === filter.semester)
+            .filter((s) => s.semester.id === filter.semesterId)
             .map((s) => ({
               key: s.id,
               value: s.id,
               text: s.name
             }))
             .value()}
-          value={filter.specialties}
+          value={filter.specialtyIds.map((specialtyId) => String(specialtyId))}
           type="dropdown"
         />
       ),
       filterIcon: (
         <Icon
           type="search"
-          style={{ color: filter.specialties.length > 0 ? '#1890ff' : undefined }}
+          style={{ color: filter.specialtyIds.length > 0 ? '#1890ff' : undefined }}
         />
       ),
       render: (record) => <p>{_.map(record, (s) => specialties[s.specialtyId].name).join(', ')}</p>
@@ -163,20 +141,20 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
       filterDropdown: (
         <SearchDropdown
           options={_(tags)
-            .filter((t) => t.semesterId === filter.semester && t.name !== 'Tags')
+            .filter((t) => t.semester.id === filter.semesterId && t.name !== 'Tags')
             .map((t) => ({
               key: t.id,
               text: t.name,
               value: t.id
             }))
             .value()}
-          onChange={(value) => handleChange(value, 'tags')}
-          value={filter.tags}
+          onChange={(value) => handleChange(value, 'tagIds')}
+          value={filter.tagIds.map((tag) => String(tag))}
           type="dropdown"
         />
       ),
       filterIcon: (
-        <Icon type="search" style={{ color: filter.tags.length > 0 ? '#1890ff' : undefined }} />
+        <Icon type="search" style={{ color: filter.tagIds.length > 0 ? '#1890ff' : undefined }} />
       ),
       render: (record) => (
         <p>
@@ -217,29 +195,20 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
         <div style={{ overflowX: 'auto' }}>
           <Table
             columns={columns}
-            loading={idsLoading}
-            dataSource={!idsLoading ? pickedQuestions.questions : null}
+            dataSource={pickedQuestions || null}
             expandedRowRender={(record) => <ExtendedRow record={record} />}
           />
         </div>
         <Divider hidden />
-        <Button
-          type="primary"
-          disabled={createLinkLoading || picked.length < 1}
-          onClick={handleCreateLink}
-        >
+        <Button type="primary" disabled={picked.length < 1} onClick={handleCreateLink}>
           Opret link
         </Button>
-        {createLinkData && (
+        {link && (
           <div style={{ border: '2px solid grey', padding: '1rem', margin: '1rem' }}>
             <h3>
               Dette er dit link:{' '}
-              <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href={window.location.href + '/' + createLinkData.createShareLink}
-              >
-                {window.location.href + '/' + createLinkData.createShareLink}
+              <a target="_blank" rel="noopener noreferrer" href={window.location.href + '/' + link}>
+                {window.location.href + '/' + link}
               </a>
             </h3>
             <p>Linket åbner i et nyt vindue. Husk at gemme det hvis du skal bruge det igen.</p>
@@ -253,7 +222,7 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
             text: `${semester.value}. semester (${semester.name})`,
             key: semester.id
           }))}
-          value={filter.semester}
+          value={filter.semesterId}
           onChange={(e, { value }: { value: number }) =>
             setFilter((prevFilter) => ({ ...prevFilter, semester: value }))
           }
@@ -264,8 +233,7 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
         <div style={{ overflowX: 'auto' }}>
           <Table
             rowKey={(record: any) => record.id}
-            dataSource={!loading ? data.questions : null}
-            loading={loading}
+            dataSource={pickedQuestions}
             columns={columns}
             expandedRowRender={(record) => <ExtendedRow record={record} />}
           ></Table>

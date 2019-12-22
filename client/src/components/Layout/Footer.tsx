@@ -1,20 +1,21 @@
 import React, { useEffect } from 'react';
-import { PropTypes } from 'prop-types';
-import ReactRouterPropTypes from 'react-router-prop-types';
-
-import { withRouter } from 'react-router';
+import { useHistory } from 'react-router';
 import { Grid, Icon, Container, Menu } from 'semantic-ui-react';
 import { urls } from '../../utils/common';
-
-import { Translate, withLocalize } from 'react-localize-redux';
+import { Translate, withLocalize, LocalizeContextProps } from 'react-localize-redux';
 import layoutTranslations from './layoutTranslations.json';
 
 /**
  * Footer component.
  */
-const Footer = (props) => {
+
+export interface FooterProps extends LocalizeContextProps {}
+
+const Footer: React.SFC<FooterProps> = ({ addTranslation }) => {
+  const history = useHistory();
+
   useEffect(() => {
-    props.addTranslation(layoutTranslations);
+    addTranslation(layoutTranslations);
   });
 
   const iconStyle = {
@@ -31,7 +32,7 @@ const Footer = (props) => {
   };
 
   const handleClick = (path) => {
-    props.history.push(path);
+    history.push(path);
   };
 
   return (
@@ -66,14 +67,4 @@ const Footer = (props) => {
   );
 };
 
-Footer.propTypes = {
-  /**
-   * history er fra ReactRouter. Bruges til navigation.
-   */
-  history: ReactRouterPropTypes.history,
-
-  // Til at tilføje oversættelser
-  addTranslation: PropTypes.func
-};
-
-export default withRouter(withLocalize(Footer));
+export default withLocalize(Footer);

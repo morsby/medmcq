@@ -1,12 +1,12 @@
 import React from 'react';
-import { Checkbox, Divider } from 'semantic-ui-react';
+import { Divider } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 import { Tag, Table } from 'antd';
 import { useSelector } from 'react-redux';
-import { IReduxState } from 'reducers';
 import _ from 'lodash';
 import { useHistory } from 'react-router';
 import AnswerDetailsTableExtendedRow from './AnswerDetailsTableExtendedRow';
+import { ReduxState } from 'redux/reducers';
 
 export interface AnswersDetailsTableProps {
   answers: any[];
@@ -20,9 +20,7 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
   questions
 }) => {
   const history = useHistory();
-  const { specialties, examSets, tags } = useSelector(
-    (state: IReduxState) => state.metadata.entities
-  );
+  const { specialties, examSets, tags } = useSelector((state: ReduxState) => state.metadata);
 
   const getColor = (answer) => {
     if (answer.correct === answer.tries) return 'green';

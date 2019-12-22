@@ -7,6 +7,8 @@ import { calculateResults, isAnswered } from '../../utils/quiz';
 import { Card, List, Container, Button } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
 import { Translate } from 'react-localize-redux';
+import { useSelector } from 'react-redux';
+import { ReduxState } from 'redux/reducers';
 
 /**
  * Viser et overblik over alle spørgsmål i quizzen og fremgangen.
@@ -15,8 +17,14 @@ import { Translate } from 'react-localize-redux';
  * @param {array}   questions    Indeholder alle spørgsmålene.
  * @param {func}    clickHandler Funktion der navigerer til det klikkede spg.
  */
+export interface QuizSummaryProps {
+  clickHandler: Function;
+}
 
-const QuizSummary = ({ questions, answers, clickHandler }) => {
+const QuizSummary: React.SFC<QuizSummaryProps> = ({ clickHandler }) => {
+  const questions = useSelector((state: ReduxState) => state.questions.questions);
+  const questionIds = useSelector((state: ReduxState) => state.quiz.questionIds);
+  const answers = useSelector((state: ReduxState) => state.quiz.answers);
   let results = calculateResults(questions, answers);
 
   return (
@@ -33,20 +41,29 @@ const QuizSummary = ({ questions, answers, clickHandler }) => {
           )}
           <Card.Description style={{ columns: '250px 4' }}>
             <List ordered>
-              {questions.result.map((qId, index) => {
-                let q = questions.entities.questions[qId];
+              {questionIds.map((qId, index) => {
+                const q = questions.find((question) => question.id === qId);
 
-                let svar;
+                let userAnswer;
                 if (isAnswered(q)) {
-                  if (q.correctAnswers.includes(answers[qId])) {
-                    svar = 'svar-korrekt';
-                  } else if (!q.correctAnswers.includes(answers[qId])) {
-                    svar = 'svar-forkert';
+                  if (
+                    q.correctAnswers.includes(answers.find((answer) => answer.questionId).answer)
+                  ) {
+                    userAnswer = 'svar-korrekt';
+                  } else if (
+                    !q.correctAnswers.includes(answers.find((answer) => answer.questionId).answer)
+                  ) {
+                    userAnswer = 'svar-forkert';
                   }
                 }
 
                 return (
-                  <List.Item as="a" className={svar} onClick={() => clickHandler(index)} key={q.id}>
+                  <List.Item
+                    as="a"
+                    className={userAnswer}
+                    onClick={() => clickHandler(index)}
+                    key={q.id}
+                  >
                     {truncateText(q.text)}
                   </List.Item>
                 );
@@ -64,12 +81,6 @@ const QuizSummary = ({ questions, answers, clickHandler }) => {
       </Card>
     </Container>
   );
-};
-
-QuizSummary.propTypes = {
-  questions: PropTypes.object.isRequired,
-  answers: PropTypes.object.isRequired,
-  clickHandler: PropTypes.func.isRequired
 };
 
 export default QuizSummary;

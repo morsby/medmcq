@@ -60,7 +60,7 @@ const QuestionMetadataDropdown = ({ options, onChange, type }) => {
     }
 
     if (items.length === 0) {
-      items.push(<Menu.Item text="Ingen tags..." />);
+      items.push(<Menu.Item>Ingen tags...</Menu.Item>);
     }
 
     return items;

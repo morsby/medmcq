@@ -16,10 +16,9 @@ import SelectionUniqueSelector from 'components/Selection/SelectionComponents/Se
 import { useSelector } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
 import { useHistory } from 'react-router';
-import Question from 'classes/Question';
-import Quiz from 'classes/Quiz';
 import Semester from 'classes/Semester';
 import Metadata from 'classes/Metadata';
+import Quiz from 'classes/Quiz';
 
 export interface SelectionProps extends LocalizeContextProps {}
 
@@ -29,12 +28,11 @@ export interface SelectionProps extends LocalizeContextProps {}
 const Selection: React.SFC<SelectionProps> = ({ addTranslation, translate }) => {
   const [errors, setErrors] = useState([]);
   const [search, setSearch] = useState('');
-  const [loading, setLoading] = useState(false);
   const metadata = useSelector((state: ReduxState) => state.metadata);
-  const ui = useSelector((state: ReduxState) => state.ui);
+  const type = useSelector((state: ReduxState) => state.ui.selection.type);
+  const selectedSemester = useSelector((state: ReduxState) => state.ui.selection.semesterId);
   const user = useSelector((state: ReduxState) => state.auth.user);
-  const quizQuestions = useSelector((state: ReduxState) => state.quiz.questions);
-  const { type, selectedSemester } = ui.selection;
+  const quizQuestions = useSelector((state: ReduxState) => state.questions.questions);
   const { semesters } = metadata;
   const history = useHistory();
 
@@ -63,20 +61,19 @@ const Selection: React.SFC<SelectionProps> = ({ addTranslation, translate }) => 
     }
   };
 
-  const handleSubmit = (quizType) => {
+  const handleSubmit = async (quizType) => {
     let err = [];
 
     if (err.length === 0) {
       // Hvis vi er ved at søge
       if (search !== '') {
-        Question.fetch({ semester: ui.selection.selectedSemester, search });
-        return history.push(urls.quiz);
+        Quiz.start({ semesterId: selectedSemester, search });
       }
 
       // tjek for fejl, start eller ej
       // Ny quiz? Hent spørgsmål
       if (quizType === 'new') {
-        Quiz.start();
+        await Quiz.start();
       }
 
       // Uanset om det er en ny quiz eller ej – skift url til quizzen.

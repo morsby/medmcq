@@ -17,10 +17,9 @@ import { ReduxState } from 'redux/reducers';
 export interface ProfileActivityProps {}
 
 const ProfileActivity: React.SFC<ProfileActivityProps> = () => {
-  const { answers, publicComments, privateComments, bookmarks } = useSelector(
+  const { publicComments, privateComments } = useSelector(
     (state: ReduxState) => state.auth.profile
   );
-  const questions = useSelector((state: ReduxState) => state.questions.questions);
 
   const [activeIndex, setActiveIndex] = useState(0);
   return (
@@ -33,12 +32,7 @@ const ProfileActivity: React.SFC<ProfileActivityProps> = () => {
             active={activeIndex === 0}
             handleClick={setActiveIndex}
           >
-            <Answers
-              answers={answers}
-              questions={questions}
-              publicComments={_.map(publicComments, (c) => c.id)}
-              privateComments={_.map(privateComments, (c) => c.id)}
-            />
+            <Answers />
           </ProfileActivityAccordionElem>
         )}
       </Translate>

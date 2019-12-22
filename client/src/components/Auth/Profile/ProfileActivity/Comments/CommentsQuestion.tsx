@@ -1,11 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Comment } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 
 import CommentsQuestionComment from './CommentsQuestionComment';
+import Question from 'classes/Question';
 
-const CommentsQuestion = ({ question = {}, type = 'public' }) => {
+export interface CommentsQuestionProps {
+  question: Question;
+  type: 'public' | 'private';
+}
+
+const CommentsQuestion: React.SFC<CommentsQuestionProps> = ({ question, type }) => {
   return (
     <div>
       <ol type="A">
@@ -28,11 +33,6 @@ const CommentsQuestion = ({ question = {}, type = 'public' }) => {
       </Comment.Group>
     </div>
   );
-};
-
-CommentsQuestion.propTypes = {
-  question: PropTypes.object,
-  type: PropTypes.string
 };
 
 export default CommentsQuestion;

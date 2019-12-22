@@ -1,17 +1,11 @@
 import React, { useState } from 'react';
-
-import { useSelector, useDispatch } from 'react-redux';
-
 import { urls } from '../../../utils/common';
 import { loginUsernameValid, loginPasswordValid } from '../../../utils/formValidation';
-
 import { Form, Field } from 'react-final-form';
 import { Button, Divider, Message } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
-import { IReduxState } from 'reducers/index.js';
 import User from 'classes/User';
 import { useHistory } from 'react-router';
-import { useCookies } from 'react-cookie';
 
 /**
  * Component der viser login-formularen.
@@ -20,10 +14,7 @@ import { useCookies } from 'react-cookie';
  */
 const LoginForm = () => {
   const [error, setError] = useState('');
-  const auth = useSelector((state: IReduxState) => state.auth);
   const history = useHistory();
-  const [cookies, setCookie] = useCookies(['user']);
-  const dispatch = useDispatch();
 
   const handleNavigation = (path) => {
     history.push(urls[path]);

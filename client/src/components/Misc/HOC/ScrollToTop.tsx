@@ -1,27 +1,18 @@
-import { Component } from 'react';
-import { PropTypes } from 'prop-types';
-import ReactRouterPropTypes from 'react-router-prop-types';
-import { withRouter } from 'react-router';
+import React, { useEffect, ReactPropTypes } from 'react';
+import { useLocation } from 'react-router-dom';
 
 /**
  * Higher Order Component der bruges til at scrolle til toppen når der ændres
  * spørgsmål i quizzen.
  */
-class ScrollToTop extends Component {
-  componentDidUpdate(prevProps) {
-    if (this.props.location !== prevProps.location) {
-      window.scrollTo(0, 0);
-    }
-  }
+const ScrollToTop: React.SFC<any> = ({ children }) => {
+  const location = useLocation();
 
-  render() {
-    return this.props.children;
-  }
-}
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location]);
 
-ScrollToTop.propTypes = {
-  children: PropTypes.node,
-  location: ReactRouterPropTypes.location
+  return children;
 };
 
-export default withRouter(ScrollToTop);
+export default ScrollToTop;

@@ -3,8 +3,16 @@ import { Divider } from 'semantic-ui-react';
 import QuestionReport from './QuestionExtras/QuestionReport';
 import QuestionComments from './QuestionComments/QuestionComments';
 import QuestionExtraButtons from './QuestionExtras/QuestionExtraButtons';
+import { useSelector } from 'react-redux';
+import { ReduxState } from 'redux/reducers';
 
-const QuestionExtras = ({ user, question, width, questionReport }) => {
+export interface QuestionExtrasProps {
+  width: number;
+}
+
+const QuestionExtras: React.SFC<QuestionExtrasProps> = ({ width }) => {
+  const questionIndex = useSelector((state: ReduxState) => state.quiz.questionIndex);
+  const question = useSelector((state: ReduxState) => state.questions.questions[questionIndex]);
   const [privateCommentsOpen, setPrivateCommentsOpen] = useState(false);
   const [publicCommentsOpen, setPublicCommentsOpen] = useState(false);
   const [reportOpen, setReportOpen] = useState(false);
@@ -29,10 +37,6 @@ const QuestionExtras = ({ user, question, width, questionReport }) => {
   /** Håndter submit af rapport */
   const onReportSubmit = () => {
     // TODO: CONNECT  TIL REDUX OG API
-    questionReport({
-      type: 'error_report',
-      data: { report: report, question: question }
-    });
     setReport('');
     setReportSent(true);
   };
@@ -57,10 +61,7 @@ const QuestionExtras = ({ user, question, width, questionReport }) => {
         privateCommentsOpen={privateCommentsOpen}
         onPublicCommentsToggle={onPublicCommentsToggle}
         publicCommentsOpen={publicCommentsOpen}
-        publicComments={(question.publicComments || []).length}
-        privateComments={(question.privateComments || []).length}
         width={width}
-        user={user}
       />
       {reportOpen && (
         <>
@@ -75,25 +76,10 @@ const QuestionExtras = ({ user, question, width, questionReport }) => {
         </>
       )}
       {(publicCommentsOpen || privateCommentsOpen) && (
-        <QuestionComments
-          user={user}
-          comments={privateCommentsOpen ? question.privateComments : question.publicComments}
-          type={privateCommentsOpen ? 'private' : 'public'}
-          question={question}
-        />
+        <QuestionComments type={privateCommentsOpen ? 'private' : 'public'} />
       )}
     </>
   );
-};
-
-QuestionExtras.propTypes = {
-  user: PropTypes.object,
-  question: PropTypes.object,
-  width: PropTypes.number,
-  questionReport: PropTypes.func, // Redux
-  deleteComment: PropTypes.func, // Redux
-  commentQuestion: PropTypes.func, // Redux
-  editComment: PropTypes.func // Redux
 };
 
 export default QuestionExtras;

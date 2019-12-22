@@ -8,7 +8,7 @@ import { validationRegex } from '../../../utils/common';
 
 import { Form, Field } from 'react-final-form';
 import { Button, Divider, Message } from 'semantic-ui-react';
-import { Translate, LocalizeContextProps } from 'react-localize-redux';
+import { Translate, LocalizeContextProps, withLocalize } from 'react-localize-redux';
 import User, { UserSignupInput } from 'classes/User';
 
 /**
@@ -143,4 +143,4 @@ const SignupForm: React.SFC<SignupFormProps> = ({ translate }) => {
   );
 };
 
-export default SignupForm;
+export default withLocalize(SignupForm);

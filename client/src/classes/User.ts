@@ -31,6 +31,12 @@ interface User {
   email: string;
   answers: UserAnswer[];
   likes: Like[];
+  manualCompletedSets: { setId: number }[];
+  bookmarks: Bookmark[];
+}
+
+interface Bookmark {
+  question: Question;
 }
 
 class User {
@@ -196,6 +202,16 @@ class User {
     return message;
   };
 
+  static forgotPassword = async ({ email }: { email: string }) => {
+    const mutation = gql`
+      mutation($email: String!) {
+        forgotPassword(email: $email)
+      }
+    `;
+
+    await Apollo.mutate('forgotPassword', mutation, { email });
+  };
+
   static edit = async (data: Partial<User>) => {
     const mutation = gql`
       mutation($data: UserEditInput) {
@@ -219,6 +235,29 @@ class User {
       email
     });
     return isAvailable;
+  };
+
+  static manualCompleteSet = async ({ setId }: { setId: number }) => {
+    const mutation = gql`
+      mutation($setId: Int!, $userId: Int!) {
+        manualCompleteSet(setId: $setId, userId: $userId)
+      }
+    `;
+
+    await Apollo.mutate('manualCompleteSet', mutation, { setId });
+
+    await store.dispatch(authReducer.actions.manualCompleteSet({ setId }));
+  };
+
+  static bookmark = async ({ questionId }: { questionId: number }) => {
+    const mutation = gql`
+      mutation($questionId: Int!) {
+        bookmark(questionId: $questionId)
+      }
+    `;
+
+    await Apollo.mutate('bookmark', mutation, { questionId });
+    await store.dispatch(authReducer.actions.setBookmark({ questionId }));
   };
 }
 
