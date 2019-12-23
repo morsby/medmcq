@@ -44,7 +44,6 @@ import NewVersionMessage from './components/Misc/Utility-pages/About/NewVersion/
 import { urls } from './utils/common';
 import Sidebar from './components/Layout/Sidebar';
 import Footer from './components/Layout/Footer';
-import ErrorBoundary from './components/Misc/Utility-pages/ErrorBoundary';
 import QuizShareRoute from 'components/Quiz/QuizShareRoute';
 import QuizShareBuilderLoader from 'components/Quiz/QuizShareBuilderLoader';
 import Sharebuilder from 'components/Sharebuilder/Sharebuilder';
@@ -96,44 +95,42 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
 
   return (
     <BrowserRouter>
-      <ErrorBoundary>
-        <ScrollToTop>
-          <NewVersionMessage />
-          <ToastContainer
-            position="top-center"
-            autoClose={3000}
-            hideProgressBar={false}
-            newestOnTop
-            closeOnClick
-            rtl={false}
-            draggable
-            pauseOnHover
-          />
-          <Sidebar>
-            <Header />
-            <Switch>
-              <Route path={'/firsttime'} component={FirstTime} />
-              <Route path={urls.about} component={About} />
-              <Route path={urls.contact} component={Contact} />
-              <Route path={'/share/:id'} component={QuizShareBuilderLoader} />
-              <Route path={'/share'} component={Sharebuilder} />
-              <Route path={urls.quizShareRoute} component={QuizShareRoute} />
-              <Route path={urls.quiz} component={Quiz} />
-              <Route path={urls.signup} component={Signup} />
-              <Route path={urls.login} component={Login} />
-              <Route path={urls.logout} component={Logout} />
-              <PrivateRoute path={urls.editProfile} component={EditProfile} />
-              <PrivateRoute path={urls.profile} component={Profile} />
-              <Route path={urls.forgotPassword} component={ForgotPassword} />
-              <Route path={`${urls.resetPassword}/:token`} component={ResetPassword} />
-              <Route path="/print" component={Print} />
-              <Route exact path="/" component={Selection} />
-              <Route component={ErrorPage} />
-            </Switch>
-            <Footer />
-          </Sidebar>
-        </ScrollToTop>
-      </ErrorBoundary>
+      <ScrollToTop>
+        <NewVersionMessage />
+        <ToastContainer
+          position="top-center"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop
+          closeOnClick
+          rtl={false}
+          draggable
+          pauseOnHover
+        />
+        <Sidebar>
+          <Header />
+          <Switch>
+            <Route path={'/firsttime'} component={FirstTime} />
+            <Route path={urls.about} component={About} />
+            <Route path={urls.contact} component={Contact} />
+            <Route path={'/share/:id'} component={QuizShareBuilderLoader} />
+            <Route path={'/share'} component={Sharebuilder} />
+            <Route path={urls.quizShareRoute} component={QuizShareRoute} />
+            <Route path={urls.quiz} component={Quiz} />
+            <Route path={urls.signup} component={Signup} />
+            <Route path={urls.login} component={Login} />
+            <Route path={urls.logout} component={Logout} />
+            <PrivateRoute path={urls.editProfile} component={EditProfile} />
+            <PrivateRoute path={urls.profile} component={Profile} />
+            <Route path={urls.forgotPassword} component={ForgotPassword} />
+            <Route path={`${urls.resetPassword}/:token`} component={ResetPassword} />
+            <Route path="/print" component={Print} />
+            <Route exact path="/" component={Selection} />
+            <Route component={ErrorPage} />
+          </Switch>
+          <Footer />
+        </Sidebar>
+      </ScrollToTop>
     </BrowserRouter>
   );
 };

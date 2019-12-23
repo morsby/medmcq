@@ -26,6 +26,7 @@ import 'react-image-lightbox/style.css'; // This only needs to be imported once 
 // redux
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import rootReducer, { ReduxState } from 'redux/reducers';
+import ErrorBoundary from 'components/Misc/Utility-pages/ErrorBoundary';
 
 const migrations: any = {
   10: (state: ReduxState) => ({
@@ -54,15 +55,17 @@ export const store = configureStore({
 export const persistor = persistStore(store);
 
 ReactDOM.render(
-  <Provider store={store}>
-    <PersistGate loading={<LoadingPage />} persistor={persistor}>
-      <ApolloProvider client={apolloClient}>
-        <LocalizeProvider store={store}>
-          <LocalizedApp />
-        </LocalizeProvider>
-      </ApolloProvider>
-    </PersistGate>
-  </Provider>,
+  <ErrorBoundary>
+    <Provider store={store}>
+      <PersistGate loading={<LoadingPage />} persistor={persistor}>
+        <ApolloProvider client={apolloClient}>
+          <LocalizeProvider store={store}>
+            <LocalizedApp />
+          </LocalizeProvider>
+        </ApolloProvider>
+      </PersistGate>
+    </Provider>
+  </ErrorBoundary>,
   document.querySelector('#root')
 );
 

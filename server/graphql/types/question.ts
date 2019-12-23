@@ -195,7 +195,8 @@ export const resolvers = {
         .where({ questionId: question.id })
         .where(function() {
           this.sum('specialtyVote.value as votes').having('votes', '>', '-1');
-        });
+        })
+        .distinct('specialtyId');
 
       return specialties.map((s) => ({ id: s.specialtyId }));
     },
@@ -205,7 +206,8 @@ export const resolvers = {
         .where({ questionId: question.id })
         .where(function() {
           this.sum('tagVote.value as votes').having('votes', '>', '-1');
-        });
+        })
+        .distinct('tagId');
 
       return tags.map((t) => ({ id: t.tagId }));
     }

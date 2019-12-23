@@ -35,7 +35,7 @@ interface User {
   bookmarks: Bookmark[];
 }
 
-interface Bookmark {
+export interface Bookmark {
   question: Question;
 }
 
@@ -99,6 +99,11 @@ class User {
           username
           likes {
             commentId
+          }
+          bookmarks {
+            question {
+              id
+            }
           }
         }
       }
@@ -256,8 +261,8 @@ class User {
       }
     `;
 
-    await Apollo.mutate('bookmark', mutation, { questionId });
-    await store.dispatch(authReducer.actions.setBookmark({ questionId }));
+    const bookmark = await Apollo.mutate<Bookmark>('bookmark', mutation, { questionId });
+    await store.dispatch(authReducer.actions.setBookmark(bookmark));
   };
 }
 

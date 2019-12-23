@@ -25,6 +25,7 @@ const questionsReducer = createSlice({
       for (let question of action.payload) {
         comments = comments.concat([...question.publicComments, ...question.privateComments]);
         specialtyVotes = specialtyVotes.concat(question.specialtyVotes);
+        tagVotes = tagVotes.concat(question.tagVotes);
       }
 
       state.comments = comments;
@@ -97,6 +98,7 @@ const questionsReducer = createSlice({
           action.payload.question.id === vote.question.id &&
           action.payload.specialty.id === vote.specialty.id
       );
+
       if (index < 0) {
         state.specialtyVotes.push(action.payload);
       } else {

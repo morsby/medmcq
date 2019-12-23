@@ -27,8 +27,9 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
     state.metadata.examSets.find((examSet) => examSet.id === question.examSet.id)
   );
   const specialties = useSelector((state: ReduxState) => state.metadata.specialties);
+  const specialtyVotes = useSelector((state: ReduxState) => state.questions.specialtyVotes);
   const tags = useSelector((state: ReduxState) => state.metadata.tags);
-
+  const tagVotes = useSelector((state: ReduxState) => state.questions.tagVotes);
   const user = useSelector((state: ReduxState) => state.auth.user);
 
   const metadataVote = async (type, metadataId) => {
@@ -66,37 +67,46 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
           <>
             <Grid.Row style={{ margin: '7px 0 7px 0' }}>
               <Translate id="questionMetadata.specialty" />{' '}
-              {_.orderBy(question.specialtyVotes, 'votes', 'desc').map((specialtyVote) => {
-                const specialty = specialties.find(
-                  (specialty) => specialty.id === specialtyVote.id
-                );
-                return (
-                  <QuestionMetadataLabel
-                    key={specialty.id}
-                    metadata={specialty}
-                    user={user}
-                    question={question}
-                    type="specialty"
-                  >
-                    {specialty.name}
-                  </QuestionMetadataLabel>
-                );
-              })}
+              {_(question.specialties)
+                .orderBy('votes', 'desc')
+                .map((s) => specialties.find((specialty) => specialty.id === s.id))
+                .map((specialty) => {
+                  const questionSpecialtyVotes = specialtyVotes.filter(
+                    (s) => s.specialty.id === specialty.id
+                  );
+                  const votes = _.sumBy(questionSpecialtyVotes, (sv) => sv.vote);
+
+                  return (
+                    <QuestionMetadataLabel
+                      key={specialty.id}
+                      metadata={specialty}
+                      user={user}
+                      question={question}
+                      type="specialty"
+                      votes={votes}
+                    >
+                      {specialty.name}
+                    </QuestionMetadataLabel>
+                  );
+                })
+                .value()}
               {user && (
                 <QuestionMetadataDropdown
                   type="specialty"
                   onChange={(value) => metadataVote('specialty', value)}
-                  options={specialties}
                 />
               )}
             </Grid.Row>
             <Grid.Row>
               <Translate id="questionMetadata.tags" />{' '}
-              {_(question.tagVotes)
-                .map((t) => tags[t.tag.id])
+              {_(question.tags)
+                .map((t) => tags.find((tag) => tag.id === t.id))
                 .filter((t) => !!t.parent.id)
                 .orderBy('votes', 'desc')
                 .map((t) => {
+                  const questionTagVotes = tagVotes.filter((tv) => tv.tag.id === t.id);
+                  const votes = _.sumBy(questionTagVotes, (tv) => tv.vote);
+
                   return (
                     <QuestionMetadataLabel
                       type="tag"
@@ -104,6 +114,7 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
                       metadata={t}
                       user={user}
                       question={question}
+                      votes={votes}
                     >
                       {t.name}
                     </QuestionMetadataLabel>
@@ -114,7 +125,6 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
                 <QuestionMetadataDropdown
                   type="tag"
                   onChange={(value) => metadataVote('tag', value)}
-                  options={tags}
                 />
               )}
             </Grid.Row>

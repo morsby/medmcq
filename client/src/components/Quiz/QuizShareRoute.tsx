@@ -1,23 +1,20 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import LoadingPage from 'components/Misc/Utility-pages/LoadingPage';
 import Quiz from 'components/Quiz/Quiz';
 import { toast } from 'react-toastify';
 import { useHistory, useParams } from 'react-router';
 import { ReduxState } from 'redux/reducers';
-import Question from 'classes/Question';
+import QuizClass from 'classes/Quiz';
 
 export interface QuizShareRouteProps {}
 
 const QuizShareRoute: React.SFC<QuizShareRouteProps> = () => {
+  const [isFetching, setIsFetching] = useState(true);
   const history = useHistory();
   const params = useParams<{ ids: string }>();
   const ids = params.ids.split(',').map((id) => Number(id));
   const dispatch = useDispatch();
-  const isFetching = useSelector((state: ReduxState) => state.questions.isFetching);
-  const questions = useSelector((state: ReduxState) =>
-    state.questions.questions.filter((question) => ids.includes(question.id))
-  );
   const error = useSelector((state: ReduxState) => state.ui.error);
 
   useEffect(() => {
@@ -30,7 +27,8 @@ const QuizShareRoute: React.SFC<QuizShareRouteProps> = () => {
         }
       });
 
-      await Question.fetch({ ids });
+      await QuizClass.start({ ids });
+      setIsFetching(false);
     };
 
     fetchQuestions();
@@ -41,7 +39,7 @@ const QuizShareRoute: React.SFC<QuizShareRouteProps> = () => {
     history.push('/');
     return null;
   }
-  if (isFetching || !questions) return <LoadingPage />;
+  if (isFetching) return <LoadingPage />;
   return <Quiz />;
 };
 

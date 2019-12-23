@@ -43,16 +43,13 @@ const QuizSummary: React.SFC<QuizSummaryProps> = ({ clickHandler }) => {
             <List ordered>
               {questionIds.map((qId, index) => {
                 const q = questions.find((question) => question.id === qId);
+                const answer = answers.find((answer) => answer.questionId === qId)?.answer;
 
-                let userAnswer;
-                if (isAnswered(q)) {
-                  if (
-                    q.correctAnswers.includes(answers.find((answer) => answer.questionId).answer)
-                  ) {
+                let userAnswer: string;
+                if (answer) {
+                  if (q.correctAnswers.includes(answer)) {
                     userAnswer = 'svar-korrekt';
-                  } else if (
-                    !q.correctAnswers.includes(answers.find((answer) => answer.questionId).answer)
-                  ) {
+                  } else if (!q.correctAnswers.includes(answer)) {
                     userAnswer = 'svar-forkert';
                   }
                 }

@@ -15,15 +15,13 @@ const quizReducer = createSlice({
   reducers: {
     setQuestionIds: (state, action: PayloadAction<number[]>) => {
       state.questionIds = action.payload;
+      state.answers = [];
     },
     changeQuestion: (state, action: PayloadAction<number>) => {
       state.questionIndex = action.payload;
     },
     setImgOpen: (state, action: PayloadAction<boolean>) => {
       state.imgOpen = action.payload;
-    },
-    newQuiz: (state, action: PayloadAction<{ questionIds: number[] }>) => {
-      state.questionIds = action.payload.questionIds;
     },
     answer: (state, action: PayloadAction<{ questionId: number; answer: number }>) => {
       state.answers.push(action.payload);

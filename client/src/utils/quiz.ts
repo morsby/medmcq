@@ -1,6 +1,7 @@
 import { store } from 'IndexApp';
 import Question from 'classes/Question';
 import { Answer } from 'classes/Quiz';
+import { ReduxState } from 'redux/reducers';
 
 export const smoothScroll = (h?: number, dir = 'up') => {
   let top = window.pageYOffset || document.documentElement.scrollTop;
@@ -70,7 +71,7 @@ export const subSupScript = (text) => {
   return text.replace(/\^(.+?)\^/g, '<sup>$1</sup>').replace(/~(.+?)~/g, '<sub>$1</sub>');
 };
 
-export const isAnswered = (question) => {
-  const state = store.getState();
-  return Object.prototype.hasOwnProperty.call(state.quiz.answers, question.id);
+export const isAnswered = (question: Question) => {
+  const state: ReduxState = store.getState();
+  return !!state.quiz.answers.find(answer => answer.questionId === question.id)
 };

@@ -7,7 +7,7 @@ import { Container, Button } from 'semantic-ui-react';
 
 import { Swipeable } from 'react-swipeable';
 import QuizLoader from './QuizLoader';
-import QuestionClass from './Question/Question';
+import Question from './Question/Question';
 import QuizNavigator from './QuizNavigator';
 import QuizSummary from './QuizSummary';
 
@@ -15,7 +15,7 @@ import { useHistory } from 'react-router';
 import { smoothScroll } from '../../utils/quiz';
 import { ReduxState } from 'redux/reducers';
 import quizReducer from 'redux/reducers/quiz';
-import Question from 'classes/Question';
+import QuestionClass from 'classes/Question';
 
 /**
  *  Hovedcomponent til Quizzen.
@@ -43,7 +43,7 @@ const Quiz: React.SFC<QuizProps> = ({ addTranslation }) => {
     Hvis quizzen er invalid (dvs. vi har hentet spørgsmål via fx profilsiden) og vi ikke er ved at hente nye spørgsmål, henter vi spørgsmål igen:
     */
     if (didInvalidate && !isFetching) {
-      Question.fetch({ ids: questionIds });
+      QuestionClass.fetch({ ids: questionIds });
     }
   }, []);
 
@@ -149,7 +149,7 @@ i componentDidMount)
         <QuizNavigator handleNavigate={handleChangeQuestion} position="top" />
 
         <Swipeable onSwipedLeft={(e) => swiped(e.deltaX)} onSwipedRight={(e) => swiped(e.deltaX)}>
-          <QuestionClass />
+          <Question />
         </Swipeable>
 
         <QuizNavigator handleNavigate={handleChangeQuestion} />

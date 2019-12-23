@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import Comment from 'classes/Comment';
 import Question from 'classes/Question';
 import User from 'classes/User';
+import { Bookmark } from '../../classes/User';
 
 /**
  * user defaulter til null; burde måske være et tomt object (men så vil mange
@@ -11,7 +12,6 @@ const initialState = {
   user: null as User | null,
   isFetching: false,
   didInvalidate: true,
-  bookmarks: [] as { questionId: number }[],
   profile: {
     answers: [] as any[],
     publicComments: [] as Comment[],
@@ -25,9 +25,6 @@ const authReducer = createSlice({
   reducers: {
     login: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
-      state.bookmarks = action.payload.bookmarks.map((bookmark) => ({
-        questionId: bookmark.question.id
-      }));
     },
     setProfile: (
       state,
@@ -56,14 +53,15 @@ const authReducer = createSlice({
         state.user.manualCompletedSets.splice(index, 1);
       }
     },
-    setBookmark: (state, action: PayloadAction<{ questionId: number }>) => {
+    setBookmark: (state, action: PayloadAction<Bookmark>) => {
       const index = state.user.bookmarks.findIndex(
-        (bookmark) => bookmark.question.id === action.payload.questionId
+        (bookmark) => bookmark.question.id === action.payload.question.id
       );
+
       if (index < 0) {
-        state.bookmarks.push({ questionId: action.payload.questionId });
+        state.user.bookmarks.push(action.payload);
       } else {
-        state.bookmarks.splice(index, 1);
+        state.user.bookmarks.splice(index, 1);
       }
     }
   }

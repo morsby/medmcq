@@ -13,7 +13,7 @@ export interface TagVote {
   id: number;
   tag: Tag;
   question: Question;
-  votes: number;
+  vote: number;
 }
 
 class Tag {}

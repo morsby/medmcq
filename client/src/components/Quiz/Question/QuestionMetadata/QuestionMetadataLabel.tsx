@@ -4,12 +4,17 @@ import { useSelector } from 'react-redux';
 import _ from 'lodash';
 import { ReduxState } from 'redux/reducers';
 import Metadata from 'classes/Metadata';
+import Question from 'classes/Question';
+import User from 'classes/User';
+import Tag from 'classes/Tag';
+import Specialty from 'classes/Specialty';
 
 export interface QuestionMetadataLabelProps {
-  metadata: { id: number };
-  user: any;
-  question: any;
+  metadata: Tag | Specialty;
+  user: User;
+  question: Question;
   type: 'tag' | 'specialty';
+  votes: number;
 }
 
 const QuestionMetadataLabel: React.SFC<QuestionMetadataLabelProps> = ({
@@ -17,7 +22,8 @@ const QuestionMetadataLabel: React.SFC<QuestionMetadataLabelProps> = ({
   user,
   question,
   children,
-  type
+  type,
+  votes
 }) => {
   const [buttonLoading, setButtonLoading] = useState(false);
   const tags = useSelector((state: ReduxState) => state.metadata.tags);
@@ -38,7 +44,7 @@ const QuestionMetadataLabel: React.SFC<QuestionMetadataLabelProps> = ({
 
   const childrenTagged = () => {
     if (type === 'specialty') return true; // Specialer har ingen children, og derfór altid alle children tagged
-    const questionTags = _.map(question.tags, (tag) => tag.tagId);
+    const questionTags = _.map(question.tags, (tag) => tag.id);
     const children = tagChildren.map((t) => t.id);
     if (children.length < 1) return true; // Hvis der ingen children er, er alle children tagges by default
     const isChildrenTagged = children.some((c) => questionTags.includes(c)); // Tjek om en af children er tagged
@@ -54,13 +60,6 @@ const QuestionMetadataLabel: React.SFC<QuestionMetadataLabelProps> = ({
     }
     return userVote || null;
   };
-
-  let votes;
-  if (type === 'specialty') {
-    votes = (question.specialties[metadata.id] || {}).votes;
-  } else {
-    votes = (question.tags[metadata.id] || {}).votes;
-  }
 
   const label = (
     <Label style={{ marginTop: '2px' }} size="small">

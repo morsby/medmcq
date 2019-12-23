@@ -14,7 +14,7 @@ export interface SpecialtyVote {
   specialty: Specialty;
   question: Question;
   user: User;
-  value: number;
+  vote: number;
 }
 
 class Specialty {}

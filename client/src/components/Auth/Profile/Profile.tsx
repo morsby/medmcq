@@ -17,7 +17,7 @@ export interface ProfileProps {}
 
 const Profile: React.SFC<ProfileProps> = () => {
   const [width, setWidth] = useState(window.innerWidth);
-  const { profile, user, isFetching, didInvalidate, bookmarks } = useSelector(
+  const { profile, user, isFetching, didInvalidate } = useSelector(
     (state: ReduxState) => state.auth
   );
   const [panes, setPanes] = useState([]);

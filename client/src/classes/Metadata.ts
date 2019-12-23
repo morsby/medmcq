@@ -82,7 +82,7 @@ class Metadata {
             user {
               id
             }
-            votes
+            vote
           }
         }
       `;
@@ -101,13 +101,14 @@ class Metadata {
             user {
               id
             }
-            votes
+            vote
           }
         }
       `;
     }
 
-    const metadataVote = await Apollo.mutate(name, mutation, { questionId, metadataId, vote });
+    const data = { questionId, metadataId, vote };
+    const metadataVote = await Apollo.mutate(name, mutation, { data });
 
     if (type === 'specialty') {
       await store.dispatch(questionsReducer.actions.voteSpecialty(metadataVote as SpecialtyVote));

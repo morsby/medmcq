@@ -190,7 +190,8 @@ export const resolvers = {
       return 'Success';
     },
     bookmark: async (root, { questionId }, ctx: Context) => {
-      await QuestionBookmark.query().insert({ questionId, userId: ctx.user.id });
+      const bookmark = await QuestionBookmark.query().insert({ questionId, userId: ctx.user.id });
+      return { id: bookmark.id };
     }
   },
 

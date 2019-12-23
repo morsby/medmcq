@@ -59,18 +59,32 @@ class Question {
       }
       specialtyVotes {
         id
+        question {
+          id
+        }
+        user {
+          id
+        }
         specialty {
           id
         }
+        vote
       }
       tagVotes {
         id
+        question {
+          id
+        }
+        user {
+          id
+        }
         tag {
           id
           parent {
             id
           }
         }
+        vote
       }
       answer1
       answer2
@@ -125,13 +139,13 @@ class Question {
     `;
 
     const questions = await Apollo.query<Question[]>('questions', query, { filter });
-    await store.dispatch(questionsReducer.actions.setQuestions(questions));
     if (newQuiz) {
       await store.dispatch(quizReducer.actions.changeQuestion(0));
       await store.dispatch(
-        quizReducer.actions.newQuiz({ questionIds: questions.map((question) => question.id) })
+        quizReducer.actions.setQuestionIds(questions.map((question) => question.id))
       );
     }
+    await store.dispatch(questionsReducer.actions.setQuestions(questions));
   };
 }
 

@@ -28,6 +28,7 @@ export interface SelectionProps extends LocalizeContextProps {}
 const Selection: React.SFC<SelectionProps> = ({ addTranslation, translate }) => {
   const [errors, setErrors] = useState([]);
   const [search, setSearch] = useState('');
+  const [startLoading, setStartLoading] = useState(false);
   const metadata = useSelector((state: ReduxState) => state.metadata);
   const type = useSelector((state: ReduxState) => state.ui.selection.type);
   const selectedSemester = useSelector((state: ReduxState) => state.ui.selection.semesterId);
@@ -65,6 +66,7 @@ const Selection: React.SFC<SelectionProps> = ({ addTranslation, translate }) => 
     let err = [];
 
     if (err.length === 0) {
+      setStartLoading(true);
       // Hvis vi er ved at søge
       if (search !== '') {
         Quiz.start({ semesterId: selectedSemester, search });
@@ -147,6 +149,8 @@ const Selection: React.SFC<SelectionProps> = ({ addTranslation, translate }) => 
         {user && type !== 'set' && <SelectionUniqueSelector />}
 
         <Button
+          loading={startLoading}
+          disabled={startLoading}
           style={{ cursor: 'pointer' }}
           fluid
           color="green"

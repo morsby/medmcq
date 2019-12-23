@@ -30,7 +30,7 @@ export const typeDefs = gql`
     tag: Tag
     question: Question
     user: User
-    votes: Int
+    vote: Int
   }
 
   type SpecialtyVote {
@@ -38,13 +38,13 @@ export const typeDefs = gql`
     specialty: Specialty
     question: Question
     user: User
-    value: Int
+    vote: Int
   }
 
   input VoteInput {
     questionId: Int!
     metadataId: Int!
-    vote: String
+    vote: Int
   }
 
   extend type Mutation {
@@ -56,9 +56,10 @@ export const typeDefs = gql`
 
 export const resolvers = {
   Mutation: {
-    voteTag: async (root, { questionId, metadataId, vote }, ctx: Context) => {
+    voteTag: async (root, { data }, ctx: Context) => {
+      const { questionId, metadataId, vote } = data;
       const exists = await QuestionTagVote.query().findOne({ questionId, tagId: metadataId });
-      let tagVote;
+      let tagVote: QuestionTagVote;
       if (exists) {
         tagVote = await QuestionTagVote.query().updateAndFetchById(exists.id, { value: vote });
       } else {
@@ -70,11 +71,15 @@ export const resolvers = {
         });
       }
 
-      return tagVote || 'Deleted';
+      return { id: tagVote.id } || 'Deleted';
     },
-    voteSpecialty: async (root, { questionId, metadataId, vote }, ctx: Context) => {
-      const exists = await QuestionSpecialtyVote.query().findOne({ questionId, tagId: metadataId });
-      let tagVote;
+    voteSpecialty: async (root, { data }, ctx: Context) => {
+      const { questionId, metadataId, vote } = data;
+      const exists = await QuestionSpecialtyVote.query().findOne({
+        questionId,
+        specialtyId: metadataId
+      });
+      let tagVote: QuestionSpecialtyVote;
       if (exists) {
         tagVote = await QuestionSpecialtyVote.query().updateAndFetchById(exists.id, {
           value: vote
@@ -89,17 +94,27 @@ export const resolvers = {
         });
       }
 
-      return tagVote || 'Deleted';
+      return { id: tagVote.id } || 'Deleted';
     }
   },
   TagVote: {
     id: ({ id }) => id,
-    tag: () => {
-      // TODO
+    tag: async ({ id }, _, ctx: Context) => {
+      const tagVote = await ctx.metadataLoaders.tagVotesLoader.load(id);
+      return { id: tagVote.tagId };
     },
-    question: () => {},
-    user: () => {},
-    votes: () => {}
+    question: async ({ id }, _, ctx: Context) => {
+      const tagVote = await ctx.metadataLoaders.tagVotesLoader.load(id);
+      return { id: tagVote.questionId };
+    },
+    user: async ({ id }, _, ctx: Context) => {
+      const tagVote = await ctx.metadataLoaders.tagVotesLoader.load(id);
+      return { id: tagVote.userId };
+    },
+    vote: async ({ id }, _, ctx: Context) => {
+      const tagVote = await ctx.metadataLoaders.tagVotesLoader.load(id);
+      return tagVote.value;
+    }
   },
   SpecialtyVote: {
     id: ({ id }) => id,
@@ -115,7 +130,7 @@ export const resolvers = {
       const specialtyVote = await ctx.metadataLoaders.specialtyVoteLoader.load(id);
       return { id: specialtyVote.userId };
     },
-    value: async ({ id }, args, ctx: Context) => {
+    vote: async ({ id }, args, ctx: Context) => {
       const specialtyVote = await ctx.metadataLoaders.specialtyVoteLoader.load(id);
       return specialtyVote.value;
     }

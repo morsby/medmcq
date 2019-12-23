@@ -1,16 +1,24 @@
 import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
 import _ from 'lodash';
 import Dropdown from 'antd/lib/dropdown';
 import Menu from 'antd/lib/menu';
-import 'antd/lib/dropdown/style/css';
-import 'antd/lib/menu/style/css';
 import { Icon } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
+import Tag from 'classes/Tag';
+import { useSelector } from 'react-redux';
+import { ReduxState } from 'redux/reducers';
 const { SubMenu } = Menu;
 
-const QuestionMetadataDropdown = ({ options, onChange, type }) => {
+export interface QuestionMetadataDropdownProps {
+  onChange: Function;
+  type: 'specialty' | 'tag'
+}
+ 
+const QuestionMetadataDropdown: React.SFC<QuestionMetadataDropdownProps> = ({onChange, type}) => {
   const [tagTree, setTagTree] = useState(null);
+  const tags = useSelector((state: ReduxState) => state.metadata.tags);
+  const specialties = useSelector((state: ReduxState) => state.metadata.specialties);
+  const options = type === 'specialty' ? specialties : tags;
 
   const handleDropdownPick = (id) => {
     onChange(id);
@@ -18,7 +26,7 @@ const QuestionMetadataDropdown = ({ options, onChange, type }) => {
 
   useEffect(() => {
     const convertMetadataToTree = () => {
-      return _.filter(options, (t) => !t.parent.id).map((t) => ({
+      return _.filter(options, (t: Tag) => !t.parent?.id).map((t) => ({
         title: t.name,
         key: t.id,
         children: getChildrenOfMetadata(t.id)
@@ -26,7 +34,7 @@ const QuestionMetadataDropdown = ({ options, onChange, type }) => {
     };
 
     const getChildrenOfMetadata = (tagId) => {
-      return _.filter(options, (t) => t.parent.id === tagId).map((t) => ({
+      return _.filter(options, (t: Tag) => t.parent?.id === tagId).map((t) => ({
         title: t.name,
         key: t.id,
         children: getChildrenOfMetadata(t.id)
@@ -122,12 +130,6 @@ const QuestionMetadataDropdown = ({ options, onChange, type }) => {
       </Dropdown>
     </span>
   );
-};
-
-QuestionMetadataDropdown.propTypes = {
-  options: PropTypes.object,
-  onChange: PropTypes.func,
-  type: PropTypes.string
 };
 
 export default QuestionMetadataDropdown;
