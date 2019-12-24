@@ -12,19 +12,26 @@ interface ExamSet {
 }
 
 class ExamSet {
+  static fragmentFull = gql`
+    fragment ExamSet on ExamSet {
+      id
+      year
+      season
+      semester {
+        id
+      }
+    }
+  `;
+
   static fetchAll = async () => {
     const res = await client.query<{ examSets: ExamSet[] }>({
       query: gql`
         query {
           examSets {
-            id
-            year
-            season
-            semester {
-              id
-            }
+            ...ExamSet
           }
         }
+        ${ExamSet.fragmentFull}
       `
     });
 

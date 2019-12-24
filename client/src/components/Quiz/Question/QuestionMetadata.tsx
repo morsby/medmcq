@@ -27,9 +27,9 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
     state.metadata.examSets.find((examSet) => examSet.id === question.examSet.id)
   );
   const specialties = useSelector((state: ReduxState) => state.metadata.specialties);
-  const specialtyVotes = useSelector((state: ReduxState) => state.questions.specialtyVotes);
+  const specialtyVotes = question.specialtyVotes;
+  const tagVotes = question.tagVotes;
   const tags = useSelector((state: ReduxState) => state.metadata.tags);
-  const tagVotes = useSelector((state: ReduxState) => state.questions.tagVotes);
   const user = useSelector((state: ReduxState) => state.auth.user);
 
   const metadataVote = async (type, metadataId) => {
@@ -80,10 +80,9 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
                     <QuestionMetadataLabel
                       key={specialty.id}
                       metadata={specialty}
-                      user={user}
-                      question={question}
+                      voteCount={votes}
+                      metadataVotes={questionSpecialtyVotes}
                       type="specialty"
-                      votes={votes}
                     >
                       {specialty.name}
                     </QuestionMetadataLabel>
@@ -112,9 +111,8 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
                       type="tag"
                       key={t.id}
                       metadata={t}
-                      user={user}
-                      question={question}
-                      votes={votes}
+                      voteCount={votes}
+                      metadataVotes={questionTagVotes}
                     >
                       {t.name}
                     </QuestionMetadataLabel>

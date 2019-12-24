@@ -44,8 +44,8 @@ interface Question {
 }
 
 class Question {
-  static questionFragment = gql`
-    fragment QuestionFull on Question {
+  static fullFragment = gql`
+    fragment Question on Question {
       id
       text
       examSet {
@@ -132,10 +132,10 @@ class Question {
     const query = gql`
       query($filter: QuestionFilterInput!) {
         questions(filter: $filter) {
-          ...QuestionFull
+          ...Question
         }
       }
-      ${Question.questionFragment}
+      ${Question.fullFragment}
     `;
 
     const questions = await Apollo.query<Question[]>('questions', query, { filter });

@@ -1,6 +1,7 @@
 import User from 'classes/User';
 import Question from './Question';
 import Semester from './Semester';
+import { gql } from 'apollo-boost';
 
 interface Specialty {
   id: number;
@@ -17,6 +18,33 @@ export interface SpecialtyVote {
   vote: number;
 }
 
-class Specialty {}
+class Specialty {
+  static fragmentFull = gql`
+    fragment Specialty on Specialty {
+      id
+      name
+      semester {
+        id
+      }
+      questionCount
+    }
+  `;
+
+  static specialtyVoteFragment = gql`
+    fragment SpecialtyVote on SpecialtyVote {
+      id
+      specialty {
+        id
+      }
+      question {
+        id
+      }
+      user {
+        id
+      }
+      vote
+    }
+  `;
+}
 
 export default Specialty;

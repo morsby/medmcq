@@ -5,6 +5,7 @@ import { store } from 'IndexApp';
 import Apollo from './Apollo';
 import authReducer from 'redux/reducers/auth';
 import Like from './Like';
+import Comment from './Comment';
 
 export interface UserLoginInput {
   username: string;
@@ -149,26 +150,10 @@ class User {
               }
             }
             publicComments(semester: $semester) {
-              id
-              text
-              user {
-                id
-                username
-              }
-              question {
-                id
-              }
+              ...Comment
             }
             privateComments(semester: $semester) {
-              id
-              text
-              user {
-                id
-                username
-              }
-              question {
-                id
-              }
+              ...Comment
             }
             bookmarks {
               question {
@@ -182,6 +167,7 @@ class User {
             }
           }
         }
+        ${Comment.fragmentFull}
       `,
       variables: { semester: options.semester }
     });

@@ -209,6 +209,8 @@ export const resolvers = {
         })
         .distinct('tagId');
 
+      console.log(tags);
+
       return tags.map((t) => ({ id: t.tagId }));
     }
   }

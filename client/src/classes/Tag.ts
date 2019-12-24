@@ -1,5 +1,7 @@
 import Question from './Question';
 import Semester from 'classes/Semester';
+import { gql } from 'apollo-boost';
+import User from './User';
 
 interface Tag {
   id: number;
@@ -14,8 +16,39 @@ export interface TagVote {
   tag: Tag;
   question: Question;
   vote: number;
+  user: User;
 }
 
-class Tag {}
+class Tag {
+  static fragmentFull = gql`
+    fragment Tag on Tag {
+      id
+      name
+      semester {
+        id
+      }
+      parent {
+        id
+      }
+      questionCount
+    }
+  `;
+
+  static tagVoteFragment = gql`
+    fragment TagVote on TagVote {
+      id
+      tag {
+        id
+      }
+      question {
+        id
+      }
+      user {
+        id
+      }
+      vote
+    }
+  `;
+}
 
 export default Tag;

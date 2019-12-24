@@ -6,6 +6,7 @@ import ExamSet from './ExamSet';
 import Tag, { TagVote } from './Tag';
 import Specialty, { SpecialtyVote } from './Specialty';
 import questionsReducer from 'redux/reducers/question';
+import Question from './Question';
 
 interface Metadata {
   examSets: ExamSet[];
@@ -19,38 +20,22 @@ class Metadata {
       query($id: Int!) {
         semester(id: $id) {
           examSets {
-            id
-            year
-            season
-            semester {
-              id
-            }
+            ...ExamSet
           }
           tags {
-            id
-            name
-            semester {
-              id
-            }
-            parent {
-              id
-            }
-            questionCount
+            ...Tag
           }
           specialties {
-            id
-            name
-            semester {
-              id
-            }
-            questionCount
+            ...Specialty
           }
         }
       }
+      ${ExamSet.fragmentFull}
+      ${Tag.fragmentFull}
+      ${Specialty.fragmentFull}
     `;
 
     const semester = await Apollo.query<Metadata>('semester', query, { id });
-
     await store.dispatch(metadataReducer.actions.setMetadata(semester));
   };
 
@@ -72,48 +57,30 @@ class Metadata {
       mutation = gql`
         mutation($data: VoteInput) {
           voteTag(data: $data) {
-            id
-            tag {
-              id
-            }
-            question {
-              id
-            }
-            user {
-              id
-            }
-            vote
+            ...Question
           }
         }
+        ${Question.fullFragment}
       `;
     } else if (type === 'specialty') {
       name = 'voteSpecialty';
       mutation = gql`
         mutation($data: VoteInput) {
           voteSpecialty(data: $data) {
-            id
-            specialty {
-              id
-            }
-            question {
-              id
-            }
-            user {
-              id
-            }
-            vote
+            ...Question
           }
         }
+        ${Question.fullFragment}
       `;
     }
 
     const data = { questionId, metadataId, vote };
-    const metadataVote = await Apollo.mutate(name, mutation, { data });
+    const question = await Apollo.mutate<Question>(name, mutation, { data });
 
     if (type === 'specialty') {
-      await store.dispatch(questionsReducer.actions.voteSpecialty(metadataVote as SpecialtyVote));
+      await store.dispatch(questionsReducer.actions.setQuestion(question));
     } else if (type === 'tag') {
-      await store.dispatch(questionsReducer.actions.voteTag(metadataVote as TagVote));
+      await store.dispatch(questionsReducer.actions.setQuestion(question));
     }
   };
 

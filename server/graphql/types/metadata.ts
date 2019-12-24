@@ -48,8 +48,8 @@ export const typeDefs = gql`
   }
 
   extend type Mutation {
-    voteTag(data: VoteInput): TagVote
-    voteSpecialty(data: VoteInput): SpecialtyVote
+    voteTag(data: VoteInput): Question
+    voteSpecialty(data: VoteInput): Question
     suggestTag(tag: String!, questionId: Int!): String
   }
 `;
@@ -59,11 +59,10 @@ export const resolvers = {
     voteTag: async (root, { data }, ctx: Context) => {
       const { questionId, metadataId, vote } = data;
       const exists = await QuestionTagVote.query().findOne({ questionId, tagId: metadataId });
-      let tagVote: QuestionTagVote;
       if (exists) {
-        tagVote = await QuestionTagVote.query().updateAndFetchById(exists.id, { value: vote });
+        await QuestionTagVote.query().updateAndFetchById(exists.id, { value: vote });
       } else {
-        tagVote = await QuestionTagVote.query().insertAndFetch({
+        await QuestionTagVote.query().insert({
           userId: ctx.user.id,
           tagId: metadataId,
           questionId,
@@ -71,7 +70,11 @@ export const resolvers = {
         });
       }
 
-      return { id: tagVote.id } || 'Deleted';
+      // Kan ikke få det til at virke uden
+      ctx.questionLoaders.questionLoader.clearAll();
+      ctx.metadataLoaders.tagVotesLoader.clearAll();
+
+      return { id: questionId };
     },
     voteSpecialty: async (root, { data }, ctx: Context) => {
       const { questionId, metadataId, vote } = data;
@@ -79,14 +82,13 @@ export const resolvers = {
         questionId,
         specialtyId: metadataId
       });
-      let tagVote: QuestionSpecialtyVote;
       if (exists) {
-        tagVote = await QuestionSpecialtyVote.query().updateAndFetchById(exists.id, {
+        await QuestionSpecialtyVote.query().updateAndFetchById(exists.id, {
           value: vote
         });
-        await QuestionSpecialtyVote.query().deleteById(exists.id);
+        // await QuestionSpecialtyVote.query().deleteById(exists.id);
       } else {
-        tagVote = await QuestionSpecialtyVote.query().insertAndFetch({
+        await QuestionSpecialtyVote.query().insertAndFetch({
           userId: ctx.user.id,
           specialtyId: metadataId,
           questionId,
@@ -94,7 +96,9 @@ export const resolvers = {
         });
       }
 
-      return { id: tagVote.id } || 'Deleted';
+      ctx.questionLoaders.questionLoader.clearAll();
+      ctx.metadataLoaders.specialtyVoteLoader.clearAll();
+      return { id: questionId };
     }
   },
   TagVote: {

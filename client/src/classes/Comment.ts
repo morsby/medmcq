@@ -26,7 +26,7 @@ interface CommentInput {
 
 class Comment {
   static fragmentFull = gql`
-    fragment FullComment on Comment {
+    fragment Comment on Comment {
       id
       text
       isPrivate
