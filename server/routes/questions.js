@@ -108,7 +108,13 @@ router.get('/', async (req, res) => {
   let { profile, ids, n, semesters, onlyNew, specialties, tags, onlyWrong, commentIds } = req.query;
   try {
     // If user is not allowed to query >300 questions, we throw an error
-    if (!ids && !profile && (!n || n > 300) && ['admin', 'creator'].indexOf(user.role) === -1) {
+    if (
+      !ids &&
+      !commentIds &&
+      !profile &&
+      (!n || n > 300) &&
+      ['admin', 'creator'].indexOf(user.role) === -1
+    ) {
       throw new NotAuthorized({
         message: `You requested too many questions. The limit for non-admins is 300 (you requested ${req
           .query.n || 'all'}).`,
