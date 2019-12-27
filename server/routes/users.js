@@ -2,7 +2,7 @@ import express from 'express';
 import { ValidationError, NotFoundError } from 'objection';
 import { errorHandler, BadRequest } from '../middleware/errorHandling';
 import { permit } from '../middleware/permission';
-import { urls } from '../misc/vars';
+import vars from 'misc/vars';
 import crypto from 'crypto';
 import sgMail from '@sendgrid/mail';
 import createResponse from './_swaggerComponents';
@@ -10,8 +10,9 @@ import QuestionUserAnswer from '../models/question_user_answer';
 import QuestionBookmark from '../models/question_bookmark';
 import QuestionComment from '../models/question_comment';
 import User from '../models/user';
-import ManualCompletedSet from './../models/manual_completed_set';
+import ManualCompletedSet from '../models/manual_completed_set';
 const router = express.Router();
+const urls = vars.urls;
 
 /**
  * @swagger
@@ -466,10 +467,12 @@ router.post('/forgot-password', async (req, res) => {
         message: 'Der blev ikke fundet en bruger.'
       });
 
+    const now = new Date();
+    now.setHours(now.getHours() + 2);
     // Update reset information
     user = await user.$query().patchAndFetch({
       resetPasswordToken: token,
-      resetPasswordExpires: Date.now() + 60 * 60 * 1000
+      resetPasswordExpires: now
     });
 
     // Send mail
@@ -513,7 +516,7 @@ router.post('/reset-password', async (req, res) => {
     // Find the user with correct token and expire time
     const user = await User.query()
       .findOne({ resetPasswordToken })
-      .andWhere('resetPasswordExpires', '>', Date.now());
+      .andWhere('resetPasswordExpires', '>', new Date());
     if (!user)
       throw new NotFoundError({
         message:

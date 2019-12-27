@@ -51,7 +51,7 @@ class User extends BaseModel {
         username: { type: 'string' },
         password: { type: 'string' },
         email: { type: 'string' },
-        resetPasswordExpires: { type: ['integer', 'null'] },
+        resetPasswordExpires: { type: 'format' },
         resetPasswordToken: { type: ['string', 'null'] },
         oldId: { type: 'string' },
         roleId: { type: 'integer' }
