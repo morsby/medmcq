@@ -50,6 +50,9 @@ class Question {
       text
       examSet {
         id
+        semester {
+          id
+        }
       }
       specialties {
         id

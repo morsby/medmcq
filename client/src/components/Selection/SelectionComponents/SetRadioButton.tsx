@@ -55,10 +55,6 @@ const SetRadioButton: React.SFC<SetRadioButtonProps> = ({ set }) => {
                   name="selectedSetId"
                   onChange={() => handleChange(set.id)}
                 />{' '}
-                {
-                  // TODO: Udregn færdiggjorte sæt
-                }
-                {<Icon name="check" color="grey" />}
                 {user && !manualLoading && (
                   <Icon
                     name="check"

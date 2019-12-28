@@ -15,30 +15,6 @@ interface Metadata {
 }
 
 class Metadata {
-  static fetchById = async (id: number) => {
-    const query = gql`
-      query($id: Int!) {
-        semester(id: $id) {
-          examSets {
-            ...ExamSet
-          }
-          tags {
-            ...Tag
-          }
-          specialties {
-            ...Specialty
-          }
-        }
-      }
-      ${ExamSet.fragmentFull}
-      ${Tag.fragmentFull}
-      ${Specialty.fragmentFull}
-    `;
-
-    const semester = await Apollo.query<Metadata>('semester', query, { id });
-    await store.dispatch(metadataReducer.actions.setMetadata(semester));
-  };
-
   static vote = async ({
     type,
     questionId,

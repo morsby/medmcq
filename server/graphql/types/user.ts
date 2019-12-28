@@ -56,6 +56,7 @@ export const typeDefs = gql`
     specialtyVotes: [SpecialtyVote]
     tagVotes: [TagVote]
     likes: [Like]
+    liked: [Like]
     manualCompletedSets: [ManualCompletedSet]
     publicComments(semester: Int): [Comment]
     privateComments(semester: Int): [Comment]
@@ -223,8 +224,14 @@ export const resolvers = {
       return answers.map((answer) => ({ id: answer.id }));
     },
     likes: async ({ id }) => {
-      const likes = await QuestionCommentLike.query().where({ userId: id });
+      const likes = await QuestionCommentLike.query()
+        .join('questionComment', 'questionCommentLike.commentId', 'questionComment.id')
+        .where('questionComment.userId', id);
       return likes.map((like) => ({ id: [like.commentId, like.userId] }));
+    },
+    liked: async ({ id }) => {
+      const liked = await QuestionCommentLike.query().where({ userId: id });
+      return liked.map((like) => ({ id: [like.commentId, like.userId] }));
     },
     bookmarks: async ({ id }, args, ctx: Context) => {
       const bookmarks = await QuestionBookmark.query().where({ userId: id });

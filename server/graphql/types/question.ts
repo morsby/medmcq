@@ -7,6 +7,7 @@ import QuestionCorrectAnswer from 'models/question_correct_answer';
 import QuestionTagVote from 'models/question_tag_vote';
 import QuestionImage from 'models/question_image';
 import QuestionUserAnswer from 'models/question_user_answer';
+import QuestionComment from 'models/question_comment';
 
 export const typeDefs = gql`
   extend type Query {
@@ -55,8 +56,7 @@ export const typeDefs = gql`
 export const resolvers = {
   Query: {
     questions: async (args, { filter }, ctx: Context) => {
-      let {
-        n,
+      const {
         ids,
         season,
         year,
@@ -67,14 +67,20 @@ export const resolvers = {
         setId,
         search,
         onlyNew,
-        onlyWrong
+        onlyWrong,
+        commentIds
       } = filter;
+      let { n } = filter;
 
       let query = Question.query();
 
       if (!filter) throw new Error('No arguments for filter provided');
 
       if (ids) return query.findByIds(ids);
+      if (commentIds)
+        return QuestionComment.query()
+          .findByIds(commentIds)
+          .select('questionId as id');
 
       query = query
         .join('semesterExamSet as examSet', 'question.examSetId', 'examSet.id')

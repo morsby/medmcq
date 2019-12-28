@@ -23,13 +23,22 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
   const [suggestTagMessage, setSuggestTagMessage] = useState('');
   const questionIndex = useSelector((state: ReduxState) => state.quiz.questionIndex);
   const question = useSelector((state: ReduxState) => state.questions.questions[questionIndex]);
+  const semesterId = question.examSet.semester.id;
   const examSet = useSelector((state: ReduxState) =>
-    state.metadata.examSets.find((examSet) => examSet.id === question.examSet.id)
+    state.metadata.semesters
+      .find((semester) => semester.id === semesterId)
+      .examSets.find((examSet) => examSet.id === question.examSet.id)
   );
-  const specialties = useSelector((state: ReduxState) => state.metadata.specialties);
+  const specialties = useSelector(
+    (state: ReduxState) =>
+      state.metadata.semesters.find((semester) => semester.id === semesterId).specialties
+  );
   const specialtyVotes = question.specialtyVotes;
   const tagVotes = question.tagVotes;
-  const tags = useSelector((state: ReduxState) => state.metadata.tags);
+  const tags = useSelector(
+    (state: ReduxState) =>
+      state.metadata.semesters.find((semester) => semester.id === semesterId).tags
+  );
   const user = useSelector((state: ReduxState) => state.auth.user);
 
   const metadataVote = async (type, metadataId) => {

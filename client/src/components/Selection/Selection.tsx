@@ -42,11 +42,6 @@ const Selection: React.SFC<SelectionProps> = ({ addTranslation, translate }) => 
     Semester.fetchAll();
   }, [addTranslation]);
 
-  useEffect(() => {
-    if (!selectedSemester) return;
-    Metadata.fetchById(selectedSemester);
-  }, [selectedSemester]);
-
   /**
    * Func der (efter validering) henter spørgsmålene
    * @param  {string} quizType Er der tale om en ny quiz eller fortsættelse

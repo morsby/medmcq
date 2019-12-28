@@ -13,7 +13,6 @@ const SelectionSetSelector = () => {
   const semester = useSelector((state: ReduxState) =>
     state.metadata.semesters.find((semester) => semester.id === selectedSemester)
   );
-  const examSets = useSelector((state: ReduxState) => state.metadata.examSets);
   const user = useSelector((state: ReduxState) => state.auth.user);
 
   if (!selectedSemester) {
@@ -34,13 +33,13 @@ const SelectionSetSelector = () => {
         </p>
       )}
 
-      {_(examSets)
+      {_(semester.examSets)
         .sortBy((examSet) => examSet.year)
         .reverse()
-        .value()
         .map((examSet) => {
           return <SetRadioButton key={examSet.id} set={examSet} />;
-        })}
+        })
+        .value()}
     </Form>
   );
 };

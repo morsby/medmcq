@@ -18,8 +18,9 @@ const SelectionSpecialtiesSelector = () => {
   const { semesterId, specialtyIds, tagIds } = useSelector(
     (state: ReduxState) => state.ui.selection
   );
-  const metadata = useSelector((state: ReduxState) => state.metadata);
-  const semester = metadata.semesters.find((semester) => semester.id === semesterId);
+  const semester = useSelector((state: ReduxState) =>
+    state.metadata.semesters.find((semester) => semester.id === semesterId)
+  );
   const [tagTree, setTagTree] = useState(null);
   const [tagSearch, setTagSearch] = useState('');
 
@@ -30,7 +31,7 @@ const SelectionSpecialtiesSelector = () => {
 
   useEffect(() => {
     const convertMetadataToTree = () => {
-      return metadata.tags
+      return semester.tags
         .filter((t) => !t.parent.id)
         .map((t) => ({
           title: `${t.name} (${t.questionCount})`,
@@ -40,7 +41,7 @@ const SelectionSpecialtiesSelector = () => {
     };
 
     const getChildrenOfMetadata = (tagId: number) => {
-      return _.filter(metadata.tags, (t) => t.parent.id === tagId).map((t) => ({
+      return _.filter(semester.tags, (t) => t.parent.id === tagId).map((t) => ({
         title: `${t.name} (${t.questionCount})`,
         key: t.id,
         children: getChildrenOfMetadata(t.id)
@@ -48,7 +49,7 @@ const SelectionSpecialtiesSelector = () => {
     };
 
     setTagTree(convertMetadataToTree());
-  }, [metadata.tags, semesterId]);
+  }, [semester, semesterId]);
 
   const renderTreeNodes = (tags) =>
     _.sortBy(tags, (t) => t.title).map((item) => {
@@ -81,14 +82,14 @@ const SelectionSpecialtiesSelector = () => {
                 data={{ semester: semester.value }}
               />
             </Header>
-            {metadata.specialties && (
+            {semester.specialties && (
               <>
                 <Tree
                   checkable
                   checkedKeys={specialtyIds.map((id) => String(id))}
                   onCheck={(specialties) => handleChange(specialties as string[], 'specialtyIds')}
                 >
-                  {metadata.specialties.map((s) => (
+                  {semester.specialties.map((s) => (
                     <Tree.TreeNode
                       title={`${s.name} (${s.questionCount})`}
                       key={String(s.id)}
@@ -124,10 +125,10 @@ const SelectionSpecialtiesSelector = () => {
                 />
               )}
             </Translate>
-            {tagSearch && metadata.tags && (
+            {tagSearch && semester.tags && (
               <Tree
                 checkedKeys={_.filter(
-                  metadata.tags,
+                  semester.tags,
                   (t: any) =>
                     t.semesterId === semesterId &&
                     t.name.toLowerCase().includes(tagSearch.toLowerCase()) &&
@@ -141,7 +142,7 @@ const SelectionSpecialtiesSelector = () => {
                 }}
                 checkable
               >
-                {_(metadata.tags)
+                {_(semester.tags)
                   .filter(
                     (t) =>
                       t.semester.id === semesterId &&

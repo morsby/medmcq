@@ -27,8 +27,9 @@ const RightMenu: React.SFC<RightMenuProps> = ({
   const fetchQuestionsByCommentIds = async (commentIds) => {
     setLoading(true);
     commentIds = _.uniq(commentIds);
-    await Quiz.start({ ids: commentIds });
+    await Quiz.start({ commentIds });
     handleNavigation('/quiz');
+    setLoading(false);
   };
 
   const changeLang = (lang) => {

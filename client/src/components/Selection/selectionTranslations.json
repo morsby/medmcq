@@ -48,8 +48,8 @@
       "For the ${semester}th semester, the following exam sets can be selected:"
     ],
     "subtitle": [
-      "Tryk på fluebenet længst til højre for sættet, for manualt at sætte det som færdigt.",
-      "Click on the rightmost tickmark to manually set the set as completed."
+      "Tryk på fluebenet for manualt at sætte sættet som færdigt.",
+      "Click the tickmark to manually set the set as completed."
     ]
   },
   "selectionSpecialtiesSelector": {
