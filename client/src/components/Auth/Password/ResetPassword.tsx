@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
 
-import { passwordValid, passwordRepeatValid } from '../../../utils/formValidation';
-
 import { Container, Message, Button, Divider } from 'semantic-ui-react';
-import { Form, Field } from 'react-final-form';
+import { Form } from 'react-final-form';
 import { Translate } from 'react-localize-redux';
 import { useParams } from 'react-router-dom';
 import User from 'classes/User';
+import { useFormik } from 'formik';
+import FormField from '../Login/FormField';
+import Yup from 'yup';
+import { validationRegex } from 'utils/common';
+const resetSchema = Yup.object().shape({
+  password: Yup.string()
+    .matches(validationRegex.password)
+    .required(),
+  confirmPassword: Yup.string().oneOf([Yup.ref('password')], 'Kodeord skal være ens')
+});
 
 /**
  * Component der nulstiller kodeordet hvis URL'ens token er gyldigt.
@@ -16,8 +24,15 @@ import User from 'classes/User';
 export interface ResetPasswordProps {}
 
 const ResetPassword: React.SFC<ResetPasswordProps> = () => {
-  const [message, setMessage] = useState('');
   const token = useParams<{ token: string }>().token;
+  const formik = useFormik({
+    initialValues: {
+      password: '',
+      confirmPassword: ''
+    },
+    validationSchema: resetSchema,
+    onSubmit: (values) => handleSubmit(values)
+  });
 
   const handleSubmit = async (values) => {
     console.log(values);
@@ -33,60 +48,28 @@ const ResetPassword: React.SFC<ResetPasswordProps> = () => {
         </h3>
         <Translate>
           {({ translate }) => (
-            <Form
-              onSubmit={handleSubmit}
-              render={({ handleSubmit, pristine, invalid, form }) => {
-                return (
-                  <form
-                    onSubmit={(event) => {
-                      handleSubmit(event).then(form.reset);
-                    }}
-                    className="ui form custom"
-                  >
-                    <Field name="password" validate={passwordValid}>
-                      {({ input, meta }) => (
-                        <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
-                          <label>{translate('resetPassword.password')}</label>
-                          <input
-                            {...input}
-                            type="password"
-                            placeholder={translate('resetPassword.password') as string}
-                          />
-                          {meta.error && meta.touched && (
-                            <Message error visible size="small">
-                              {meta.error}
-                            </Message>
-                          )}
-                        </div>
-                      )}
-                    </Field>
-                    <Divider hidden />
-                    <Field name="password-repeat" validate={passwordRepeatValid}>
-                      {({ input, meta }) => (
-                        <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
-                          <label>{translate('resetPassword.password_repeat')}</label>
-                          <input
-                            {...input}
-                            type="password"
-                            placeholder={translate('resetPassword.password_repeat') as string}
-                          />
-                          {meta.error && meta.touched && (
-                            <Message error visible>
-                              {meta.error}
-                            </Message>
-                          )}
-                        </div>
-                      )}
-                    </Field>
-                    {message && <Message>{message}</Message>}
-                    <Divider hidden />
-                    <Button disabled={pristine || invalid}>
-                      <Translate id="resetPassword.submit" />
-                    </Button>
-                  </form>
-                );
-              }}
-            />
+            <Form onSubmit={formik.handleSubmit}>
+              <FormField
+                name="password"
+                value={formik.values.password}
+                placeholder={translate('resetPassword.password') as string}
+                error={formik.errors.password}
+                touched={formik.touched.password}
+                onChange={formik.handleChange}
+              />
+              <FormField
+                name="password-repeat"
+                value={formik.values.password}
+                placeholder={translate('resetPassword.password_repeat') as string}
+                error={formik.errors.confirmPassword}
+                touched={formik.touched.confirmPassword}
+                onChange={formik.handleChange}
+              />
+              <Divider hidden />
+              <Button disabled={formik.isValid}>
+                <Translate id="resetPassword.submit" />
+              </Button>
+            </Form>
           )}
         </Translate>
       </Container>

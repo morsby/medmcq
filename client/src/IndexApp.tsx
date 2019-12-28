@@ -14,19 +14,22 @@ import { PersistGate } from 'redux-persist/lib/integration/react';
 // Oversættelse
 import { LocalizeProvider } from 'react-localize-redux';
 
+// redux
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import rootReducer, { ReduxState } from 'redux/reducers';
+import ErrorBoundary from 'components/Misc/Utility-pages/ErrorBoundary';
+
 // Components
 import LocalizedApp from './App';
 import LoadingPage from './components/Misc/Utility-pages/LoadingPage';
+
+// Utils
+import 'proto/string';
 
 // STYLING
 import './styles/scss/main.scss';
 // Lightbox css
 import 'react-image-lightbox/style.css'; // This only needs to be imported once in your app
-
-// redux
-import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
-import rootReducer, { ReduxState } from 'redux/reducers';
-import ErrorBoundary from 'components/Misc/Utility-pages/ErrorBoundary';
 
 const migrations: any = {
   10: (state: ReduxState) => ({

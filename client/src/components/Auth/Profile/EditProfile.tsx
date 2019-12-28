@@ -1,10 +1,5 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import ReactRouterPropTypes from 'react-router-prop-types';
-import { connect } from 'react-redux';
-
+import React from 'react';
 import { urls } from '../../../utils/common';
-import * as validation from '../../../utils/formValidation';
 import { Container, Message, Button, Divider } from 'semantic-ui-react';
 import { Form, Field } from 'react-final-form';
 import { Translate } from 'react-localize-redux';

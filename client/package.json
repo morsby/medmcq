@@ -37,7 +37,8 @@
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
     "semantic-ui-react": "^0.88.1",
-    "typescript": "^3.7.3"
+    "typescript": "^3.7.3",
+    "yup": "^0.28.0"
   },
   "proxy": "http://localhost:3001",
   "scripts": {
@@ -49,15 +50,16 @@
   },
   "devDependencies": {
     "@types/jest": "^24.0.20",
+    "@types/jwt-decode": "^2.2.1",
+    "@types/lodash": "^4.14.144",
     "@types/node": "^12.11.7",
     "@types/react": "^16.9.11",
     "@types/react-dom": "^16.9.3",
     "@types/react-redux": "^7.1.5",
-    "@types/react-toastify": "^4.0.2",
-    "@types/jwt-decode": "^2.2.1",
-    "@types/lodash": "^4.14.144",
     "@types/react-router-dom": "^5.1.0",
     "@types/react-tagsinput": "^3.19.6",
+    "@types/react-toastify": "^4.0.2",
+    "@types/yup": "^0.26.27",
     "case-sensitive-paths-webpack-plugin": "^2.2.0",
     "concurrently": "^5.0.0",
     "cross-env": "^6.0.3",

@@ -1,27 +1,54 @@
 import React, { useState } from 'react';
-import { urls } from '../../../utils/common';
-import { loginUsernameValid, loginPasswordValid } from '../../../utils/formValidation';
-import { Form, Field } from 'react-final-form';
-import { Button, Divider, Message } from 'semantic-ui-react';
+import { urls, validationRegex } from '../../../utils/common';
+import { Form } from 'react-final-form';
+import { Button, Divider } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 import User from 'classes/User';
 import { useHistory } from 'react-router';
+import { useFormik } from 'formik';
+import Yup from 'yup';
+import FormField from './FormField';
+const loginSchema = Yup.object().shape({
+  username: Yup.string()
+    .min(3, 'Brugernavnet er for kort')
+    .matches(validationRegex.username)
+    .required('Du skal indtaste et brugernavn'),
+  password: Yup.string()
+    .matches(
+      validationRegex.password,
+      'Kodeordet skal være mindst 6 tegn, indeholde mindst et stort bogstav, et lille bogstav og et tal'
+    )
+    .required('Du skal angive et kodeord'),
+  email: Yup.string().email()
+});
 
 /**
  * Component der viser login-formularen.
  * Kaldes af ./Login.js
- * Props er history (fra react-router) og login (fra redux)
  */
-const LoginForm = () => {
+export interface LoginFormProps {}
+
+const LoginForm: React.SFC<LoginFormProps> = () => {
   const [error, setError] = useState('');
   const history = useHistory();
+  const formik = useFormik({
+    initialValues: {
+      username: '',
+      password: '',
+      email: ''
+    },
+    validationSchema: loginSchema,
+    onSubmit: (values) => {
+      onSubmit({ username: values.username, password: values.password, email: values.email });
+    }
+  });
 
   const handleNavigation = (path) => {
     history.push(urls[path]);
   };
 
-  const onSubmit = async (values) => {
-    const user = await User.login(values);
+  const onSubmit = async (data: { username: string; password: string; email: string }) => {
+    const user = await User.login(data);
 
     if (!user) {
       return setError('Login mislykkedes');
@@ -34,54 +61,29 @@ const LoginForm = () => {
     <>
       <Translate>
         {({ translate }) => (
-          <Form
-            onSubmit={onSubmit}
-            render={({ handleSubmit, pristine, invalid }) => (
-              <form onSubmit={handleSubmit} className="ui form custom">
-                <Field name="username" validate={loginUsernameValid}>
-                  {({ input, meta }) => (
-                    <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
-                      <label>{translate('loginForm.username')}</label>
-                      <input
-                        {...input}
-                        type="text"
-                        placeholder={translate('loginForm.username') as any}
-                      />
+          <Form onSubmit={formik.handleSubmit}>
+            <FormField
+              name="username"
+              placeholder={translate('loginForm.username') as string}
+              onChange={formik.handleChange}
+              touched={formik.touched.username}
+              value={formik.values.username}
+              error={formik.errors.username}
+            />
+            <FormField
+              name="password"
+              placeholder={translate('loginForm.password') as string}
+              onChange={formik.handleChange}
+              touched={formik.touched.password}
+              value={formik.values.password}
+              error={formik.errors.password}
+            />
 
-                      {meta.error && meta.touched && (
-                        <Message error visible>
-                          {meta.error}
-                        </Message>
-                      )}
-                    </div>
-                  )}
-                </Field>
-
-                <Field name="password" validate={loginPasswordValid}>
-                  {({ input, meta }) => (
-                    <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
-                      <label>{translate('loginForm.password')}</label>
-                      <input
-                        {...input}
-                        type="password"
-                        placeholder={translate('loginForm.password') as any}
-                      />
-                      {meta.error && meta.touched && (
-                        <Message error visible size="small">
-                          {meta.error}
-                        </Message>
-                      )}
-                    </div>
-                  )}
-                </Field>
-                {error && <Message negative>{translate('loginForm.errs.login_failed')}</Message>}
-                <Divider hidden />
-                <Button floated="left" disabled={pristine || invalid} positive>
-                  {translate('loginForm.login')}
-                </Button>
-              </form>
-            )}
-          />
+            <Divider hidden />
+            <Button floated="left" disabled={!formik.isValid} positive>
+              {translate('loginForm.login')}
+            </Button>
+          </Form>
         )}
       </Translate>
       <div
