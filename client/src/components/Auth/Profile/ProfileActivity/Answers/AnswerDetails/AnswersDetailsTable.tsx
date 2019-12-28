@@ -81,7 +81,6 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
 
   const rowSelection = {
     onChange: (selectedRowKeys, selectedRows) => {
-      console.log(selectedRowKeys);
       toggleCheckbox(selectedRowKeys);
     }
   };

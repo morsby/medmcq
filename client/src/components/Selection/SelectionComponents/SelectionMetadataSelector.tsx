@@ -24,7 +24,8 @@ const SelectionSpecialtiesSelector = () => {
   const [tagSearch, setTagSearch] = useState('');
 
   const handleChange = (value: string[], type: 'tagIds' | 'specialtyIds') => {
-    dispatch(UIReducer.actions.changeSelection({ type, value }));
+    const numberedValues = value.map((id) => Number(id));
+    dispatch(UIReducer.actions.changeSelection({ type, value: numberedValues }));
   };
 
   useEffect(() => {
@@ -84,7 +85,7 @@ const SelectionSpecialtiesSelector = () => {
               <>
                 <Tree
                   checkable
-                  checkedKeys={specialtyIds}
+                  checkedKeys={specialtyIds.map((id) => String(id))}
                   onCheck={(specialties) => handleChange(specialties as string[], 'specialtyIds')}
                 >
                   {metadata.specialties.map((s) => (
@@ -160,7 +161,7 @@ const SelectionSpecialtiesSelector = () => {
             {!tagSearch && tagTree && (
               <>
                 <Tree
-                  checkedKeys={tagIds}
+                  checkedKeys={tagIds.map((id) => String(id))}
                   onCheck={(tags: any) => handleChange(tags, 'tagIds')}
                   checkable
                 >

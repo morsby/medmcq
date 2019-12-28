@@ -32,14 +32,15 @@ const migrations: any = {
   10: (state: ReduxState) => ({
     ...state,
     questions: null
-  })
+  }),
+  11: (state: ReduxState) => ({})
 };
 
 const persistConfig = {
   key: 'medMCQ',
   storage: storage,
   stateReconciler: autoMergeLevel2, // see "Merge Process" section for details.
-  version: 10,
+  version: 11,
   migrate: createMigrate(migrations),
   whitelist: ['quiz', 'questions', 'metadata', 'ui', 'settings', 'shareBuilder'] // to disable persists
 };

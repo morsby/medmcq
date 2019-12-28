@@ -58,12 +58,17 @@ export const resolvers = {
   Mutation: {
     voteTag: async (root, { data }, ctx: Context) => {
       const { questionId, metadataId, vote } = data;
-      const exists = await QuestionTagVote.query().findOne({ questionId, tagId: metadataId });
+      const userId = ctx.user.id;
+      const exists = await QuestionTagVote.query().findOne({
+        questionId,
+        tagId: metadataId,
+        userId
+      });
       if (exists) {
         await QuestionTagVote.query().updateAndFetchById(exists.id, { value: vote });
       } else {
         await QuestionTagVote.query().insert({
-          userId: ctx.user.id,
+          userId,
           tagId: metadataId,
           questionId,
           value: vote
@@ -78,9 +83,11 @@ export const resolvers = {
     },
     voteSpecialty: async (root, { data }, ctx: Context) => {
       const { questionId, metadataId, vote } = data;
+      const userId = ctx.user.id;
       const exists = await QuestionSpecialtyVote.query().findOne({
         questionId,
-        specialtyId: metadataId
+        specialtyId: metadataId,
+        userId
       });
       if (exists) {
         await QuestionSpecialtyVote.query().updateAndFetchById(exists.id, {
@@ -156,10 +163,11 @@ export const resolvers = {
     questionCount: async ({ id }, _, ctx: Context) => {
       const questions = await QuestionTagVote.query()
         .where({ tagId: id })
-        .distinct('questionId')
-        .where(function() {
-          this.sum('tagVote.value as votes').having('votes', '>', '-1');
-        });
+        .groupBy('questionId')
+        .sum('value as votes')
+        .having('votes', '>', '-1')
+        .orderBy('votes', 'desc')
+        .select('questionId');
 
       return questions.length;
     }
@@ -177,10 +185,11 @@ export const resolvers = {
     questionCount: async ({ id }, _, ctx: Context) => {
       const questions = await QuestionSpecialtyVote.query()
         .where({ specialtyId: id })
-        .distinct('questionId')
-        .where(function() {
-          this.sum('specialtyVote.value as votes').having('votes', '>', '-1');
-        });
+        .groupBy('questionId')
+        .sum('value as votes')
+        .having('votes', '>', '-1')
+        .orderBy('votes', 'desc')
+        .select('questionId');
 
       return questions.length;
     }

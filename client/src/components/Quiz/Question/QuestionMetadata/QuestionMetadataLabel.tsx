@@ -49,8 +49,7 @@ const QuestionMetadataLabel: React.SFC<QuestionMetadataLabelProps> = ({
     return isChildrenTagged;
   };
 
-  const isVotedOn = () => {
-      return metadataVotes.find((vote) => vote.user.id)?.vote  };
+  const isVotedOn = () => metadataVotes.find((vote) => vote.user.id === user.id)?.vote;
 
   const label = (
     <Label style={{ marginTop: '2px' }} size="small">

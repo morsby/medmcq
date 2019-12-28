@@ -6,6 +6,7 @@ import Comment from 'models/question_comment';
 import QuestionCorrectAnswer from 'models/question_correct_answer';
 import QuestionTagVote from 'models/question_tag_vote';
 import QuestionImage from 'models/question_image';
+import QuestionUserAnswer from 'models/question_user_answer';
 
 export const typeDefs = gql`
   extend type Query {
@@ -53,8 +54,21 @@ export const typeDefs = gql`
 
 export const resolvers = {
   Query: {
-    questions: async (args, { filter }) => {
-      let { n, ids, season, year, semesterId, text, tagIds, specialtyIds, setId, search } = filter;
+    questions: async (args, { filter }, ctx: Context) => {
+      let {
+        n,
+        ids,
+        season,
+        year,
+        semesterId,
+        text,
+        tagIds,
+        specialtyIds,
+        setId,
+        search,
+        onlyNew,
+        onlyWrong
+      } = filter;
 
       let query = Question.query();
 
@@ -92,27 +106,59 @@ export const resolvers = {
       }
 
       if (specialtyIds && specialtyIds.length > 0) {
+        const votes = await QuestionSpecialtyVote.query()
+          .whereIn('specialtyId', specialtyIds)
+          .groupBy('questionId')
+          .sum('value as votes')
+          .having('votes', '>', '-1')
+          .orderBy('votes', 'desc')
+          .select('questionId');
+
         query = query
           .join('questionSpecialtyVote as specialtyVote', 'question.id', 'specialtyVote.questionId')
-          .whereIn('specialtyVote.specialtyId', specialtyIds)
-          .where(function() {
-            this.sum('specialtyVote.value as votes').having('votes', '>', '-1');
-          });
+          .whereIn('question.id', votes.map((specialtyVote) => specialtyVote.questionId));
       }
 
       if (tagIds && tagIds.length > 0) {
+        const votes = await QuestionTagVote.query()
+          .whereIn('tagId', tagIds)
+          .groupBy('questionId')
+          .sum('value as votes')
+          .having('votes', '>', '-1')
+          .orderBy('votes', 'desc')
+          .select('questionId');
+
         query = query
           .join('questionTagVote as tagVote', 'question.id', 'tagVote.questionId')
-          .whereIn('tagVote.tagId', tagIds)
-          .where(function() {
-            this.sum('tagVote.value as votes').having('votes', '>', '-1');
-          });
+          .whereIn('question.id', votes.map((vote) => vote.questionId));
       }
 
       if (text) {
         query = query.whereRaw(
           'MATCH (text, answer1, answer2, answer3) AGAINST (? IN BOOLEAN MODE)',
           filter.text
+        );
+      }
+
+      if (ctx.user && onlyWrong) {
+        const correctAnswers = QuestionUserAnswer.query()
+          .where({ userId: ctx.user.id })
+          .join(
+            'questionCorrectAnswer',
+            'questionUserAnswer.questionId',
+            '=',
+            'questionCorrectAnswer.questionId'
+          )
+          .whereRaw('question_user_answer.answer = question_correct_answer.answer')
+          .select('questionUserAnswer.questionId');
+
+        query = query.whereNotIn('question.id', correctAnswers);
+      } else if (ctx.user && onlyNew) {
+        query = query.whereNotIn(
+          'question.id',
+          QuestionUserAnswer.query()
+            .where({ userId: ctx.user.id })
+            .distinct('questionId')
         );
       }
 
@@ -190,26 +236,24 @@ export const resolvers = {
       return question.updatedAt.toISOString();
     },
     specialties: async ({ id }, args, ctx: Context) => {
-      const question = await ctx.questionLoaders.questionLoader.load(id);
       const specialties = await QuestionSpecialtyVote.query()
-        .where({ questionId: question.id })
-        .where(function() {
-          this.sum('specialtyVote.value as votes').having('votes', '>', '-1');
-        })
-        .distinct('specialtyId');
+        .where({ questionId: id })
+        .groupBy('specialtyId')
+        .sum('value as votes')
+        .having('votes', '>', '-1')
+        .orderBy('votes', 'desc')
+        .select('specialtyId');
 
       return specialties.map((s) => ({ id: s.specialtyId }));
     },
     tags: async ({ id }, args, ctx: Context) => {
-      const question = await ctx.questionLoaders.questionLoader.load(id);
       const tags = await QuestionTagVote.query()
-        .where({ questionId: question.id })
-        .where(function() {
-          this.sum('tagVote.value as votes').having('votes', '>', '-1');
-        })
-        .distinct('tagId');
-
-      console.log(tags);
+        .where({ questionId: id })
+        .groupBy('tagId')
+        .sum('value as votes')
+        .having('votes', '>', '-1')
+        .orderBy('votes', 'desc')
+        .select('tagId');
 
       return tags.map((t) => ({ id: t.tagId }));
     }

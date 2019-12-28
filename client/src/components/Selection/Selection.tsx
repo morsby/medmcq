@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import { breakpoints, urls } from 'utils/common';
 
@@ -28,6 +28,7 @@ export interface SelectionProps extends LocalizeContextProps {}
 const Selection: React.SFC<SelectionProps> = ({ addTranslation, translate }) => {
   const [errors, setErrors] = useState([]);
   const [search, setSearch] = useState('');
+  const [loading, setLoading] = useState(false);
   const [startLoading, setStartLoading] = useState(false);
   const metadata = useSelector((state: ReduxState) => state.metadata);
   const type = useSelector((state: ReduxState) => state.ui.selection.type);
@@ -42,8 +43,16 @@ const Selection: React.SFC<SelectionProps> = ({ addTranslation, translate }) => 
     Semester.fetchAll();
   }, [addTranslation]);
 
+  const fetchMetadata = useCallback(async () => {
+    setLoading(true);
+    await Metadata.fetchById(selectedSemester);
+    setLoading(false);
+  }, [selectedSemester]);
+
   useEffect(() => {
-    Metadata.fetchById(selectedSemester);
+    if (!selectedSemester) return;
+
+    fetchMetadata();
   }, [selectedSemester]);
 
   /**
