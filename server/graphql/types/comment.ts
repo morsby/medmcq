@@ -10,13 +10,23 @@ export const typeDefs = gql`
     isPrivate: Boolean
     isAnonymous: Boolean
     user: User
-    createdAt: String
-    updatedAt: String
     likes: [Like]
     question: Question
+    createdAt: String
+    updatedAt: String
+  }
+
+  input CommentInput {
+    id: Int
+    text: String!
+    isPrivate: Boolean
+    isAnonymous: Boolean
+    questionId: Int
   }
 
   extend type Mutation {
+    addComment(data: CommentInput): Comment
+    editComment(data: CommentInput): Comment
     likeComment(commentId: Int!): Comment
     deleteComment(commentId: Int!): String
   }
@@ -28,7 +38,7 @@ export const resolvers = {
       if (!ctx.user) throw new Error('Must be logged in to like');
       const userId = ctx.user.id;
 
-      const alreadyLiked = await QuestionCommentLike.query().where({
+      const alreadyLiked = await QuestionCommentLike.query().findOne({
         commentId,
         userId: ctx.user.id
       });
@@ -40,12 +50,39 @@ export const resolvers = {
         await QuestionCommentLike.query().insert({ commentId, userId });
       }
 
+      // ctx.likeLoaders.likesLoader.clear([commentId, userId]);
       return { id: commentId };
     },
-    deleteComment: async (root, {commentId}, ctx: Context) => {
-      const comment = QuestionComment.query().where({commentId, userId: ctx.user.id}).delete();
-      if (!comment) throw new Error("Comment not found");
-      return "Successfully deleted"
+    deleteComment: async (root, { commentId }, ctx: Context) => {
+      const comment = await QuestionComment.query()
+        .where({ id: commentId, userId: ctx.user.id })
+        .delete();
+      if (!comment) throw new Error('Comment not found');
+      return 'Successfully deleted';
+    },
+    addComment: async (root, { data }, ctx: Context) => {
+      const { text, isPrivate, isAnonymous, questionId } = data;
+      const comment = await QuestionComment.query().insertAndFetch({
+        text,
+        private: isPrivate,
+        anonymous: isAnonymous,
+        questionId,
+        userId: ctx.user.id
+      });
+      return { id: comment.id };
+    },
+    editComment: async (root, { data }, ctx: Context) => {
+      const { id, text, isPrivate, isAnonymous, questionId } = data;
+      const exists = await QuestionComment.query().findOne({ id, userId: ctx.user.id });
+      if (exists) {
+        const comment = await exists
+          .$query()
+          .updateAndFetch({ text, private: isPrivate, anonymous: isAnonymous, questionId });
+
+        ctx.commentLoaders.commentsLoader.clear(comment.id);
+        return { id: comment.id };
+      }
+      throw new Error('Comment not found');
     }
   },
 
@@ -69,11 +106,11 @@ export const resolvers = {
     },
     createdAt: async ({ id }, _, ctx: Context) => {
       const comment = await ctx.commentLoaders.commentsLoader.load(id);
-      return comment.createdAt;
+      return comment.createdAt.toISOString();
     },
     updatedAt: async ({ id }, _, ctx: Context) => {
       const comment = await ctx.commentLoaders.commentsLoader.load(id);
-      return comment.updatedAt;
+      return comment.updatedAt.toISOString();
     },
     likes: async ({ id }, _, ctx: Context) => {
       const likes = await QuestionCommentLike.query().where({ commentId: id });

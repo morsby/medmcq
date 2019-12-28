@@ -1,18 +1,18 @@
-import bodyParser from 'body-parser';
 import dotEnv from 'dotenv-flow';
+const env = process.env.NODE_ENV || 'development';
+dotEnv.config({ node_env: env });
+import bodyParser from 'body-parser';
 import express from 'express';
 import helmet from 'helmet';
 import Knex from 'knex';
 import { Model } from 'objection';
 import cookieParser from 'cookie-parser';
 
-import apolloClient from './graphql/apolloServer';
+import apolloServer from './graphql/apolloServer';
 import logger from './middleware/logger';
 import path from 'path';
 
 const port = process.env.PORT || 3001;
-const env = process.env.NODE_ENV || 'development';
-dotEnv.config({ node_env: env });
 const app = express();
 
 // Database
@@ -30,7 +30,7 @@ app.use(cookieParser());
 app.use(logger);
 
 // GraphQL and routes
-apolloClient.applyMiddleware({ app });
+apolloServer.applyMiddleware({ app });
 
 /* Catch all */
 app.use(express.static(path.join(__dirname, '..', '..', 'client', 'build')));

@@ -64,10 +64,11 @@ export const resolvers = {
         tagId: metadataId,
         userId
       });
+      let tagVote: QuestionTagVote;
       if (exists) {
-        await QuestionTagVote.query().updateAndFetchById(exists.id, { value: vote });
+        tagVote = await exists.$query().updateAndFetch({ value: vote });
       } else {
-        await QuestionTagVote.query().insert({
+        tagVote = await QuestionTagVote.query().insert({
           userId,
           tagId: metadataId,
           questionId,
@@ -76,8 +77,8 @@ export const resolvers = {
       }
 
       // Kan ikke få det til at virke uden
-      ctx.questionLoaders.questionLoader.clearAll();
-      ctx.metadataLoaders.tagVotesLoader.clearAll();
+      ctx.questionLoaders.questionLoader.clear(questionId);
+      ctx.metadataLoaders.tagVotesLoader.clear(tagVote.id);
 
       return { id: questionId };
     },
@@ -89,13 +90,15 @@ export const resolvers = {
         specialtyId: metadataId,
         userId
       });
+
+      let specialtyVote: QuestionSpecialtyVote;
       if (exists) {
-        await QuestionSpecialtyVote.query().updateAndFetchById(exists.id, {
+        specialtyVote = await exists.$query().updateAndFetch({
           value: vote
         });
         // await QuestionSpecialtyVote.query().deleteById(exists.id);
       } else {
-        await QuestionSpecialtyVote.query().insertAndFetch({
+        specialtyVote = await QuestionSpecialtyVote.query().insertAndFetch({
           userId: ctx.user.id,
           specialtyId: metadataId,
           questionId,
@@ -103,8 +106,8 @@ export const resolvers = {
         });
       }
 
-      ctx.questionLoaders.questionLoader.clearAll();
-      ctx.metadataLoaders.specialtyVoteLoader.clearAll();
+      ctx.questionLoaders.questionLoader.clear(questionId);
+      ctx.metadataLoaders.specialtyVoteLoader.clear(specialtyVote.id);
       return { id: questionId };
     }
   },

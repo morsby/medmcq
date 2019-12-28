@@ -18,8 +18,9 @@ interface Comment {
 }
 
 interface CommentInput {
+  id?: number;
+  text: string;
   questionId: number;
-  commentId: number;
   isPrivate: boolean;
   isAnonymous: boolean;
 }
@@ -46,7 +47,19 @@ class Comment {
     }
   `;
 
-  static add = (data: CommentInput) => {};
+  static add = async (data: CommentInput) => {
+    const mutation = gql`
+      mutation($data: CommentInput) {
+        addComment(data: $data) {
+          ...Comment
+        }
+      }
+      ${Comment.fragmentFull}
+    `;
+
+    const comment = await Apollo.mutate<Comment>('addComment', mutation, { data: { ...data } });
+    store.dispatch(questionsReducer.actions.addComment({ comment }));
+  };
 
   static delete = async ({ commentId }: { commentId: number }) => {
     const mutation = gql`
@@ -59,13 +72,25 @@ class Comment {
     store.dispatch(questionsReducer.actions.removeComment({ commentId }));
   };
 
-  static edit = (data: CommentInput) => {};
+  static edit = async (data: CommentInput) => {
+    const mutation = gql`
+      mutation($data: CommentInput) {
+        editComment(data: $data) {
+          ...Comment
+        }
+      }
+      ${Comment.fragmentFull}
+    `;
+
+    const comment = await Apollo.mutate<Comment>('editComment', mutation, { data });
+    store.dispatch(questionsReducer.actions.editComment({ comment }));
+  };
 
   static like = async ({ commentId }: { commentId: number }) => {
     const mutation = gql`
       mutation($commentId: Int!) {
         likeComment(commentId: $commentId) {
-          ...FullComment
+          ...Comment
         }
       }
       ${Comment.fragmentFull}

@@ -58,33 +58,10 @@ class Question {
         id
       }
       specialtyVotes {
-        id
-        question {
-          id
-        }
-        user {
-          id
-        }
-        specialty {
-          id
-        }
-        vote
+        ...SpecialtyVote
       }
       tagVotes {
-        id
-        question {
-          id
-        }
-        user {
-          id
-        }
-        tag {
-          id
-          parent {
-            id
-          }
-        }
-        vote
+        ...TagVote
       }
       answer1
       answer2
@@ -92,40 +69,15 @@ class Question {
       images
       correctAnswers
       publicComments {
-        id
-        text
-        isPrivate
-        isAnonymous
-        question {
-          id
-        }
-        user {
-          id
-          username
-        }
-        likes {
-          commentId
-          userId
-        }
+        ...Comment
       }
       privateComments {
-        id
-        text
-        isPrivate
-        isAnonymous
-        question {
-          id
-        }
-        user {
-          id
-          username
-        }
-        likes {
-          commentId
-          userId
-        }
+        ...Comment
       }
     }
+    ${Comment.fragmentFull}
+    ${Tag.tagVoteFragment}
+    ${Specialty.specialtyVoteFragment}
   `;
 
   static fetch = async (filter: Partial<QuestionFilterInput>, newQuiz?: boolean) => {

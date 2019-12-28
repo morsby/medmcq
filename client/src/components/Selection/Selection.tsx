@@ -19,6 +19,7 @@ import { useHistory } from 'react-router';
 import Semester from 'classes/Semester';
 import Metadata from 'classes/Metadata';
 import Quiz from 'classes/Quiz';
+import LoadingPage from 'components/Misc/Utility-pages/LoadingPage';
 
 export interface SelectionProps extends LocalizeContextProps {}
 
@@ -28,14 +29,12 @@ export interface SelectionProps extends LocalizeContextProps {}
 const Selection: React.SFC<SelectionProps> = ({ addTranslation, translate }) => {
   const [errors, setErrors] = useState([]);
   const [search, setSearch] = useState('');
-  const [loading, setLoading] = useState(false);
   const [startLoading, setStartLoading] = useState(false);
-  const metadata = useSelector((state: ReduxState) => state.metadata);
+  const semesters = useSelector((state: ReduxState) => state.metadata.semesters);
   const type = useSelector((state: ReduxState) => state.ui.selection.type);
   const selectedSemester = useSelector((state: ReduxState) => state.ui.selection.semesterId);
   const user = useSelector((state: ReduxState) => state.auth.user);
   const quizQuestions = useSelector((state: ReduxState) => state.questions.questions);
-  const { semesters } = metadata;
   const history = useHistory();
 
   useEffect(() => {
@@ -43,16 +42,9 @@ const Selection: React.SFC<SelectionProps> = ({ addTranslation, translate }) => 
     Semester.fetchAll();
   }, [addTranslation]);
 
-  const fetchMetadata = useCallback(async () => {
-    setLoading(true);
-    await Metadata.fetchById(selectedSemester);
-    setLoading(false);
-  }, [selectedSemester]);
-
   useEffect(() => {
     if (!selectedSemester) return;
-
-    fetchMetadata();
+    Metadata.fetchById(selectedSemester);
   }, [selectedSemester]);
 
   /**
@@ -60,7 +52,6 @@ const Selection: React.SFC<SelectionProps> = ({ addTranslation, translate }) => 
    * @param  {string} quizType Er der tale om en ny quiz eller fortsættelse
    *                           af en gammel?
    */
-
   const searchHandler = (e, { value }) => {
     setSearch(value);
   };
@@ -94,6 +85,7 @@ const Selection: React.SFC<SelectionProps> = ({ addTranslation, translate }) => 
     }
   };
 
+  if (!semesters) return <LoadingPage />
   return (
     <div className="flex-container">
       <Container className="content">
@@ -111,7 +103,9 @@ const Selection: React.SFC<SelectionProps> = ({ addTranslation, translate }) => 
             <Divider hidden />
             <Translate
               id="selectionNSelector.total_n"
-              data={{ n: (semesters[selectedSemester] || {}).questionCount }}
+              data={{
+                n: semesters.find((semester) => semester.id === selectedSemester)?.questionCount
+              }}
             />
             <Divider />
           </>

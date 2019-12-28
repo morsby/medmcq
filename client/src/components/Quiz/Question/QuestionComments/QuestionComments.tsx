@@ -58,22 +58,22 @@ const QuestionComments: React.SFC<QuestionCommentsProps> = ({ type }) => {
     try {
       if (editCommentId) {
         await Comment.edit({
+          text: comment,
           questionId: question.id,
-          commentId: editCommentId,
+          id: editCommentId,
           isAnonymous,
           isPrivate
         });
         setEditCommentId(null);
       } else {
         await Comment.add({
+          text: comment,
           questionId: question.id,
-          commentId: editCommentId,
           isPrivate,
           isAnonymous
         });
       }
 
-      // TODO: Vent med at slette kommentar til den ER postet
       setComment('');
       setLoading(false);
     } catch (error) {
@@ -180,7 +180,11 @@ const QuestionComments: React.SFC<QuestionCommentsProps> = ({ type }) => {
             question={question}
             type={type}
             handleEdit={handleEditComment}
-            mostLiked={!c.isPrivate && c.likes.length === mostLiked.likes.length}
+            mostLiked={
+              !c.isPrivate &&
+              mostLiked.likes.length > 0 &&
+              c.likes.length === mostLiked.likes.length
+            }
           />
         ))}
       {form}

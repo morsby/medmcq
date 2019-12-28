@@ -4,10 +4,11 @@ import generateLoaders from './dataloaders';
 import jsonWebToken from 'jsonwebtoken';
 import User from 'models/user';
 import Express from 'express';
+const secret = process.env.SECRET || '';
 
 const decodeUser = (jwt: string) => {
   if (!jwt) return null;
-  return jsonWebToken.decode(jwt);
+  return jsonWebToken.verify(jwt, secret);
 };
 
 const generateContext = (req: Express.Request, res: Express.Response) => ({
