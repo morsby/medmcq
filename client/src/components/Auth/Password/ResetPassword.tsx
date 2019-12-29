@@ -1,20 +1,12 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-import { Container, Message, Button, Divider } from 'semantic-ui-react';
+import { Container, Button, Divider } from 'semantic-ui-react';
 import { Form } from 'react-final-form';
 import { Translate } from 'react-localize-redux';
 import { useParams } from 'react-router-dom';
-import User from 'classes/User';
 import { useFormik } from 'formik';
 import FormField from '../Login/FormField';
-import Yup from 'yup';
-import { validationRegex } from 'utils/common';
-const resetSchema = Yup.object().shape({
-  password: Yup.string()
-    .matches(validationRegex.password)
-    .required(),
-  confirmPassword: Yup.string().oneOf([Yup.ref('password')], 'Kodeord skal være ens')
-});
+import { resetSchema } from 'utils/validationSchemas';
 
 /**
  * Component der nulstiller kodeordet hvis URL'ens token er gyldigt.

@@ -1,7 +1,7 @@
 import { store } from 'IndexApp';
 import Question from 'classes/Question';
-import { Answer } from 'classes/Quiz';
 import { ReduxState } from 'redux/reducers';
+import { AnswerInput } from 'classes/Quiz';
 
 export const smoothScroll = (h?: number, dir = 'up') => {
   let top = window.pageYOffset || document.documentElement.scrollTop;
@@ -41,7 +41,7 @@ export const evalAnswer = (question, userAnswer, answerNo) => {
   }
 };
 
-export const calculateResults = (questions: Question[], answers: Partial<Answer>[]) => {
+export const calculateResults = (questions: Question[], answers: Partial<AnswerInput>[]) => {
   let res = {
     status: true,
     n: 0,

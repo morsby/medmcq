@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { Button, Divider } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 import AnswerDetails from './AnswerDetails/AnswerDetails';
@@ -24,10 +23,25 @@ const Answers: React.SFC<AnswersProps> = () => {
     toggleDetails(!details);
   };
 
-  let totalAnswers = Object.keys(answers).length;
-  let allRight = _.filter(answers, (a) => a.tries === a.correct);
-  let allWrong = _.filter(answers, (a) => a.correct === 0);
-  let mixed = _.filter(answers, (a) => a.correct > 0 && a.correct < a.tries);
+  let totalAnswers = answers.length;
+  const mappedAnswers = () => {
+    let mapped = {} as { [key: string]: { tries: number; correct: number } };
+
+    for (let answer of answers) {
+      if (!mapped[answer.question.id]) {
+        mapped[answer.question.id] = { correct: 0, tries: 0 };
+      }
+      mapped[answer.question.id].tries++;
+      if (answer.question.correctAnswers.includes(answer.answer)) {
+        mapped[answer.question.id].correct++;
+      }
+    }
+
+    return mapped;
+  };
+  let allRight = _.filter(mappedAnswers(), (a) => a.tries === a.correct);
+  let allWrong = _.filter(mappedAnswers(), (a) => a.correct === 0);
+  let mixed = _.filter(mappedAnswers(), (a) => a.correct > 0 && a.correct < a.tries);
   return (
     <div>
       <p>

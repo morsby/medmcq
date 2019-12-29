@@ -6,6 +6,7 @@ import Apollo from './Apollo';
 import authReducer from 'redux/reducers/auth';
 import Like from './Like';
 import Comment from './Comment';
+import Specialty from './Specialty';
 
 export interface UserLoginInput {
   username: string;
@@ -18,26 +19,34 @@ export interface UserSignupInput {
   email?: string;
 }
 
-interface UserAnswer {
+interface User {
+  id: number;
+  username: string;
+  password?: string;
+  email: string;
+  answers: Answer[];
+  likes: Like[];
+  manualCompletedSets: { setId: number }[];
+  bookmarks: Bookmark[];
+}
+
+export interface Answer {
   id: number;
   answer: number;
   answerTime: number;
   question: Question;
 }
 
-interface User {
+export interface Bookmark {
   id: number;
-  username: string;
-  password?: string;
-  email: string;
-  answers: UserAnswer[];
-  likes: Like[];
-  manualCompletedSets: { setId: number }[];
-  bookmarks: Bookmark[];
+  question: Question;
 }
 
-export interface Bookmark {
-  question: Question;
+export interface ProfileData {
+  answers: Answer[];
+  publicComments: Comment[];
+  privateComments: Comment[];
+  bookmarks: Bookmark[];
 }
 
 class User {
@@ -137,42 +146,55 @@ class User {
   };
 
   static getProfileData = async (options: { semester: number }) => {
-    const res = await client.query<{ user: Partial<User> }>({
-      query: gql`
-        query($semester: Int) {
-          user {
-            answers(semester: $semester) {
+    const query = gql`
+      query($semester: Int) {
+        profile {
+          answers(semester: $semester) {
+            id
+            answer
+            answerTime
+            question {
               id
-              answer
-              answerTime
-              question {
+              correctAnswers
+            }
+          }
+          publicComments(semester: $semester) {
+            ...Comment
+            question {
+              specialties {
                 id
-              }
-            }
-            publicComments(semester: $semester) {
-              ...Comment
-            }
-            privateComments(semester: $semester) {
-              ...Comment
-            }
-            bookmarks {
-              question {
-                id
-                text
-                correctAnswers
-                answer1
-                answer2
-                answer3
               }
             }
           }
+          privateComments(semester: $semester) {
+            ...Comment
+            question {
+              specialties {
+                id
+              }
+            }
+          }
+          bookmarks {
+            id
+            question {
+              id
+              text
+              correctAnswers
+              answer1
+              answer2
+              answer3
+            }
+          }
         }
-        ${Comment.fragmentFull}
-      `,
-      variables: { semester: options.semester }
+      }
+      ${Comment.fragmentFull}
+    `;
+
+    const profileData = await Apollo.query<ProfileData>('profile', query, {
+      semester: options.semester
     });
 
-    return res.data.user;
+    store.dispatch(authReducer.actions.setProfile(profileData));
   };
 
   static resetPassword = async ({

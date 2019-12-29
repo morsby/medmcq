@@ -12,19 +12,18 @@ import { useHistory } from 'react-router';
 import { ReduxState } from 'redux/reducers';
 import User from 'classes/User';
 import uiReducer from 'redux/reducers/ui';
+import Semester from 'classes/Semester';
 
 export interface ProfileProps {}
 
 const Profile: React.SFC<ProfileProps> = () => {
+  const [loading, setLoading] = useState(true);
   const [width, setWidth] = useState(window.innerWidth);
-  const { profile, user, isFetching, didInvalidate } = useSelector(
-    (state: ReduxState) => state.auth
-  );
+  const { user } = useSelector((state: ReduxState) => state.auth);
   const [panes, setPanes] = useState([]);
   const selectedSemester = useSelector((state: ReduxState) => state.ui.selection.semesterId);
   const currentLanguage = useSelector((state: ReduxState) => state.settings.language);
   const semesters = useSelector((state: ReduxState) => state.metadata.semesters);
-  const questions = useSelector((state: ReduxState) => state.questions);
   const history = useHistory();
   const dispatch = useDispatch();
 
@@ -36,13 +35,21 @@ const Profile: React.SFC<ProfileProps> = () => {
 
   useEffect(() => {
     window.addEventListener('resize', handleResize);
-    dispatch(User.getProfileData({ semester: selectedSemester }));
-
     return window.removeEventListener('resize', handleResize);
-  }, [dispatch, selectedSemester]);
+  }, []);
 
   useEffect(() => {
-    const generatePaneLabel = (semester) => {
+    const fetchProfile = async () => {
+      setLoading(true);
+      await User.getProfileData({ semester: selectedSemester });
+      setLoading(false);
+    };
+
+    fetchProfile();
+  }, [selectedSemester]);
+
+  useEffect(() => {
+    const generatePaneLabel = (semester: Semester) => {
       if (width < 480) {
         return `${semester.value}${currentLanguage === 'dk' ? '.' : 'th'}`;
       } else if (width < 768) {
@@ -55,42 +62,23 @@ const Profile: React.SFC<ProfileProps> = () => {
     };
 
     let panes = [];
-    _.map(semesters, (e) =>
+    semesters.map((semester) =>
       panes.push({
-        menuItem: generatePaneLabel(e),
-        render: () => (
-          <Tab.Pane loading={isFetching}>
-            {!isFetching && !didInvalidate && <ProfileActivity />}
-          </Tab.Pane>
-        )
+        menuItem: generatePaneLabel(semester),
+        render: () => <Tab.Pane loading={loading}>{!loading && <ProfileActivity />}</Tab.Pane>
       })
     );
 
     setPanes(panes);
-  }, [
-    currentLanguage,
-    didInvalidate,
-    isFetching,
-    profile.answers,
-    profile.privateComments,
-    profile.publicComments,
-    questions,
-    semesters,
-    width
-  ]);
+  }, [loading]);
 
   const handleTabChange = (e, { activeIndex }) => {
-    const semesterId = Number(Object.keys(semesters)[activeIndex]);
+    const semesterId = semesters[activeIndex].id;
     dispatch(uiReducer.actions.changeSelection({ type: 'semesterId', value: semesterId }));
-    dispatch(User.getProfileData({ semester: semesterId }));
   };
 
   const handleNavigation = (path) => {
     history.push(urls[path]);
-  };
-
-  const findActiveIndex = (semesterId) => {
-    return Object.keys(semesters).indexOf(String(semesterId));
   };
 
   return (
@@ -116,7 +104,7 @@ const Profile: React.SFC<ProfileProps> = () => {
         </h3>
         <Tab
           panes={panes}
-          activeIndex={findActiveIndex(selectedSemester)}
+          activeIndex={semesters.findIndex((semester) => semester.id === selectedSemester)}
           onTabChange={handleTabChange}
         />
       </Container>

@@ -1,7 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import Comment from 'classes/Comment';
-import Question from 'classes/Question';
-import User from 'classes/User';
+import User, { ProfileData } from 'classes/User';
 import { Bookmark } from '../../classes/User';
 
 /**
@@ -12,11 +10,7 @@ const initialState = {
   user: null as User | null,
   isFetching: false,
   didInvalidate: true,
-  profile: {
-    answers: [] as any[],
-    publicComments: [] as Comment[],
-    privateComments: [] as Comment[]
-  }
+  profile: {} as ProfileData
 };
 
 const authReducer = createSlice({
@@ -26,16 +20,7 @@ const authReducer = createSlice({
     login: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
     },
-    setProfile: (
-      state,
-      action: PayloadAction<{
-        questions: Question[];
-        privateComments: Comment[];
-        publicComments: Comment[];
-        bookmarks;
-        answers;
-      }>
-    ) => {
+    setProfile: (state, action: PayloadAction<ProfileData>) => {
       state.profile = action.payload;
     },
     logout: (state) => {

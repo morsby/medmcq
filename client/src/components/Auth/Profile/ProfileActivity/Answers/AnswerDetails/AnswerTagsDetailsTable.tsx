@@ -19,7 +19,9 @@ const AnswerTagsDetailsTable: React.SFC<AnswerTagsDetailsTableProps> = ({ answer
   const questions = useSelector((state: ReduxState) => state.questions.questions);
   const selectedSemester = useSelector((state: ReduxState) => state.ui.selection.semesterId);
   const tags = useSelector((state: ReduxState) =>
-    state.metadata.tags.filter((tag) => tag.semester.id === selectedSemester)
+    state.metadata.semesters
+      .find((semester) => semester.id === selectedSemester)
+      .tags.filter((tag) => tag.semester.id === selectedSemester)
   );
 
   const getPercentCorrect = (record) => {

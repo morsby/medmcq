@@ -16,6 +16,7 @@ export const typeDefs = gql`
   extend type Query {
     user: User
     checkUsernameAvailability(username: String!, email: String): Boolean
+    profile: User # Is required for caching, so user isn't overwritten in profile
   }
 
   extend type Mutation {
@@ -84,6 +85,11 @@ export const typeDefs = gql`
 export const resolvers = {
   Query: {
     user: async (_root, _args, ctx: Context) => {
+      if (!ctx.user) return null;
+      const user = await ctx.userLoaders.userLoader.load(ctx.user.id);
+      return { id: user.id };
+    },
+    profile: async (_root, _args, ctx: Context) => {
       if (!ctx.user) return null;
       const user = await ctx.userLoaders.userLoader.load(ctx.user.id);
       return { id: user.id };

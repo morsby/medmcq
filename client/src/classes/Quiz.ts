@@ -7,7 +7,7 @@ import Apollo from './Apollo';
 
 interface Quiz {}
 
-export interface Answer {
+export interface AnswerInput {
   questionId: number;
   answer: number;
   answerTime: number;
@@ -34,7 +34,7 @@ class Quiz {
     await Question.fetch(filter, true);
   };
 
-  static answer = async (data: Answer) => {
+  static answer = async (data: AnswerInput) => {
     const { questionId, answer } = data;
     const mutation = gql`
       mutation($data: AnswerInput!) {

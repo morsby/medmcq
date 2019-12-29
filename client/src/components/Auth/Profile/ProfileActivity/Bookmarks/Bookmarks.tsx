@@ -1,19 +1,22 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import marked from 'marked';
-import _ from 'lodash';
 import { Translate } from 'react-localize-redux';
 import { Divider, Button } from 'semantic-ui-react';
 import { useHistory } from 'react-router';
-import Question from 'classes/Question';
 import Quiz from 'classes/Quiz';
+import { useSelector } from 'react-redux';
+import { ReduxState } from 'redux/reducers';
+import _ from 'lodash';
 
 /**
  * Component that displays questions
  */
-const Bookmarks = ({ bookmarks }) => {
+export interface BookmarksProps {}
+
+const Bookmarks: React.SFC<BookmarksProps> = () => {
   const history = useHistory();
-  if (Object.keys(bookmarks).length === 0) return <Translate id="profileBookmarks.no_bookmarks" />;
+  const bookmarks = useSelector((state: ReduxState) => state.auth.profile.bookmarks);
+  if (bookmarks.length === 0) return <Translate id="profileBookmarks.no_bookmarks" />;
 
   const openAll = async () => {
     Quiz.start({ ids: _.map(bookmarks, (bookmark) => bookmark.id) });
@@ -53,14 +56,6 @@ const Bookmarks = ({ bookmarks }) => {
       ))}
     </div>
   );
-};
-
-Bookmarks.propTypes = {
-  /**
-   * An object of bookmarked questions
-   */
-  bookmarks: PropTypes.object,
-  history: PropTypes.object
 };
 
 export default Bookmarks;

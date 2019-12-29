@@ -22,8 +22,10 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
   const dispatch = useDispatch();
   const picked = useSelector((state: ReduxState) => state.shareBuilder.picked);
   const semesters = useSelector((state: ReduxState) => state.metadata.semesters);
-  const specialties = useSelector((state: ReduxState) => state.metadata.specialties);
-  const tags = useSelector((state: ReduxState) => state.metadata.tags);
+  const chosenSemesterId = useSelector((state: ReduxState) => state.ui.selection.semesterId);
+  const { tags, specialties } = useSelector((state: ReduxState) =>
+    state.metadata.semesters.find((semester) => semester.id === chosenSemesterId)
+  );
   const pickedQuestions = useSelector((state: ReduxState) => state.questions.questions);
   const [selectedId, setSelectedId] = useState<null | number>(null);
 

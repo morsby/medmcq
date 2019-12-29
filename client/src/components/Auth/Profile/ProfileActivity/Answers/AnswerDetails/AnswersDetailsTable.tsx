@@ -20,7 +20,10 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
   questions
 }) => {
   const history = useHistory();
-  const { specialties, examSets, tags } = useSelector((state: ReduxState) => state.metadata);
+  const chosenSemesterId = useSelector((state: ReduxState) => state.ui.selection.semesterId);
+  const { tags, specialties, examSets } = useSelector((state: ReduxState) =>
+    state.metadata.semesters.find((semester) => semester.id === chosenSemesterId)
+  );
 
   const getColor = (answer) => {
     if (answer.correct === answer.tries) return 'green';

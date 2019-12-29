@@ -61,7 +61,7 @@ const EditProfile: React.SFC<EditProfileProps> = () => {
                     }}
                     className="ui form custom"
                   >
-                    <Field name="email" validate={validation.emailValid}>
+                    <Field name="email">
                       {({ input, meta }) => (
                         <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
                           <label>{translate('editProfile.form_fields.email')}</label>
@@ -83,7 +83,7 @@ const EditProfile: React.SFC<EditProfileProps> = () => {
                         </div>
                       )}
                     </Field>
-                    <Field name="password" validate={validation.passwordValid}>
+                    <Field name="password">
                       {({ input, meta }) => (
                         <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
                           <label>{translate('editProfile.form_fields.new_password')}</label>
@@ -105,7 +105,7 @@ const EditProfile: React.SFC<EditProfileProps> = () => {
                       )}
                     </Field>
                     <Divider hidden />
-                    <Field name="password-repeat" validate={validation.passwordRepeatValid}>
+                    <Field name="password-repeat">
                       {({ input, meta }) => (
                         <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
                           <label>{translate('editProfile.form_fields.new_password_repeat')}</label>

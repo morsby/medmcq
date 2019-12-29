@@ -17,7 +17,6 @@ import { useSelector } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
 import { useHistory } from 'react-router';
 import Semester from 'classes/Semester';
-import Metadata from 'classes/Metadata';
 import Quiz from 'classes/Quiz';
 import LoadingPage from 'components/Misc/Utility-pages/LoadingPage';
 

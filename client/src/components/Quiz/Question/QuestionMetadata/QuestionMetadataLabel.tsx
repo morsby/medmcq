@@ -23,7 +23,10 @@ const QuestionMetadataLabel: React.SFC<QuestionMetadataLabelProps> = ({
   const [buttonLoading, setButtonLoading] = useState(false);
   const questionIndex = useSelector((state: ReduxState) => state.quiz.questionIndex);
   const question = useSelector((state: ReduxState) => state.questions.questions[questionIndex])
-  const tags = useSelector((state: ReduxState) => state.metadata.tags);
+  const chosenSemesterId = useSelector((state: ReduxState) => state.ui.selection.semesterId);
+  const { tags } = useSelector((state: ReduxState) =>
+    state.metadata.semesters.find((semester) => semester.id === chosenSemesterId)
+  );
   const user = useSelector((state: ReduxState) => state.auth.user)
   const tagChildren = _.filter(tags, (tag) => tag.parent.id === metadata.id);
 

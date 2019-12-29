@@ -21,8 +21,12 @@ const PrivateRoute: React.SFC<PrivateRouteProps> = (props) => {
   const user = useSelector((state: ReduxState) => state.auth.user);
 
   useEffect(() => {
-    if (!user) User.fetch();
-    setLoading(false);
+    const fetchUser = async () => {
+      if (!user) await User.fetch();
+      setLoading(false);
+    };
+
+    fetchUser();
   }, [user]);
 
   if (loading) return <LoadingPage />;

@@ -1,26 +1,12 @@
 import React, { useState } from 'react';
-import { urls, validationRegex } from '../../../utils/common';
-import { Form } from 'react-final-form';
-import { Button, Divider } from 'semantic-ui-react';
+import { urls } from '../../../utils/common';
+import { Button, Divider, Form } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 import User from 'classes/User';
 import { useHistory } from 'react-router';
 import { useFormik } from 'formik';
-import Yup from 'yup';
 import FormField from './FormField';
-const loginSchema = Yup.object().shape({
-  username: Yup.string()
-    .min(3, 'Brugernavnet er for kort')
-    .matches(validationRegex.username)
-    .required('Du skal indtaste et brugernavn'),
-  password: Yup.string()
-    .matches(
-      validationRegex.password,
-      'Kodeordet skal være mindst 6 tegn, indeholde mindst et stort bogstav, et lille bogstav og et tal'
-    )
-    .required('Du skal angive et kodeord'),
-  email: Yup.string().email()
-});
+import { loginSchema } from 'utils/validationSchemas';
 
 /**
  * Component der viser login-formularen.
@@ -34,12 +20,11 @@ const LoginForm: React.SFC<LoginFormProps> = () => {
   const formik = useFormik({
     initialValues: {
       username: '',
-      password: '',
-      email: ''
+      password: ''
     },
     validationSchema: loginSchema,
     onSubmit: (values) => {
-      onSubmit({ username: values.username, password: values.password, email: values.email });
+      onSubmit({ username: values.username, password: values.password });
     }
   });
 
@@ -47,7 +32,7 @@ const LoginForm: React.SFC<LoginFormProps> = () => {
     history.push(urls[path]);
   };
 
-  const onSubmit = async (data: { username: string; password: string; email: string }) => {
+  const onSubmit = async (data: { username: string; password: string }) => {
     const user = await User.login(data);
 
     if (!user) {

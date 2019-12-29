@@ -2,14 +2,11 @@ import React from 'react';
 
 import { useHistory } from 'react-router';
 
-import { emailValid, passwordValid, passwordRepeatValid } from '../../../utils/formValidation';
-
-import { validationRegex } from '../../../utils/common';
-
 import { Form, Field } from 'react-final-form';
 import { Button, Divider, Message } from 'semantic-ui-react';
 import { Translate, LocalizeContextProps, withLocalize } from 'react-localize-redux';
 import User, { UserSignupInput } from 'classes/User';
+import { validationRegex } from 'utils/validationSchemas';
 
 /**
  * Component der viser signup-form. Kaldes af ./Signup.js
@@ -37,15 +34,6 @@ const SignupForm: React.SFC<SignupFormProps> = ({ translate }) => {
     }
   };
 
-  const emailValidLocal = async (email) => {
-    let error = emailValid(email);
-    if (error) return error;
-
-    let available = await User.checkAvailable({ email });
-
-    return available ? null : translate('signup.errs.email_taken');
-  };
-
   return (
     <Form
       onSubmit={handleSubmit}
@@ -70,7 +58,7 @@ const SignupForm: React.SFC<SignupFormProps> = ({ translate }) => {
               )}
             </Field>
             <Divider hidden />
-            <Field name="email" validate={emailValidLocal} validateFields={[]}>
+            <Field name="email" validateFields={[]}>
               {({ input, meta }) => (
                 <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
                   <label>{translate('signup.form_fields.email')}</label>
@@ -93,7 +81,7 @@ const SignupForm: React.SFC<SignupFormProps> = ({ translate }) => {
               )}
             </Field>
             <Divider hidden />
-            <Field name="password" validate={passwordValid} validateFields={['password-repeat']}>
+            <Field name="password" validateFields={['password-repeat']}>
               {({ input, meta }) => (
                 <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
                   <label>{translate('signup.form_fields.password')}</label>
@@ -111,11 +99,7 @@ const SignupForm: React.SFC<SignupFormProps> = ({ translate }) => {
               )}
             </Field>
             <Divider hidden />
-            <Field
-              name="password-repeat"
-              validate={passwordRepeatValid}
-              validateFields={['password']}
-            >
+            <Field name="password-repeat" validateFields={['password']}>
               {({ input, meta }) => (
                 <div className={'field ' + (meta.error && meta.touched ? 'error' : '')}>
                   <label>{translate('signup.form_fields.password_repeat')}</label>

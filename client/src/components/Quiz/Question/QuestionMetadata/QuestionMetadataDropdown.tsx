@@ -16,8 +16,8 @@ export interface QuestionMetadataDropdownProps {
  
 const QuestionMetadataDropdown: React.SFC<QuestionMetadataDropdownProps> = ({onChange, type}) => {
   const [tagTree, setTagTree] = useState(null);
-  const tags = useSelector((state: ReduxState) => state.metadata.tags);
-  const specialties = useSelector((state: ReduxState) => state.metadata.specialties);
+  const selectedSemester = useSelector((state: ReduxState) => state.ui.selection.semesterId);
+  const {specialties, tags} = useSelector((state: ReduxState) => state.metadata.semesters.find((semester) => semester.id === selectedSemester));
   const options = type === 'specialty' ? specialties : tags;
 
   const handleDropdownPick = (id) => {

@@ -5,7 +5,7 @@ export interface FormFieldProps {
   name: string;
   error: string;
   touched: boolean;
-  onChange: (value: string) => void;
+  onChange: (e: React.ChangeEvent) => void;
   value: string;
   placeholder: string;
 }
@@ -21,7 +21,12 @@ const FormField: React.SFC<FormFieldProps> = ({
   return (
     <>
       <label>{placeholder.toTitleCase()}</label>
-      <Form.Input onChange={(e, { value }) => onChange(value)} name={name} value={value} />
+      <Form.Input
+        type={name === 'password' ? 'password' : undefined}
+        onChange={(e) => onChange(e)}
+        name={name}
+        value={value}
+      />
       {error && touched && <div>{error}</div>}
     </>
   );
