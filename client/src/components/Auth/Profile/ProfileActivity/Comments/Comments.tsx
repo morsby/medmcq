@@ -93,28 +93,33 @@ const Comments: React.SFC<CommentsProps> = ({ questions = {}, comments = {}, typ
       <Button style={{ marginBottom: '1rem' }} onClick={startAll}>
         <Translate id="profileActivity.accordionElements.startAll" />
       </Button>
-      <Table
-        bordered
-        title={() => (
-          <Input
-            onChange={(e) => setSearch(e.target.value)}
-            value={search}
-            placeholder="Søg..."
-            style={{ width: '100%' }}
-          />
-        )}
-        dataSource={searchComments(comments).map((comment) => {
-          if (type === 'public') {
-            return { comment: publicComments[comment.id], question: questions[comment.questionId] };
-          } else if (type === 'private') {
-            return {
-              comment: privateComments[comment.id],
-              question: questions[comment.questionId]
-            };
-          }
-        })}
-        columns={columns}
-      />
+      <div style={{ overflowX: 'auto' }}>
+        <Table
+          bordered
+          title={() => (
+            <Input
+              onChange={(e) => setSearch(e.target.value)}
+              value={search}
+              placeholder="Søg..."
+              style={{ width: '100%' }}
+            />
+          )}
+          dataSource={searchComments(comments).map((comment) => {
+            if (type === 'public') {
+              return {
+                comment: publicComments[comment.id],
+                question: questions[comment.questionId]
+              };
+            } else if (type === 'private') {
+              return {
+                comment: privateComments[comment.id],
+                question: questions[comment.questionId]
+              };
+            }
+          })}
+          columns={columns}
+        />
+      </div>
     </div>
   );
 };
