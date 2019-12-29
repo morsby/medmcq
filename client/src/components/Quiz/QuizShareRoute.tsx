@@ -30,8 +30,8 @@ const QuizShareRoute: React.SFC<QuizShareRouteProps> = () => {
         }
       });
 
-      await dispatch(getQuestions({ ids, quiz: true }));
       await dispatch({ type: types.QUIZ_NAVIGATE, payload: 0 });
+      await dispatch(getQuestions({ ids, quiz: true }));
     };
 
     fetchQuestions();
