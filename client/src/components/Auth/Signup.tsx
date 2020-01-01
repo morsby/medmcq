@@ -3,7 +3,7 @@ import React from 'react';
 import { Container, Message } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 
-import SignupForm from './SignupForm';
+import SignupForm from 'components/Forms/SignupForm';
 
 /**
  * Component der viser info om registrering.

@@ -3,7 +3,7 @@ import React from 'react';
 import { Container } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 
-import LoginForm from './LoginForm';
+import LoginForm from '../Forms/LoginForm';
 
 /**
  * Component der kalder loginform.

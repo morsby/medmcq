@@ -5,7 +5,6 @@ import _ from 'lodash';
 import { useHistory } from 'react-router';
 import { ReduxState } from 'redux/reducers';
 import UIReducer from 'redux/reducers/ui';
-import Question from 'classes/Question';
 import Quiz from 'classes/Quiz';
 
 export interface AnswerTagsDetailsTableProps {
@@ -71,7 +70,7 @@ const AnswerTagsDetailsTable: React.SFC<AnswerTagsDetailsTableProps> = ({ answer
 
     // Send the array to state, to refresh table
     setAnsweredTags(_.map(answeredTags));
-  }, [tags, answers]);
+  }, [tags, answers, questions]);
 
   const columns = [
     {

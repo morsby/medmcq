@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { urls } from '../../../utils/common';
+import { urls } from '../../utils/common';
 import { Button, Divider, Form, Message } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 import User from 'classes/User';
 import { useHistory } from 'react-router';
 import { useFormik } from 'formik';
-import FormField from './FormField';
-import { loginSchema } from 'utils/validationSchemas';
+import FormField from './Fields/FormField';
 
 /**
  * Component der viser login-formularen.
@@ -23,7 +22,6 @@ const LoginForm: React.SFC<LoginFormProps> = () => {
       username: '',
       password: ''
     },
-    validationSchema: loginSchema,
     onSubmit: (values) => {
       onSubmit({ username: values.username, password: values.password });
     }
@@ -57,17 +55,13 @@ const LoginForm: React.SFC<LoginFormProps> = () => {
               name="username"
               placeholder={translate('loginForm.username') as string}
               onChange={formik.handleChange}
-              touched={formik.touched.username}
-              value={formik.values.username}
-              error={formik.errors.username}
+              formik={formik}
             />
             <FormField
               name="password"
               placeholder={translate('loginForm.password') as string}
               onChange={formik.handleChange}
-              touched={formik.touched.password}
-              value={formik.values.password}
-              error={formik.errors.password}
+              formik={formik}
             />
 
             <Divider hidden />

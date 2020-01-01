@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { Button, Divider } from 'semantic-ui-react';
 
-import { evalAnswer, subSupScript } from '../../../utils/quiz';
+import { evalAnswer, subSupScript } from 'utils/quiz';
 import marked from 'marked';
 import Question from 'classes/Question';
 import { useSelector } from 'react-redux';

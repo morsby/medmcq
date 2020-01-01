@@ -7,7 +7,7 @@ import { Container, Button } from 'semantic-ui-react';
 
 import { Swipeable } from 'react-swipeable';
 import QuizLoader from './QuizLoader';
-import Question from './Question/Question';
+import Question from 'components/Question/Question';
 import QuizNavigator from './QuizNavigator';
 import QuizSummary from './QuizSummary';
 

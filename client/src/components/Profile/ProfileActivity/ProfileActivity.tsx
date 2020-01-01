@@ -4,9 +4,9 @@ import { Translate } from 'react-localize-redux';
 import { Accordion } from 'semantic-ui-react';
 import ProfileActivityAccordionElem from './ProfileActivityAccordionElem';
 
-import Answers from './Answers/Answers';
-import Bookmarks from './Bookmarks/Bookmarks';
-import Comments from './Comments/Comments';
+import Answers from './Answers';
+import Bookmarks from './Bookmarks';
+import Comments from './Comments';
 import _ from 'lodash';
 import { useSelector } from 'react-redux';
 import { ReduxState } from 'redux/reducers';

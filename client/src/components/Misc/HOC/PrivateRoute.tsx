@@ -3,7 +3,7 @@ import { Route, Redirect } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { urls } from 'utils/common';
 
-import LoadingPage from '../Utility-pages/LoadingPage';
+import LoadingPage from '../Utility/LoadingPage';
 import { ReduxState } from 'redux/reducers';
 import User from 'classes/User';
 
@@ -13,7 +13,7 @@ import User from 'classes/User';
  */
 export interface PrivateRouteProps {
   path: string;
-  component: React.SFC;
+  component: any;
 }
 
 const PrivateRoute: React.SFC<PrivateRouteProps> = (props) => {

@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
 import { useDispatch } from 'react-redux';
-import LoadingPage from 'components/Misc/Utility-pages/LoadingPage';
+import LoadingPage from 'components/Misc/Utility/LoadingPage';
 import Quiz from 'components/Quiz/Quiz';
 import { useQuery } from 'react-apollo-hooks';
 import { fetchQuestionIdsFromShareLink as query_fetchQuestionIdsFromShareLink } from 'queries/shareLink';
-import ErrorBoundary from 'components/Misc/Utility-pages/ErrorBoundary';
+import ErrorBoundary from 'components/Misc/Utility/ErrorBoundary';
 import Question from 'classes/Question';
 
 export interface QuizShareBuilderLoader {}

@@ -132,12 +132,11 @@
     ],
     "form_fields": {
       "email": ["Email", "E-mail"],
-      "new_password": ["Nyt kodeord", "New password"],
-      "new_password_placeholder": [
-        "Efter blank for at beholde den nuværende kode",
-        "Leave blank to keep your old password"
+      "password": [
+        "Nyt kodeord (efterlad blank for at beholde nuværende)",
+        "New password (leave blank to keep the old password)"
       ],
-      "new_password_repeat": ["Gentag nyt kodeord", "Repeat new password"],
+      "confirmPassword": ["Gentag nyt kodeord", "Repeat new password"],
       "submit": ["Gem ændringer", "Save changes"],
       "abort": ["Tilbage til din profil", "Return to your profile"]
     }
@@ -155,7 +154,7 @@
       "username": ["Brugernavn", "Username"],
       "email": ["Email", "E-mail"],
       "password": ["Kodeord", "Password"],
-      "password_repeat": ["Gentag kodeord", "Repeat password"],
+      "confirmPassword": ["Gentag kodeord", "Repeat password"],
       "email_not_required_message": [
         "Du behøver ikke indtaste en email-adresse, men hvis du glemmer dine loginoplysninger uden den, kan du ikke få din bruger tilbage.",
         "You do not have to provide an e-mail address but if you forget your login credentials and have no associated e-mail address, you can not reclaim your account."
@@ -168,7 +167,7 @@
         "Ugyldigt brugernavn. Brugernavne skal være mindst 3 tegn og må ikke indeholde mellemrum. Gyldige brugernavne er f.eks. sigurd, sig_urd, sig.urd og sigurd123.",
         "Username invalid. Usernames must be at least 3 characters and can not contain spaces. Valid usernames include sigurd, sig_urd, sig.urd and sigurd1234."
       ],
-      "username_taken": ["Brugernavnet er allerde taget.", "Username has already been taken."],
+      "username_taken": ["Brugernavnet er allerede taget.", "Username has already been taken."],
       "email_taken": ["Emailen er allerede brugt.", "E-mail has already been taken."]
     }
   }

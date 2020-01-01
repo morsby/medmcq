@@ -17,11 +17,11 @@ import { LocalizeProvider } from 'react-localize-redux';
 // redux
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import rootReducer, { ReduxState } from 'redux/reducers';
-import ErrorBoundary from 'components/Misc/Utility-pages/ErrorBoundary';
+import ErrorBoundary from 'components/Misc/Utility/ErrorBoundary';
 
 // Components
 import LocalizedApp from './App';
-import LoadingPage from './components/Misc/Utility-pages/LoadingPage';
+import LoadingPage from './components/Misc/Utility/LoadingPage';
 
 // Utils
 import 'proto/string';

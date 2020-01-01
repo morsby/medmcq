@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { urls } from '../../../utils/common';
+import { urls } from '../../utils/common';
 import _ from 'lodash';
 
 import { Container, Tab, Button, Divider } from 'semantic-ui-react';

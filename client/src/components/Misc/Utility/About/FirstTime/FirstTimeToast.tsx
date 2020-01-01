@@ -7,7 +7,7 @@ import {
   Translate,
   setActiveLanguage
 } from 'react-localize-redux';
-import aboutTranslations from 'components/Misc/Utility-pages/About/aboutTranslations';
+import aboutTranslations from 'components/Misc/Utility/About/aboutTranslations';
 import { useDispatch, useSelector } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
 

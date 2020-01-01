@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, Image, Divider, Icon, Segment, Button } from 'semantic-ui-react';
 import { Translate, withLocalize, LocalizeContextProps } from 'react-localize-redux';
-import aboutTranslations from 'components/Misc/Utility-pages/About/aboutTranslations';
+import aboutTranslations from 'components/Misc/Utility/About/aboutTranslations';
 import selectionGif from 'images/aboutGifs/selectionGif.gif';
 import commentGif from 'images/aboutGifs/commentGif.gif';
 import profileGif from 'images/aboutGifs/profileGif.gif';

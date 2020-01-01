@@ -1,11 +1,10 @@
 import React from 'react';
 
-import { Container, Button, Divider } from 'semantic-ui-react';
-import { Form } from 'react-final-form';
+import { Container, Button, Divider, Form } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 import { useParams } from 'react-router-dom';
 import { useFormik } from 'formik';
-import FormField from '../Login/FormField';
+import FormField from './Fields/FormField';
 import { resetSchema } from 'utils/validationSchemas';
 
 /**
@@ -43,19 +42,17 @@ const ResetPassword: React.SFC<ResetPasswordProps> = () => {
             <Form onSubmit={formik.handleSubmit}>
               <FormField
                 name="password"
-                value={formik.values.password}
                 placeholder={translate('resetPassword.password') as string}
-                error={formik.errors.password}
-                touched={formik.touched.password}
                 onChange={formik.handleChange}
+                formik={formik}
+                shouldValidate
               />
               <FormField
                 name="password-repeat"
-                value={formik.values.password}
                 placeholder={translate('resetPassword.password_repeat') as string}
-                error={formik.errors.confirmPassword}
-                touched={formik.touched.confirmPassword}
+                formik={formik}
                 onChange={formik.handleChange}
+                shouldValidate
               />
               <Divider hidden />
               <Button disabled={formik.isValid}>

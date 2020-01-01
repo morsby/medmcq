@@ -6,7 +6,6 @@ import Apollo from './Apollo';
 import authReducer from 'redux/reducers/auth';
 import Like from './Like';
 import Comment from './Comment';
-import Specialty from './Specialty';
 
 export interface UserLoginInput {
   username: string;
@@ -91,11 +90,10 @@ class User {
 
   static signup = async (data: UserSignupInput) => {
     const mutation = gql`
-    mutation(data: LoginInput) 
-    { 
-      signup(data:$data) 
-    }
-`;
+      mutation($data: UserInput) {
+        signup(data: $data)
+      }
+    `;
 
     await Apollo.mutate<string>('signup', mutation, { data });
     await User.fetch();
@@ -107,6 +105,7 @@ class User {
         user {
           id
           username
+          email
           likes {
             commentId
           }
@@ -120,7 +119,6 @@ class User {
     `;
 
     const user = await Apollo.query<User>('user', query);
-
     await store.dispatch(authReducer.actions.login(user));
   };
 
@@ -236,16 +234,15 @@ class User {
     await User.fetch();
   };
 
-  static checkAvailable = async ({ email, password }: Partial<User>) => {
+  static checkAvailable = async (data: Partial<User>) => {
     const query = gql`
-      query {
-        checkUsernameAvailability(email: "123", username: "123")
+      query($data: UserAvailableInput) {
+        checkUsernameAvailability(data: $data)
       }
     `;
 
     const isAvailable = await Apollo.query<boolean>('checkUsernameAvailability', query, {
-      password,
-      email
+      data
     });
     return isAvailable;
   };

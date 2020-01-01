@@ -18,7 +18,7 @@ import { ReduxState } from 'redux/reducers';
 import { useHistory } from 'react-router';
 import Semester from 'classes/Semester';
 import Quiz from 'classes/Quiz';
-import LoadingPage from 'components/Misc/Utility-pages/LoadingPage';
+import LoadingPage from 'components/Misc/Utility/LoadingPage';
 
 export interface SelectionProps extends LocalizeContextProps {}
 

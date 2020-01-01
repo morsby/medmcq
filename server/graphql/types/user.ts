@@ -15,7 +15,7 @@ import crypto from 'crypto';
 export const typeDefs = gql`
   extend type Query {
     user: User
-    checkUsernameAvailability(username: String!, email: String): Boolean
+    checkUsernameAvailability(data: UserAvailableInput): Boolean
     profile: User # Is required for caching, so user isn't overwritten in profile
   }
 
@@ -38,6 +38,11 @@ export const typeDefs = gql`
   input UserInput {
     username: String!
     password: String!
+    email: String
+  }
+
+  input UserAvailableInput {
+    username: String
     email: String
   }
 
@@ -94,12 +99,13 @@ export const resolvers = {
       const user = await ctx.userLoaders.userLoader.load(ctx.user.id);
       return { id: user.id };
     },
-    checkUsernameAvailability: async (root, { username, email }) => {
+    checkUsernameAvailability: async (root, { data: { username, email } }) => {
       const user = await User.query()
         .where({ username })
         .orWhere({ email })
+        .skipUndefined()
         .first();
-      return !!user;
+      return !user; // Returns true if username is available (not in use)
     }
   },
 
@@ -109,7 +115,7 @@ export const resolvers = {
       if (!user) throw new Error('Username or password is invalid');
       const isValidPassword = user.verifyPassword(password);
       if (!isValidPassword) throw new Error('Username or password is invalid');
-      user = _.pick(user, ['id', 'username', 'email']);
+      user = { id: user.id }; // Only ID is needed, as the user is fetched through the user query based on this ID
       const token = jwt.sign(user, process.env.SECRET);
       ctx.res.cookie('user', token);
       return 'Logged in';
@@ -118,9 +124,16 @@ export const resolvers = {
       ctx.res.cookie('user', null, { expires: new Date(0) });
       return 'Logged out';
     },
-    signup: async (root, { data }) => {
-      const user = User.query().insert(data);
-      return jwt.sign(user, process.env.SECRET);
+    signup: async (root, { data }, ctx: Context) => {
+      let user: Partial<User> = await User.query().insertAndFetch(data);
+      user = { id: user.id }; // Only ID is needed, as the user is fetched through the user query based on this ID
+      const token = jwt.sign(user, process.env.SECRET);
+      ctx.res.cookie('user', token);
+      return 'User has been created and logged in';
+    },
+    editUser: async (root, { data }) => {
+      // TODO
+      console.log('Not implemented');
     },
     resetPassword: async (root, { token, password }) => {
       // Check if required fields are provided
@@ -211,6 +224,10 @@ export const resolvers = {
     password: async ({ id }, _, ctx: Context) => {
       const user = await ctx.userLoaders.userLoader.load(id);
       return user.password;
+    },
+    email: async ({ id }, _, ctx: Context) => {
+      const user = await ctx.userLoaders.userLoader.load(id);
+      return user.email;
     },
     role: async ({ id }, _, ctx: Context) => {
       const user = await ctx.userLoaders.userLoader.load(id);

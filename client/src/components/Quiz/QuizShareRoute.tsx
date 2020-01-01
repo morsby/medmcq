@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import LoadingPage from 'components/Misc/Utility-pages/LoadingPage';
+import LoadingPage from 'components/Misc/Utility/LoadingPage';
 import Quiz from 'components/Quiz/Quiz';
 import { toast } from 'react-toastify';
 import { useHistory, useParams } from 'react-router';

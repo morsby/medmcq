@@ -9,10 +9,10 @@ import { subSupScript } from 'utils/quiz';
 
 import { Container, Grid, Divider, Segment, Responsive } from 'semantic-ui-react';
 
-import QuestionAnswerButtons from 'components/Quiz/Question/QuestionAnswerButtons';
-import QuestionImage from 'components/Quiz/Question/QuestionImage';
-import QuestionMetadata from 'components/Quiz/Question/QuestionMetadata';
-import QuestionExtras from 'components/Quiz/Question/QuestionExtras';
+import QuestionAnswerButtons from 'components/Question/QuestionAnswerButtons';
+import QuestionImage from 'components/Question/QuestionImage';
+import QuestionMetadata from 'components/Question/QuestionMetadata';
+import QuestionExtras from 'components/Question/QuestionExtras';
 import { ReduxState } from 'redux/reducers/index';
 import Quiz from 'classes/Quiz';
 

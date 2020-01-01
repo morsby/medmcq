@@ -7,15 +7,15 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { LocalizeContextProps, withLocalize } from 'react-localize-redux';
 import { renderToStaticMarkup } from 'react-dom/server'; // required to initialize react-localize-redux
 import authTranslations from './components/Auth/authTranslations.json'; // fordi der ikke er en gennemgående component i dette regi
-import toastTranslations from 'components/Misc/toastTranslations.json';
+import toastTranslations from 'redux/actions/toastTranslations.json';
 
 // HOCs
 import PrivateRoute from './components/Misc/HOC/PrivateRoute';
 import ScrollToTop from './components/Misc/HOC/ScrollToTop';
 // Routes
 // Diverse
-import ErrorPage from './components/Misc/Utility-pages/404';
-import Print from './components/Misc/Utility-pages/Print/Print';
+import ErrorPage from './components/Misc/Utility/404';
+import Print from './components/Misc/Utility/Print/Print';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -24,35 +24,34 @@ import Selection from './components/Selection/Selection';
 
 // Selve quizzen
 import Quiz from './components/Quiz/Quiz';
-import About from './components/Misc/Utility-pages/About/About';
-import Contact from './components/Misc/Utility-pages/Contact';
+import About from './components/Misc/Utility/About/About';
+import Contact from './components/Misc/Utility/Contact';
 
 import Header from './components/Layout/Header';
 
 // Auth
-import Signup from './components/Auth/Signup/Signup';
-import Login from './components/Auth/Login/Login';
-import Logout from './components/Auth/Logout/Logout';
-import Profile from './components/Auth/Profile/Profile';
-import EditProfile from './components/Auth/Profile/EditProfile';
-import ForgotPassword from './components/Auth/Password/ForgotPassword';
-import ResetPassword from './components/Auth/Password/ResetPassword';
+import Signup from './components/Auth/Signup';
+import Login from './components/Auth/Login';
+import Logout from './components/Auth/Logout';
+import Profile from './components/Profile/Profile';
+import EditProfile from './components/Forms/EditProfile';
+import ForgotPassword from './components/Forms/ForgotPassword';
+import ResetPassword from './components/Forms/ResetPassword';
 
 // NewVersionMessage
-import NewVersionMessage from './components/Misc/Utility-pages/About/NewVersion/NewVersionMessage';
+import NewVersionMessage from './components/Misc/Utility/About/NewVersion/NewVersionMessage';
 
 import { urls } from './utils/common';
-import Sidebar from './components/Layout/Sidebar';
-import Footer from './components/Layout/Footer';
 import QuizShareRoute from 'components/Quiz/QuizShareRoute';
 import QuizShareBuilderLoader from 'components/Quiz/QuizShareBuilderLoader';
 import Sharebuilder from 'components/Sharebuilder/Sharebuilder';
 import { toast } from 'react-toastify';
-import FirstTimeToast from 'components/Misc/Utility-pages/About/FirstTime/FirstTimeToast';
-import FirstTime from 'components/Misc/Utility-pages/About/FirstTime/FirstTime';
+import FirstTimeToast from 'components/Misc/Utility/About/FirstTime/FirstTimeToast';
+import FirstTime from 'components/Misc/Utility/About/FirstTime/FirstTime';
 import User from 'classes/User';
 import { ReduxState } from 'redux/reducers/index';
 import settingsReducer from 'redux/reducers/settings';
+import Layout from 'components/Layout/Layout';
 
 export interface AppProps extends LocalizeContextProps {}
 
@@ -107,8 +106,7 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
           draggable
           pauseOnHover
         />
-        <Sidebar>
-          <Header />
+        <Layout>
           <Switch>
             <Route path={'/firsttime'} component={FirstTime} />
             <Route path={urls.about} component={About} />
@@ -128,8 +126,7 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
             <Route exact path="/" component={Selection} />
             <Route component={ErrorPage} />
           </Switch>
-          <Footer />
-        </Sidebar>
+        </Layout>
       </ScrollToTop>
     </BrowserRouter>
   );
