@@ -7,7 +7,7 @@ import { useSelector } from 'react-redux';
 import CommentClass from 'classes/Comment';
 import { ReduxState } from 'redux/reducers';
 import Quiz from 'classes/Quiz';
-import Highlighter from 'react-highlight-words';
+import Highlighter from 'react-highlighter';
 import { Tag, Table } from 'antd';
 
 export interface CommentsProps {
@@ -27,6 +27,17 @@ const Comments: React.SFC<CommentsProps> = ({ comments }) => {
     history.push('/quiz');
   };
 
+  const likesColumn =
+    type === 'public'
+      ? [
+          {
+            title: 'Likes',
+            render: (record) => record.comment.likes.length,
+            sorter: (a, b) => a.comment.likes.length - b.comment.likes.length
+          }
+        ]
+      : [];
+
   const columns = [
     {
       title: 'Dato',
@@ -38,10 +49,12 @@ const Comments: React.SFC<CommentsProps> = ({ comments }) => {
       title: 'Kommentar',
       render: (record: CommentClass) => (
         <Highlighter
-          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-          searchWords={[search]}
-          textToHighlight={record.text}
-        />
+          matchElement="span"
+          search={search}
+          matchStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+        >
+          {record.comment.text}
+        </Highlighter>
       )
     },
     {
@@ -53,6 +66,7 @@ const Comments: React.SFC<CommentsProps> = ({ comments }) => {
           </Tag>
         ))
     },
+    ...likesColumn,
     {
       title: 'Valg',
       render: (record: CommentClass) => (
@@ -75,6 +89,7 @@ const Comments: React.SFC<CommentsProps> = ({ comments }) => {
       </Button>
       <div style={{ overflowX: 'auto' }}>
         <Table
+          rowKey={(record) => record.comment.id}
           bordered
           title={() => (
             <Input

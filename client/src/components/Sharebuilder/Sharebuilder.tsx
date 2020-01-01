@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Segment, Dropdown, Divider } from 'semantic-ui-react';
 import { Table, Icon, Button } from 'antd';
-import Highlighter from 'react-highlight-words';
+import Highlighter from 'react-highlighter';
 import ExtendedRow from 'components/Sharebuilder/extendedRow';
 import { useSelector, useDispatch } from 'react-redux';
 import SearchDropdown from 'components/Sharebuilder/searchDropdown';
@@ -102,11 +102,12 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
       filterIcon: <Icon type="search" style={{ color: filter.text ? '#1890ff' : undefined }} />,
       render: (text) => (
         <Highlighter
-          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-          searchWords={filter.text.split(' ')}
-          autoEscape
-          textToHighlight={text}
-        />
+          matchStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+          search={filter.text}
+          matchElement="span"
+        >
+          {text}
+        </Highlighter>
       )
     },
     {
