@@ -34,6 +34,17 @@ const Comments: React.SFC<CommentsProps> = ({ questions = {}, comments = {}, typ
     history.push('/quiz');
   };
 
+  const likesColumn =
+    type === 'public'
+      ? [
+          {
+            title: 'Likes',
+            render: (record) => record.comment.likes.length,
+            sorter: (a, b) => a.comment.likes.length - b.comment.likes.length
+          }
+        ]
+      : [];
+
   const columns = [
     {
       title: 'Dato',
@@ -44,7 +55,13 @@ const Comments: React.SFC<CommentsProps> = ({ questions = {}, comments = {}, typ
     {
       title: 'Kommentar',
       render: (record) => (
-        <Highlighter matchElement="span" search={search} matchStyle={{ backgroundColor: '#ffc069', padding: 0 }}>{record.comment.text}</Highlighter>
+        <Highlighter
+          matchElement="span"
+          search={search}
+          matchStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+        >
+          {record.comment.text}
+        </Highlighter>
       )
     },
     {
@@ -56,11 +73,7 @@ const Comments: React.SFC<CommentsProps> = ({ questions = {}, comments = {}, typ
           </Tag>
         ))
     },
-    {
-      title: 'Likes',
-      render: (record) => (type === 'public' ? record.comment.likes.length : 0),
-      sorter: (a, b) => a.comment.likes?.length - b.comment.likes?.length
-    },
+    ...likesColumn,
     {
       title: 'Valg',
       render: (record) => (
@@ -79,13 +92,17 @@ const Comments: React.SFC<CommentsProps> = ({ questions = {}, comments = {}, typ
   const searchComments = (comments) => {
     if (search) {
       if (type === 'public') {
-        return _.filter(comments, (comment) =>
-          publicComments[comment.id].text.toLowerCase().indexOf(search.toLowerCase()) !== -1
+        return _.filter(
+          comments,
+          (comment) =>
+            publicComments[comment.id].text.toLowerCase().indexOf(search.toLowerCase()) !== -1
         );
       }
       if (type === 'private') {
-        return _.filter(comments, (comment) =>
-          privateComments[comment.id].text.toLowerCase().indexOf(search.toLowerCase()) !== -1
+        return _.filter(
+          comments,
+          (comment) =>
+            privateComments[comment.id].text.toLowerCase().indexOf(search.toLowerCase()) !== -1
         );
       }
     }
