@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getQuestions } from 'actions';
 import { Table, Input, Tag } from 'antd';
 import { IReduxState } from 'reducers';
-import Highlighter from 'react-highlight-words';
+import Highlighter from 'react-highlighter';
 
 export interface CommentsProps {
   questions: any;
@@ -44,11 +44,7 @@ const Comments: React.SFC<CommentsProps> = ({ questions = {}, comments = {}, typ
     {
       title: 'Kommentar',
       render: (record) => (
-        <Highlighter
-          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-          searchWords={[search]}
-          textToHighlight={record.comment.text}
-        />
+        <Highlighter matchElement="span" search={search} matchStyle={{ backgroundColor: '#ffc069', padding: 0 }}>{record.comment.text}</Highlighter>
       )
     },
     {
@@ -59,6 +55,11 @@ const Comments: React.SFC<CommentsProps> = ({ questions = {}, comments = {}, typ
             {specialties[specialty.specialtyId].name}
           </Tag>
         ))
+    },
+    {
+      title: 'Likes',
+      render: (record) => (type === 'public' ? record.comment.likes.length : 0),
+      sorter: (a, b) => a.comment.likes?.length - b.comment.likes?.length
     },
     {
       title: 'Valg',
@@ -78,10 +79,14 @@ const Comments: React.SFC<CommentsProps> = ({ questions = {}, comments = {}, typ
   const searchComments = (comments) => {
     if (search) {
       if (type === 'public') {
-        return _.filter(comments, (comment) => publicComments[comment.id].text.includes(search));
+        return _.filter(comments, (comment) =>
+          publicComments[comment.id].text.toLowerCase().indexOf(search.toLowerCase()) !== -1
+        );
       }
       if (type === 'private') {
-        return _.filter(comments, (comment) => privateComments[comment.id].text.includes(search));
+        return _.filter(comments, (comment) =>
+          privateComments[comment.id].text.toLowerCase().indexOf(search.toLowerCase()) !== -1
+        );
       }
     }
 
@@ -95,6 +100,7 @@ const Comments: React.SFC<CommentsProps> = ({ questions = {}, comments = {}, typ
       </Button>
       <div style={{ overflowX: 'auto' }}>
         <Table
+          rowKey={(record) => record.comment.id}
           bordered
           title={() => (
             <Input

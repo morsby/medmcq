@@ -4,7 +4,7 @@ import { useMutation, useQuery } from 'react-apollo-hooks';
 import { createShareLink as query_createShareLink } from 'queries/shareLink';
 import * as queries from 'queries/questions';
 import { Table, Icon, Button } from 'antd';
-import Highlighter from 'react-highlight-words';
+import Highlighter from 'react-highlighter';
 import ExtendedRow from 'components/Sharebuilder/extendedRow';
 import { useSelector, useDispatch } from 'react-redux';
 import { IReduxState } from 'reducers';
@@ -122,11 +122,12 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
       filterIcon: <Icon type="search" style={{ color: filter.text ? '#1890ff' : undefined }} />,
       render: (text) => (
         <Highlighter
-          highlightStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-          searchWords={filter.text.split(' ')}
-          autoEscape
-          textToHighlight={text}
-        />
+          matchStyle={{ backgroundColor: '#ffc069', padding: 0 }}
+          search={filter.text}
+          matchElement="span"
+        >
+          {text}
+        </Highlighter>
       )
     },
     {
