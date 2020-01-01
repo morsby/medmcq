@@ -43,7 +43,7 @@
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "swagger-jsdoc": "^3.4.0",
-    "typescript": "^3.6.4"
+    "typescript": "^3.7.4"
   },
   "devDependencies": {
     "@types/dotenv-flow": "^3.0.0",
