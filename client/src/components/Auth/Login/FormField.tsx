@@ -26,6 +26,7 @@ const FormField: React.SFC<FormFieldProps> = ({
         onChange={(e) => onChange(e)}
         name={name}
         value={value}
+        placeholder={placeholder}
       />
       {error && touched && <div>{error}</div>}
     </>

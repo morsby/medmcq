@@ -44,7 +44,7 @@ const ProfileActivity: React.SFC<ProfileActivityProps> = () => {
             active={activeIndex === 1}
             handleClick={setActiveIndex}
           >
-            <Comments comments={publicComments} />
+            <Comments type="public" comments={publicComments} />
           </ProfileActivityAccordionElem>
         )}
       </Translate>
@@ -56,7 +56,7 @@ const ProfileActivity: React.SFC<ProfileActivityProps> = () => {
             active={activeIndex === 2}
             handleClick={setActiveIndex}
           >
-            <Comments comments={privateComments} />
+            <Comments type="private" comments={privateComments} />
           </ProfileActivityAccordionElem>
         )}
       </Translate>

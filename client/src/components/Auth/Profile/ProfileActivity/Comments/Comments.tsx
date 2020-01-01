@@ -12,9 +12,10 @@ import { Tag, Table } from 'antd';
 
 export interface CommentsProps {
   comments: CommentClass[];
+  type: 'public' | "private"
 }
 
-const Comments: React.SFC<CommentsProps> = ({ comments }) => {
+const Comments: React.SFC<CommentsProps> = ({ comments, type }) => {
   const [search, setSearch] = useState('');
   const selectedSemesterId = useSelector((state: ReduxState) => state.ui.selection.semesterId);
   const specialties = useSelector(
@@ -32,8 +33,8 @@ const Comments: React.SFC<CommentsProps> = ({ comments }) => {
       ? [
           {
             title: 'Likes',
-            render: (record) => record.comment.likes.length,
-            sorter: (a, b) => a.comment.likes.length - b.comment.likes.length
+            render: (record: CommentClass) => record.likes.length,
+            sorter: (a: CommentClass, b: CommentClass) => a.likes.length - b.likes.length
           }
         ]
       : [];
@@ -42,8 +43,8 @@ const Comments: React.SFC<CommentsProps> = ({ comments }) => {
     {
       title: 'Dato',
       render: (record: CommentClass) => new Date(record.createdAt).toLocaleDateString(),
-      sorter: (a, b) =>
-        (new Date(a.comment.createdAt) as any) - (new Date(b.comment.createdAt) as any)
+      sorter: (a: CommentClass, b: CommentClass) =>
+        (new Date(a.createdAt) as any) - (new Date(b.createdAt) as any)
     },
     {
       title: 'Kommentar',
@@ -53,7 +54,7 @@ const Comments: React.SFC<CommentsProps> = ({ comments }) => {
           search={search}
           matchStyle={{ backgroundColor: '#ffc069', padding: 0 }}
         >
-          {record.comment.text}
+          {record.text}
         </Highlighter>
       )
     },
@@ -89,7 +90,7 @@ const Comments: React.SFC<CommentsProps> = ({ comments }) => {
       </Button>
       <div style={{ overflowX: 'auto' }}>
         <Table
-          rowKey={(record) => record.comment.id}
+          rowKey={(record: CommentClass) => String(record.id)}
           bordered
           title={() => (
             <Input
