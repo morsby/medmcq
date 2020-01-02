@@ -7,9 +7,9 @@ import styles from './SelectionNSelector.module.css';
 import { Translate } from 'react-localize-redux';
 
 import { Label, Input, Form, Radio, Header, Grid } from 'semantic-ui-react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
-import UIReducer from 'redux/reducers/ui';
+import Selection from 'classes/Selection';
 const radioOptions = [5, 10, 20, 40, 80];
 
 /**
@@ -19,8 +19,7 @@ const radioOptions = [5, 10, 20, 40, 80];
 export interface SelectionNSelectorProps {}
 
 const SelectionNSelector: React.SFC<SelectionNSelectorProps> = () => {
-  const dispatch = useDispatch();
-  const n = useSelector((state: ReduxState) => state.ui.selection.n);
+  const n = useSelector((state: ReduxState) => state.selection.n);
 
   let labelError;
   if (n > allowedNs.max || n < allowedNs.min) {
@@ -35,7 +34,7 @@ const SelectionNSelector: React.SFC<SelectionNSelectorProps> = () => {
   }
 
   const handleChange = (value: number) => {
-    dispatch(UIReducer.actions.changeSelection({ type: 'n', value }));
+    Selection.change({ type: 'n', value });
   };
 
   return (

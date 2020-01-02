@@ -9,7 +9,7 @@ import { Translate } from 'react-localize-redux';
 import { ReduxState } from 'redux/reducers';
 
 const SelectionSetSelector = () => {
-  const selectedSemester = useSelector((state: ReduxState) => state.ui.selection.semesterId);
+  const selectedSemester = useSelector((state: ReduxState) => state.selection.semesterId);
   const semester = useSelector((state: ReduxState) =>
     state.metadata.semesters.find((semester) => semester.id === selectedSemester)
   );

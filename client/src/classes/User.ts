@@ -5,7 +5,6 @@ import { store } from 'IndexApp';
 import Apollo from './Apollo';
 import authReducer from 'redux/reducers/auth';
 import Like from './Like';
-import Comment from './Comment';
 
 export interface UserLoginInput {
   username: string;
@@ -41,15 +40,8 @@ export interface Bookmark {
   question: Question;
 }
 
-export interface ProfileData {
-  answers: Answer[];
-  publicComments: Comment[];
-  privateComments: Comment[];
-  bookmarks: Bookmark[];
-}
-
 class User {
-  static login = async (data: UserLoginInput) => {
+  static login = async (data: UserLoginInput): Promise<User> => {
     const mutation = gql`
       mutation($data: LoginInput) {
         login(data: $data)
@@ -99,6 +91,10 @@ class User {
     await User.fetch();
   };
 
+  /**
+   * Fetches the user based on the stored cookie in "user". The stored cookie is
+   * manipulated based on login and logout.
+   */
   static fetch = async () => {
     const query = gql`
       query {
@@ -143,58 +139,6 @@ class User {
     return res.data.user;
   };
 
-  static getProfileData = async (options: { semester: number }) => {
-    const query = gql`
-      query($semester: Int) {
-        profile {
-          answers(semester: $semester) {
-            id
-            answer
-            answerTime
-            question {
-              id
-              correctAnswers
-            }
-          }
-          publicComments(semester: $semester) {
-            ...Comment
-            question {
-              specialties {
-                id
-              }
-            }
-          }
-          privateComments(semester: $semester) {
-            ...Comment
-            question {
-              specialties {
-                id
-              }
-            }
-          }
-          bookmarks {
-            id
-            question {
-              id
-              text
-              correctAnswers
-              answer1
-              answer2
-              answer3
-            }
-          }
-        }
-      }
-      ${Comment.fragmentFull}
-    `;
-
-    const profileData = await Apollo.query<ProfileData>('profile', query, {
-      semester: options.semester
-    });
-
-    store.dispatch(authReducer.actions.setProfile(profileData));
-  };
-
   static resetPassword = async ({
     token,
     password
@@ -234,6 +178,9 @@ class User {
     await User.fetch();
   };
 
+  /**
+   * Checks if the supplied username or email is available.
+   */
   static checkAvailable = async (data: Partial<User>) => {
     const query = gql`
       query($data: UserAvailableInput) {

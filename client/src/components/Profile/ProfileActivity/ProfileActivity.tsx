@@ -17,9 +17,7 @@ import { ReduxState } from 'redux/reducers';
 export interface ProfileActivityProps {}
 
 const ProfileActivity: React.SFC<ProfileActivityProps> = () => {
-  const { publicComments, privateComments } = useSelector(
-    (state: ReduxState) => state.auth.profile
-  );
+  const { publicComments, privateComments } = useSelector((state: ReduxState) => state.profile);
 
   const [activeIndex, setActiveIndex] = useState(0);
   return (

@@ -1,23 +1,20 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Tree } from 'antd';
 
 import { Translate } from 'react-localize-redux';
 
 import { Form, Header, Grid, Input, Button } from 'semantic-ui-react';
-import _ from 'lodash';
 import { ReduxState } from 'redux/reducers';
+import Selection from 'classes/Selection';
+import _ from 'lodash';
 import 'antd/lib/tree/style/css';
-import UIReducer from 'redux/reducers/ui';
 
 /**
  * Laver en checkbox for hvert speciale.
  */
 const SelectionSpecialtiesSelector = () => {
-  const dispatch = useDispatch();
-  const { semesterId, specialtyIds, tagIds } = useSelector(
-    (state: ReduxState) => state.ui.selection
-  );
+  const { semesterId, specialtyIds, tagIds } = useSelector((state: ReduxState) => state.selection);
   const semester = useSelector((state: ReduxState) =>
     state.metadata.semesters.find((semester) => semester.id === semesterId)
   );
@@ -26,7 +23,7 @@ const SelectionSpecialtiesSelector = () => {
 
   const handleChange = (value: string[], type: 'tagIds' | 'specialtyIds') => {
     const numberedValues = value.map((id) => Number(id));
-    dispatch(UIReducer.actions.changeSelection({ type, value: numberedValues }));
+    Selection.change({ type, value: numberedValues });
   };
 
   useEffect(() => {

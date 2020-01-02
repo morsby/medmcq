@@ -9,8 +9,12 @@ const Logout: React.SFC<LogoutProps> = () => {
   const history = useHistory();
 
   useEffect(() => {
-    User.logout();
-    history.push('/');
+    const logout = async () => {
+      await User.logout();
+      history.push('/');
+    };
+
+    logout();
   }, []);
 
   return null;

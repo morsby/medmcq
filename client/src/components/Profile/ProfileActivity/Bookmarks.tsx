@@ -15,7 +15,7 @@ export interface BookmarksProps {}
 
 const Bookmarks: React.SFC<BookmarksProps> = () => {
   const history = useHistory();
-  const bookmarks = useSelector((state: ReduxState) => state.auth.profile.bookmarks);
+  const bookmarks = useSelector((state: ReduxState) => state.profile.bookmarks);
   if (bookmarks.length === 0) return <Translate id="profileBookmarks.no_bookmarks" />;
 
   const openAll = async () => {

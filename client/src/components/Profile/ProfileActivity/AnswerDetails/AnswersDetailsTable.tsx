@@ -20,7 +20,7 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
   questions
 }) => {
   const history = useHistory();
-  const chosenSemesterId = useSelector((state: ReduxState) => state.ui.selection.semesterId);
+  const chosenSemesterId = useSelector((state: ReduxState) => state.selection.semesterId);
   const { tags, specialties, examSets } = useSelector((state: ReduxState) =>
     state.metadata.semesters.find((semester) => semester.id === chosenSemesterId)
   );

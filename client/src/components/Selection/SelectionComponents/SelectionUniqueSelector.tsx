@@ -1,9 +1,9 @@
 import React from 'react';
 import { Checkbox, Divider } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
-import UIReducer from 'redux/reducers/ui';
+import Selection from 'classes/Selection';
 
 export interface SelectionUniqueSelectorProps {}
 
@@ -11,11 +11,10 @@ export interface SelectionUniqueSelectorProps {}
  * Component der giver mulighed for at vælge om der ønskes kun nye spørgsmål.
  */
 const SelectionUniqueSelector: React.SFC<SelectionUniqueSelectorProps> = () => {
-  const { onlyNew, onlyWrong } = useSelector((state: ReduxState) => state.ui.selection);
-  const dispatch = useDispatch();
+  const { onlyNew, onlyWrong } = useSelector((state: ReduxState) => state.selection);
 
   const handleChange = (checked: boolean, type: 'onlyNew' | 'onlyWrong') => {
-    dispatch(UIReducer.actions.changeSelection({ type, value: checked }));
+    Selection.change({ type, value: checked });
   };
 
   return (

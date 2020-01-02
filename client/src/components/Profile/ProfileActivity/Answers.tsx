@@ -15,33 +15,19 @@ export interface AnswersProps {}
 const Answers: React.SFC<AnswersProps> = () => {
   const [details, toggleDetails] = useState(false);
   const [tagDetailsOpen, setTagsDetailsOpen] = useState(false);
-  const answers = useSelector((state: ReduxState) => state.auth.profile.answers);
-  const privateComments = useSelector((state: ReduxState) => state.auth.profile.privateComments);
-  const publicComments = useSelector((state: ReduxState) => state.auth.profile.publicComments);
+  const answers = useSelector((state: ReduxState) => state.profile.answers);
+  const tries = useSelector((state: ReduxState) => state.profile.tries);
+  const privateComments = useSelector((state: ReduxState) => state.profile.privateComments);
+  const publicComments = useSelector((state: ReduxState) => state.profile.publicComments);
 
   const onToggleDetails = () => {
     toggleDetails(!details);
   };
 
   let totalAnswers = answers.length;
-  const mappedAnswers = () => {
-    let mapped = {} as { [key: string]: { tries: number; correct: number } };
-
-    for (let answer of answers) {
-      if (!mapped[answer.question.id]) {
-        mapped[answer.question.id] = { correct: 0, tries: 0 };
-      }
-      mapped[answer.question.id].tries++;
-      if (answer.question.correctAnswers.includes(answer.answer)) {
-        mapped[answer.question.id].correct++;
-      }
-    }
-
-    return mapped;
-  };
-  let allRight = _.filter(mappedAnswers(), (a) => a.tries === a.correct);
-  let allWrong = _.filter(mappedAnswers(), (a) => a.correct === 0);
-  let mixed = _.filter(mappedAnswers(), (a) => a.correct > 0 && a.correct < a.tries);
+  let allRight = _.filter(tries, (attempt) => attempt.tries === attempt.correct);
+  let allWrong = _.filter(tries, (a) => a.correct === 0);
+  let mixed = _.filter(tries, (a) => a.correct > 0 && a.correct < a.tries);
   return (
     <div>
       <p>
@@ -82,8 +68,8 @@ const Answers: React.SFC<AnswersProps> = () => {
         {!tagDetailsOpen ? 'Vis Tag Detaljer' : 'Skjul Tag Detaljer'}
       </Button>
       <Divider hidden />
-      {details && totalAnswers > 0 && <AnswerDetails answers={answers} />}
-      {tagDetailsOpen && <AnswerTagsDetailsTable answers={answers} />}
+      {details && totalAnswers > 0 && <AnswerDetails />}
+      {tagDetailsOpen && <AnswerTagsDetailsTable />}
     </div>
   );
 };

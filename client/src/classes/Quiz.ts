@@ -16,15 +16,7 @@ export interface AnswerInput {
 class Quiz {
   static start = async (filter?: Partial<QuestionFilterInput>) => {
     const reduxStore: ReduxState = store.getState();
-    const {
-      specialtyIds,
-      tagIds,
-      semesterId,
-      n,
-      setId,
-      onlyNew,
-      onlyWrong
-    } = reduxStore.ui.selection;
+    const { specialtyIds, tagIds, semesterId, n, setId, onlyNew, onlyWrong } = reduxStore.selection;
 
     if (!filter) {
       filter = { specialtyIds, tagIds, semesterId, n, setId };

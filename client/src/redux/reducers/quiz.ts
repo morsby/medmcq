@@ -3,7 +3,6 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 const initialState = {
   questionIds: [] as number[],
   answers: [] as { questionId: number; answer: number }[],
-  quizId: null,
   questionIndex: 0,
   didInvalidate: false,
   imgOpen: false

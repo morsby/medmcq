@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { urls } from '../../utils/common';
 import _ from 'lodash';
 
@@ -10,9 +10,9 @@ import { Translate } from 'react-localize-redux';
 import ProfileActivity from './ProfileActivity/ProfileActivity';
 import { useHistory } from 'react-router';
 import { ReduxState } from 'redux/reducers';
-import User from 'classes/User';
-import uiReducer from 'redux/reducers/ui';
+import ProfileClass from 'classes/Profile';
 import Semester from 'classes/Semester';
+import Selection from 'classes/Selection';
 
 export interface ProfileProps {}
 
@@ -21,11 +21,10 @@ const Profile: React.SFC<ProfileProps> = () => {
   const [width, setWidth] = useState(window.innerWidth);
   const { user } = useSelector((state: ReduxState) => state.auth);
   const [panes, setPanes] = useState([]);
-  const selectedSemester = useSelector((state: ReduxState) => state.ui.selection.semesterId);
+  const selectedSemester = useSelector((state: ReduxState) => state.selection.semesterId);
   const currentLanguage = useSelector((state: ReduxState) => state.settings.language);
   const semesters = useSelector((state: ReduxState) => state.metadata.semesters);
   const history = useHistory();
-  const dispatch = useDispatch();
 
   /**
    * HandleResize and debounce it
@@ -41,7 +40,7 @@ const Profile: React.SFC<ProfileProps> = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       setLoading(true);
-      await User.getProfileData({ semester: selectedSemester });
+      await ProfileClass.fetch({ semester: selectedSemester });
       setLoading(false);
     };
 
@@ -74,7 +73,7 @@ const Profile: React.SFC<ProfileProps> = () => {
 
   const handleTabChange = (e, { activeIndex }) => {
     const semesterId = semesters[activeIndex].id;
-    dispatch(uiReducer.actions.changeSelection({ type: 'semesterId', value: semesterId }));
+    Selection.change({ type: 'semesterId', value: semesterId });
   };
 
   const handleNavigation = (path) => {

@@ -5,8 +5,9 @@ import questionsReducer from './question';
 import quizReducer from './quiz';
 import settingsReducer from './settings';
 import shareBuilderReducer from './sharebuilder';
-import UIReducer from './ui';
 import { localizeReducer } from 'react-localize-redux';
+import selectionReducer from './selection';
+import profileReducer from './profile';
 
 const rootReducer = combineReducers({
   auth: authReducer.reducer,
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
   quiz: quizReducer.reducer,
   settings: settingsReducer.reducer,
   shareBuilder: shareBuilderReducer.reducer,
-  ui: UIReducer.reducer,
+  selection: selectionReducer.reducer,
+  profile: profileReducer.reducer,
   localize: localizeReducer
 });
 

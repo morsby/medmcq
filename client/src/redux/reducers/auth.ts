@@ -1,16 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import User, { ProfileData } from 'classes/User';
+import User from 'classes/User';
 import { Bookmark } from '../../classes/User';
 
-/**
- * user defaulter til null; burde måske være et tomt object (men så vil mange
- * Component-auth checks skulle skrives om, da user vil være === true)
- */
 const initialState = {
-  user: null as User | null,
-  isFetching: false,
-  didInvalidate: true,
-  profile: {} as ProfileData
+  user: null as User | null
 };
 
 const authReducer = createSlice({
@@ -19,9 +12,6 @@ const authReducer = createSlice({
   reducers: {
     login: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
-    },
-    setProfile: (state, action: PayloadAction<ProfileData>) => {
-      state.profile = action.payload;
     },
     logout: (state) => {
       state.user = null;

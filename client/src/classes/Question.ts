@@ -94,6 +94,8 @@ class Question {
     `;
 
     const questions = await Apollo.query<Question[]>('questions', query, { filter });
+    console.log(questions);
+
     if (newQuiz) {
       await store.dispatch(quizReducer.actions.changeQuestion(0));
       await store.dispatch(

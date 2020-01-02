@@ -2,22 +2,18 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { QuestionFilterInput } from 'classes/Question';
 
 const initialState = {
-  isLoading: false,
-  selection: {
-    type: 'random',
-    n: 10,
-    onlyNew: false,
-    onlyWrong: false,
-    semesterId: 1,
-    setId: null,
-    specialtyIds: [],
-    tagIds: []
-  },
-  error: false
+  type: 'random',
+  n: 10,
+  onlyNew: false,
+  onlyWrong: false,
+  semesterId: 1,
+  setId: null,
+  specialtyIds: [],
+  tagIds: []
 };
 
-const UIReducer = createSlice({
-  name: 'UI',
+const selectionReducer = createSlice({
+  name: 'selection',
   initialState,
   reducers: {
     changeSelection: (
@@ -25,26 +21,25 @@ const UIReducer = createSlice({
       action: PayloadAction<{ type: keyof QuestionFilterInput | 'type'; value: any }>
     ) => {
       const { type, value } = action.payload;
-      const { selection } = state;
 
       // Vi nulstiller hvis nyt semester
       if (type === 'semesterId') {
-        selection.setId = null;
-        selection.specialtyIds = [];
-        selection.tagIds = [];
+        state.setId = null;
+        state.specialtyIds = [];
+        state.tagIds = [];
       }
 
-      selection[type] = value;
+      state[type] = value;
 
       // Skift checkboxene afhængigt af type, da disse ikke overlapper
       if (type === 'onlyNew') {
-        selection.onlyWrong = false;
+        state.onlyWrong = false;
       }
       if (type === 'onlyWrong') {
-        selection.onlyNew = false;
+        state.onlyNew = false;
       }
     }
   }
 });
 
-export default UIReducer;
+export default selectionReducer;

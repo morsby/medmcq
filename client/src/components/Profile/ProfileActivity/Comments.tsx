@@ -17,7 +17,7 @@ export interface CommentsProps {
 
 const Comments: React.SFC<CommentsProps> = ({ comments, type }) => {
   const [search, setSearch] = useState('');
-  const selectedSemesterId = useSelector((state: ReduxState) => state.ui.selection.semesterId);
+  const selectedSemesterId = useSelector((state: ReduxState) => state.selection.semesterId);
   const specialties = useSelector(
     (state: ReduxState) => state.metadata.semesters.find((semester) => semester.id === selectedSemesterId).specialties
   );

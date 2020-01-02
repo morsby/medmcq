@@ -5,20 +5,19 @@ import _ from 'lodash';
 import { Form, Radio, Divider, Icon, Loader } from 'semantic-ui-react';
 
 import { Translate } from 'react-localize-redux';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import User from 'classes/User';
 import ExamSet from 'classes/ExamSet';
 import { ReduxState } from 'redux/reducers';
-import UIReducer from 'redux/reducers/ui';
+import Selection from 'classes/Selection';
 
 export interface SetRadioButtonProps {
   set: ExamSet;
 }
 
 const SetRadioButton: React.SFC<SetRadioButtonProps> = ({ set }) => {
-  const dispatch = useDispatch();
   const user = useSelector((state: ReduxState) => state.auth.user);
-  const chosenSetId = useSelector((state: ReduxState) => state.ui.selection.setId);
+  const chosenSetId = useSelector((state: ReduxState) => state.selection.setId);
   const [manualLoading, setManualLoading] = useState(false);
 
   const handleManualCompletion = async () => {
@@ -28,7 +27,7 @@ const SetRadioButton: React.SFC<SetRadioButtonProps> = ({ set }) => {
   };
 
   const handleChange = async (setId: number) => {
-    await dispatch(UIReducer.actions.changeSelection({ type: 'setId', value: setId }));
+    await Selection.change({ type: 'setId', value: setId });
   };
 
   return (

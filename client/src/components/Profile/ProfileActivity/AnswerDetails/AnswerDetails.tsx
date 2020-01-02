@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import _ from 'lodash';
 
 import { Button, Divider } from 'semantic-ui-react';
@@ -11,19 +11,22 @@ import { urls } from 'utils/common';
 import { useHistory } from 'react-router';
 import AnswersDetailsTable from './AnswersDetailsTable';
 import { ReduxState } from 'redux/reducers';
-import Question from 'classes/Question';
 import Quiz from 'classes/Quiz';
 
 /**
  * Component showing answer details.  Any filtering occurs in this component.
  */
-const AnswerDetails = ({ answers }) => {
+export interface AnswerDetailsProps {}
+
+const AnswerDetails: React.SFC<AnswerDetailsProps> = () => {
   const [filter, setFilter] = useState(undefined);
   const [search, setSearch] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [selected, setSelected] = useState([]);
   const [quizLoading, setQuizLoading] = useState(false);
   const questions = useSelector((state: ReduxState) => state.questions.questions);
+  let answers = useSelector((state: ReduxState) => state.profile.answers);
+  const tries = useSelector((state: ReduxState) => state.profile.tries);
   const history = useHistory();
 
   /**
@@ -55,18 +58,24 @@ const AnswerDetails = ({ answers }) => {
   if (filter) {
     switch (filter) {
       case 'allRight':
-        answers = _.pickBy(answers, (a) => a.correct === a.tries);
+        answers = answers.filter((answer) => tries[answer.id].correct === tries[answer.id].tries);
         break;
       case 'allWrong':
-        answers = _.pickBy(answers, (a) => a.correct === 0);
+        answers = answers.filter((answer) => tries[answer.id].correct === 0);
         break;
       default:
-        answers = _.pickBy(answers, (a) => a.correct > 0 && a.correct < a.tries);
+        answers = answers.filter(
+          (answer) =>
+            tries[answer.id].correct > 0 && tries[answer.id].correct < tries[answer.id].tries
+        );
     }
   }
 
   if (isSearching) {
-    answers = _.pickBy(answers, (a, questionId) => questions[questionId].text.includes(search));
+    answers = answers.filter(
+      (answer) =>
+        questions.find((question) => question.id === answer.question.id).text.indexOf(search) !== -1
+    );
   }
 
   return (

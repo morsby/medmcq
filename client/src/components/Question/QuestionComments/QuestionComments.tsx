@@ -76,6 +76,7 @@ const QuestionComments: React.SFC<QuestionCommentsProps> = ({ type }) => {
       }
 
       setComment('');
+      setIsAnonymous(false);
       setLoading(false);
     } catch (error) {
       setLoading(false);
@@ -83,10 +84,10 @@ const QuestionComments: React.SFC<QuestionCommentsProps> = ({ type }) => {
     }
   };
 
-  const handleEditComment = (comment) => {
+  const handleEditComment = (comment: Comment) => {
     setEditCommentId(comment.id);
     setComment(comment.text);
-    setIsAnonymous(!!comment.anonymous);
+    setIsAnonymous(!!comment.isAnonymous);
   };
 
   const undoEdit = () => {

@@ -30,8 +30,8 @@ const Selection: React.SFC<SelectionProps> = ({ addTranslation, translate }) => 
   const [search, setSearch] = useState('');
   const [startLoading, setStartLoading] = useState(false);
   const semesters = useSelector((state: ReduxState) => state.metadata.semesters);
-  const type = useSelector((state: ReduxState) => state.ui.selection.type);
-  const selectedSemester = useSelector((state: ReduxState) => state.ui.selection.semesterId);
+  const type = useSelector((state: ReduxState) => state.selection.type);
+  const selectedSemester = useSelector((state: ReduxState) => state.selection.semesterId);
   const user = useSelector((state: ReduxState) => state.auth.user);
   const quizQuestions = useSelector((state: ReduxState) => state.questions.questions);
   const history = useHistory();

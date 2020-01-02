@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
-import { useDispatch } from 'react-redux';
 import LoadingPage from 'components/Misc/Utility/LoadingPage';
 import Quiz from 'components/Quiz/Quiz';
 import { useQuery } from 'react-apollo-hooks';
@@ -12,7 +11,6 @@ export interface QuizShareBuilderLoader {}
 
 const QuizShareBuilderLoader: React.SFC<QuizShareBuilderLoader> = () => {
   const params = useParams<{ id: string }>();
-  const dispatch = useDispatch();
   const { data, error, loading } = useQuery(query_fetchQuestionIdsFromShareLink, {
     variables: { shareId: params.id }
   });
@@ -26,7 +24,7 @@ const QuizShareBuilderLoader: React.SFC<QuizShareBuilderLoader> = () => {
     if (!loading) {
       fetchQuestions();
     }
-  }, [data, dispatch, loading, params.id]);
+  }, [data, loading, params.id]);
 
   if (loading) return <LoadingPage />;
   if (error) return <ErrorBoundary />;

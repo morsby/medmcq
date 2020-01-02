@@ -1,16 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState = {
-  /**
-   * Hvilket sprog er valgt? kan være 'dk' eller 'gb'
-   */
-  language: 'dk',
-  /**
-   * App version
-   */
-  version: '0.0.1',
-  // Is it the users first time? Then display description modal.
-  firstTime: true
+  language: 'dk', // Hvilket sprog er valgt? kan være 'dk' eller 'gb'
+  version: '0.0.1', // App version
+  firstTime: true // Is it the users first time? Then display description modal.
 };
 
 const settingsReducer = createSlice({

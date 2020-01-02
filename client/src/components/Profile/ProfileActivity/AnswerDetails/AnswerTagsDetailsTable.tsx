@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Table, Tag } from 'antd';
 import _ from 'lodash';
 import { useHistory } from 'react-router';
 import { ReduxState } from 'redux/reducers';
-import UIReducer from 'redux/reducers/ui';
 import Quiz from 'classes/Quiz';
+import Selection from 'classes/Selection';
 
-export interface AnswerTagsDetailsTableProps {
-  answers: any[];
-}
+type AnsweredTag = { id: number; name: string; correct: number; tries: number };
+type AnsweredTags = { [key: string]: AnsweredTag };
 
-const AnswerTagsDetailsTable: React.SFC<AnswerTagsDetailsTableProps> = ({ answers }) => {
+export interface AnswerTagsDetailsTableProps {}
+
+const AnswerTagsDetailsTable: React.SFC<AnswerTagsDetailsTableProps> = () => {
   const [answeredTags, setAnsweredTags] = useState([]);
   const history = useHistory();
-  const dispatch = useDispatch();
-  const questions = useSelector((state: ReduxState) => state.questions.questions);
-  const selectedSemester = useSelector((state: ReduxState) => state.ui.selection.semesterId);
-  const tags = useSelector((state: ReduxState) =>
-    state.metadata.semesters
-      .find((semester) => semester.id === selectedSemester)
-      .tags.filter((tag) => tag.semester.id === selectedSemester)
+  const selectedSemester = useSelector((state: ReduxState) => state.selection.semesterId);
+  const answers = useSelector((state: ReduxState) => state.profile.answers);
+  const tries = useSelector((state: ReduxState) => state.profile.tries);
+  const tags = useSelector(
+    (state: ReduxState) =>
+      state.metadata.semesters.find((semester) => semester.id === selectedSemester).tags
   );
 
   const getPercentCorrect = (record) => {
@@ -39,14 +39,14 @@ const AnswerTagsDetailsTable: React.SFC<AnswerTagsDetailsTableProps> = ({ answer
   };
 
   const handleTagSelect = async (tagId: number) => {
-    await dispatch(UIReducer.actions.changeSelection({ type: 'tagIds', value: [tagId] }));
-    await dispatch(UIReducer.actions.changeSelection({ type: 'n', value: 80 }));
+    await Selection.change({ type: 'tagIds', value: [tagId] });
+    await Selection.change({ type: 'n', value: 80 });
     await Quiz.start();
     history.push('/quiz');
   };
 
   useEffect(() => {
-    const answeredTags = {};
+    const answeredTags: AnsweredTags = {};
 
     // Insert tags into answeredTags
     for (let tag of tags) {
@@ -59,23 +59,25 @@ const AnswerTagsDetailsTable: React.SFC<AnswerTagsDetailsTableProps> = ({ answer
     }
 
     // For each answer, add the count to answeredTags
-    _.map(answers, (answer, questionId) => {
-      for (let tag of _.map<any>(questions[questionId].tags)) {
+    _.map(tries, (attempt) => {
+      for (let tag of answers.find((answer) => answer.question.id === attempt.questionId).question
+        .tags) {
         if (answeredTags[tag.id]) {
-          answeredTags[tag.id].correct += answer.correct;
-          answeredTags[tag.id].tries += answer.tries;
+          answeredTags[tag.id].correct += attempt.correct;
+          answeredTags[tag.id].tries += attempt.tries;
         }
       }
     });
 
     // Send the array to state, to refresh table
+    console.log('running');
     setAnsweredTags(_.map(answeredTags));
-  }, [tags, answers, questions]);
+  }, []);
 
   const columns = [
     {
       title: 'Tag',
-      render: (record) => (
+      render: (record: AnsweredTag) => (
         <p
           style={{ color: '#1890ff', cursor: 'pointer' }}
           onClick={() => handleTagSelect(record.id)}
@@ -83,28 +85,28 @@ const AnswerTagsDetailsTable: React.SFC<AnswerTagsDetailsTableProps> = ({ answer
           {record.name}
         </p>
       ),
-      sorter: (a, b) => a.name.localeCompare(b.name)
+      sorter: (a: AnsweredTag, b: AnsweredTag) => a.name.localeCompare(b.name)
     },
     {
       title: 'Korrekt',
       dataIndex: 'correct',
-      sorter: (a, b) => a.correct - b.correct
+      sorter: (a: AnsweredTag, b: AnsweredTag) => a.correct - b.correct
     },
     {
       title: 'Forsøg',
       dataIndex: 'tries',
-      sorter: (a, b) => a.tries - b.tries
+      sorter: (a: AnsweredTag, b: AnsweredTag) => a.tries - b.tries
     },
     {
       title: 'Percent',
-      render: (record) => {
+      render: (record: AnsweredTag) => {
         if (isNaN(Math.round(record.correct / record.tries))) {
           return <Tag color="blue">0%</Tag>;
         } else {
           return <Tag color={getColor(record)}>{getPercentCorrect(record)}%</Tag>;
         }
       },
-      sorter: (a, b) => getPercentCorrect(a) - getPercentCorrect(b)
+      sorter: (a: AnsweredTag, b: AnsweredTag) => getPercentCorrect(a) - getPercentCorrect(b)
     }
   ];
 

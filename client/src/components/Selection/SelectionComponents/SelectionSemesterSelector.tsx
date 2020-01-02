@@ -1,15 +1,14 @@
 import React from 'react';
 import { Header, Dropdown } from 'semantic-ui-react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
-import uiReducer from 'redux/reducers/ui';
 import { Translate } from 'react-localize-redux';
+import Selection from 'classes/Selection';
 
 export interface SelectionSemesterSelectorProps {}
 
 const SelectionSemesterSelector: React.SFC<SelectionSemesterSelectorProps> = () => {
-  const dispatch = useDispatch();
-  const selectedSemester = useSelector((state: ReduxState) => state.ui.selection.semesterId);
+  const selectedSemester = useSelector((state: ReduxState) => state.selection.semesterId);
   const semesters = useSelector((state: ReduxState) => state.metadata.semesters);
   const mappedSemesters = semesters.map((semester) => ({
     text: `${semester.value}. semester - ${semester.name}`,
@@ -18,7 +17,7 @@ const SelectionSemesterSelector: React.SFC<SelectionSemesterSelectorProps> = () 
   }));
 
   const handleChange = (value: number) => {
-    dispatch(uiReducer.actions.changeSelection({ type: 'semesterId', value }));
+    Selection.change({ type: 'semesterId', value });
   };
 
   return (
