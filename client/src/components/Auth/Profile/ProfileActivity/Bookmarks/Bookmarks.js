@@ -17,7 +17,7 @@ const Bookmarks = ({ bookmarks }) => {
   if (Object.keys(bookmarks).length === 0) return <Translate id="profileBookmarks.no_bookmarks" />;
 
   const openAll = async () => {
-    await dispatch(getQuestions({ ids: _.map(bookmarks, (bookmark) => bookmark.id) }));
+    await dispatch(getQuestions({ ids: _.map(bookmarks, (bookmark) => bookmark.question.id) }));
     history.push('/quiz');
   };
 
