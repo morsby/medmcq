@@ -5,6 +5,7 @@ import QuestionComments from './QuestionComments/QuestionComments';
 import QuestionExtraButtons from './QuestionExtras/QuestionExtraButtons';
 import { useSelector } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
+import Question from 'classes/Question';
 
 export interface QuestionExtrasProps {
   width: number;
@@ -35,8 +36,8 @@ const QuestionExtras: React.SFC<QuestionExtrasProps> = ({ width }) => {
   };
 
   /** Håndter submit af rapport */
-  const onReportSubmit = () => {
-    // TODO: CONNECT  TIL REDUX OG API
+  const onReportSubmit = async () => {
+    await Question.report({ report, questionId: question.id });
     setReport('');
     setReportSent(true);
   };

@@ -8,10 +8,18 @@ import QuestionTagVote from 'models/question_tag_vote';
 import QuestionImage from 'models/question_image';
 import QuestionUserAnswer from 'models/question_user_answer';
 import QuestionComment from 'models/question_comment';
+import { urls } from 'misc/vars';
+import ExamSet from 'models/exam_set';
+import Semester from 'models/semester';
+import sgMail from '@sendgrid/mail';
 
 export const typeDefs = gql`
   extend type Query {
     questions(filter: QuestionFilterInput!): [Question!]
+  }
+
+  extend type Mutation {
+    reportQuestion(report: String!, questionId: Int!): String
   }
 
   input QuestionFilterInput {
@@ -169,6 +177,39 @@ export const resolvers = {
       }
 
       return query.groupBy('question.id').select('question.id as id');
+    }
+  },
+  Mutation: {
+    reportQuestion: async (root, { report, questionId }) => {
+      const question = await Question.query().findById(questionId);
+      const examSet = await ExamSet.query().findById(question.examSetId);
+      const semester = await Semester.query().findById(examSet.semesterId);
+
+      const msg = {
+        to: urls.issue,
+        from: `medMCQ-app <${urls.fromEmail}>`,
+        subject: `Fejl i spørgsmål med id ${question.id}`,
+        text: `
+  Der er blevet rapporteret en fejl i følgende spørgsmål:
+  - ID: ${question.id}
+  - Semester: ${semester.value}
+  - Sæt: ${examSet.year}/${examSet.season}
+  - Spørgsmålnummer: ${question.examSetQno}
+  <hr>
+  <strong>Indrapporteringen lyder:</strong>
+  ${report}
+  <hr>
+  <strong>Spørgsmålet lyder:</strong>
+  ${question.text}<br>
+  A. ${question.answer1}<br>
+  B. ${question.answer2}<br>
+  C. ${question.answer3}
+  `
+      };
+
+      sgMail.send(msg);
+
+      return `Question (ID: ${question.id}) reported`;
     }
   },
   Question: {

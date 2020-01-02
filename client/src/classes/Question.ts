@@ -94,7 +94,6 @@ class Question {
     `;
 
     const questions = await Apollo.query<Question[]>('questions', query, { filter });
-    console.log(questions);
 
     if (newQuiz) {
       await store.dispatch(quizReducer.actions.changeQuestion(0));
@@ -103,6 +102,16 @@ class Question {
       );
     }
     await store.dispatch(questionsReducer.actions.setQuestions(questions));
+  };
+
+  static report = async (data: { report: string; questionId: number }) => {
+    const mutation = gql`
+      mutation($report: String!, $questionId: Int!) {
+        reportQuestion(report: $report, questionId: $questionId)
+      }
+    `;
+
+    await Apollo.mutate('reportQuestion', mutation, data);
   };
 }
 

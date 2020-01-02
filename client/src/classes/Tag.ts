@@ -2,6 +2,7 @@ import Question from './Question';
 import Semester from 'classes/Semester';
 import { gql } from 'apollo-boost';
 import User from './User';
+import Apollo from './Apollo';
 
 interface Tag {
   id: number;
@@ -49,6 +50,16 @@ class Tag {
       vote
     }
   `;
+
+  static suggest = async (data: { tagName: string; questionId: number }) => {
+    const mutation = gql`
+      mutation($tagName: String!, $questionId: Int!) {
+        suggestTag(tagName: $tagName, questionId: $questionId)
+      }
+    `;
+
+    await Apollo.mutate('suggestTag', mutation, data);
+  };
 }
 
 export default Tag;

@@ -2,8 +2,19 @@ import { gql } from 'apollo-server-express';
 import { Context } from 'graphql/apolloServer';
 import QuestionTagVote from 'models/question_tag_vote';
 import QuestionSpecialtyVote from 'models/question_specialty_vote';
+import { urls } from 'misc/vars';
+import Question from 'models/question';
+import Semester from 'models/semester';
+import ExamSet from 'models/exam_set';
+import sgMail from '@sendgrid/mail';
 
 export const typeDefs = gql`
+  extend type Mutation {
+    voteTag(data: VoteInput): Question
+    voteSpecialty(data: VoteInput): Question
+    suggestTag(tagName: String!, questionId: Int!): String
+  }
+
   type Specialty {
     id: Int
     name: String
@@ -45,12 +56,6 @@ export const typeDefs = gql`
     questionId: Int!
     metadataId: Int!
     vote: Int
-  }
-
-  extend type Mutation {
-    voteTag(data: VoteInput): Question
-    voteSpecialty(data: VoteInput): Question
-    suggestTag(tag: String!, questionId: Int!): String
   }
 `;
 
@@ -109,6 +114,32 @@ export const resolvers = {
       ctx.questionLoaders.questionLoader.clear(questionId);
       ctx.metadataLoaders.specialtyVoteLoader.clear(specialtyVote.id);
       return { id: questionId };
+    },
+    suggestTag: async (root, { tagName, questionId }) => {
+      const question = await Question.query().findById(questionId);
+      const examSet = await ExamSet.query().findById(question.examSetId);
+      const semester = await Semester.query().findById(examSet.semesterId);
+
+      const msg = {
+        to: urls.issue,
+        from: `medMCQ-app <${urls.fromEmail}>`,
+        subject: `Nyt tag foreslået: ${tagName}`,
+        text: `
+  Der er blevet foreslået et nyt tag: ${tagName}.
+  Det blev foreslået til spørgsmålet: 
+  - ID: ${question.id}
+  - Semester: ${semester.value}
+  - Sæt: ${examSet.year}/${examSet.season}
+  - Spørgsmålnummer: ${question.examSetQno}
+  ${question.text}<br>
+  A. ${question.answer1}<br>
+  B. ${question.answer2}<br>
+  C. ${question.answer3}
+  `
+      };
+
+      sgMail.send(msg);
+      return `Tag "${tagName}" has been suggested.`;
     }
   },
   TagVote: {

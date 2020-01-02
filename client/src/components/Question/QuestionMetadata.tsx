@@ -13,6 +13,7 @@ import makeToast from 'redux/actions/makeToast';
 import { ReduxState } from 'redux/reducers';
 import Metadata from 'classes/Metadata';
 import User from 'classes/User';
+import Tag from 'classes/Tag';
 
 export interface QuestionMetadataProps {}
 
@@ -50,7 +51,7 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
   }, [question]);
 
   const suggestTag = async () => {
-    await Metadata.suggestTag({ tagName: newTag, questionId: question.id });
+    await Tag.suggest({ tagName: newTag, questionId: question.id });
     setNewTag('');
     setAddingNewTag(false);
     setSuggestTagMessage('Dit tag er blevet foreslået');
