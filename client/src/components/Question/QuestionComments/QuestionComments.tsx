@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, TextArea, Button, Message, Checkbox } from 'semantic-ui-react';
+import { Form, Button, Message, Checkbox } from 'semantic-ui-react';
 
 import { Translate } from 'react-localize-redux';
 
@@ -9,6 +9,7 @@ import makeToast from 'redux/actions/makeToast';
 import { ReduxState } from 'redux/reducers';
 import Comment from 'classes/Comment';
 import _ from 'lodash';
+import TextArea from 'antd/lib/input/TextArea';
 
 /**
  * Viser kommentarer til et spørgsmål
@@ -109,9 +110,10 @@ const QuestionComments: React.SFC<QuestionCommentsProps> = ({ type }) => {
             {({ translate }) => (
               <TextArea
                 name="comment"
-                placeholder={translate('questionComments.write_a_comment')}
-                onChange={(e, { value }) => setComment(value as string)}
+                placeholder={translate('questionComments.write_a_comment') as string}
+                onChange={(e) => setComment(e.target.value)}
                 value={comment}
+                autosize={{ minRows: 3 }}
               />
             )}
           </Translate>
