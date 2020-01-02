@@ -145,9 +145,7 @@ export const resolvers = {
         .findOne({ resetPasswordToken: token })
         .andWhere('resetPasswordExpires', '>', Date.now());
       if (!user)
-        throw new Error(
-          'Reset-token er ikke gyldigt. Bed om et nyt via formularen "Jeg har glemt min kode" og prøv igen.'
-        );
+        return 'Reset-token er ikke gyldigt. Bed om et nyt via formularen "Jeg har glemt min kode" og prøv igen.';
 
       // Reset password
       await user.$query().patch({ password, resetPasswordToken: null, resetPasswordExpires: null });

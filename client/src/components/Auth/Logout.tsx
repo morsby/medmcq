@@ -15,7 +15,7 @@ const Logout: React.SFC<LogoutProps> = () => {
     };
 
     logout();
-  }, []);
+  }, [history]);
 
   return null;
 };

@@ -7,7 +7,6 @@ import ProfileActivityAccordionElem from './ProfileActivityAccordionElem';
 import Answers from './Answers';
 import Bookmarks from './Bookmarks';
 import Comments from './Comments';
-import _ from 'lodash';
 import { useSelector } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
 

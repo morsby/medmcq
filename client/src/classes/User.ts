@@ -153,7 +153,6 @@ class User {
     `;
 
     const message = await Apollo.mutate<string>('resetPassword', mutation, { token, password });
-
     return message;
   };
 

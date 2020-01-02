@@ -21,7 +21,7 @@ const confirmPassword = Yup.string().oneOf([Yup.ref('password')], 'Kodeord skal 
 
 export const resetSchema = Yup.object().shape({
   password: password.required('Dette felt er krævet'),
-  confirmPassword
+  confirmPassword: confirmPassword.required('Dette felt er krævet')
 });
 
 export const signupSchema = Yup.object().shape({

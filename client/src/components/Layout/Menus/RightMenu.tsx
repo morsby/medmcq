@@ -7,7 +7,6 @@ import _ from 'lodash';
 import { ReduxState } from 'redux/reducers';
 import settingsReducer from 'redux/reducers/settings';
 import User from 'classes/User';
-import Question from 'classes/Question';
 import Quiz from 'classes/Quiz';
 
 export interface RightMenuProps extends LocalizeContextProps {
