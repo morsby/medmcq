@@ -2,12 +2,13 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect, useDispatch, useSelector } from 'react-redux';
 import * as actions from 'actions';
-import { Form, TextArea, Button, Message, Checkbox } from 'semantic-ui-react';
+import { Form, Button, Message, Checkbox } from 'semantic-ui-react';
 
 import { Translate } from 'react-localize-redux';
 
 import QuestionCommentSingle from './QuestionCommentSingle';
 import { makeToast } from 'actions';
+import TextArea from 'antd/lib/input/TextArea';
 
 /**
  * Viser kommentarer til et spørgsmål
@@ -113,6 +114,7 @@ const QuestionComments = ({ comments, user, question, writeComment, editComment,
                 placeholder={translate('questionComments.write_a_comment')}
                 onChange={(e) => setComment(e.target.value)}
                 value={comment}
+                autosize={{ minRows: 3 }}
               />
             )}
           </Translate>
