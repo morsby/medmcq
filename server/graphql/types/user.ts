@@ -3,7 +3,6 @@ import { Context } from 'graphql/apolloServer';
 import QuestionUserAnswer from 'models/question_user_answer';
 import User from 'models/user';
 import jwt from 'jsonwebtoken';
-import _ from 'lodash';
 import QuestionCommentLike from 'models/question_comment_like';
 import QuestionBookmark from 'models/question_bookmark';
 import QuestionComment from 'models/question_comment';
@@ -11,6 +10,7 @@ import sgMail from '@sendgrid/mail';
 import { urls } from 'misc/vars';
 import ManualCompletedSet from 'models/manual_completed_set';
 import crypto from 'crypto';
+import _ from 'lodash';
 
 export const typeDefs = gql`
   extend type Query {
@@ -58,14 +58,20 @@ export const typeDefs = gql`
     password: String
     role: Role
     bookmarks: [Bookmark]
-    answers(semester: Int): [Answer]
+    answers: [Answer]
     specialtyVotes: [SpecialtyVote]
     tagVotes: [TagVote]
     likes: [Like]
     liked: [Like]
     manualCompletedSets: [ManualCompletedSet]
-    publicComments(semester: Int): [Comment]
-    privateComments(semester: Int): [Comment]
+    publicComments: [Comment]
+    privateComments: [Comment]
+    answeredSets: [AnsweredSet]
+  }
+
+  type AnsweredSet {
+    examSetId: Int
+    count: Int
   }
 
   type Role {
@@ -287,6 +293,30 @@ export const resolvers = {
     manualCompletedSets: async ({ id }) => {
       const completedSets = await ManualCompletedSet.query().where({ userId: id });
       return completedSets.map((completedSet) => completedSet.setId);
+    },
+    answeredSets: async ({ id }, args, ctx: Context) => {
+      // Get all questionIds that have been at least answered once
+      const answeredQuestions = await QuestionUserAnswer.query()
+        .where({ userId: id })
+        .distinct('questionId')
+        .select('questionId');
+
+      // Find all questions corresponding to the answeredQuestion Ids
+      const questions = await ctx.questionLoaders.questionLoader.loadMany(
+        answeredQuestions.map((aq) => aq.questionId)
+      );
+      const examSetIds = _.uniq(questions.map((question) => question.examSetId));
+
+      // Count the questions answered based on each examSetId
+      let answeredSets = [];
+      for (let examSetId of examSetIds) {
+        answeredSets.push({
+          examSetId,
+          count: questions.filter((question) => question.examSetId === examSetId).length
+        });
+      }
+
+      return answeredSets;
     }
   },
 

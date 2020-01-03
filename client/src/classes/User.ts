@@ -24,8 +24,9 @@ interface User {
   email: string;
   answers: Answer[];
   likes: Like[];
-  manualCompletedSets: { setId: number }[];
+  manualCompletedSets: { examSetId: number }[];
   bookmarks: Bookmark[];
+  answeredSets: { examSetId: number; count: number }[];
 }
 
 export interface Answer {
@@ -109,6 +110,10 @@ class User {
             question {
               id
             }
+          }
+          answeredSets {
+            examSetId
+            count
           }
         }
       }

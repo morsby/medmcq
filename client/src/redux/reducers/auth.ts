@@ -16,13 +16,13 @@ const authReducer = createSlice({
     logout: (state) => {
       state.user = null;
     },
-    manualCompleteSet: (state, action: PayloadAction<{ setId: number }>) => {
+    manualCompleteSet: (state, action: PayloadAction<{ examSetId: number }>) => {
       const index = state.user.manualCompletedSets.findIndex(
-        (completedSet) => completedSet.setId === action.payload.setId
+        (completedSet) => completedSet.examSetId === action.payload.examSetId
       );
       if (index < 0) {
         // Hvis brugeren har tilføjet sættet
-        state.user.manualCompletedSets.push({ setId: action.payload.setId });
+        state.user.manualCompletedSets.push({ examSetId: action.payload.examSetId });
       } else {
         // Hvis brugeren har fjernet sættet
         state.user.manualCompletedSets.splice(index, 1);

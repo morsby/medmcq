@@ -54,6 +54,15 @@ const SetRadioButton: React.SFC<SetRadioButtonProps> = ({ set }) => {
                   name="selectedSetId"
                   onChange={() => handleChange(set.id)}
                 />{' '}
+                {user && (
+                  <span>
+                    {
+                      user.answeredSets.find((answeredSet) => answeredSet.examSetId === set.id)
+                        .count
+                    }{' '}
+                    / 80
+                  </span>
+                )}
                 {user && !manualLoading && (
                   <Icon
                     name="check"
