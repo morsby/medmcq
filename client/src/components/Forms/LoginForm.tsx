@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { urls } from '../../utils/common';
 import { Button, Divider, Form, Message } from 'semantic-ui-react';
-import { Translate } from 'react-localize-redux';
+import { Translate, withLocalize, LocalizeContextProps } from 'react-localize-redux';
 import User from 'classes/User';
 import { useHistory } from 'react-router';
 import { useFormik } from 'formik';
@@ -11,9 +11,9 @@ import FormField from './Fields/FormField';
  * Component der viser login-formularen.
  * Kaldes af ./Login.js
  */
-export interface LoginFormProps {}
+export interface LoginFormProps extends LocalizeContextProps {}
 
-const LoginForm: React.SFC<LoginFormProps> = () => {
+const LoginForm: React.SFC<LoginFormProps> = ({ translate }) => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const history = useHistory();
@@ -47,31 +47,28 @@ const LoginForm: React.SFC<LoginFormProps> = () => {
   };
 
   return (
-    <>
-      <Translate>
-        {({ translate }) => (
-          <Form onSubmit={formik.handleSubmit}>
-            <FormField
-              name="username"
-              placeholder={translate('loginForm.username') as string}
-              onChange={formik.handleChange}
-              formik={formik}
-            />
-            <FormField
-              name="password"
-              placeholder={translate('loginForm.password') as string}
-              onChange={formik.handleChange}
-              formik={formik}
-            />
+    <div>
+      <Form onSubmit={formik.handleSubmit}>
+        <FormField
+          name="username"
+          placeholder={translate('loginForm.username') as string}
+          onChange={formik.handleChange}
+          formik={formik}
+        />
+        <FormField
+          name="password"
+          placeholder={translate('loginForm.password') as string}
+          onChange={formik.handleChange}
+          formik={formik}
+        />
 
-            <Divider hidden />
-            <Button loading={loading} floated="left" disabled={!formik.isValid || loading} positive>
-              {translate('loginForm.login')}
-            </Button>
-            {error && <Message color="red">{error}</Message>}
-          </Form>
-        )}
-      </Translate>
+        <Divider hidden />
+        <Button loading={loading} floated="left" disabled={!formik.isValid || loading} positive>
+          {translate('loginForm.login')}
+        </Button>
+        {error && <Message color="red">{error}</Message>}
+      </Form>
+
       <div
         style={{
           display: 'flex',
@@ -86,8 +83,8 @@ const LoginForm: React.SFC<LoginFormProps> = () => {
           <Translate id="loginForm.forgot_password" />
         </Button>
       </div>
-    </>
+    </div>
   );
 };
 
-export default LoginForm;
+export default withLocalize(LoginForm);

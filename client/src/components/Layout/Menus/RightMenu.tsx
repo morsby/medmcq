@@ -8,6 +8,7 @@ import { ReduxState } from 'redux/reducers';
 import settingsReducer from 'redux/reducers/settings';
 import User from 'classes/User';
 import Quiz from 'classes/Quiz';
+import Comment from 'classes/Comment';
 
 export interface RightMenuProps extends LocalizeContextProps {
   handleNavigation: Function;
@@ -23,7 +24,7 @@ const RightMenu: React.SFC<RightMenuProps> = ({
   const activeLanguage = useSelector((state: ReduxState) => state.settings.language);
   const user = useSelector((state: ReduxState) => state.auth.user);
 
-  const fetchQuestionsByCommentIds = async (commentIds) => {
+  const startQuizByLikes = async (commentIds: Comment['id'][]) => {
     setLoading(true);
     commentIds = _.uniq(commentIds);
     await Quiz.start({ commentIds });
@@ -31,7 +32,7 @@ const RightMenu: React.SFC<RightMenuProps> = ({
     setLoading(false);
   };
 
-  const changeLang = (lang) => {
+  const changeLang = (lang: string) => {
     setActiveLanguage(lang);
     dispatch(settingsReducer.actions.changeSettings({ type: 'language', value: lang }));
   };
@@ -63,9 +64,7 @@ const RightMenu: React.SFC<RightMenuProps> = ({
           </strong>
         </Menu.Item>
         {!loading ? (
-          <Menu.Item
-            onClick={() => fetchQuestionsByCommentIds(user.likes.map((like) => like.commentId))}
-          >
+          <Menu.Item onClick={() => startQuizByLikes(user.likes.map((like) => like.commentId))}>
             <Icon name="thumbs up outline" /> {user.likes.length}
           </Menu.Item>
         ) : (
