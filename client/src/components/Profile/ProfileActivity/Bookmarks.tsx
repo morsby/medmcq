@@ -19,7 +19,7 @@ const Bookmarks: React.SFC<BookmarksProps> = () => {
   if (bookmarks.length === 0) return <Translate id="profileBookmarks.no_bookmarks" />;
 
   const openAll = async () => {
-    Quiz.start({ ids: _.map(bookmarks, (bookmark) => bookmark.id) });
+    Quiz.start({ ids: _.map(bookmarks, (bookmark) => bookmark.question.id) });
     history.push('/quiz');
   };
 
@@ -28,7 +28,7 @@ const Bookmarks: React.SFC<BookmarksProps> = () => {
       <Button onClick={openAll}>
         <Translate id="profileActivity.accordionElements.startAll" />
       </Button>
-      {_.map(bookmarks, (bookmark, i) => (
+      {bookmarks.map((bookmark, i) => (
         <div key={bookmark.id}>
           {Number(i) > 0 && <Divider />}
           <div dangerouslySetInnerHTML={{ __html: marked(bookmark.question.text) }} />
