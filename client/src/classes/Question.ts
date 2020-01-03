@@ -17,7 +17,7 @@ export interface QuestionFilterInput {
   season: string;
   ids: number[];
   n: number;
-  setId: number;
+  examSetId: number;
   onlyNew: boolean;
   onlyWrong: boolean;
   commentIds: number[];

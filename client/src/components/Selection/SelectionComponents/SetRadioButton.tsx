@@ -1,15 +1,11 @@
-import React, { useState } from 'react';
-
-import _ from 'lodash';
-
-import { Form, Radio, Divider, Icon, Loader } from 'semantic-ui-react';
-
+import React from 'react';
+import { Form, Radio, Divider } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 import { useSelector } from 'react-redux';
-import User from 'classes/User';
 import ExamSet from 'classes/ExamSet';
 import { ReduxState } from 'redux/reducers';
 import Selection from 'classes/Selection';
+import SetRadioButtonMetadata from './SetRadioButtonMetadata';
 
 export interface SetRadioButtonProps {
   set: ExamSet;
@@ -17,17 +13,10 @@ export interface SetRadioButtonProps {
 
 const SetRadioButton: React.SFC<SetRadioButtonProps> = ({ set }) => {
   const user = useSelector((state: ReduxState) => state.auth.user);
-  const chosenSetId = useSelector((state: ReduxState) => state.selection.setId);
-  const [manualLoading, setManualLoading] = useState(false);
+  const chosenSetId = useSelector((state: ReduxState) => state.selection.examSetId);
 
-  const handleManualCompletion = async () => {
-    setManualLoading(true);
-    await User.manualCompleteSet({ setId: set.id });
-    setManualLoading(false);
-  };
-
-  const handleChange = async (setId: number) => {
-    await Selection.change({ type: 'setId', value: setId });
+  const handleChange = async (examSetId: number) => {
+    await Selection.change({ type: 'examSetId', value: examSetId });
   };
 
   return (
@@ -45,7 +34,6 @@ const SetRadioButton: React.SFC<SetRadioButtonProps> = ({ set }) => {
               label = label.replace('Efterår', 'Autumn');
               label = label.replace('(reeks)', '(re-ex)');
             }
-
             return (
               <>
                 <Radio
@@ -54,25 +42,7 @@ const SetRadioButton: React.SFC<SetRadioButtonProps> = ({ set }) => {
                   name="selectedSetId"
                   onChange={() => handleChange(set.id)}
                 />{' '}
-                {user && (
-                  <span>
-                    {
-                      user.answeredSets.find((answeredSet) => answeredSet.examSetId === set.id)
-                        .count
-                    }{' '}
-                    / 80
-                  </span>
-                )}
-                {user && !manualLoading && (
-                  <Icon
-                    name="check"
-                    onClick={handleManualCompletion}
-                    style={{ cursor: 'pointer' }}
-                    color={_.find(user.manualCompletedSets, { id: set.id }) ? 'orange' : 'grey'}
-                  />
-                )}
-                {manualLoading && <Loader active inline size="mini" />}
-                <Divider vertical hidden />
+                {user && <SetRadioButtonMetadata user={user} examSetId={set.id} />}
               </>
             );
           }}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { breakpoints, urls } from 'utils/common';
 
@@ -19,6 +19,7 @@ import { useHistory } from 'react-router';
 import Semester from 'classes/Semester';
 import Quiz from 'classes/Quiz';
 import LoadingPage from 'components/Misc/Utility/LoadingPage';
+import User from 'classes/User';
 
 export interface SelectionProps extends LocalizeContextProps {}
 
@@ -40,6 +41,10 @@ const Selection: React.SFC<SelectionProps> = ({ addTranslation, translate }) => 
     addTranslation(selectionTranslations);
     Semester.fetchAll();
   }, [addTranslation]);
+
+  useEffect(() => {
+    User.fetch();
+  }, [])
 
   /**
    * Func der (efter validering) henter spørgsmålene

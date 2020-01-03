@@ -26,7 +26,7 @@ export const typeDefs = gql`
     editUser(data: UserEditInput): String
     forgotPassword(email: String!): String
     resetPassword(token: String!, password: String!): String
-    manualCompleteSet(setId: Int!, userId: Int!): String
+    manualCompleteSet(examSetId: Int!, userId: Int!): String
     bookmark(questionId: Int!): String
   }
 
@@ -58,14 +58,14 @@ export const typeDefs = gql`
     password: String
     role: Role
     bookmarks: [Bookmark]
-    answers: [Answer]
+    answers(semester: Int): [Answer]
     specialtyVotes: [SpecialtyVote]
     tagVotes: [TagVote]
     likes: [Like]
     liked: [Like]
     manualCompletedSets: [ManualCompletedSet]
-    publicComments: [Comment]
-    privateComments: [Comment]
+    publicComments(semester: Int): [Comment]
+    privateComments(semester: Int): [Comment]
     answeredSets: [AnsweredSet]
   }
 
@@ -89,7 +89,7 @@ export const typeDefs = gql`
   }
 
   type ManualCompletedSet {
-    setId: Int
+    examSetId: Int
   }
 `;
 
@@ -292,7 +292,7 @@ export const resolvers = {
     },
     manualCompletedSets: async ({ id }) => {
       const completedSets = await ManualCompletedSet.query().where({ userId: id });
-      return completedSets.map((completedSet) => completedSet.setId);
+      return completedSets.map((completedSet) => completedSet.examSetId);
     },
     answeredSets: async ({ id }, args, ctx: Context) => {
       // Get all questionIds that have been at least answered once

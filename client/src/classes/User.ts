@@ -66,7 +66,7 @@ class User {
     `;
 
     const user = await Apollo.query<User>('user', query);
-    await store.dispatch(authReducer.actions.login(user));
+    await User.fetch();
     return user;
   };
 
@@ -198,16 +198,16 @@ class User {
     return isAvailable;
   };
 
-  static manualCompleteSet = async ({ setId }: { setId: number }) => {
+  static manualCompleteSet = async ({ examSetId }: { examSetId: number }) => {
     const mutation = gql`
-      mutation($setId: Int!, $userId: Int!) {
-        manualCompleteSet(setId: $setId, userId: $userId)
+      mutation($examSetId: Int!, $userId: Int!) {
+        manualCompleteSet(examSetId: $examSetId, userId: $userId)
       }
     `;
 
-    await Apollo.mutate('manualCompleteSet', mutation, { setId });
+    await Apollo.mutate('manualCompleteSet', mutation, { examSetId });
 
-    await store.dispatch(authReducer.actions.manualCompleteSet({ setId }));
+    await store.dispatch(authReducer.actions.manualCompleteSet({ examSetId }));
   };
 
   static bookmark = async ({ questionId }: { questionId: number }) => {

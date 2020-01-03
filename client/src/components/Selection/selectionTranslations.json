@@ -48,7 +48,7 @@
       "For the ${semester}th semester, the following exam sets can be selected:"
     ],
     "subtitle": [
-      "Tryk på fluebenet for manualt at sætte sættet som færdigt.",
+      "Tryk på fluebenet ud for sættet for manuelt det som færdigt.",
       "Click the tickmark to manually set the set as completed."
     ]
   },

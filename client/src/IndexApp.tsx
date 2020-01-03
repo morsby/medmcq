@@ -45,7 +45,7 @@ const persistConfig = {
   stateReconciler: autoMergeLevel2, // see "Merge Process" section for details.
   version: 11,
   migrate: createMigrate(migrations),
-  whitelist: ['quiz', 'questions', 'metadata', 'ui', 'settings', 'shareBuilder'] // to disable persists
+  blacklist: ['auth', 'profile']
 };
 
 const pReducer = persistReducer(persistConfig, rootReducer);

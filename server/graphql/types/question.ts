@@ -31,7 +31,7 @@ export const typeDefs = gql`
     season: String
     ids: [Int]
     n: Int
-    setId: Int
+    examSetId: Int
     onlyNew: Boolean
     onlyWrong: Boolean
     commentIds: [Int]
@@ -72,7 +72,7 @@ export const resolvers = {
         text,
         tagIds,
         specialtyIds,
-        setId,
+        examSetId,
         search,
         onlyNew,
         onlyWrong,
@@ -98,7 +98,7 @@ export const resolvers = {
       }
 
       // Specifics
-      if (setId) return query.where('examSet.id', setId);
+      if (examSetId) return query.where('examSet.id', examSetId);
       if (search)
         return query
           .joinRelation('semester')

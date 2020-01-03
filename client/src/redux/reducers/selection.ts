@@ -7,7 +7,7 @@ const initialState = {
   onlyNew: false,
   onlyWrong: false,
   semesterId: 1,
-  setId: null,
+  examSetId: null,
   specialtyIds: [],
   tagIds: []
 };
@@ -24,7 +24,7 @@ const selectionReducer = createSlice({
 
       // Vi nulstiller hvis nyt semester
       if (type === 'semesterId') {
-        state.setId = null;
+        state.examSetId = null;
         state.specialtyIds = [];
         state.tagIds = [];
       }
