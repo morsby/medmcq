@@ -5,6 +5,7 @@ import marked from 'marked';
 import { useSelector } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
 import { QuestionAnswer } from 'classes/Question';
+import { Translate } from 'react-localize-redux';
 
 /**
  * Component der viser svarmuligheder.
@@ -70,7 +71,7 @@ const QuestionAnswerButtons: React.SFC<QuestionAnswerButtonsProps> = ({
           />
           {chosenAnswer && !percentagesHided && (
             <Popup position="top center" trigger={<span>{answer.correctPercent}%</span>}>
-              Procent af alle, der har besvaret spørgsmålet med dette valg.
+              <Translate id="question.percentage_popup" />
             </Popup>
           )}
         </div>
@@ -85,7 +86,6 @@ const QuestionAnswerButtons: React.SFC<QuestionAnswerButtonsProps> = ({
       {generateButton(2)}
       <Divider hidden />
       {generateButton(3)}
-      <Divider hidden />
     </Button.Group>
   );
 };

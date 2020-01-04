@@ -12,6 +12,7 @@ import { urls } from 'misc/vars';
 import ExamSet from 'models/exam_set';
 import Semester from 'models/semester';
 import sgMail from '@sendgrid/mail';
+import _ from 'lodash';
 
 export const typeDefs = gql`
   extend type Query {
@@ -229,7 +230,11 @@ export const resolvers = {
     },
     answer1: async ({ id }, args, ctx: Context) => {
       const question = await ctx.questionLoaders.questionLoader.load(id);
-      const answers = await ctx.answerLoaders.userAnswersByQuestionIdLoader.load(id);
+      let answers = await ctx.answerLoaders.userAnswersByQuestionIdLoader.load(id);
+      answers = _(answers)
+        .sortBy((answer) => answer.createdAt, 'asc')
+        .uniqBy((answer) => answer.userId)
+        .value();
       const correctPercent = Math.round(
         (answers.filter((answer) => answer.answer === 1).length / answers.length) * 100
       );
@@ -237,7 +242,11 @@ export const resolvers = {
     },
     answer2: async ({ id }, args, ctx: Context) => {
       const question = await ctx.questionLoaders.questionLoader.load(id);
-      const answers = await ctx.answerLoaders.userAnswersByQuestionIdLoader.load(id);
+      let answers = await ctx.answerLoaders.userAnswersByQuestionIdLoader.load(id);
+      answers = _(answers)
+        .sortBy((answer) => answer.createdAt, 'asc')
+        .uniqBy((answer) => answer.userId)
+        .value();
       const correctPercent = Math.round(
         (answers.filter((answer) => answer.answer === 2).length / answers.length) * 100
       );
@@ -245,7 +254,11 @@ export const resolvers = {
     },
     answer3: async ({ id }, args, ctx: Context) => {
       const question = await ctx.questionLoaders.questionLoader.load(id);
-      const answers = await ctx.answerLoaders.userAnswersByQuestionIdLoader.load(id);
+      let answers = await ctx.answerLoaders.userAnswersByQuestionIdLoader.load(id);
+      answers = _(answers)
+        .sortBy((answer) => answer.createdAt, 'asc')
+        .uniqBy((answer) => answer.userId)
+        .value();
       const correctPercent = Math.round(
         (answers.filter((answer) => answer.answer === 3).length / answers.length) * 100
       );

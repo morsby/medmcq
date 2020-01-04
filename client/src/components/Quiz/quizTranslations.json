@@ -37,7 +37,11 @@
     "show_percentages": ["Vis procenter", "Show percentages"],
     "hide_percentages": ["Skjul procenter", "Hide percentages"],
     "report_question": ["Rapporter en fejl i spørgsmålet", "Report an error in the question"],
-    "private_comment": ["Privat kommentar", "Private comment"]
+    "private_comment": ["Privat kommentar", "Private comment"],
+    "percentage_popup": [
+      "Procent af alle, der ved første forsøg har besvaret spørgsmålet med dette valg.",
+      "Percentage of all, who on their first try have chosen this answer."
+    ]
   },
   "questionMetadata": {
     "set": ["Sæt:", "Set:"],
