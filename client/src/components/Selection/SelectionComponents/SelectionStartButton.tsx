@@ -1,0 +1,50 @@
+import React, { useState } from 'react';
+import { Button } from 'semantic-ui-react';
+import { Translate } from 'react-localize-redux';
+import Quiz from 'classes/Quiz';
+import { urls } from 'utils/common';
+import { ReduxState } from 'redux/reducers';
+import { useHistory } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
+export interface SelectionStartButtonProps {}
+
+const SelectionStartButton: React.SFC<SelectionStartButtonProps> = () => {
+  const [startLoading, setStartLoading] = useState(false);
+  const history = useHistory();
+  const quizQuestions = useSelector((state: ReduxState) => state.questions.questions);
+
+  const handleStartNew = async () => {
+    setStartLoading(true);
+    await Quiz.start();
+    history.push(urls.quiz);
+  };
+
+  const handleContinue = async () => {
+    history.push(urls.quiz);
+  };
+
+  return (
+    <div>
+      <Button
+        loading={startLoading}
+        disabled={startLoading}
+        style={{ cursor: 'pointer' }}
+        fluid
+        color="green"
+        basic
+        onClick={() => handleStartNew()}
+      >
+        Start!
+      </Button>
+      <div style={{ height: '5px' }} />
+      {quizQuestions.length > 0 && (
+        <Button basic fluid color="orange" onClick={() => handleContinue()}>
+          <Translate id="selection.static.continue_quiz" />
+        </Button>
+      )}
+    </div>
+  );
+};
+
+export default SelectionStartButton;

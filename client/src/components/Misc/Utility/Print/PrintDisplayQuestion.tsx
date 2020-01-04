@@ -24,9 +24,6 @@ const PrintDisplayQuestion: React.SFC<PrintDisplayQuestionProps> = ({
   let { text, answer1, answer2, answer3, correctAnswers, images, examSet } = question;
 
   text = subSupScript(text);
-  answer1 = subSupScript(correctAnswers[0]);
-  answer2 = subSupScript(correctAnswers[1]);
-  answer3 = subSupScript(correctAnswers[3]);
 
   return (
     <div>

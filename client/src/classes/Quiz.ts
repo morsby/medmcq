@@ -23,11 +23,27 @@ class Quiz {
       n,
       examSetId,
       onlyNew,
-      onlyWrong
+      onlyWrong,
+      search,
+      type
     } = reduxStore.selection;
 
     if (!filter) {
-      filter = { specialtyIds, tagIds, semesterId, n, examSetId };
+      const rootFilter = { semesterId, n };
+
+      switch (type) {
+        case 'random':
+          filter = { ...rootFilter, search };
+          break;
+        case 'specialer':
+          filter = { ...rootFilter, tagIds, specialtyIds };
+          break;
+        case 'set':
+          filter = { ...rootFilter, examSetId };
+          break;
+        default:
+          filter = rootFilter;
+      }
     }
 
     filter = { ...filter, onlyNew, onlyWrong };

@@ -5,7 +5,7 @@ import { breakpoints, urls } from 'utils/common';
 import selectionTranslations from './selectionTranslations.json';
 import { withLocalize, Translate, LocalizeContextProps } from 'react-localize-redux';
 
-import { Container, Header, Divider, Button, Message, Input } from 'semantic-ui-react';
+import { Container, Header, Divider, Message, Input } from 'semantic-ui-react';
 
 import SelectionSemesterSelector from 'components/Selection/SelectionComponents/SelectionSemesterSelector';
 import SelectionNSelector from 'components/Selection/SelectionComponents/SelectionNSelector';
@@ -15,11 +15,13 @@ import SelectionTypeSelector from 'components/Selection/SelectionComponents/Sele
 import SelectionUniqueSelector from 'components/Selection/SelectionComponents/SelectionUniqueSelector';
 import { useSelector } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
-import { useHistory } from 'react-router';
 import Semester from 'classes/Semester';
 import Quiz from 'classes/Quiz';
 import LoadingPage from 'components/Misc/Utility/LoadingPage';
 import User from 'classes/User';
+import SelectionStartButton from './SelectionComponents/SelectionStartButton';
+import SelectionClass from 'classes/Selection';
+import { useHistory } from 'react-router-dom';
 
 export interface SelectionProps extends LocalizeContextProps {}
 
@@ -28,14 +30,13 @@ export interface SelectionProps extends LocalizeContextProps {}
  */
 const Selection: React.SFC<SelectionProps> = ({ addTranslation, translate }) => {
   const [errors, setErrors] = useState([]);
-  const [search, setSearch] = useState('');
+  const history = useHistory();
   const [startLoading, setStartLoading] = useState(false);
+  const search = useSelector((state: ReduxState) => state.selection.search);
   const semesters = useSelector((state: ReduxState) => state.metadata.semesters);
   const type = useSelector((state: ReduxState) => state.selection.type);
   const selectedSemester = useSelector((state: ReduxState) => state.selection.semesterId);
   const user = useSelector((state: ReduxState) => state.auth.user);
-  const quizQuestions = useSelector((state: ReduxState) => state.questions.questions);
-  const history = useHistory();
 
   useEffect(() => {
     addTranslation(selectionTranslations);
@@ -44,47 +45,20 @@ const Selection: React.SFC<SelectionProps> = ({ addTranslation, translate }) => 
 
   useEffect(() => {
     User.fetch();
-  }, [])
-
-  /**
-   * Func der (efter validering) henter spørgsmålene
-   * @param  {string} quizType Er der tale om en ny quiz eller fortsættelse
-   *                           af en gammel?
-   */
-  const searchHandler = (e, { value }) => {
-    setSearch(value);
-  };
+  }, []);
 
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
-      handleSubmit('new');
-    }
-  };
-
-  const handleSubmit = async (quizType) => {
-    let err = [];
-
-    if (err.length === 0) {
-      setStartLoading(true);
-      // Hvis vi er ved at søge
-      if (search !== '') {
-        Quiz.start({ semesterId: selectedSemester, search });
-      }
-
-      // tjek for fejl, start eller ej
-      // Ny quiz? Hent spørgsmål
-      if (quizType === 'new') {
-        await Quiz.start();
-      }
-
-      // Uanset om det er en ny quiz eller ej – skift url til quizzen.
+      Quiz.start();
       history.push(urls.quiz);
-    } else {
-      setErrors(err);
     }
   };
 
-  if (!semesters) return <LoadingPage />
+  const handleSearch = (search: string) => {
+    SelectionClass.change({ type: 'search', value: search });
+  };
+
+  if (!semesters) return <LoadingPage />;
   return (
     <div className="flex-container">
       <Container className="content">
@@ -120,7 +94,7 @@ const Selection: React.SFC<SelectionProps> = ({ addTranslation, translate }) => 
             </p>
             <Input
               value={search}
-              onChange={searchHandler}
+              onChange={(e, { value }) => handleSearch(value)}
               fluid
               icon="search"
               iconPosition="left"
@@ -149,25 +123,7 @@ const Selection: React.SFC<SelectionProps> = ({ addTranslation, translate }) => 
         )}
         {window.innerWidth < breakpoints.mobile && <Divider hidden />}
         {user && type !== 'set' && <SelectionUniqueSelector />}
-
-        <Button
-          loading={startLoading}
-          disabled={startLoading}
-          style={{ cursor: 'pointer' }}
-          fluid
-          color="green"
-          basic
-          onClick={() => handleSubmit('new')}
-        >
-          Start!
-        </Button>
-        <div style={{ height: '5px' }} />
-        {quizQuestions.length > 0 && (
-          <Button basic fluid color="orange" onClick={() => handleSubmit('cont')}>
-            <Translate id="selection.static.continue_quiz" />
-          </Button>
-        )}
-
+        <SelectionStartButton />
         <Divider hidden />
       </Container>
     </div>

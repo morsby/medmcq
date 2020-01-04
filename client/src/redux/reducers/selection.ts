@@ -9,7 +9,8 @@ const initialState = {
   semesterId: 1,
   examSetId: null,
   specialtyIds: [],
-  tagIds: []
+  tagIds: [],
+  search: ''
 };
 
 const selectionReducer = createSlice({

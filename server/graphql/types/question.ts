@@ -80,9 +80,8 @@ export const resolvers = {
       } = filter;
       let { n } = filter;
 
-      let query = Question.query();
-
       if (!filter) throw new Error('No arguments for filter provided');
+      let query = Question.query();
 
       if (ids) return query.findByIds(ids);
       if (commentIds)
@@ -100,9 +99,10 @@ export const resolvers = {
       // Specifics
       if (examSetId) return query.where('examSet.id', examSetId);
       if (search)
-        return query
-          .joinRelation('semester')
-          .whereRaw('MATCH (text, answer1, answer2, answer3) AGAINST (? IN BOOLEAN MODE)', search);
+        return query.whereRaw(
+          'MATCH (text, answer1, answer2, answer3) AGAINST (? IN BOOLEAN MODE)',
+          search
+        );
 
       // Start filtering based on other values
 
@@ -130,7 +130,10 @@ export const resolvers = {
 
         query = query
           .join('questionSpecialtyVote as specialtyVote', 'question.id', 'specialtyVote.questionId')
-          .whereIn('question.id', votes.map((specialtyVote) => specialtyVote.questionId));
+          .whereIn(
+            'question.id',
+            votes.map((specialtyVote) => specialtyVote.questionId)
+          );
       }
 
       if (tagIds && tagIds.length > 0) {
@@ -144,7 +147,10 @@ export const resolvers = {
 
         query = query
           .join('questionTagVote as tagVote', 'question.id', 'tagVote.questionId')
-          .whereIn('question.id', votes.map((vote) => vote.questionId));
+          .whereIn(
+            'question.id',
+            votes.map((vote) => vote.questionId)
+          );
       }
 
       if (text) {
