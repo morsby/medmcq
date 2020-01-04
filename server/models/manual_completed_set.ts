@@ -2,7 +2,7 @@ import { Model } from 'objection';
 
 interface ManualCompletedSet {
   id: number;
-  examSetId: number;
+  setId: number;
   userId: number;
 }
 

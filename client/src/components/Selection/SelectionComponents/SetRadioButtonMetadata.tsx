@@ -24,19 +24,23 @@ const SetRadioButtonMetadata: React.SFC<SetRadioButtonMetadataProps> = ({ user, 
 
   const getColor = () => {
     if (getCount() === 80) {
-      return 'darkgreen'
-    };
-    return 'darkgrey'
-  }
+      return 'darkgreen';
+    }
+    return 'darkgrey';
+  };
 
   return (
-    <span style={{marginLeft: '0.5em'}}>
+    <span style={{ marginLeft: '0.5em' }}>
       {!manualLoading && (
         <Icon
           name="check"
           onClick={handleManualCompletion}
           style={{ cursor: 'pointer' }}
-          color={_.find(user.manualCompletedSets, { id: examSetId }) ? 'orange' : 'grey'}
+          color={
+            user.manualCompletedSets.find((completedSets) => completedSets.examSetId === examSetId)
+              ? 'green'
+              : 'grey'
+          }
         />
       )}
       {manualLoading && <Loader active inline size="mini" />}

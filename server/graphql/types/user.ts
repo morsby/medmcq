@@ -26,7 +26,7 @@ export const typeDefs = gql`
     editUser(data: UserEditInput): String
     forgotPassword(email: String!): String
     resetPassword(token: String!, password: String!): String
-    manualCompleteSet(examSetId: Int!, userId: Int!): String
+    manualCompleteSet(examSetId: Int!): String
     bookmark(questionId: Int!): String
   }
 
@@ -216,6 +216,19 @@ export const resolvers = {
     bookmark: async (root, { questionId }, ctx: Context) => {
       const bookmark = await QuestionBookmark.query().insert({ questionId, userId: ctx.user.id });
       return { id: bookmark.id };
+    },
+    manualCompleteSet: async (root, { examSetId }, ctx: Context) => {
+      const exists = await ManualCompletedSet.query().findOne({
+        userId: ctx.user.id,
+        setId: examSetId
+      });
+      if (exists) {
+        await exists.$query().delete();
+        return 'Set has been marked as not completed';
+      } else {
+        await ManualCompletedSet.query().insert({ userId: ctx.user.id, setId: examSetId });
+        return 'Set has been marked as completed';
+      }
     }
   },
 
@@ -292,7 +305,7 @@ export const resolvers = {
     },
     manualCompletedSets: async ({ id }) => {
       const completedSets = await ManualCompletedSet.query().where({ userId: id });
-      return completedSets.map((completedSet) => completedSet.examSetId);
+      return completedSets.map((completedSet) => ({ examSetId: completedSet.setId }));
     },
     answeredSets: async ({ id }, args, ctx: Context) => {
       // Get all questionIds that have been at least answered once

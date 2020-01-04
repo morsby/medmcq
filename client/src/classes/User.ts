@@ -115,6 +115,9 @@ class User {
             examSetId
             count
           }
+          manualCompletedSets {
+            examSetId
+          }
         }
       }
     `;
@@ -198,15 +201,17 @@ class User {
     return isAvailable;
   };
 
+  /**
+   * Completes a examSet manually, by clicking on the checkmark.
+   */
   static manualCompleteSet = async ({ examSetId }: { examSetId: number }) => {
     const mutation = gql`
-      mutation($examSetId: Int!, $userId: Int!) {
-        manualCompleteSet(examSetId: $examSetId, userId: $userId)
+      mutation($examSetId: Int!) {
+        manualCompleteSet(examSetId: $examSetId)
       }
     `;
 
     await Apollo.mutate('manualCompleteSet', mutation, { examSetId });
-
     await store.dispatch(authReducer.actions.manualCompleteSet({ examSetId }));
   };
 
