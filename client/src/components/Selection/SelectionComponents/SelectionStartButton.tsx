@@ -5,6 +5,7 @@ import Quiz from 'classes/Quiz';
 import { urls } from 'utils/common';
 import { ReduxState } from 'redux/reducers';
 import { useHistory } from 'react-router-dom';
+import Selection from 'classes/Selection';
 import { useSelector } from 'react-redux';
 
 export interface SelectionStartButtonProps {}
@@ -17,6 +18,7 @@ const SelectionStartButton: React.SFC<SelectionStartButtonProps> = () => {
   const handleStartNew = async () => {
     setStartLoading(true);
     await Quiz.start();
+    Selection.change({ type: 'search', value: '' });
     history.push(urls.quiz);
   };
 

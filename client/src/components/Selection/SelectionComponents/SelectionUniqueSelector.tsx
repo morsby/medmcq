@@ -38,7 +38,6 @@ const SelectionUniqueSelector: React.SFC<SelectionUniqueSelectorProps> = () => {
           </>
         )}
       </Translate>
-      <Divider hidden />
     </>
   );
 };

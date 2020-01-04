@@ -113,7 +113,7 @@ const Question: React.SFC<QuestionProps> = () => {
               <Responsive as="div" minWidth={breakpoints.mobile + 1}>
                 <Divider />
 
-                <QuestionAnswerButtons answer={answer?.answer} handleAnswer={handleAnswer} />
+                <QuestionAnswerButtons chosenAnswer={answer?.answer} handleAnswer={handleAnswer} />
               </Responsive>
             </Grid.Column>
             {question.images.length > 0 && (
@@ -127,7 +127,7 @@ const Question: React.SFC<QuestionProps> = () => {
         </Grid>
         <Responsive as="div" maxWidth={breakpoints.mobile}>
           <Divider />
-          <QuestionAnswerButtons handleAnswer={handleAnswer} answer={answer?.answer} />
+          <QuestionAnswerButtons handleAnswer={handleAnswer} chosenAnswer={answer?.answer} />
         </Responsive>
         <QuestionMetadata />
         <QuestionExtras width={width} />

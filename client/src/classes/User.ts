@@ -22,14 +22,14 @@ interface User {
   username: string;
   password?: string;
   email: string;
-  answers: Answer[];
+  answers: UserAnswer[];
   likes: Like[];
   manualCompletedSets: { examSetId: number }[];
   bookmarks: Bookmark[];
   answeredSets: { examSetId: number; count: number }[];
 }
 
-export interface Answer {
+export interface UserAnswer {
   id: number;
   answer: number;
   answerTime: number;

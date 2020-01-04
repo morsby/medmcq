@@ -27,10 +27,9 @@ const SelectionTypeSelector: React.SFC<SelectionTypeSelectorProps> = () => {
       >
         <Translate id="selectionTypeSelector.types.random" />
       </Button>
-
       <Button
-        value="specialer"
-        active={type === 'specialer'}
+        value="metadata"
+        active={type === 'metadata'}
         onClick={(e) => handleChange(e.currentTarget.value)}
       >
         <Translate id="selectionTypeSelector.types.specialties" />

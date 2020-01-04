@@ -27,9 +27,9 @@ export interface QuestionFilterInput {
 interface Question {
   id: number;
   text: string;
-  answer1: string;
-  answer2: string;
-  answer3: string;
+  answer1: QuestionAnswer;
+  answer2: QuestionAnswer;
+  answer3: QuestionAnswer;
   examSet: ExamSet;
   correctAnswers: number[];
   specialties: Specialty[];
@@ -41,6 +41,11 @@ interface Question {
   specialtyVotes: SpecialtyVote[];
   isBookmarked: boolean;
   isLiked: boolean;
+}
+
+export interface QuestionAnswer {
+  answer: string;
+  correctPercent: number;
 }
 
 class Question {
@@ -66,9 +71,18 @@ class Question {
       tagVotes {
         ...TagVote
       }
-      answer1
-      answer2
-      answer3
+      answer1 {
+        answer
+        correctPercent
+      }
+      answer2 {
+        answer
+        correctPercent
+      }
+      answer3 {
+        answer
+        correctPercent
+      }
       images
       correctAnswers
       publicComments {

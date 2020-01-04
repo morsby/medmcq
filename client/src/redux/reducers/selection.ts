@@ -2,7 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { QuestionFilterInput } from 'classes/Question';
 
 const initialState = {
-  type: 'random',
+  type: 'random' as 'random' | 'metadata' | 'set',
   n: 10,
   onlyNew: false,
   onlyWrong: false,

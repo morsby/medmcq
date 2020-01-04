@@ -1,13 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-
-import { Button, Divider } from 'semantic-ui-react';
-
+import { Button, Divider, Popup } from 'semantic-ui-react';
 import { evalAnswer, subSupScript } from 'utils/quiz';
 import marked from 'marked';
-import Question from 'classes/Question';
 import { useSelector } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
+import { QuestionAnswer } from 'classes/Question';
 
 /**
  * Component der viser svarmuligheder.
@@ -17,19 +14,20 @@ import { ReduxState } from 'redux/reducers';
  * @param {object}  question Selve spørgsmålet.
  */
 export interface QuestionAnswerButtonsProps {
-  answer: number;
+  chosenAnswer: number | undefined;
   handleAnswer: Function;
 }
 
-const QuestionAnswerButtons: React.SFC<QuestionAnswerButtonsProps> = ({ handleAnswer, answer }) => {
+const QuestionAnswerButtons: React.SFC<QuestionAnswerButtonsProps> = ({
+  handleAnswer,
+  chosenAnswer
+}) => {
   const questionIndex = useSelector((state: ReduxState) => state.quiz.questionIndex);
   const question = useSelector((state: ReduxState) => state.questions.questions[questionIndex]);
-  /**
-   * Func der prefixer svarmuligheder med A, B og C samt laver knappen.
-   * @param  {Number} answerNo Svarmulighed nr. 1, 2 el. 3
-   * @return {Comp}            Selve knappen.
-   */
-  const generateButton = (answerNo) => {
+
+  const generateButton = (answerNo: number) => {
+    const answer: QuestionAnswer = question[`answer${answerNo}`];
+
     let answerText;
     switch (answerNo) {
       case 1:
@@ -44,7 +42,7 @@ const QuestionAnswerButtons: React.SFC<QuestionAnswerButtonsProps> = ({ handleAn
       default:
         break;
     }
-    answerText = answerText + question[`answer${answerNo}`];
+    answerText = answerText + answer.answer;
     /**
      * subSupScript tillader sub- og superscripts vha. markdown-syntaks.
      */
@@ -53,14 +51,28 @@ const QuestionAnswerButtons: React.SFC<QuestionAnswerButtonsProps> = ({ handleAn
       <Button
         style={{ textAlign: 'left' }}
         onClick={() => handleAnswer(answerNo)}
-        color={evalAnswer(question, answer, answerNo)}
+        color={evalAnswer(question, chosenAnswer, answerNo)}
         size="large"
       >
         <div
-          dangerouslySetInnerHTML={{
-            __html: marked(answerText)
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            width: '100%',
+            alignItems: 'center'
           }}
-        />
+        >
+          <div
+            dangerouslySetInnerHTML={{
+              __html: marked(answerText)
+            }}
+          />
+          {chosenAnswer && (
+            <Popup position="top center" trigger={<span>{answer.correctPercent}%</span>}>
+              Procent af alle, der har besvaret spørgsmålet med dette valg.
+            </Popup>
+          )}
+        </div>
       </Button>
     );
   };

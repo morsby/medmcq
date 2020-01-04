@@ -42,9 +42,9 @@ export const typeDefs = gql`
   type Question {
     id: Int
     text: String
-    answer1: String
-    answer2: String
-    answer3: String
+    answer1: QuestionAnswer
+    answer2: QuestionAnswer
+    answer3: QuestionAnswer
     images: [String]
     oldId: String
     examSetQno: Int
@@ -58,6 +58,11 @@ export const typeDefs = gql`
     examSet: ExamSet
     createdAt: String
     updatedAt: String
+  }
+
+  type QuestionAnswer {
+    answer: String
+    correctPercent: Int
   }
 `;
 
@@ -125,7 +130,6 @@ export const resolvers = {
           .groupBy('questionId')
           .sum('value as votes')
           .having('votes', '>', '-1')
-          .orderBy('votes', 'desc')
           .select('questionId');
 
         query = query
@@ -142,7 +146,6 @@ export const resolvers = {
           .groupBy('questionId')
           .sum('value as votes')
           .having('votes', '>', '-1')
-          .orderBy('votes', 'desc')
           .select('questionId');
 
         query = query
@@ -226,15 +229,27 @@ export const resolvers = {
     },
     answer1: async ({ id }, args, ctx: Context) => {
       const question = await ctx.questionLoaders.questionLoader.load(id);
-      return question.answer1;
+      const answers = await ctx.answerLoaders.userAnswersByQuestionIdLoader.load(id);
+      const correctPercent = Math.round(
+        (answers.filter((answer) => answer.answer === 1).length / answers.length) * 100
+      );
+      return { answer: question.answer1, correctPercent };
     },
     answer2: async ({ id }, args, ctx: Context) => {
       const question = await ctx.questionLoaders.questionLoader.load(id);
-      return question.answer2;
+      const answers = await ctx.answerLoaders.userAnswersByQuestionIdLoader.load(id);
+      const correctPercent = Math.round(
+        (answers.filter((answer) => answer.answer === 2).length / answers.length) * 100
+      );
+      return { answer: question.answer2, correctPercent };
     },
     answer3: async ({ id }, args, ctx: Context) => {
       const question = await ctx.questionLoaders.questionLoader.load(id);
-      return question.answer3;
+      const answers = await ctx.answerLoaders.userAnswersByQuestionIdLoader.load(id);
+      const correctPercent = Math.round(
+        (answers.filter((answer) => answer.answer === 3).length / answers.length) * 100
+      );
+      return { answer: question.answer3, correctPercent };
     },
     images: async ({ id }, args, ctx: Context) => {
       const images = await QuestionImage.query().where({ questionId: id });

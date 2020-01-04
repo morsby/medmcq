@@ -38,11 +38,13 @@ const SelectionSpecialtiesSelector = () => {
     };
 
     const getChildrenOfMetadata = (tagId: number) => {
-      return _.filter(semester.tags, (t) => t.parent.id === tagId).map((t) => ({
-        title: `${t.name} (${t.questionCount})`,
-        key: t.id,
-        children: getChildrenOfMetadata(t.id)
-      }));
+      return semester.tags
+        .filter((t) => t.parent.id === tagId)
+        .map((t) => ({
+          title: `${t.name} (${t.questionCount})`,
+          key: t.id,
+          children: getChildrenOfMetadata(t.id)
+        }));
     };
 
     setTagTree(convertMetadataToTree());

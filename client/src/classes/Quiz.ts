@@ -35,7 +35,7 @@ class Quiz {
         case 'random':
           filter = { ...rootFilter, search };
           break;
-        case 'specialer':
+        case 'metadata':
           filter = { ...rootFilter, tagIds, specialtyIds };
           break;
         case 'set':
