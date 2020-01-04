@@ -34,6 +34,8 @@
     "hide_public_comments": ["Skjul offentlige kommentarer (${n})", "Hide public comments (${n})"],
     "show_private_comments": ["Vis private kommentarer (${n})", "Show private comments (${n})"],
     "hide_private_comments": ["Skjul private kommentarer (${n})", "Hide private comments (${n})"],
+    "show_percentages": ["Vis procenter", "Show percentages"],
+    "hide_percentages": ["Skjul procenter", "Hide percentages"],
     "report_question": ["Rapporter en fejl i spørgsmålet", "Report an error in the question"],
     "private_comment": ["Privat kommentar", "Private comment"]
   },

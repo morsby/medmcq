@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Tree } from 'antd';
 
-import { Translate } from 'react-localize-redux';
+import { Translate, LocalizeContextProps, withLocalize } from 'react-localize-redux';
 
 import { Form, Header, Grid, Input, Button } from 'semantic-ui-react';
 import { ReduxState } from 'redux/reducers';
@@ -13,7 +13,11 @@ import 'antd/lib/tree/style/css';
 /**
  * Laver en checkbox for hvert speciale.
  */
-const SelectionSpecialtiesSelector = () => {
+export interface SelectionSpecialtiesSelectorProps extends LocalizeContextProps {}
+
+const SelectionSpecialtiesSelector: React.SFC<SelectionSpecialtiesSelectorProps> = ({
+  translate
+}) => {
   const { semesterId, specialtyIds, tagIds } = useSelector((state: ReduxState) => state.selection);
   const semester = useSelector((state: ReduxState) =>
     state.metadata.semesters.find((semester) => semester.id === semesterId)
@@ -62,14 +66,6 @@ const SelectionSpecialtiesSelector = () => {
       return <Tree.TreeNode key={item.key} {...item} />;
     });
 
-  if (!semesterId) {
-    return (
-      <Header as="h3">
-        <Translate id="selectionSpecialtiesSelector.choose_semester" />
-      </Header>
-    );
-  }
-
   return (
     <Form>
       <Grid columns="equal" stackable>
@@ -113,17 +109,13 @@ const SelectionSpecialtiesSelector = () => {
                 data={{ semester: semester.value }}
               />
             </Header>
-            <Translate>
-              {({ translate }) => (
-                <Input
-                  onChange={(e) => {
-                    setTagSearch(e.target.value);
-                  }}
-                  fluid
-                  placeholder={translate('selectionSpecialtiesSelector.search')}
-                />
-              )}
-            </Translate>
+            <Input
+              onChange={(e) => {
+                setTagSearch(e.target.value);
+              }}
+              fluid
+              placeholder={translate('selectionSpecialtiesSelector.search')}
+            />
             {tagSearch && semester.tags && (
               <Tree
                 checkedKeys={_.filter(
@@ -135,7 +127,7 @@ const SelectionSpecialtiesSelector = () => {
                 ).map((t) => String(t.id))}
                 onCheck={(tags: any, { node }) => {
                   handleChange(
-                    [...tags, ..._.filter(tagIds, (id) => id !== String(node.props.dataRef.id))],
+                    [...tags, ...tagIds.filter((id) => id !== String(node.props.dataRef.id))],
                     'tagIds'
                   ); // Ovenstående er en ret omstændig måde at få ID'er fra det filtrerede array til at også virke med det ikke filtrerede (da ID'er ikke vil eksistere i træet, når de udelukkes i søgning)
                 }}
@@ -181,4 +173,4 @@ const SelectionSpecialtiesSelector = () => {
   );
 };
 
-export default SelectionSpecialtiesSelector;
+export default withLocalize(SelectionSpecialtiesSelector);

@@ -1,8 +1,9 @@
 import React from 'react';
 import { Translate } from 'react-localize-redux';
 import { Button, Divider } from 'semantic-ui-react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
+import settingsReducer from 'redux/reducers/settings';
 
 export interface QuestionExtraButtonsProps {
   width: number;
@@ -21,14 +22,22 @@ const QuestionExtraButtons: React.SFC<QuestionExtraButtonsProps> = ({
   privateCommentsOpen,
   publicCommentsOpen
 }) => {
+  const dispatch = useDispatch();
   const user = useSelector((state: ReduxState) => state.auth.user);
   const questionIndex = useSelector((state: ReduxState) => state.quiz.questionIndex);
   const question = useSelector((state: ReduxState) => state.questions.questions[questionIndex]);
+  const percentagesHided = useSelector((state: ReduxState) => state.settings.hidePercentages);
   const comments = useSelector((state: ReduxState) =>
     state.questions.comments.filter((comment) => comment.question.id === question.id)
   );
   const publicComments = comments.filter((comment) => !comment.isPrivate).length;
   const privateComments = comments.filter((comment) => comment.isPrivate).length;
+
+  const handleHidePercentages = () => {
+    dispatch(
+      settingsReducer.actions.changeSettings({ type: 'hidePercentages', value: !percentagesHided })
+    );
+  };
 
   return (
     <>
@@ -53,9 +62,18 @@ const QuestionExtraButtons: React.SFC<QuestionExtraButtonsProps> = ({
         </Button>
       )}
       {width <= 700 && <Divider hidden />}
-      <Button basic color="orange" floated={width > 700 ? 'right' : null} onClick={onReportToggle}>
-        <Translate id="question.report_question" />
-      </Button>
+      <div style={{ float: width > 700 ? 'right' : null }}>
+        <Button basic onClick={handleHidePercentages}>
+          {percentagesHided ? (
+            <Translate id="question.show_percentages" />
+          ) : (
+            <Translate id="question.hide_percentages" />
+          )}
+        </Button>
+        <Button basic color="orange" onClick={onReportToggle}>
+          <Translate id="question.report_question" />
+        </Button>
+      </div>
     </>
   );
 };

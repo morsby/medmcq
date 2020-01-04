@@ -24,6 +24,7 @@ const QuestionAnswerButtons: React.SFC<QuestionAnswerButtonsProps> = ({
 }) => {
   const questionIndex = useSelector((state: ReduxState) => state.quiz.questionIndex);
   const question = useSelector((state: ReduxState) => state.questions.questions[questionIndex]);
+  const percentagesHided = useSelector((state: ReduxState) => state.settings.hidePercentages);
 
   const generateButton = (answerNo: number) => {
     const answer: QuestionAnswer = question[`answer${answerNo}`];
@@ -67,7 +68,7 @@ const QuestionAnswerButtons: React.SFC<QuestionAnswerButtonsProps> = ({
               __html: marked(answerText)
             }}
           />
-          {chosenAnswer && (
+          {chosenAnswer && !percentagesHided && (
             <Popup position="top center" trigger={<span>{answer.correctPercent}%</span>}>
               Procent af alle, der har besvaret spørgsmålet med dette valg.
             </Popup>
@@ -84,6 +85,7 @@ const QuestionAnswerButtons: React.SFC<QuestionAnswerButtonsProps> = ({
       {generateButton(2)}
       <Divider hidden />
       {generateButton(3)}
+      <Divider hidden />
     </Button.Group>
   );
 };
