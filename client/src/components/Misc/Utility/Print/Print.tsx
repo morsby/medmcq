@@ -62,7 +62,7 @@ const Print: React.SFC<PrintProps> = ({ addTranslation }) => {
               <h3>
                 <Translate id="print.question" data={{ n: i + 1 }} />
               </h3>
-              <PrintDisplayQuestion questionProp={q} showCorrect={showCorrect} />
+              <PrintDisplayQuestion question={q} showCorrect={showCorrect} n={i + 1} />
             </div>
           );
         })}

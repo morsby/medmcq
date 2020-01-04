@@ -1,35 +1,32 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import marked from 'marked';
-import { imageURL, getSemester } from '../../../../utils/common';
+import { imageURL } from '../../../../utils/common';
 import { subSupScript } from '../../../../utils/quiz';
 
 import { Translate } from 'react-localize-redux';
+import Question from 'classes/Question';
 
 /**
  * Selve den component, der viser de printervenlige udgaver af spørgsmålet.
  * Kaldes af Print.js som også giver alle props.
  */
-const PrintDisplayQuestion = (props) => {
-  let {
-    question,
-    answer1,
-    answer2,
-    answer3,
-    correctAnswer,
-    image,
-    semester,
-    examYear,
-    examSeason,
-    n
-  } = props.questionProp;
+export interface PrintDisplayQuestionProps {
+  question: Question;
+  showCorrect: boolean;
+  n: number;
+}
 
-  let text = subSupScript(question);
-  answer1 = subSupScript(answer1);
-  answer2 = subSupScript(answer2);
-  answer3 = subSupScript(answer3);
+const PrintDisplayQuestion: React.SFC<PrintDisplayQuestionProps> = ({
+  question,
+  showCorrect,
+  n
+}) => {
+  let { text, answer1, answer2, answer3, correctAnswers, images, examSet } = question;
 
-  if (Array.isArray(correctAnswer)) correctAnswer = correctAnswer.join(' correct-');
+  text = subSupScript(text);
+  answer1 = subSupScript(correctAnswers[0]);
+  answer2 = subSupScript(correctAnswers[1]);
+  answer3 = subSupScript(correctAnswers[3]);
 
   return (
     <div>
@@ -38,8 +35,9 @@ const PrintDisplayQuestion = (props) => {
           __html: marked(text)
         }}
       />
-      {image && <img src={imageURL(image)} alt="billede til eksamensspørgsmål" />}
-      <ol type="A" className={props.showCorrect ? `correct-${correctAnswer}` : null}>
+      {images.length > 0 &&
+        images.map((image) => <img src={imageURL(image)} alt="billede til eksamensspørgsmål" />)}
+      <ol type="A" className={showCorrect ? `correct-${correctAnswers.join(' correct-')}` : null}>
         <li
           dangerouslySetInnerHTML={{
             __html: marked(answer1)
@@ -60,26 +58,14 @@ const PrintDisplayQuestion = (props) => {
       <Translate>
         {({ translate }) => (
           <div className="print-metadata">
-            {translate('print.metadata.from')} {getSemester(semester).name},{' '}
-            {translate(`print.metadata.seasons.${examSeason}`)} {examYear},{' '}
+            {translate('print.metadata.from')} {examSet.semester.name},{' '}
+            {translate(`print.metadata.seasons.${examSet.season}`)} {examSet.year},{' '}
             {translate('print.metadata.question', { n })}
           </div>
         )}
       </Translate>
     </div>
   );
-};
-
-PrintDisplayQuestion.propTypes = {
-  /**
-   * Spørgsmålsobjektet
-   */
-  questionProp: PropTypes.object,
-
-  /**
-   * Skal de rigtige svar være synlige?
-   */
-  showCorrect: PropTypes.bool
 };
 
 export default PrintDisplayQuestion;
