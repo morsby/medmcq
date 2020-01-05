@@ -1,26 +1,26 @@
 import React from 'react';
 import { Translate } from 'react-localize-redux';
-import { Button, Divider } from 'semantic-ui-react';
+import { Button, Divider, Menu } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
 import settingsReducer from 'redux/reducers/settings';
 
 export interface QuestionExtraButtonsProps {
-  width: number;
   onReportToggle: () => void;
   onPrivateCommentsToggle: () => void;
   onPublicCommentsToggle: () => void;
   privateCommentsOpen: boolean;
   publicCommentsOpen: boolean;
+  reportOpen: boolean;
 }
 
 const QuestionExtraButtons: React.SFC<QuestionExtraButtonsProps> = ({
-  width,
   onReportToggle,
   onPrivateCommentsToggle,
   onPublicCommentsToggle,
   privateCommentsOpen,
-  publicCommentsOpen
+  publicCommentsOpen,
+  reportOpen
 }) => {
   const dispatch = useDispatch();
   const user = useSelector((state: ReduxState) => state.auth.user);
@@ -40,41 +40,36 @@ const QuestionExtraButtons: React.SFC<QuestionExtraButtonsProps> = ({
   };
 
   return (
-    <>
-      <Button color={publicCommentsOpen ? 'green' : null} basic onClick={onPublicCommentsToggle}>
+    <Menu stackable>
+      <Menu.Item color="green" active={publicCommentsOpen} onClick={onPublicCommentsToggle}>
         {publicCommentsOpen ? (
           <Translate id="question.hide_public_comments" data={{ n: publicComments }} />
         ) : (
           <Translate id="question.show_public_comments" data={{ n: publicComments }} />
         )}
-      </Button>
+      </Menu.Item>
       {user && (
-        <Button
-          color={privateCommentsOpen ? 'green' : null}
-          basic
-          onClick={onPrivateCommentsToggle}
-        >
+        <Menu.Item color="green" active={privateCommentsOpen} onClick={onPrivateCommentsToggle}>
           {privateCommentsOpen ? (
             <Translate id="question.hide_private_comments" data={{ n: privateComments }} />
           ) : (
             <Translate id="question.show_private_comments" data={{ n: privateComments }} />
           )}
-        </Button>
+        </Menu.Item>
       )}
-      {width <= 700 && <Divider hidden />}
-      <div style={{ float: width > 700 ? 'right' : null }}>
-        <Button basic onClick={handleHidePercentages}>
+      <Menu.Menu position="right">
+        <Menu.Item onClick={handleHidePercentages}>
           {percentagesHided ? (
             <Translate id="question.show_percentages" />
           ) : (
             <Translate id="question.hide_percentages" />
           )}
-        </Button>
-        <Button basic color="orange" onClick={onReportToggle}>
+        </Menu.Item>
+        <Menu.Item color="orange" active={reportOpen} onClick={onReportToggle}>
           <Translate id="question.report_question" />
-        </Button>
-      </div>
-    </>
+        </Menu.Item>
+      </Menu.Menu>
+    </Menu>
   );
 };
 

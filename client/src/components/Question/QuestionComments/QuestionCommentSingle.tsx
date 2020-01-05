@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import marked from 'marked';
-import { Comment as SemanticComment, Icon, Menu, Loader } from 'semantic-ui-react';
+import { Comment, Icon, Menu, Loader } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
-import Comment from 'classes/Comment';
+import CommentClass from 'classes/Comment';
 import Question from 'classes/Question';
 import { ReduxState } from 'redux/reducers';
 import _ from 'lodash';
@@ -17,7 +17,7 @@ import _ from 'lodash';
  * @param {func}    editComment   Funktion at ændre kommentar
  */
 export interface QuestionCommentSingleProps {
-  comment: Comment;
+  comment: CommentClass;
   question: Question;
   type: 'private' | 'public';
   mostLiked?: boolean;
@@ -35,106 +35,107 @@ const QuestionCommentSingle: React.SFC<QuestionCommentSingleProps> = ({
 
   const handleLike = async () => {
     setLikeLoading(true);
-    await Comment.like({ commentId: comment.id });
+    await CommentClass.like({ commentId: comment.id });
     setLikeLoading(false);
   };
 
   const handleDelete = async (commentId: number) => {
-    await Comment.delete({ commentId });
+    await CommentClass.delete({ commentId });
   };
 
   return (
-    <SemanticComment
+    <Comment
       key={comment.id}
       style={{
         border: '1px solid rgb(140,140,140)',
         borderRadius: '5px',
-        marginTop: '1em',
         padding: '0.5em',
         paddingTop: 0
       }}
     >
-      <SemanticComment.Content>
-        {comment.isAnonymous ? (
-          <SemanticComment.Author as="strong">
+      <Comment.Content>
+        <Comment.Author as="strong">
+          {comment.isAnonymous ? (
             <Translate id="questionCommentSingle.anonymous" />
-          </SemanticComment.Author>
-        ) : (
-          <SemanticComment.Author as="strong">
-            {comment.user.username[0].toUpperCase() + comment.user.username.substring(1)}{' '}
-            {!comment.isPrivate && mostLiked && <Icon color="green" name="star outline" />}
-          </SemanticComment.Author>
-        )}
-        <SemanticComment.Metadata style={{ color: 'rgb(140, 140, 140)' }}>
-          {new Date(comment.createdAt).toLocaleString('da-DK', {
-            timeStyle: 'short',
-            dateStyle: 'short'
-          } as any)}
-          {!comment.isPrivate && (
-            <>
-              <br />
-              {likeLoading && <Loader active inline size="mini" />}
-              {!likeLoading && user && comment.user.id !== user.id ? (
-                <Icon
-                  name="thumbs up outline"
-                  color={_.findIndex(comment.likes, { userId: user.id }) !== -1 ? 'green' : 'grey'}
-                  style={user.id ? { cursor: 'pointer' } : {}}
-                  onClick={handleLike}
-                />
-              ) : (
-                <Icon disabled name="thumbs up outline" />
-              )}
-              <span style={{ color: 'grey' }}>{comment.likes.length}</span>
-            </>
-          )}
-        </SemanticComment.Metadata>
-        {comment.isPrivate && (
-          <SemanticComment.Metadata style={{ color: 'rgb(140, 140, 140)' }}>
-            <Translate id="question.private_comment" />
-          </SemanticComment.Metadata>
-        )}
-        <SemanticComment.Text
+          ) : (
+            comment.user.username.toTitleCase()
+          )}{' '}
+          {!comment.isPrivate && mostLiked && <Icon color="green" name="star outline" />}
+        </Comment.Author>
+        <Comment.Metadata>
+          <div>
+            {new Date(comment.createdAt).toLocaleString('da-DK', {
+              timeStyle: 'short',
+              dateStyle: 'short'
+            } as any)}
+            {!comment.isPrivate && (
+              <span style={{ marginLeft: '1em' }}>
+                {!likeLoading && user && comment.user.id !== user.id ? (
+                  <Icon
+                    name="thumbs up outline"
+                    color={
+                      comment.likes.findIndex((like) => like.userId === user.id) !== -1
+                        ? 'green'
+                        : 'grey'
+                    }
+                    style={user.id ? { cursor: 'pointer' } : {}}
+                    onClick={handleLike}
+                  />
+                ) : (
+                  <>
+                    <Loader active inline size="mini" />{' '}
+                  </>
+                )}
+                <span style={{ color: 'grey' }}>{comment.likes.length}</span>
+              </span>
+            )}
+            {comment.isPrivate && <Translate id="question.private_comment" />}
+          </div>
+        </Comment.Metadata>
+        <Comment.Text
           style={{ marginTop: '1em', fontSize: '15px' }}
           dangerouslySetInnerHTML={{
             __html: marked(comment.text)
           }}
         />
-        {user && user.id === comment.user.id && !likeLoading && (
-          <Menu size="tiny" icon="labeled" secondary>
-            {!deleting && (
-              <Menu.Item onClick={() => setDeleting(true)}>
-                <Icon name="trash" color="red" />
-                <Translate id="questionCommentSingle.delete" />
-              </Menu.Item>
-            )}
-            {deleting && (
-              <>
-                <Menu.Item>
-                  <Translate id="questionCommentSingle.delete_confirmation" />
-                </Menu.Item>
-                <Menu.Item onClick={() => setDeleting(false)}>
-                  <Icon name="close" />
-                  <Translate id="questionCommentSingle.no" />
-                </Menu.Item>
-                <Menu.Item
-                  onClick={() => {
-                    handleDelete(comment.id);
-                    setDeleting(false);
-                  }}
-                >
+        <Comment.Actions>
+          {user && user.id === comment.user.id && !likeLoading && (
+            <>
+              {!deleting && (
+                <Comment.Action onClick={() => setDeleting(true)}>
                   <Icon name="trash" color="red" />
-                  <Translate id="questionCommentSingle.yes" />
-                </Menu.Item>
-              </>
-            )}
-            <Menu.Item onClick={() => handleEdit(comment)}>
-              <Icon name="edit" color="yellow" />
-              <Translate id="questionCommentSingle.edit" />
-            </Menu.Item>
-          </Menu>
-        )}
-      </SemanticComment.Content>
-    </SemanticComment>
+                  <Translate id="questionCommentSingle.delete" />
+                </Comment.Action>
+              )}
+              {deleting && (
+                <>
+                  <span>
+                    <Translate id="questionCommentSingle.delete_confirmation" />
+                  </span>
+                  <Comment.Action onClick={() => setDeleting(false)}>
+                    <Icon name="close" />
+                    <Translate id="questionCommentSingle.no" />
+                  </Comment.Action>
+                  <Comment.Action
+                    onClick={() => {
+                      handleDelete(comment.id);
+                      setDeleting(false);
+                    }}
+                  >
+                    <Icon name="trash" color="red" />
+                    <Translate id="questionCommentSingle.yes" />
+                  </Comment.Action>
+                </>
+              )}
+              <Comment.Action onClick={() => handleEdit(comment)}>
+                <Icon name="edit" color="yellow" />
+                <Translate id="questionCommentSingle.edit" />
+              </Comment.Action>
+            </>
+          )}
+        </Comment.Actions>
+      </Comment.Content>
+    </Comment>
   );
 };
 

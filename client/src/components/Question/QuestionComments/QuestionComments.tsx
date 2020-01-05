@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Form, Button, Message, Checkbox } from 'semantic-ui-react';
+import { Form, Button, Message, Checkbox, Comment } from 'semantic-ui-react';
 
 import { Translate } from 'react-localize-redux';
 
 import QuestionCommentSingle from './QuestionCommentSingle';
 import makeToast from 'redux/actions/makeToast';
 import { ReduxState } from 'redux/reducers';
-import Comment from 'classes/Comment';
+import CommentClass from 'classes/Comment';
 import _ from 'lodash';
 import TextArea from 'antd/lib/input/TextArea';
 
@@ -58,7 +58,7 @@ const QuestionComments: React.SFC<QuestionCommentsProps> = ({ type }) => {
 
     try {
       if (editCommentId) {
-        await Comment.edit({
+        await CommentClass.edit({
           text: comment,
           questionId: question.id,
           id: editCommentId,
@@ -67,7 +67,7 @@ const QuestionComments: React.SFC<QuestionCommentsProps> = ({ type }) => {
         });
         setEditCommentId(null);
       } else {
-        await Comment.add({
+        await CommentClass.add({
           text: comment,
           questionId: question.id,
           isPrivate,
@@ -84,7 +84,7 @@ const QuestionComments: React.SFC<QuestionCommentsProps> = ({ type }) => {
     }
   };
 
-  const handleEditComment = (comment: Comment) => {
+  const handleEditComment = (comment: CommentClass) => {
     setEditCommentId(comment.id);
     setComment(comment.text);
     setIsAnonymous(!!comment.isAnonymous);
@@ -164,34 +164,36 @@ const QuestionComments: React.SFC<QuestionCommentsProps> = ({ type }) => {
   }
 
   return (
-    <div>
-      {type === 'private' &&
-        privateComments.map((c) => (
-          <QuestionCommentSingle
-            key={c.id}
-            type={type}
-            comment={c}
-            question={question}
-            handleEdit={handleEditComment}
-          />
-        ))}
-      {type === 'public' &&
-        publicComments.map((c) => (
-          <QuestionCommentSingle
-            key={c.id}
-            comment={c}
-            question={question}
-            type={type}
-            handleEdit={handleEditComment}
-            mostLiked={
-              !c.isPrivate &&
-              mostLiked.likes.length > 0 &&
-              c.likes.length === mostLiked.likes.length
-            }
-          />
-        ))}
+    <>
+      <Comment.Group as="div" style={{ maxWidth: '100%' }}>
+        {type === 'private' &&
+          privateComments.map((c) => (
+            <QuestionCommentSingle
+              key={c.id}
+              type={type}
+              comment={c}
+              question={question}
+              handleEdit={handleEditComment}
+            />
+          ))}
+        {type === 'public' &&
+          publicComments.map((c) => (
+            <QuestionCommentSingle
+              key={c.id}
+              comment={c}
+              question={question}
+              type={type}
+              handleEdit={handleEditComment}
+              mostLiked={
+                !c.isPrivate &&
+                mostLiked.likes.length > 0 &&
+                c.likes.length === mostLiked.likes.length
+              }
+            />
+          ))}
+      </Comment.Group>
       {form}
-    </div>
+    </>
   );
 };
 

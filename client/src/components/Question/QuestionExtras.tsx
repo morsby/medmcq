@@ -62,7 +62,7 @@ const QuestionExtras: React.SFC<QuestionExtrasProps> = ({ width }) => {
         privateCommentsOpen={privateCommentsOpen}
         onPublicCommentsToggle={onPublicCommentsToggle}
         publicCommentsOpen={publicCommentsOpen}
-        width={width}
+        reportOpen={reportOpen}
       />
       {reportOpen && (
         <>
