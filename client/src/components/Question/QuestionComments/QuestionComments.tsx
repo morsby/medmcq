@@ -109,13 +109,24 @@ const QuestionComments: React.SFC<QuestionCommentsProps> = ({ type }) => {
         <Form>
           <Translate>
             {({ translate }) => (
-              <TextArea
-                name="comment"
-                placeholder={translate('questionComments.write_a_comment') as string}
-                onChange={(e) => setComment(e.target.value)}
-                value={comment}
-                autosize={{ minRows: 3 }}
-              />
+              <>
+                <TextArea
+                  name="comment"
+                  placeholder={translate('questionComments.write_a_comment') as string}
+                  onChange={(e) => setComment(e.target.value)}
+                  value={comment}
+                  autosize={{ minRows: 3 }}
+                />
+                <div style={{ textAlign: 'right' }}>
+                  <a
+                    style={{ color: 'grey' }}
+                    href="https://www.markdownguide.org/cheat-sheet/"
+                    target="_blank"
+                  >
+                    <Translate id="questionComments.supportsMarkdown" />
+                  </a>
+                </div>
+              </>
             )}
           </Translate>
           {type === 'public' && (

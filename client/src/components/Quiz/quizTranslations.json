@@ -99,7 +99,8 @@
     "comment": ["Kommentér", "Comment"],
     "undo_edit": ["Fortryd ændring", "Undo edit"],
     "hide_username": ["Skjul dit brugernavn", "Hide your usernname"],
-    "anonymous": ["Skjul mit brugernavn", "Hide my username"]
+    "anonymous": ["Skjul mit brugernavn", "Hide my username"],
+    "supportsMarkdown": ["Understøtter markdown", "Supports markdown"]
   },
   "questionCommentSingle": {
     "edit": ["Ret", "Edit"],

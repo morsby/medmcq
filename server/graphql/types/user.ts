@@ -123,7 +123,7 @@ export const resolvers = {
       if (!isValidPassword) throw new Error('Username or password is invalid');
       user = { id: user.id }; // Only ID is needed, as the user is fetched through the user query based on this ID
       const token = jwt.sign(user, process.env.SECRET);
-      ctx.res.cookie('user', token);
+      ctx.res.cookie('user', token, { expires: new Date(253402300000000) }); // Expires year 9999
       return 'Logged in';
     },
     logout: (root, args, ctx: Context) => {
