@@ -38,7 +38,7 @@ const QuestionComments: React.SFC<QuestionCommentsProps> = ({ type }) => {
   const [comment, setComment] = useState('');
   const [loading, setLoading] = useState(false);
   const [isAnonymous, setIsAnonymous] = useState(false);
-  const mostLiked = _.maxBy(publicComments, (comment: CommentClass) => comment.likes.length);
+  const mostLiked = _.maxBy(publicComments, (comment) => comment.likes.length);
   const user = useSelector((state: ReduxState) => state.auth.user);
   let form;
 
