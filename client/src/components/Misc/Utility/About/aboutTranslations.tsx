@@ -74,13 +74,31 @@ export default {
     header: ['Hvad er nyt på siden?', "What's new on the site?"],
     body: [
       `
-    <h3>v.0.2.3 - 24/05-2019</h3>
+    <h3>v.2.0.0 - 24/05-2019</h3>
+    <ul>
+        <li>
+            Vi har omskrevet vores server helt fra bunden og ændret mange ting på hjemmesiden bag kulisserne! Dette betyder for dig, at du kan forvente en hurtigere responsrate på jeres ønsker til nye funktioner. Derudover kører hjemmesiden nu også meget hurtigere, som du måske vil kunne mærke.
+        </li>
+        <li>
+            Vi har fået en ny eksamens-mode, hvor du kan teste dine evner med en timer og uden at du får svar med det samme. En hyppigt ønsket feature, som nu endelig er her!
+        </li>
+        <li>
+            Du kan se procenter på hver svarmulighed, som viser hvor stor del af dine medstuderende, der har valgt hvad du har.
+        </li>
+        <li>
+            Du kan nu se præcist hvor mange spørgsmål du mangler at besvare i hvert enkelt sæt. Find det under fulde eksamenssæt!
+        </li>
+        <li>
+            Vi har fået et nyt kommentarfelt layout, som gør det en smule mere kompakt. På den måde kan du se flere kommentarer, uden at skulle scrolle ned!
+        </li>
+    </ul>
+    <h3>v.1.2.3 - 24/05-2019</h3>
     <ul>
         <li>
             Vi har fået et nyt stemmesystem! Du kan nu også nedstemme specialer og tags. Du kan læse om det nye system længere nede.
         </li>
     </ul>
-    <h3>v.0.2.2 - 2019-04-25</h3>
+    <h3>v.1.2.2 - 2019-04-25</h3>
     <ul>
       <li>
           Der kan nu søges efter spørgsmål (med én frase). Søg efter 
@@ -88,13 +106,13 @@ export default {
           "hjerte<em>r</em>" og "hjerte<em>sygdomme</em>").
       </li>
   </ul>
-<h3>v.0.2.1 - 2019-04-12</h3>
+<h3>v.1.2.1 - 2019-04-12</h3>
 <ul>
     <li>
         Der kan nu også vælges spørgsmål efter tag.
     </li>
 </ul>
-<h3>v0.2.0 - 2019-03-25</h3>
+<h3>v1.2.0 - 2019-03-25</h3>
 <ul>
     <li>
         Alle brugere kan nu stemme på specialer og tags til spørgsmål.
@@ -109,7 +127,7 @@ export default {
         Forskellige bugfixes (layout, navigation m.v.).
     </li>
 </ul>
-<h3>v0.1.0 - 2018-11-26</h3>
+<h3>v1.1.0 - 2018-11-26</h3>
 <ul>
     <li>
     Siden gemmer mange ting lokalt på din enhed (ikke som cookies) -
@@ -158,20 +176,20 @@ export default {
   </li>
 </ul>`,
       `
-    <h3>v.0.2.3 - 24/05-2019</h3>
+    <h3>v.1.2.3 - 24/05-2019</h3>
     <ul>
         <li>
             We have a new voting system! You can now also downvote wrongly labelled specialties and tags. You can read more about the new system further down.
         </li>
     </ul>
-  <h3>v.0.2.2 - 2019-04-25</h3>
+  <h3>v.1.2.2 - 2019-04-25</h3>
   <ul>
     <li>
         You can search for questions (by one phrase). Search for the base of the 
         word for most results ("child" will also match "child<em>ren</em>").
     </li>
   </ul>
-  <h3>v.0.2.1 - 2019-04-12</h3>
+  <h3>v.1.2.1 - 2019-04-12</h3>
   <ul>
       <li>
           Questions can also be filtered by tag.
