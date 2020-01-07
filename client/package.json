@@ -39,7 +39,6 @@
     "semantic-ui-react": "^0.88.1",
     "styled-components": "^4.4.1",
     "typescript": "^3.7.3",
-    "@types/lodash": "^4.14.149",
     "yup": "^0.28.0"
   },
   "proxy": "http://localhost:3001",
@@ -53,6 +52,7 @@
   "devDependencies": {
     "@types/jest": "^24.0.20",
     "@types/jwt-decode": "^2.2.1",
+    "@types/lodash": "^4.14.149",
     "@types/marked": "^0.7.2",
     "@types/moment-timezone": "^0.5.12",
     "@types/node": "^12.11.7",
