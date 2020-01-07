@@ -5,8 +5,8 @@ interface QuestionComment {
   userId: number;
   questionId: number;
   text: string;
-  private: 1 | 2;
-  anonymous: 1 | 2;
+  private: 0 | 1;
+  anonymous: 0 | 1;
   createdAt: Date;
   updatedAt: Date;
 }

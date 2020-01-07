@@ -65,7 +65,7 @@ export const createQuestions = async () => {
     userId: 1,
     questionId: 1,
     text: 'comment text',
-    private: false
+    private: 0
   });
   await QuestionCorrectAnswer.query().insert({
     id: 1,
