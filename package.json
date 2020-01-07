@@ -14,7 +14,7 @@
     "client": "npm run genversion && cd client && npm start",
     "dev": "npm-run-all --parallel server client",
     "install-all": "npm install && cd server && npm install && cd .. && cd client && npm install",
-    "build": "npm run genversion && npm-run-all --sequential build:*",
+    "build": "npm-run-all --sequential build:*",
     "build:server": "cd server && npm run build",
     "build:client": "cd client && npm run build",
     "genversion": "genversion -e version.js -s && mv version.js client/src/",
