@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { Translate, LocalizeContextProps, withLocalize } from 'react-localize-redux';
 import quizTranslations from './quizTranslations.json';
 
-import { Container, Button } from 'semantic-ui-react';
+import { Container, Button, Divider } from 'semantic-ui-react';
 
 import { Swipeable } from 'react-swipeable';
 import QuizLoader from './QuizLoader';
@@ -16,6 +16,7 @@ import { smoothScroll } from '../../utils/quiz';
 import { ReduxState } from 'redux/reducers';
 import quizReducer from 'redux/reducers/quiz';
 import QuestionClass from 'classes/Question';
+import QuestionStopExamMode from 'components/Question/QuestionStopExamMode';
 
 /**
  *  Hovedcomponent til Quizzen.
@@ -33,6 +34,7 @@ const Quiz: React.SFC<QuizProps> = ({ addTranslation }) => {
   const imgOpen = useSelector((state: ReduxState) => state.quiz.imgOpen);
   const didInvalidate = useSelector((state: ReduxState) => state.quiz.didInvalidate);
   const questionIds = useSelector((state: ReduxState) => state.quiz.questionIds);
+  const examMode = useSelector((state: ReduxState) => state.quiz.examMode);
   const { isFetching } = useSelector((state: ReduxState) => state.questions);
   const max = questionIds.length;
 
@@ -152,8 +154,10 @@ i componentDidMount)
           <Question />
         </Swipeable>
 
-        <QuizNavigator handleNavigate={handleChangeQuestion} />
+        {examMode && <QuestionStopExamMode />}
+        <Divider hidden />
 
+        <QuizNavigator handleNavigate={handleChangeQuestion} />
         <QuizSummary clickHandler={handleChangeQuestion} />
       </div>
     </div>

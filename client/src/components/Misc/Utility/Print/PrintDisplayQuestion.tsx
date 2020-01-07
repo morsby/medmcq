@@ -37,17 +37,17 @@ const PrintDisplayQuestion: React.SFC<PrintDisplayQuestionProps> = ({
       <ol type="A" className={showCorrect ? `correct-${correctAnswers.join(' correct-')}` : null}>
         <li
           dangerouslySetInnerHTML={{
-            __html: marked(answer1)
+            __html: marked(answer1.answer)
           }}
         />
         <li
           dangerouslySetInnerHTML={{
-            __html: marked(answer2)
+            __html: marked(answer2.answer)
           }}
         />
         <li
           dangerouslySetInnerHTML={{
-            __html: marked(answer3)
+            __html: marked(answer3.answer)
           }}
         />
       </ol>

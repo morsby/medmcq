@@ -29,15 +29,22 @@ export const smoothScroll = (h?: number, dir = 'up') => {
   }
 };
 
-export const evalAnswer = (question, userAnswer, answerNo) => {
+export const evalAnswer = (question, userAnswer, answerNo, examMode) => {
   if (!userAnswer) return null; // hvis ikke svaret
+  console.log(examMode);
 
-  if (question.correctAnswers.includes(answerNo)) {
-    return 'green';
-  } else if (answerNo === userAnswer) {
-    return 'red'; // hvis forkert svar
+  if (examMode) {
+    if (answerNo === userAnswer) {
+      return 'blue';
+    }
   } else {
-    return 'grey'; // ikke valgt mulighed
+    if (question.correctAnswers.includes(answerNo)) {
+      return 'green';
+    } else if (answerNo === userAnswer) {
+      return 'red'; // hvis forkert svar
+    } else {
+      return 'grey'; // ikke valgt mulighed
+    }
   }
 };
 
@@ -73,5 +80,5 @@ export const subSupScript = (text) => {
 
 export const isAnswered = (question: Question) => {
   const state: ReduxState = store.getState();
-  return !!state.quiz.answers.find(answer => answer.questionId === question.id)
+  return !!state.quiz.answers.find((answer) => answer.questionId === question.id);
 };

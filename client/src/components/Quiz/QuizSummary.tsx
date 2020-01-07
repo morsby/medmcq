@@ -25,6 +25,8 @@ const QuizSummary: React.SFC<QuizSummaryProps> = ({ clickHandler }) => {
   const questions = useSelector((state: ReduxState) => state.questions.questions);
   const questionIds = useSelector((state: ReduxState) => state.quiz.questionIds);
   const answers = useSelector((state: ReduxState) => state.quiz.answers);
+  const examMode = useSelector((state: ReduxState) => state.quiz.examMode);
+  const usedExamTime = useSelector((state: ReduxState) => state.quiz.usedExamTime);
   let results = calculateResults(questions, answers);
 
   return (
@@ -34,9 +36,11 @@ const QuizSummary: React.SFC<QuizSummaryProps> = ({ clickHandler }) => {
           <Card.Header>
             <Translate id="quizSummary.header" />
           </Card.Header>
-          {results.status && (
+          {results.status && !examMode && (
             <Card.Content>
               <Translate id="quizSummary.results" data={{ ...results }} />
+              <br />
+              {usedExamTime && <Translate id="quizSummary.usedTime" data={{ usedExamTime }} />}
             </Card.Content>
           )}
           <Card.Description style={{ columns: '250px 4' }}>
@@ -47,7 +51,9 @@ const QuizSummary: React.SFC<QuizSummaryProps> = ({ clickHandler }) => {
 
                 let userAnswer: string;
                 if (answer) {
-                  if (q.correctAnswers.includes(answer)) {
+                  if (examMode) {
+                    userAnswer = 'svar-examMode';
+                  } else if (q.correctAnswers.includes(answer)) {
                     userAnswer = 'svar-korrekt';
                   } else if (!q.correctAnswers.includes(answer)) {
                     userAnswer = 'svar-forkert';

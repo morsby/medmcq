@@ -4,6 +4,7 @@ import { Button, Divider, Menu } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
 import settingsReducer from 'redux/reducers/settings';
+import quizReducer from 'redux/reducers/quiz';
 
 export interface QuestionExtraButtonsProps {
   onReportToggle: () => void;
@@ -26,7 +27,7 @@ const QuestionExtraButtons: React.SFC<QuestionExtraButtonsProps> = ({
   const user = useSelector((state: ReduxState) => state.auth.user);
   const questionIndex = useSelector((state: ReduxState) => state.quiz.questionIndex);
   const question = useSelector((state: ReduxState) => state.questions.questions[questionIndex]);
-  const percentagesHided = useSelector((state: ReduxState) => state.settings.hidePercentages);
+  const percentagesHided = useSelector((state: ReduxState) => state.quiz.hidePercentages);
   const comments = useSelector((state: ReduxState) =>
     state.questions.comments.filter((comment) => comment.question.id === question.id)
   );
@@ -34,9 +35,7 @@ const QuestionExtraButtons: React.SFC<QuestionExtraButtonsProps> = ({
   const privateComments = comments.filter((comment) => comment.isPrivate).length;
 
   const handleHidePercentages = () => {
-    dispatch(
-      settingsReducer.actions.changeSettings({ type: 'hidePercentages', value: !percentagesHided })
-    );
+    dispatch(quizReducer.actions.togglePercentages());
   };
 
   return (

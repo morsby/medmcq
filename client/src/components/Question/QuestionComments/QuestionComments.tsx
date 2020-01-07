@@ -115,13 +115,14 @@ const QuestionComments: React.SFC<QuestionCommentsProps> = ({ type }) => {
                   placeholder={translate('questionComments.write_a_comment') as string}
                   onChange={(e) => setComment(e.target.value)}
                   value={comment}
-                  autosize={{ minRows: 3 }}
+                  autoSize={{ minRows: 3 }}
                 />
                 <div style={{ textAlign: 'right' }}>
                   <a
                     style={{ color: 'grey' }}
                     href="https://www.markdownguide.org/cheat-sheet/"
                     target="_blank"
+                    rel="noopener noreferrer"
                   >
                     <Translate id="questionComments.supportsMarkdown" />
                   </a>

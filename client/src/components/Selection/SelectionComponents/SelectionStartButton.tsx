@@ -15,9 +15,9 @@ const SelectionStartButton: React.SFC<SelectionStartButtonProps> = () => {
   const history = useHistory();
   const quizQuestions = useSelector((state: ReduxState) => state.questions.questions);
 
-  const handleStartNew = async () => {
+  const handleStart = async (examMode?: boolean) => {
     setStartLoading(true);
-    await Quiz.start();
+    await Quiz.start(null, examMode);
     Selection.change({ type: 'search', value: '' });
     history.push(urls.quiz);
   };
@@ -35,9 +35,21 @@ const SelectionStartButton: React.SFC<SelectionStartButtonProps> = () => {
         fluid
         color="green"
         basic
-        onClick={() => handleStartNew()}
+        onClick={() => handleStart()}
       >
         Start!
+      </Button>
+      <div style={{ height: '5px' }} />
+      <Button
+        loading={startLoading}
+        disabled={startLoading}
+        style={{ cursor: 'pointer' }}
+        fluid
+        color="blue"
+        basic
+        onClick={() => handleStart(true)}
+      >
+        Start som eksamen
       </Button>
       <div style={{ height: '5px' }} />
       {quizQuestions.length > 0 && (

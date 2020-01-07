@@ -1,11 +1,6 @@
 import React from 'react';
-import { Button, Divider, Popup } from 'semantic-ui-react';
-import { evalAnswer, subSupScript } from 'utils/quiz';
-import marked from 'marked';
-import { useSelector } from 'react-redux';
-import { ReduxState } from 'redux/reducers';
-import { QuestionAnswer } from 'classes/Question';
-import { Translate } from 'react-localize-redux';
+import { Button, Divider } from 'semantic-ui-react';
+import QuestionAnswerButton from './QuestionAnswerButton';
 
 /**
  * Component der viser svarmuligheder.
@@ -15,77 +10,17 @@ import { Translate } from 'react-localize-redux';
  * @param {object}  question Selve spørgsmålet.
  */
 export interface QuestionAnswerButtonsProps {
-  chosenAnswer: number | undefined;
   handleAnswer: Function;
 }
 
-const QuestionAnswerButtons: React.SFC<QuestionAnswerButtonsProps> = ({
-  handleAnswer,
-  chosenAnswer
-}) => {
-  const questionIndex = useSelector((state: ReduxState) => state.quiz.questionIndex);
-  const question = useSelector((state: ReduxState) => state.questions.questions[questionIndex]);
-  const percentagesHided = useSelector((state: ReduxState) => state.settings.hidePercentages);
-
-  const generateButton = (answerNo: number) => {
-    const answer: QuestionAnswer = question[`answer${answerNo}`];
-
-    let answerText;
-    switch (answerNo) {
-      case 1:
-        answerText = 'A. ';
-        break;
-      case 2:
-        answerText = 'B. ';
-        break;
-      case 3:
-        answerText = 'C. ';
-        break;
-      default:
-        break;
-    }
-    answerText = answerText + answer.answer;
-    /**
-     * subSupScript tillader sub- og superscripts vha. markdown-syntaks.
-     */
-    answerText = subSupScript(answerText);
-    return (
-      <Button
-        style={{ textAlign: 'left' }}
-        onClick={() => handleAnswer(answerNo)}
-        color={evalAnswer(question, chosenAnswer, answerNo)}
-        size="large"
-      >
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            width: '100%',
-            alignItems: 'center'
-          }}
-        >
-          <div
-            dangerouslySetInnerHTML={{
-              __html: marked(answerText)
-            }}
-          />
-          {chosenAnswer && !percentagesHided && (
-            <Popup position="top center" trigger={<span>{answer.correctPercent}%</span>}>
-              <Translate id="question.percentage_popup" />
-            </Popup>
-          )}
-        </div>
-      </Button>
-    );
-  };
-
+const QuestionAnswerButtons: React.SFC<QuestionAnswerButtonsProps> = ({ handleAnswer }) => {
   return (
     <Button.Group vertical fluid>
-      {generateButton(1)}
+      <QuestionAnswerButton answerNumber={1} handleAnswer={handleAnswer} />
       <Divider hidden />
-      {generateButton(2)}
+      <QuestionAnswerButton answerNumber={2} handleAnswer={handleAnswer} />
       <Divider hidden />
-      {generateButton(3)}
+      <QuestionAnswerButton answerNumber={3} handleAnswer={handleAnswer} />
     </Button.Group>
   );
 };

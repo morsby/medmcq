@@ -24,8 +24,12 @@
   "quizSummary": {
     "header": ["Fremgang", "Progress"],
     "results": [
-      "Du har svaret rigtigt på ${correct} af ${n} spørgsmål. Dette svarer til ${percentage}",
+      "Du har svaret rigtigt på ${correct} af ${n} spørgsmål. Dette svarer til ${percentage}.",
       "You have answered ${correct} out of ${n} questions correctly. This is equivalent to ${percentage}."
+    ],
+    "usedTime": [
+      "Du brugte <u>${usedExamTime}</u> til besvarelsen.",
+      "You used <u>${usedExamTime}</u> to answer."
     ],
     "print": ["Print disse spørgsmål", "Print these questions"]
   },

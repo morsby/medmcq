@@ -65,7 +65,7 @@ const Contact: React.SFC<ContactProps> = ({ addTranslation }) => {
               <Message info>
                 <div
                   dangerouslySetInnerHTML={{
-                    __html: marked(translate('contact.disclaimer'))
+                    __html: marked(translate('contact.disclaimer') as string)
                   }}
                 />
               </Message>
@@ -81,7 +81,7 @@ const Contact: React.SFC<ContactProps> = ({ addTranslation }) => {
                 <Message.Content>
                   <div
                     dangerouslySetInnerHTML={{
-                      __html: marked(translate('contact.form.submitted.body'))
+                      __html: marked(translate('contact.form.submitted.body') as string)
                     }}
                   />
                 </Message.Content>

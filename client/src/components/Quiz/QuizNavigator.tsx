@@ -3,6 +3,7 @@ import { Container, Menu, Icon } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 import { useSelector } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
+import QuestionExamModeCounter from 'components/Question/QuestionExamModeCounter';
 
 /**
  * En menu, der tillader navigation i quizzen frem og tilbage samt viser
@@ -18,6 +19,7 @@ export interface QuizNavigatorProps {
 const QuizNavigator: React.SFC<QuizNavigatorProps> = ({ position, handleNavigate }) => {
   const qn = useSelector((state: ReduxState) => state.quiz.questionIndex);
   const qmax = useSelector((state: ReduxState) => state.questions.questions.length);
+  const examMode = useSelector((state: ReduxState) => state.quiz.examMode);
 
   return (
     <Container {...(position === 'top' ? { className: 'top-nav' } : {})}>
@@ -28,7 +30,10 @@ const QuizNavigator: React.SFC<QuizNavigatorProps> = ({ position, handleNavigate
         </Menu.Item>
         <Menu.Item header>
           {position === 'top' && (
-            <Translate id="quizNavigator.progress" data={{ n: qn + 1, total: qmax }} />
+            <div style={{ fontSize: '0.9em' }}>
+              <Translate id="quizNavigator.progress" data={{ n: qn + 1, total: qmax }} />
+              {examMode && <QuestionExamModeCounter />}
+            </div>
           )}
         </Menu.Item>
         <Menu.Item

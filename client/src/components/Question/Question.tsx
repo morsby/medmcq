@@ -29,17 +29,15 @@ const Question: React.SFC<QuestionProps> = () => {
   const question = useSelector(
     (state: ReduxState) => state.questions.questions[currentQuestionNumber]
   );
-  const answer = useSelector((state: ReduxState) =>
-    state.quiz.answers.find((answer) => answer.questionId === question.id)
-  );
   const imgOpen = useSelector((state: ReduxState) => state.quiz.imgOpen);
+  const examMode = useSelector((state: ReduxState) => state.quiz.examMode);
 
   useEffect(() => {
     setAnswerTime(0);
   }, [question]);
 
   const handleAnswer = (answer: number) => {
-    Quiz.answer({ answer, answerTime, questionId: question.id });
+    Quiz.answer({ answer, answerTime, questionId: question.id }, examMode);
   };
 
   useEffect(() => {
@@ -113,7 +111,7 @@ const Question: React.SFC<QuestionProps> = () => {
               <Responsive as="div" minWidth={breakpoints.mobile + 1}>
                 <Divider />
 
-                <QuestionAnswerButtons chosenAnswer={answer?.answer} handleAnswer={handleAnswer} />
+                <QuestionAnswerButtons handleAnswer={handleAnswer} />
               </Responsive>
             </Grid.Column>
             {question.images.length > 0 && (
@@ -127,10 +125,10 @@ const Question: React.SFC<QuestionProps> = () => {
         </Grid>
         <Responsive as="div" maxWidth={breakpoints.mobile}>
           <Divider />
-          <QuestionAnswerButtons handleAnswer={handleAnswer} chosenAnswer={answer?.answer} />
+          <QuestionAnswerButtons handleAnswer={handleAnswer} />
         </Responsive>
-        <QuestionMetadata />
-        <QuestionExtras width={width} />
+        {!examMode && <QuestionMetadata />}
+        {!examMode && <QuestionExtras width={width} />}
       </Segment>
       <Divider hidden />
     </Container>
