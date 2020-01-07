@@ -78,6 +78,7 @@ class Quiz {
     }
 
     store.dispatch(quizReducer.actions.stopExamMode());
+    store.dispatch(quizReducer.actions.changeQuestion(0));
   };
 }
 
