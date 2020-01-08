@@ -13,10 +13,9 @@ const QuestionExamModeCounter: React.SFC<QuestionExamModeCounterProps> = () => {
   const examModeStart = useSelector((state: ReduxState) => state.quiz.examModeStart);
 
   useEffect(() => {
+    setCounter(moment.duration(moment(new Date()).diff(examModeStart)).humanize());
     const interval = setInterval(() => {
-      const now = moment(new Date());
-      const difference = moment.duration(now.diff(examModeStart)).humanize();
-
+      const difference = moment.duration(moment(new Date()).diff(examModeStart)).humanize();
       setCounter(difference);
     }, 1000);
 
