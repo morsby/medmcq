@@ -44,8 +44,12 @@ const Footer: React.SFC<FooterProps> = ({ addTranslation }) => {
               <p>
                 <Translate id="footer.permission" />
               </p>
-              <Icon name="heartbeat" />
-              <Translate id="footer.developed_by" />
+              <div>
+                <Icon name="heartbeat" /> <Translate id="footer.developed_by" />
+              </div>
+              <div>
+                <Icon name="sitemap" /> <span>Version 2.0</span>
+              </div>
             </Grid.Column>
             <Grid.Column largeScreen={4} computer={4} tablet={6} mobile={16}>
               <Menu secondary vertical inverted fluid>
