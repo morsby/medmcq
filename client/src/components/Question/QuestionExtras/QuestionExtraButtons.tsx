@@ -1,9 +1,8 @@
 import React from 'react';
 import { Translate } from 'react-localize-redux';
-import { Button, Divider, Menu } from 'semantic-ui-react';
+import { Menu } from 'semantic-ui-react';
 import { useSelector, useDispatch } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
-import settingsReducer from 'redux/reducers/settings';
 import quizReducer from 'redux/reducers/quiz';
 
 export interface QuestionExtraButtonsProps {
@@ -31,6 +30,9 @@ const QuestionExtraButtons: React.SFC<QuestionExtraButtonsProps> = ({
   const comments = useSelector((state: ReduxState) =>
     state.questions.comments.filter((comment) => comment.question.id === question.id)
   );
+  const isAnswered = !!useSelector((state: ReduxState) =>
+    state.quiz.answers.find((answer) => answer.questionId === question.id)
+  );
   const publicComments = comments.filter((comment) => !comment.isPrivate).length;
   const privateComments = comments.filter((comment) => comment.isPrivate).length;
 
@@ -42,17 +44,27 @@ const QuestionExtraButtons: React.SFC<QuestionExtraButtonsProps> = ({
     <Menu stackable>
       <Menu.Item color="green" active={publicCommentsOpen} onClick={onPublicCommentsToggle}>
         {publicCommentsOpen ? (
-          <Translate id="question.hide_public_comments" data={{ n: publicComments }} />
+          <>
+            <Translate id="question.hide_public_comments" /> {`(${publicComments})`}
+          </>
         ) : (
-          <Translate id="question.show_public_comments" data={{ n: publicComments }} />
+          <>
+            <Translate id="question.show_public_comments" />{' '}
+            {isAnswered ? `(${publicComments})` : null}
+          </>
         )}
       </Menu.Item>
       {user && (
         <Menu.Item color="green" active={privateCommentsOpen} onClick={onPrivateCommentsToggle}>
           {privateCommentsOpen ? (
-            <Translate id="question.hide_private_comments" data={{ n: privateComments }} />
+            <>
+              <Translate id="question.hide_private_comments" /> {`(${privateComments})`}
+            </>
           ) : (
-            <Translate id="question.show_private_comments" data={{ n: privateComments }} />
+            <>
+              <Translate id="question.show_private_comments" />{' '}
+              {isAnswered ? `(${privateComments})` : null}
+            </>
           )}
         </Menu.Item>
       )}

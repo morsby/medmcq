@@ -34,10 +34,10 @@
     "print": ["Print disse spørgsmål", "Print these questions"]
   },
   "question": {
-    "show_public_comments": ["Vis offentlige kommentarer (${n})", "Show public comments (${n})"],
-    "hide_public_comments": ["Skjul offentlige kommentarer (${n})", "Hide public comments (${n})"],
-    "show_private_comments": ["Vis private kommentarer (${n})", "Show private comments (${n})"],
-    "hide_private_comments": ["Skjul private kommentarer (${n})", "Hide private comments (${n})"],
+    "show_public_comments": ["Vis offentlige kommentarer", "Show public comments"],
+    "hide_public_comments": ["Skjul offentlige kommentarer", "Hide public comments"],
+    "show_private_comments": ["Vis private kommentarer", "Show private comments"],
+    "hide_private_comments": ["Skjul private kommentarer", "Hide private comments"],
     "show_percentages": ["Vis procenter", "Show percentages"],
     "hide_percentages": ["Skjul procenter", "Hide percentages"],
     "report_question": ["Rapporter en fejl i spørgsmålet", "Report an error in the question"],
