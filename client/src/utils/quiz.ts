@@ -31,7 +31,6 @@ export const smoothScroll = (h?: number, dir = 'up') => {
 
 export const evalAnswer = (question, userAnswer, answerNo, examMode) => {
   if (!userAnswer) return null; // hvis ikke svaret
-  console.log(examMode);
 
   if (examMode) {
     if (answerNo === userAnswer) {
