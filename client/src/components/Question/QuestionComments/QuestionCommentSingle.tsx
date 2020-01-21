@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import marked from 'marked';
-import { Comment, Icon, Menu, Loader } from 'semantic-ui-react';
+import { Comment, Icon } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 import CommentClass from 'classes/Comment';
 import Question from 'classes/Question';
 import { ReduxState } from 'redux/reducers';
 import _ from 'lodash';
+import QuestionCommentLikeButton from './QuestionCommentLikeButton';
 
 /**
  * Component der viser den enkelte kommentar
@@ -33,12 +34,6 @@ const QuestionCommentSingle: React.SFC<QuestionCommentSingleProps> = ({
   const [likeLoading, setLikeLoading] = useState(false);
   const user = useSelector((state: ReduxState) => state.auth.user);
 
-  const handleLike = async () => {
-    setLikeLoading(true);
-    await CommentClass.like({ commentId: comment.id });
-    setLikeLoading(false);
-  };
-
   const handleDelete = async (commentId: number) => {
     await CommentClass.delete({ commentId });
   };
@@ -64,34 +59,17 @@ const QuestionCommentSingle: React.SFC<QuestionCommentSingleProps> = ({
         </Comment.Author>
         <Comment.Metadata>
           <div>
+            {!comment.isPrivate && <QuestionCommentLikeButton comment={comment} />}
+            {comment.isPrivate && <Translate id="question.private_comment" />}
+          </div>
+          <div style={{ marginLeft: '1em' }}>
             {new Date(comment.createdAt).toLocaleString('da-DK', {
               timeStyle: 'short',
               dateStyle: 'short'
             } as any)}
-            {!comment.isPrivate && (
-              <span style={{ marginLeft: '1em' }}>
-                {!likeLoading && user && comment.user.id !== user.id ? (
-                  <Icon
-                    name="thumbs up outline"
-                    color={
-                      comment.likes.findIndex((like) => like.userId === user.id) !== -1
-                        ? 'green'
-                        : 'grey'
-                    }
-                    style={user.id ? { cursor: 'pointer' } : {}}
-                    onClick={handleLike}
-                  />
-                ) : (
-                  <>
-                    <Loader active inline size="mini" />{' '}
-                  </>
-                )}
-                <span style={{ color: 'grey' }}>{comment.likes.length}</span>
-              </span>
-            )}
-            {comment.isPrivate && <Translate id="question.private_comment" />}
           </div>
         </Comment.Metadata>
+        <Comment.Metadata></Comment.Metadata>
         <Comment.Text
           style={{ marginTop: '1em', fontSize: '15px' }}
           dangerouslySetInnerHTML={{
