@@ -3,7 +3,7 @@ import { Model } from 'objection';
 interface QuestionImage {
   id: number;
   link: string;
-  question_id: number;
+  questionId: number;
 }
 
 class QuestionImage extends Model {

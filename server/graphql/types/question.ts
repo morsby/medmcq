@@ -65,6 +65,20 @@ export const typeDefs = gql`
     answer: String
     correctPercent: Int
   }
+
+  input QuestionInput {
+    answer1: String!
+    answer2: String!
+    answer3: String!
+    correctAnswers: [Int!]!
+    text: String!
+    images: [QuestionImageInput]
+    examSetQno: Int!
+  }
+
+  input QuestionImageInput {
+    link: String!
+  }
 `;
 
 export const resolvers = {
@@ -135,10 +149,7 @@ export const resolvers = {
 
         query = query
           .join('questionSpecialtyVote as specialtyVote', 'question.id', 'specialtyVote.questionId')
-          .whereIn(
-            'question.id',
-            votes.map((specialtyVote) => specialtyVote.questionId)
-          );
+          .whereIn('question.id', votes.map((specialtyVote) => specialtyVote.questionId));
       }
 
       if (tagIds && tagIds.length > 0) {
@@ -151,10 +162,7 @@ export const resolvers = {
 
         query = query
           .join('questionTagVote as tagVote', 'question.id', 'tagVote.questionId')
-          .whereIn(
-            'question.id',
-            votes.map((vote) => vote.questionId)
-          );
+          .whereIn('question.id', votes.map((vote) => vote.questionId));
       }
 
       if (text) {
