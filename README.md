@@ -13,8 +13,8 @@ For at køre appen, skal du placere en fil med navnet ".env.development" med fø
 - DB_URL
 - SECRET
 - SENDGRID
-- KEYGRIP_SECRETS
-  Se mere om omsætningen i dokumentation for dotenv-flow.
+- KEYGRIP_SECRETS    
+Se mere om omsætningen i dokumentation for dotenv-flow.
   
 Derefter skal du køre `npm run install-all` og derefter `npm run dev` for at starte dit development workflow. Held og lykke!
 
