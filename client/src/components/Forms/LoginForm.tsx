@@ -6,6 +6,8 @@ import User from 'classes/User';
 import { useHistory } from 'react-router';
 import { useFormik } from 'formik';
 import FormField from './Fields/FormField';
+import { useDispatch } from 'react-redux';
+import makeToast from 'redux/actions/makeToast';
 
 /**
  * Component der viser login-formularen.
@@ -14,8 +16,8 @@ import FormField from './Fields/FormField';
 export interface LoginFormProps extends LocalizeContextProps {}
 
 const LoginForm: React.SFC<LoginFormProps> = ({ translate }) => {
-  const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
   const history = useHistory();
   const formik = useFormik({
     initialValues: {
@@ -36,12 +38,12 @@ const LoginForm: React.SFC<LoginFormProps> = ({ translate }) => {
     try {
       const user = await User.login(data);
       if (!user) {
-        return setError('Login mislykkedes');
+        return dispatch(makeToast('loginForm.errs.login_failed', 'error'));
       }
 
       return handleNavigation('root');
     } catch (error) {
-      setError(error);
+      dispatch(makeToast('loginForm.errs.login_failed', 'error'));
       setLoading(false);
     }
   };
@@ -82,8 +84,6 @@ const LoginForm: React.SFC<LoginFormProps> = ({ translate }) => {
           <Translate id="loginForm.forgot_password" />
         </Button>
       </div>
-
-      {error && <Message color="red">{error}</Message>}
     </div>
   );
 };
