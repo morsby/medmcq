@@ -48,8 +48,8 @@
       "For the ${semester}th semester, the following exam sets can be selected:"
     ],
     "subtitle": [
-      "Tryk på fluebenet længst til højre for sættet, for manualt at sætte det som færdigt.",
-      "Click on the rightmost tickmark to manually set the set as completed."
+      "Tryk på fluebenet ud for sættet for manuelt det som færdigt.",
+      "Click the tickmark to manually set the set as completed."
     ]
   },
   "selectionSpecialtiesSelector": {
@@ -81,8 +81,8 @@
       "The value must be between ${min} and ${max}."
     ],
     "total_n": [
-      "Der er ${n} spørgsmål for det valgte semester.",
-      "There are ${n} questions for the selected semester."
+      "Der er ${n} spørgsmål på ${semesterNumber}. semester.",
+      "There are ${n} questions available on the ${semesterNumber}th semester."
     ]
   },
   "selectionUniqueSelector": {

@@ -10,7 +10,7 @@ export const typeDefs = gql`
   }
 
   extend type Mutation {
-    createShareLink(questionIds: [Int]!): String
+    createShareLink(questionIds: [Int!]!): String
   }
 `;
 

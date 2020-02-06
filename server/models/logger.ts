@@ -1,4 +1,4 @@
-import BaseModel from './_base_model';
+import { Model } from 'objection';
 
 interface Logger {
   method: string;
@@ -7,7 +7,7 @@ interface Logger {
   body: string;
 }
 
-class Logger extends BaseModel {
+class Logger extends Model {
   static get tableName() {
     return 'logger';
   }

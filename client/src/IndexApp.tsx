@@ -1,8 +1,6 @@
-/* eslint-disable import/first */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
-
 // GraphQL
 import { ApolloProvider } from 'react-apollo-hooks';
 import apolloClient from 'apolloClient';
@@ -12,67 +10,66 @@ import { createMigrate, persistStore, persistReducer } from 'redux-persist';
 import storage from 'redux-persist/es/storage';
 import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2';
 import { PersistGate } from 'redux-persist/lib/integration/react';
-import reducers, { IReduxState } from './reducers';
 
 // Oversættelse
 import { LocalizeProvider } from 'react-localize-redux';
 
+// redux
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import rootReducer, { ReduxState } from 'redux/reducers';
+import ErrorBoundary from 'components/Misc/Utility/ErrorBoundary';
+
 // Components
 import LocalizedApp from './App';
-import LoadingPage from './components/Misc/Utility-pages/LoadingPage';
+import LoadingPage from './components/Misc/Utility/LoadingPage';
+
+// Utils
+import 'proto/string';
 
 // STYLING
 import './styles/scss/main.scss';
 // Lightbox css
 import 'react-image-lightbox/style.css'; // This only needs to be imported once in your app
 
-// redux
-import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
-
 const migrations: any = {
-  10: (state: IReduxState) => ({
+  10: (state: ReduxState) => ({
     ...state,
     questions: null
-  })
+  }),
+  11: (state: ReduxState) => ({})
 };
 
 const persistConfig = {
   key: 'medMCQ',
   storage: storage,
   stateReconciler: autoMergeLevel2, // see "Merge Process" section for details.
-  version: 10,
+  version: 11,
   migrate: createMigrate(migrations),
-  whitelist: ['quiz', 'questions', 'metadata', 'ui', 'settings', 'shareBuilder'] // to disable persists
+  blacklist: ['auth', 'profile']
 };
 
-const pReducer = persistReducer(persistConfig, reducers);
-
-// Redux middleware
-let middleware = getDefaultMiddleware();
-/**
- * removes createSerializableStateInvariantMiddleware which threw a bunch of errs
- * over react-localize-redux and redux-persist.
- */
-if (middleware.length > 1) middleware.pop();
+const pReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
   reducer: pReducer,
-  middleware,
+  middleware: getDefaultMiddleware({ serializableCheck: false }),
   devTools: { maxAge: 20 }
 });
 
 export const persistor = persistStore(store);
 
 ReactDOM.render(
-  <Provider store={store}>
-    <PersistGate loading={<LoadingPage />} persistor={persistor}>
-      <ApolloProvider client={apolloClient}>
-        <LocalizeProvider store={store}>
-          <LocalizedApp />
-        </LocalizeProvider>
-      </ApolloProvider>
-    </PersistGate>
-  </Provider>,
+  <ErrorBoundary>
+    <Provider store={store}>
+      <PersistGate loading={<LoadingPage />} persistor={persistor}>
+        <ApolloProvider client={apolloClient}>
+          <LocalizeProvider store={store}>
+            <LocalizedApp />
+          </LocalizeProvider>
+        </ApolloProvider>
+      </PersistGate>
+    </Provider>
+  </ErrorBoundary>,
   document.querySelector('#root')
 );
 

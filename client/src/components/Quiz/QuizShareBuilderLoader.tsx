@@ -1,34 +1,30 @@
 import React, { useEffect } from 'react';
 import { useParams } from 'react-router';
-import { useDispatch } from 'react-redux';
-import LoadingPage from 'components/Misc/Utility-pages/LoadingPage';
+import LoadingPage from 'components/Misc/Utility/LoadingPage';
 import Quiz from 'components/Quiz/Quiz';
-import * as types from '../../actions/types';
 import { useQuery } from 'react-apollo-hooks';
-import { getQuestions } from 'actions';
 import { fetchQuestionIdsFromShareLink as query_fetchQuestionIdsFromShareLink } from 'queries/shareLink';
-import ErrorBoundary from 'components/Misc/Utility-pages/ErrorBoundary';
+import ErrorBoundary from 'components/Misc/Utility/ErrorBoundary';
+import Question from 'classes/Question';
 
 export interface QuizShareBuilderLoader {}
 
 const QuizShareBuilderLoader: React.SFC<QuizShareBuilderLoader> = () => {
-  const params: any = useParams();
-  const dispatch = useDispatch();
+  const params = useParams<{ id: string }>();
   const { data, error, loading } = useQuery(query_fetchQuestionIdsFromShareLink, {
     variables: { shareId: params.id }
   });
 
   useEffect(() => {
     const fetchQuestions = async () => {
-      await dispatch(getQuestions({ ids: data.shareLink, quiz: true }));
-      await dispatch({ type: types.QUIZ_NAVIGATE, payload: 0 });
+      await Question.fetch({ ids: data.shareLink });
     };
 
     // Når ID'er er hentet gennem useQuery, så henter vi spørgsmålene fra ID'erne normalt
     if (!loading) {
       fetchQuestions();
     }
-  }, [data, dispatch, loading, params.id]);
+  }, [data, loading, params.id]);
 
   if (loading) return <LoadingPage />;
   if (error) return <ErrorBoundary />;
