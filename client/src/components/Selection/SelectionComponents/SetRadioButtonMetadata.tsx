@@ -45,7 +45,7 @@ const SetRadioButtonMetadata: React.SFC<SetRadioButtonMetadataProps> = ({ user, 
       )}
       {manualLoading && <Loader active inline size="mini" />}
       <span style={{ color: getColor(), margin: '0 0.5em' }}>
-        {getCount() || 0} / 80 ({Math.round((getCount() / 80) * 100)}%)
+        {getCount() || 0} / 80 ({Math.round(((getCount() || 0) / 80) * 100)}%)
       </span>
     </span>
   );
