@@ -1,4 +1,4 @@
-import BaseModel from './_base_model';
+import { Model } from 'objection';
 
 interface ShareLink {
   link: string;
@@ -8,7 +8,7 @@ interface ShareLink {
   questionId: number;
 }
 
-class ShareLink extends BaseModel {
+class ShareLink extends Model {
   static get tableName() {
     return 'share_links';
   }

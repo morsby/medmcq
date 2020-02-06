@@ -1,9 +1,15 @@
-import BaseModel from './_base_model';
+import { Model } from 'objection';
 
-class manualCompletedSet extends BaseModel {
+interface ManualCompletedSet {
+  id: number;
+  setId: number;
+  userId: number;
+}
+
+class ManualCompletedSet extends Model {
   static get tableName() {
     return 'manualCompletedSets';
   }
 }
 
-export default manualCompletedSet;
+export default ManualCompletedSet;

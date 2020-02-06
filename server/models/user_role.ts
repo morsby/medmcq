@@ -1,6 +1,4 @@
-import BaseModel from './_base_model';
 import { Model } from 'objection';
-import User from './user';
 
 interface UserRole {
   id: number;
@@ -8,35 +6,9 @@ interface UserRole {
   level: number;
 }
 
-class UserRole extends BaseModel {
+class UserRole extends Model {
   static get tableName() {
     return 'userRole';
-  }
-
-  static get jsonSchema() {
-    return {
-      type: 'object',
-      required: ['name', 'level'],
-
-      properties: {
-        id: { type: 'integer' },
-        name: { type: 'string' },
-        level: { type: 'integer' }
-      }
-    };
-  }
-
-  static get relationMappings() {
-    return {
-      users: {
-        relation: Model.HasManyRelation,
-        modelClass: User,
-        join: {
-          from: 'user.roleId',
-          to: 'userRole.id'
-        }
-      }
-    };
   }
 }
 

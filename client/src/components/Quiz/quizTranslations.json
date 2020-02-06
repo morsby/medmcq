@@ -24,18 +24,42 @@
   "quizSummary": {
     "header": ["Fremgang", "Progress"],
     "results": [
-      "Du har svaret rigtigt på ${correct} af ${n} spørgsmål. Dette svarer til ${percentage}",
+      "Du har svaret rigtigt på ${correct} af ${n} spørgsmål. Dette svarer til ${percentage}.",
       "You have answered ${correct} out of ${n} questions correctly. This is equivalent to ${percentage}."
+    ],
+    "usedTime": [
+      "Du brugte <u>${usedExamTime}</u> til besvarelsen.",
+      "You used <u>${usedExamTime}</u> to answer."
     ],
     "print": ["Print disse spørgsmål", "Print these questions"]
   },
   "question": {
-    "show_public_comments": ["Vis offentlige kommentarer (${n})", "Show public comments (${n})"],
-    "hide_public_comments": ["Skjul offentlige kommentarer (${n})", "Hide public comments (${n})"],
-    "show_private_comments": ["Vis private kommentarer (${n})", "Show private comments (${n})"],
-    "hide_private_comments": ["Skjul private kommentarer (${n})", "Hide private comments (${n})"],
+    "show_public_comments": ["Vis offentlige kommentarer", "Show public comments"],
+    "hide_public_comments": ["Skjul offentlige kommentarer", "Hide public comments"],
+    "show_private_comments": ["Vis private kommentarer", "Show private comments"],
+    "hide_private_comments": ["Skjul private kommentarer", "Hide private comments"],
+    "show_percentages": ["Vis procenter", "Show percentages"],
+    "hide_percentages": ["Skjul procenter", "Hide percentages"],
     "report_question": ["Rapporter en fejl i spørgsmålet", "Report an error in the question"],
-    "private_comment": ["Privat kommentar", "Private comment"]
+    "private_comment": ["Privat kommentar", "Private comment"],
+    "percentage_popup": [
+      "Procent af alle, der ved første forsøg har besvaret spørgsmålet med dette valg.",
+      "Percentage of all, who on their first try have chosen this answer."
+    ],
+    "stopExamButton": [
+      "Færdiggør eksamen, og se alle svar",
+      "Finish the exam, and see all answers"
+    ],
+    "stopExamModalTitle": [
+      "Er du sikker på, at du vil færdiggøre din eksamen?",
+      "Are you sure you want to finish your exam?"
+    ],
+    "stopExamConfirmation": [
+      "Dette returnerer dig til første spørgsmål, og viser dig alle svar.",
+      "This returns you to the first question, and shows all answers."
+    ],
+    "stopExamCancel": ["Annullér", "Cancel"],
+    "stopExamOk": ["Ja, afslut eksamen", "Yes, finish the exam"]
   },
   "questionMetadata": {
     "set": ["Sæt:", "Set:"],
@@ -93,7 +117,8 @@
     "comment": ["Kommentér", "Comment"],
     "undo_edit": ["Fortryd ændring", "Undo edit"],
     "hide_username": ["Skjul dit brugernavn", "Hide your usernname"],
-    "anonymous": ["Skjul mit brugernavn", "Hide my username"]
+    "anonymous": ["Skjul mit brugernavn", "Hide my username"],
+    "supportsMarkdown": ["Understøtter markdown", "Supports markdown"]
   },
   "questionCommentSingle": {
     "edit": ["Ret", "Edit"],
