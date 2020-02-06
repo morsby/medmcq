@@ -8,13 +8,15 @@ Siden er lavet med tilladelse fra Institut for Klinisk Medicin, Health, Aarhus U
 
 ## Opsætning
 
-For at køre appen, skal du placere en fil med navnet ".env.development" med følgende enviromental variables:
+For at køre appen, skal du placere en fil med navnet ".env.development" med følgende enviromental variables i server mappen:
 
 - DB_URL
 - SECRET
 - SENDGRID
 - KEYGRIP_SECRETS
   Se mere om omsætningen i dokumentation for dotenv-flow.
+  
+Derefter skal du køre `npm run install-all` og derefter `npm run dev` for at starte dit development workflow. Held og lykke!
 
 ## For de teknisk interesserede
 
