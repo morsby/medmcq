@@ -7,11 +7,13 @@ import _ from 'lodash';
 import { useHistory } from 'react-router';
 import AnswerDetailsTableExtendedRow from './AnswerDetailsTableExtendedRow';
 import { ReduxState } from 'redux/reducers';
+import Question from 'classes/Question';
+import { UserAnswer } from 'classes/User';
 
 export interface AnswersDetailsTableProps {
-  answers: any[];
+  answers: UserAnswer[];
   toggleCheckbox: Function;
-  questions: any[];
+  questions: Question[];
 }
 
 const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
@@ -24,6 +26,7 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
   const { tags, specialties, examSets } = useSelector((state: ReduxState) =>
     state.metadata.semesters.find((semester) => semester.id === chosenSemesterId)
   );
+  const tries = useSelector((state: ReduxState) => state.profile.tries);
 
   const getColor = (answer) => {
     if (answer.correct === answer.tries) return 'green';
@@ -34,49 +37,55 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
   const columns = [
     {
       title: <Translate id="profileAnswerDetails.table_headers.performance" />,
-      render: (record) => (
-        <Tag color={getColor(record)}>
-          {record.correct} / {record.tries} ({Math.round((record.correct / record.tries) * 100)}
-          %)
-        </Tag>
-      ),
-      sorter: (a, b) =>
-        Math.round((a.correct / a.tries) * 100) - Math.round((b.correct / b.tries) * 100)
+      render: (record: UserAnswer) => {
+        const attempt = tries.find((attempt) => attempt.questionId === record.question.id);
+
+        return (
+          <Tag color={getColor(attempt)}>
+            {attempt.correct} / {attempt.tries} (
+            {Math.round((attempt.correct / attempt.tries) * 100)}
+            %)
+          </Tag>
+        );
+      },
+      sorter: (a, b) => {
+        const aAttempts = tries.find((attempt) => attempt.questionId === a.question.id);
+        const bAttempts = tries.find((attempt) => attempt.questionId === b.question.id);
+        return (
+          Math.round((aAttempts.correct / aAttempts.tries) * 100) -
+          Math.round((bAttempts.correct / bAttempts.tries) * 100)
+        );
+      }
     },
     {
       title: <Translate id="profileAnswerDetails.table_headers.question" />,
       key: 'text',
-      render: (record) => (
+      render: (record: UserAnswer) => (
         <p
           style={{ color: '#1890ff', cursor: 'pointer' }}
-          onClick={() => history.push(`quiz/${record.key}`)}
+          onClick={() => history.push(`quiz/${record.question.id}`)}
         >
-          {questions[record.key].text.substr(0, 100)}...
+          {console.log(record)}
+          {record.question.text.substr(0, 100)}...
         </p>
       )
     },
     {
       title: <Translate id="profileAnswerDetails.table_headers.specialty" />,
-      render: (record) =>
-        _.map(questions[record.questionId].specialties, (specialty) => (
-          <Tag color="blue">{specialties[specialty.id].name}</Tag>
-        ))
+      render: (record: UserAnswer) =>
+        record.question.specialties.map((specialty) => <Tag color="blue">{specialty.name}</Tag>)
     },
     {
       title: 'Tags',
-      render: (record) =>
-        _.map(questions[record.questionId].tags, (tag) => (
-          <Tag color="geekblue">{tags[tag.id].name}</Tag>
-        ))
+      render: (record: UserAnswer) =>
+        record.question.tags.map((tag) => <Tag color="geekblue">{tag.name}</Tag>)
     },
     {
       title: <Translate id="profileAnswerDetails.table_headers.set" />,
-      render: (record) => (
+      render: (record: UserAnswer) => (
         <>
-          <Translate
-            id={`profileAnswerDetails.${examSets[questions[record.questionId].examSet].season}`}
-          />
-          {examSets[questions[record.questionId].examSet].year}
+          <Translate id={`profileAnswerDetails.${record.question.examSet.season}`} />
+          {record.question.examSet.year}
         </>
       )
     }
@@ -96,9 +105,9 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
         rowKey={(record) => record.key}
         bordered
         columns={columns}
-        dataSource={_.map(answers, (a, questionId) => ({ ...a, key: questionId }))}
-        expandedRowRender={(record) => {
-          const question = questions[record.key];
+        dataSource={answers}
+        expandedRowRender={(record: UserAnswer) => {
+          const question = questions.find((question) => question.id === record.question.id);
 
           return (
             <>

@@ -41,7 +41,7 @@ const Selection: React.SFC<SelectionProps> = ({ addTranslation }) => {
     User.fetch();
   }, []);
 
-  if (semesters.length < 0) return <LoadingPage />;
+  if (!semesters || semesters.length < 0) return <LoadingPage />;
   return (
     <div className="flex-container">
       <Container className="content">

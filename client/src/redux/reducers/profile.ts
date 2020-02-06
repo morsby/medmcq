@@ -9,7 +9,7 @@ const initialState = {
   publicComments: [] as Comment[],
   privateComments: [] as Comment[],
   bookmarks: [] as Bookmark[],
-  tries: {} as Attempt
+  tries: [] as Attempt[]
 };
 
 const profileReducer = createSlice({

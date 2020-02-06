@@ -59,7 +59,7 @@ const AnswerTagsDetailsTable: React.SFC<AnswerTagsDetailsTableProps> = () => {
     }
 
     // For each answer, add the count to answeredTags
-    _.map(tries, (attempt) => {
+    tries.map((attempt) => {
       for (let tag of answers.find((answer) => answer.question.id === attempt.questionId).question
         .tags) {
         if (answeredTags[tag.id]) {

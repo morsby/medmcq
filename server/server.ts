@@ -27,7 +27,7 @@ app.use(bodyParser.json());
 app.use(cookieParser());
 
 // Logging of all requests
-app.use(logger);
+// app.use(logger);
 
 // GraphQL and routes
 apolloServer.applyMiddleware({ app });

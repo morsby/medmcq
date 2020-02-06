@@ -1,5 +1,4 @@
 import { gql } from 'apollo-server-express';
-import { merge } from 'lodash';
 import { typeDefs as ShareLink, resolvers as shareLinkResolvers } from './shareLink';
 import { typeDefs as Question, resolvers as questionResolvers } from './question';
 import { typeDefs as Metadata, resolvers as metadataResolvers } from './metadata';
@@ -34,7 +33,7 @@ export const typeDefs = [
   Like
 ];
 
-export const resolvers = merge(
+export const resolvers = [
   shareLinkResolvers,
   questionResolvers,
   metadataResolvers,
@@ -45,4 +44,4 @@ export const resolvers = merge(
   voteResolvers,
   userResolvers,
   likeResolvers
-);
+];

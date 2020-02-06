@@ -30,7 +30,7 @@
     "postbuild": "cd server && npm run migrate-latest",
     "migrate-travis": "cd server && knex migrate:rollback --all && knex migrate:latest --env travis"
   },
-  "author": "Morsby",
+  "author": "Morsby & Thomas",
   "license": "MIT",
   "dependencies": {
     "genversion": "^2.2.0",

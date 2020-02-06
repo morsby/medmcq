@@ -222,6 +222,7 @@ export const resolvers = {
       return `Question (ID: ${question.id}) reported`;
     }
   },
+
   Question: {
     id: ({ id }) => id,
     text: async ({ id }, args, ctx: Context) => {

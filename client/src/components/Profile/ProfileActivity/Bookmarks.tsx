@@ -34,13 +34,13 @@ const Bookmarks: React.SFC<BookmarksProps> = () => {
           <div dangerouslySetInnerHTML={{ __html: marked(bookmark.question.text) }} />
           <ol type="A">
             <li className={bookmark.question.correctAnswers.indexOf(1) > -1 ? 'svar-korrekt' : ''}>
-              {bookmark.question.answer1}
+              {bookmark.question.answer1.answer}
             </li>
             <li className={bookmark.question.correctAnswers.indexOf(2) > -1 ? 'svar-korrekt' : ''}>
-              {bookmark.question.answer2}
+              {bookmark.question.answer2.answer}
             </li>
             <li className={bookmark.question.correctAnswers.indexOf(3) > -1 ? 'svar-korrekt' : ''}>
-              {bookmark.question.answer3}
+              {bookmark.question.answer3.answer}
             </li>
           </ol>
           <div style={{ textAlign: 'center', margin: '1rem' }}>

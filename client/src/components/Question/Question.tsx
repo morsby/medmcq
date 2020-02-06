@@ -25,18 +25,22 @@ export interface QuestionProps {}
 const Question: React.SFC<QuestionProps> = () => {
   const [width, setWidth] = useState(window.innerWidth);
   const [answerTime, setAnswerTime] = useState(0);
-  const currentQuestionNumber = useSelector((state: ReduxState) => state.quiz.questionIndex);
+  const currentQuestionIndex = useSelector((state: ReduxState) => state.quiz.questionIndex);
   const question = useSelector(
-    (state: ReduxState) => state.questions.questions[currentQuestionNumber]
+    (state: ReduxState) => state.questions.questions[currentQuestionIndex]
   );
   const imgOpen = useSelector((state: ReduxState) => state.quiz.imgOpen);
   const examMode = useSelector((state: ReduxState) => state.quiz.examMode);
+  const answered = useSelector(
+    (state: ReduxState) => !!state.quiz.answers.find((answer) => answer.questionId === question.id)
+  );
 
   useEffect(() => {
     setAnswerTime(0);
   }, [question]);
 
   const handleAnswer = (answer: number) => {
+    if (answered && !examMode) return;
     Quiz.answer({ answer, answerTime, questionId: question.id }, examMode);
   };
 

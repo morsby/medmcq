@@ -13,21 +13,21 @@ const ExtendedRow: React.SFC<ExtendedRowProps> = ({ record }) => {
           color: _.find(record.correctAnswers, { answer: 1 }) ? 'green' : undefined
         }}
       >
-        Svarmulighed 1: {record.answer1}
+        Svarmulighed 1: {record.answer1.answer}
       </p>
       <p
         style={{
           color: _.find(record.correctAnswers, { answer: 2 }) ? 'green' : undefined
         }}
       >
-        Svarmulighed 2: {record.answer2}
+        Svarmulighed 2: {record.answer2.answer}
       </p>
       <p
         style={{
           color: _.find(record.correctAnswers, { answer: 3 }) ? 'green' : undefined
         }}
       >
-        Svarmulighed 3: {record.answer3}
+        Svarmulighed 3: {record.answer3.answer}
       </p>
     </>
   );

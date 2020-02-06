@@ -13,21 +13,21 @@ const AnswerDetailsTableExtendedRow: React.SFC<AnswerDetailsTableExtendedRow> = 
           color: _.indexOf(question.correctAnswers, 1) !== -1 ? 'green' : undefined
         }}
       >
-        Svarmulighed 1: {question.answer1}
+        Svarmulighed 1: {question.answer1.answer}
       </p>
       <p
         style={{
           color: _.indexOf(question.correctAnswers, 2) !== -1 ? 'green' : undefined
         }}
       >
-        Svarmulighed 2: {question.answer2}
+        Svarmulighed 2: {question.answer2.answer}
       </p>
       <p
         style={{
           color: _.indexOf(question.correctAnswers, 3) !== -1 ? 'green' : undefined
         }}
       >
-        Svarmulighed 3: {question.answer3}
+        Svarmulighed 3: {question.answer3.answer}
       </p>
     </>
   );

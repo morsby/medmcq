@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { urls } from '../../utils/common';
 import _ from 'lodash';
 
-import { Container, Tab, Button, Divider } from 'semantic-ui-react';
+import { Container, Tab, Button, Divider, Loader, Segment } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 
 import ProfileActivity from './ProfileActivity/ProfileActivity';
@@ -64,7 +64,16 @@ const Profile: React.SFC<ProfileProps> = () => {
     semesters.map((semester) =>
       panes.push({
         menuItem: generatePaneLabel(semester),
-        render: () => <Tab.Pane loading={loading}>{!loading && <ProfileActivity />}</Tab.Pane>
+        render: () => {
+          if (loading)
+            return (
+              <Tab.Pane style={{ textAlign: 'center' }}>
+                <Loader inline active size="huge" />
+                <p>Hvis du har besvaret mange spørgsmål, kan dette tage lidt tid.</p>
+              </Tab.Pane>
+            );
+          return <Tab.Pane>{<ProfileActivity />}</Tab.Pane>;
+        }
       })
     );
 

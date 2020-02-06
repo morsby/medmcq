@@ -15,7 +15,7 @@ export interface AnswerInput {
 
 class Quiz {
   static start = async (filter?: Partial<QuestionFilterInput>, examMode?: boolean) => {
-    const reduxStore: ReduxState = store.getState();
+    const reduxStore: ReduxState = store.getState() as any;
     const {
       specialtyIds,
       tagIds,
@@ -68,7 +68,7 @@ class Quiz {
   };
 
   static stopExam = async () => {
-    const state: ReduxState = store.getState();
+    const state: ReduxState = store.getState() as any;
 
     for (let answer of state.quiz.answers) {
       await Quiz.answer(

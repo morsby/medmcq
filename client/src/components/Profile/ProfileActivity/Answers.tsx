@@ -25,9 +25,9 @@ const Answers: React.SFC<AnswersProps> = () => {
   };
 
   let totalAnswers = answers.length;
-  let allRight = _.filter(tries, (attempt) => attempt.tries === attempt.correct);
-  let allWrong = _.filter(tries, (a) => a.correct === 0);
-  let mixed = _.filter(tries, (a) => a.correct > 0 && a.correct < a.tries);
+  let allRight = tries.filter((attempt) => attempt.tries === attempt.correct);
+  let allWrong = tries.filter((a) => a.correct === 0);
+  let mixed = tries.filter((a) => a.correct > 0 && a.correct < a.tries);
   return (
     <div>
       <p>

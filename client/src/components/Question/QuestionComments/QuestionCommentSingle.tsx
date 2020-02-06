@@ -69,7 +69,6 @@ const QuestionCommentSingle: React.SFC<QuestionCommentSingleProps> = ({
             } as any)}
           </div>
         </Comment.Metadata>
-        <Comment.Metadata></Comment.Metadata>
         <Comment.Text
           style={{ marginTop: '1em', fontSize: '15px' }}
           dangerouslySetInnerHTML={{

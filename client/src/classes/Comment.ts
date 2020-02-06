@@ -57,7 +57,7 @@ class Comment {
       ${Comment.fragmentFull}
     `;
 
-    const comment = await Apollo.mutate<Comment>('addComment', mutation, { data: { ...data } });
+    const comment = await Apollo.mutate<Comment>('addComment', mutation, { data });
     store.dispatch(questionsReducer.actions.addComment({ comment }));
   };
 

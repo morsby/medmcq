@@ -5,31 +5,35 @@ import Apollo from './Apollo';
 import profileReducer from 'redux/reducers/profile';
 import { store } from 'IndexApp';
 import Tag from './Tag';
+import Specialty from './Specialty';
+import ExamSet from './ExamSet';
 
 interface Profile {
   answers: UserAnswer[];
   publicComments: Comment[];
   privateComments: Comment[];
   bookmarks: Bookmark[];
-  tries: Attempt;
+  tries: Attempt[];
 }
 
-export type Attempt = { [key: string]: { tries: number; correct: number; questionId: number } };
+export type Attempt = { tries: number; correct: number; questionId: number };
 
-const mapAnswers = (answers: UserAnswer[]): Attempt => {
-  let mapped = {} as Attempt;
+const mapAnswers = (answers: UserAnswer[]): Attempt[] => {
+  let attempts = [] as Attempt[];
 
   for (let answer of answers) {
-    if (!mapped[answer.question.id]) {
-      mapped[answer.question.id] = { correct: 0, tries: 0, questionId: answer.question.id };
+    const attemptExists = attempts.find((attempt) => attempt.questionId === answer.question.id);
+
+    if (!attemptExists) {
+      attempts.push({ correct: 0, tries: 0, questionId: answer.question.id });
     }
-    mapped[answer.question.id].tries++;
+    attempts.find((attempt) => attempt.questionId === answer.question.id).tries++;
     if (answer.question.correctAnswers.includes(answer.answer)) {
-      mapped[answer.question.id].correct++;
+      attempts.find((attempt) => attempt.questionId === answer.question.id).correct++;
     }
   }
 
-  return mapped;
+  return attempts;
 };
 
 class Profile {
@@ -43,9 +47,16 @@ class Profile {
             answerTime
             question {
               id
+              text
               correctAnswers
               tags {
                 ...Tag
+              }
+              specialties {
+                ...Specialty
+              }
+              examSet {
+                ...ExamSet
               }
             }
           }
@@ -71,15 +82,23 @@ class Profile {
               id
               text
               correctAnswers
-              answer1
-              answer2
-              answer3
+              answer1 {
+                answer
+              }
+              answer2 {
+                answer
+              }
+              answer3 {
+                answer
+              }
             }
           }
         }
       }
       ${Comment.fragmentFull}
       ${Tag.fragmentFull}
+      ${Specialty.fragmentFull}
+      ${ExamSet.fragmentFull}
     `;
 
     const profileData = await Apollo.query<Profile>('profile', query, {
