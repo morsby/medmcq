@@ -10,10 +10,11 @@ Siden er lavet med tilladelse fra Institut for Klinisk Medicin, Health, Aarhus U
 
 For at køre appen, skal du placere en fil med navnet ".env.development" med følgende enviromental variables i server mappen:
 
-- DB_URL
-- SECRET
-- SENDGRID
-- KEYGRIP_SECRETS
+`
+SECRET=thisisasecret
+DB_URL=mysql://user:password@ip:port/schema
+KEYGRIP_SECRETS="example example example example example example example example"
+`
 
 Se mere om omsætningen i dokumentation for dotenv-flow.
   
