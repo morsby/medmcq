@@ -66,7 +66,6 @@ const LoginForm: React.SFC<LoginFormProps> = ({ translate }) => {
         <Button loading={loading} floated="left" disabled={!formik.isValid || loading} positive>
           {translate('loginForm.login')}
         </Button>
-        {error && <Message color="red">{error}</Message>}
       </Form>
 
       <div
@@ -83,6 +82,8 @@ const LoginForm: React.SFC<LoginFormProps> = ({ translate }) => {
           <Translate id="loginForm.forgot_password" />
         </Button>
       </div>
+
+      {error && <Message color="red">{error}</Message>}
     </div>
   );
 };
