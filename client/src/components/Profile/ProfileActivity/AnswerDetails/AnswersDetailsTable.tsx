@@ -3,7 +3,6 @@ import { Divider } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 import { Tag, Table } from 'antd';
 import { useSelector } from 'react-redux';
-import _ from 'lodash';
 import { useHistory } from 'react-router';
 import AnswerDetailsTableExtendedRow from './AnswerDetailsTableExtendedRow';
 import { ReduxState } from 'redux/reducers';
@@ -22,10 +21,6 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
   questions
 }) => {
   const history = useHistory();
-  const chosenSemesterId = useSelector((state: ReduxState) => state.selection.semesterId);
-  const { tags, specialties, examSets } = useSelector((state: ReduxState) =>
-    state.metadata.semesters.find((semester) => semester.id === chosenSemesterId)
-  );
   const tries = useSelector((state: ReduxState) => state.profile.tries);
 
   const getColor = (answer) => {
@@ -65,7 +60,6 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
           style={{ color: '#1890ff', cursor: 'pointer' }}
           onClick={() => history.push(`quiz/${record.question.id}`)}
         >
-          {console.log(record)}
           {record.question.text.substr(0, 100)}...
         </p>
       )
@@ -92,7 +86,7 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
   ];
 
   const rowSelection = {
-    onChange: (selectedRowKeys, selectedRows) => {
+    onChange: (selectedRowKeys) => {
       toggleCheckbox(selectedRowKeys);
     }
   };

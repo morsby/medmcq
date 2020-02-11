@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { urls } from '../../utils/common';
 import _ from 'lodash';
 
-import { Container, Tab, Button, Divider, Loader, Segment } from 'semantic-ui-react';
+import { Container, Tab, Button, Divider, Loader } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 
 import ProfileActivity from './ProfileActivity/ProfileActivity';

@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import _ from 'lodash';
 
 import { Button, Divider } from 'semantic-ui-react';
 import { Input } from 'antd';

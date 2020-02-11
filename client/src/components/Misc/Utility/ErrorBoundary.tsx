@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { withRouter } from 'react-router';
 import { Button, Container, Divider } from 'semantic-ui-react';
 
 class ErrorBoundary extends Component {

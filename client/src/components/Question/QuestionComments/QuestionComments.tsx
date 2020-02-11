@@ -19,21 +19,20 @@ export interface QuestionCommentsProps {
  * Viser kommentarer til et spørgsmål
  */
 const QuestionComments: React.SFC<QuestionCommentsProps> = ({ type }) => {
+  const [editCommentId, setEditCommentId] = useState(null);
+  const [comment, setComment] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [isAnonymous, setIsAnonymous] = useState(false);
   const dispatch = useDispatch();
   const currentQuestionNumber = useSelector((state: ReduxState) => state.quiz.questionIndex);
   const question = useSelector(
     (state: ReduxState) => state.questions.questions[currentQuestionNumber]
   );
-  let comments = useSelector((state: ReduxState) =>
+  const comments = useSelector((state: ReduxState) =>
     state.questions.comments.filter((comment) => comment.question.id === question.id)
   );
-  comments = _.uniqBy(comments, (comment) => comment.id); // If for some reason a question is fetched twice
   const publicComments = comments.filter((comment) => !comment.isPrivate);
   const privateComments = comments.filter((comment) => comment.isPrivate);
-  const [editCommentId, setEditCommentId] = useState(null);
-  const [comment, setComment] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [isAnonymous, setIsAnonymous] = useState(false);
   const mostLiked = _.maxBy(publicComments, (comment) => comment.likes.length);
   const user = useSelector((state: ReduxState) => state.auth.user);
   let form;
@@ -171,7 +170,6 @@ const QuestionComments: React.SFC<QuestionCommentsProps> = ({ type }) => {
     );
   }
 
-  console.log(publicComments);
   return (
     <>
       <Comment.Group as="div" style={{ maxWidth: '100%' }}>

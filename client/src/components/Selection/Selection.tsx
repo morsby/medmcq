@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import selectionTranslations from './selectionTranslations.json';
-import { withLocalize, Translate, LocalizeContextProps } from 'react-localize-redux';
+import { withLocalize, LocalizeContextProps } from 'react-localize-redux';
 import { Container, Header, Divider } from 'semantic-ui-react';
 import SelectionSemesterSelector from 'components/Selection/SelectionComponents/SelectionSemesterSelector';
 import SelectionTypeSelector from 'components/Selection/SelectionComponents/SelectionTypeSelector';

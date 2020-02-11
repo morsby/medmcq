@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { urls } from '../../utils/common';
-import { Button, Divider, Form, Message } from 'semantic-ui-react';
+import { Button, Divider, Form } from 'semantic-ui-react';
 import { Translate, withLocalize, LocalizeContextProps } from 'react-localize-redux';
 import User from 'classes/User';
 import { useHistory } from 'react-router';

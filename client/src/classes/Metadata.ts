@@ -1,10 +1,9 @@
 import { gql } from 'apollo-boost';
 import Apollo from './Apollo';
 import { store } from 'IndexApp';
-import metadataReducer from 'redux/reducers/metadata';
 import ExamSet from './ExamSet';
-import Tag, { TagVote } from './Tag';
-import Specialty, { SpecialtyVote } from './Specialty';
+import Tag from './Tag';
+import Specialty from './Specialty';
 import questionsReducer from 'redux/reducers/question';
 import Question from './Question';
 
