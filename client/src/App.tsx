@@ -27,8 +27,6 @@ import Quiz from './components/Quiz/Quiz';
 import About from './components/Misc/Utility/About/About';
 import Contact from './components/Misc/Utility/Contact';
 
-import Header from './components/Layout/Header';
-
 // Auth
 import Signup from './components/Auth/Signup';
 import Login from './components/Auth/Login';
@@ -72,7 +70,10 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
 
     dispatch(
       initialize({
-        languages: [{ name: 'Danish', code: 'dk' }, { name: 'English', code: 'gb' }],
+        languages: [
+          { name: 'Danish', code: 'dk' },
+          { name: 'English', code: 'gb' }
+        ],
         options: {
           renderToStaticMarkup,
           renderInnerHtml: true,

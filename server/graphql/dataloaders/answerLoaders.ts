@@ -7,7 +7,6 @@ const batchUserAnswers = async (ids: number[]) => {
 };
 
 const batchAnswersByQuestionId = async (ids: number[]) => {
-  console.log(ids);
   const answers = await QuestionUserAnswer.query().whereIn('questionId', ids);
   return ids.map((id) => answers.filter((answer) => answer.questionId === id));
 };

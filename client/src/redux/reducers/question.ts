@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import Question from 'classes/Question';
 import Comment from 'classes/Comment';
-import Tag, { TagVote } from 'classes/Tag';
-import Specialty, { SpecialtyVote } from 'classes/Specialty';
+import { TagVote } from 'classes/Tag';
+import { SpecialtyVote } from 'classes/Specialty';
+import _ from 'lodash';
 
 const initialState = {
   questions: [] as Question[],
@@ -15,7 +16,8 @@ const questionsReducer = createSlice({
   initialState,
   reducers: {
     setQuestions: (state, action: PayloadAction<Question[]>) => {
-      state.questions = action.payload;
+      const questions = _.uniqBy(action.payload, (question) => question.id); // Prevents duplicates
+      state.questions = questions;
 
       let comments: Comment[] = [];
       let tagVotes: TagVote[] = [];

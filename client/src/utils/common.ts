@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 export const urls = {
   root: '/',
   quiz: '/quiz',

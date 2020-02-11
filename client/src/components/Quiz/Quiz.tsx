@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Translate, LocalizeContextProps, withLocalize } from 'react-localize-redux';
 import quizTranslations from './quizTranslations.json';

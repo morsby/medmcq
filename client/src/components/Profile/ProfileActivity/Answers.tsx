@@ -3,15 +3,14 @@ import { Button, Divider } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 import AnswerDetails from './AnswerDetails/AnswerDetails';
 import AnswerTagsDetailsTable from './AnswerDetails/AnswerTagsDetailsTable';
-import _ from 'lodash';
 import { useSelector } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
-/**
- * Component that displays a summary of the answered questions.
- */
 
 export interface AnswersProps {}
 
+/**
+ * Component that displays a summary of the answered questions.
+ */
 const Answers: React.SFC<AnswersProps> = () => {
   const [details, toggleDetails] = useState(false);
   const [tagDetailsOpen, setTagsDetailsOpen] = useState(false);

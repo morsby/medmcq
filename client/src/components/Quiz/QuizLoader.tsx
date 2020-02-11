@@ -1,5 +1,4 @@
-import React, { Component, useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect } from 'react';
 import { Divider, Button } from 'semantic-ui-react';
 import LoadingPage from '../Misc/Utility/LoadingPage';
 

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Checkbox, Divider } from 'semantic-ui-react';
-import { Translate, withLocalize, LocalizeContextProps } from 'react-localize-redux';
+import { Checkbox } from 'semantic-ui-react';
+import { withLocalize, LocalizeContextProps } from 'react-localize-redux';
 import { useSelector } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
 import Selection from 'classes/Selection';

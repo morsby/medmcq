@@ -2,7 +2,6 @@ import React, { useState, useCallback } from 'react';
 import User from 'classes/User';
 import { Icon, Loader } from 'semantic-ui-react';
 import ExamSet from 'classes/ExamSet';
-import _ from 'lodash';
 
 export interface SetRadioButtonMetadataProps {
   user: User;

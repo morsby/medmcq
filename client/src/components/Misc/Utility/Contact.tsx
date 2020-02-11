@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Formik, useFormik } from 'formik';
+import { useFormik } from 'formik';
 import { withLocalize, Translate, LocalizeContextProps } from 'react-localize-redux';
 import contactTranslations from './contactTranslations';
 import marked from 'marked';
