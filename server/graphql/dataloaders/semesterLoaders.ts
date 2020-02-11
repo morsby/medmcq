@@ -8,4 +8,6 @@ const batchSemesters = async (ids: number[]) => {
 };
 
 // Loaders
-export const semesterLoader = new dataLoader((ids: number[]) => batchSemesters(ids));
+export const semesterLoader = new dataLoader((ids: number[]) => batchSemesters(ids), {
+  cache: false
+});

@@ -6,4 +6,6 @@ const batchLikes = async (ids: [number, number][]) => {
   return ids.map((id) => likes.find((like) => id[0] === like.commentId && id[1] === like.userId));
 };
 
-export const likesLoader = new dataLoader((ids: [number, number][]) => batchLikes(ids));
+export const likesLoader = new dataLoader((ids: [number, number][]) => batchLikes(ids), {
+  cache: false
+});

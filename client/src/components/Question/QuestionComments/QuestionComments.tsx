@@ -11,27 +11,23 @@ import CommentClass from 'classes/Comment';
 import _ from 'lodash';
 import TextArea from 'antd/lib/input/TextArea';
 
-/**
- * Viser kommentarer til et spørgsmål
- * Modtager alle props fra ../Question.js
- * @param {array} comments          Array af kommentarer til spørgsmålet
- * @param {string} newComment       Den nye kommentar
- * @param {func}  onCommentType     Funktion til at ændre kommentar-tekst
- * @param {object} user             Brugeren
- */
 export interface QuestionCommentsProps {
   type: 'private' | 'public';
 }
 
+/**
+ * Viser kommentarer til et spørgsmål
+ */
 const QuestionComments: React.SFC<QuestionCommentsProps> = ({ type }) => {
   const dispatch = useDispatch();
   const currentQuestionNumber = useSelector((state: ReduxState) => state.quiz.questionIndex);
   const question = useSelector(
     (state: ReduxState) => state.questions.questions[currentQuestionNumber]
   );
-  const comments = useSelector((state: ReduxState) =>
+  let comments = useSelector((state: ReduxState) =>
     state.questions.comments.filter((comment) => comment.question.id === question.id)
   );
+  comments = _.uniqBy(comments, (comment) => comment.id); // If for some reason a question is fetched twice
   const publicComments = comments.filter((comment) => !comment.isPrivate);
   const privateComments = comments.filter((comment) => comment.isPrivate);
   const [editCommentId, setEditCommentId] = useState(null);
@@ -175,26 +171,19 @@ const QuestionComments: React.SFC<QuestionCommentsProps> = ({ type }) => {
     );
   }
 
+  console.log(publicComments);
   return (
     <>
       <Comment.Group as="div" style={{ maxWidth: '100%' }}>
         {type === 'private' &&
           privateComments.map((c) => (
-            <QuestionCommentSingle
-              key={c.id}
-              type={type}
-              comment={c}
-              question={question}
-              handleEdit={handleEditComment}
-            />
+            <QuestionCommentSingle key={c.id} comment={c} handleEdit={handleEditComment} />
           ))}
         {type === 'public' &&
           publicComments.map((c) => (
             <QuestionCommentSingle
               key={c.id}
               comment={c}
-              question={question}
-              type={type}
               handleEdit={handleEditComment}
               mostLiked={
                 !c.isPrivate &&

@@ -9,7 +9,6 @@ import { Model } from 'objection';
 import cookieParser from 'cookie-parser';
 
 import apolloServer from './graphql/apolloServer';
-import logger from './middleware/logger';
 import path from 'path';
 
 const port = process.env.PORT || 3001;

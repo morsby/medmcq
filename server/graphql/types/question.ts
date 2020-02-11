@@ -149,7 +149,10 @@ export const resolvers = {
 
         query = query
           .join('questionSpecialtyVote as specialtyVote', 'question.id', 'specialtyVote.questionId')
-          .whereIn('question.id', votes.map((specialtyVote) => specialtyVote.questionId));
+          .whereIn(
+            'question.id',
+            votes.map((specialtyVote) => specialtyVote.questionId)
+          );
       }
 
       if (tagIds && tagIds.length > 0) {
@@ -162,7 +165,10 @@ export const resolvers = {
 
         query = query
           .join('questionTagVote as tagVote', 'question.id', 'tagVote.questionId')
-          .whereIn('question.id', votes.map((vote) => vote.questionId));
+          .whereIn(
+            'question.id',
+            votes.map((vote) => vote.questionId)
+          );
       }
 
       if (text) {
@@ -244,9 +250,12 @@ export const resolvers = {
         .sortBy((answer) => answer.createdAt, 'asc')
         .uniqBy((answer) => answer.userId)
         .value();
-      const correctPercent = Math.round(
-        (answers.filter((answer) => answer.answer === 1).length / answers.length) * 100
-      );
+      let correctPercent = 100;
+      if (answers.length > 0) {
+        correctPercent = Math.round(
+          (answers.filter((answer) => answer.answer === 1).length / answers.length) * 100
+        );
+      }
       return { answer: question.answer1, correctPercent };
     },
     answer2: async ({ id }, args, ctx: Context) => {

@@ -4,9 +4,7 @@ import marked from 'marked';
 import { Comment, Icon } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 import CommentClass from 'classes/Comment';
-import Question from 'classes/Question';
 import { ReduxState } from 'redux/reducers';
-import _ from 'lodash';
 import QuestionCommentLikeButton from './QuestionCommentLikeButton';
 
 /**
@@ -19,8 +17,6 @@ import QuestionCommentLikeButton from './QuestionCommentLikeButton';
  */
 export interface QuestionCommentSingleProps {
   comment: CommentClass;
-  question: Question;
-  type: 'private' | 'public';
   mostLiked?: boolean;
   handleEdit: Function;
 }
@@ -31,7 +27,6 @@ const QuestionCommentSingle: React.SFC<QuestionCommentSingleProps> = ({
   handleEdit
 }) => {
   const [deleting, setDeleting] = useState(false);
-  const [likeLoading, setLikeLoading] = useState(false);
   const user = useSelector((state: ReduxState) => state.auth.user);
 
   const handleDelete = async (commentId: number) => {
@@ -76,7 +71,7 @@ const QuestionCommentSingle: React.SFC<QuestionCommentSingleProps> = ({
           }}
         />
         <Comment.Actions>
-          {user && user.id === comment.user.id && !likeLoading && (
+          {user && user.id === comment.user.id && (
             <>
               {!deleting && (
                 <Comment.Action onClick={() => setDeleting(true)}>

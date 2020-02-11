@@ -8,4 +8,6 @@ const batchExamSets = async (ids: number[]) => {
 };
 
 // Loaders
-export const examSetsLoader = new dataloader((ids: number[]) => batchExamSets(ids));
+export const examSetsLoader = new dataloader((ids: number[]) => batchExamSets(ids), {
+  cache: false
+});

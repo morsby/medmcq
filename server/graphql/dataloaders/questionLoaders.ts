@@ -8,4 +8,6 @@ const batchQuestions = async (ids: number[]) => {
 };
 
 // Loaders
-export const questionLoader = new dataloader((ids: number[]) => batchQuestions(ids));
+export const questionLoader = new dataloader((ids: number[]) => batchQuestions(ids), {
+  cache: false
+});

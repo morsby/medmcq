@@ -8,4 +8,6 @@ const batchComments = async (ids: number[]) => {
 };
 
 // Loaders
-export const commentsLoader = new dataLoader((ids: number[]) => batchComments(ids));
+export const commentsLoader = new dataLoader((ids: number[]) => batchComments(ids), {
+  cache: false
+});
