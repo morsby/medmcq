@@ -50,7 +50,6 @@ export const resolvers = {
         await QuestionCommentLike.query().insert({ commentId, userId });
       }
 
-      // ctx.likeLoaders.likesLoader.clear([commentId, userId]);
       return { id: commentId };
     },
     deleteComment: async (root, { commentId }, ctx: Context) => {
@@ -79,7 +78,6 @@ export const resolvers = {
           .$query()
           .updateAndFetch({ text, private: isPrivate, anonymous: isAnonymous, questionId });
 
-        ctx.commentLoaders.commentsLoader.clear(comment.id);
         return { id: comment.id };
       }
       throw new Error('Comment not found');

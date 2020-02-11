@@ -8,7 +8,11 @@ const secret = process.env.SECRET || '';
 
 const decodeUser = (jwt: string) => {
   if (!jwt) return null;
-  return jsonWebToken.verify(jwt, secret);
+  try {
+    return jsonWebToken.verify(jwt, secret);
+  } catch (error) {
+    return null;
+  }
 };
 
 const generateContext = (req: Express.Request, res: Express.Response) => ({
@@ -24,5 +28,5 @@ export default new ApolloServer({
   resolvers,
   typeDefs,
   context: ({ req, res }) => generateContext(req, res),
-  tracing: true
+  tracing: process.env.NODE_ENV !== 'production'
 });

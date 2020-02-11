@@ -81,10 +81,6 @@ export const resolvers = {
         });
       }
 
-      // Kan ikke få det til at virke uden
-      ctx.questionLoaders.questionLoader.clear(questionId);
-      ctx.metadataLoaders.tagVotesLoader.clear(tagVote.id);
-
       return { id: questionId };
     },
     voteSpecialty: async (root, { data }, ctx: Context) => {
@@ -111,8 +107,6 @@ export const resolvers = {
         });
       }
 
-      ctx.questionLoaders.questionLoader.clear(questionId);
-      ctx.metadataLoaders.specialtyVoteLoader.clear(specialtyVote.id);
       return { id: questionId };
     },
     suggestTag: async (root, { tagName, questionId }) => {

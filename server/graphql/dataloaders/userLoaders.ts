@@ -13,5 +13,7 @@ const batchBookmarks = async (ids: number[]) => {
 };
 
 // Loaders
-export const userLoader = new dataLoader((ids: number[]) => batchUsers(ids));
-export const bookmarkLoader = new dataLoader((ids: number[]) => batchBookmarks(ids));
+export const userLoader = new dataLoader((ids: number[]) => batchUsers(ids), { cache: false });
+export const bookmarkLoader = new dataLoader((ids: number[]) => batchBookmarks(ids), {
+  cache: false
+});

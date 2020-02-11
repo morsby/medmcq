@@ -7,11 +7,15 @@ const batchUserAnswers = async (ids: number[]) => {
 };
 
 const batchAnswersByQuestionId = async (ids: number[]) => {
+  console.log(ids);
   const answers = await QuestionUserAnswer.query().whereIn('questionId', ids);
   return ids.map((id) => answers.filter((answer) => answer.questionId === id));
 };
 
-export const userAnswersLoader = new DataLoader((ids: number[]) => batchUserAnswers(ids));
-export const userAnswersByQuestionIdLoader = new DataLoader((ids: number[]) =>
-  batchAnswersByQuestionId(ids)
+export const userAnswersLoader = new DataLoader((ids: number[]) => batchUserAnswers(ids), {
+  cache: false
+});
+export const userAnswersByQuestionIdLoader = new DataLoader(
+  (ids: number[]) => batchAnswersByQuestionId(ids),
+  { cache: false }
 );

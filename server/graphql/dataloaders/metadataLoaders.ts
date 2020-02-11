@@ -4,7 +4,6 @@ import Specialty from 'models/specialty';
 import Tag from 'models/tag';
 import QuestionTagVote from 'models/question_tag_vote';
 
-// Batchers ============================================================================
 const batchSpecialties = async (ids: number[]) => {
   const specialties = await Specialty.query().findByIds(ids);
   return ids.map((id) => specialties.find((s) => s.id === id));
@@ -25,8 +24,13 @@ const batchSpecialtyVotes = async (ids: number[]) => {
   return ids.map((id) => specialtyVotes.find((s) => s.id === id));
 };
 
-// Loaders ============================================================================
-export const specialtyLoader = new dataLoader((ids: number[]) => batchSpecialties(ids));
-export const specialtyVoteLoader = new dataLoader((ids: number[]) => batchSpecialtyVotes(ids));
-export const tagLoader = new dataLoader((ids: number[]) => batchTags(ids));
-export const tagVotesLoader = new dataLoader((ids: number[]) => batchTagVotes(ids));
+export const specialtyLoader = new dataLoader((ids: number[]) => batchSpecialties(ids), {
+  cache: false
+});
+export const specialtyVoteLoader = new dataLoader((ids: number[]) => batchSpecialtyVotes(ids), {
+  cache: false
+});
+export const tagLoader = new dataLoader((ids: number[]) => batchTags(ids), { cache: false });
+export const tagVotesLoader = new dataLoader((ids: number[]) => batchTagVotes(ids), {
+  cache: false
+});
