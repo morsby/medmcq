@@ -11,11 +11,11 @@ export const typeDefs = gql`
 export const resolvers = {
   Like: {
     commentId: async ({ id }, _, ctx: Context) => {
-      const like = await ctx.likeLoaders.likesLoader.load(id);
+      const like = await ctx.likesLoader.load(id);
       return like.commentId;
     },
     userId: async ({ id }, _, ctx: Context) => {
-      const like = await ctx.likeLoaders.likesLoader.load(id);
+      const like = await ctx.likesLoader.load(id);
       return like.userId;
     }
   }

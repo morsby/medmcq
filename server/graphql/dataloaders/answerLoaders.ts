@@ -11,10 +11,7 @@ const batchAnswersByQuestionId = async (ids: number[]) => {
   return ids.map((id) => answers.filter((answer) => answer.questionId === id));
 };
 
-export const userAnswersLoader = new DataLoader((ids: number[]) => batchUserAnswers(ids), {
-  cache: false
-});
-export const userAnswersByQuestionIdLoader = new DataLoader(
-  (ids: number[]) => batchAnswersByQuestionId(ids),
-  { cache: false }
-);
+export const createUserAnswersLoader = () =>
+  new DataLoader((ids: number[]) => batchUserAnswers(ids));
+export const createUserAnswersByQuestionIdLoader = () =>
+  new DataLoader((ids: number[]) => batchAnswersByQuestionId(ids));

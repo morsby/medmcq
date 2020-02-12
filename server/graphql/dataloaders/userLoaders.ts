@@ -1,5 +1,5 @@
 import User from 'models/user';
-import dataLoader from 'dataloader';
+import DataLoader from 'dataloader';
 import QuestionBookmark from 'models/question_bookmark';
 
 // Batchers
@@ -13,7 +13,5 @@ const batchBookmarks = async (ids: number[]) => {
 };
 
 // Loaders
-export const userLoader = new dataLoader((ids: number[]) => batchUsers(ids), { cache: false });
-export const bookmarkLoader = new dataLoader((ids: number[]) => batchBookmarks(ids), {
-  cache: false
-});
+export const createUserLoader = () => new DataLoader((ids: number[]) => batchUsers(ids));
+export const createBookmarkLoader = () => new DataLoader((ids: number[]) => batchBookmarks(ids));

@@ -240,12 +240,12 @@ export const resolvers = {
   Question: {
     id: ({ id }) => id,
     text: async ({ id }, args, ctx: Context) => {
-      const question = await ctx.questionLoaders.questionLoader.load(id);
+      const question = await ctx.questionLoader.load(id);
       return question.text;
     },
     answer1: async ({ id }, args, ctx: Context) => {
-      const question = await ctx.questionLoaders.questionLoader.load(id);
-      let answers = await ctx.answerLoaders.userAnswersByQuestionIdLoader.load(id);
+      const question = await ctx.questionLoader.load(id);
+      let answers = await ctx.userAnswersByQuestionIdLoader.load(id);
       answers = _(answers)
         .sortBy((answer) => answer.createdAt, 'asc')
         .uniqBy((answer) => answer.userId)
@@ -259,8 +259,8 @@ export const resolvers = {
       return { answer: question.answer1, correctPercent };
     },
     answer2: async ({ id }, args, ctx: Context) => {
-      const question = await ctx.questionLoaders.questionLoader.load(id);
-      let answers = await ctx.answerLoaders.userAnswersByQuestionIdLoader.load(id);
+      const question = await ctx.questionLoader.load(id);
+      let answers = await ctx.userAnswersByQuestionIdLoader.load(id);
       answers = _(answers)
         .sortBy((answer) => answer.createdAt, 'asc')
         .uniqBy((answer) => answer.userId)
@@ -271,8 +271,8 @@ export const resolvers = {
       return { answer: question.answer2, correctPercent };
     },
     answer3: async ({ id }, args, ctx: Context) => {
-      const question = await ctx.questionLoaders.questionLoader.load(id);
-      let answers = await ctx.answerLoaders.userAnswersByQuestionIdLoader.load(id);
+      const question = await ctx.questionLoader.load(id);
+      let answers = await ctx.userAnswersByQuestionIdLoader.load(id);
       answers = _(answers)
         .sortBy((answer) => answer.createdAt, 'asc')
         .uniqBy((answer) => answer.userId)
@@ -287,16 +287,16 @@ export const resolvers = {
       return images.map((image) => image.link);
     },
     oldId: async ({ id }, args, ctx: Context) => {
-      const question = await ctx.questionLoaders.questionLoader.load(id);
+      const question = await ctx.questionLoader.load(id);
       return question.oldId;
     },
     examSetQno: async ({ id }, args, ctx: Context) => {
-      const question = await ctx.questionLoaders.questionLoader.load(id);
+      const question = await ctx.questionLoader.load(id);
       return question.examSetQno;
     },
     examSet: async ({ id }, args, ctx: Context) => {
-      const question = await ctx.questionLoaders.questionLoader.load(id);
-      const examSet = await ctx.examSetLoaders.examSetsLoader.load(question.examSetId);
+      const question = await ctx.questionLoader.load(id);
+      const examSet = await ctx.examSetsLoader.load(question.examSetId);
       return { id: examSet.id };
     },
     publicComments: async ({ id }, _, ctx: Context) => {
@@ -327,11 +327,11 @@ export const resolvers = {
       return tagVotes.map((tv) => ({ id: tv.id }));
     },
     createdAt: async ({ id }, args, ctx: Context) => {
-      const question = await ctx.questionLoaders.questionLoader.load(id);
+      const question = await ctx.questionLoader.load(id);
       return question.createdAt.toISOString();
     },
     updatedAt: async ({ id }, args, ctx: Context) => {
-      const question = await ctx.questionLoaders.questionLoader.load(id);
+      const question = await ctx.questionLoader.load(id);
       return question.updatedAt.toISOString();
     },
     specialties: async ({ id }, args, ctx: Context) => {

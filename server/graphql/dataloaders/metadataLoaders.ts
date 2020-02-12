@@ -1,5 +1,5 @@
 import QuestionSpecialtyVote from 'models/question_specialty_vote';
-import dataLoader from 'dataloader';
+import DataLoader from 'dataloader';
 import Specialty from 'models/specialty';
 import Tag from 'models/tag';
 import QuestionTagVote from 'models/question_tag_vote';
@@ -24,13 +24,9 @@ const batchSpecialtyVotes = async (ids: number[]) => {
   return ids.map((id) => specialtyVotes.find((s) => s.id === id));
 };
 
-export const specialtyLoader = new dataLoader((ids: number[]) => batchSpecialties(ids), {
-  cache: false
-});
-export const specialtyVoteLoader = new dataLoader((ids: number[]) => batchSpecialtyVotes(ids), {
-  cache: false
-});
-export const tagLoader = new dataLoader((ids: number[]) => batchTags(ids), { cache: false });
-export const tagVotesLoader = new dataLoader((ids: number[]) => batchTagVotes(ids), {
-  cache: false
-});
+export const createSpecialtyLoader = () => new DataLoader((ids: number[]) => batchSpecialties(ids));
+export const createSpecialtyVoteLoader = () =>
+  new DataLoader((ids: number[]) => batchSpecialtyVotes(ids));
+export const createTagLoader = () =>
+  new DataLoader((ids: number[]) => batchTags(ids), { cache: false });
+export const createTagVotesLoader = () => new DataLoader((ids: number[]) => batchTagVotes(ids));

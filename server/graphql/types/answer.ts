@@ -43,26 +43,26 @@ export const resolvers = {
   Answer: {
     id: ({ id }) => id,
     answer: async ({ id }, _, ctx: Context) => {
-      const answer = await ctx.answerLoaders.userAnswersLoader.load(id);
+      const answer = await ctx.userAnswersLoader.load(id);
       return answer.answer;
     },
     answerTime: async ({ id }, _, ctx: Context) => {
-      const answer = await ctx.answerLoaders.userAnswersLoader.load(id);
+      const answer = await ctx.userAnswersLoader.load(id);
       return answer.answerTime;
     },
     question: async ({ id }, _, ctx: Context) => {
-      const answer = await ctx.answerLoaders.userAnswersLoader.load(id);
+      const answer = await ctx.userAnswersLoader.load(id);
       const question = await Question.query()
         .findById(answer.questionId)
         .select('id');
       return { id: question.id };
     },
     createdAt: async ({ id }, _, ctx: Context) => {
-      const answer = await ctx.answerLoaders.userAnswersLoader.load(id);
+      const answer = await ctx.userAnswersLoader.load(id);
       return answer.createdAt;
     },
     updatedAt: async ({ id }, _, ctx: Context) => {
-      const answer = await ctx.answerLoaders.userAnswersLoader.load(id);
+      const answer = await ctx.userAnswersLoader.load(id);
       return answer.updatedAt;
     }
   }

@@ -1,4 +1,4 @@
-import dataloader from 'dataloader';
+import Dataloader from 'dataloader';
 import Question from 'models/question';
 
 // Batchers
@@ -8,6 +8,4 @@ const batchQuestions = async (ids: number[]) => {
 };
 
 // Loaders
-export const questionLoader = new dataloader((ids: number[]) => batchQuestions(ids), {
-  cache: false
-});
+export const createQuestionLoader = () => new Dataloader((ids: number[]) => batchQuestions(ids));

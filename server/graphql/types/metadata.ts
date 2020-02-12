@@ -139,53 +139,53 @@ export const resolvers = {
   TagVote: {
     id: ({ id }) => id,
     tag: async ({ id }, _, ctx: Context) => {
-      const tagVote = await ctx.metadataLoaders.tagVotesLoader.load(id);
+      const tagVote = await ctx.tagVotesLoader.load(id);
       return { id: tagVote.tagId };
     },
     question: async ({ id }, _, ctx: Context) => {
-      const tagVote = await ctx.metadataLoaders.tagVotesLoader.load(id);
+      const tagVote = await ctx.tagVotesLoader.load(id);
       return { id: tagVote.questionId };
     },
     user: async ({ id }, _, ctx: Context) => {
-      const tagVote = await ctx.metadataLoaders.tagVotesLoader.load(id);
+      const tagVote = await ctx.tagVotesLoader.load(id);
       return { id: tagVote.userId };
     },
     vote: async ({ id }, _, ctx: Context) => {
-      const tagVote = await ctx.metadataLoaders.tagVotesLoader.load(id);
+      const tagVote = await ctx.tagVotesLoader.load(id);
       return tagVote.value;
     }
   },
   SpecialtyVote: {
     id: ({ id }) => id,
     specialty: async ({ id }, _, ctx: Context) => {
-      const specialtyVote = await ctx.metadataLoaders.specialtyVoteLoader.load(id);
+      const specialtyVote = await ctx.specialtyVoteLoader.load(id);
       return { id: specialtyVote.specialtyId };
     },
     question: async ({ id }, args, ctx: Context) => {
-      const specialtyVote = await ctx.metadataLoaders.specialtyVoteLoader.load(id);
+      const specialtyVote = await ctx.specialtyVoteLoader.load(id);
       return { id: specialtyVote.questionId };
     },
     user: async ({ id }, args, ctx: Context) => {
-      const specialtyVote = await ctx.metadataLoaders.specialtyVoteLoader.load(id);
+      const specialtyVote = await ctx.specialtyVoteLoader.load(id);
       return { id: specialtyVote.userId };
     },
     vote: async ({ id }, args, ctx: Context) => {
-      const specialtyVote = await ctx.metadataLoaders.specialtyVoteLoader.load(id);
+      const specialtyVote = await ctx.specialtyVoteLoader.load(id);
       return specialtyVote.value;
     }
   },
   Tag: {
     id: ({ id }) => id,
     name: async ({ id }, _, ctx: Context) => {
-      const tag = await ctx.metadataLoaders.tagLoader.load(id);
+      const tag = await ctx.tagLoader.load(id);
       return tag.name;
     },
     semester: async ({ id }, _, ctx: Context) => {
-      const tag = await ctx.metadataLoaders.tagLoader.load(id);
+      const tag = await ctx.tagLoader.load(id);
       return { id: tag.semesterId };
     },
     parent: async ({ id }, _, ctx: Context) => {
-      const tag = await ctx.metadataLoaders.tagLoader.load(id);
+      const tag = await ctx.tagLoader.load(id);
       return { id: tag.parentId };
     },
     questionCount: async ({ id }, _, ctx: Context) => {
@@ -203,11 +203,11 @@ export const resolvers = {
   Specialty: {
     id: ({ id }) => id,
     name: async ({ id }, _, ctx: Context) => {
-      const specialty = await ctx.metadataLoaders.specialtyLoader.load(id);
+      const specialty = await ctx.specialtyLoader.load(id);
       return specialty.name;
     },
     semester: async ({ id }, _, ctx: Context) => {
-      const specialty = await ctx.metadataLoaders.specialtyLoader.load(id);
+      const specialty = await ctx.specialtyLoader.load(id);
       return { id: specialty.semesterId };
     },
     questionCount: async ({ id }, _, ctx: Context) => {

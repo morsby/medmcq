@@ -87,27 +87,27 @@ export const resolvers = {
   Comment: {
     id: ({ id }) => id,
     text: async ({ id }, _, ctx: Context) => {
-      const comment = await ctx.commentLoaders.commentsLoader.load(id);
+      const comment = await ctx.commentsLoader.load(id);
       return comment.text;
     },
     isPrivate: async ({ id }, _, ctx: Context) => {
-      const comment = await ctx.commentLoaders.commentsLoader.load(id);
+      const comment = await ctx.commentsLoader.load(id);
       return comment.private;
     },
     isAnonymous: async ({ id }, _, ctx: Context) => {
-      const comment = await ctx.commentLoaders.commentsLoader.load(id);
+      const comment = await ctx.commentsLoader.load(id);
       return !!comment.anonymous;
     },
     user: async ({ id }, _, ctx: Context) => {
-      const comment = await ctx.commentLoaders.commentsLoader.load(id);
+      const comment = await ctx.commentsLoader.load(id);
       return { id: comment.userId };
     },
     createdAt: async ({ id }, _, ctx: Context) => {
-      const comment = await ctx.commentLoaders.commentsLoader.load(id);
+      const comment = await ctx.commentsLoader.load(id);
       return comment.createdAt.toISOString();
     },
     updatedAt: async ({ id }, _, ctx: Context) => {
-      const comment = await ctx.commentLoaders.commentsLoader.load(id);
+      const comment = await ctx.commentsLoader.load(id);
       return comment.updatedAt.toISOString();
     },
     likes: async ({ id }, _, ctx: Context) => {
@@ -115,7 +115,7 @@ export const resolvers = {
       return likes.map((like) => ({ id: [like.commentId, like.userId] }));
     },
     question: async ({ id }, _, ctx: Context) => {
-      const comment = await ctx.commentLoaders.commentsLoader.load(id);
+      const comment = await ctx.commentsLoader.load(id);
       return { id: comment.questionId };
     }
   }
