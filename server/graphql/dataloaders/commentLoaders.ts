@@ -1,5 +1,5 @@
 import Comment from 'models/question_comment';
-import dataLoader from 'dataloader';
+import DataLoader from 'dataloader';
 
 // Batchers
 const batchComments = async (ids: number[]) => {
@@ -8,6 +8,4 @@ const batchComments = async (ids: number[]) => {
 };
 
 // Loaders
-export const commentsLoader = new dataLoader((ids: number[]) => batchComments(ids), {
-  cache: false
-});
+export const createCommentsLoader = () => new DataLoader((ids: number[]) => batchComments(ids));

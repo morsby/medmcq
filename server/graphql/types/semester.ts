@@ -39,15 +39,15 @@ export const resolvers = {
   Semester: {
     id: ({ id }) => id,
     value: async ({ id }, _, ctx: Context) => {
-      const semester = await ctx.semesterLoaders.semesterLoader.load(id);
+      const semester = await ctx.semesterLoader.load(id);
       return semester.value;
     },
     name: async ({ id }, _, ctx: Context) => {
-      const semester = await ctx.semesterLoaders.semesterLoader.load(id);
+      const semester = await ctx.semesterLoader.load(id);
       return semester.name;
     },
     shortName: async ({ id }, _, ctx: Context) => {
-      const semester = await ctx.semesterLoaders.semesterLoader.load(id);
+      const semester = await ctx.semesterLoader.load(id);
       return semester.shortName;
     },
     questionCount: async ({ id }, _, ctx: Context) => {

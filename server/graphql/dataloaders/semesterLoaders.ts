@@ -1,5 +1,5 @@
 import Semester from 'models/semester';
-import dataLoader from 'dataloader';
+import DataLoader from 'dataloader';
 
 // Batchers
 const batchSemesters = async (ids: number[]) => {
@@ -8,6 +8,4 @@ const batchSemesters = async (ids: number[]) => {
 };
 
 // Loaders
-export const semesterLoader = new dataLoader((ids: number[]) => batchSemesters(ids), {
-  cache: false
-});
+export const createSemesterLoader = () => new DataLoader((ids: number[]) => batchSemesters(ids));

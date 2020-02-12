@@ -82,15 +82,15 @@ export const resolvers = {
   ExamSet: {
     id: ({ id }) => id,
     year: async ({ id }, args, ctx: Context) => {
-      const examSet = await ctx.examSetLoaders.examSetsLoader.load(id);
+      const examSet = await ctx.examSetsLoader.load(id);
       return examSet.year;
     },
     season: async ({ id }, args, ctx: Context) => {
-      const examSet = await ctx.examSetLoaders.examSetsLoader.load(id);
+      const examSet = await ctx.examSetsLoader.load(id);
       return examSet.season;
     },
     semester: async ({ id }, args, ctx: Context) => {
-      const examSet = await ctx.examSetLoaders.examSetsLoader.load(id);
+      const examSet = await ctx.examSetsLoader.load(id);
       return { id: examSet.semesterId };
     }
   }

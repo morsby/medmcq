@@ -1,5 +1,5 @@
 import ExamSet from 'models/exam_set';
-import dataloader from 'dataloader';
+import Dataloader from 'dataloader';
 
 // Batchers
 const batchExamSets = async (ids: number[]) => {
@@ -8,6 +8,4 @@ const batchExamSets = async (ids: number[]) => {
 };
 
 // Loaders
-export const examSetsLoader = new dataloader((ids: number[]) => batchExamSets(ids), {
-  cache: false
-});
+export const createExamSetsLoader = () => new Dataloader((ids: number[]) => batchExamSets(ids));

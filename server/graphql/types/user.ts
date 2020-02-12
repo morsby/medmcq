@@ -97,12 +97,12 @@ export const resolvers = {
   Query: {
     user: async (_root, _args, ctx: Context) => {
       if (!ctx.user) return null;
-      const user = await ctx.userLoaders.userLoader.load(ctx.user.id);
+      const user = await ctx.userLoader.load(ctx.user.id);
       return { id: user.id };
     },
     profile: async (_root, _args, ctx: Context) => {
       if (!ctx.user) return null;
-      const user = await ctx.userLoaders.userLoader.load(ctx.user.id);
+      const user = await ctx.userLoader.load(ctx.user.id);
       return { id: user.id };
     },
     checkUsernameAvailability: async (root, { data: { username, email } }) => {
@@ -235,19 +235,19 @@ export const resolvers = {
   User: {
     id: ({ id }) => id,
     username: async ({ id }, _, ctx: Context) => {
-      const user = await ctx.userLoaders.userLoader.load(id);
+      const user = await ctx.userLoader.load(id);
       return user.username;
     },
     password: async ({ id }, _, ctx: Context) => {
-      const user = await ctx.userLoaders.userLoader.load(id);
+      const user = await ctx.userLoader.load(id);
       return user.password;
     },
     email: async ({ id }, _, ctx: Context) => {
-      const user = await ctx.userLoaders.userLoader.load(id);
+      const user = await ctx.userLoader.load(id);
       return user.email;
     },
     role: async ({ id }, _, ctx: Context) => {
-      const user = await ctx.userLoaders.userLoader.load(id);
+      const user = await ctx.userLoader.load(id);
       return { id: user.roleId };
     },
     answers: async ({ id }, { semester }) => {
@@ -315,7 +315,7 @@ export const resolvers = {
         .select('questionId');
 
       // Find all questions corresponding to the answeredQuestion Ids
-      const questions = await ctx.questionLoaders.questionLoader.loadMany(
+      const questions = await ctx.questionLoader.loadMany(
         answeredQuestions.map((aq) => aq.questionId)
       );
       const examSetIds = _.uniq(questions.map((question) => question.examSetId));
@@ -336,7 +336,7 @@ export const resolvers = {
   Bookmark: {
     id: ({ id }) => id,
     question: async ({ id }, args, ctx: Context) => {
-      const bookmark = await ctx.userLoaders.bookmarkLoader.load(id);
+      const bookmark = await ctx.bookmarkLoader.load(id);
       return { id: bookmark.questionId };
     }
   }
