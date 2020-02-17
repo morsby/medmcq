@@ -18,7 +18,7 @@ KEYGRIP_SECRETS="example example example example example example example example
 
 Se mere om omsætningen i dokumentation for dotenv-flow.
   
-Derefter skal du køre `npm run install-all` og derefter `npm run dev` for at starte dit development workflow. Held og lykke!
+Derefter skal du køre `npm run install-all`, efterfulgt af `cd server && knex migrate:latest` og derefter `npm run dev` for at starte dit development workflow. Held og lykke!
 
 ## For de teknisk interesserede
 
