@@ -22,6 +22,6 @@ Derefter skal du køre `npm run install-all`, efterfulgt af `cd server && knex m
 
 ## For de teknisk interesserede
 
-I `/server` findes en graphQL api der er forbundet til en mySQL database. Databasens kan opsættes ved brug af migrations, som findes under server. Denne server serverer vores client.
+I `/server` findes en graphQL api der er forbundet til en mySQL database. Databasen kan opsættes ved brug af migrations, som findes under server. Denne server serverer vores client.
 
 I `/client` findes hjemmesiden, der er bygget i React. Denne henter data fra api'en og viser spørgsmålene.
