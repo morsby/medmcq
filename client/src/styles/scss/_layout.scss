@@ -43,3 +43,12 @@ body,
     margin-top: 5px;
   }
 }
+
+.ui {
+  &.menu.inverted.blue {
+    background-color: #004687 !important;
+  }
+  &.button.blue.basic {
+    border-color: #004687 !important;
+  }
+}
