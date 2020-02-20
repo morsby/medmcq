@@ -1,0 +1,8 @@
+version: '3'
+services:
+  server:
+    env_file: server/.env.development
+    restart: always
+    build: .
+    ports:
+      - '8080:3001'
