@@ -7,6 +7,7 @@ import Question from 'models/question';
 import Semester from 'models/semester';
 import ExamSet from 'models/exam_set';
 import sgMail from '@sendgrid/mail';
+import Tag from 'models/tag';
 
 export const typeDefs = gql`
   extend type Mutation {
@@ -189,8 +190,21 @@ export const resolvers = {
       return { id: tag.parentId };
     },
     questionCount: async ({ id }, _, ctx: Context) => {
+      const getChildIds = async (parentId: number) => {
+        const children = await Tag.query()
+          .where({ parentId })
+          .select('id');
+        if (children.length === 0) return [];
+        let ids = [];
+        for (let child of children) {
+          ids.push(child.id, ...(await getChildIds(child.id)));
+        }
+        return ids;
+      };
+
       const questions = await QuestionTagVote.query()
         .where({ tagId: id })
+        .orWhereIn('tagId', await getChildIds(id))
         .groupBy('questionId')
         .sum('value as votes')
         .having('votes', '>', '-1')
