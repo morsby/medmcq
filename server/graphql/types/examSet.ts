@@ -21,6 +21,7 @@ export const typeDefs = gql`
     semester: Semester
     createdAt: String
     updatedAt: String
+    questionCount: Int
   }
 
   input ExamSetInput {
@@ -92,6 +93,13 @@ export const resolvers = {
     semester: async ({ id }, args, ctx: Context) => {
       const examSet = await ctx.examSetsLoader.load(id);
       return { id: examSet.semesterId };
+    },
+    questionCount: async ({ id }) => {
+      const result = await Question.query()
+        .where({ examSetId: id })
+        .count()
+        .first();
+      return result['count(*)'];
     }
   }
 };

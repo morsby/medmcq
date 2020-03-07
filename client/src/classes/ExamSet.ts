@@ -7,6 +7,7 @@ interface ExamSet {
   year: number;
   season: string;
   semester: Semester;
+  questionCount: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -20,6 +21,7 @@ class ExamSet {
       semester {
         id
       }
+      questionCount
     }
   `;
 
