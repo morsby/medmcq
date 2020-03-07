@@ -22,7 +22,7 @@ const SetRadioButton: React.SFC<SetRadioButtonProps> = ({ set }) => {
   const translateSeason = (season: ExamSet['season'], activeLanguage: { code: string }) => {
     const isEnglish = activeLanguage.code === 'gb';
     const reExam = () => {
-      if (season.match(/re/i)) {
+      if (season.match(/re/)) {
         if (isEnglish) {
           return 'Reexam ';
         }
@@ -31,13 +31,13 @@ const SetRadioButton: React.SFC<SetRadioButtonProps> = ({ set }) => {
       return '';
     };
 
-    if (season.match(/F/i)) {
+    if (season.match(/F/)) {
       if (isEnglish) {
         return reExam() + 'Spring';
       }
       return reExam() + 'Forår';
     }
-    if (season.match(/E/i)) {
+    if (season.match(/E/)) {
       if (isEnglish) {
         return reExam() + 'Autumn';
       }
