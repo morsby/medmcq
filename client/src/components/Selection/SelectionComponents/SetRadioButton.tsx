@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Radio } from 'semantic-ui-react';
-import { Translate } from 'react-localize-redux';
+import { Translate, Language } from 'react-localize-redux';
 import { useSelector } from 'react-redux';
 import ExamSet from 'classes/ExamSet';
 import { ReduxState } from 'redux/reducers';
@@ -16,36 +16,50 @@ const SetRadioButton: React.SFC<SetRadioButtonProps> = ({ set }) => {
   const chosenSetId = useSelector((state: ReduxState) => state.selection.examSetId);
 
   const handleChange = async (examSetId: number) => {
-    await Selection.change({ type: 'examSetId', value: examSetId });
+    Selection.change({ type: 'examSetId', value: examSetId });
+  };
+
+  const translateSeason = (season: ExamSet['season'], activeLanguage: { code: string }) => {
+    const isEnglish = activeLanguage.code === 'gb';
+    const reExam = () => {
+      if (season.match(/re/i)) {
+        if (isEnglish) {
+          return 'Reexam ';
+        }
+        return 'Reeksamen ';
+      }
+      return '';
+    };
+
+    if (season.match(/F/i)) {
+      if (isEnglish) {
+        return reExam() + 'Spring';
+      }
+      return reExam() + 'Forår';
+    }
+    if (season.match(/E/i)) {
+      if (isEnglish) {
+        return reExam() + 'Autumn';
+      }
+      return reExam() + 'Efterår';
+    }
   };
 
   return (
     <Form.Group key={set.id}>
       <Form.Field>
         <Translate>
-          {({ activeLanguage = { code: 'dk' } }) => {
-            // TODO:
-            /* flyt evt. disse replaces over i react-localize-redux
-                        vha. dynamiske id's (se fx profileAnswerDetails og dets
-                        Sæt-kolonne i tabellen) */
-            let label = `${set.season} ${set.year}`;
-            if (activeLanguage.code === 'gb') {
-              label = label.replace('Forår', 'Spring');
-              label = label.replace('Efterår', 'Autumn');
-              label = label.replace('(reeks)', '(re-ex)');
-            }
-            return (
-              <>
-                <Radio
-                  label={label}
-                  checked={set.id === chosenSetId}
-                  name="selectedSetId"
-                  onChange={() => handleChange(set.id)}
-                />{' '}
-                {user && <SetRadioButtonMetadata user={user} examSet={set} />}
-              </>
-            );
-          }}
+          {({ activeLanguage = { code: 'dk' } }) => (
+            <>
+              <Radio
+                label={`${translateSeason(set.season, activeLanguage)} ${set.year}`}
+                checked={set.id === chosenSetId}
+                name="selectedSetId"
+                onChange={() => handleChange(set.id)}
+              />{' '}
+              {user && <SetRadioButtonMetadata user={user} examSet={set} />}
+            </>
+          )}
         </Translate>
       </Form.Field>
     </Form.Group>
