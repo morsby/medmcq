@@ -42,7 +42,7 @@ const SetRadioButton: React.SFC<SetRadioButtonProps> = ({ set }) => {
                   name="selectedSetId"
                   onChange={() => handleChange(set.id)}
                 />{' '}
-                {user && <SetRadioButtonMetadata user={user} examSetId={set.id} />}
+                {user && <SetRadioButtonMetadata user={user} examSet={set} />}
               </>
             );
           }}

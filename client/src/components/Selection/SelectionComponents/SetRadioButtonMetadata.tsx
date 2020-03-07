@@ -5,24 +5,24 @@ import ExamSet from 'classes/ExamSet';
 
 export interface SetRadioButtonMetadataProps {
   user: User;
-  examSetId: ExamSet['id'];
+  examSet: ExamSet;
 }
 
-const SetRadioButtonMetadata: React.SFC<SetRadioButtonMetadataProps> = ({ user, examSetId }) => {
+const SetRadioButtonMetadata: React.SFC<SetRadioButtonMetadataProps> = ({ user, examSet }) => {
   const [manualLoading, setManualLoading] = useState(false);
 
   const handleManualCompletion = async () => {
     setManualLoading(true);
-    await User.manualCompleteSet({ examSetId });
+    await User.manualCompleteSet({ examSetId: examSet.id });
     setManualLoading(false);
   };
 
   const getCount = useCallback(() => {
-    return user.answeredSets.find((answeredSet) => answeredSet.examSetId === examSetId)?.count;
-  }, [examSetId, user]);
+    return user.answeredSets.find((answeredSet) => answeredSet.examSetId === examSet.id)?.count;
+  }, [examSet, user]);
 
   const getColor = () => {
-    if (getCount() === 80) {
+    if (getCount() === examSet.questionCount) {
       return 'darkgreen';
     }
     return 'darkgrey';
@@ -36,7 +36,7 @@ const SetRadioButtonMetadata: React.SFC<SetRadioButtonMetadataProps> = ({ user, 
           onClick={handleManualCompletion}
           style={{ cursor: 'pointer' }}
           color={
-            user.manualCompletedSets.find((completedSets) => completedSets.examSetId === examSetId)
+            user.manualCompletedSets.find((completedSets) => completedSets.examSetId === examSet.id)
               ? 'green'
               : 'grey'
           }
@@ -44,7 +44,8 @@ const SetRadioButtonMetadata: React.SFC<SetRadioButtonMetadataProps> = ({ user, 
       )}
       {manualLoading && <Loader active inline size="mini" />}
       <span style={{ color: getColor(), margin: '0 0.5em' }}>
-        {getCount() || 0} / 80 ({Math.round(((getCount() || 0) / 80) * 100)}%)
+        {getCount() || 0} / {examSet.questionCount} (
+        {Math.round(((getCount() || 0) / examSet.questionCount) * 100) || 0}%)
       </span>
     </span>
   );
