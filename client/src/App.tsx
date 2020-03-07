@@ -1,9 +1,9 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense, lazy } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-// Oversættelse
+// Translation
 import { LocalizeContextProps, withLocalize } from 'react-localize-redux';
 import { renderToStaticMarkup } from 'react-dom/server'; // required to initialize react-localize-redux
 import authTranslations from './components/Auth/authTranslations.json'; // fordi der ikke er en gennemgående component i dette regi
@@ -12,44 +12,41 @@ import toastTranslations from 'redux/actions/toastTranslations.json';
 // HOCs
 import PrivateRoute from './components/Misc/HOC/PrivateRoute';
 import ScrollToTop from './components/Misc/HOC/ScrollToTop';
-// Routes
-// Diverse
+// Misc
 import ErrorPage from './components/Misc/Utility/404';
 import Print from './components/Misc/Utility/Print/Print';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-// Selections
-import Selection from './components/Selection/Selection';
-
-// Selve quizzen
-import Quiz from './components/Quiz/Quiz';
-import About from './components/Misc/Utility/About/About';
-import Contact from './components/Misc/Utility/Contact';
-
-// Auth
-import Signup from './components/Auth/Signup';
-import Login from './components/Auth/Login';
-import Logout from './components/Auth/Logout';
-import Profile from './components/Profile/Profile';
-import EditProfile from './components/Forms/EditProfile';
-import ForgotPassword from './components/Forms/ForgotPassword';
-import ResetPassword from './components/Forms/ResetPassword';
-
-// NewVersionMessage
-import NewVersionMessage from './components/Misc/Utility/About/NewVersion/NewVersionMessage';
-
 import { urls } from './utils/common';
-import QuizShareRoute from 'components/Quiz/QuizShareRoute';
-import QuizShareBuilderLoader from 'components/Quiz/QuizShareBuilderLoader';
-import Sharebuilder from 'components/Sharebuilder/Sharebuilder';
 import { toast } from 'react-toastify';
-import FirstTimeToast from 'components/Misc/Utility/About/FirstTime/FirstTimeToast';
-import FirstTime from 'components/Misc/Utility/About/FirstTime/FirstTime';
-import User from 'classes/User';
 import { ReduxState } from 'redux/reducers/index';
 import settingsReducer from 'redux/reducers/settings';
+
+// Classes
+import User from 'classes/User';
+
+// Components
+import LoadingPage from 'components/Misc/Utility/LoadingPage';
 import Layout from 'components/Layout/Layout';
+import NewVersionMessage from './components/Misc/Utility/About/NewVersion/NewVersionMessage';
+
+// Lazy components
+const Selection = lazy(() => import('./components/Selection/Selection'));
+const Quiz = lazy(() => import('./components/Quiz/Quiz'));
+const About = lazy(() => import('./components/Misc/Utility/About/About'));
+const Contact = lazy(() => import('./components/Misc/Utility/Contact'));
+const Signup = lazy(() => import('./components/Auth/Signup'));
+const Login = lazy(() => import('./components/Auth/Login'));
+const Logout = lazy(() => import('./components/Auth/Logout'));
+const Profile = lazy(() => import('./components/Profile/Profile'));
+const EditProfile = lazy(() => import('./components/Forms/EditProfile'));
+const ForgotPassword = lazy(() => import('./components/Forms/ForgotPassword'));
+const ResetPassword = lazy(() => import('./components/Forms/ResetPassword'));
+const QuizShareRoute = lazy(() => import('components/Quiz/QuizShareRoute'));
+const QuizShareBuilderLoader = lazy(() => import('components/Quiz/QuizShareBuilderLoader'));
+const Sharebuilder = lazy(() => import('components/Sharebuilder/Sharebuilder'));
+const FirstTimeToast = lazy(() => import('components/Misc/Utility/About/FirstTime/FirstTimeToast'));
+const FirstTime = lazy(() => import('components/Misc/Utility/About/FirstTime/FirstTime'));
 
 export interface AppProps extends LocalizeContextProps {}
 
@@ -108,25 +105,27 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
           pauseOnHover
         />
         <Layout>
-          <Switch>
-            <Route path={'/firsttime'} component={FirstTime} />
-            <Route path={urls.about} component={About} />
-            <Route path={urls.contact} component={Contact} />
-            <Route path={'/share/:id'} component={QuizShareBuilderLoader} />
-            <Route path={'/share'} component={Sharebuilder} />
-            <Route path={urls.quizShareRoute} component={QuizShareRoute} />
-            <Route path={urls.quiz} component={Quiz} />
-            <Route path={urls.signup} component={Signup} />
-            <Route path={urls.login} component={Login} />
-            <Route path={urls.logout} component={Logout} />
-            <PrivateRoute path={urls.editProfile} component={EditProfile} />
-            <PrivateRoute path={urls.profile} component={Profile} />
-            <Route path={urls.forgotPassword} component={ForgotPassword} />
-            <Route path={`${urls.resetPassword}/:token`} component={ResetPassword} />
-            <Route path="/print" component={Print} />
-            <Route exact path="/" component={Selection} />
-            <Route component={ErrorPage} />
-          </Switch>
+          <Suspense fallback={<LoadingPage />}>
+            <Switch>
+              <Route path={'/firsttime'} component={FirstTime} />
+              <Route path={urls.about} component={About} />
+              <Route path={urls.contact} component={Contact} />
+              <Route path={'/share/:id'} component={QuizShareBuilderLoader} />
+              <Route path={'/share'} component={Sharebuilder} />
+              <Route path={urls.quizShareRoute} component={QuizShareRoute} />
+              <Route path={urls.quiz} component={Quiz} />
+              <Route path={urls.signup} component={Signup} />
+              <Route path={urls.login} component={Login} />
+              <Route path={urls.logout} component={Logout} />
+              <PrivateRoute path={urls.editProfile} component={EditProfile} />
+              <PrivateRoute path={urls.profile} component={Profile} />
+              <Route path={urls.forgotPassword} component={ForgotPassword} />
+              <Route path={`${urls.resetPassword}/:token`} component={ResetPassword} />
+              <Route path="/print" component={Print} />
+              <Route exact path="/" component={Selection} />
+              <Route component={ErrorPage} />
+            </Switch>
+          </Suspense>
         </Layout>
       </ScrollToTop>
     </BrowserRouter>

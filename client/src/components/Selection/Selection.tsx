@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, lazy, Suspense } from 'react';
 import selectionTranslations from './selectionTranslations.json';
 import { withLocalize, LocalizeContextProps } from 'react-localize-redux';
 import { Container, Header, Divider } from 'semantic-ui-react';
@@ -11,10 +11,10 @@ import Semester from 'classes/Semester';
 import LoadingPage from 'components/Misc/Utility/LoadingPage';
 import User from 'classes/User';
 import SelectionStartButton from './SelectionComponents/SelectionStartButton';
-import SelectionRandom from './SelectionRandom';
-import SelectionMetadata from './SelectionMetadata';
-import SelectionSets from './SelectionSets';
 import QuestionCount from './SelectionComponents/QuestionCount';
+const SelectionRandom = lazy(() => import('./SelectionRandom'));
+const SelectionMetadata = lazy(() => import('./SelectionMetadata'));
+const SelectionSets = lazy(() => import('./SelectionSets'));
 
 export interface SelectionProps extends LocalizeContextProps {}
 
@@ -54,9 +54,11 @@ const Selection: React.SFC<SelectionProps> = ({ addTranslation }) => {
         <Divider />
         <SelectionTypeSelector />
         <Divider hidden />
-        {type === 'random' && <SelectionRandom />}
-        {type === 'metadata' && <SelectionMetadata />}
-        {type === 'set' && <SelectionSets />}
+        <Suspense fallback={<LoadingPage />}>
+          {type === 'random' && <SelectionRandom />}
+          {type === 'metadata' && <SelectionMetadata />}
+          {type === 'set' && <SelectionSets />}
+        </Suspense>
         {user && type !== 'set' && (
           <>
             <Divider />
