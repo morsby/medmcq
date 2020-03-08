@@ -92,20 +92,20 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
 
   return (
     <BrowserRouter>
-      <ScrollToTop>
-        <NewVersionMessage />
-        <ToastContainer
-          position="top-center"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop
-          closeOnClick
-          rtl={false}
-          draggable
-          pauseOnHover
-        />
-        <Layout>
-          <Suspense fallback={<LoadingPage />}>
+      <Suspense fallback={<LoadingPage />}>
+        <ScrollToTop>
+          <NewVersionMessage />
+          <ToastContainer
+            position="top-center"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop
+            closeOnClick
+            rtl={false}
+            draggable
+            pauseOnHover
+          />
+          <Layout>
             <Switch>
               <Route path={'/firsttime'} component={FirstTime} />
               <Route path={urls.about} component={About} />
@@ -125,9 +125,9 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
               <Route exact path="/" component={Selection} />
               <Route component={ErrorPage} />
             </Switch>
-          </Suspense>
-        </Layout>
-      </ScrollToTop>
+          </Layout>
+        </ScrollToTop>
+      </Suspense>
     </BrowserRouter>
   );
 };
