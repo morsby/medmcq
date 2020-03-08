@@ -30,7 +30,7 @@ const decodeUser = (jwt: string) => {
   }
 };
 
-const generateContext = (req: Express.Request, res: Express.Response) => ({
+export const generateContext = (req: Express.Request, res: Express.Response) => ({
   userAnswersLoader: createUserAnswersLoader(),
   userAnswersByQuestionIdLoader: createUserAnswersByQuestionIdLoader(),
   examSetsLoader: createExamSetsLoader(),
