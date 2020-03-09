@@ -18,7 +18,14 @@ const SetRadioButtonMetadata: React.SFC<SetRadioButtonMetadataProps> = ({ user, 
   };
 
   const getCount = useCallback(() => {
-    return user.answeredSets.find((answeredSet) => answeredSet.examSetId === examSet.id)?.count;
+    return (
+      user.answeredSets.find((answeredSet) => answeredSet.examSetId === examSet.id)?.count || 0
+    );
+  }, [examSet, user]);
+
+  const getPercentage = useCallback(() => {
+    if (examSet.questionCount === 0) return 100; // Since 0/0 is NaN in javascript
+    return Math.round((getCount() / examSet.questionCount) * 100);
   }, [examSet, user]);
 
   const getColor = () => {
@@ -44,8 +51,7 @@ const SetRadioButtonMetadata: React.SFC<SetRadioButtonMetadataProps> = ({ user, 
       )}
       {manualLoading && <Loader active inline size="mini" />}
       <span style={{ color: getColor(), margin: '0 0.5em' }}>
-        {getCount() || 0} / {examSet.questionCount} (
-        {Math.round(((getCount() || 0) / examSet.questionCount) * 100) || 0}%)
+        {getCount()} / {examSet.questionCount} ({getPercentage()}%)
       </span>
     </span>
   );
