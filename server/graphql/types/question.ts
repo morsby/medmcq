@@ -13,6 +13,7 @@ import ExamSet from 'models/exam_set';
 import Semester from 'models/semester';
 import sgMail from '@sendgrid/mail';
 import _ from 'lodash';
+import User from 'models/user';
 
 export const typeDefs = gql`
   extend type Query {
@@ -21,6 +22,7 @@ export const typeDefs = gql`
 
   extend type Mutation {
     reportQuestion(report: String!, questionId: Int!): String
+    createQuestion(data: QuestionInput): Question
   }
 
   input QuestionFilterInput {
@@ -72,12 +74,9 @@ export const typeDefs = gql`
     answer3: String!
     correctAnswers: [Int!]!
     text: String!
-    images: [QuestionImageInput]
+    images: [String]
     examSetQno: Int!
-  }
-
-  input QuestionImageInput {
-    link: String!
+    examSetId: Int!
   }
 `;
 
@@ -203,7 +202,38 @@ export const resolvers = {
       return query.groupBy('question.id').select('question.id as id');
     }
   },
+
   Mutation: {
+    createQuestion: async (root, { data }, ctx: Context) => {
+      const user = await User.query().findById(ctx.user?.id);
+      if (user?.roleId >= 4) throw new Error('Not permitted');
+      const {
+        answer1,
+        answer2,
+        answer3,
+        correctAnswers,
+        text,
+        images,
+        examSetQno,
+        examSetId
+      } = data;
+      const question = await Question.query().insertAndFetch({
+        answer1,
+        answer2,
+        answer3,
+        text,
+        examSetId,
+        examSetQno
+      });
+      await QuestionCorrectAnswer.query().insertGraph(
+        correctAnswers.map((answer) => ({ answer, questionId: question.id }))
+      );
+      await QuestionImage.query().insertGraph(
+        images.map((image) => ({ link: image, questionId: question.id }))
+      );
+
+      return { id: question.id };
+    },
     reportQuestion: async (root, { report, questionId }) => {
       const question = await Question.query().findById(questionId);
       const examSet = await ExamSet.query().findById(question.examSetId);

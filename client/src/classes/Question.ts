@@ -127,6 +127,20 @@ class Question {
 
     await Apollo.mutate('reportQuestion', mutation, data);
   };
+
+  static create = async (data: any) => {
+    const mutation = gql`
+      mutation CreateQuestion($data: QuestionInput) {
+        createQuestion(data: $data) {
+          ...Question
+        }
+      }
+      ${Question.fullFragment}
+    `;
+
+    const question = await Apollo.mutate<Question>('createQuestion', mutation, { data });
+    store.dispatch(questionsReducer.actions.addQuestion(question));
+  };
 }
 
 export default Question;

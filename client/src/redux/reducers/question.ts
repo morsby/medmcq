@@ -4,6 +4,7 @@ import Comment from 'classes/Comment';
 import { TagVote } from 'classes/Tag';
 import { SpecialtyVote } from 'classes/Specialty';
 import _ from 'lodash';
+import { insertOrReplace } from 'utils/common';
 
 const initialState = {
   questions: [] as Question[],
@@ -30,14 +31,8 @@ const questionsReducer = createSlice({
 
       state.comments = comments;
     },
-    setQuestion: (state, action: PayloadAction<Question>) => {
-      const index = state.questions.findIndex((question) => question.id === action.payload.id);
-
-      if (index < 0) {
-        state.questions.push(action.payload);
-      } else {
-        state.questions[index] = action.payload;
-      }
+    addQuestion: (state, action: PayloadAction<Question>) => {
+      insertOrReplace(state.questions, action.payload);
     },
     setBookmarked: (
       state,
