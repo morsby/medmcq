@@ -7,6 +7,7 @@ import helmet from 'helmet';
 import Knex from 'knex';
 import { Model } from 'objection';
 import cookieParser from 'cookie-parser';
+import imageRoute from 'routes/image';
 
 import apolloServer from './graphql/apolloServer';
 import path from 'path';
@@ -30,6 +31,7 @@ app.use(cookieParser());
 
 // GraphQL and routes
 apolloServer.applyMiddleware({ app });
+app.use('/images', imageRoute);
 
 /* Catch all */
 app.use(express.static(path.join(__dirname, '..', '..', 'client', 'build')));

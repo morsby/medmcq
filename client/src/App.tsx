@@ -47,6 +47,7 @@ const QuizShareBuilderLoader = lazy(() => import('components/Quiz/QuizShareBuild
 const Sharebuilder = lazy(() => import('components/Sharebuilder/Sharebuilder'));
 const FirstTimeToast = lazy(() => import('components/Misc/Utility/About/FirstTime/FirstTimeToast'));
 const FirstTime = lazy(() => import('components/Misc/Utility/About/FirstTime/FirstTime'));
+const CreateQuestionForm = lazy(() => import('components/CreateQuestion/CreateQuestionForm'));
 
 export interface AppProps extends LocalizeContextProps {}
 
@@ -54,6 +55,7 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
   const dispatch = useDispatch();
   const language = useSelector((state: ReduxState) => state.settings.language);
   const firstTime = useSelector((state: ReduxState) => state.settings.firstTime);
+  const user = useSelector((state: ReduxState) => state.auth.user);
 
   useEffect(() => {
     // Hent brugeren
@@ -117,6 +119,7 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
               <Route path={urls.signup} component={Signup} />
               <Route path={urls.login} component={Login} />
               <Route path={urls.logout} component={Logout} />
+              {user?.role.id < 4 && <Route path="/createquestion" component={CreateQuestionForm} />}
               <PrivateRoute path={urls.editProfile} component={EditProfile} />
               <PrivateRoute path={urls.profile} component={Profile} />
               <Route path={urls.forgotPassword} component={ForgotPassword} />

@@ -5,6 +5,7 @@ import ExamSet from 'models/exam_set';
 import Specialty from 'models/specialty';
 import Tag from 'models/tag';
 import Question from 'models/question';
+import User from 'models/user';
 
 export const typeDefs = gql`
   extend type Query {
@@ -26,8 +27,16 @@ export const typeDefs = gql`
 
 export const resolvers = {
   Query: {
-    semesters: async () => {
-      const semesters = await Semester.query();
+    semesters: async (root, args, ctx: Context) => {
+      const user = await User.query()
+        .findById(ctx.user?.id)
+        .skipUndefined();
+      let semesters: Semester[];
+      if (user?.roleId < 4) {
+        semesters = await Semester.query();
+      } else {
+        semesters = await Semester.query().where({ locked: 0 });
+      }
       return semesters.map((semester) => ({ id: semester.id }));
     },
     semester: async (root, { id }) => {

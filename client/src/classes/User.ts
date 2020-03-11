@@ -27,6 +27,7 @@ interface User {
   manualCompletedSets: { examSetId: number }[];
   bookmarks: Bookmark[];
   answeredSets: { examSetId: number; count: number }[];
+  role: Role;
 }
 
 export interface UserAnswer {
@@ -41,6 +42,10 @@ export interface Bookmark {
   question: Question;
 }
 
+export interface Role {
+  id: number;
+}
+
 class User {
   static login = async (data: UserLoginInput): Promise<User> => {
     const mutation = gql`
@@ -50,23 +55,7 @@ class User {
     `;
 
     await Apollo.mutate<string>('login', mutation, { data }); // Sets a JWT as cookie
-
-    const query = gql`
-      query {
-        user {
-          id
-          username
-          email
-          likes {
-            commentId
-            userId
-          }
-        }
-      }
-    `;
-
-    const user = await Apollo.query<User>('user', query);
-    await User.fetch();
+    const user = await User.fetch();
     return user;
   };
 
@@ -103,6 +92,9 @@ class User {
           id
           username
           email
+          role {
+            id
+          }
           likes {
             commentId
           }
@@ -124,6 +116,7 @@ class User {
 
     const user = await Apollo.query<User>('user', query);
     await store.dispatch(authReducer.actions.login(user));
+    return user;
   };
 
   static getAnsweredQuestions = async () => {

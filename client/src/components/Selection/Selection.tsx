@@ -1,7 +1,7 @@
 import React, { useEffect, lazy, Suspense } from 'react';
 import selectionTranslations from './selectionTranslations.json';
 import { withLocalize, LocalizeContextProps } from 'react-localize-redux';
-import { Container, Header, Divider } from 'semantic-ui-react';
+import { Container, Header, Divider, Button } from 'semantic-ui-react';
 import SelectionSemesterSelector from 'components/Selection/SelectionComponents/SelectionSemesterSelector';
 import SelectionTypeSelector from 'components/Selection/SelectionComponents/SelectionTypeSelector';
 import SelectionUniqueSelector from 'components/Selection/SelectionComponents/SelectionUniqueSelector';
@@ -12,6 +12,7 @@ import LoadingPage from 'components/Misc/Utility/LoadingPage';
 import User from 'classes/User';
 import SelectionStartButton from './SelectionComponents/SelectionStartButton';
 import QuestionCount from './SelectionComponents/QuestionCount';
+import { useHistory } from 'react-router-dom';
 const SelectionRandom = lazy(() => import('./SelectionRandom'));
 const SelectionMetadata = lazy(() => import('./SelectionMetadata'));
 const SelectionSets = lazy(() => import('./SelectionSets'));
@@ -22,6 +23,7 @@ export interface SelectionProps extends LocalizeContextProps {}
  * Hovedsiden til at håndtere alle valg af spørgsmål.
  */
 const Selection: React.SFC<SelectionProps> = ({ addTranslation }) => {
+  const history = useHistory();
   const semesters = useSelector((state: ReduxState) => state.metadata.semesters);
   const type = useSelector((state: ReduxState) => state.selection.type);
   const user = useSelector((state: ReduxState) => state.auth.user);
@@ -67,6 +69,12 @@ const Selection: React.SFC<SelectionProps> = ({ addTranslation }) => {
         )}
         <Divider hidden />
         <SelectionStartButton />
+        <div style={{ height: '5px' }} />
+        {user?.role.id < 4 && (
+          <Button onClick={() => history.push('/createquestion')} fluid basic color="black">
+            Opret spørgsmål
+          </Button>
+        )}
         <Divider hidden />
       </Container>
     </div>

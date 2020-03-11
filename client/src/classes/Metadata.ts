@@ -53,14 +53,10 @@ class Metadata {
     const question = await Apollo.mutate<Question>(name, mutation, { data });
 
     if (type === 'specialty') {
-      await store.dispatch(questionsReducer.actions.setQuestion(question));
+      await store.dispatch(questionsReducer.actions.addQuestion(question));
     } else if (type === 'tag') {
-      await store.dispatch(questionsReducer.actions.setQuestion(question));
+      await store.dispatch(questionsReducer.actions.addQuestion(question));
     }
-  };
-
-  static suggestTag = ({ tagName, questionId }: { tagName: string; questionId: number }) => {
-    // TODO
   };
 }
 

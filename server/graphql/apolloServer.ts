@@ -44,7 +44,7 @@ const generateContext = (req: Express.Request, res: Express.Response) => ({
   userLoader: createUserLoader(),
   bookmarkLoader: createBookmarkLoader(),
   commentsLoader: createCommentsLoader(),
-  user: decodeUser(req.cookies.user) as User,
+  user: decodeUser(req.cookies.user) as User | null,
   res,
   req
 });
@@ -54,6 +54,5 @@ export type Context = ReturnType<typeof generateContext>;
 export default new ApolloServer({
   resolvers,
   typeDefs,
-  context: ({ req, res }) => generateContext(req, res),
-  tracing: process.env.NODE_ENV !== 'production'
+  context: ({ req, res }) => generateContext(req, res)
 });
