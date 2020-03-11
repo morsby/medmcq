@@ -7,4 +7,4 @@ services:
     ports:
       - '8080:3001'
     volumes:
-      - './client/build/images:/apps/medmcq/images'
+      - './images:/client/build/images'
