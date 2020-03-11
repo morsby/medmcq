@@ -7,4 +7,4 @@ services:
     ports:
       - '8080:3001'
     volumes:
-      - './images:client/build/images'
+      - './images:/usr/src/app/client/build/images'
