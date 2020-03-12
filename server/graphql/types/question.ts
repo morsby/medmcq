@@ -229,9 +229,11 @@ export const resolvers: Resolvers = {
       await QuestionCorrectAnswer.query().insertGraph(
         correctAnswers.map((answer) => ({ answer, questionId: question.id }))
       );
-      await QuestionImage.query().insertGraph(
-        images.map((image) => ({ link: image, questionId: question.id }))
-      );
+      if (!!images) {
+        await QuestionImage.query().insertGraph(
+          images.map((image) => ({ link: image, questionId: question.id }))
+        );
+      }
 
       return { id: question.id };
     },

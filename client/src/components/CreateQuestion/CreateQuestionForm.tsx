@@ -44,14 +44,18 @@ const CreateQuestionForm: React.SFC<CreateQuestionFormProps> = () => {
   const handleSubmit = async (values) => {
     setIsSubmitting(true);
     try {
-      const formData = new FormData();
-      for (let image of images) {
-        formData.append('images', image);
+      if (!!images) {
+        const formData = new FormData();
+        for (let image of images) {
+          formData.append('images', image);
+        }
+        const res = await axios.post('/images/upload', formData, {
+          headers: { 'content-type': 'multipart/form-data' }
+        });
+        await Question.create({ ...values, images: res.data });
+      } else {
+        await Question.create(values);
       }
-      const res = await axios.post('/images/upload', formData, {
-        headers: { 'content-type': 'multipart/form-data' }
-      });
-      await Question.create({ ...values, images: res.data });
       await Semester.fetchAll();
       formik.resetForm();
       setIsSubmitting(false);
