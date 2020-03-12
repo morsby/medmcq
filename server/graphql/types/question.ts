@@ -224,7 +224,8 @@ export const resolvers: Resolvers = {
         answer3,
         text,
         examSetId,
-        examSetQno
+        examSetQno,
+        userId: user.id
       });
       await QuestionCorrectAnswer.query().insertGraph(
         correctAnswers.map((answer) => ({ answer, questionId: question.id }))

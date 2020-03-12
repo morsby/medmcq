@@ -8,6 +8,7 @@ interface Question {
   answer1: string;
   answer2: string;
   answer3: string;
+  userId: number;
   examSetQno: number;
   examSetId: number;
   createdAt: Date;
