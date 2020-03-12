@@ -20,6 +20,10 @@ Se mere om omsætningen i dokumentation for dotenv-flow.
   
 Derefter skal du køre `npm run install-all`, efterfulgt af `cd server && knex migrate:latest` og derefter `npm run dev` for at starte dit development workflow. Held og lykke!
 
+## Development
+
+Når du redigerer i typeDefs på graphQL API'en, skal du køre `npm run generate` for at opdatere typescript typer på både backend og frontend. Dette bruger graphql-code-generator.
+
 ## For de teknisk interesserede
 
 I `/server` findes en graphQL api der er forbundet til en mySQL database. Databasen kan opsættes ved brug af migrations, som findes under server. Denne server serverer vores client.
