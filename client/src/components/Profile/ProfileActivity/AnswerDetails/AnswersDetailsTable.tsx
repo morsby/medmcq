@@ -7,10 +7,10 @@ import { useHistory } from 'react-router';
 import AnswerDetailsTableExtendedRow from './AnswerDetailsTableExtendedRow';
 import { ReduxState } from 'redux/reducers';
 import Question from 'classes/Question';
-import { UserAnswer } from 'classes/User';
+import { Answer } from 'types/generated';
 
 export interface AnswersDetailsTableProps {
-  answers: UserAnswer[];
+  answers: Answer[];
   toggleCheckbox: Function;
   questions: Question[];
 }
@@ -32,7 +32,7 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
   const columns = [
     {
       title: <Translate id="profileAnswerDetails.table_headers.performance" />,
-      render: (record: UserAnswer) => {
+      render: (record: Answer) => {
         const attempt = tries.find((attempt) => attempt.questionId === record.question.id);
 
         return (
@@ -55,7 +55,7 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
     {
       title: <Translate id="profileAnswerDetails.table_headers.question" />,
       key: 'text',
-      render: (record: UserAnswer) => (
+      render: (record: Answer) => (
         <p
           style={{ color: '#1890ff', cursor: 'pointer' }}
           onClick={() => history.push(`quiz/${record.question.id}`)}
@@ -66,17 +66,17 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
     },
     {
       title: <Translate id="profileAnswerDetails.table_headers.specialty" />,
-      render: (record: UserAnswer) =>
+      render: (record: Answer) =>
         record.question.specialties.map((specialty) => <Tag color="blue">{specialty.name}</Tag>)
     },
     {
       title: 'Tags',
-      render: (record: UserAnswer) =>
+      render: (record: Answer) =>
         record.question.tags.map((tag) => <Tag color="geekblue">{tag.name}</Tag>)
     },
     {
       title: <Translate id="profileAnswerDetails.table_headers.set" />,
-      render: (record: UserAnswer) => (
+      render: (record: Answer) => (
         <>
           <Translate id={`profileAnswerDetails.${record.question.examSet.season}`} />
           {record.question.examSet.year}
@@ -100,7 +100,7 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
         bordered
         columns={columns}
         dataSource={answers}
-        expandedRowRender={(record: UserAnswer) => {
+        expandedRowRender={(record: Answer) => {
           const question = questions.find((question) => question.id === record.question.id);
 
           return (

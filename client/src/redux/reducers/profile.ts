@@ -1,11 +1,10 @@
-import { Bookmark } from 'classes/User';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { UserAnswer } from 'classes/User';
 import Comment from 'classes/Comment';
 import Profile, { Attempt } from 'classes/Profile';
+import { Answer, Bookmark } from 'types/generated';
 
 const initialState = {
-  answers: [] as UserAnswer[],
+  answers: [] as Answer[],
   publicComments: [] as Comment[],
   privateComments: [] as Comment[],
   bookmarks: [] as Bookmark[],

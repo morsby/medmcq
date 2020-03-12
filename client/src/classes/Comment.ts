@@ -1,29 +1,10 @@
-import User from 'classes/User';
-import Like from './Like';
-import Question from 'classes/Question.js';
 import { gql } from 'apollo-boost';
 import Apollo from './Apollo';
 import { store } from 'IndexApp';
 import questionsReducer from 'redux/reducers/question';
+import { Comment as CommentType, CommentInput } from 'types/generated';
 
-interface Comment {
-  id: number;
-  text: string;
-  isPrivate: boolean;
-  isAnonymous: boolean;
-  user: User;
-  likes: Like[];
-  question: Question;
-  createdAt: Date;
-}
-
-interface CommentInput {
-  id?: number;
-  text: string;
-  questionId: number;
-  isPrivate: boolean;
-  isAnonymous: boolean;
-}
+interface Comment extends CommentType {}
 
 class Comment {
   static fragmentFull = gql`

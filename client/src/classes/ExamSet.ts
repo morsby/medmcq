@@ -1,16 +1,8 @@
-import Semester from './Semester';
 import client from 'apolloClient';
 import { gql } from 'apollo-boost';
+import { ExamSet as ExamSetType } from 'types/generated';
 
-interface ExamSet {
-  id: number;
-  year: number;
-  season: string;
-  semester: Semester;
-  questionCount: number;
-  createdAt: string;
-  updatedAt: string;
-}
+interface ExamSet extends ExamSetType {}
 
 class ExamSet {
   static fragmentFull = gql`

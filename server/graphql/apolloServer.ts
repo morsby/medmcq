@@ -1,7 +1,6 @@
 import { ApolloServer } from 'apollo-server-express';
 import { resolvers, typeDefs } from 'graphql/types';
 import jsonWebToken from 'jsonwebtoken';
-import User from 'models/user';
 import Express from 'express';
 import { createCommentsLoader } from './dataloaders/commentLoaders';
 import {
@@ -21,11 +20,12 @@ import { createSemesterLoader } from './dataloaders/semesterLoaders';
 import { createUserLoader, createBookmarkLoader } from './dataloaders/userLoaders';
 const secret = process.env.SECRET || '';
 
-const decodeUser = (jwt: string) => {
+const decodeUser = (jwt: string, res: Express.Response) => {
   if (!jwt) return null;
   try {
     return jsonWebToken.verify(jwt, secret);
   } catch (error) {
+    res.cookie('user', {}, { expires: new Date(0) });
     return null;
   }
 };
@@ -44,7 +44,7 @@ const generateContext = (req: Express.Request, res: Express.Response) => ({
   userLoader: createUserLoader(),
   bookmarkLoader: createBookmarkLoader(),
   commentsLoader: createCommentsLoader(),
-  user: decodeUser(req.cookies.user) as User | null,
+  user: decodeUser(req.cookies.user, res) as { id: number } | null,
   res,
   req
 });

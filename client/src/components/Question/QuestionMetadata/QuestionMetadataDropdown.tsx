@@ -7,17 +7,20 @@ import { Translate } from 'react-localize-redux';
 import Tag from 'classes/Tag';
 import { useSelector } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
+import Specialty from 'classes/Specialty';
 const { SubMenu } = Menu;
 
 export interface QuestionMetadataDropdownProps {
   onChange: Function;
-  type: 'specialty' | 'tag'
+  type: 'specialty' | 'tag';
 }
- 
-const QuestionMetadataDropdown: React.SFC<QuestionMetadataDropdownProps> = ({onChange, type}) => {
+
+const QuestionMetadataDropdown: React.SFC<QuestionMetadataDropdownProps> = ({ onChange, type }) => {
   const [tagTree, setTagTree] = useState(null);
   const selectedSemester = useSelector((state: ReduxState) => state.selection.semesterId);
-  const {specialties, tags} = useSelector((state: ReduxState) => state.metadata.semesters.find((semester) => semester.id === selectedSemester));
+  const { specialties, tags } = useSelector((state: ReduxState) =>
+    state.metadata.semesters.find((semester) => semester.id === selectedSemester)
+  );
   const options = type === 'specialty' ? specialties : tags;
 
   const handleDropdownPick = (id) => {
@@ -26,7 +29,7 @@ const QuestionMetadataDropdown: React.SFC<QuestionMetadataDropdownProps> = ({onC
 
   useEffect(() => {
     const convertMetadataToTree = () => {
-      return _.filter(options, (t: Tag) => !t.parent?.id).map((t) => ({
+      return _.filter(options, (t: Tag) => !t.parent?.id).map((t: Tag) => ({
         title: t.name,
         key: t.id,
         children: getChildrenOfMetadata(t.id)
@@ -34,7 +37,7 @@ const QuestionMetadataDropdown: React.SFC<QuestionMetadataDropdownProps> = ({onC
     };
 
     const getChildrenOfMetadata = (tagId) => {
-      return _.filter(options, (t: Tag) => t.parent?.id === tagId).map((t) => ({
+      return _.filter(options, (t: Tag) => t.parent?.id === tagId).map((t: Tag) => ({
         title: t.name,
         key: t.id,
         children: getChildrenOfMetadata(t.id)
@@ -94,7 +97,7 @@ const QuestionMetadataDropdown: React.SFC<QuestionMetadataDropdownProps> = ({onC
     }
 
     if (type === 'specialty') {
-      return _.map(options, (s) => {
+      return _.map(options, (s: Specialty) => {
         return (
           <Menu.Item onClick={() => handleDropdownPick(s.id)} key={s.id}>
             {s.name}

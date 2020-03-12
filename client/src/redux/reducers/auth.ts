@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import User from 'classes/User';
-import { Bookmark } from '../../classes/User';
+import { Bookmark } from 'types/generated';
+import { insertOrReplace } from 'utils/common';
 
 const initialState = {
   user: null as User | null
@@ -28,7 +29,7 @@ const authReducer = createSlice({
         state.user.manualCompletedSets.splice(index, 1);
       }
     },
-    setBookmark: (state, action: PayloadAction<Bookmark>) => {
+    addOrRemoveBookmark: (state, action: PayloadAction<Bookmark>) => {
       const index = state.user.bookmarks.findIndex(
         (bookmark) => bookmark.question.id === action.payload.question.id
       );

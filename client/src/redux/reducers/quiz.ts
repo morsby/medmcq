@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { AnswerInput } from 'classes/Quiz';
 import moment from 'moment-timezone';
+import { AnswerInput } from 'types/generated';
 
 const initialState = {
   questionIds: [] as number[],

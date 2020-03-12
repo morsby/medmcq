@@ -1,6 +1,7 @@
 import { gql } from 'apollo-server-express';
 import ShareLink from '../../models/shareLink';
 import crypto from 'crypto';
+import { Resolvers } from 'types/resolvers-types';
 
 // Husk altid extend på alle typer af queries, da det er et krav for modularitet af graphql
 // (måske i fremtiden det ikke behøves)
@@ -10,11 +11,11 @@ export const typeDefs = gql`
   }
 
   extend type Mutation {
-    createShareLink(questionIds: [Int!]!): String
+    createShareLink(questionIds: [Int!]!): Int
   }
 `;
 
-export const resolvers = {
+export const resolvers: Resolvers = {
   Query: {
     shareLink: async (_args, { shareId }) => {
       const ids = await ShareLink.query()

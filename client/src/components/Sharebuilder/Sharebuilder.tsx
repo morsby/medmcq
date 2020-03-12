@@ -10,7 +10,8 @@ import _ from 'lodash';
 import { ReduxState } from 'redux/reducers';
 import shareBuilderReducer from 'redux/reducers/sharebuilder';
 import ShareBuilderClass from 'classes/ShareBuilder';
-import Question, { QuestionFilterInput } from 'classes/Question';
+import Question from 'classes/Question';
+import { QuestionFilterInput } from 'types/generated';
 
 export interface SharebuilderProps {}
 

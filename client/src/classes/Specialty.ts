@@ -1,22 +1,7 @@
-import User from 'classes/User';
-import Question from './Question';
-import Semester from './Semester';
 import { gql } from 'apollo-boost';
+import { Specialty as SpecialtyType } from 'types/generated';
 
-interface Specialty {
-  id: number;
-  name: string;
-  semester: Partial<Semester>;
-  questionCount: number;
-}
-
-export interface SpecialtyVote {
-  id: number;
-  specialty: Specialty;
-  question: Question;
-  user: User;
-  vote: number;
-}
+interface Specialty extends SpecialtyType {}
 
 class Specialty {
   static fragmentFull = gql`

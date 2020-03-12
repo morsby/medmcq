@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { isAnswered } from 'utils/quiz';
 import CopyToClipBoard from 'react-copy-to-clipboard';
 
-import { Grid, Button, Input, Message, Icon } from 'semantic-ui-react';
+import { Grid, Button, Input, Message, Icon, Loader } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 import QuestionAnsweredCounter from './QuestionMetadata/QuestionAnsweredCounter';
 import QuestionMetadataLabel from './QuestionMetadata/QuestionMetadataLabel';
@@ -20,6 +20,7 @@ export interface QuestionMetadataProps {}
 const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
   const dispatch = useDispatch();
   const [newTag, setNewTag] = useState('');
+  const [isBookmarking, setIsBookmarking] = useState(false);
   const [addingNewTag, setAddingNewTag] = useState(false);
   const [suggestTagMessage, setSuggestTagMessage] = useState('');
   const questionIndex = useSelector((state: ReduxState) => state.quiz.questionIndex);
@@ -59,6 +60,12 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
 
   const handleChange = (e, { value }) => {
     setNewTag(value);
+  };
+
+  const handleBookmark = async () => {
+    setIsBookmarking(true);
+    await User.bookmark({ questionId: question.id });
+    setIsBookmarking(false);
   };
 
   return (
@@ -182,19 +189,21 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
             </Grid.Column>
             <Grid.Column width={5} textAlign="right">
               <span style={{ color: 'grey' }}>Gem spørgsmål - </span>
-              <Icon
-                style={{ cursor: 'pointer' }}
-                onClick={() => {
-                  if (question.isBookmarked) {
-                    User.bookmark({ questionId: question.id });
-                  } else {
-                    User.bookmark({ questionId: question.id });
+              {isBookmarking ? (
+                <Loader active inline size="small" />
+              ) : (
+                <Icon
+                  style={{ cursor: 'pointer' }}
+                  onClick={handleBookmark}
+                  color={
+                    user.bookmarks.find((bookmark) => bookmark.question.id === question.id)
+                      ? 'green'
+                      : 'grey'
                   }
-                }}
-                color={question.isBookmarked ? 'green' : 'grey'}
-                name="flag"
-                size="large"
-              />
+                  name="flag"
+                  size="large"
+                />
+              )}
             </Grid.Column>
           </Grid.Row>
         </>

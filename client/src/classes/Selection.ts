@@ -1,6 +1,6 @@
-import { QuestionFilterInput } from './Question';
 import { store } from 'IndexApp';
 import selectionReducer from 'redux/reducers/selection';
+import { QuestionFilterInput } from 'types/generated';
 
 interface Selection {}
 

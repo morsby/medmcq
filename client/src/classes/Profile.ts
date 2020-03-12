@@ -1,4 +1,3 @@
-import { UserAnswer, Bookmark } from 'classes/User';
 import Comment from 'classes/Comment';
 import { gql } from 'apollo-boost';
 import Apollo from './Apollo';
@@ -7,18 +6,15 @@ import { store } from 'IndexApp';
 import Tag from './Tag';
 import Specialty from './Specialty';
 import ExamSet from './ExamSet';
+import { User as UserType, Answer } from 'types/generated';
 
-interface Profile {
-  answers: UserAnswer[];
-  publicComments: Comment[];
-  privateComments: Comment[];
-  bookmarks: Bookmark[];
+interface Profile extends UserType {
   tries: Attempt[];
 }
 
 export type Attempt = { tries: number; correct: number; questionId: number };
 
-const mapAnswers = (answers: UserAnswer[]): Attempt[] => {
+const mapAnswers = (answers: Answer[]): Attempt[] => {
   let attempts = [] as Attempt[];
 
   for (let answer of answers) {

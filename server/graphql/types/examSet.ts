@@ -1,9 +1,10 @@
 import { gql } from 'apollo-server-express';
-import { Context } from 'graphql/apolloServer';
 import ExamSet from 'models/exam_set';
 import Question from 'models/question';
 import QuestionCorrectAnswer from 'models/question_correct_answer';
 import QuestionImage from 'models/question_image';
+import { Resolvers } from 'types/resolvers-types';
+import User from 'models/user';
 
 export const typeDefs = gql`
   extend type Query {
@@ -11,7 +12,7 @@ export const typeDefs = gql`
   }
 
   extend type Mutation {
-    createExamSet(data: [ExamSetInput!]!): ExamSet
+    createExamSet(data: ExamSetInput): ExamSet
   }
 
   type ExamSet {
@@ -32,7 +33,7 @@ export const typeDefs = gql`
   }
 `;
 
-export const resolvers = {
+export const resolvers: Resolvers = {
   Query: {
     examSets: async () => {
       const examSets = await ExamSet.query().select('id');
@@ -41,8 +42,10 @@ export const resolvers = {
   },
 
   Mutation: {
-    createExamSet: async (root, { data }, ctx: Context) => {
-      if (ctx.user.roleId < 2) throw new Error('Not permitted');
+    createExamSet: async (root, { data }, ctx) => {
+      if (!ctx.user) throw new Error('Not permitted');
+      const user = await User.query().findById(ctx.user.id);
+      if (user.roleId >= 4) throw new Error('Not permitted');
 
       const { year, season, semesterId, questions } = data;
       const examSet = await ExamSet.query().insertAndFetch({
@@ -70,7 +73,7 @@ export const resolvers = {
         }
         for (let image of images) {
           await QuestionImage.query().insert({
-            link: image.link,
+            link: image,
             questionId: newQuestion.id
           });
         }
@@ -82,15 +85,15 @@ export const resolvers = {
 
   ExamSet: {
     id: ({ id }) => id,
-    year: async ({ id }, args, ctx: Context) => {
+    year: async ({ id }, args, ctx) => {
       const examSet = await ctx.examSetsLoader.load(id);
       return examSet.year;
     },
-    season: async ({ id }, args, ctx: Context) => {
+    season: async ({ id }, args, ctx) => {
       const examSet = await ctx.examSetsLoader.load(id);
       return examSet.season;
     },
-    semester: async ({ id }, args, ctx: Context) => {
+    semester: async ({ id }, args, ctx) => {
       const examSet = await ctx.examSetsLoader.load(id);
       return { id: examSet.semesterId };
     },

@@ -1,10 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import Question from 'classes/Question';
 import Comment from 'classes/Comment';
-import { TagVote } from 'classes/Tag';
-import { SpecialtyVote } from 'classes/Specialty';
 import _ from 'lodash';
 import { insertOrReplace } from 'utils/common';
+import { TagVote, SpecialtyVote } from 'types/generated';
 
 const initialState = {
   questions: [] as Question[],
@@ -33,14 +32,6 @@ const questionsReducer = createSlice({
     },
     addQuestion: (state, action: PayloadAction<Question>) => {
       insertOrReplace(state.questions, action.payload);
-    },
-    setBookmarked: (
-      state,
-      action: PayloadAction<{ questionId: number; isBookmarked: boolean }>
-    ) => {
-      const { questionId, isBookmarked } = action.payload;
-      const index = state.questions.findIndex((question) => question.id === questionId);
-      state.questions[index].isBookmarked = isBookmarked;
     },
     setLiked: (state, action: PayloadAction<{ questionId: number; isLiked: boolean }>) => {
       const { questionId, isLiked } = action.payload;
