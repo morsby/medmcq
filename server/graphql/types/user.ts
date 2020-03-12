@@ -260,7 +260,7 @@ export const resolvers: Resolvers = {
       return { id: user.roleId };
     },
     answers: async ({ id }, { semester }) => {
-      let query = QuestionUserAnswer.query().where({ userId: id });
+      let query = QuestionUserAnswer.query().where('questionUserAnswer.userId', id);
 
       if (semester) {
         query = query
@@ -287,7 +287,9 @@ export const resolvers: Resolvers = {
       return bookmarks.map((bookmark) => ({ id: bookmark.id }));
     },
     publicComments: async ({ id }, { semester }, ctx) => {
-      let query = QuestionComment.query().where({ userId: id, private: 0 });
+      let query = QuestionComment.query()
+        .where('questionComment.userId', id)
+        .where({ private: 0 });
 
       if (semester) {
         query = query
@@ -300,7 +302,9 @@ export const resolvers: Resolvers = {
       return publicComments.map((pubC) => ({ id: pubC.id }));
     },
     privateComments: async ({ id }, { semester }, ctx) => {
-      let query = QuestionComment.query().where({ userId: id, private: 1 });
+      let query = QuestionComment.query()
+        .where('questionComment.userId', id)
+        .where({ private: 1 });
 
       if (semester) {
         query = query
