@@ -24,8 +24,6 @@ Derefter skal du køre `npm run install-all`, efterfulgt af `cd server && knex m
 
 Når du redigerer i typeDefs på graphQL API'en, skal du køre `npm run generate` for at opdatere typescript typer på både backend og frontend. Dette bruger graphql-code-generator.
 
-## For de teknisk interesserede
-
 I `/server` findes en graphQL api der er forbundet til en mySQL database. Databasen kan opsættes ved brug af migrations, som findes under server. Denne server serverer vores client.
 
 I `/client` findes hjemmesiden, der er bygget i React. Denne henter data fra api'en og viser spørgsmålene.
