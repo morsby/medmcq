@@ -1,5 +1,5 @@
 import { gql } from 'apollo-server-express';
-import { Context } from 'graphql/apolloServer';
+import { Resolvers } from 'types/resolvers-types';
 
 export const typeDefs = gql`
   type Like {
@@ -8,14 +8,14 @@ export const typeDefs = gql`
   }
 `;
 
-export const resolvers = {
+export const resolvers: Resolvers = {
   Like: {
-    commentId: async ({ id }, _, ctx: Context) => {
-      const like = await ctx.likesLoader.load(id);
+    commentId: async ({ commentId, userId }, _, ctx) => {
+      const like = await ctx.likesLoader.load([commentId, userId]);
       return like.commentId;
     },
-    userId: async ({ id }, _, ctx: Context) => {
-      const like = await ctx.likesLoader.load(id);
+    userId: async ({ commentId, userId }, _, ctx) => {
+      const like = await ctx.likesLoader.load([commentId, userId]);
       return like.userId;
     }
   }

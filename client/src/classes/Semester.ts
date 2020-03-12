@@ -5,17 +5,9 @@ import metadataReducer from 'redux/reducers/metadata';
 import ExamSet from './ExamSet';
 import Specialty from './Specialty';
 import Tag from './Tag';
+import { Semester as SemesterType } from 'types/generated';
 
-interface Semester {
-  id: number;
-  value: number;
-  name: string;
-  shortName: string;
-  questionCount: number;
-  examSets: ExamSet[];
-  specialties: Specialty[];
-  tags: Tag[];
-}
+interface Semester extends SemesterType {}
 
 class Semester {
   static fetchAll = async () => {

@@ -1,17 +1,12 @@
-import Question, { QuestionFilterInput } from './Question';
+import Question from './Question';
 import { store } from 'IndexApp';
 import quizReducer from 'redux/reducers/quiz';
 import { ReduxState } from 'redux/reducers';
 import { gql } from 'apollo-boost';
 import Apollo from './Apollo';
+import { AnswerInput, QuestionFilterInput } from 'types/generated';
 
 interface Quiz {}
-
-export interface AnswerInput {
-  questionId: number;
-  answer: number;
-  answerTime: number;
-}
 
 class Quiz {
   static start = async (filter?: Partial<QuestionFilterInput>, examMode?: boolean) => {

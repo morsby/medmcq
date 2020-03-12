@@ -1,7 +1,7 @@
 import { store } from 'IndexApp';
 import Question from 'classes/Question';
 import { ReduxState } from 'redux/reducers';
-import { AnswerInput } from 'classes/Quiz';
+import { AnswerInput } from 'types/generated';
 
 export const smoothScroll = (h?: number, dir = 'up') => {
   let top = window.pageYOffset || document.documentElement.scrollTop;

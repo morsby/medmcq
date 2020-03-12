@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Segment, Form, Dropdown, Container, Divider, Input, Grid } from 'semantic-ui-react';
+import { Segment, Form, Dropdown, Container, Divider } from 'semantic-ui-react';
 import { useFormik } from 'formik';
 import { useSelector } from 'react-redux';
 import { ReduxState } from 'redux/reducers';

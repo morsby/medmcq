@@ -4,30 +4,32 @@ import { useSelector } from 'react-redux';
 import _ from 'lodash';
 import { ReduxState } from 'redux/reducers';
 import Metadata from 'classes/Metadata';
-import Tag, { TagVote } from 'classes/Tag';
-import Specialty, { SpecialtyVote } from 'classes/Specialty';
+import Tag from 'classes/Tag';
+import Specialty from 'classes/Specialty';
+import { TagVote, SpecialtyVote } from 'types/generated';
 
 export interface QuestionMetadataLabelProps {
   metadata: Tag | Specialty;
   type: 'tag' | 'specialty';
-  metadataVotes: (TagVote|SpecialtyVote)[];
-  voteCount: number
+  metadataVotes: (TagVote | SpecialtyVote)[];
+  voteCount: number;
 }
 
 const QuestionMetadataLabel: React.SFC<QuestionMetadataLabelProps> = ({
   metadata,
   children,
   type,
-  voteCount, metadataVotes
+  voteCount,
+  metadataVotes
 }) => {
   const [buttonLoading, setButtonLoading] = useState(false);
   const questionIndex = useSelector((state: ReduxState) => state.quiz.questionIndex);
-  const question = useSelector((state: ReduxState) => state.questions.questions[questionIndex])
+  const question = useSelector((state: ReduxState) => state.questions.questions[questionIndex]);
   const chosenSemesterId = useSelector((state: ReduxState) => state.selection.semesterId);
   const { tags } = useSelector((state: ReduxState) =>
     state.metadata.semesters.find((semester) => semester.id === chosenSemesterId)
   );
-  const user = useSelector((state: ReduxState) => state.auth.user)
+  const user = useSelector((state: ReduxState) => state.auth.user);
   const tagChildren = _.filter(tags, (tag) => tag.parent.id === metadata.id);
 
   const vote = async (vote: number, metadataId?: number) => {

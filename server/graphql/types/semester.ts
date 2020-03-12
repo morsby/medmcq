@@ -1,11 +1,11 @@
 import { gql } from 'apollo-server-express';
-import { Context } from 'graphql/apolloServer';
 import Semester from 'models/semester';
 import ExamSet from 'models/exam_set';
 import Specialty from 'models/specialty';
 import Tag from 'models/tag';
 import Question from 'models/question';
 import User from 'models/user';
+import { Resolvers } from 'types/resolvers-types';
 
 export const typeDefs = gql`
   extend type Query {
@@ -25,9 +25,9 @@ export const typeDefs = gql`
   }
 `;
 
-export const resolvers = {
+export const resolvers: Resolvers = {
   Query: {
-    semesters: async (root, args, ctx: Context) => {
+    semesters: async (root, args, ctx) => {
       const user = await User.query()
         .findById(ctx.user?.id)
         .skipUndefined();
@@ -47,19 +47,19 @@ export const resolvers = {
 
   Semester: {
     id: ({ id }) => id,
-    value: async ({ id }, _, ctx: Context) => {
+    value: async ({ id }, _, ctx) => {
       const semester = await ctx.semesterLoader.load(id);
       return semester.value;
     },
-    name: async ({ id }, _, ctx: Context) => {
+    name: async ({ id }, _, ctx) => {
       const semester = await ctx.semesterLoader.load(id);
       return semester.name;
     },
-    shortName: async ({ id }, _, ctx: Context) => {
+    shortName: async ({ id }, _, ctx) => {
       const semester = await ctx.semesterLoader.load(id);
       return semester.shortName;
     },
-    questionCount: async ({ id }, _, ctx: Context) => {
+    questionCount: async ({ id }) => {
       const examSetIds = ExamSet.query()
         .where({ semesterId: id })
         .select('id');

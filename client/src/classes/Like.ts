@@ -1,7 +1,6 @@
-interface Like {
-  commentId: number;
-  userId: number;
-}
+import { Like as LikeType } from 'types/generated';
+
+interface Like extends LikeType {}
 
 class Like {}
 

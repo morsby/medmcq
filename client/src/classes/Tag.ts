@@ -1,24 +1,8 @@
-import Question from './Question';
-import Semester from 'classes/Semester';
 import { gql } from 'apollo-boost';
-import User from './User';
 import Apollo from './Apollo';
+import { Tag as TagType } from 'types/generated';
 
-interface Tag {
-  id: number;
-  name: string;
-  semester: Partial<Semester>;
-  parent: Partial<Tag>;
-  questionCount: number;
-}
-
-export interface TagVote {
-  id: number;
-  tag: Tag;
-  question: Question;
-  vote: number;
-  user: User;
-}
+interface Tag extends TagType {}
 
 class Tag {
   static fragmentFull = gql`

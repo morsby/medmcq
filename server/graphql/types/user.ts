@@ -1,5 +1,4 @@
 import { gql } from 'apollo-server-express';
-import { Context } from 'graphql/apolloServer';
 import QuestionUserAnswer from 'models/question_user_answer';
 import User from 'models/user';
 import jwt from 'jsonwebtoken';
@@ -11,6 +10,7 @@ import { urls } from 'misc/vars';
 import ManualCompletedSet from 'models/manual_completed_set';
 import crypto from 'crypto';
 import _ from 'lodash';
+import { Resolvers } from 'types/resolvers-types';
 
 export const typeDefs = gql`
   extend type Query {
@@ -27,7 +27,7 @@ export const typeDefs = gql`
     forgotPassword(email: String!): String
     resetPassword(token: String!, password: String!): String
     manualCompleteSet(examSetId: Int!): String
-    bookmark(questionId: Int!): String
+    bookmark(questionId: Int!): Bookmark
   }
 
   input LoginInput {
@@ -93,14 +93,14 @@ export const typeDefs = gql`
   }
 `;
 
-export const resolvers = {
+export const resolvers: Resolvers = {
   Query: {
-    user: async (_root, _args, ctx: Context) => {
+    user: async (_root, _args, ctx) => {
       if (!ctx.user) return null;
       const user = await ctx.userLoader.load(ctx.user.id);
       return { id: user.id };
     },
-    profile: async (_root, _args, ctx: Context) => {
+    profile: async (_root, _args, ctx) => {
       if (!ctx.user) return null;
       const user = await ctx.userLoader.load(ctx.user.id);
       return { id: user.id };
@@ -116,7 +116,7 @@ export const resolvers = {
   },
 
   Mutation: {
-    login: async (root, { data: { username, password } }, ctx: Context) => {
+    login: async (root, { data: { username, password } }, ctx) => {
       let user: Partial<User> = await User.query().findOne({ username });
       if (!user) throw new Error('Username or password is invalid');
       const isValidPassword = user.verifyPassword(password);
@@ -126,11 +126,11 @@ export const resolvers = {
       ctx.res.cookie('user', token, { expires: new Date(253402300000000) }); // Expires year 9999
       return 'Logged in';
     },
-    logout: (root, args, ctx: Context) => {
+    logout: (root, args, ctx) => {
       ctx.res.cookie('user', null, { expires: new Date(0) });
       return 'Logged out';
     },
-    signup: async (root, { data }, ctx: Context) => {
+    signup: async (root, { data }, ctx) => {
       let user: Partial<User> = await User.query().insertAndFetch(data);
       user = { id: user.id }; // Only ID is needed, as the user is fetched through the user query based on this ID
       const token = jwt.sign(user, process.env.SECRET);
@@ -139,7 +139,7 @@ export const resolvers = {
     },
     editUser: async (root, { data }) => {
       // TODO
-      console.log('Not implemented');
+      return 'Not implemented';
     },
     resetPassword: async (root, { token, password }) => {
       // Check if required fields are provided
@@ -172,7 +172,7 @@ export const resolvers = {
       // Send response
       return 'Dit kodeord er blevet nulstillet. / Your password has been reset.';
     },
-    forgotPassword: async (root, { email }, ctx: Context) => {
+    forgotPassword: async (root, { email }, ctx) => {
       if (!email) {
         throw new Error('You need to provide an email');
       }
@@ -213,11 +213,20 @@ export const resolvers = {
       // Send response
       return 'Success';
     },
-    bookmark: async (root, { questionId }, ctx: Context) => {
-      const bookmark = await QuestionBookmark.query().insert({ questionId, userId: ctx.user.id });
-      return { id: bookmark.id };
+    bookmark: async (root, { questionId }, ctx) => {
+      const isBookmarked = await QuestionBookmark.query().findOne({
+        questionId,
+        userId: ctx.user.id
+      });
+      if (!isBookmarked) {
+        const bookmark = await QuestionBookmark.query().insert({ questionId, userId: ctx.user.id });
+        return { id: bookmark.id };
+      } else {
+        await isBookmarked.$query().delete();
+        return null;
+      }
     },
-    manualCompleteSet: async (root, { examSetId }, ctx: Context) => {
+    manualCompleteSet: async (root, { examSetId }, ctx) => {
       const exists = await ManualCompletedSet.query().findOne({
         userId: ctx.user.id,
         setId: examSetId
@@ -234,19 +243,19 @@ export const resolvers = {
 
   User: {
     id: ({ id }) => id,
-    username: async ({ id }, _, ctx: Context) => {
+    username: async ({ id }, _, ctx) => {
       const user = await ctx.userLoader.load(id);
       return user.username;
     },
-    password: async ({ id }, _, ctx: Context) => {
+    password: async ({ id }, _, ctx) => {
       const user = await ctx.userLoader.load(id);
       return user.password;
     },
-    email: async ({ id }, _, ctx: Context) => {
+    email: async ({ id }, _, ctx) => {
       const user = await ctx.userLoader.load(id);
       return user.email;
     },
-    role: async ({ id }, _, ctx: Context) => {
+    role: async ({ id }, _, ctx) => {
       const user = await ctx.userLoader.load(id);
       return { id: user.roleId };
     },
@@ -267,17 +276,17 @@ export const resolvers = {
       const likes = await QuestionCommentLike.query()
         .join('questionComment', 'questionCommentLike.commentId', 'questionComment.id')
         .where('questionComment.userId', id);
-      return likes.map((like) => ({ id: [like.commentId, like.userId] }));
+      return likes.map((like) => ({ commentId: like.commentId, userId: like.userId }));
     },
     liked: async ({ id }) => {
       const liked = await QuestionCommentLike.query().where({ userId: id });
-      return liked.map((like) => ({ id: [like.commentId, like.userId] }));
+      return liked.map((like) => ({ commentId: like.commentId, userId: like.userId }));
     },
-    bookmarks: async ({ id }, args, ctx: Context) => {
+    bookmarks: async ({ id }, args, ctx) => {
       const bookmarks = await QuestionBookmark.query().where({ userId: id });
       return bookmarks.map((bookmark) => ({ id: bookmark.id }));
     },
-    publicComments: async ({ id }, { semester }, ctx: Context) => {
+    publicComments: async ({ id }, { semester }, ctx) => {
       let query = QuestionComment.query().where({ userId: id, private: 0 });
 
       if (semester) {
@@ -290,7 +299,7 @@ export const resolvers = {
       const publicComments = await query;
       return publicComments.map((pubC) => ({ id: pubC.id }));
     },
-    privateComments: async ({ id }, { semester }, ctx: Context) => {
+    privateComments: async ({ id }, { semester }, ctx) => {
       let query = QuestionComment.query().where({ userId: id, private: 1 });
 
       if (semester) {
@@ -307,7 +316,7 @@ export const resolvers = {
       const completedSets = await ManualCompletedSet.query().where({ userId: id });
       return completedSets.map((completedSet) => ({ examSetId: completedSet.setId }));
     },
-    answeredSets: async ({ id }, args, ctx: Context) => {
+    answeredSets: async ({ id }, args, ctx) => {
       // Get all questionIds that have been at least answered once
       const answeredQuestions = await QuestionUserAnswer.query()
         .where({ userId: id })
@@ -335,7 +344,7 @@ export const resolvers = {
 
   Bookmark: {
     id: ({ id }) => id,
-    question: async ({ id }, args, ctx: Context) => {
+    question: async ({ id }, args, ctx) => {
       const bookmark = await ctx.bookmarkLoader.load(id);
       return { id: bookmark.questionId };
     }

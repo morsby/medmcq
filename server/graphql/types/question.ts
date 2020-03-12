@@ -1,6 +1,5 @@
 import { gql } from 'apollo-server-express';
 import Question from 'models/question';
-import { Context } from 'graphql/apolloServer';
 import QuestionSpecialtyVote from 'models/question_specialty_vote';
 import Comment from 'models/question_comment';
 import QuestionCorrectAnswer from 'models/question_correct_answer';
@@ -14,6 +13,7 @@ import Semester from 'models/semester';
 import sgMail from '@sendgrid/mail';
 import _ from 'lodash';
 import User from 'models/user';
+import { Resolvers } from 'types/resolvers-types';
 
 export const typeDefs = gql`
   extend type Query {
@@ -80,9 +80,9 @@ export const typeDefs = gql`
   }
 `;
 
-export const resolvers = {
+export const resolvers: Resolvers = {
   Query: {
-    questions: async (args, { filter }, ctx: Context) => {
+    questions: async (args, { filter }, ctx) => {
       const {
         ids,
         season,
@@ -199,12 +199,13 @@ export const resolvers = {
         );
       }
 
-      return query.groupBy('question.id').select('question.id as id');
+      const questions = await query.groupBy('question.id').select('question.id as id');
+      return questions.map((question) => ({ id: question.id }));
     }
   },
 
   Mutation: {
-    createQuestion: async (root, { data }, ctx: Context) => {
+    createQuestion: async (root, { data }, ctx) => {
       const user = await User.query().findById(ctx.user?.id);
       if (user?.roleId >= 4) throw new Error('Not permitted');
       const {
@@ -269,11 +270,11 @@ export const resolvers = {
 
   Question: {
     id: ({ id }) => id,
-    text: async ({ id }, args, ctx: Context) => {
+    text: async ({ id }, args, ctx) => {
       const question = await ctx.questionLoader.load(id);
       return question.text;
     },
-    answer1: async ({ id }, args, ctx: Context) => {
+    answer1: async ({ id }, args, ctx) => {
       const question = await ctx.questionLoader.load(id);
       let answers = await ctx.userAnswersByQuestionIdLoader.load(id);
       answers = _(answers)
@@ -288,7 +289,7 @@ export const resolvers = {
       }
       return { answer: question.answer1, correctPercent };
     },
-    answer2: async ({ id }, args, ctx: Context) => {
+    answer2: async ({ id }, args, ctx) => {
       const question = await ctx.questionLoader.load(id);
       let answers = await ctx.userAnswersByQuestionIdLoader.load(id);
       answers = _(answers)
@@ -300,7 +301,7 @@ export const resolvers = {
       );
       return { answer: question.answer2, correctPercent };
     },
-    answer3: async ({ id }, args, ctx: Context) => {
+    answer3: async ({ id }, args, ctx) => {
       const question = await ctx.questionLoader.load(id);
       let answers = await ctx.userAnswersByQuestionIdLoader.load(id);
       answers = _(answers)
@@ -312,30 +313,30 @@ export const resolvers = {
       );
       return { answer: question.answer3, correctPercent };
     },
-    images: async ({ id }, args, ctx: Context) => {
+    images: async ({ id }, args, ctx) => {
       const images = await QuestionImage.query().where({ questionId: id });
       return images.map((image) => image.link);
     },
-    oldId: async ({ id }, args, ctx: Context) => {
+    oldId: async ({ id }, args, ctx) => {
       const question = await ctx.questionLoader.load(id);
       return question.oldId;
     },
-    examSetQno: async ({ id }, args, ctx: Context) => {
+    examSetQno: async ({ id }, args, ctx) => {
       const question = await ctx.questionLoader.load(id);
       return question.examSetQno;
     },
-    examSet: async ({ id }, args, ctx: Context) => {
+    examSet: async ({ id }, args, ctx) => {
       const question = await ctx.questionLoader.load(id);
       const examSet = await ctx.examSetsLoader.load(question.examSetId);
       return { id: examSet.id };
     },
-    publicComments: async ({ id }, _, ctx: Context) => {
+    publicComments: async ({ id }, _, ctx) => {
       const publicComments = await Comment.query()
         .where('questionId', id)
         .where({ private: 0 });
       return publicComments.map((pc) => ({ id: pc.id }));
     },
-    privateComments: async ({ id }, args, ctx: Context) => {
+    privateComments: async ({ id }, args, ctx) => {
       if (!ctx.user) return [];
       let privateComments = await Comment.query().where({
         questionId: id,
@@ -344,27 +345,27 @@ export const resolvers = {
       });
       return privateComments.map((comment) => ({ id: comment.id }));
     },
-    correctAnswers: async ({ id }, args, ctx: Context) => {
+    correctAnswers: async ({ id }, args, ctx) => {
       const correctAnswers = await QuestionCorrectAnswer.query().where('questionId', id);
       return correctAnswers.map((ca) => ca.answer);
     },
-    specialtyVotes: async ({ id }, args, ctx: Context) => {
+    specialtyVotes: async ({ id }, args, ctx) => {
       const specialtyVotes = await QuestionSpecialtyVote.query().where('questionId', id);
       return specialtyVotes.map((sv) => ({ id: sv.id }));
     },
-    tagVotes: async ({ id }, _, ctx: Context) => {
+    tagVotes: async ({ id }, _, ctx) => {
       const tagVotes = await QuestionTagVote.query().where('questionId', id);
       return tagVotes.map((tv) => ({ id: tv.id }));
     },
-    createdAt: async ({ id }, args, ctx: Context) => {
+    createdAt: async ({ id }, args, ctx) => {
       const question = await ctx.questionLoader.load(id);
       return question.createdAt.toISOString();
     },
-    updatedAt: async ({ id }, args, ctx: Context) => {
+    updatedAt: async ({ id }, args, ctx) => {
       const question = await ctx.questionLoader.load(id);
       return question.updatedAt.toISOString();
     },
-    specialties: async ({ id }, args, ctx: Context) => {
+    specialties: async ({ id }, args, ctx) => {
       const specialties = await QuestionSpecialtyVote.query()
         .where({ questionId: id })
         .groupBy('specialtyId')
@@ -375,7 +376,7 @@ export const resolvers = {
 
       return specialties.map((s) => ({ id: s.specialtyId }));
     },
-    tags: async ({ id }, args, ctx: Context) => {
+    tags: async ({ id }, args, ctx) => {
       const tags = await QuestionTagVote.query()
         .where({ questionId: id })
         .groupBy('tagId')

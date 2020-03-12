@@ -1,51 +1,15 @@
 import { gql } from 'apollo-boost';
 import Comment from 'classes/Comment';
-import Specialty, { SpecialtyVote } from 'classes/Specialty';
-import Tag, { TagVote } from './Tag';
+import Specialty from 'classes/Specialty';
+import Tag from './Tag';
 import { store } from 'IndexApp';
 import Apollo from './Apollo';
 import questionsReducer from 'redux/reducers/question';
 import quizReducer from 'redux/reducers/quiz';
-import ExamSet from './ExamSet';
+import { Question as QuestionType, QuestionFilterInput } from 'types/generated';
 
-export interface QuestionFilterInput {
-  text: string;
-  specialtyIds: number[];
-  tagIds: number[];
-  semesterId: number;
-  year: number;
-  season: string;
-  ids: number[];
-  n: number;
-  examSetId: number;
-  onlyNew: boolean;
-  onlyWrong: boolean;
-  commentIds: number[];
-  search: string;
-}
-
-interface Question {
-  id: number;
-  text: string;
-  answer1: QuestionAnswer;
-  answer2: QuestionAnswer;
-  answer3: QuestionAnswer;
-  examSet: ExamSet;
-  correctAnswers: number[];
-  specialties: Specialty[];
-  tags: Tag[];
-  publicComments: Comment[];
-  images: string[];
-  privateComments: Comment[];
-  tagVotes: TagVote[];
-  specialtyVotes: SpecialtyVote[];
-  isBookmarked: boolean;
+interface Question extends QuestionType {
   isLiked: boolean;
-}
-
-export interface QuestionAnswer {
-  answer: string;
-  correctPercent: number;
 }
 
 class Question {

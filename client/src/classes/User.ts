@@ -1,53 +1,14 @@
 import client from 'apolloClient';
 import { gql } from 'apollo-boost';
-import Question from './Question';
 import { store } from 'IndexApp';
 import Apollo from './Apollo';
 import authReducer from 'redux/reducers/auth';
-import Like from './Like';
+import { User as UserType, LoginInput, UserInput, Bookmark } from 'types/generated';
 
-export interface UserLoginInput {
-  username: string;
-  password: string;
-}
-
-export interface UserSignupInput {
-  username: string;
-  password: string;
-  email?: string;
-}
-
-interface User {
-  id: number;
-  username: string;
-  password?: string;
-  email: string;
-  answers: UserAnswer[];
-  likes: Like[];
-  manualCompletedSets: { examSetId: number }[];
-  bookmarks: Bookmark[];
-  answeredSets: { examSetId: number; count: number }[];
-  role: Role;
-}
-
-export interface UserAnswer {
-  id: number;
-  answer: number;
-  answerTime: number;
-  question: Question;
-}
-
-export interface Bookmark {
-  id: number;
-  question: Question;
-}
-
-export interface Role {
-  id: number;
-}
+interface User extends UserType {}
 
 class User {
-  static login = async (data: UserLoginInput): Promise<User> => {
+  static login = async (data: LoginInput): Promise<User> => {
     const mutation = gql`
       mutation($data: LoginInput) {
         login(data: $data)
@@ -70,7 +31,7 @@ class User {
     await store.dispatch(authReducer.actions.logout());
   };
 
-  static signup = async (data: UserSignupInput) => {
+  static signup = async (data: UserInput) => {
     const mutation = gql`
       mutation($data: UserInput) {
         signup(data: $data)
@@ -211,12 +172,21 @@ class User {
   static bookmark = async ({ questionId }: { questionId: number }) => {
     const mutation = gql`
       mutation($questionId: Int!) {
-        bookmark(questionId: $questionId)
+        bookmark(questionId: $questionId) {
+          id
+          question {
+            id
+          }
+        }
       }
     `;
 
     const bookmark = await Apollo.mutate<Bookmark>('bookmark', mutation, { questionId });
-    await store.dispatch(authReducer.actions.setBookmark(bookmark));
+    if (!bookmark)
+      return store.dispatch(
+        authReducer.actions.addOrRemoveBookmark({ question: { id: questionId } })
+      );
+    store.dispatch(authReducer.actions.addOrRemoveBookmark(bookmark));
   };
 }
 

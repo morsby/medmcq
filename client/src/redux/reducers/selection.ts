@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { QuestionFilterInput } from 'classes/Question';
+import { QuestionFilterInput } from 'types/generated';
 
 const initialState = {
   type: 'random' as 'random' | 'metadata' | 'set',
