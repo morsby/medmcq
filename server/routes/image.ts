@@ -10,7 +10,7 @@ const storage = multer.diskStorage({
     cb(null, `Custom-` + Date.now() + path.extname(file.originalname));
   }
 });
-const upload = multer({ storage, limits: { fileSize: 1000000 } });
+const upload = multer({ storage, limits: { fileSize: 1000000 * 10 } }); // 10 Megabytes
 
 router.post('/upload', upload.array('images', 5), (req, res) => {
   const images = req.files;
