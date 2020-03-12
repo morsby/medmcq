@@ -207,7 +207,7 @@ export const resolvers: Resolvers = {
   Mutation: {
     createQuestion: async (root, { data }, ctx) => {
       const user = await User.query().findById(ctx.user?.id);
-      if (user?.roleId >= 4) throw new Error('Not permitted');
+      if (user?.roleId >= 3) throw new Error('Not permitted');
       const {
         answer1,
         answer2,
