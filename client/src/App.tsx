@@ -119,7 +119,7 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
               <Route path={urls.signup} component={Signup} />
               <Route path={urls.login} component={Login} />
               <Route path={urls.logout} component={Logout} />
-              {user?.role.id < 4 && <Route path="/createquestion" component={CreateQuestionForm} />}
+              {user?.role.id < 3 && <Route path="/createquestion" component={CreateQuestionForm} />}
               <PrivateRoute path={urls.editProfile} component={EditProfile} />
               <PrivateRoute path={urls.profile} component={Profile} />
               <Route path={urls.forgotPassword} component={ForgotPassword} />

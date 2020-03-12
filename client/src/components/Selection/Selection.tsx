@@ -70,7 +70,7 @@ const Selection: React.SFC<SelectionProps> = ({ addTranslation }) => {
         <Divider hidden />
         <SelectionStartButton />
         <div style={{ height: '5px' }} />
-        {user?.role.id < 4 && (
+        {user?.role.id < 3 && (
           <Button onClick={() => history.push('/createquestion')} fluid basic color="black">
             Opret spørgsmål
           </Button>
