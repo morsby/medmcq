@@ -58,6 +58,7 @@ const CreateQuestionForm: React.SFC<CreateQuestionFormProps> = () => {
       }
       await Semester.fetchAll();
       formik.resetForm();
+      setImages(null);
       setIsSubmitting(false);
     } catch (error) {
       setIsSubmitting(false);
