@@ -23,6 +23,7 @@ export const typeDefs = gql`
   extend type Mutation {
     reportQuestion(report: String!, questionId: Int!): String
     createQuestion(data: QuestionInput): Question
+    updateQuestion(data: QuestionInput): Question
   }
 
   input QuestionFilterInput {
@@ -70,6 +71,7 @@ export const typeDefs = gql`
   }
 
   input QuestionInput {
+    id: Int
     answer1: String!
     answer2: String!
     answer3: String!
@@ -228,6 +230,41 @@ export const resolvers: Resolvers = {
       await QuestionCorrectAnswer.query().insertGraph(
         correctAnswers.map((answer) => ({ answer, questionId: question.id }))
       );
+      if (!!images) {
+        await QuestionImage.query().insertGraph(
+          images.map((image) => ({ link: image, questionId: question.id }))
+        );
+      }
+
+      return { id: question.id };
+    },
+    updateQuestion: async (root, { data }, ctx) => {
+      const user = await User.query().findById(ctx.user?.id);
+      if (user?.roleId >= 3) throw new Error('Not permitted');
+      let question = await Question.query().findById(data.id);
+      if (question.userId !== user.id || user.roleId !== 1) throw new Error('Not permitted');
+      const { answer1, answer2, answer3, correctAnswers, text, images, examSetId } = data;
+      question = await question
+        .$query()
+        .updateAndFetch({
+          answer1,
+          answer2,
+          answer3,
+          text,
+          examSetId,
+          userId: user.id
+        })
+        .skipUndefined();
+
+      if (correctAnswers.length > 0) {
+        await QuestionCorrectAnswer.query()
+          .where({ questionId: question.id })
+          .delete();
+        await QuestionCorrectAnswer.query().insertGraph(
+          correctAnswers.map((answer) => ({ answer, questionId: question.id }))
+        );
+      }
+
       if (!!images) {
         await QuestionImage.query().insertGraph(
           images.map((image) => ({ link: image, questionId: question.id }))

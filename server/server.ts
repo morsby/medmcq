@@ -1,24 +1,17 @@
 import dotEnv from 'dotenv-flow';
-const env = process.env.NODE_ENV || 'development';
-dotEnv.config({ node_env: env });
+dotEnv.config({ default_node_env: 'development' });
+import './config/objection';
 import bodyParser from 'body-parser';
 import express from 'express';
 import helmet from 'helmet';
-import Knex from 'knex';
-import { Model } from 'objection';
 import cookieParser from 'cookie-parser';
 import imageRoute from 'routes/image';
-
-import apolloServer from './graphql/apolloServer';
+import apolloServer from './config/apolloServer';
 import path from 'path';
 
 const port = process.env.PORT || 3001;
 const app = express();
-
-// Database
-const knexConfig = require('./knexfile');
-const knex = Knex(knexConfig);
-Model.knex(knex);
+const env = process.env.NODE_ENV || 'development';
 
 // middleware
 app.use(helmet());

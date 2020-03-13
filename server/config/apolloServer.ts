@@ -2,22 +2,22 @@ import { ApolloServer } from 'apollo-server-express';
 import { resolvers, typeDefs } from 'graphql/types';
 import jsonWebToken from 'jsonwebtoken';
 import Express from 'express';
-import { createCommentsLoader } from './dataloaders/commentLoaders';
+import { createCommentsLoader } from '../graphql/dataloaders/commentLoaders';
 import {
   createUserAnswersLoader,
   createUserAnswersByQuestionIdLoader
-} from './dataloaders/answerLoaders';
-import { createExamSetsLoader } from './dataloaders/examSetLoaders';
-import { createLikesLoader } from './dataloaders/likeLoaders';
+} from '../graphql/dataloaders/answerLoaders';
+import { createExamSetsLoader } from '../graphql/dataloaders/examSetLoaders';
+import { createLikesLoader } from '../graphql/dataloaders/likeLoaders';
 import {
   createSpecialtyLoader,
   createSpecialtyVoteLoader,
   createTagLoader,
   createTagVotesLoader
-} from './dataloaders/metadataLoaders';
-import { createQuestionLoader } from './dataloaders/questionLoaders';
-import { createSemesterLoader } from './dataloaders/semesterLoaders';
-import { createUserLoader, createBookmarkLoader } from './dataloaders/userLoaders';
+} from '../graphql/dataloaders/metadataLoaders';
+import { createQuestionLoader } from '../graphql/dataloaders/questionLoaders';
+import { createSemesterLoader } from '../graphql/dataloaders/semesterLoaders';
+import { createUserLoader, createBookmarkLoader } from '../graphql/dataloaders/userLoaders';
 const secret = process.env.SECRET || '';
 
 const decodeUser = (jwt: string, res: Express.Response) => {

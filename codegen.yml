@@ -12,5 +12,5 @@ generates:
       - 'typescript-resolvers'
     config:
       useIndexSignature: true
-      contextType: graphql/apolloServer#Context
+      contextType: config/apolloServer#Context
       defaultMapper: Partial<{T}>

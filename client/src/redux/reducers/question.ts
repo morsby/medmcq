@@ -8,7 +8,8 @@ import { TagVote, SpecialtyVote } from 'types/generated';
 const initialState = {
   questions: [] as Question[],
   comments: [] as Comment[],
-  isFetching: false
+  isFetching: false,
+  isEditing: false
 };
 
 const questionsReducer = createSlice({
@@ -53,6 +54,9 @@ const questionsReducer = createSlice({
     removeComment: (state, action: PayloadAction<{ commentId: number }>) => {
       const index = state.comments.findIndex((comment) => comment.id === action.payload.commentId);
       state.comments.splice(index, 1);
+    },
+    toggleEditing: (state) => {
+      state.isEditing = !state.isEditing;
     }
   }
 });

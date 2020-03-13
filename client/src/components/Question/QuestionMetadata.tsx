@@ -14,6 +14,7 @@ import { ReduxState } from 'redux/reducers';
 import Metadata from 'classes/Metadata';
 import User from 'classes/User';
 import Tag from 'classes/Tag';
+import questionsReducer from 'redux/reducers/question';
 
 export interface QuestionMetadataProps {}
 
@@ -25,6 +26,7 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
   const [suggestTagMessage, setSuggestTagMessage] = useState('');
   const questionIndex = useSelector((state: ReduxState) => state.quiz.questionIndex);
   const question = useSelector((state: ReduxState) => state.questions.questions[questionIndex]);
+  const isEditing = useSelector((state: ReduxState) => state.questions.isEditing);
   const semesterId = question.examSet.semester.id;
   const examSet = useSelector((state: ReduxState) =>
     state.metadata.semesters
@@ -163,6 +165,15 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
               <Translate id="voting.share" />
             </Button>
           </CopyToClipBoard>
+          {user && (question.user?.id === user.id || user?.role.id === 1) && (
+            <Button
+              onClick={() => dispatch(questionsReducer.actions.toggleEditing())}
+              basic
+              color="orange"
+            >
+              {isEditing ? 'Luk redigering' : 'Rediger'}
+            </Button>
+          )}
           {user && isAnswered(question) && <QuestionAnsweredCounter />}
         </Grid.Row>
       </Grid.Column>

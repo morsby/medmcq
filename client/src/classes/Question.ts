@@ -6,7 +6,7 @@ import { store } from 'IndexApp';
 import Apollo from './Apollo';
 import questionsReducer from 'redux/reducers/question';
 import quizReducer from 'redux/reducers/quiz';
-import { Question as QuestionType, QuestionFilterInput } from 'types/generated';
+import { Question as QuestionType, QuestionFilterInput, QuestionInput } from 'types/generated';
 
 interface Question extends QuestionType {
   isLiked: boolean;
@@ -96,7 +96,7 @@ class Question {
     await Apollo.mutate('reportQuestion', mutation, data);
   };
 
-  static create = async (data: any) => {
+  static create = async (data: Partial<QuestionInput>) => {
     const mutation = gql`
       mutation CreateQuestion($data: QuestionInput) {
         createQuestion(data: $data) {
@@ -107,6 +107,20 @@ class Question {
     `;
 
     const question = await Apollo.mutate<Question>('createQuestion', mutation, { data });
+    store.dispatch(questionsReducer.actions.addQuestion(question));
+  };
+
+  static update = async (data: Partial<QuestionInput>) => {
+    const mutation = gql`
+      mutation UpdateQuestion($data: QuestionInput) {
+        updateQuestion(data: $data) {
+          ...Question
+        }
+      }
+      ${Question.fullFragment}
+    `;
+
+    const question = await Apollo.mutate<Question>('updateQuestion', mutation, { data });
     store.dispatch(questionsReducer.actions.addQuestion(question));
   };
 }

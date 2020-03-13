@@ -105,6 +105,7 @@ export type Mutation = {
   createShareLink?: Maybe<Scalars['Int']>;
   reportQuestion?: Maybe<Scalars['String']>;
   createQuestion?: Maybe<Question>;
+  updateQuestion?: Maybe<Question>;
   voteTag?: Maybe<Question>;
   voteSpecialty?: Maybe<Question>;
   suggestTag?: Maybe<Scalars['String']>;
@@ -137,6 +138,11 @@ export type MutationReportQuestionArgs = {
 
 
 export type MutationCreateQuestionArgs = {
+  data?: Maybe<QuestionInput>;
+};
+
+
+export type MutationUpdateQuestionArgs = {
   data?: Maybe<QuestionInput>;
 };
 
@@ -307,6 +313,7 @@ export type QuestionFilterInput = {
 };
 
 export type QuestionInput = {
+  id?: Maybe<Scalars['Int']>;
   answer1: Scalars['String'];
   answer2: Scalars['String'];
   answer3: Scalars['String'];

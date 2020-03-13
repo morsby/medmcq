@@ -1,5 +1,5 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
-import { Context } from 'graphql/apolloServer';
+import { Context } from 'config/apolloServer';
 export type Maybe<T> = T | null;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
@@ -107,6 +107,7 @@ export type Mutation = {
   createShareLink?: Maybe<Scalars['Int']>;
   reportQuestion?: Maybe<Scalars['String']>;
   createQuestion?: Maybe<Question>;
+  updateQuestion?: Maybe<Question>;
   voteTag?: Maybe<Question>;
   voteSpecialty?: Maybe<Question>;
   suggestTag?: Maybe<Scalars['String']>;
@@ -139,6 +140,11 @@ export type MutationReportQuestionArgs = {
 
 
 export type MutationCreateQuestionArgs = {
+  data?: Maybe<QuestionInput>;
+};
+
+
+export type MutationUpdateQuestionArgs = {
   data?: Maybe<QuestionInput>;
 };
 
@@ -309,6 +315,7 @@ export type QuestionFilterInput = {
 };
 
 export type QuestionInput = {
+  id?: Maybe<Scalars['Int']>;
   answer1: Scalars['String'];
   answer2: Scalars['String'];
   answer3: Scalars['String'];
@@ -644,6 +651,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   createShareLink?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType, RequireFields<MutationCreateShareLinkArgs, 'questionIds'>>,
   reportQuestion?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationReportQuestionArgs, 'report' | 'questionId'>>,
   createQuestion?: Resolver<Maybe<ResolversTypes['Question']>, ParentType, ContextType, RequireFields<MutationCreateQuestionArgs, never>>,
+  updateQuestion?: Resolver<Maybe<ResolversTypes['Question']>, ParentType, ContextType, RequireFields<MutationUpdateQuestionArgs, never>>,
   voteTag?: Resolver<Maybe<ResolversTypes['Question']>, ParentType, ContextType, RequireFields<MutationVoteTagArgs, never>>,
   voteSpecialty?: Resolver<Maybe<ResolversTypes['Question']>, ParentType, ContextType, RequireFields<MutationVoteSpecialtyArgs, never>>,
   suggestTag?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationSuggestTagArgs, 'tagName' | 'questionId'>>,
