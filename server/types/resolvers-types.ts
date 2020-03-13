@@ -282,6 +282,7 @@ export type Question = {
   examSet?: Maybe<ExamSet>;
   createdAt?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
+  user?: Maybe<User>;
 };
 
 export type QuestionAnswer = {
@@ -698,6 +699,7 @@ export type QuestionResolvers<ContextType = Context, ParentType extends Resolver
   examSet?: Resolver<Maybe<ResolversTypes['ExamSet']>, ParentType, ContextType>,
   createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   updatedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 

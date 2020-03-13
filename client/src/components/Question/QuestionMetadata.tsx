@@ -72,13 +72,20 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
     <Grid celled stackable columns="equal">
       <Grid.Column>
         <Grid.Row>
-          <Translate id="questionMetadata.set" />{' '}
-          {examSet.season === 'F' ? (
-            <Translate id="questionMetadata.set_season.F" />
-          ) : (
-            <Translate id="questionMetadata.set_season.E" />
-          )}{' '}
-          {examSet.year}
+          <div>
+            <Translate id="questionMetadata.set" />{' '}
+            {examSet.season === 'F' ? (
+              <Translate id="questionMetadata.set_season.F" />
+            ) : (
+              <Translate id="questionMetadata.set_season.E" />
+            )}{' '}
+            {examSet.year}
+          </div>
+          {question.user && (
+            <div>
+              <p>Lavet af: {question.user.username.toTitleCase()}</p>
+            </div>
+          )}
         </Grid.Row>
         {isAnswered(question) && (
           <>

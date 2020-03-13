@@ -61,6 +61,7 @@ export const typeDefs = gql`
     examSet: ExamSet
     createdAt: String
     updatedAt: String
+    user: User
   }
 
   type QuestionAnswer {
@@ -386,6 +387,11 @@ export const resolvers: Resolvers = {
         .select('tagId');
 
       return tags.map((t) => ({ id: t.tagId }));
+    },
+    user: async ({ id }, args, ctx) => {
+      const question = await ctx.questionLoader.load(id);
+      if (!question.userId) return null;
+      return { id: question.userId };
     }
   }
 };

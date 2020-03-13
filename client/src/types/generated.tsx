@@ -280,6 +280,7 @@ export type Question = {
   examSet?: Maybe<ExamSet>;
   createdAt?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
+  user?: Maybe<User>;
 };
 
 export type QuestionAnswer = {

@@ -55,6 +55,10 @@ class Question {
       privateComments {
         ...Comment
       }
+      user {
+        id
+        username
+      }
     }
     ${Comment.fragmentFull}
     ${Tag.tagVoteFragment}
