@@ -251,8 +251,7 @@ export const resolvers: Resolvers = {
           answer2,
           answer3,
           text,
-          examSetId,
-          userId: user.id
+          examSetId
         })
         .skipUndefined();
 
