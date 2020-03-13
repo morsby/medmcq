@@ -242,7 +242,7 @@ export const resolvers: Resolvers = {
       const user = await User.query().findById(ctx.user?.id);
       if (user?.roleId >= 3) throw new Error('Not permitted');
       let question = await Question.query().findById(data.id);
-      if (question.userId !== user.id || user.roleId !== 1) throw new Error('Not permitted');
+      if (question.userId !== user.id && user.roleId !== 1) throw new Error('Not permitted');
       const { answer1, answer2, answer3, correctAnswers, text, images, examSetId } = data;
       question = await question
         .$query()
