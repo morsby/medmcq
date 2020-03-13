@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Segment, Form, Dropdown, Container, Divider } from 'semantic-ui-react';
+import { Segment, Form, Dropdown, Container, Divider, Message } from 'semantic-ui-react';
 import { useFormik } from 'formik';
 import { useSelector } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
@@ -7,14 +7,18 @@ import TextArea from 'antd/lib/input/TextArea';
 import Question from 'classes/Question';
 import Semester from 'classes/Semester';
 import axios from 'axios';
+import { QuestionInput } from 'types/generated';
 
 export interface CreateQuestionFormProps {}
 
 const CreateQuestionForm: React.SFC<CreateQuestionFormProps> = () => {
+  const [error, setError] = useState('');
   const [semesterId, setSemesterId] = useState(5);
   const [images, setImages] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const semesters = useSelector((state: ReduxState) => state.metadata.semesters);
+  const semesters = useSelector((state: ReduxState) =>
+    state.metadata.semesters.filter((semester) => semester.id > 4)
+  );
   const semester = semesters.find((semester) => semester.id === semesterId);
   const examSets = semester.examSets;
   const formik = useFormik({
@@ -23,14 +27,12 @@ const CreateQuestionForm: React.SFC<CreateQuestionFormProps> = () => {
       answer1: '',
       answer2: '',
       answer3: '',
-      examSetQno: 0,
       examSetId: examSets[0]?.id,
       correctAnswers: [] as number[]
     },
     onSubmit: (values) => handleSubmit(values),
     enableReinitialize: true
   });
-  const examSet = examSets.find((examSet) => examSet.id === formik.values.examSetId);
 
   useEffect(() => {
     Semester.fetchAll();
@@ -38,10 +40,9 @@ const CreateQuestionForm: React.SFC<CreateQuestionFormProps> = () => {
 
   useEffect(() => {
     formik.resetForm();
-    formik.setFieldValue('examSetQno', examSet?.questionCount + 1);
-  }, [semesterId, examSet]);
+  }, [semesterId]);
 
-  const handleSubmit = async (values) => {
+  const handleSubmit = async (values: QuestionInput) => {
     setIsSubmitting(true);
     try {
       if (!!images) {
@@ -60,7 +61,10 @@ const CreateQuestionForm: React.SFC<CreateQuestionFormProps> = () => {
       formik.resetForm();
       setImages(null);
       setIsSubmitting(false);
+      setError('');
     } catch (error) {
+      console.log('error: ', error);
+      setError(error.message);
       setIsSubmitting(false);
     }
   };
@@ -118,13 +122,6 @@ const CreateQuestionForm: React.SFC<CreateQuestionFormProps> = () => {
             name="images"
             onChange={(e) => setImages(e.target.files)}
           />
-          <Form.Input
-            type="number"
-            value={formik.values.examSetQno}
-            onChange={formik.handleChange}
-            name="examSetQno"
-            label="Spørgsmålsnummer"
-          />
           <Form.Field>
             <label>Korrekte svar</label>
             <Dropdown
@@ -168,6 +165,7 @@ const CreateQuestionForm: React.SFC<CreateQuestionFormProps> = () => {
             Tilføj
           </Form.Button>
         </Form>
+        {error && <Message color="red">{error}</Message>}
       </Segment>
     </Container>
   );

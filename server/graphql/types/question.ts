@@ -75,7 +75,6 @@ export const typeDefs = gql`
     correctAnswers: [Int!]!
     text: String!
     images: [String]
-    examSetQno: Int!
     examSetId: Int!
   }
 `;
@@ -208,16 +207,14 @@ export const resolvers: Resolvers = {
     createQuestion: async (root, { data }, ctx) => {
       const user = await User.query().findById(ctx.user?.id);
       if (user?.roleId >= 3) throw new Error('Not permitted');
-      const {
-        answer1,
-        answer2,
-        answer3,
-        correctAnswers,
-        text,
-        images,
-        examSetQno,
-        examSetId
-      } = data;
+      const { answer1, answer2, answer3, correctAnswers, text, images, examSetId } = data;
+      const questions = await Question.query().where({ examSetId });
+      const examSetQno =
+        questions.reduce(
+          (max, question) => (question.examSetQno > max ? question.examSetQno : max),
+          0
+        ) + 1;
+
       const question = await Question.query().insertAndFetch({
         answer1,
         answer2,

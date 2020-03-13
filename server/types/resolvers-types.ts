@@ -314,7 +314,6 @@ export type QuestionInput = {
   correctAnswers: Array<Scalars['Int']>;
   text: Scalars['String'];
   images?: Maybe<Array<Maybe<Scalars['String']>>>;
-  examSetQno: Scalars['Int'];
   examSetId: Scalars['Int'];
 };
 

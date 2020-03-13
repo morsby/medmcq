@@ -54,8 +54,9 @@ export const resolvers: Resolvers = {
         semesterId
       });
 
+      let examSetQno = 1;
       for (let question of questions) {
-        const { answer1, answer2, answer3, correctAnswers, text, images, examSetQno } = question;
+        const { answer1, answer2, answer3, correctAnswers, text, images } = question;
 
         const newQuestion = await Question.query().insertAndFetch({
           text,
@@ -65,12 +66,15 @@ export const resolvers: Resolvers = {
           examSetQno,
           examSetId: examSet.id
         });
+        examSetQno++;
+
         for (let correctAnswer of correctAnswers) {
           await QuestionCorrectAnswer.query().insert({
             answer: correctAnswer,
             questionId: newQuestion.id
           });
         }
+
         for (let image of images) {
           await QuestionImage.query().insert({
             link: image,
