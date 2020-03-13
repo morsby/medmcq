@@ -7,12 +7,12 @@ const useWidth = () => {
   const [width, setWidth] = useState(window.innerWidth);
 
   useEffect(() => {
-    let handleResize = () => setWidth(window.innerWidth);
+    let handleResize = () => {
+      setWidth(window.innerWidth);
+    };
     handleResize = _.debounce(handleResize, 300);
 
     window.addEventListener('resize', handleResize);
-
-    return window.removeEventListener('resize', handleResize);
   }, []);
 
   return { width };

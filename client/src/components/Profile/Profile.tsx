@@ -13,29 +13,19 @@ import { ReduxState } from 'redux/reducers';
 import ProfileClass from 'classes/Profile';
 import Semester from 'classes/Semester';
 import Selection from 'classes/Selection';
+import useWidth from 'hooks/useWidth';
 
 export interface ProfileProps {}
 
 const Profile: React.SFC<ProfileProps> = () => {
   const [loading, setLoading] = useState(true);
-  const [width, setWidth] = useState(window.innerWidth);
+  const { width } = useWidth();
   const { user } = useSelector((state: ReduxState) => state.auth);
   const [panes, setPanes] = useState([]);
   const selectedSemester = useSelector((state: ReduxState) => state.selection.semesterId);
   const currentLanguage = useSelector((state: ReduxState) => state.settings.language);
   const semesters = useSelector((state: ReduxState) => state.metadata.semesters);
   const history = useHistory();
-
-  /**
-   * HandleResize and debounce it
-   */
-  let handleResize = () => setWidth(window.innerWidth);
-  handleResize = _.debounce(handleResize, 300);
-
-  useEffect(() => {
-    window.addEventListener('resize', handleResize);
-    return window.removeEventListener('resize', handleResize);
-  }, []);
 
   useEffect(() => {
     const fetchProfile = async () => {

@@ -1,21 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import Header from './Header';
 import Footer from './Footer';
 import Sidebar from './Sidebar';
 import { breakpoints } from 'utils/common';
+import useWidth from 'hooks/useWidth';
 
 export interface LayoutProps {}
 
 const Layout: React.SFC<LayoutProps> = ({ children }) => {
-  const [width, setWidth] = useState(window.innerWidth);
-
-  useEffect(() => {
-    window.addEventListener('resize', () => {
-      setWidth(window.innerWidth);
-    });
-
-    return window.removeEventListener('resize', () => setWidth(window.innerWidth));
-  }, []);
+  const { width } = useWidth();
 
   if (width < breakpoints.mobile)
     return (
