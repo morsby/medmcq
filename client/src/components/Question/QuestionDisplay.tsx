@@ -69,9 +69,10 @@ const QuestionDisplay: React.SFC<QuestionDisplayProps> = () => {
     return () => {
       document.removeEventListener('keydown', onKeydown);
     };
-  }, [question]);
+  }, [question, answered, examMode]);
 
   const handleAnswer = (answer: number) => {
+    console.log(answered, examMode);
     if (answered && !examMode) return;
     Quiz.answer({ answer, answerTime, questionId: question.id }, examMode);
   };
@@ -92,7 +93,6 @@ const QuestionDisplay: React.SFC<QuestionDisplayProps> = () => {
             />
             <Responsive as="div" minWidth={breakpoints.mobile + 1}>
               <Divider />
-
               <QuestionAnswerButtons handleAnswer={handleAnswer} />
             </Responsive>
           </Grid.Column>
