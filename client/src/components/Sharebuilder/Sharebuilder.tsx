@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Segment, Dropdown, Divider } from 'semantic-ui-react';
+import { Segment, Dropdown, Divider, Input } from 'semantic-ui-react';
 import { Table, Icon, Button, Tag } from 'antd';
 import Highlighter from 'react-highlighter';
 import ExtendedRow from 'components/Sharebuilder/ExtendedRow';
@@ -22,6 +22,7 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
   const [initialLoading, setInitialLoading] = useState(true);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [filterLoading, setFilterLoading] = useState(false);
+  const [shareLinks, setShareLinks] = useState('');
   const dispatch = useDispatch();
   const history = useHistory();
   const [link, setLink] = useState('');
@@ -90,8 +91,23 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
   // Function til at skabe linket, når man har bygget færdigt - kalder useMutation
   const handleCreateLink = async () => {
     setSubmitLoading(true);
-    const link = await ShareBuilderClass.createShareLink({ questionIds: picked.map((q) => q.id) });
+    let link: string;
+    if (shareLinks) {
+      const links = shareLinks.split(',');
+      let ids = [];
+      for (let link of links) {
+        const id = Number(link.trim().split(/quiz\/(\d+)/)[1]);
+        if (isNaN(id)) continue;
+        ids.push(id);
+      }
+
+      link = await ShareBuilderClass.createShareLink({ questionIds: ids });
+    } else {
+      link = await ShareBuilderClass.createShareLink({ questionIds: picked.map((q) => q.id) });
+    }
+
     setLink(link);
+    setShareLinks('');
     setSubmitLoading(false);
   };
 
@@ -213,6 +229,21 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
             columns={columns}
             dataSource={pickedQuestions}
             expandedRowRender={(record) => <ExtendedRow record={record} />}
+          />
+        </div>
+        <Divider />
+        <div>
+          <label>
+            Du kan indsætte dele-links her, adskilt af komma, eller vælge spørgsmål i boksen
+            nederst.
+            <br />
+            Hvis du benytter ovenstående boks, slet da alt der står her.
+          </label>
+          <Input
+            fluid
+            placeholder="https://medmcq.au.dk/quiz/5, https://medmcq.au.dk/quiz/10, osv..."
+            value={shareLinks}
+            onChange={(e) => setShareLinks(e.target.value)}
           />
         </div>
         <Divider hidden />
