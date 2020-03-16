@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Segment, Dropdown, Divider } from 'semantic-ui-react';
-import { Table, Icon, Button } from 'antd';
+import { Table, Icon, Button, Tag } from 'antd';
 import Highlighter from 'react-highlighter';
 import ExtendedRow from 'components/Sharebuilder/ExtendedRow';
 import { useSelector, useDispatch } from 'react-redux';
@@ -12,28 +12,47 @@ import shareBuilderReducer from 'redux/reducers/sharebuilder';
 import ShareBuilderClass from 'classes/ShareBuilder';
 import Question from 'classes/Question';
 import { QuestionFilterInput } from 'types/generated';
+import LoadingPage from 'components/Misc/Utility/LoadingPage';
+import Semester from 'classes/Semester';
+import Selection from 'classes/Selection';
 
 export interface SharebuilderProps {}
 
 const Sharebuilder: React.SFC<SharebuilderProps> = () => {
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [filterLoading, setFilterLoading] = useState(false);
+  const dispatch = useDispatch();
   const history = useHistory();
   const [link, setLink] = useState('');
-  const [filter, setFilter] = useState<Partial<QuestionFilterInput>>({});
+  const [filter, setFilter] = useState<Partial<QuestionFilterInput>>({
+    specialtyIds: [],
+    tagIds: []
+  });
   // Redux
-  const dispatch = useDispatch();
+  const user = useSelector((state: ReduxState) => state.auth.user);
   const picked = useSelector((state: ReduxState) => state.shareBuilder.picked);
   const semesters = useSelector((state: ReduxState) => state.metadata.semesters);
-  const chosenSemesterId = useSelector((state: ReduxState) => state.selection.semesterId);
-  const { tags, specialties } = useSelector((state: ReduxState) =>
-    state.metadata.semesters.find((semester) => semester.id === chosenSemesterId)
+  let questions = useSelector((state: ReduxState) => state.questions.questions);
+  const semesterId = useSelector((state: ReduxState) => state.selection.semesterId);
+  const semester = useSelector((state: ReduxState) =>
+    state.metadata.semesters.find((semester) => semester.id === semesterId)
   );
-  const pickedQuestions = useSelector((state: ReduxState) => state.questions.questions);
+  const tags = semester?.tags;
+  const specialties = semester?.specialties;
+  const pickedQuestions = useSelector((state: ReduxState) => state.shareBuilder.picked);
   const [selectedId, setSelectedId] = useState<null | number>(null);
+  const shouldNotFetch =
+    !semesterId || (!filter.text && filter.tagIds.length === 0 && filter.specialtyIds.length === 0);
 
   // Debounce filter, for ikke at query på hvert keystroke (delay er 1 sekund, som angivet herunder)
   const debounceQueryFilter = useCallback(
-    _.debounce((filter: Partial<QuestionFilterInput>) => Question.fetch(filter), 1000),
-    []
+    _.debounce(async (filter: Partial<QuestionFilterInput>) => {
+      setFilterLoading(true);
+      await Question.fetch({ ...filter, semesterId });
+      setFilterLoading(false);
+    }, 1000),
+    [semesterId]
   );
 
   // UseEffect til at skifte query filteret, men kun hvis man faktisk har valgt filtre
@@ -43,38 +62,41 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
     if (selectedId) {
       debounceQueryFilter({ ids: [selectedId] });
     }
-    if (filter.text || filter.tagIds.length > 0 || filter.specialtyIds.length > 0) {
+    if (!shouldNotFetch) {
       debounceQueryFilter(filter);
     }
   }, [debounceQueryFilter, filter]);
 
-  const handleChange = (value: string, type: keyof QuestionFilterInput) => {
-    setFilter((prevFilter) => ({ ...prevFilter, [type]: value }));
+  const handleChange = (value: any, type: keyof QuestionFilterInput) => {
+    setFilter({ ...filter, [type]: value });
   };
 
+  useEffect(() => {
+    const fetchInitial = async () => {
+      if (!semester) {
+        await Semester.fetchAll();
+      }
+      setInitialLoading(false);
+    };
+
+    fetchInitial();
+  }, []);
+
   // Kalder redux når man har valgt et spørgsmål, og lægger det her (under shareBuilder reducer -> picked)
-  const handlePick = (value) => {
-    const index = _.indexOf(picked, value);
-
-    if (index !== -1)
-      return dispatch(
-        shareBuilderReducer.actions.setPicked([
-          ...picked.slice(0, index),
-          ...picked.slice(index + 1)
-        ])
-      );
-
-    const newPick = picked.concat(value);
-
-    dispatch(shareBuilderReducer.actions.setPicked(newPick));
+  const handlePick = (value: Question) => {
+    dispatch(shareBuilderReducer.actions.addPicked(value));
   };
 
   // Function til at skabe linket, når man har bygget færdigt - kalder useMutation
   const handleCreateLink = async () => {
-    const link = await ShareBuilderClass.createShareLink({ questionIds: picked });
+    setSubmitLoading(true);
+    const link = await ShareBuilderClass.createShareLink({ questionIds: picked.map((q) => q.id) });
     setLink(link);
+    setSubmitLoading(false);
   };
 
+  console.log(filter);
+  if (!semester) return <LoadingPage />;
   const columns = [
     {
       title: 'ID',
@@ -113,20 +135,16 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
     },
     {
       title: 'Specialer',
-      dataIndex: 'specialties',
       key: 'specialties',
       filterDropdown: (
         <SearchDropdown
-          onChange={(value) => handleChange(value, 'semesterId')}
-          options={_(specialties)
-            .filter((s) => s.semester.id === filter.semesterId)
-            .map((s) => ({
-              key: s.id,
-              value: s.id,
-              text: s.name
-            }))
-            .value()}
-          value={filter.specialtyIds.map((specialtyId) => String(specialtyId))}
+          onChange={(value) => handleChange(value, 'specialtyIds')}
+          options={specialties.map((s) => ({
+            key: s.id,
+            value: s.id,
+            text: s.name
+          }))}
+          value={filter.specialtyIds?.map((specialtyId) => String(specialtyId))}
           type="dropdown"
         />
       ),
@@ -136,22 +154,21 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
           style={{ color: filter.specialtyIds.length > 0 ? '#1890ff' : undefined }}
         />
       ),
-      render: (record) => <p>{_.map(record, (s) => specialties[s.specialtyId].name).join(', ')}</p>
+      render: (record: Question) =>
+        record.specialties.map((s) => (
+          <Tag color="blue">{specialties.find((specialty) => s.id === specialty.id)?.name}</Tag>
+        ))
     },
     {
       title: 'Tags',
-      dataIndex: 'tags',
       key: 'tags',
       filterDropdown: (
         <SearchDropdown
-          options={_(tags)
-            .filter((t) => t.semester.id === filter.semesterId && t.name !== 'Tags')
-            .map((t) => ({
-              key: t.id,
-              text: t.name,
-              value: t.id
-            }))
-            .value()}
+          options={tags.map((t) => ({
+            key: t.id,
+            text: t.name,
+            value: t.id
+          }))}
           onChange={(value) => handleChange(value, 'tagIds')}
           value={filter.tagIds.map((tag) => String(tag))}
           type="dropdown"
@@ -160,26 +177,21 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
       filterIcon: (
         <Icon type="search" style={{ color: filter.tagIds.length > 0 ? '#1890ff' : undefined }} />
       ),
-      render: (record) => (
-        <p>
-          {_(record)
-            .map((t) => tags[t.tagId].name)
-            .filter((t) => t !== 'Tags')
-            .value()
-            .join(', ')}
-        </p>
-      )
+      render: (record: Question) =>
+        record.tags.map((t) => (
+          <Tag color="orange">{tags.find((tag) => tag.id === t.id)?.name}</Tag>
+        ))
     },
     {
       title: '',
       key: 'actions',
-      render: (record) => (
+      render: (record: Question) => (
         <>
           <Button
-            type={_.indexOf(picked, record.id) !== -1 ? 'danger' : 'primary'}
-            onClick={() => handlePick(record.id)}
+            type={picked.findIndex((p) => p.id === record.id) !== -1 ? 'danger' : 'primary'}
+            onClick={() => handlePick(record)}
           >
-            {_.indexOf(picked, record.id) !== -1 ? <Icon type="cross" /> : 'Tilføj'}
+            {picked.findIndex((p) => p.id === record.id) !== -1 ? <Icon type="cross" /> : 'Tilføj'}
           </Button>
           <Button onClick={() => history.push('/quiz/' + record.id)}>Gå til spørgsmål</Button>
         </>
@@ -199,14 +211,29 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
         <div style={{ overflowX: 'auto' }}>
           <Table
             columns={columns}
-            dataSource={pickedQuestions || null}
+            dataSource={pickedQuestions}
             expandedRowRender={(record) => <ExtendedRow record={record} />}
           />
         </div>
         <Divider hidden />
-        <Button type="primary" disabled={picked.length < 1} onClick={handleCreateLink}>
-          Opret link
-        </Button>
+        {!user ? (
+          <>
+            <p style={{ color: 'grey' }}>
+              Opret en gratis bruger oppe til højre. Dette lader dig også justere dine links på et
+              senere tidspunkt
+            </p>
+            <Button disabled>Du skal være logget ind for at oprette links</Button>
+          </>
+        ) : (
+          <Button
+            loading={submitLoading}
+            type="primary"
+            disabled={picked.length < 1 || submitLoading}
+            onClick={handleCreateLink}
+          >
+            Opret link
+          </Button>
+        )}
         {link && (
           <div style={{ border: '2px solid grey', padding: '1rem', margin: '1rem' }}>
             <h3>
@@ -221,26 +248,32 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
         <Divider />
         <label>Semester</label>
         <Dropdown
-          options={_.map(semesters, (semester) => ({
+          options={semesters.map((semester) => ({
             value: semester.id,
             text: `${semester.value}. semester (${semester.name})`,
             key: semester.id
           }))}
-          value={filter.semesterId}
+          value={semesterId}
           onChange={(e, { value }: { value: number }) =>
-            setFilter((prevFilter) => ({ ...prevFilter, semester: value }))
+            Selection.change({ type: 'semesterId', value })
           }
           fluid
           selection
         ></Dropdown>
+        {shouldNotFetch && (
+          <p style={{ textAlign: 'center', color: 'grey' }}>
+            Angiv filtre (under forstørrelsesglassene herunder) for at søge efter spørgsmål
+          </p>
+        )}
         <Divider />
         <div style={{ overflowX: 'auto' }}>
           <Table
-            rowKey={(record: any) => record.id}
-            dataSource={pickedQuestions}
+            rowKey={(record) => String(record.id)}
+            dataSource={questions}
+            loading={filterLoading || initialLoading}
             columns={columns}
             expandedRowRender={(record) => <ExtendedRow record={record} />}
-          ></Table>
+          />
         </div>
       </Segment>
     </div>

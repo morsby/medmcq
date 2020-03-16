@@ -14,6 +14,7 @@ import sgMail from '@sendgrid/mail';
 import _ from 'lodash';
 import User from 'models/user';
 import { Resolvers } from 'types/resolvers-types';
+import ShareLink from 'models/shareLink';
 
 export const typeDefs = gql`
   extend type Query {
@@ -41,6 +42,7 @@ export const typeDefs = gql`
     commentIds: [Int]
     profile: Boolean
     search: String
+    shareId: Int
   }
 
   type Question {
@@ -97,7 +99,8 @@ export const resolvers: Resolvers = {
         search,
         onlyNew,
         onlyWrong,
-        commentIds
+        commentIds,
+        shareId
       } = filter;
       let { n } = filter;
 
@@ -105,6 +108,12 @@ export const resolvers: Resolvers = {
       let query = Question.query();
 
       if (ids) return query.findByIds(ids);
+      if (shareId) {
+        const shareObjs = await ShareLink.query()
+          .where({ shareId })
+          .select('questionId');
+        return query.findByIds(shareObjs.map((obj) => obj.questionId));
+      }
       if (commentIds)
         return QuestionComment.query()
           .findByIds(commentIds)

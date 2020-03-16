@@ -238,7 +238,7 @@ export type Profile = {
 export type Query = {
    __typename?: 'Query';
   _empty?: Maybe<Scalars['String']>;
-  shareLink?: Maybe<Array<Maybe<Scalars['String']>>>;
+  shareLink?: Maybe<Array<Maybe<Question>>>;
   questions?: Maybe<Array<Question>>;
   examSets?: Maybe<Array<Maybe<ExamSet>>>;
   semesters?: Maybe<Array<Maybe<Semester>>>;
@@ -250,7 +250,7 @@ export type Query = {
 
 
 export type QueryShareLinkArgs = {
-  shareId?: Maybe<Scalars['String']>;
+  shareId?: Maybe<Scalars['Int']>;
 };
 
 
@@ -312,6 +312,7 @@ export type QuestionFilterInput = {
   commentIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
   profile?: Maybe<Scalars['Boolean']>;
   search?: Maybe<Scalars['String']>;
+  shareId?: Maybe<Scalars['Int']>;
 };
 
 export type QuestionInput = {
@@ -516,12 +517,11 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = ResolversObject<{
   Query: ResolverTypeWrapper<{}>,
   String: ResolverTypeWrapper<Partial<Scalars['String']>>,
-  QuestionFilterInput: ResolverTypeWrapper<Partial<QuestionFilterInput>>,
   Int: ResolverTypeWrapper<Partial<Scalars['Int']>>,
-  Boolean: ResolverTypeWrapper<Partial<Scalars['Boolean']>>,
   Question: ResolverTypeWrapper<Partial<Question>>,
   QuestionAnswer: ResolverTypeWrapper<Partial<QuestionAnswer>>,
   Comment: ResolverTypeWrapper<Partial<Comment>>,
+  Boolean: ResolverTypeWrapper<Partial<Scalars['Boolean']>>,
   User: ResolverTypeWrapper<Partial<User>>,
   Role: ResolverTypeWrapper<Partial<Role>>,
   Bookmark: ResolverTypeWrapper<Partial<Bookmark>>,
@@ -535,6 +535,7 @@ export type ResolversTypes = ResolversObject<{
   Like: ResolverTypeWrapper<Partial<Like>>,
   ManualCompletedSet: ResolverTypeWrapper<Partial<ManualCompletedSet>>,
   AnsweredSet: ResolverTypeWrapper<Partial<AnsweredSet>>,
+  QuestionFilterInput: ResolverTypeWrapper<Partial<QuestionFilterInput>>,
   UserAvailableInput: ResolverTypeWrapper<Partial<UserAvailableInput>>,
   Mutation: ResolverTypeWrapper<{}>,
   QuestionInput: ResolverTypeWrapper<Partial<QuestionInput>>,
@@ -554,12 +555,11 @@ export type ResolversTypes = ResolversObject<{
 export type ResolversParentTypes = ResolversObject<{
   Query: {},
   String: Partial<Scalars['String']>,
-  QuestionFilterInput: Partial<QuestionFilterInput>,
   Int: Partial<Scalars['Int']>,
-  Boolean: Partial<Scalars['Boolean']>,
   Question: Partial<Question>,
   QuestionAnswer: Partial<QuestionAnswer>,
   Comment: Partial<Comment>,
+  Boolean: Partial<Scalars['Boolean']>,
   User: Partial<User>,
   Role: Partial<Role>,
   Bookmark: Partial<Bookmark>,
@@ -573,6 +573,7 @@ export type ResolversParentTypes = ResolversObject<{
   Like: Partial<Like>,
   ManualCompletedSet: Partial<ManualCompletedSet>,
   AnsweredSet: Partial<AnsweredSet>,
+  QuestionFilterInput: Partial<QuestionFilterInput>,
   UserAvailableInput: Partial<UserAvailableInput>,
   Mutation: {},
   QuestionInput: Partial<QuestionInput>,
@@ -678,7 +679,7 @@ export type ProfileResolvers<ContextType = Context, ParentType extends Resolvers
 
 export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
   _empty?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  shareLink?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType, RequireFields<QueryShareLinkArgs, never>>,
+  shareLink?: Resolver<Maybe<Array<Maybe<ResolversTypes['Question']>>>, ParentType, ContextType, RequireFields<QueryShareLinkArgs, never>>,
   questions?: Resolver<Maybe<Array<ResolversTypes['Question']>>, ParentType, ContextType, RequireFields<QueryQuestionsArgs, 'filter'>>,
   examSets?: Resolver<Maybe<Array<Maybe<ResolversTypes['ExamSet']>>>, ParentType, ContextType>,
   semesters?: Resolver<Maybe<Array<Maybe<ResolversTypes['Semester']>>>, ParentType, ContextType>,

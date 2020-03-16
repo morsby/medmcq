@@ -236,7 +236,7 @@ export type Profile = {
 export type Query = {
    __typename?: 'Query';
   _empty?: Maybe<Scalars['String']>;
-  shareLink?: Maybe<Array<Maybe<Scalars['String']>>>;
+  shareLink?: Maybe<Array<Maybe<Question>>>;
   questions?: Maybe<Array<Question>>;
   examSets?: Maybe<Array<Maybe<ExamSet>>>;
   semesters?: Maybe<Array<Maybe<Semester>>>;
@@ -248,7 +248,7 @@ export type Query = {
 
 
 export type QueryShareLinkArgs = {
-  shareId?: Maybe<Scalars['String']>;
+  shareId?: Maybe<Scalars['Int']>;
 };
 
 
@@ -310,6 +310,7 @@ export type QuestionFilterInput = {
   commentIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
   profile?: Maybe<Scalars['Boolean']>;
   search?: Maybe<Scalars['String']>;
+  shareId?: Maybe<Scalars['Int']>;
 };
 
 export type QuestionInput = {

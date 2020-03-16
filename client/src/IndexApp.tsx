@@ -36,14 +36,15 @@ const migrations: any = {
     ...state,
     questions: null
   }),
-  11: (state: ReduxState) => ({})
+  11: (state: ReduxState) => ({}),
+  12: (state: ReduxState) => ({ ...state, shareBuilder: {} })
 };
 
 const persistConfig = {
   key: 'medMCQ',
   storage: storage,
   stateReconciler: autoMergeLevel2, // see "Merge Process" section for details.
-  version: 11,
+  version: 12,
   migrate: createMigrate(migrations),
   blacklist: ['auth', 'profile']
 };

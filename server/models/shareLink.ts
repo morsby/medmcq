@@ -2,10 +2,10 @@ import { Model } from 'objection';
 
 interface ShareLink {
   link: string;
-  question_id: number;
+  questionId: number;
+  userId: number;
   published: boolean;
   shareId: number;
-  questionId: number;
 }
 
 class ShareLink extends Model {

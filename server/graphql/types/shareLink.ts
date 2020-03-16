@@ -7,7 +7,7 @@ import { Resolvers } from 'types/resolvers-types';
 // (måske i fremtiden det ikke behøves)
 export const typeDefs = gql`
   extend type Query {
-    shareLink(shareId: String): [String]
+    shareLink(shareId: Int): [Question]
   }
 
   extend type Mutation {
@@ -18,23 +18,16 @@ export const typeDefs = gql`
 export const resolvers: Resolvers = {
   Query: {
     shareLink: async (_args, { shareId }) => {
-      const ids = await ShareLink.query()
+      const shareObjs = await ShareLink.query()
         .where('shareId', '=', shareId)
         .select('questionId');
-
-      // Hent spørgsmåls ID'er fra det share,
-      // da questions så igen hentes fra frontend (gennem normal ID logik)
-      let questionIds = [];
-      ids.forEach((id) => {
-        questionIds.push(id.questionId);
-      });
-
-      return questionIds;
+      return shareObjs.map((so) => ({ id: so.questionId }));
     }
   },
 
   Mutation: {
-    createShareLink: async (_args, { questionIds }) => {
+    createShareLink: async (_args, { questionIds }, ctx) => {
+      if (!ctx.user) throw new Error('Not logged in');
       const randomId = crypto
         .randomBytes(16)
         .join('')
@@ -51,7 +44,8 @@ export const resolvers: Resolvers = {
       for (const id of questionIds) {
         links.push({
           shareId: Number(randomId),
-          questionId: Number(id)
+          questionId: Number(id),
+          userId: ctx.user.id
         });
       }
 
