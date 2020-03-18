@@ -48,6 +48,8 @@ const Sharebuilder = lazy(() => import('components/Sharebuilder/Sharebuilder'));
 const FirstTimeToast = lazy(() => import('components/Misc/Utility/About/FirstTime/FirstTimeToast'));
 const FirstTime = lazy(() => import('components/Misc/Utility/About/FirstTime/FirstTime'));
 const CreateQuestionForm = lazy(() => import('components/CreateQuestion/CreateQuestionForm'));
+const SharebuilderPicker = lazy(() => import('components/Sharebuilder/ShareBuilderPicker'));
+const SharebuilderLinks = lazy(() => import('components/Sharebuilder/SharebuilderLinks'));
 
 export interface AppProps extends LocalizeContextProps {}
 
@@ -94,7 +96,13 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
 
   return (
     <BrowserRouter>
-      <Suspense fallback={<LoadingPage />}>
+      <Suspense
+        fallback={
+          <Layout>
+            <LoadingPage />
+          </Layout>
+        }
+      >
         <ScrollToTop>
           <NewVersionMessage />
           <ToastContainer
@@ -112,8 +120,10 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
               <Route path={'/firsttime'} component={FirstTime} />
               <Route path={urls.about} component={About} />
               <Route path={urls.contact} component={Contact} />
+              <Route path={'/share/search'} component={Sharebuilder} />
+              <Route path={'/share/links'} component={SharebuilderLinks} />
               <Route path={'/share/:id'} component={QuizShareBuilderLoader} />
-              <Route path={'/share'} component={Sharebuilder} />
+              <Route path={'/share'} component={SharebuilderPicker} />
               <Route path={urls.quizShareRoute} component={QuizShareRoute} />
               <Route path={urls.quiz} component={Quiz} />
               <Route path={urls.signup} component={Signup} />

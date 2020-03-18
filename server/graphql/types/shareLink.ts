@@ -11,7 +11,7 @@ export const typeDefs = gql`
   }
 
   extend type Mutation {
-    createShareLink(questionIds: [Int!]!): Int
+    createShareLink(questionIds: [Int!]!): String
   }
 `;
 
@@ -29,7 +29,7 @@ export const resolvers: Resolvers = {
     createShareLink: async (_args, { questionIds }, ctx) => {
       if (!ctx.user) throw new Error('Not logged in');
       const randomId = crypto
-        .randomBytes(16)
+        .randomBytes(8)
         .join('')
         .substring(0, 10);
 
@@ -43,7 +43,7 @@ export const resolvers: Resolvers = {
       let links: any = [];
       for (const id of questionIds) {
         links.push({
-          shareId: Number(randomId),
+          shareId: randomId,
           questionId: Number(id),
           userId: ctx.user.id
         });

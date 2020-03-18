@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Segment, Dropdown, Divider, Input } from 'semantic-ui-react';
+import { Segment, Dropdown, Divider } from 'semantic-ui-react';
 import { Table, Icon, Button, Tag } from 'antd';
 import Highlighter from 'react-highlighter';
 import ExtendedRow from 'components/Sharebuilder/ExtendedRow';
@@ -15,36 +15,49 @@ import { QuestionFilterInput } from 'types/generated';
 import LoadingPage from 'components/Misc/Utility/LoadingPage';
 import Semester from 'classes/Semester';
 import Selection from 'classes/Selection';
+const domain =
+  process.env.NODE_ENV === 'production' ? 'https://medmcq.au.dk' : 'http://localhost:3000';
+
+const initialFilter = {
+  specialtyIds: [],
+  tagIds: []
+};
 
 export interface SharebuilderProps {}
 
 const Sharebuilder: React.SFC<SharebuilderProps> = () => {
+  const dispatch = useDispatch();
+  const [hasFetched, setHasFetched] = useState(false);
   const [initialLoading, setInitialLoading] = useState(true);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [filterLoading, setFilterLoading] = useState(false);
-  const [shareLinks, setShareLinks] = useState('');
-  const dispatch = useDispatch();
+  const [selectedId, setSelectedId] = useState('');
   const history = useHistory();
   const [link, setLink] = useState('');
-  const [filter, setFilter] = useState<Partial<QuestionFilterInput>>({
-    specialtyIds: [],
-    tagIds: []
-  });
+  const [filter, setFilter] = useState<Partial<QuestionFilterInput>>(initialFilter);
+  const shareLink = `${domain}/share/${link}`;
+
   // Redux
   const user = useSelector((state: ReduxState) => state.auth.user);
   const picked = useSelector((state: ReduxState) => state.shareBuilder.picked);
   const semesters = useSelector((state: ReduxState) => state.metadata.semesters);
-  let questions = useSelector((state: ReduxState) => state.questions.questions);
+  const questions = useSelector((state: ReduxState) =>
+    hasFetched ? state.questions.questions : null
+  );
   const semesterId = useSelector((state: ReduxState) => state.selection.semesterId);
   const semester = useSelector((state: ReduxState) =>
     state.metadata.semesters.find((semester) => semester.id === semesterId)
   );
-  const tags = semester?.tags;
-  const specialties = semester?.specialties;
+  const tags = useSelector((state: ReduxState) =>
+    state.metadata.semesters.flatMap((semester) => semester.tags)
+  );
+  const specialties = useSelector((state: ReduxState) =>
+    state.metadata.semesters.flatMap((semester) => semester.specialties)
+  );
   const pickedQuestions = useSelector((state: ReduxState) => state.shareBuilder.picked);
-  const [selectedId, setSelectedId] = useState<null | number>(null);
   const shouldNotFetch =
-    !semesterId || (!filter.text && filter.tagIds.length === 0 && filter.specialtyIds.length === 0);
+    !semesterId ||
+    (!selectedId && !filter.text && filter.tagIds.length === 0 && filter.specialtyIds.length === 0);
 
   // Debounce filter, for ikke at query på hvert keystroke (delay er 1 sekund, som angivet herunder)
   const debounceQueryFilter = useCallback(
@@ -52,6 +65,7 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
       setFilterLoading(true);
       await Question.fetch({ ...filter, semesterId });
       setFilterLoading(false);
+      setHasFetched(true);
     }, 1000),
     [semesterId]
   );
@@ -60,17 +74,27 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
   // Er en lidt "omstændig" måde at undgå at useQuery bliver kaldt uden parameters,
   // da det henter alle spørgsmål. Bedre implementering søges.. ;)
   useEffect(() => {
-    if (selectedId) {
-      debounceQueryFilter({ ids: [selectedId] });
+    if (shouldNotFetch) {
+      setHasFetched(false);
     }
     if (!shouldNotFetch) {
-      debounceQueryFilter(filter);
+      if (selectedId) {
+        debounceQueryFilter({ ids: [Number(selectedId)] });
+      } else {
+        debounceQueryFilter(filter);
+      }
     }
-  }, [debounceQueryFilter, filter]);
+  }, [debounceQueryFilter, filter, selectedId, shouldNotFetch]);
 
   const handleChange = (value: any, type: keyof QuestionFilterInput) => {
     setFilter({ ...filter, [type]: value });
   };
+
+  useEffect(() => {
+    setHasFetched(false);
+    setSelectedId('');
+    setFilter(initialFilter);
+  }, [semesterId]);
 
   useEffect(() => {
     const fetchInitial = async () => {
@@ -91,27 +115,12 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
   // Function til at skabe linket, når man har bygget færdigt - kalder useMutation
   const handleCreateLink = async () => {
     setSubmitLoading(true);
-    let link: string;
-    if (shareLinks) {
-      const links = shareLinks.split(',');
-      let ids = [];
-      for (let link of links) {
-        const id = Number(link.trim().split(/quiz\/(\d+)/)[1]);
-        if (isNaN(id)) continue;
-        ids.push(id);
-      }
-
-      link = await ShareBuilderClass.createShareLink({ questionIds: ids });
-    } else {
-      link = await ShareBuilderClass.createShareLink({ questionIds: picked.map((q) => q.id) });
-    }
+    const link = await ShareBuilderClass.createShareLink({ questionIds: picked.map((q) => q.id) });
 
     setLink(link);
-    setShareLinks('');
     setSubmitLoading(false);
   };
 
-  console.log(filter);
   if (!semester) return <LoadingPage />;
   const columns = [
     {
@@ -122,7 +131,7 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
       filterDropdown: (
         <SearchDropdown
           onChange={(value) => setSelectedId(value)}
-          value={String(selectedId)}
+          value={selectedId}
           type="search"
         />
       )
@@ -155,11 +164,13 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
       filterDropdown: (
         <SearchDropdown
           onChange={(value) => handleChange(value, 'specialtyIds')}
-          options={specialties.map((s) => ({
-            key: s.id,
-            value: s.id,
-            text: s.name
-          }))}
+          options={specialties
+            .filter((specialty) => specialty.semester.id === semesterId)
+            .map((s) => ({
+              key: s.id,
+              value: s.id,
+              text: s.name
+            }))}
           value={filter.specialtyIds?.map((specialtyId) => String(specialtyId))}
           type="dropdown"
         />
@@ -180,11 +191,13 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
       key: 'tags',
       filterDropdown: (
         <SearchDropdown
-          options={tags.map((t) => ({
-            key: t.id,
-            text: t.name,
-            value: t.id
-          }))}
+          options={tags
+            .filter((tag) => tag.semester.id === semesterId)
+            .map((t) => ({
+              key: t.id,
+              text: t.name,
+              value: t.id
+            }))}
           onChange={(value) => handleChange(value, 'tagIds')}
           value={filter.tagIds.map((tag) => String(tag))}
           type="dropdown"
@@ -232,21 +245,6 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
           />
         </div>
         <Divider />
-        <div>
-          <label>
-            Du kan indsætte dele-links her, adskilt af komma, eller vælge spørgsmål i boksen
-            nederst.
-            <br />
-            Hvis du benytter ovenstående boks, slet da alt der står her.
-          </label>
-          <Input
-            fluid
-            placeholder="https://medmcq.au.dk/quiz/5, https://medmcq.au.dk/quiz/10, osv..."
-            value={shareLinks}
-            onChange={(e) => setShareLinks(e.target.value)}
-          />
-        </div>
-        <Divider hidden />
         {!user ? (
           <>
             <p style={{ color: 'grey' }}>
@@ -269,8 +267,8 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
           <div style={{ border: '2px solid grey', padding: '1rem', margin: '1rem' }}>
             <h3>
               Dette er dit link:{' '}
-              <a target="_blank" rel="noopener noreferrer" href={window.location.href + '/' + link}>
-                {window.location.href + '/' + link}
+              <a target="_blank" rel="noopener noreferrer" href={shareLink}>
+                {shareLink}
               </a>
             </h3>
             <p>Linket åbner i et nyt vindue. Husk at gemme det hvis du skal bruge det igen.</p>
@@ -290,12 +288,12 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
           }
           fluid
           selection
-        ></Dropdown>
-        {shouldNotFetch && (
+        />
+        <div>
           <p style={{ textAlign: 'center', color: 'grey' }}>
-            Angiv filtre (under forstørrelsesglassene herunder) for at søge efter spørgsmål
+            Hvis du søger på ID'er, hentes spørgsmål uvilkårligt af valgt semester
           </p>
-        )}
+        </div>
         <Divider />
         <div style={{ overflowX: 'auto' }}>
           <Table
@@ -304,6 +302,14 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
             loading={filterLoading || initialLoading}
             columns={columns}
             expandedRowRender={(record) => <ExtendedRow record={record} />}
+            footer={() =>
+              shouldNotFetch && (
+                <p style={{ textAlign: 'center', color: 'grey' }}>
+                  Angiv filtre (under forstørrelsesglassene ved siden af colonnens titel) for at
+                  søge efter spørgsmål
+                </p>
+              )
+            }
           />
         </div>
       </Segment>

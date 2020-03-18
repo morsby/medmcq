@@ -5,7 +5,7 @@ interface ShareLink {
   questionId: number;
   userId: number;
   published: boolean;
-  shareId: number;
+  shareId: string;
 }
 
 class ShareLink extends Model {

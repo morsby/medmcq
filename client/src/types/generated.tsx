@@ -102,7 +102,7 @@ export type ManualCompletedSet = {
 export type Mutation = {
    __typename?: 'Mutation';
   _empty?: Maybe<Scalars['String']>;
-  createShareLink?: Maybe<Scalars['Int']>;
+  createShareLink?: Maybe<Scalars['String']>;
   reportQuestion?: Maybe<Scalars['String']>;
   createQuestion?: Maybe<Question>;
   updateQuestion?: Maybe<Question>;
@@ -310,7 +310,7 @@ export type QuestionFilterInput = {
   commentIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
   profile?: Maybe<Scalars['Boolean']>;
   search?: Maybe<Scalars['String']>;
-  shareId?: Maybe<Scalars['Int']>;
+  shareId?: Maybe<Scalars['String']>;
 };
 
 export type QuestionInput = {

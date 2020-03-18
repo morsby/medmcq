@@ -45,10 +45,13 @@ body,
 }
 
 .ui {
-  &.menu.inverted.blue {
-    background-color: #004687 !important;
+  &.blue,
+  &.primary {
+    background-color: $color-one !important;
   }
-  &.button.blue.basic {
-    border-color: #004687 !important;
+
+  &.blue.basic {
+    border-color: $color-one !important;
+    background-color: initial !important;
   }
 }

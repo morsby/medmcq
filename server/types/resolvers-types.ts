@@ -104,7 +104,7 @@ export type ManualCompletedSet = {
 export type Mutation = {
    __typename?: 'Mutation';
   _empty?: Maybe<Scalars['String']>;
-  createShareLink?: Maybe<Scalars['Int']>;
+  createShareLink?: Maybe<Scalars['String']>;
   reportQuestion?: Maybe<Scalars['String']>;
   createQuestion?: Maybe<Question>;
   updateQuestion?: Maybe<Question>;
@@ -312,7 +312,7 @@ export type QuestionFilterInput = {
   commentIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
   profile?: Maybe<Scalars['Boolean']>;
   search?: Maybe<Scalars['String']>;
-  shareId?: Maybe<Scalars['Int']>;
+  shareId?: Maybe<Scalars['String']>;
 };
 
 export type QuestionInput = {
@@ -649,7 +649,7 @@ export type ManualCompletedSetResolvers<ContextType = Context, ParentType extend
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
   _empty?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  createShareLink?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType, RequireFields<MutationCreateShareLinkArgs, 'questionIds'>>,
+  createShareLink?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationCreateShareLinkArgs, 'questionIds'>>,
   reportQuestion?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationReportQuestionArgs, 'report' | 'questionId'>>,
   createQuestion?: Resolver<Maybe<ResolversTypes['Question']>, ParentType, ContextType, RequireFields<MutationCreateQuestionArgs, never>>,
   updateQuestion?: Resolver<Maybe<ResolversTypes['Question']>, ParentType, ContextType, RequireFields<MutationUpdateQuestionArgs, never>>,

@@ -42,7 +42,7 @@ export const typeDefs = gql`
     commentIds: [Int]
     profile: Boolean
     search: String
-    shareId: Int
+    shareId: String
   }
 
   type Question {
