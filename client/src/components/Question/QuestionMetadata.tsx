@@ -37,6 +37,9 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
     (state: ReduxState) =>
       state.metadata.semesters.find((semester) => semester.id === semesterId).specialties
   );
+  const answers = useSelector((state: ReduxState) =>
+    state.quiz.answers.filter((answer) => answer.questionId === question.id)
+  );
   const specialtyVotes = question.specialtyVotes;
   const tagVotes = question.tagVotes;
   const tags = useSelector(
@@ -89,7 +92,7 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
             </div>
           )}
         </Grid.Row>
-        {isAnswered(question) && (
+        {isAnswered(question, answers) && (
           <>
             <Grid.Row style={{ margin: '7px 0 7px 0' }}>
               <Translate id="questionMetadata.specialty" />{' '}
@@ -174,10 +177,11 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
               {isEditing ? 'Luk redigering' : 'Rediger'}
             </Button>
           )}
-          {user && isAnswered(question) && <QuestionAnsweredCounter />}
+          {user && isAnswered(question, answers) && <QuestionAnsweredCounter />}
         </Grid.Row>
       </Grid.Column>
-      {user && isAnswered(question) && (
+      {console.log(isAnswered(question, answers))}
+      {user && isAnswered(question, answers) && (
         <>
           <Grid.Row>
             <Grid.Column>
