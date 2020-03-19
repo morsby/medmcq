@@ -403,6 +403,11 @@ export type User = {
 };
 
 
+export type UserBookmarksArgs = {
+  semester?: Maybe<Scalars['Int']>;
+};
+
+
 export type UserAnswersArgs = {
   semester?: Maybe<Scalars['Int']>;
 };

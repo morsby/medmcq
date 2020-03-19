@@ -57,7 +57,7 @@ export const typeDefs = gql`
     email: String
     password: String
     role: Role
-    bookmarks: [Bookmark]
+    bookmarks(semester: Int): [Bookmark]
     answers(semester: Int): [Answer]
     specialtyVotes: [SpecialtyVote]
     tagVotes: [TagVote]
@@ -282,8 +282,17 @@ export const resolvers: Resolvers = {
       const liked = await QuestionCommentLike.query().where({ userId: id });
       return liked.map((like) => ({ commentId: like.commentId, userId: like.userId }));
     },
-    bookmarks: async ({ id }, args, ctx) => {
-      const bookmarks = await QuestionBookmark.query().where({ userId: id });
+    bookmarks: async ({ id }, { semester }, ctx) => {
+      let query = QuestionBookmark.query().where('questionBookmark.userId', id);
+
+      if (semester) {
+        query = query
+          .join('question', 'questionId', 'question.id')
+          .join('semesterExamSet', 'question.examSetId', 'semesterExamSet.id')
+          .where({ semesterId: semester });
+      }
+
+      const bookmarks = await query;
       return bookmarks.map((bookmark) => ({ id: bookmark.id }));
     },
     publicComments: async ({ id }, { semester }, ctx) => {

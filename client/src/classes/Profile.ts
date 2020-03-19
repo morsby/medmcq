@@ -35,7 +35,7 @@ const mapAnswers = (answers: Answer[]): Attempt[] => {
 class Profile {
   static fetch = async (options: { semester: number }) => {
     const query = gql`
-      query($semester: Int) {
+      query Profile($semester: Int) {
         profile {
           answers(semester: $semester) {
             id
@@ -72,7 +72,7 @@ class Profile {
               }
             }
           }
-          bookmarks {
+          bookmarks(semester: $semester) {
             id
             question {
               id
@@ -96,6 +96,8 @@ class Profile {
       ${Specialty.fragmentFull}
       ${ExamSet.fragmentFull}
     `;
+
+    console.log(options.semester);
 
     const profileData = await Apollo.query<Profile>('profile', query, {
       semester: options.semester

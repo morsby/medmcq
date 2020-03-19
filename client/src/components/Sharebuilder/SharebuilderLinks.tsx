@@ -39,9 +39,7 @@ const ShareBuilderLinks: React.SFC<ShareBuilderLinksProps> = () => {
         textAlign="center"
       >
         <h1>Opret quiz</h1>
-        <label>
-          Du kan indsætte dele-links her, adskilt af komma, eller vælge spørgsmål i boksen nederst.
-        </label>
+        <label>Indsæt dele-links her, adskilt af komma.</label>
         <Input
           fluid
           placeholder="https://medmcq.au.dk/quiz/5, https://medmcq.au.dk/quiz/10, osv..."

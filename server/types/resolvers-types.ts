@@ -405,6 +405,11 @@ export type User = {
 };
 
 
+export type UserBookmarksArgs = {
+  semester?: Maybe<Scalars['Int']>;
+};
+
+
 export type UserAnswersArgs = {
   semester?: Maybe<Scalars['Int']>;
 };
@@ -786,7 +791,7 @@ export type UserResolvers<ContextType = Context, ParentType extends ResolversPar
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   password?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   role?: Resolver<Maybe<ResolversTypes['Role']>, ParentType, ContextType>,
-  bookmarks?: Resolver<Maybe<Array<Maybe<ResolversTypes['Bookmark']>>>, ParentType, ContextType>,
+  bookmarks?: Resolver<Maybe<Array<Maybe<ResolversTypes['Bookmark']>>>, ParentType, ContextType, RequireFields<UserBookmarksArgs, never>>,
   answers?: Resolver<Maybe<Array<Maybe<ResolversTypes['Answer']>>>, ParentType, ContextType, RequireFields<UserAnswersArgs, never>>,
   specialtyVotes?: Resolver<Maybe<Array<Maybe<ResolversTypes['SpecialtyVote']>>>, ParentType, ContextType>,
   tagVotes?: Resolver<Maybe<Array<Maybe<ResolversTypes['TagVote']>>>, ParentType, ContextType>,
