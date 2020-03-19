@@ -10,6 +10,12 @@ import Selection from 'classes/Selection';
 import _ from 'lodash';
 import 'antd/lib/tree/style/css';
 
+interface TagSelectionObject {
+  title: string;
+  key: string;
+  children: TagSelectionObject[];
+}
+
 /**
  * Laver en checkbox for hvert speciale.
  */
@@ -54,7 +60,7 @@ const SelectionSpecialtiesSelector: React.SFC<SelectionSpecialtiesSelectorProps>
     setTagTree(convertMetadataToTree());
   }, [semester, semesterId]);
 
-  const renderTreeNodes = (tags) =>
+  const renderTreeNodes = (tags: TagSelectionObject[]) =>
     _.sortBy(tags, (t) => t.title).map((item) => {
       if (item.children) {
         return (
@@ -118,27 +124,23 @@ const SelectionSpecialtiesSelector: React.SFC<SelectionSpecialtiesSelectorProps>
             />
             {tagSearch && semester.tags && (
               <Tree
-                checkedKeys={_.filter(
-                  semester.tags,
-                  (t: any) =>
-                    t.semesterId === semesterId &&
-                    t.name.toLowerCase().includes(tagSearch.toLowerCase()) &&
-                    tagIds.includes(String(t.id))
-                ).map((t) => String(t.id))}
-                onCheck={(tags: any, { node }) => {
+                checkedKeys={semester.tags
+                  .filter(
+                    (t) =>
+                      t.name.toLowerCase().includes(tagSearch.toLowerCase()) &&
+                      tagIds.includes(t.id)
+                  )
+                  .map((t) => String(t.id))}
+                onCheck={(tags, { node }) => {
                   handleChange(
-                    [...tags, ...tagIds.filter((id) => id !== String(node.props.dataRef.id))],
+                    [...(tags as string[]), ...tagIds.filter((id) => id !== node.props.dataRef.id)],
                     'tagIds'
                   ); // Ovenstående er en ret omstændig måde at få ID'er fra det filtrerede array til at også virke med det ikke filtrerede (da ID'er ikke vil eksistere i træet, når de udelukkes i søgning)
                 }}
                 checkable
               >
                 {_(semester.tags)
-                  .filter(
-                    (t) =>
-                      t.semester.id === semesterId &&
-                      t.name.toLowerCase().includes(tagSearch.toLowerCase())
-                  )
+                  .filter((t) => t.name.toLowerCase().includes(tagSearch.toLowerCase()))
                   .sortBy((t) => t.name)
                   .value()
                   .map((t) => (
@@ -154,7 +156,7 @@ const SelectionSpecialtiesSelector: React.SFC<SelectionSpecialtiesSelectorProps>
               <>
                 <Tree
                   checkedKeys={tagIds.map((id) => String(id))}
-                  onCheck={(tags: any) => handleChange(tags, 'tagIds')}
+                  onCheck={(tags) => handleChange(tags as string[], 'tagIds')}
                   checkable
                 >
                   {renderTreeNodes(tagTree)}
