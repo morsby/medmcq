@@ -41,10 +41,10 @@ const Bookmarks: React.SFC<BookmarksProps> = () => {
       {bookmarks
         .filter(
           (bookmark) =>
-            bookmark.question.text.includes(search) ||
-            bookmark.question.answer1.answer.includes(search) ||
-            bookmark.question.answer2.answer.includes(search) ||
-            bookmark.question.answer3.answer.includes(search)
+            bookmark.question.text.toLowerCase().includes(search.toLowerCase()) ||
+            bookmark.question.answer1.answer.toLowerCase().includes(search.toLowerCase()) ||
+            bookmark.question.answer2.answer.toLowerCase().includes(search.toLowerCase()) ||
+            bookmark.question.answer3.answer.toLowerCase().includes(search.toLowerCase())
         )
         .map((bookmark, i) => (
           <div key={bookmark.id}>
