@@ -21,6 +21,7 @@ import { urls } from './utils/common';
 import { toast } from 'react-toastify';
 import { ReduxState } from 'redux/reducers/index';
 import settingsReducer from 'redux/reducers/settings';
+import { hotjar } from 'react-hotjar';
 
 // Classes
 import User from 'classes/User';
@@ -58,6 +59,8 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
   const language = useSelector((state: ReduxState) => state.settings.language);
   const firstTime = useSelector((state: ReduxState) => state.settings.firstTime);
   const user = useSelector((state: ReduxState) => state.auth.user);
+
+  hotjar.initialize(1757351, 6);
 
   useEffect(() => {
     // Hent brugeren
