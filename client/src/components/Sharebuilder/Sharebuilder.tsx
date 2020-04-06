@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Segment, Dropdown, Divider } from 'semantic-ui-react';
-import { Table, Icon, Button, Tag } from 'antd';
+import { Table, Button, Tag } from 'antd';
+import { SearchOutlined, CloseOutlined } from '@ant-design/icons';
 import Highlighter from 'react-highlighter';
 import ExtendedRow from 'components/Sharebuilder/ExtendedRow';
 import { useSelector, useDispatch } from 'react-redux';
@@ -127,7 +128,7 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
       title: 'ID',
       dataIndex: 'id',
       key: 'id',
-      filterIcon: <Icon type="search" style={{ color: selectedId ? '#1890ff' : undefined }} />,
+      filterIcon: <SearchOutlined style={{ color: selectedId ? '#1890ff' : undefined }} />,
       filterDropdown: (
         <SearchDropdown
           onChange={(value) => setSelectedId(value)}
@@ -147,7 +148,7 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
           type="search"
         />
       ),
-      filterIcon: <Icon type="search" style={{ color: filter.text ? '#1890ff' : undefined }} />,
+      filterIcon: <SearchOutlined style={{ color: filter.text ? '#1890ff' : undefined }} />,
       render: (text) => (
         <Highlighter
           matchStyle={{ backgroundColor: '#ffc069', padding: 0 }}
@@ -176,10 +177,7 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
         />
       ),
       filterIcon: (
-        <Icon
-          type="search"
-          style={{ color: filter.specialtyIds.length > 0 ? '#1890ff' : undefined }}
-        />
+        <SearchOutlined style={{ color: filter.specialtyIds.length > 0 ? '#1890ff' : undefined }} />
       ),
       render: (record: Question) =>
         record.specialties.map((s) => (
@@ -204,7 +202,7 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
         />
       ),
       filterIcon: (
-        <Icon type="search" style={{ color: filter.tagIds.length > 0 ? '#1890ff' : undefined }} />
+        <SearchOutlined style={{ color: filter.tagIds.length > 0 ? '#1890ff' : undefined }} />
       ),
       render: (record: Question) =>
         record.tags.map((t) => (
@@ -220,7 +218,7 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
             type={picked.findIndex((p) => p.id === record.id) !== -1 ? 'danger' : 'primary'}
             onClick={() => handlePick(record)}
           >
-            {picked.findIndex((p) => p.id === record.id) !== -1 ? <Icon type="cross" /> : 'Tilføj'}
+            {picked.findIndex((p) => p.id === record.id) !== -1 ? <CloseOutlined /> : 'Tilføj'}
           </Button>
           <Button onClick={() => history.push('/quiz/' + record.id)}>Gå til spørgsmål</Button>
         </>

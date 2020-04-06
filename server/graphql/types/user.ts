@@ -337,9 +337,13 @@ export const resolvers: Resolvers = {
         .select('questionId');
 
       // Find all questions corresponding to the answeredQuestion Ids
-      const questions = await ctx.questionLoader.loadMany(
-        answeredQuestions.map((aq) => aq.questionId)
-      );
+      const questions = (
+        await ctx.questionLoader.loadMany(answeredQuestions.map((aq) => aq.questionId))
+      ).map((q) => {
+        if (q instanceof Error) return;
+        return q;
+      });
+
       const examSetIds = _.uniq(questions.map((question) => question.examSetId));
 
       // Count the questions answered based on each examSetId

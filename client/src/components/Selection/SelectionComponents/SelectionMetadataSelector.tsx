@@ -12,7 +12,7 @@ import 'antd/lib/tree/style/css';
 
 interface TagSelectionObject {
   title: string;
-  key: string;
+  key: number;
   children: TagSelectionObject[];
 }
 
@@ -31,9 +31,8 @@ const SelectionSpecialtiesSelector: React.SFC<SelectionSpecialtiesSelectorProps>
   const [tagTree, setTagTree] = useState(null);
   const [tagSearch, setTagSearch] = useState('');
 
-  const handleChange = (value: string[], type: 'tagIds' | 'specialtyIds') => {
-    const numberedValues = value.map((id) => Number(id));
-    Selection.change({ type, value: numberedValues });
+  const handleChange = (value: number[], type: 'tagIds' | 'specialtyIds') => {
+    Selection.change({ type, value });
   };
 
   useEffect(() => {
@@ -64,7 +63,7 @@ const SelectionSpecialtiesSelector: React.SFC<SelectionSpecialtiesSelectorProps>
     _.sortBy(tags, (t) => t.title).map((item) => {
       if (item.children) {
         return (
-          <Tree.TreeNode title={item.title} key={item.key} dataRef={item}>
+          <Tree.TreeNode title={item.title} key={item.key}>
             {renderTreeNodes(item.children)}
           </Tree.TreeNode>
         );
@@ -87,14 +86,13 @@ const SelectionSpecialtiesSelector: React.SFC<SelectionSpecialtiesSelectorProps>
               <>
                 <Tree
                   checkable
-                  checkedKeys={specialtyIds.map((id) => String(id))}
-                  onCheck={(specialties) => handleChange(specialties as string[], 'specialtyIds')}
+                  checkedKeys={specialtyIds.map((id) => id)}
+                  onCheck={(specialties) => handleChange(specialties as number[], 'specialtyIds')}
                 >
                   {semester.specialties.map((s) => (
                     <Tree.TreeNode
                       title={`${s.name} (${s.questionCount})`}
-                      key={String(s.id)}
-                      dataRef={s}
+                      key={s.id}
                     ></Tree.TreeNode>
                   ))}
                 </Tree>
@@ -124,18 +122,13 @@ const SelectionSpecialtiesSelector: React.SFC<SelectionSpecialtiesSelectorProps>
             />
             {tagSearch && semester.tags && (
               <Tree
-                checkedKeys={semester.tags
-                  .filter(
-                    (t) =>
-                      t.name.toLowerCase().includes(tagSearch.toLowerCase()) &&
-                      tagIds.includes(t.id)
-                  )
-                  .map((t) => String(t.id))}
-                onCheck={(tags, { node }) => {
+                checkedKeys={tagIds.map((id) => String(id))}
+                onCheck={(tags: number[], { node, checked }) => {
+                  if (checked) return handleChange([...tagIds, Number(node.key)], 'tagIds');
                   handleChange(
-                    [...(tags as string[]), ...tagIds.filter((id) => id !== node.props.dataRef.id)],
+                    tagIds.filter((id) => id !== Number(node.key)),
                     'tagIds'
-                  ); // Ovenstående er en ret omstændig måde at få ID'er fra det filtrerede array til at også virke med det ikke filtrerede (da ID'er ikke vil eksistere i træet, når de udelukkes i søgning)
+                  );
                 }}
                 checkable
               >
@@ -144,11 +137,7 @@ const SelectionSpecialtiesSelector: React.SFC<SelectionSpecialtiesSelectorProps>
                   .sortBy((t) => t.name)
                   .value()
                   .map((t) => (
-                    <Tree.TreeNode
-                      title={`${t.name} (${t.questionCount})`}
-                      key={String(t.id)}
-                      dataRef={t}
-                    ></Tree.TreeNode>
+                    <Tree.TreeNode title={`${t.name} (${t.questionCount})`} key={t.id} />
                   ))}
               </Tree>
             )}
@@ -156,7 +145,12 @@ const SelectionSpecialtiesSelector: React.SFC<SelectionSpecialtiesSelectorProps>
               <>
                 <Tree
                   checkedKeys={tagIds.map((id) => String(id))}
-                  onCheck={(tags) => handleChange(tags as string[], 'tagIds')}
+                  onCheck={(tags: number[]) =>
+                    handleChange(
+                      tags.map((t) => Number(t)),
+                      'tagIds'
+                    )
+                  }
                   checkable
                 >
                   {renderTreeNodes(tagTree)}
