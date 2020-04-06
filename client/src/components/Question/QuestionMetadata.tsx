@@ -100,6 +100,7 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
                 .orderBy('votes', 'desc')
                 .map((s) => specialties.find((specialty) => specialty.id === s.id))
                 .map((specialty) => {
+                  if (!specialty) return null;
                   const questionSpecialtyVotes = specialtyVotes.filter(
                     (s) => s.specialty.id === specialty.id
                   );
@@ -132,6 +133,7 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
                 .filter((t) => !!t.parent.id)
                 .orderBy('votes', 'desc')
                 .map((t) => {
+                  if (!t) return null;
                   const questionTagVotes = tagVotes.filter((tv) => tv.tag.id === t.id);
                   const votes = _.sumBy(questionTagVotes, (tv) => tv.vote);
 
