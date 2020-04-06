@@ -17,6 +17,8 @@ import { ReduxState } from 'redux/reducers';
 import quizReducer from 'redux/reducers/quiz';
 import QuestionClass from 'classes/Question';
 import QuestionStopExamMode from 'components/Question/QuestionStopExamMode';
+import LoadingPage from 'components/Misc/Utility/LoadingPage';
+import Semester from 'classes/Semester';
 
 /**
  *  Hovedcomponent til Quizzen.
@@ -30,6 +32,7 @@ export interface QuizProps extends LocalizeContextProps {}
 const Quiz: React.SFC<QuizProps> = ({ addTranslation }) => {
   const history = useHistory();
   const dispatch = useDispatch();
+  const semesters = useSelector((state: ReduxState) => state.metadata.semesters);
   const questionIndex = useSelector((state: ReduxState) => state.quiz.questionIndex);
   const imgOpen = useSelector((state: ReduxState) => state.quiz.imgOpen);
   const didInvalidate = useSelector((state: ReduxState) => state.quiz.didInvalidate);
@@ -55,6 +58,10 @@ const Quiz: React.SFC<QuizProps> = ({ addTranslation }) => {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [questionIndex]);
+  
+  useEffect(() => {
+    if (!semesters) Semester.fetchAll();
+  }, []);
 
   const handleChangeQuestion = (questionNumber: number) => {
     dispatch(quizReducer.actions.changeQuestion(questionNumber));
@@ -144,7 +151,8 @@ i componentDidMount)
       </div>
     );
   }
-
+  
+  if (!semesters) return <LoadingPage />;
   return (
     <div className="flex-container">
       <div className="content">
