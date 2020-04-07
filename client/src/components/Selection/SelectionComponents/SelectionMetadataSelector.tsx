@@ -12,7 +12,7 @@ import 'antd/lib/tree/style/css';
 
 interface TagSelectionObject {
   title: string;
-  key: number;
+  key: string;
   children: TagSelectionObject[];
 }
 
@@ -86,13 +86,15 @@ const SelectionSpecialtiesSelector: React.SFC<SelectionSpecialtiesSelectorProps>
               <>
                 <Tree
                   checkable
-                  checkedKeys={specialtyIds.map((id) => id)}
-                  onCheck={(specialties) => handleChange(specialties as number[], 'specialtyIds')}
+                  checkedKeys={specialtyIds.map((id) => String(id))}
+                  onCheck={(specialties: string[]) =>
+                    handleChange(specialties.map((id) => Number(id)) as number[], 'specialtyIds')
+                  }
                 >
                   {semester.specialties.map((s) => (
                     <Tree.TreeNode
                       title={`${s.name} (${s.questionCount})`}
-                      key={s.id}
+                      key={String(s.id)}
                     ></Tree.TreeNode>
                   ))}
                 </Tree>
@@ -123,7 +125,7 @@ const SelectionSpecialtiesSelector: React.SFC<SelectionSpecialtiesSelectorProps>
             {tagSearch && semester.tags && (
               <Tree
                 checkedKeys={tagIds.map((id) => String(id))}
-                onCheck={(tags: number[], { node, checked }) => {
+                onCheck={(tags: string[], { node, checked }) => {
                   if (checked) return handleChange([...tagIds, Number(node.key)], 'tagIds');
                   handleChange(
                     tagIds.filter((id) => id !== Number(node.key)),
@@ -145,7 +147,7 @@ const SelectionSpecialtiesSelector: React.SFC<SelectionSpecialtiesSelectorProps>
               <>
                 <Tree
                   checkedKeys={tagIds.map((id) => String(id))}
-                  onCheck={(tags: number[]) =>
+                  onCheck={(tags: string[]) =>
                     handleChange(
                       tags.map((t) => Number(t)),
                       'tagIds'
