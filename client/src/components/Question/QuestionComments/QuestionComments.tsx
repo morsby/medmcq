@@ -24,6 +24,7 @@ const QuestionComments: React.SFC<QuestionCommentsProps> = ({ type }) => {
   const [loading, setLoading] = useState(false);
   const [isAnonymous, setIsAnonymous] = useState(false);
   const dispatch = useDispatch();
+  const user = useSelector((state: ReduxState) => state.auth.user);
   const currentQuestionNumber = useSelector((state: ReduxState) => state.quiz.questionIndex);
   const question = useSelector(
     (state: ReduxState) => state.questions.questions[currentQuestionNumber]
@@ -32,9 +33,10 @@ const QuestionComments: React.SFC<QuestionCommentsProps> = ({ type }) => {
     state.questions.comments.filter((comment) => comment.question.id === question.id)
   );
   const publicComments = comments.filter((comment) => !comment.isPrivate);
-  const privateComments = comments.filter((comment) => comment.isPrivate);
+  const privateComments = comments
+    .filter((comment) => comment.isPrivate)
+    .filter((c) => c.user.id === user.id);
   const mostLiked = _.maxBy(publicComments, (comment) => comment.likes.length);
-  const user = useSelector((state: ReduxState) => state.auth.user);
   let form;
 
   useEffect(() => {

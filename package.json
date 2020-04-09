@@ -14,7 +14,7 @@
     "build:server": "cd server && npm run build",
     "build:client": "cd client && npm run build",
     "genversion": "genversion -e version.js -s && mv version.js client/src/",
-    "test": "npm run db:reset &&  start-server-and-test testdev http://localhost:3000 cy:run",
+    "test": "start-server-and-test testdev http://localhost:3000 cy:run",
     "testdev": "cross-env NODE_ENV=\"test\" npm run dev",
     "postbuild": "cd server && npm run migrate-latest",
     "generate": "graphql-codegen",

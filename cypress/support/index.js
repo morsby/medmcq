@@ -19,7 +19,15 @@ import './commands';
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
-describe('initial load', () => {
+Cypress.Cookies.defaults({
+  whitelist: 'user'
+});
+
+describe('setup', () => {
+  it('should reset the database', () => {
+    cy.exec('npm run db:reset');
+  });
+
   it('should open the frontpage', () => {
     cy.visit('/');
   });
@@ -34,11 +42,73 @@ describe('initial load', () => {
     cy.get('.close').should('not.exist');
   });
 
-  it('should be able to change semester', () => {
+  it('should be able to pick semester', () => {
     cy.get('.selection').click();
     cy.get('.selection > .visible > :nth-child(2)').should('contain', 'semester');
     cy.get('.selection > .visible > :nth-child(2)').click();
     cy.get('div.text').should('contain', 'Abdomen');
     cy.get('div.text').should('not.contain', 'Inflammation');
+  });
+});
+
+describe('authentication', () => {
+  after(() => {
+    cy.frontpage();
+  });
+
+  describe('create first user', () => {
+    it('should be able to visit loginpage', () => {
+      cy.contains('Log ind').click();
+      cy.url().should('include', '/login');
+    });
+
+    it('should be able to visit register page', () => {
+      cy.contains('Opret bruger').click();
+      cy.url().should('include', '/opret');
+    });
+
+    it('should be able to register', () => {
+      cy.get('Input[placeholder=Brugernavn]').type('example');
+      cy.get('Input[placeholder=Email]').type('example@example.com');
+      cy.get('Input[placeholder=Kodeord]').type('Password1');
+      cy.get('Input[placeholder="Gentag kodeord"]').type('Password1');
+      cy.wait(1000); // Username and email is being checked
+      cy.contains('button', 'Opret').click();
+      cy.url().should('not.include', 'opret');
+      cy.getCookie('user').should('be.ok');
+    });
+
+    it('should be able to logout', () => {
+      cy.logout();
+    });
+
+    it('should be able to login', () => {
+      cy.login();
+      cy.logout();
+    });
+  });
+
+  describe('create second user', () => {
+    it('should be able to visit loginpage', () => {
+      cy.contains('Log ind').click();
+      cy.url().should('include', '/login');
+    });
+
+    it('should be able to visit register page', () => {
+      cy.contains('Opret bruger').click();
+      cy.url().should('include', '/opret');
+    });
+
+    it('should be able to register a second user', () => {
+      cy.get('Input[placeholder=Brugernavn]').type('example2');
+      cy.get('Input[placeholder=Email]').type('example2@example.com');
+      cy.get('Input[placeholder=Kodeord]').type('Password2');
+      cy.get('Input[placeholder="Gentag kodeord"]').type('Password2');
+      cy.wait(1000); // Username and email is being checked
+      cy.contains('button', 'Opret').click();
+      cy.url().should('not.include', 'opret');
+      cy.getCookie('user').should('be.ok');
+      cy.logout();
+    });
   });
 });

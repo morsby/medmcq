@@ -98,6 +98,10 @@ export const resolvers: Resolvers = {
     user: async (_root, _args, ctx) => {
       if (!ctx.user) return null;
       const user = await ctx.userLoader.load(ctx.user.id);
+      if (!user) {
+        ctx.res.cookie('user', {}, { expires: new Date(0) });
+        return null;
+      }
       return { id: user.id };
     },
     profile: async (_root, _args, ctx) => {

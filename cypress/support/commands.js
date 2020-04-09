@@ -23,3 +23,32 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('login', () => {
+  cy.contains('Log ind').click();
+  cy.url().should('include', '/login');
+  cy.get('Input[placeholder=Brugernavn]').type('example');
+  cy.get('Input[placeholder=Kodeord]').type('Password1');
+  cy.contains('button', 'Log ind').click();
+  cy.url().should('not.include', 'login');
+  cy.getCookie('user').should('be.ok');
+});
+
+Cypress.Commands.add('loginOther', () => {
+  cy.contains('Log ind').click();
+  cy.url().should('include', '/login');
+  cy.get('Input[placeholder=Brugernavn]').type('example2');
+  cy.get('Input[placeholder=Kodeord]').type('Password2');
+  cy.contains('button', 'Log ind').click();
+  cy.url().should('not.include', 'login');
+  cy.getCookie('user').should('be.ok');
+});
+
+Cypress.Commands.add('logout', () => {
+  cy.contains('button', 'Log ud').click();
+  cy.getCookie('user').should('not.be.ok');
+});
+
+Cypress.Commands.add('frontpage', () => {
+  cy.get('header > div > a').click();
+});

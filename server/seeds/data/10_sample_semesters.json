@@ -1,14 +1,6 @@
 [
-  { "value": 7, "name": "Inflammation", "short_name": "Inf" },
-  { "value": 8, "name": "Abdomen", "short_name": "Abd" },
-  {
-    "value": 9,
-    "name": "Hjerte-lunge-kar",
-    "short_name": "HLK"
-  },
-  {
-    "value": 11,
-    "name": "Familie-samfund / GOP",
-    "short_name": "GOP"
-  }
+  { "id": 1, "value": 7, "name": "Inflammation", "short_name": "Inf" },
+  { "id": 2, "value": 8, "name": "Abdomen", "short_name": "Abd" },
+  { "id": 3, "value": 9, "name": "Hjerte-lunge-kar", "short_name": "HLK" },
+  { "id": 4, "value": 11, "name": "Familie-samfund / GOP", "short_name": "GOP" }
 ]
