@@ -3,32 +3,24 @@
   "version": "2.0.0",
   "description": "En webapp til visning af MCQ-opgaver fra kandidaten i medicin på AU",
   "main": "server/server.js",
-  "engines": {
-    "node": "10.16.0",
-    "npm": "6.9.0"
-  },
   "repository": "https://github.com/Morsby/medmcq",
   "scripts": {
     "start": "ts-node -P server/tsconfig.json -r tsconfig-paths/register server/build/server.js",
     "server": "cd server && npm run dev",
     "client": "npm run genversion && cd client && npm start",
-    "dev": "npm-run-all --parallel server client",
+    "dev": "cross-env npm-run-all --parallel server client",
     "install-all": "npm install && cd server && npm install && cd .. && cd client && npm install",
-    "build": "npm run genversion && npm-run-all --sequential build:*",
+    "build": "cross-env npm run genversion && npm-run-all --sequential build:*",
     "build:server": "cd server && npm run build",
     "build:client": "cd client && npm run build",
     "genversion": "genversion -e version.js -s && mv version.js client/src/",
-    "lint": "eslint . --fix --ext .ts,.tsx,.js,.jsx,.json",
-    "format": "npm-run-all --parallel format:*",
-    "format:json": "prettier --list-different  --write \"**/*.json\"",
-    "format:styles": "prettier --list-different --write \"**/*.{css,scss}\"",
-    "validate": "npm-run-all --sequential lint format test",
-    "test": "npm-run-all --parallel test:*",
-    "test:server": "cd server && npm run test",
-    "test:client": "cd client && npm run test",
+    "test": "npm run db:reset &&  start-server-and-test testdev http://localhost:3000 cy:run",
+    "testdev": "cross-env NODE_ENV=\"test\" npm run dev",
     "postbuild": "cd server && npm run migrate-latest",
-    "migrate-travis": "cd server && knex migrate:rollback --all && knex migrate:latest --env travis",
-    "generate": "graphql-codegen"
+    "generate": "graphql-codegen",
+    "cy": "cypress open",
+    "cy:run": "cypress run",
+    "db:reset": "cd server && cross-env NODE_ENV=\"test\" knex migrate:latest && cross-env NODE_ENV=\"test\" knex seed:run"
   },
   "author": "Morsby & Thomas",
   "license": "MIT",
@@ -40,6 +32,7 @@
     "typescript": "^3.7.3"
   },
   "devDependencies": {
+    "@bahmutov/add-typescript-to-cypress": "^2.1.2",
     "@graphql-codegen/cli": "^1.13.0",
     "@graphql-codegen/typescript": "^1.13.0",
     "@graphql-codegen/typescript-operations": "^1.13.0",
@@ -71,7 +64,8 @@
     "@types/yup": "^0.26.27",
     "@typescript-eslint/eslint-plugin": "^2.5.0",
     "@typescript-eslint/parser": "^2.5.0",
-    "cross-env": "^6.0.3",
+    "cross-env": "^7.0.2",
+    "cypress": "^4.3.0",
     "eslint": "^6.6.0",
     "eslint-config-prettier": "^6.5.0",
     "eslint-config-react": "^1.1.7",
@@ -81,7 +75,9 @@
     "eslint-plugin-react-hooks": "^2.2.0",
     "eslint-plugin-typescript": "^0.14.0",
     "prettier": "^1.19.1",
+    "start-server-and-test": "^1.10.11",
     "tslint": "^5.20.0",
-    "typescript-eslint-parser": "^22.0.0"
+    "typescript-eslint-parser": "^22.0.0",
+    "webpack": "^4.42.1"
   }
 }

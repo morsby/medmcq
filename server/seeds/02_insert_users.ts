@@ -1,5 +1,5 @@
-const _ = require('lodash');
-const sampleUsers = require('./data/02_sample_users');
+import _ from 'lodash';
+import sampleUsers from './data/02_sample_users.json';
 
 exports.seed = function(knex) {
   // Deletes ALL existing entries

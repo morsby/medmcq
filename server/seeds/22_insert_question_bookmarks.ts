@@ -1,5 +1,5 @@
-const _ = require('lodash');
-const sampleBookmarks = require('./data/22_sample_bookmarks');
+import _ from 'lodash';
+import sampleBookmarks from './data/22_sample_bookmarks.json';
 
 exports.seed = function(knex) {
   // Deletes ALL existing entries
@@ -7,12 +7,10 @@ exports.seed = function(knex) {
     .del()
     .then(async () => {
       const users = await knex.from('user').select('id', 'username');
-      const questions = await knex.from('question').select('id', 'old_id');
-      let bookmarks = sampleBookmarks.map((bookmark) => {
+      const questions = await knex.from('question').select('id');
+      let bookmarks = sampleBookmarks.map((bookmark: any, i) => {
         bookmark.user_id = _.find(users, { username: bookmark.user_id }).id;
-        bookmark.question_id = _.find(questions, {
-          oldId: bookmark.question_id
-        }).id;
+        bookmark.question_id = questions[i].id;
         return bookmark;
       });
       return knex('question_bookmark').insert(bookmarks);

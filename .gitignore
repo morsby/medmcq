@@ -6,6 +6,10 @@ secretKeys.json
 client/*/version.js
 client/*/CHANGELOG.md
 
+# tests
+cypress/videos
+cypress/screenshots
+
 # Logs
 logs
 *.log

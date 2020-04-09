@@ -12,7 +12,10 @@ const QuestionCount: React.SFC<QuestionCountProps> = () => {
     state.metadata.semesters.find((semester) => semester.id === selectedSemester)
   );
 
-  if (!semester) return <LoadingPage />;
+  if (!semester)
+    return (
+      <p style={{ marginTop: '5px' }}>Vælg venligst et semester for at komme igang &#128578;</p>
+    );
   return (
     <div style={{ margin: '1rem auto' }}>
       <Translate

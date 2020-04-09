@@ -3,21 +3,18 @@
     "username": "TestBruger",
     "email": "test@test.dk",
     "password": "$2b$10$MxtwzTWxOQWYyvr0Ag7qyenMUwBGKCpHB.LWd/WPGctcwqUd794V2",
-    "old_id": "gammel_id_1",
     "role_id": "user"
   },
   {
     "username": "TestAdmin",
     "email": "admin@test.dk",
     "password": "$2b$10$MxtwzTWxOQWYyvr0Ag7qyenMUwBGKCpHB.LWd/WPGctcwqUd794V2",
-    "old_id": "gammel_id_2",
     "role_id": "admin"
   },
   {
     "username": "TestEditor",
     "email": "editor@test.dk",
     "password": "$2b$10$MxtwzTWxOQWYyvr0Ag7qyenMUwBGKCpHB.LWd/WPGctcwqUd794V2",
-    "old_id": "gammel_id_3",
     "role_id": "editor"
   }
 ]

@@ -9,6 +9,7 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "outDir": ""
+    "outDir": "",
+    "types": ["cypress"]
   }
 }

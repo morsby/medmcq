@@ -329,9 +329,10 @@ export const resolvers: Resolvers = {
         .value();
       let correctPercent = 100;
       if (answers.length > 0) {
-        correctPercent = Math.round(
-          (answers.filter((answer) => answer.answer === 1).length / answers.length) * 100
-        );
+        correctPercent =
+          Math.round(
+            (answers.filter((answer) => answer.answer === 1).length / answers.length) * 100
+          ) || 0;
       }
       return { answer: question.answer1, correctPercent };
     },
@@ -342,9 +343,10 @@ export const resolvers: Resolvers = {
         .sortBy((answer) => answer.createdAt, 'asc')
         .uniqBy((answer) => answer.userId)
         .value();
-      const correctPercent = Math.round(
-        (answers.filter((answer) => answer.answer === 2).length / answers.length) * 100
-      );
+      const correctPercent =
+        Math.round(
+          (answers.filter((answer) => answer.answer === 2).length / answers.length) * 100
+        ) || 0;
       return { answer: question.answer2, correctPercent };
     },
     answer3: async ({ id }, args, ctx) => {
@@ -354,9 +356,10 @@ export const resolvers: Resolvers = {
         .sortBy((answer) => answer.createdAt, 'asc')
         .uniqBy((answer) => answer.userId)
         .value();
-      const correctPercent = Math.round(
-        (answers.filter((answer) => answer.answer === 3).length / answers.length) * 100
-      );
+      const correctPercent =
+        Math.round(
+          (answers.filter((answer) => answer.answer === 3).length / answers.length) * 100
+        ) || 0;
       return { answer: question.answer3, correctPercent };
     },
     images: async ({ id }, args, ctx) => {

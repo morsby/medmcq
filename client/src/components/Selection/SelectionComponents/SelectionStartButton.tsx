@@ -12,8 +12,10 @@ export interface SelectionStartButtonProps {}
 
 const SelectionStartButton: React.SFC<SelectionStartButtonProps> = () => {
   const [startLoading, setStartLoading] = useState(false);
+  const semesterId = useSelector((state: ReduxState) => state.selection.semesterId);
   const history = useHistory();
   const quizQuestions = useSelector((state: ReduxState) => state.questions.questions);
+  const isDisabled = startLoading || !semesterId;
 
   const handleStart = async (examMode?: boolean) => {
     setStartLoading(true);
@@ -30,7 +32,7 @@ const SelectionStartButton: React.SFC<SelectionStartButtonProps> = () => {
     <div>
       <Button
         loading={startLoading}
-        disabled={startLoading}
+        disabled={isDisabled}
         style={{ cursor: 'pointer' }}
         fluid
         color="green"
@@ -42,7 +44,7 @@ const SelectionStartButton: React.SFC<SelectionStartButtonProps> = () => {
       <div style={{ height: '5px' }} />
       <Button
         loading={startLoading}
-        disabled={startLoading}
+        disabled={isDisabled}
         style={{ cursor: 'pointer' }}
         fluid
         color="blue"

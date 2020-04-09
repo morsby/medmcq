@@ -5,7 +5,8 @@
     "module": "commonjs",
     "outDir": "./build",
     "baseUrl": "./",
-    "sourceMap": true
+    "sourceMap": true,
+    "types": ["node"]
   },
   "include": ["./**/*"],
   "exclude": ["./__tests__", "./build"]

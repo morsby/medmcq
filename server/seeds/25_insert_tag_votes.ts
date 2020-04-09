@@ -1,5 +1,5 @@
-const _ = require('lodash');
-const sampleVotes = require('./data/25_sample_tag_votes');
+import _ from 'lodash';
+import sampleVotes from './data/25_sample_tag_votes.json';
 
 exports.seed = function(knex) {
   // Deletes ALL existing entries
@@ -7,13 +7,11 @@ exports.seed = function(knex) {
     .del()
     .then(async () => {
       const users = await knex.from('user').select('id', 'username');
-      const questions = await knex.from('question').select('id', 'old_id');
+      const questions = await knex.from('question').select('id');
       const tags = await knex.from('question_tag').select('id', 'name');
-      let votes = sampleVotes.map((vote) => {
+      let votes = sampleVotes.map((vote: any, i) => {
         vote.user_id = _.find(users, { username: vote.user_id }).id;
-        vote.question_id = _.find(questions, {
-          oldId: vote.question_id
-        }).id;
+        vote.question_id = questions[i].id;
         vote.tag_id = _.find(tags, {
           name: vote.tag_id
         }).id;

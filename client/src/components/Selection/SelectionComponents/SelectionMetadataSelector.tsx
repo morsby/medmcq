@@ -9,6 +9,7 @@ import { ReduxState } from 'redux/reducers';
 import Selection from 'classes/Selection';
 import _ from 'lodash';
 import 'antd/lib/tree/style/css';
+import LoadingPage from 'components/Misc/Utility/LoadingPage';
 
 interface TagSelectionObject {
   title: string;
@@ -26,7 +27,7 @@ const SelectionSpecialtiesSelector: React.SFC<SelectionSpecialtiesSelectorProps>
 }) => {
   const { semesterId, specialtyIds, tagIds } = useSelector((state: ReduxState) => state.selection);
   const semester = useSelector((state: ReduxState) =>
-    state.metadata.semesters.find((semester) => semester.id === semesterId)
+    state.metadata.semesters.find((semester) => semester.value === semesterId)
   );
   const [tagTree, setTagTree] = useState(null);
   const [tagSearch, setTagSearch] = useState('');
