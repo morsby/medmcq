@@ -72,8 +72,9 @@ describe('authentication', () => {
       cy.get('Input[placeholder=Email]').type('example@example.com');
       cy.get('Input[placeholder=Kodeord]').type('Password1');
       cy.get('Input[placeholder="Gentag kodeord"]').type('Password1');
-      cy.wait(10000); // Username and email is being checked
+      cy.wait(5000); // Username and email is being checked
       cy.contains('button', 'Opret').click();
+      cy.wait(5000); // User is being registered
       cy.url().should('not.include', 'opret');
       cy.getCookie('user').should('be.ok');
     });
@@ -104,8 +105,9 @@ describe('authentication', () => {
       cy.get('Input[placeholder=Email]').type('example2@example.com');
       cy.get('Input[placeholder=Kodeord]').type('Password2');
       cy.get('Input[placeholder="Gentag kodeord"]').type('Password2');
-      cy.wait(10000); // Username and email is being checked
+      cy.wait(5000); // Username and email is being checked
       cy.contains('button', 'Opret').click();
+      cy.wait(5000); // User is being registered
       cy.url().should('not.include', 'opret');
       cy.getCookie('user').should('be.ok');
       cy.logout();
