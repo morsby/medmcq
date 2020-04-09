@@ -50,5 +50,5 @@ Cypress.Commands.add('logout', () => {
 });
 
 Cypress.Commands.add('frontpage', () => {
-  cy.get('header > div > a').click();
+  cy.get('header > div > a > img').click();
 });

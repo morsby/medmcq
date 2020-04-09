@@ -52,7 +52,7 @@ describe('setup', () => {
 });
 
 describe('authentication', () => {
-  after(() => {
+  before(() => {
     cy.frontpage();
   });
 
