@@ -80,7 +80,7 @@ const SelectionSpecialtiesSelector: React.SFC<SelectionSpecialtiesSelectorProps>
             <Header as="h3">
               <Translate
                 id="selectionSpecialtiesSelector.header"
-                data={{ semester: semester.value }}
+                data={{ semester: semester?.value }}
               />
             </Header>
             {semester.specialties && (
