@@ -1,26 +1,26 @@
 [
   {
-    "user_id": "TestBruger",
+    "user_id": "testBruger",
     "answer": 1
   },
   {
-    "user_id": "TestBruger",
+    "user_id": "testBruger",
     "answer": 2
   },
   {
-    "user_id": "TestAdmin",
+    "user_id": "testAdmin",
     "answer": 3
   },
   {
-    "user_id": "TestAdmin",
+    "user_id": "testAdmin",
     "answer": 1
   },
   {
-    "user_id": "TestAdmin",
+    "user_id": "testAdmin",
     "answer": 2
   },
   {
-    "user_id": "TestAdmin",
+    "user_id": "testAdmin",
     "answer": 3
   }
 ]

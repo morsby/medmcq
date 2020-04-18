@@ -69,6 +69,7 @@ const SignupForm: React.SFC<SignupFormProps> = ({ translate }) => {
         <Form.Button
           disabled={!formik.isValid || hasError.username || hasError.email}
           color="green"
+          type="submit"
         >
           <Icon name="check" /> <Translate id="signup.form_fields.submit" />
         </Form.Button>

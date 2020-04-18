@@ -1,26 +1,26 @@
 [
   {
-    "user_id": "TestBruger",
+    "user_id": "testBruger",
     "tag_id": "Paraklinik"
   },
   {
-    "user_id": "TestBruger",
+    "user_id": "testBruger",
     "tag_id": "Radiologi"
   },
   {
-    "user_id": "TestAdmin",
+    "user_id": "testAdmin",
     "tag_id": "Paraklinik"
   },
   {
-    "user_id": "TestAdmin",
+    "user_id": "testAdmin",
     "tag_id": "Leversygdomme"
   },
   {
-    "user_id": "TestAdmin",
+    "user_id": "testAdmin",
     "tag_id": "Børn"
   },
   {
-    "user_id": "TestBruger",
+    "user_id": "testBruger",
     "tag_id": "Leversygdomme"
   }
 ]

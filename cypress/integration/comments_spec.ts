@@ -5,12 +5,13 @@ const commentText2 = 'Dette er også en kommentar';
 
 describe('comments', () => {
   before(() => {
-    cy.login();
     cy.frontpage();
+    cy.login();
   });
 
   after(() => {
     cy.logout();
+    cy.frontpage();
   });
 
   describe('write comments', () => {
