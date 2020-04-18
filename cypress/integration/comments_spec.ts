@@ -26,9 +26,9 @@ describe('comments', () => {
     it('should be able to write a public comments', () => {
       cy.get('textarea[name=comment]').type(commentText);
       cy.contains('button', 'Kommentér').click();
+      cy.contains('p', commentText).should('exist');
       cy.get('textarea[name=comment]').type(commentText2);
       cy.contains('button', 'Kommentér').click();
-      cy.contains('p', commentText).should('exist');
       cy.contains('p', commentText2).should('exist');
     });
 
@@ -54,9 +54,9 @@ describe('comments', () => {
     it('should be able to write a private comments', () => {
       cy.get('textarea[name=comment]').type(commentText);
       cy.contains('button', 'Kommentér').click();
+      cy.contains('p', commentText).should('exist');
       cy.get('textarea[name=comment]').type(commentText2);
       cy.contains('button', 'Kommentér').click();
-      cy.contains('p', commentText).should('exist');
       cy.contains('p', commentText2).should('exist');
     });
 
