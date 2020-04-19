@@ -26,7 +26,7 @@ const SelectionSpecialtiesSelector: React.SFC<SelectionSpecialtiesSelectorProps>
 }) => {
   const { semesterId, specialtyIds, tagIds } = useSelector((state: ReduxState) => state.selection);
   const semester = useSelector((state: ReduxState) =>
-    state.metadata.semesters.find((semester) => semester.value === semesterId)
+    state.metadata.semesters.find((semester) => semester.id === semesterId)
   );
   const [tagTree, setTagTree] = useState(null);
   const [tagSearch, setTagSearch] = useState('');
