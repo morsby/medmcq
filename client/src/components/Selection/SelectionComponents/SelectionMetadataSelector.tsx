@@ -9,7 +9,6 @@ import { ReduxState } from 'redux/reducers';
 import Selection from 'classes/Selection';
 import _ from 'lodash';
 import 'antd/lib/tree/style/css';
-import LoadingPage from 'components/Misc/Utility/LoadingPage';
 
 interface TagSelectionObject {
   title: string;
@@ -37,6 +36,7 @@ const SelectionSpecialtiesSelector: React.SFC<SelectionSpecialtiesSelectorProps>
   };
 
   useEffect(() => {
+    if (!semester) return;
     const convertMetadataToTree = () => {
       return semester.tags
         .filter((t) => !t.parent.id)
@@ -72,6 +72,7 @@ const SelectionSpecialtiesSelector: React.SFC<SelectionSpecialtiesSelectorProps>
       return <Tree.TreeNode key={item.key} {...item} />;
     });
 
+  if (!semester) return <p>Du skal vælge et semester for at se specialer og tags.</p>;
   return (
     <Form>
       <Grid columns="equal" stackable>
