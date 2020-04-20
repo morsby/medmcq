@@ -1,3 +1,6 @@
+# Notice
+Det har været nødvendigt at kunne administrere repositoriet ved vores nuværende opsætning på serveren. Derfor er udviklingen flyttet til https://github.com/thjendk/medmcq, hvor du kan finde de seneste opdateringer.
+
 # AU medMCQ
 
 [![Build Status](https://travis-ci.org/morsby/medmcq.svg?branch=master)](https://travis-ci.org/morsby/medmcq)
