@@ -161,7 +161,6 @@ export const resolvers: Resolvers = {
       await user.$query().patch({ password, resetPasswordToken: null, resetPasswordExpires: null });
 
       // Send mail
-      sgMail.setApiKey(process.env.SENDGRID);
       const msg = {
         to: user.email,
         from: urls.fromEmail,
@@ -200,7 +199,6 @@ export const resolvers: Resolvers = {
       });
 
       // Send mail
-      sgMail.setApiKey(process.env.SENDGRID);
       const msg = {
         to: user.email,
         from: urls.fromEmail,

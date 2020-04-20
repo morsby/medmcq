@@ -8,10 +8,11 @@ import cookieParser from 'cookie-parser';
 import imageRoute from 'routes/image';
 import apolloServer from './config/apolloServer';
 import path from 'path';
+import sgMail from '@sendgrid/mail';
 
 const port = process.env.PORT || 3001;
 const app = express();
-const env = process.env.NODE_ENV || 'development';
+sgMail.setApiKey(process.env.SENDGRID);
 
 // middleware
 app.use(helmet());

@@ -4,13 +4,13 @@ import { withLocalize, Translate, LocalizeContextProps } from 'react-localize-re
 import contactTranslations from './contactTranslations';
 import marked from 'marked';
 import { Container, Form, Message, Divider } from 'semantic-ui-react';
+import Selection from 'classes/Selection';
+import { ContactInput } from 'types/generated';
 
-/**
- * Component til siden "Kontakt".
- */
 export interface ContactProps extends LocalizeContextProps {}
 
 const Contact: React.SFC<ContactProps> = ({ addTranslation }) => {
+  const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const formik = useFormik({
     initialValues: {
@@ -24,10 +24,10 @@ const Contact: React.SFC<ContactProps> = ({ addTranslation }) => {
     addTranslation(contactTranslations);
   }, [addTranslation]);
 
-  const handleSubmit = (values: { subject; message }, resetForm: any) => {
-    const { subject, message } = values;
-
-    this.props.contactUs({ subject, message });
+  const handleSubmit = async (values: ContactInput, resetForm: Function) => {
+    setLoading(true);
+    await Selection.contact(values);
+    setLoading(false);
     setSubmitted(true);
     resetForm();
   };
@@ -69,25 +69,26 @@ const Contact: React.SFC<ContactProps> = ({ addTranslation }) => {
                   }}
                 />
               </Message>
-              <Form.Button type="submit" />
+              <Form.Button
+                type="submit"
+                onClick={() => formik.handleSubmit()}
+                loading={loading}
+                disabled={loading}
+              >
+                Send
+              </Form.Button>
             </Form>
           )}
         </Translate>
         {submitted && (
-          <Translate>
-            {({ translate }) => (
-              <Message positive>
-                <Message.Header>{translate('contact.form.submitted.header')}</Message.Header>
-                <Message.Content>
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: marked(translate('contact.form.submitted.body') as string)
-                    }}
-                  />
-                </Message.Content>
-              </Message>
-            )}
-          </Translate>
+          <Message positive>
+            <Message.Header>
+              <Translate id="contact.form.submitted.header" />
+            </Message.Header>
+            <Message.Content>
+              <Translate id="contact.form.submitted.body" />
+            </Message.Content>
+          </Message>
         )}
       </Container>
     </div>

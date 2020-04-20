@@ -9,6 +9,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
 
@@ -65,6 +66,11 @@ export type CommentInput = {
   isPrivate?: Maybe<Scalars['Boolean']>;
   isAnonymous?: Maybe<Scalars['Boolean']>;
   questionId?: Maybe<Scalars['Int']>;
+};
+
+export type ContactInput = {
+  subject?: Maybe<Scalars['String']>;
+  message?: Maybe<Scalars['String']>;
 };
 
 export type ExamSet = {
@@ -125,6 +131,7 @@ export type Mutation = {
   resetPassword?: Maybe<Scalars['String']>;
   manualCompleteSet?: Maybe<Scalars['String']>;
   bookmark?: Maybe<Bookmark>;
+  contact?: Maybe<Scalars['String']>;
 };
 
 
@@ -228,6 +235,11 @@ export type MutationManualCompleteSetArgs = {
 
 export type MutationBookmarkArgs = {
   questionId: Scalars['Int'];
+};
+
+
+export type MutationContactArgs = {
+  data?: Maybe<ContactInput>;
 };
 
 export type Profile = {
@@ -551,6 +563,7 @@ export type ResolversTypes = ResolversObject<{
   LoginInput: ResolverTypeWrapper<Partial<LoginInput>>,
   UserInput: ResolverTypeWrapper<Partial<UserInput>>,
   UserEditInput: ResolverTypeWrapper<Partial<UserEditInput>>,
+  ContactInput: ResolverTypeWrapper<Partial<ContactInput>>,
   Profile: ResolverTypeWrapper<Partial<Profile>>,
   CacheControlScope: ResolverTypeWrapper<Partial<CacheControlScope>>,
   Upload: ResolverTypeWrapper<Partial<Scalars['Upload']>>,
@@ -589,6 +602,7 @@ export type ResolversParentTypes = ResolversObject<{
   LoginInput: Partial<LoginInput>,
   UserInput: Partial<UserInput>,
   UserEditInput: Partial<UserEditInput>,
+  ContactInput: Partial<ContactInput>,
   Profile: Partial<Profile>,
   CacheControlScope: Partial<CacheControlScope>,
   Upload: Partial<Scalars['Upload']>,
@@ -675,6 +689,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   resetPassword?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationResetPasswordArgs, 'token' | 'password'>>,
   manualCompleteSet?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationManualCompleteSetArgs, 'examSetId'>>,
   bookmark?: Resolver<Maybe<ResolversTypes['Bookmark']>, ParentType, ContextType, RequireFields<MutationBookmarkArgs, 'questionId'>>,
+  contact?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationContactArgs, never>>,
 }>;
 
 export type ProfileResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Profile'] = ResolversParentTypes['Profile']> = ResolversObject<{

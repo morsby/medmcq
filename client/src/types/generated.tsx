@@ -7,6 +7,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
 
@@ -63,6 +64,11 @@ export type CommentInput = {
   isPrivate?: Maybe<Scalars['Boolean']>;
   isAnonymous?: Maybe<Scalars['Boolean']>;
   questionId?: Maybe<Scalars['Int']>;
+};
+
+export type ContactInput = {
+  subject?: Maybe<Scalars['String']>;
+  message?: Maybe<Scalars['String']>;
 };
 
 export type ExamSet = {
@@ -123,6 +129,7 @@ export type Mutation = {
   resetPassword?: Maybe<Scalars['String']>;
   manualCompleteSet?: Maybe<Scalars['String']>;
   bookmark?: Maybe<Bookmark>;
+  contact?: Maybe<Scalars['String']>;
 };
 
 
@@ -226,6 +233,11 @@ export type MutationManualCompleteSetArgs = {
 
 export type MutationBookmarkArgs = {
   questionId: Scalars['Int'];
+};
+
+
+export type MutationContactArgs = {
+  data?: Maybe<ContactInput>;
 };
 
 export type Profile = {
