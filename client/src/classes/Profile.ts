@@ -97,8 +97,6 @@ class Profile {
       ${ExamSet.fragmentFull}
     `;
 
-    console.log(options.semester);
-
     const profileData = await Apollo.query<Profile>('profile', query, {
       semester: options.semester
     });

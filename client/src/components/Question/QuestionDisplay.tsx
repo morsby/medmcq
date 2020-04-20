@@ -72,7 +72,6 @@ const QuestionDisplay: React.SFC<QuestionDisplayProps> = () => {
   }, [question, answered, examMode]);
 
   const handleAnswer = (answer: number) => {
-    console.log(answered, examMode);
     if (answered && !examMode) return;
     Quiz.answer({ answer, answerTime, questionId: question.id }, examMode);
   };

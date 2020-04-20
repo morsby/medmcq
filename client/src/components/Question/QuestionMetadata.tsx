@@ -182,7 +182,6 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
           {user && isAnswered(question, answers) && <QuestionAnsweredCounter />}
         </Grid.Row>
       </Grid.Column>
-      {console.log(isAnswered(question, answers))}
       {user && isAnswered(question, answers) && (
         <>
           <Grid.Row>
