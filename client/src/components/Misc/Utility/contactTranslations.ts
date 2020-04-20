@@ -1,10 +1,6 @@
 export default {
   contact: {
     header: ['Kontakt os', 'Contact us'],
-    subheader: [
-      'Benyt nedenstående formular til at sende en besked til dem, der arbejder på siden.',
-      'Use the form below to send a message to the people working on the site.'
-    ],
     disclaimer: [
       `
 Når du sender din besked, bliver den offentligt tilgængelig. Der oprettes en ny tråd på https://github.com/morsby/medmcq/issues.

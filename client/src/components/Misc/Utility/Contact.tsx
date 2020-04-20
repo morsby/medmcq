@@ -38,7 +38,6 @@ const Contact: React.SFC<ContactProps> = ({ addTranslation }) => {
         <h1>
           <Translate id="contact.header" />
         </h1>
-        <Translate id="contact.subheader" />
         <Divider hidden />
         <Translate>
           {({ translate }) => (
