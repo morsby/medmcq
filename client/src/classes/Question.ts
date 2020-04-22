@@ -78,12 +78,9 @@ class Question {
     const questions = await Apollo.query<Question[]>('questions', query, { filter });
 
     if (newQuiz) {
-      await store.dispatch(quizReducer.actions.changeQuestion(0));
-      await store.dispatch(
-        quizReducer.actions.setQuestionIds(questions.map((question) => question.id))
-      );
+      store.dispatch(quizReducer.actions.resetQuiz());
     }
-    await store.dispatch(questionsReducer.actions.setQuestions(questions));
+    store.dispatch(questionsReducer.actions.setQuestions(questions));
   };
 
   static report = async (data: { report: string; questionId: number }) => {

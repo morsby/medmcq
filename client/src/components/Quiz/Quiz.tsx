@@ -15,7 +15,6 @@ import { useHistory } from 'react-router';
 import { smoothScroll } from '../../utils/quiz';
 import { ReduxState } from 'redux/reducers';
 import quizReducer from 'redux/reducers/quiz';
-import QuestionClass from 'classes/Question';
 import QuestionStopExamMode from 'components/Question/QuestionStopExamMode';
 import LoadingPage from 'components/Misc/Utility/LoadingPage';
 import Semester from 'classes/Semester';
@@ -34,22 +33,14 @@ const Quiz: React.SFC<QuizProps> = ({ addTranslation }) => {
   const dispatch = useDispatch();
   const semesters = useSelector((state: ReduxState) => state.metadata.semesters);
   const questionIndex = useSelector((state: ReduxState) => state.quiz.questionIndex);
+  const questions = useSelector((state: ReduxState) => state.questions.questions);
   const imgOpen = useSelector((state: ReduxState) => state.quiz.imgOpen);
-  const didInvalidate = useSelector((state: ReduxState) => state.quiz.didInvalidate);
-  const questionIds = useSelector((state: ReduxState) => state.quiz.questionIds);
   const examMode = useSelector((state: ReduxState) => state.quiz.examMode);
   const { isFetching } = useSelector((state: ReduxState) => state.questions);
-  const max = questionIds.length;
+  const max = questions.length;
 
   useEffect(() => {
     addTranslation(quizTranslations);
-
-    /*
-    Hvis quizzen er invalid (dvs. vi har hentet spørgsmål via fx profilsiden) og vi ikke er ved at hente nye spørgsmål, henter vi spørgsmål igen:
-    */
-    if (didInvalidate && !isFetching) {
-      QuestionClass.fetch({ ids: questionIds });
-    }
   }, []);
 
   useEffect(() => {
@@ -58,7 +49,7 @@ const Quiz: React.SFC<QuizProps> = ({ addTranslation }) => {
       window.removeEventListener('keydown', handleKeyDown);
     };
   }, [questionIndex]);
-  
+
   useEffect(() => {
     if (!semesters) Semester.fetchAll();
   }, []);
@@ -88,7 +79,7 @@ const Quiz: React.SFC<QuizProps> = ({ addTranslation }) => {
     }
   };
 
-  const swiped = (deltaX) => {
+  const swiped = (deltaX: number) => {
     if (imgOpen) return;
 
     // Navigation ved swipes
@@ -135,7 +126,7 @@ i componentDidMount)
     );
   }
 
-  if (questionIds.length === 0) {
+  if (questions.length === 0) {
     return (
       <div className="flex-container">
         <div className="content">
@@ -151,7 +142,7 @@ i componentDidMount)
       </div>
     );
   }
-  
+
   if (!semesters) return <LoadingPage />;
   return (
     <div className="flex-container">

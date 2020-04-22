@@ -20,9 +20,7 @@ describe('authentication', () => {
       cy.get('Input[placeholder=Kodeord]').type('Password1');
       cy.get('Input[placeholder="Gentag kodeord"]').type('Password1');
       cy.contains('button', 'Opret', { matchCase: false }).should('not.have.class', 'disabled');
-      cy.contains('button', 'Opret', { matchCase: false })
-        .click()
-        .debug();
+      cy.contains('button', 'Opret', { matchCase: false }).click();
       cy.url().should('not.include', 'opret');
       cy.getCookie('user').should('be.ok');
     });

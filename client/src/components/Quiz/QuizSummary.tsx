@@ -22,7 +22,6 @@ export interface QuizSummaryProps {
 
 const QuizSummary: React.SFC<QuizSummaryProps> = ({ clickHandler }) => {
   const questions = useSelector((state: ReduxState) => state.questions.questions);
-  const questionIds = useSelector((state: ReduxState) => state.quiz.questionIds);
   const answers = useSelector((state: ReduxState) => state.quiz.answers);
   const examMode = useSelector((state: ReduxState) => state.quiz.examMode);
   const usedExamTime = useSelector((state: ReduxState) => state.quiz.usedExamTime);
@@ -44,9 +43,8 @@ const QuizSummary: React.SFC<QuizSummaryProps> = ({ clickHandler }) => {
           )}
           <Card.Description style={{ columns: '250px 4' }}>
             <List ordered>
-              {questionIds.map((qId, index) => {
-                const q = questions.find((question) => question.id === qId);
-                const answer = answers.find((answer) => answer.questionId === qId)?.answer;
+              {questions.map((q, index) => {
+                const answer = answers.find((answer) => answer.questionId === q.id)?.answer;
 
                 let userAnswer: string;
                 if (answer) {

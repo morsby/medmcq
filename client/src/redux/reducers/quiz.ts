@@ -3,7 +3,6 @@ import moment from 'moment-timezone';
 import { AnswerInput } from 'types/generated';
 
 const initialState = {
-  questionIds: [] as number[],
   answers: [] as AnswerInput[],
   questionIndex: 0,
   didInvalidate: false,
@@ -18,10 +17,10 @@ const quizReducer = createSlice({
   name: 'quiz',
   initialState,
   reducers: {
-    setQuestionIds: (state, action: PayloadAction<number[]>) => {
-      state.questionIds = action.payload;
+    resetQuiz: (state) => {
       state.answers = [];
-      state.usedExamTime = ''; // Sættes hver gang der startes ny quiz, for at undgå overlap fra tidligere examMode
+      state.questionIndex = 0;
+      state.usedExamTime = '';
     },
     changeQuestion: (state, action: PayloadAction<number>) => {
       state.questionIndex = action.payload;
