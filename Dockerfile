@@ -4,8 +4,6 @@ WORKDIR /usr/src/app
 
 # Dont skip this step. It is for caching.
 COPY package*.json ./
-COPY client/package*.json ./client/
-COPY server/package*.json ./server/
 
 RUN npm ci
 
