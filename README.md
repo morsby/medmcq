@@ -16,12 +16,12 @@ KEYGRIP_SECRETS="example example example example example example example example
 
 Se mere om omsætningen i dokumentation for dotenv-flow.
   
-Derefter skal du køre `npm run install-all`, efterfulgt af `cd server && knex migrate:latest` og derefter `npm run dev` for at starte dit development workflow. Held og lykke!
+Derefter skal du køre `npm install`, efterfulgt af `cd server && knex migrate:latest` og derefter `npm run dev` for at starte dit development workflow. Held og lykke!
 
 ## Development
 
 I `/server` findes en graphQL api der er forbundet til en mySQL database. Databasen kan opsættes ved brug af migrations, som findes under server. Denne server serverer vores client.
 
-I `/client` findes hjemmesiden, der er bygget i React. Denne henter data fra api'en og viser spørgsmålene.
+I `/src` findes hjemmesiden, der er bygget i React. Denne henter data fra api'en og viser spørgsmålene.
 
 Når du redigerer i typeDefs på graphQL API'en, skal du køre `npm run generate` for at opdatere typescript typer på både backend og frontend. Dette bruger graphql-code-generator.
