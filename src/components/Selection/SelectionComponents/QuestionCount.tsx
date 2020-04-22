@@ -2,7 +2,6 @@ import React from 'react';
 import { Translate } from 'react-localize-redux';
 import { useSelector } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
-import LoadingPage from 'components/Misc/Utility/LoadingPage';
 
 export interface QuestionCountProps {}
 
@@ -22,7 +21,7 @@ const QuestionCount: React.SFC<QuestionCountProps> = () => {
         id="selectionNSelector.total_n"
         data={{
           n: semester.questionCount,
-          semesterNumber: semester.value
+          semesterNumber: semester.value,
         }}
       />
     </div>

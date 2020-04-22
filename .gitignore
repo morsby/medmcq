@@ -3,12 +3,10 @@ dev.js
 secretKeys.json
 .env*
 
-client/*/version.js
-client/*/CHANGELOG.md
-
 # tests
 cypress/videos
 cypress/screenshots
+build/
 
 # Logs
 logs

@@ -7,7 +7,7 @@ COPY package*.json ./
 COPY client/package*.json ./client/
 COPY server/package*.json ./server/
 
-RUN npm run install-all
+RUN npm ci
 
 COPY . .
 

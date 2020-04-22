@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ReduxState } from 'redux/reducers';
 import { useSelector, useDispatch } from 'react-redux';
-import { Grid, Input, Form, Divider, Dropdown, Button } from 'semantic-ui-react';
+import { Grid, Form, Divider, Dropdown, Button } from 'semantic-ui-react';
 import TextArea from 'antd/lib/input/TextArea';
 import { useFormik } from 'formik';
 import { QuestionInput } from 'types/generated';
@@ -31,10 +31,10 @@ const QuestionEditor: React.SFC<QuestionEditorProps> = () => {
       answer2: question.answer2.answer,
       answer3: question.answer3.answer,
       correctAnswers: question.correctAnswers,
-      examSetId: question.examSet.id
+      examSetId: question.examSet.id,
     },
     onSubmit: (values) => handleSubmit(values),
-    enableReinitialize: true
+    enableReinitialize: true,
   });
 
   const handleSubmit = async (values: Partial<QuestionInput>) => {
@@ -46,7 +46,7 @@ const QuestionEditor: React.SFC<QuestionEditorProps> = () => {
           formData.append('images', image);
         }
         const res = await Axios.post('/images/upload', formData, {
-          headers: { 'content-type': 'multipart/form-data' }
+          headers: { 'content-type': 'multipart/form-data' },
         });
         await Question.update({ ...values, images: res.data });
       } else {
@@ -126,7 +126,7 @@ const QuestionEditor: React.SFC<QuestionEditorProps> = () => {
             options={[
               { text: 1, value: 1, key: 1 },
               { text: 2, value: 2, key: 2 },
-              { text: 3, value: 3, key: 3 }
+              { text: 3, value: 3, key: 3 },
             ]}
             onChange={(e, { value }) => formik.setFieldValue('correctAnswers', value)}
           />

@@ -1,10 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import User from 'classes/User';
 import { Bookmark } from 'types/generated';
-import { insertOrReplace } from 'utils/common';
 
 const initialState = {
-  user: null as User | null
+  user: null as User | null,
 };
 
 const authReducer = createSlice({
@@ -39,8 +38,8 @@ const authReducer = createSlice({
       } else {
         state.user.bookmarks.splice(index, 1);
       }
-    }
-  }
+    },
+  },
 });
 
 export default authReducer;

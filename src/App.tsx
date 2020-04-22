@@ -19,7 +19,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { urls } from './utils/common';
 import { toast } from 'react-toastify';
-import { ReduxState } from 'redux/reducers/index';
+import { ReduxState } from 'redux/reducers';
 import settingsReducer from 'redux/reducers/settings';
 
 // Classes
@@ -73,13 +73,13 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
       initialize({
         languages: [
           { name: 'Danish', code: 'dk' },
-          { name: 'English', code: 'gb' }
+          { name: 'English', code: 'gb' },
         ],
         options: {
           renderToStaticMarkup,
           renderInnerHtml: true,
-          defaultLanguage
-        }
+          defaultLanguage,
+        },
       })
     );
 
@@ -87,7 +87,7 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
       toast.success(<FirstTimeToast language={defaultLanguage} />, {
         autoClose: false,
         onClose: () => dispatch(settingsReducer.actions.setFirstTime(false)),
-        closeOnClick: false
+        closeOnClick: false,
       });
     }
 

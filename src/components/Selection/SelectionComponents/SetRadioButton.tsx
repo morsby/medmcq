@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, Radio } from 'semantic-ui-react';
-import { Translate, Language } from 'react-localize-redux';
+import { Translate } from 'react-localize-redux';
 import { useSelector } from 'react-redux';
 import ExamSet from 'classes/ExamSet';
 import { ReduxState } from 'redux/reducers';

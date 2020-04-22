@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 
 import { useSelector } from 'react-redux';
 import { urls } from '../../utils/common';
-import _ from 'lodash';
 
 import { Container, Tab, Button, Divider, Loader } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
@@ -63,7 +62,7 @@ const Profile: React.SFC<ProfileProps> = () => {
               </Tab.Pane>
             );
           return <Tab.Pane>{<ProfileActivity />}</Tab.Pane>;
-        }
+        },
       })
     );
 
@@ -86,7 +85,7 @@ const Profile: React.SFC<ProfileProps> = () => {
           <Translate
             id="profile.header"
             data={{
-              username: user.username[0].toUpperCase() + user.username.substring(1)
+              username: user.username[0].toUpperCase() + user.username.substring(1),
             }}
           />
         </h2>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ShareBuilder from 'classes/ShareBuilder';
-import { Input, Divider, Button, Segment, Container } from 'semantic-ui-react';
+import { Input, Divider, Button, Segment } from 'semantic-ui-react';
 import { useSelector } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
 const domain =

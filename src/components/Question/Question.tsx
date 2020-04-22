@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { Container, Divider, Segment } from 'semantic-ui-react';
 import QuestionMetadata from 'components/Question/QuestionMetadata';
 import QuestionExtras from 'components/Question/QuestionExtras';
-import { ReduxState } from 'redux/reducers/index';
+import { ReduxState } from 'redux/reducers';
 import QuestionDisplay from './QuestionDisplay';
 import useWidth from 'hooks/useWidth';
 import QuestionEditor from './QuestionEditor';
