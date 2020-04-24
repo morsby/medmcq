@@ -2,7 +2,7 @@ import { gql } from 'apollo-server-express';
 import { Resolvers } from 'types/resolvers-types';
 import { urls } from 'misc/vars';
 import sgMail from '@sendgrid/mail';
-import { knex } from 'build/config/objection';
+import { knex } from 'config/objection';
 
 export const typeDefs = gql`
   extend type Query {
