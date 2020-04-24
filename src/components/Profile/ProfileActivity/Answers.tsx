@@ -47,7 +47,7 @@ const Answers: React.SFC<AnswersProps> = () => {
   );
 
   let totalAnswers = answers.length;
-  const uniqAnswers = _.uniqBy(answers, (a) => a.question.id);
+  const uniqQuestions = _.uniqBy(answers, (a) => a.question.id);
   let allRight = tries.filter((attempt) => attempt.tries === attempt.correct).length;
   let allWrong = tries.filter((a) => a.correct === 0).length;
   let mixed = tries.filter((a) => a.correct > 0 && a.correct < a.tries).length;
@@ -91,7 +91,7 @@ const Answers: React.SFC<AnswersProps> = () => {
         <StatBox>
           <Progress
             type="circle"
-            percent={Math.round((uniqAnswers.length / questionCount) * 100)}
+            percent={Math.round((uniqQuestions.length / questionCount) * 100)}
           />
           <StatLabel>Besvarede spørgsmål</StatLabel>
           <StatLabel>(uniqQuestions.length)</StatLabel>
