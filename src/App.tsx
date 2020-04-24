@@ -101,8 +101,14 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (!maintenance) return <LoadingPage />;
-  if (maintenance?.message) return <MaintenancePage />;
+  if (!maintenance)
+    return (
+      <BrowserRouter>
+        <Layout>
+          <LoadingPage />
+        </Layout>
+      </BrowserRouter>
+    );
   return (
     <BrowserRouter>
       <Suspense
@@ -126,9 +132,14 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
           />
           <Layout>
             <Switch>
-              <Route path={'/firsttime'} component={FirstTime} />
-              <Route path={urls.about} component={About} />
+              <Route path={urls.login} component={Login} />
+              <Route path={urls.logout} component={Logout} />
               <Route path={urls.contact} component={Contact} />
+              <Route path={urls.about} component={About} />
+              {maintenance?.message && user?.role.id !== 1 && (
+                <Route path="/" component={MaintenancePage} />
+              )}
+              <Route path={'/firsttime'} component={FirstTime} />
               <Route path={'/share/search'} component={Sharebuilder} />
               <Route path={'/share/links'} component={SharebuilderLinks} />
               <Route path={'/share/:id'} component={QuizShareBuilderLoader} />
@@ -136,8 +147,6 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
               <Route path={urls.quizShareRoute} component={QuizShareRoute} />
               <Route path={urls.quiz} component={Quiz} />
               <Route path={urls.signup} component={Signup} />
-              <Route path={urls.login} component={Login} />
-              <Route path={urls.logout} component={Logout} />
               {user?.role.id < 3 && <Route path="/createquestion" component={CreateQuestionForm} />}
               <PrivateRoute path={urls.editProfile} component={EditProfile} />
               <PrivateRoute path={urls.profile} component={Profile} />
