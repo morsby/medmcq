@@ -94,7 +94,7 @@ const Answers: React.SFC<AnswersProps> = () => {
             percent={Math.round((uniqAnswers.length / questionCount) * 100)}
           />
           <StatLabel>Besvarede spørgsmål</StatLabel>
-          <StatLabel>({uniqQuestions.length})</StatLabel>
+          <StatLabel>(uniqQuestions.length)</StatLabel>
         </StatBox>
         <StatBox>
           <PieChart height={180} width={250}>
