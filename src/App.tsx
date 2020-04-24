@@ -1,4 +1,4 @@
-import React, { useEffect, Suspense, lazy } from 'react';
+import React, { useEffect, Suspense, lazy, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
@@ -56,6 +56,7 @@ const SharebuilderLinks = lazy(() => import('components/Sharebuilder/Sharebuilde
 export interface AppProps extends LocalizeContextProps {}
 
 const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
+  const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const language = useSelector((state: ReduxState) => state.settings.language);
   const firstTime = useSelector((state: ReduxState) => state.settings.firstTime);
@@ -66,6 +67,7 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
     const fetch = async () => {
       await User.fetch();
       await SelectionClass.fetchMaintenance();
+      setLoading(false);
     };
 
     fetch();
@@ -101,7 +103,7 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  if (!maintenance)
+  if (loading)
     return (
       <BrowserRouter>
         <Layout>
