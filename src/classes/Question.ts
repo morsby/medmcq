@@ -9,7 +9,7 @@ import quizReducer from 'redux/reducers/quiz';
 import { Question as QuestionType, QuestionFilterInput, QuestionInput } from 'types/generated';
 
 interface Question extends QuestionType {
-  isLiked: boolean;
+  isLiked?: boolean;
 }
 
 class Question {

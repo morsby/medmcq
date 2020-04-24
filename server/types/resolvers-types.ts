@@ -13,98 +13,37 @@ export type Scalars = {
   Upload: any;
 };
 
-export type Answer = {
-   __typename?: 'Answer';
-  id?: Maybe<Scalars['Int']>;
-  answer?: Maybe<Scalars['Int']>;
-  question?: Maybe<Question>;
-  answerTime?: Maybe<Scalars['Int']>;
-  createdAt?: Maybe<Scalars['String']>;
-  updatedAt?: Maybe<Scalars['String']>;
-};
-
-export type AnsweredSet = {
-   __typename?: 'AnsweredSet';
-  examSetId?: Maybe<Scalars['Int']>;
-  count?: Maybe<Scalars['Int']>;
-};
-
-export type AnswerInput = {
-  answer: Scalars['Int'];
-  questionId: Scalars['Int'];
-  answerTime: Scalars['Int'];
-};
-
-export type Bookmark = {
-   __typename?: 'Bookmark';
-  id?: Maybe<Scalars['Int']>;
-  question?: Maybe<Question>;
-  user?: Maybe<User>;
-};
-
-export enum CacheControlScope {
-  Public = 'PUBLIC',
-  Private = 'PRIVATE'
-}
-
-export type Comment = {
-   __typename?: 'Comment';
-  id?: Maybe<Scalars['Int']>;
-  text?: Maybe<Scalars['String']>;
-  isPrivate?: Maybe<Scalars['Boolean']>;
-  isAnonymous?: Maybe<Scalars['Boolean']>;
-  user?: Maybe<User>;
-  likes?: Maybe<Array<Maybe<Like>>>;
-  question?: Maybe<Question>;
-  createdAt?: Maybe<Scalars['String']>;
-  updatedAt?: Maybe<Scalars['String']>;
-};
-
-export type CommentInput = {
-  id?: Maybe<Scalars['Int']>;
-  text: Scalars['String'];
-  isPrivate?: Maybe<Scalars['Boolean']>;
-  isAnonymous?: Maybe<Scalars['Boolean']>;
-  questionId?: Maybe<Scalars['Int']>;
-};
-
-export type ContactInput = {
-  subject?: Maybe<Scalars['String']>;
-  message?: Maybe<Scalars['String']>;
-};
-
-export type ExamSet = {
-   __typename?: 'ExamSet';
-  id?: Maybe<Scalars['Int']>;
-  year?: Maybe<Scalars['Int']>;
-  season?: Maybe<Scalars['String']>;
+export type Query = {
+   __typename?: 'Query';
+  _empty?: Maybe<Scalars['String']>;
+  shareLink?: Maybe<Array<Maybe<Question>>>;
+  questions?: Maybe<Array<Question>>;
+  examSets?: Maybe<Array<Maybe<ExamSet>>>;
+  semesters?: Maybe<Array<Maybe<Semester>>>;
   semester?: Maybe<Semester>;
-  createdAt?: Maybe<Scalars['String']>;
-  updatedAt?: Maybe<Scalars['String']>;
-  questionCount?: Maybe<Scalars['Int']>;
+  user?: Maybe<User>;
+  checkUsernameAvailability?: Maybe<Scalars['Boolean']>;
+  profile?: Maybe<User>;
 };
 
-export type ExamSetInput = {
-  year: Scalars['Int'];
-  season: Scalars['String'];
-  semesterId: Scalars['Int'];
-  questions?: Maybe<Array<Maybe<QuestionInput>>>;
+
+export type QueryShareLinkArgs = {
+  shareId?: Maybe<Scalars['Int']>;
 };
 
-export type Like = {
-   __typename?: 'Like';
-  commentId?: Maybe<Scalars['Int']>;
-  userId?: Maybe<Scalars['Int']>;
+
+export type QueryQuestionsArgs = {
+  filter: QuestionFilterInput;
 };
 
-export type LoginInput = {
-  username: Scalars['String'];
-  password: Scalars['String'];
+
+export type QuerySemesterArgs = {
+  id: Scalars['Int'];
 };
 
-export type ManualCompletedSet = {
-   __typename?: 'ManualCompletedSet';
-  examSetId?: Maybe<Scalars['Int']>;
+
+export type QueryCheckUsernameAvailabilityArgs = {
+  data?: Maybe<UserAvailableInput>;
 };
 
 export type Mutation = {
@@ -242,42 +181,22 @@ export type MutationContactArgs = {
   data?: Maybe<ContactInput>;
 };
 
-export type Profile = {
-   __typename?: 'Profile';
-  id?: Maybe<Scalars['Int']>;
-};
-
-export type Query = {
-   __typename?: 'Query';
-  _empty?: Maybe<Scalars['String']>;
-  shareLink?: Maybe<Array<Maybe<Question>>>;
-  questions?: Maybe<Array<Question>>;
-  examSets?: Maybe<Array<Maybe<ExamSet>>>;
-  semesters?: Maybe<Array<Maybe<Semester>>>;
-  semester?: Maybe<Semester>;
-  user?: Maybe<User>;
-  checkUsernameAvailability?: Maybe<Scalars['Boolean']>;
-  profile?: Maybe<User>;
-};
-
-
-export type QueryShareLinkArgs = {
-  shareId?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryQuestionsArgs = {
-  filter: QuestionFilterInput;
-};
-
-
-export type QuerySemesterArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryCheckUsernameAvailabilityArgs = {
-  data?: Maybe<UserAvailableInput>;
+export type QuestionFilterInput = {
+  text?: Maybe<Scalars['String']>;
+  specialtyIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  tagIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  semesterId?: Maybe<Scalars['Int']>;
+  year?: Maybe<Scalars['Int']>;
+  season?: Maybe<Scalars['String']>;
+  ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  n?: Maybe<Scalars['Int']>;
+  examSetId?: Maybe<Scalars['Int']>;
+  onlyNew?: Maybe<Scalars['Boolean']>;
+  onlyWrong?: Maybe<Scalars['Boolean']>;
+  commentIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
+  profile?: Maybe<Scalars['Boolean']>;
+  search?: Maybe<Scalars['String']>;
+  shareId?: Maybe<Scalars['String']>;
 };
 
 export type Question = {
@@ -305,26 +224,9 @@ export type Question = {
 
 export type QuestionAnswer = {
    __typename?: 'QuestionAnswer';
+  questionId?: Maybe<Scalars['Int']>;
   answer?: Maybe<Scalars['String']>;
   correctPercent?: Maybe<Scalars['Int']>;
-};
-
-export type QuestionFilterInput = {
-  text?: Maybe<Scalars['String']>;
-  specialtyIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
-  tagIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
-  semesterId?: Maybe<Scalars['Int']>;
-  year?: Maybe<Scalars['Int']>;
-  season?: Maybe<Scalars['String']>;
-  ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
-  n?: Maybe<Scalars['Int']>;
-  examSetId?: Maybe<Scalars['Int']>;
-  onlyNew?: Maybe<Scalars['Boolean']>;
-  onlyWrong?: Maybe<Scalars['Boolean']>;
-  commentIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
-  profile?: Maybe<Scalars['Boolean']>;
-  search?: Maybe<Scalars['String']>;
-  shareId?: Maybe<Scalars['String']>;
 };
 
 export type QuestionInput = {
@@ -338,23 +240,6 @@ export type QuestionInput = {
   examSetId: Scalars['Int'];
 };
 
-export type Role = {
-   __typename?: 'Role';
-  id?: Maybe<Scalars['Int']>;
-};
-
-export type Semester = {
-   __typename?: 'Semester';
-  id?: Maybe<Scalars['Int']>;
-  value?: Maybe<Scalars['Int']>;
-  name?: Maybe<Scalars['String']>;
-  shortName?: Maybe<Scalars['String']>;
-  examSets?: Maybe<Array<Maybe<ExamSet>>>;
-  specialties?: Maybe<Array<Maybe<Specialty>>>;
-  tags?: Maybe<Array<Maybe<Tag>>>;
-  questionCount?: Maybe<Scalars['Int']>;
-};
-
 export type Specialty = {
    __typename?: 'Specialty';
   id?: Maybe<Scalars['Int']>;
@@ -364,15 +249,6 @@ export type Specialty = {
   updatedAt?: Maybe<Scalars['String']>;
   oldId?: Maybe<Scalars['String']>;
   questionCount?: Maybe<Scalars['Int']>;
-};
-
-export type SpecialtyVote = {
-   __typename?: 'SpecialtyVote';
-  id?: Maybe<Scalars['Int']>;
-  specialty?: Maybe<Specialty>;
-  question?: Maybe<Question>;
-  user?: Maybe<User>;
-  vote?: Maybe<Scalars['Int']>;
 };
 
 export type Tag = {
@@ -396,6 +272,108 @@ export type TagVote = {
   vote?: Maybe<Scalars['Int']>;
 };
 
+export type SpecialtyVote = {
+   __typename?: 'SpecialtyVote';
+  id?: Maybe<Scalars['Int']>;
+  specialty?: Maybe<Specialty>;
+  question?: Maybe<Question>;
+  user?: Maybe<User>;
+  vote?: Maybe<Scalars['Int']>;
+};
+
+export type VoteInput = {
+  questionId: Scalars['Int'];
+  metadataId: Scalars['Int'];
+  vote?: Maybe<Scalars['Int']>;
+};
+
+export type ExamSet = {
+   __typename?: 'ExamSet';
+  id?: Maybe<Scalars['Int']>;
+  year?: Maybe<Scalars['Int']>;
+  season?: Maybe<Scalars['String']>;
+  semester?: Maybe<Semester>;
+  createdAt?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['String']>;
+  questionCount?: Maybe<Scalars['Int']>;
+};
+
+export type ExamSetInput = {
+  year: Scalars['Int'];
+  season: Scalars['String'];
+  semesterId: Scalars['Int'];
+  questions?: Maybe<Array<Maybe<QuestionInput>>>;
+};
+
+export type Semester = {
+   __typename?: 'Semester';
+  id?: Maybe<Scalars['Int']>;
+  value?: Maybe<Scalars['Int']>;
+  name?: Maybe<Scalars['String']>;
+  shortName?: Maybe<Scalars['String']>;
+  examSets?: Maybe<Array<Maybe<ExamSet>>>;
+  specialties?: Maybe<Array<Maybe<Specialty>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  questionCount?: Maybe<Scalars['Int']>;
+};
+
+export type Comment = {
+   __typename?: 'Comment';
+  id?: Maybe<Scalars['Int']>;
+  text?: Maybe<Scalars['String']>;
+  isPrivate?: Maybe<Scalars['Boolean']>;
+  isAnonymous?: Maybe<Scalars['Boolean']>;
+  user?: Maybe<User>;
+  likes?: Maybe<Array<Maybe<Like>>>;
+  question?: Maybe<Question>;
+  createdAt?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['String']>;
+};
+
+export type CommentInput = {
+  id?: Maybe<Scalars['Int']>;
+  text: Scalars['String'];
+  isPrivate?: Maybe<Scalars['Boolean']>;
+  isAnonymous?: Maybe<Scalars['Boolean']>;
+  questionId?: Maybe<Scalars['Int']>;
+};
+
+export type Answer = {
+   __typename?: 'Answer';
+  id?: Maybe<Scalars['Int']>;
+  answer?: Maybe<Scalars['Int']>;
+  question?: Maybe<Question>;
+  answerTime?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['String']>;
+};
+
+export type AnswerInput = {
+  answer: Scalars['Int'];
+  questionId: Scalars['Int'];
+  answerTime: Scalars['Int'];
+};
+
+export type LoginInput = {
+  username: Scalars['String'];
+  password: Scalars['String'];
+};
+
+export type UserInput = {
+  username: Scalars['String'];
+  password: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
+};
+
+export type UserAvailableInput = {
+  username?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+};
+
+export type UserEditInput = {
+  password?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+};
 
 export type User = {
    __typename?: 'User';
@@ -436,27 +414,50 @@ export type UserPrivateCommentsArgs = {
   semester?: Maybe<Scalars['Int']>;
 };
 
-export type UserAvailableInput = {
-  username?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['String']>;
+export type AnsweredSet = {
+   __typename?: 'AnsweredSet';
+  examSetId?: Maybe<Scalars['Int']>;
+  count?: Maybe<Scalars['Int']>;
 };
 
-export type UserEditInput = {
-  password?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['String']>;
+export type Role = {
+   __typename?: 'Role';
+  id?: Maybe<Scalars['Int']>;
 };
 
-export type UserInput = {
-  username: Scalars['String'];
-  password: Scalars['String'];
-  email?: Maybe<Scalars['String']>;
+export type Bookmark = {
+   __typename?: 'Bookmark';
+  id?: Maybe<Scalars['Int']>;
+  question?: Maybe<Question>;
+  user?: Maybe<User>;
 };
 
-export type VoteInput = {
-  questionId: Scalars['Int'];
-  metadataId: Scalars['Int'];
-  vote?: Maybe<Scalars['Int']>;
+export type Profile = {
+   __typename?: 'Profile';
+  id?: Maybe<Scalars['Int']>;
 };
+
+export type ManualCompletedSet = {
+   __typename?: 'ManualCompletedSet';
+  examSetId?: Maybe<Scalars['Int']>;
+};
+
+export type Like = {
+   __typename?: 'Like';
+  commentId?: Maybe<Scalars['Int']>;
+  userId?: Maybe<Scalars['Int']>;
+};
+
+export type ContactInput = {
+  subject?: Maybe<Scalars['String']>;
+  message?: Maybe<Scalars['String']>;
+};
+
+export enum CacheControlScope {
+  Public = 'PUBLIC',
+  Private = 'PRIVATE'
+}
+
 
 export type WithIndex<TObject> = TObject & Record<string, any>;
 export type ResolversObject<TObject> = WithIndex<TObject>;
@@ -532,138 +533,92 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
-  Query: ResolverTypeWrapper<{}>,
   String: ResolverTypeWrapper<Partial<Scalars['String']>>,
+  Boolean: ResolverTypeWrapper<Partial<Scalars['Boolean']>>,
+  Query: ResolverTypeWrapper<{}>,
   Int: ResolverTypeWrapper<Partial<Scalars['Int']>>,
+  Mutation: ResolverTypeWrapper<{}>,
+  QuestionFilterInput: ResolverTypeWrapper<Partial<QuestionFilterInput>>,
   Question: ResolverTypeWrapper<Partial<Question>>,
   QuestionAnswer: ResolverTypeWrapper<Partial<QuestionAnswer>>,
-  Comment: ResolverTypeWrapper<Partial<Comment>>,
-  Boolean: ResolverTypeWrapper<Partial<Scalars['Boolean']>>,
-  User: ResolverTypeWrapper<Partial<User>>,
-  Role: ResolverTypeWrapper<Partial<Role>>,
-  Bookmark: ResolverTypeWrapper<Partial<Bookmark>>,
-  Answer: ResolverTypeWrapper<Partial<Answer>>,
-  SpecialtyVote: ResolverTypeWrapper<Partial<SpecialtyVote>>,
+  QuestionInput: ResolverTypeWrapper<Partial<QuestionInput>>,
   Specialty: ResolverTypeWrapper<Partial<Specialty>>,
-  Semester: ResolverTypeWrapper<Partial<Semester>>,
-  ExamSet: ResolverTypeWrapper<Partial<ExamSet>>,
   Tag: ResolverTypeWrapper<Partial<Tag>>,
   TagVote: ResolverTypeWrapper<Partial<TagVote>>,
-  Like: ResolverTypeWrapper<Partial<Like>>,
-  ManualCompletedSet: ResolverTypeWrapper<Partial<ManualCompletedSet>>,
-  AnsweredSet: ResolverTypeWrapper<Partial<AnsweredSet>>,
-  QuestionFilterInput: ResolverTypeWrapper<Partial<QuestionFilterInput>>,
-  UserAvailableInput: ResolverTypeWrapper<Partial<UserAvailableInput>>,
-  Mutation: ResolverTypeWrapper<{}>,
-  QuestionInput: ResolverTypeWrapper<Partial<QuestionInput>>,
+  SpecialtyVote: ResolverTypeWrapper<Partial<SpecialtyVote>>,
   VoteInput: ResolverTypeWrapper<Partial<VoteInput>>,
+  ExamSet: ResolverTypeWrapper<Partial<ExamSet>>,
   ExamSetInput: ResolverTypeWrapper<Partial<ExamSetInput>>,
+  Semester: ResolverTypeWrapper<Partial<Semester>>,
+  Comment: ResolverTypeWrapper<Partial<Comment>>,
   CommentInput: ResolverTypeWrapper<Partial<CommentInput>>,
+  Answer: ResolverTypeWrapper<Partial<Answer>>,
   AnswerInput: ResolverTypeWrapper<Partial<AnswerInput>>,
   LoginInput: ResolverTypeWrapper<Partial<LoginInput>>,
   UserInput: ResolverTypeWrapper<Partial<UserInput>>,
+  UserAvailableInput: ResolverTypeWrapper<Partial<UserAvailableInput>>,
   UserEditInput: ResolverTypeWrapper<Partial<UserEditInput>>,
-  ContactInput: ResolverTypeWrapper<Partial<ContactInput>>,
+  User: ResolverTypeWrapper<Partial<User>>,
+  AnsweredSet: ResolverTypeWrapper<Partial<AnsweredSet>>,
+  Role: ResolverTypeWrapper<Partial<Role>>,
+  Bookmark: ResolverTypeWrapper<Partial<Bookmark>>,
   Profile: ResolverTypeWrapper<Partial<Profile>>,
+  ManualCompletedSet: ResolverTypeWrapper<Partial<ManualCompletedSet>>,
+  Like: ResolverTypeWrapper<Partial<Like>>,
+  ContactInput: ResolverTypeWrapper<Partial<ContactInput>>,
   CacheControlScope: ResolverTypeWrapper<Partial<CacheControlScope>>,
   Upload: ResolverTypeWrapper<Partial<Scalars['Upload']>>,
 }>;
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
-  Query: {},
   String: Partial<Scalars['String']>,
+  Boolean: Partial<Scalars['Boolean']>,
+  Query: {},
   Int: Partial<Scalars['Int']>,
+  Mutation: {},
+  QuestionFilterInput: Partial<QuestionFilterInput>,
   Question: Partial<Question>,
   QuestionAnswer: Partial<QuestionAnswer>,
-  Comment: Partial<Comment>,
-  Boolean: Partial<Scalars['Boolean']>,
-  User: Partial<User>,
-  Role: Partial<Role>,
-  Bookmark: Partial<Bookmark>,
-  Answer: Partial<Answer>,
-  SpecialtyVote: Partial<SpecialtyVote>,
+  QuestionInput: Partial<QuestionInput>,
   Specialty: Partial<Specialty>,
-  Semester: Partial<Semester>,
-  ExamSet: Partial<ExamSet>,
   Tag: Partial<Tag>,
   TagVote: Partial<TagVote>,
-  Like: Partial<Like>,
-  ManualCompletedSet: Partial<ManualCompletedSet>,
-  AnsweredSet: Partial<AnsweredSet>,
-  QuestionFilterInput: Partial<QuestionFilterInput>,
-  UserAvailableInput: Partial<UserAvailableInput>,
-  Mutation: {},
-  QuestionInput: Partial<QuestionInput>,
+  SpecialtyVote: Partial<SpecialtyVote>,
   VoteInput: Partial<VoteInput>,
+  ExamSet: Partial<ExamSet>,
   ExamSetInput: Partial<ExamSetInput>,
+  Semester: Partial<Semester>,
+  Comment: Partial<Comment>,
   CommentInput: Partial<CommentInput>,
+  Answer: Partial<Answer>,
   AnswerInput: Partial<AnswerInput>,
   LoginInput: Partial<LoginInput>,
   UserInput: Partial<UserInput>,
+  UserAvailableInput: Partial<UserAvailableInput>,
   UserEditInput: Partial<UserEditInput>,
-  ContactInput: Partial<ContactInput>,
+  User: Partial<User>,
+  AnsweredSet: Partial<AnsweredSet>,
+  Role: Partial<Role>,
+  Bookmark: Partial<Bookmark>,
   Profile: Partial<Profile>,
+  ManualCompletedSet: Partial<ManualCompletedSet>,
+  Like: Partial<Like>,
+  ContactInput: Partial<ContactInput>,
   CacheControlScope: Partial<CacheControlScope>,
   Upload: Partial<Scalars['Upload']>,
 }>;
 
-export type AnswerResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Answer'] = ResolversParentTypes['Answer']> = ResolversObject<{
-  id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  answer?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  question?: Resolver<Maybe<ResolversTypes['Question']>, ParentType, ContextType>,
-  answerTime?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  updatedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  __isTypeOf?: isTypeOfResolverFn<ParentType>,
-}>;
-
-export type AnsweredSetResolvers<ContextType = Context, ParentType extends ResolversParentTypes['AnsweredSet'] = ResolversParentTypes['AnsweredSet']> = ResolversObject<{
-  examSetId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  count?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  __isTypeOf?: isTypeOfResolverFn<ParentType>,
-}>;
-
-export type BookmarkResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Bookmark'] = ResolversParentTypes['Bookmark']> = ResolversObject<{
-  id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  question?: Resolver<Maybe<ResolversTypes['Question']>, ParentType, ContextType>,
+export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  _empty?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  shareLink?: Resolver<Maybe<Array<Maybe<ResolversTypes['Question']>>>, ParentType, ContextType, RequireFields<QueryShareLinkArgs, never>>,
+  questions?: Resolver<Maybe<Array<ResolversTypes['Question']>>, ParentType, ContextType, RequireFields<QueryQuestionsArgs, 'filter'>>,
+  examSets?: Resolver<Maybe<Array<Maybe<ResolversTypes['ExamSet']>>>, ParentType, ContextType>,
+  semesters?: Resolver<Maybe<Array<Maybe<ResolversTypes['Semester']>>>, ParentType, ContextType>,
+  semester?: Resolver<Maybe<ResolversTypes['Semester']>, ParentType, ContextType, RequireFields<QuerySemesterArgs, 'id'>>,
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
-  __isTypeOf?: isTypeOfResolverFn<ParentType>,
-}>;
-
-export type CommentResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Comment'] = ResolversParentTypes['Comment']> = ResolversObject<{
-  id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  text?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  isPrivate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
-  isAnonymous?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
-  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
-  likes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Like']>>>, ParentType, ContextType>,
-  question?: Resolver<Maybe<ResolversTypes['Question']>, ParentType, ContextType>,
-  createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  updatedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  __isTypeOf?: isTypeOfResolverFn<ParentType>,
-}>;
-
-export type ExamSetResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ExamSet'] = ResolversParentTypes['ExamSet']> = ResolversObject<{
-  id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  year?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  season?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  semester?: Resolver<Maybe<ResolversTypes['Semester']>, ParentType, ContextType>,
-  createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  updatedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  questionCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  __isTypeOf?: isTypeOfResolverFn<ParentType>,
-}>;
-
-export type LikeResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Like'] = ResolversParentTypes['Like']> = ResolversObject<{
-  commentId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  userId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  __isTypeOf?: isTypeOfResolverFn<ParentType>,
-}>;
-
-export type ManualCompletedSetResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ManualCompletedSet'] = ResolversParentTypes['ManualCompletedSet']> = ResolversObject<{
-  examSetId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+  checkUsernameAvailability?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<QueryCheckUsernameAvailabilityArgs, never>>,
+  profile?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
 }>;
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
@@ -692,23 +647,6 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   contact?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationContactArgs, never>>,
 }>;
 
-export type ProfileResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Profile'] = ResolversParentTypes['Profile']> = ResolversObject<{
-  id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  __isTypeOf?: isTypeOfResolverFn<ParentType>,
-}>;
-
-export type QueryResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  _empty?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  shareLink?: Resolver<Maybe<Array<Maybe<ResolversTypes['Question']>>>, ParentType, ContextType, RequireFields<QueryShareLinkArgs, never>>,
-  questions?: Resolver<Maybe<Array<ResolversTypes['Question']>>, ParentType, ContextType, RequireFields<QueryQuestionsArgs, 'filter'>>,
-  examSets?: Resolver<Maybe<Array<Maybe<ResolversTypes['ExamSet']>>>, ParentType, ContextType>,
-  semesters?: Resolver<Maybe<Array<Maybe<ResolversTypes['Semester']>>>, ParentType, ContextType>,
-  semester?: Resolver<Maybe<ResolversTypes['Semester']>, ParentType, ContextType, RequireFields<QuerySemesterArgs, 'id'>>,
-  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
-  checkUsernameAvailability?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<QueryCheckUsernameAvailabilityArgs, never>>,
-  profile?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
-}>;
-
 export type QuestionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Question'] = ResolversParentTypes['Question']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
   text?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
@@ -733,25 +671,9 @@ export type QuestionResolvers<ContextType = Context, ParentType extends Resolver
 }>;
 
 export type QuestionAnswerResolvers<ContextType = Context, ParentType extends ResolversParentTypes['QuestionAnswer'] = ResolversParentTypes['QuestionAnswer']> = ResolversObject<{
+  questionId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
   answer?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   correctPercent?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  __isTypeOf?: isTypeOfResolverFn<ParentType>,
-}>;
-
-export type RoleResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Role'] = ResolversParentTypes['Role']> = ResolversObject<{
-  id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  __isTypeOf?: isTypeOfResolverFn<ParentType>,
-}>;
-
-export type SemesterResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Semester'] = ResolversParentTypes['Semester']> = ResolversObject<{
-  id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  value?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  shortName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  examSets?: Resolver<Maybe<Array<Maybe<ResolversTypes['ExamSet']>>>, ParentType, ContextType>,
-  specialties?: Resolver<Maybe<Array<Maybe<ResolversTypes['Specialty']>>>, ParentType, ContextType>,
-  tags?: Resolver<Maybe<Array<Maybe<ResolversTypes['Tag']>>>, ParentType, ContextType>,
-  questionCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
@@ -763,15 +685,6 @@ export type SpecialtyResolvers<ContextType = Context, ParentType extends Resolve
   updatedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   oldId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   questionCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  __isTypeOf?: isTypeOfResolverFn<ParentType>,
-}>;
-
-export type SpecialtyVoteResolvers<ContextType = Context, ParentType extends ResolversParentTypes['SpecialtyVote'] = ResolversParentTypes['SpecialtyVote']> = ResolversObject<{
-  id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  specialty?: Resolver<Maybe<ResolversTypes['Specialty']>, ParentType, ContextType>,
-  question?: Resolver<Maybe<ResolversTypes['Question']>, ParentType, ContextType>,
-  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
-  vote?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
@@ -796,9 +709,60 @@ export type TagVoteResolvers<ContextType = Context, ParentType extends Resolvers
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
-export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
-  name: 'Upload'
-}
+export type SpecialtyVoteResolvers<ContextType = Context, ParentType extends ResolversParentTypes['SpecialtyVote'] = ResolversParentTypes['SpecialtyVote']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  specialty?: Resolver<Maybe<ResolversTypes['Specialty']>, ParentType, ContextType>,
+  question?: Resolver<Maybe<ResolversTypes['Question']>, ParentType, ContextType>,
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
+  vote?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+}>;
+
+export type ExamSetResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ExamSet'] = ResolversParentTypes['ExamSet']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  year?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  season?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  semester?: Resolver<Maybe<ResolversTypes['Semester']>, ParentType, ContextType>,
+  createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  updatedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  questionCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+}>;
+
+export type SemesterResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Semester'] = ResolversParentTypes['Semester']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  value?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  shortName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  examSets?: Resolver<Maybe<Array<Maybe<ResolversTypes['ExamSet']>>>, ParentType, ContextType>,
+  specialties?: Resolver<Maybe<Array<Maybe<ResolversTypes['Specialty']>>>, ParentType, ContextType>,
+  tags?: Resolver<Maybe<Array<Maybe<ResolversTypes['Tag']>>>, ParentType, ContextType>,
+  questionCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+}>;
+
+export type CommentResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Comment'] = ResolversParentTypes['Comment']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  text?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  isPrivate?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  isAnonymous?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
+  likes?: Resolver<Maybe<Array<Maybe<ResolversTypes['Like']>>>, ParentType, ContextType>,
+  question?: Resolver<Maybe<ResolversTypes['Question']>, ParentType, ContextType>,
+  createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  updatedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+}>;
+
+export type AnswerResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Answer'] = ResolversParentTypes['Answer']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  answer?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  question?: Resolver<Maybe<ResolversTypes['Question']>, ParentType, ContextType>,
+  answerTime?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  updatedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+}>;
 
 export type UserResolvers<ContextType = Context, ParentType extends ResolversParentTypes['User'] = ResolversParentTypes['User']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
@@ -819,27 +783,65 @@ export type UserResolvers<ContextType = Context, ParentType extends ResolversPar
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
+export type AnsweredSetResolvers<ContextType = Context, ParentType extends ResolversParentTypes['AnsweredSet'] = ResolversParentTypes['AnsweredSet']> = ResolversObject<{
+  examSetId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  count?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+}>;
+
+export type RoleResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Role'] = ResolversParentTypes['Role']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+}>;
+
+export type BookmarkResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Bookmark'] = ResolversParentTypes['Bookmark']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  question?: Resolver<Maybe<ResolversTypes['Question']>, ParentType, ContextType>,
+  user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+}>;
+
+export type ProfileResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Profile'] = ResolversParentTypes['Profile']> = ResolversObject<{
+  id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+}>;
+
+export type ManualCompletedSetResolvers<ContextType = Context, ParentType extends ResolversParentTypes['ManualCompletedSet'] = ResolversParentTypes['ManualCompletedSet']> = ResolversObject<{
+  examSetId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+}>;
+
+export type LikeResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Like'] = ResolversParentTypes['Like']> = ResolversObject<{
+  commentId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  userId?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+}>;
+
+export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
+  name: 'Upload'
+}
+
 export type Resolvers<ContextType = Context> = ResolversObject<{
-  Answer?: AnswerResolvers<ContextType>,
-  AnsweredSet?: AnsweredSetResolvers<ContextType>,
-  Bookmark?: BookmarkResolvers<ContextType>,
-  Comment?: CommentResolvers<ContextType>,
-  ExamSet?: ExamSetResolvers<ContextType>,
-  Like?: LikeResolvers<ContextType>,
-  ManualCompletedSet?: ManualCompletedSetResolvers<ContextType>,
-  Mutation?: MutationResolvers<ContextType>,
-  Profile?: ProfileResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
+  Mutation?: MutationResolvers<ContextType>,
   Question?: QuestionResolvers<ContextType>,
   QuestionAnswer?: QuestionAnswerResolvers<ContextType>,
-  Role?: RoleResolvers<ContextType>,
-  Semester?: SemesterResolvers<ContextType>,
   Specialty?: SpecialtyResolvers<ContextType>,
-  SpecialtyVote?: SpecialtyVoteResolvers<ContextType>,
   Tag?: TagResolvers<ContextType>,
   TagVote?: TagVoteResolvers<ContextType>,
-  Upload?: GraphQLScalarType,
+  SpecialtyVote?: SpecialtyVoteResolvers<ContextType>,
+  ExamSet?: ExamSetResolvers<ContextType>,
+  Semester?: SemesterResolvers<ContextType>,
+  Comment?: CommentResolvers<ContextType>,
+  Answer?: AnswerResolvers<ContextType>,
   User?: UserResolvers<ContextType>,
+  AnsweredSet?: AnsweredSetResolvers<ContextType>,
+  Role?: RoleResolvers<ContextType>,
+  Bookmark?: BookmarkResolvers<ContextType>,
+  Profile?: ProfileResolvers<ContextType>,
+  ManualCompletedSet?: ManualCompletedSetResolvers<ContextType>,
+  Like?: LikeResolvers<ContextType>,
+  Upload?: GraphQLScalarType,
 }>;
 
 

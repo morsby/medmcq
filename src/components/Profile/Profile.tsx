@@ -6,20 +6,20 @@ import { urls } from '../../utils/common';
 import { Container, Tab, Button, Divider, Loader } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 
-import ProfileActivity from './ProfileActivity/ProfileActivity';
 import { useHistory } from 'react-router';
 import { ReduxState } from 'redux/reducers';
 import ProfileClass from 'classes/Profile';
 import Semester from 'classes/Semester';
 import Selection from 'classes/Selection';
 import useWidth from 'hooks/useWidth';
+const ProfileActivity = React.lazy(() => import('./ProfileActivity/ProfileActivity'));
 
 export interface ProfileProps {}
 
 const Profile: React.SFC<ProfileProps> = () => {
   const [loading, setLoading] = useState(true);
   const { width } = useWidth();
-  const { user } = useSelector((state: ReduxState) => state.auth);
+  const user = useSelector((state: ReduxState) => state.auth.user);
   const [panes, setPanes] = useState([]);
   const selectedSemester = useSelector((state: ReduxState) => state.selection.semesterId);
   const currentLanguage = useSelector((state: ReduxState) => state.settings.language);
@@ -61,7 +61,11 @@ const Profile: React.SFC<ProfileProps> = () => {
                 <p>Hvis du har besvaret mange spørgsmål, kan dette tage lidt tid.</p>
               </Tab.Pane>
             );
-          return <Tab.Pane>{<ProfileActivity />}</Tab.Pane>;
+          return (
+            <Tab.Pane>
+              <ProfileActivity />
+            </Tab.Pane>
+          );
         },
       })
     );

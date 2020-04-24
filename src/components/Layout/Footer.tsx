@@ -20,7 +20,7 @@ const Footer: React.SFC<FooterProps> = ({ addTranslation }) => {
 
   const iconStyle = {
     float: 'none',
-    marginRight: '3px'
+    marginRight: '3px',
   };
 
   const footerStyle = {
@@ -28,7 +28,7 @@ const Footer: React.SFC<FooterProps> = ({ addTranslation }) => {
     margin: '10px 0 0 0',
     padding: '1rem',
     width: '100%',
-    color: '#fff'
+    color: '#fff',
   };
 
   const handleClick = (path) => {
@@ -48,7 +48,7 @@ const Footer: React.SFC<FooterProps> = ({ addTranslation }) => {
                 <Icon name="heartbeat" /> <Translate id="footer.developed_by" />
               </div>
               <div>
-                <Icon name="sitemap" /> <span>Version 2.0</span>
+                <Icon name="sitemap" /> <span>Version 2.1.0</span>
               </div>
             </Grid.Column>
             <Grid.Column largeScreen={4} computer={4} tablet={6} mobile={16}>

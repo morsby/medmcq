@@ -34,11 +34,11 @@ export const resolvers: Resolvers = {
         questionId,
         userId,
         answer,
-        answerTime
+        answerTime,
       });
 
       return 'Succesfully saved answer';
-    }
+    },
   },
 
   Answer: {
@@ -53,10 +53,7 @@ export const resolvers: Resolvers = {
     },
     question: async ({ id }, _, ctx) => {
       const answer = await ctx.userAnswersLoader.load(id);
-      const question = await Question.query()
-        .findById(answer.questionId)
-        .select('id');
-      return { id: question.id };
+      return { id: answer.questionId };
     },
     createdAt: async ({ id }, _, ctx) => {
       const answer = await ctx.userAnswersLoader.load(id);
@@ -65,6 +62,6 @@ export const resolvers: Resolvers = {
     updatedAt: async ({ id }, _, ctx) => {
       const answer = await ctx.userAnswersLoader.load(id);
       return answer.updatedAt.toISOString();
-    }
-  }
+    },
+  },
 };

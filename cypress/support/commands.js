@@ -29,9 +29,7 @@ Cypress.Commands.add('login', () => {
   cy.url().should('include', '/login');
   cy.get('Input[placeholder=Brugernavn]').type('testBruger');
   cy.get('Input[placeholder=Kodeord]').type('Password1');
-  cy.contains('button', 'Log ind')
-    .click()
-    .debug();
+  cy.contains('button', 'Log ind').click();
   cy.url().should('not.include', 'login');
   cy.getCookie('user').should('be.ok');
 });

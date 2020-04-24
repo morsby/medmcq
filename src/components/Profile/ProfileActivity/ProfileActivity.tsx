@@ -29,7 +29,7 @@ const ProfileActivity: React.SFC<ProfileActivityProps> = () => {
             active={activeIndex === 0}
             handleClick={setActiveIndex}
           >
-            <Answers />
+            {activeIndex === 0 && <Answers />}
           </ProfileActivityAccordionElem>
         )}
       </Translate>
@@ -41,7 +41,7 @@ const ProfileActivity: React.SFC<ProfileActivityProps> = () => {
             active={activeIndex === 1}
             handleClick={setActiveIndex}
           >
-            <Comments type="public" comments={publicComments} />
+            {activeIndex === 1 && <Comments type="public" comments={publicComments} />}
           </ProfileActivityAccordionElem>
         )}
       </Translate>
@@ -53,7 +53,7 @@ const ProfileActivity: React.SFC<ProfileActivityProps> = () => {
             active={activeIndex === 2}
             handleClick={setActiveIndex}
           >
-            <Comments type="private" comments={privateComments} />
+            {activeIndex === 2 && <Comments type="private" comments={privateComments} />}
           </ProfileActivityAccordionElem>
         )}
       </Translate>
@@ -65,7 +65,7 @@ const ProfileActivity: React.SFC<ProfileActivityProps> = () => {
             active={activeIndex === 3}
             handleClick={setActiveIndex}
           >
-            <Bookmarks />
+            {activeIndex === 3 && <Bookmarks />}
           </ProfileActivityAccordionElem>
         )}
       </Translate>

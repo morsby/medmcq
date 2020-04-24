@@ -68,6 +68,7 @@ export const typeDefs = gql`
   }
 
   type QuestionAnswer {
+    questionId: Int
     answer: String
     correctPercent: Int
   }
@@ -100,7 +101,7 @@ export const resolvers: Resolvers = {
         onlyNew,
         onlyWrong,
         commentIds,
-        shareId
+        shareId,
       } = filter;
       let { n } = filter;
 
@@ -109,15 +110,11 @@ export const resolvers: Resolvers = {
 
       if (ids) return query.findByIds(ids);
       if (shareId) {
-        const shareObjs = await ShareLink.query()
-          .where({ shareId })
-          .select('questionId');
+        const shareObjs = await ShareLink.query().where({ shareId }).select('questionId');
         return query.findByIds(shareObjs.map((obj) => obj.questionId));
       }
       if (commentIds)
-        return QuestionComment.query()
-          .findByIds(commentIds)
-          .select('questionId as id');
+        return QuestionComment.query().findByIds(commentIds).select('questionId as id');
 
       query = query
         .join('semesterExamSet as examSet', 'question.examSetId', 'examSet.id')
@@ -204,15 +201,13 @@ export const resolvers: Resolvers = {
       } else if (ctx.user && onlyNew) {
         query = query.whereNotIn(
           'question.id',
-          QuestionUserAnswer.query()
-            .where({ userId: ctx.user.id })
-            .distinct('questionId')
+          QuestionUserAnswer.query().where({ userId: ctx.user.id }).distinct('questionId')
         );
       }
 
       const questions = await query.groupBy('question.id').select('question.id as id');
       return questions.map((question) => ({ id: question.id }));
-    }
+    },
   },
 
   Mutation: {
@@ -234,7 +229,7 @@ export const resolvers: Resolvers = {
         text,
         examSetId,
         examSetQno,
-        userId: user.id
+        userId: user.id,
       });
       await QuestionCorrectAnswer.query().insertGraph(
         correctAnswers.map((answer) => ({ answer, questionId: question.id }))
@@ -260,14 +255,12 @@ export const resolvers: Resolvers = {
           answer2,
           answer3,
           text,
-          examSetId
+          examSetId,
         })
         .skipUndefined();
 
       if (correctAnswers.length > 0) {
-        await QuestionCorrectAnswer.query()
-          .where({ questionId: question.id })
-          .delete();
+        await QuestionCorrectAnswer.query().where({ questionId: question.id }).delete();
         await QuestionCorrectAnswer.query().insertGraph(
           correctAnswers.map((answer) => ({ answer, questionId: question.id }))
         );
@@ -305,13 +298,13 @@ export const resolvers: Resolvers = {
   A. ${question.answer1}<br>
   B. ${question.answer2}<br>
   C. ${question.answer3}
-  `
+  `,
       };
 
       sgMail.send(msg);
 
       return `Question (ID: ${question.id}) reported`;
-    }
+    },
   },
 
   Question: {
@@ -322,45 +315,15 @@ export const resolvers: Resolvers = {
     },
     answer1: async ({ id }, args, ctx) => {
       const question = await ctx.questionLoader.load(id);
-      let answers = await ctx.userAnswersByQuestionIdLoader.load(id);
-      answers = _(answers)
-        .sortBy((answer) => answer.createdAt, 'asc')
-        .uniqBy((answer) => answer.userId)
-        .value();
-      let correctPercent = 100;
-      if (answers.length > 0) {
-        correctPercent =
-          Math.round(
-            (answers.filter((answer) => answer.answer === 1).length / answers.length) * 100
-          ) || 0;
-      }
-      return { answer: question.answer1, correctPercent };
+      return { answer: question.answer1, questionId: id };
     },
     answer2: async ({ id }, args, ctx) => {
       const question = await ctx.questionLoader.load(id);
-      let answers = await ctx.userAnswersByQuestionIdLoader.load(id);
-      answers = _(answers)
-        .sortBy((answer) => answer.createdAt, 'asc')
-        .uniqBy((answer) => answer.userId)
-        .value();
-      const correctPercent =
-        Math.round(
-          (answers.filter((answer) => answer.answer === 2).length / answers.length) * 100
-        ) || 0;
-      return { answer: question.answer2, correctPercent };
+      return { answer: question.answer2, questionId: id };
     },
     answer3: async ({ id }, args, ctx) => {
       const question = await ctx.questionLoader.load(id);
-      let answers = await ctx.userAnswersByQuestionIdLoader.load(id);
-      answers = _(answers)
-        .sortBy((answer) => answer.createdAt, 'asc')
-        .uniqBy((answer) => answer.userId)
-        .value();
-      const correctPercent =
-        Math.round(
-          (answers.filter((answer) => answer.answer === 3).length / answers.length) * 100
-        ) || 0;
-      return { answer: question.answer3, correctPercent };
+      return { answer: question.answer3, questionId: id };
     },
     images: async ({ id }, args, ctx) => {
       const images = await QuestionImage.query().where({ questionId: id });
@@ -380,9 +343,7 @@ export const resolvers: Resolvers = {
       return { id: examSet.id };
     },
     publicComments: async ({ id }, _, ctx) => {
-      const publicComments = await Comment.query()
-        .where('questionId', id)
-        .where({ private: 0 });
+      const publicComments = await Comment.query().where('questionId', id).where({ private: 0 });
       return publicComments.map((pc) => ({ id: pc.id }));
     },
     privateComments: async ({ id }, args, ctx) => {
@@ -390,7 +351,7 @@ export const resolvers: Resolvers = {
       let privateComments = await Comment.query().where({
         questionId: id,
         private: 1,
-        userId: ctx.user.id
+        userId: ctx.user.id,
       });
       return privateComments.map((comment) => ({ id: comment.id }));
     },
@@ -440,6 +401,25 @@ export const resolvers: Resolvers = {
       const question = await ctx.questionLoader.load(id);
       if (!question.userId) return null;
       return { id: question.userId };
-    }
-  }
+    },
+  },
+
+  QuestionAnswer: {
+    answer: ({ answer }, _, ctx) => answer,
+    correctPercent: async ({ questionId }, args, ctx) => {
+      let answers = await ctx.userAnswersByQuestionIdLoader.load(questionId);
+      answers = _(answers)
+        .sortBy((answer) => answer.createdAt, 'asc')
+        .uniqBy((answer) => answer.userId)
+        .value();
+      let correctPercent = 100;
+      if (answers.length > 0) {
+        correctPercent =
+          Math.round(
+            (answers.filter((answer) => answer.answer === 1).length / answers.length) * 100
+          ) || 0;
+      }
+      return correctPercent;
+    },
+  },
 };

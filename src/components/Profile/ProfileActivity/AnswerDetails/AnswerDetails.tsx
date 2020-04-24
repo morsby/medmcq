@@ -11,6 +11,7 @@ import { useHistory } from 'react-router';
 import AnswersDetailsTable from './AnswersDetailsTable';
 import { ReduxState } from 'redux/reducers';
 import Quiz from 'classes/Quiz';
+import _ from 'lodash';
 
 /**
  * Component showing answer details.  Any filtering occurs in this component.
@@ -34,9 +35,9 @@ const AnswerDetails: React.SFC<AnswerDetailsProps> = () => {
    * @param  {bool}    checked Is the checkbox already checked? Should we check or uncheck?
    * @return {null}            Returns nothing, simply updates state.
    */
-  const toggleCheckbox = useCallback((ids) => {
+  const toggleCheckbox = (ids) => {
     setSelected(ids);
-  }, []);
+  };
 
   const startQuiz = async (ids) => {
     setQuizLoading(true);
@@ -57,26 +58,32 @@ const AnswerDetails: React.SFC<AnswerDetailsProps> = () => {
   if (filter) {
     switch (filter) {
       case 'allRight':
-        answers = answers.filter((answer) => tries[answer.id].correct === tries[answer.id].tries);
+        answers = answers.filter(
+          (answer) =>
+            tries.find((t) => t.questionId === answer.question.id).correct ===
+            tries.find((t) => t.questionId === answer.question.id).tries
+        );
         break;
       case 'allWrong':
-        answers = answers.filter((answer) => tries[answer.id].correct === 0);
+        answers = answers.filter(
+          (answer) => tries.find((t) => t.questionId === answer.question.id).correct === 0
+        );
         break;
       default:
         answers = answers.filter(
           (answer) =>
-            tries[answer.id].correct > 0 && tries[answer.id].correct < tries[answer.id].tries
+            tries.find((t) => t.questionId === answer.question.id).correct > 0 &&
+            tries.find((t) => t.questionId === answer.question.id).correct <
+              tries.find((t) => t.questionId === answer.question.id).tries
         );
     }
   }
 
   if (isSearching) {
-    answers = answers.filter(
-      (answer) =>
-        questions.find((question) => question.id === answer.question.id).text.indexOf(search) !== -1
-    );
+    answers = answers.filter((answer) => answer.question.text.includes(search));
   }
 
+  answers = _.uniqBy(answers, (a) => a.question.id);
   return (
     <div>
       <Button
@@ -118,9 +125,9 @@ const AnswerDetails: React.SFC<AnswerDetailsProps> = () => {
       </Translate>
 
       <AnswersDetailsTable
+        selectedIds={selected}
         answers={answers}
         toggleCheckbox={toggleCheckbox}
-        questions={questions}
       />
     </div>
   );

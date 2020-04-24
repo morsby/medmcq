@@ -6,22 +6,26 @@ import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import AnswerDetailsTableExtendedRow from './AnswerDetailsTableExtendedRow';
 import { ReduxState } from 'redux/reducers';
-import Question from 'classes/Question';
 import { Answer } from 'types/generated';
+import { TableRowSelection } from 'antd/lib/table/interface';
 
 export interface AnswersDetailsTableProps {
   answers: Answer[];
   toggleCheckbox: Function;
-  questions: Question[];
+  selectedIds: number[];
 }
 
 const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
   answers,
   toggleCheckbox,
-  questions
+  selectedIds,
 }) => {
   const history = useHistory();
+  const semesterId = useSelector((state: ReduxState) => state.selection.semesterId);
   const tries = useSelector((state: ReduxState) => state.profile.tries);
+  const { specialties, tags, examSets } = useSelector((state: ReduxState) =>
+    state.metadata.semesters.find((s) => s.id === semesterId)
+  );
 
   const getColor = (answer) => {
     if (answer.correct === answer.tries) return 'green';
@@ -50,45 +54,52 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
           Math.round((aAttempts.correct / aAttempts.tries) * 100) -
           Math.round((bAttempts.correct / bAttempts.tries) * 100)
         );
-      }
+      },
     },
     {
       title: <Translate id="profileAnswerDetails.table_headers.question" />,
       key: 'text',
       render: (record: Answer) => (
-        <p
-          style={{ color: '#1890ff', cursor: 'pointer' }}
-          onClick={() => history.push(`quiz/${record.question.id}`)}
-        >
+        <p style={{ cursor: 'pointer' }} onClick={() => history.push(`quiz/${record.question.id}`)}>
           {record.question.text.substr(0, 100)}...
         </p>
-      )
+      ),
     },
     {
       title: <Translate id="profileAnswerDetails.table_headers.specialty" />,
       render: (record: Answer) =>
-        record.question.specialties.map((specialty) => <Tag color="blue">{specialty.name}</Tag>)
+        record.question.specialties.map((s) => {
+          const specialty = specialties.find((sp) => sp.id === s.id);
+          return <Tag color="blue">{specialty.name}</Tag>;
+        }),
     },
     {
       title: 'Tags',
       render: (record: Answer) =>
-        record.question.tags.map((tag) => <Tag color="geekblue">{tag.name}</Tag>)
+        record.question.tags.map((tag) => {
+          tag = tags.find((t) => t.id === tag.id);
+          return <Tag color="geekblue">{tag.name}</Tag>;
+        }),
     },
     {
       title: <Translate id="profileAnswerDetails.table_headers.set" />,
-      render: (record: Answer) => (
-        <>
-          <Translate id={`profileAnswerDetails.${record.question.examSet.season}`} />
-          {record.question.examSet.year}
-        </>
-      )
-    }
+      render: (record: Answer) => {
+        const examSet = examSets.find((set) => set.id === record.question.examSet.id);
+        return (
+          <>
+            <Translate id={`profileAnswerDetails.${examSet.season}`} />
+            {examSet.year}
+          </>
+        );
+      },
+    },
   ];
 
-  const rowSelection = {
+  const rowSelection: TableRowSelection<any> = {
     onChange: (selectedRowKeys) => {
       toggleCheckbox(selectedRowKeys);
-    }
+    },
+    selectedRowKeys: selectedIds,
   };
 
   return (
@@ -96,18 +107,16 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
       <Table
         size="small"
         rowSelection={rowSelection}
-        rowKey={(record) => record.key}
+        rowKey={(record: Answer) => record.id}
         bordered
         columns={columns}
         dataSource={answers}
         expandedRowRender={(record: Answer) => {
-          const question = questions.find((question) => question.id === record.question.id);
-
           return (
             <>
-              <p>{question.text}</p>
+              <p>{record.question.text}</p>
               <Divider />
-              <AnswerDetailsTableExtendedRow question={question} />
+              <AnswerDetailsTableExtendedRow question={record.question} />
             </>
           );
         }}

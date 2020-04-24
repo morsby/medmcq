@@ -46,7 +46,13 @@ const SelectionNSelector: React.SFC<SelectionNSelectorProps> = () => {
         <Grid verticalAlign="top">
           <Grid.Row>
             {radioOptions.map((option) => (
-              <Grid.Column computer={1} tablet={2} mobile={3} className={styles.height38}>
+              <Grid.Column
+                key={option}
+                computer={1}
+                tablet={2}
+                mobile={3}
+                className={styles.height38}
+              >
                 <Form.Field>
                   <Radio
                     label={option}

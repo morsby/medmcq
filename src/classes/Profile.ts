@@ -3,9 +3,6 @@ import { gql } from 'apollo-boost';
 import Apollo from './Apollo';
 import profileReducer from 'redux/reducers/profile';
 import { store } from 'IndexApp';
-import Tag from './Tag';
-import Specialty from './Specialty';
-import ExamSet from './ExamSet';
 import { User as UserType, Answer } from 'types/generated';
 
 interface Profile extends UserType {
@@ -45,20 +42,30 @@ class Profile {
               id
               text
               correctAnswers
+              answer1 {
+                answer
+              }
+              answer2 {
+                answer
+              }
+              answer3 {
+                answer
+              }
               tags {
-                ...Tag
+                id
               }
               specialties {
-                ...Specialty
+                id
               }
               examSet {
-                ...ExamSet
+                id
               }
             }
           }
           publicComments(semester: $semester) {
             ...Comment
             question {
+              id
               specialties {
                 id
               }
@@ -67,6 +74,7 @@ class Profile {
           privateComments(semester: $semester) {
             ...Comment
             question {
+              id
               specialties {
                 id
               }
@@ -92,13 +100,10 @@ class Profile {
         }
       }
       ${Comment.fragmentFull}
-      ${Tag.fragmentFull}
-      ${Specialty.fragmentFull}
-      ${ExamSet.fragmentFull}
     `;
 
     const profileData = await Apollo.query<Profile>('profile', query, {
-      semester: options.semester
+      semester: options.semester,
     });
 
     profileData.tries = mapAnswers(profileData.answers);

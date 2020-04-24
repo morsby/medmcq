@@ -1,3 +1,6 @@
+/**
+ * Answers 3 questions
+ */
 export const answerQuestions = () => {
   cy.get(':nth-child(2) > .fluid > :nth-child(3)').click();
   cy.get('.top-nav > .ui > :nth-child(3)').click();
