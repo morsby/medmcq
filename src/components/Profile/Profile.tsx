@@ -12,7 +12,7 @@ import ProfileClass from 'classes/Profile';
 import Semester from 'classes/Semester';
 import Selection from 'classes/Selection';
 import useWidth from 'hooks/useWidth';
-const ProfileActivity = React.lazy(() => import('./ProfileActivity/ProfileActivity'));
+import ProfileActivity from './ProfileActivity/ProfileActivity';
 
 export interface ProfileProps {}
 
