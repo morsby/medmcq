@@ -76,15 +76,12 @@ export default {
       `
       <h3>v.2.1.0 - 24/04-2020</h3>
       <ul>
-          <li>
-              Profilsiden er gjort meget hurtige. Tidlige ville den tage meget lang tid om at indlæse, hvis man havde besvaret mange spørgsmål.
-          </li>
-          <li>
-              Derudover smårettelser til profilsiden, som nu skulle køre uden fejl.
-          </li>
-          <li>
-              Der udvikles på siden uden at dokumentere dette, så nye funktioner vil løbende poppe op hist og her.
-          </li>
+        <li>
+          Profilsiden har fået en opgradering i både udseende og hastighed. Derudover smårettelser.
+        </li>
+        <li>
+            Der udvikles på siden uden at dokumentere dette, så nye funktioner vil løbende poppe op hist og her.
+        </li>
       </ul>
     <h3>v.2.0.0 - 24/05-2019</h3>
     <ul>
@@ -191,13 +188,10 @@ export default {
       <h3>v.2.1.0 - 24/04-2020</h3>
       <ul>
         <li>
-              The performance of the profile page has been made much better. Previously the loadingtimes were long if the user had answered many questions.
+              The visuals and performance of the profile page have been upgraded.
         </li>
         <li>
-              We have also made small fixed to the profilepage, which should now be running without errors.
-        </li>
-        <li>
-              The site is under ongoing development, and new features will appear from time to time, without explicit documentation.
+              The site is always under ongoing development, and new features will appear from time to time, without explicit documentation.
         </li>
      </ul>
     <h3>v.1.2.3 - 24/05-2019</h3>

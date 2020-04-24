@@ -15,7 +15,7 @@ describe('profile', () => {
   });
 
   it('should have saved answered questions', () => {
-    cy.contains('p', 'svaret på').should('contain', '3');
+    cy.get('div[class="ui statistic"]').should('contain', '3');
   });
 
   it('should be able to change semesters', () => {

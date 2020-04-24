@@ -58,7 +58,7 @@ const Profile: React.SFC<ProfileProps> = () => {
             return (
               <Tab.Pane style={{ textAlign: 'center' }}>
                 <Loader inline active size="huge" />
-                <p>Hvis du har besvaret mange spørgsmål, kan dette tage lidt tid.</p>
+                <p>Vi beregner din statistik. Vent venligst, det er klar om lidt &#128522;</p>
               </Tab.Pane>
             );
           return (
