@@ -1,7 +1,7 @@
 import React, { useEffect, lazy, Suspense } from 'react';
 import selectionTranslations from './selectionTranslations.json';
 import { withLocalize, LocalizeContextProps } from 'react-localize-redux';
-import { Container, Header, Divider, Button } from 'semantic-ui-react';
+import { Container, Header, Divider, Button, Message } from 'semantic-ui-react';
 import SelectionSemesterSelector from 'components/Selection/SelectionComponents/SelectionSemesterSelector';
 import SelectionTypeSelector from 'components/Selection/SelectionComponents/SelectionTypeSelector';
 import SelectionUniqueSelector from 'components/Selection/SelectionComponents/SelectionUniqueSelector';
@@ -13,6 +13,7 @@ import User from 'classes/User';
 import SelectionStartButton from './SelectionComponents/SelectionStartButton';
 import QuestionCount from './SelectionComponents/QuestionCount';
 import { useHistory } from 'react-router-dom';
+import SelectionClass from 'classes/Selection';
 const SelectionRandom = lazy(() => import('./SelectionRandom'));
 const SelectionMetadata = lazy(() => import('./SelectionMetadata'));
 const SelectionSets = lazy(() => import('./SelectionSets'));
@@ -27,6 +28,7 @@ const Selection: React.SFC<SelectionProps> = ({ addTranslation }) => {
   const semesters = useSelector((state: ReduxState) => state.metadata.semesters);
   const type = useSelector((state: ReduxState) => state.selection.type);
   const user = useSelector((state: ReduxState) => state.auth.user);
+  const notice = useSelector((state: ReduxState) => state.settings.notice);
 
   /**
    * Fetch all semester metadata on return to selection
@@ -40,7 +42,13 @@ const Selection: React.SFC<SelectionProps> = ({ addTranslation }) => {
    * Fetch user whenever the user goes back to the selection screen
    */
   useEffect(() => {
-    User.fetch();
+    const fetch = async () => {
+      await User.fetch();
+      await SelectionClass.fetchMaintenance();
+      await SelectionClass.fetchNotice();
+    };
+
+    fetch();
   }, []);
 
   if (!semesters || semesters.length < 0) return <LoadingPage />;
@@ -51,6 +59,7 @@ const Selection: React.SFC<SelectionProps> = ({ addTranslation }) => {
           MedMcq
         </Header>
         <Divider />
+        {notice.message && <Message color={notice.color as any}>{notice.message}</Message>}
         <SelectionSemesterSelector />
         <QuestionCount />
         <Divider />

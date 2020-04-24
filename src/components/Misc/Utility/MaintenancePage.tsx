@@ -1,13 +1,24 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { ReduxState } from 'redux/reducers';
 
-const MaintenancePage = () => {
+export interface MaintenancePageProps {}
+
+const MaintenancePage: React.SFC<MaintenancePageProps> = () => {
+  const maintenance = useSelector((state: ReduxState) => state.settings.maintenance);
+
   return (
-    <div style={{ textAlign: 'center', margin: '20%' }}>
-      <h1>MedMCQ</h1>
-      <h2 style={{ fontSize: '15px' }}>
-        Vi er ved at integrere et nyt stemme-system på spørgsmålene. <br /> Dette kræver at siden er
-        nede, mens vi opdaterer databasen. Arbejdet tager omkring en halv time. Vi ses snart igen!
-      </h2>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+      }}
+    >
+      <h1 style={{ fontSize: '3em' }}>MedMCQ</h1>
+      <p style={{ fontSize: '1.5em' }}>{maintenance.message}</p>
     </div>
   );
 };

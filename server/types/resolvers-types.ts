@@ -24,6 +24,8 @@ export type Query = {
   user?: Maybe<User>;
   checkUsernameAvailability?: Maybe<Scalars['Boolean']>;
   profile?: Maybe<User>;
+  maintenance?: Maybe<Maintenance>;
+  notice?: Maybe<Notice>;
 };
 
 
@@ -448,6 +450,17 @@ export type Like = {
   userId?: Maybe<Scalars['Int']>;
 };
 
+export type Maintenance = {
+   __typename?: 'Maintenance';
+  message?: Maybe<Scalars['String']>;
+};
+
+export type Notice = {
+   __typename?: 'Notice';
+  message?: Maybe<Scalars['String']>;
+  color?: Maybe<Scalars['String']>;
+};
+
 export type ContactInput = {
   subject?: Maybe<Scalars['String']>;
   message?: Maybe<Scalars['String']>;
@@ -565,6 +578,8 @@ export type ResolversTypes = ResolversObject<{
   Profile: ResolverTypeWrapper<Partial<Profile>>,
   ManualCompletedSet: ResolverTypeWrapper<Partial<ManualCompletedSet>>,
   Like: ResolverTypeWrapper<Partial<Like>>,
+  Maintenance: ResolverTypeWrapper<Partial<Maintenance>>,
+  Notice: ResolverTypeWrapper<Partial<Notice>>,
   ContactInput: ResolverTypeWrapper<Partial<ContactInput>>,
   CacheControlScope: ResolverTypeWrapper<Partial<CacheControlScope>>,
   Upload: ResolverTypeWrapper<Partial<Scalars['Upload']>>,
@@ -604,6 +619,8 @@ export type ResolversParentTypes = ResolversObject<{
   Profile: Partial<Profile>,
   ManualCompletedSet: Partial<ManualCompletedSet>,
   Like: Partial<Like>,
+  Maintenance: Partial<Maintenance>,
+  Notice: Partial<Notice>,
   ContactInput: Partial<ContactInput>,
   CacheControlScope: Partial<CacheControlScope>,
   Upload: Partial<Scalars['Upload']>,
@@ -619,6 +636,8 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
   checkUsernameAvailability?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<QueryCheckUsernameAvailabilityArgs, never>>,
   profile?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
+  maintenance?: Resolver<Maybe<ResolversTypes['Maintenance']>, ParentType, ContextType>,
+  notice?: Resolver<Maybe<ResolversTypes['Notice']>, ParentType, ContextType>,
 }>;
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
@@ -817,6 +836,17 @@ export type LikeResolvers<ContextType = Context, ParentType extends ResolversPar
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
+export type MaintenanceResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Maintenance'] = ResolversParentTypes['Maintenance']> = ResolversObject<{
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+}>;
+
+export type NoticeResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Notice'] = ResolversParentTypes['Notice']> = ResolversObject<{
+  message?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  color?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+}>;
+
 export interface UploadScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Upload'], any> {
   name: 'Upload'
 }
@@ -841,6 +871,8 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   Profile?: ProfileResolvers<ContextType>,
   ManualCompletedSet?: ManualCompletedSetResolvers<ContextType>,
   Like?: LikeResolvers<ContextType>,
+  Maintenance?: MaintenanceResolvers<ContextType>,
+  Notice?: NoticeResolvers<ContextType>,
   Upload?: GraphQLScalarType,
 }>;
 

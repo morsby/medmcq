@@ -22,6 +22,8 @@ export type Query = {
   user?: Maybe<User>;
   checkUsernameAvailability?: Maybe<Scalars['Boolean']>;
   profile?: Maybe<User>;
+  maintenance?: Maybe<Maintenance>;
+  notice?: Maybe<Notice>;
 };
 
 
@@ -444,6 +446,17 @@ export type Like = {
    __typename?: 'Like';
   commentId?: Maybe<Scalars['Int']>;
   userId?: Maybe<Scalars['Int']>;
+};
+
+export type Maintenance = {
+   __typename?: 'Maintenance';
+  message?: Maybe<Scalars['String']>;
+};
+
+export type Notice = {
+   __typename?: 'Notice';
+  message?: Maybe<Scalars['String']>;
+  color?: Maybe<Scalars['String']>;
 };
 
 export type ContactInput = {

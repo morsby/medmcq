@@ -21,6 +21,7 @@ import { urls } from './utils/common';
 import { toast } from 'react-toastify';
 import { ReduxState } from 'redux/reducers';
 import settingsReducer from 'redux/reducers/settings';
+import SelectionClass from 'classes/Selection';
 
 // Classes
 import User from 'classes/User';
@@ -29,6 +30,7 @@ import User from 'classes/User';
 import LoadingPage from 'components/Misc/Utility/LoadingPage';
 import Layout from 'components/Layout/Layout';
 import NewVersionMessage from './components/Misc/Utility/About/NewVersion/NewVersionMessage';
+import MaintenancePage from 'components/Misc/Utility/MaintenancePage';
 
 // Lazy components
 const Selection = lazy(() => import('./components/Selection/Selection'));
@@ -58,10 +60,15 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
   const language = useSelector((state: ReduxState) => state.settings.language);
   const firstTime = useSelector((state: ReduxState) => state.settings.firstTime);
   const user = useSelector((state: ReduxState) => state.auth.user);
+  const maintenance = useSelector((state: ReduxState) => state.settings.maintenance);
 
   useEffect(() => {
-    // Hent brugeren
-    User.fetch();
+    const fetch = async () => {
+      await User.fetch();
+      await SelectionClass.fetchMaintenance();
+    };
+
+    fetch();
 
     dispatch(addTranslation(authTranslations));
     dispatch(addTranslation(toastTranslations));
@@ -94,6 +101,8 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  if (!maintenance) return <LoadingPage />;
+  if (maintenance?.message) return <MaintenancePage />;
   return (
     <BrowserRouter>
       <Suspense
