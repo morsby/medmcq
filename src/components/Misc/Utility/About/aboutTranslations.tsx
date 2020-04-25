@@ -74,6 +74,12 @@ export default {
     header: ['Hvad er nyt på siden?', "What's new on the site?"],
     body: [
       `
+      <h3>v.2.2.0 - 24/04-2020</h3>
+      <ul>
+        <li>
+          Databasen har fået en ordentlig overhaling. Dette ville du ikke direkte lægge mærke til, men det gør at vores profilside kører langt hurtigere. Specifikt har vi ændret på den måde hvorpå vi lagrer de svar du vælger når du er logget ind. Du kan senere se disse på profilsiden eller bruge til at sortere quizzen med.
+        </li>
+      </ul>
       <h3>v.2.1.0 - 24/04-2020</h3>
       <ul>
         <li>
@@ -185,6 +191,12 @@ export default {
   </li>
 </ul>`,
       `
+      <h3>v.2.2.0 - 24/04-2020</h3>
+      <ul>
+        <li>
+          The database has undergone some serious changes. You will not be able to spot this directly, however among other things it makes the profile page run much smoother and faster. We have specifically changed the way we register the answers you make, when you are logged in. You use these data to sort the quiz or guide you on the profilepage.
+        </li>
+      </ul>
       <h3>v.2.1.0 - 24/04-2020</h3>
       <ul>
         <li>

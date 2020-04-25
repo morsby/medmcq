@@ -51,7 +51,7 @@ const Footer: React.SFC<FooterProps> = ({ addTranslation }) => {
                 <Icon name="ship" /> <Translate id="footer.created_by" />
               </div>
               <div>
-                <Icon name="sitemap" /> <span>Version 2.1.0</span>
+                <Icon name="sitemap" /> <span>Version 2.2.0</span>
               </div>
             </Grid.Column>
             <Grid.Column largeScreen={4} computer={4} tablet={6} mobile={16}>
