@@ -10,14 +10,14 @@ export async function up(knex: Knex): Promise<any> {
     console.log(`Parsing answer ${index} out of ${questionAnswers.length}`);
 
     const userAnswers = await knex('question_user_answer').where({
-      question_id: questionAnswer.question_id,
+      questionId: questionAnswer.questionId,
       answer: questionAnswer.index,
     });
 
     for (let answer of userAnswers) {
       await knex('question_user_answer')
         .where({ id: answer.id })
-        .update({ answer_id: questionAnswer.id });
+        .update({ answerId: questionAnswer.id });
     }
 
     index++;
