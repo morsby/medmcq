@@ -1,7 +1,7 @@
  **/node_modules/
 **/coverage/**
 **/graveyard/
-client/build/
+build/
 server/build/
-client/src/semantic/
-client/src/serviceWorker.js
+src/semantic/
+src/serviceWorker.js

@@ -19,9 +19,9 @@ export interface PrintDisplayQuestionProps {
 const PrintDisplayQuestion: React.SFC<PrintDisplayQuestionProps> = ({
   question,
   showCorrect,
-  n
+  n,
 }) => {
-  let { text, answer1, answer2, answer3, correctAnswers, images, examSet } = question;
+  let { text, images, examSet, answers } = question;
 
   text = subSupScript(text);
 
@@ -29,27 +29,20 @@ const PrintDisplayQuestion: React.SFC<PrintDisplayQuestionProps> = ({
     <div>
       <div
         dangerouslySetInnerHTML={{
-          __html: marked(text)
+          __html: marked(text),
         }}
       />
       {images.length > 0 &&
         images.map((image) => <img src={imageURL(image)} alt="billede til eksamensspørgsmål" />)}
-      <ol type="A" className={showCorrect ? `correct-${correctAnswers.join(' correct-')}` : null}>
-        <li
-          dangerouslySetInnerHTML={{
-            __html: marked(answer1.answer)
-          }}
-        />
-        <li
-          dangerouslySetInnerHTML={{
-            __html: marked(answer2.answer)
-          }}
-        />
-        <li
-          dangerouslySetInnerHTML={{
-            __html: marked(answer3.answer)
-          }}
-        />
+      <ol type="A">
+        {answers.map((a) => (
+          <li
+            style={{ color: showCorrect && a.isCorrect ? 'green' : null }}
+            dangerouslySetInnerHTML={{
+              __html: marked(a.text),
+            }}
+          />
+        ))}
       </ol>
 
       <Translate>

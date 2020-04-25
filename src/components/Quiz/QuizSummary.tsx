@@ -22,10 +22,10 @@ export interface QuizSummaryProps {
 
 const QuizSummary: React.SFC<QuizSummaryProps> = ({ clickHandler }) => {
   const questions = useSelector((state: ReduxState) => state.questions.questions);
-  const answers = useSelector((state: ReduxState) => state.quiz.answers);
+  const userAnswers = useSelector((state: ReduxState) => state.quiz.userAnswers);
   const examMode = useSelector((state: ReduxState) => state.quiz.examMode);
   const usedExamTime = useSelector((state: ReduxState) => state.quiz.usedExamTime);
-  let results = calculateResults(questions, answers);
+  let results = calculateResults(questions, userAnswers);
 
   return (
     <Container>
@@ -44,15 +44,17 @@ const QuizSummary: React.SFC<QuizSummaryProps> = ({ clickHandler }) => {
           <Card.Description style={{ columns: '250px 4' }}>
             <List ordered>
               {questions.map((q, index) => {
-                const answer = answers.find((answer) => answer.questionId === q.id)?.answer;
+                const answer = q.answers.find((qa) =>
+                  userAnswers.some((a) => a.answerId === qa.id)
+                );
 
                 let userAnswer: string;
                 if (answer) {
                   if (examMode) {
                     userAnswer = 'svar-examMode';
-                  } else if (q.correctAnswers.includes(answer)) {
+                  } else if (answer.isCorrect) {
                     userAnswer = 'svar-korrekt';
-                  } else if (!q.correctAnswers.includes(answer)) {
+                  } else {
                     userAnswer = 'svar-forkert';
                   }
                 }

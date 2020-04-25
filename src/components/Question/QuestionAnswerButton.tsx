@@ -7,6 +7,7 @@ import marked from 'marked';
 import { Button, Popup } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 import styled from 'styled-components';
+import { QuestionAnswer } from 'types/generated';
 
 export interface QuestionAnswerButtonProps {
   answerNumber: number;
@@ -22,17 +23,22 @@ const ButtonInnerDiv = styled.div`
 
 const QuestionAnswerButton: React.SFC<QuestionAnswerButtonProps> = ({
   answerNumber,
-  handleAnswer
+  handleAnswer,
 }) => {
   const questionIndex = useSelector((state: ReduxState) => state.quiz.questionIndex);
   const question = useSelector((state: ReduxState) => state.questions.questions[questionIndex]);
-  const userAnswer = useSelector(
-    (state: ReduxState) =>
-      state.quiz.answers.find((answer) => answer.questionId === question.id)?.answer
+  const answer: QuestionAnswer = question.answers.find((a) => a.index === answerNumber);
+  const userAnswer = useSelector((state: ReduxState) =>
+    state.quiz.userAnswers.find((userAnswer) => userAnswer.answerId === answer.id)
+  );
+  const isAnswered = useSelector((state: ReduxState) =>
+    state.quiz.userAnswers.some((userAnswer) =>
+      question.answers.map((a) => a.id).includes(userAnswer.answerId)
+    )
   );
   const examMode = useSelector((state: ReduxState) => state.quiz.examMode);
   const percentagesHided = useSelector((state: ReduxState) => state.quiz.hidePercentages);
-  const answer: Question['answer1'] = question[`answer${answerNumber}`];
+  if (!answer) return null;
 
   /**
    * Set up button text
@@ -51,23 +57,23 @@ const QuestionAnswerButton: React.SFC<QuestionAnswerButtonProps> = ({
     default:
       break;
   }
-  answerText = answerText + answer.answer;
+  answerText = answerText + answer.text;
   answerText = subSupScript(answerText);
 
   return (
     <Button
       style={{ textAlign: 'left' }}
-      onClick={() => handleAnswer(answerNumber)}
-      color={evalAnswer(question, userAnswer, answerNumber, examMode)}
+      onClick={() => handleAnswer(answer.id)}
+      color={evalAnswer(userAnswer, answer, examMode, isAnswered)}
       size="large"
     >
       <ButtonInnerDiv>
         <div
           dangerouslySetInnerHTML={{
-            __html: marked(answerText)
+            __html: marked(answerText),
           }}
         />
-        {userAnswer && !percentagesHided && (
+        {isAnswered && !percentagesHided && (
           <Popup position="top center" trigger={<span>{answer.correctPercent}%</span>}>
             <Translate id="question.percentage_popup" />
           </Popup>

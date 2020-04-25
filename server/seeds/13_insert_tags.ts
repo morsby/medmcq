@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import sampleTags from './data/13_sample_tags.json';
 
-exports.seed = function(knex) {
+exports.seed = function (knex) {
   // Deletes ALL existing entries
   return knex('question_tag')
     .del()
@@ -14,7 +14,7 @@ exports.seed = function(knex) {
         sampleTags.map((t) => {
           return {
             name: t.name,
-            semester_id: _.find(semesters, { short_name: t.semester_name }).id
+            semester_id: _.find(semesters, { shortName: t.semester_name }).id,
           };
         })
       );

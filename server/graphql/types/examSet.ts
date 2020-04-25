@@ -1,7 +1,6 @@
 import { gql } from 'apollo-server-express';
 import ExamSet from 'models/exam_set';
 import Question from 'models/question';
-import QuestionCorrectAnswer from 'models/question_correct_answer';
 import QuestionImage from 'models/question_image';
 import { Resolvers } from 'types/resolvers-types';
 import User from 'models/user';
@@ -38,7 +37,7 @@ export const resolvers: Resolvers = {
     examSets: async () => {
       const examSets = await ExamSet.query().select('id');
       return examSets.map((examSet) => ({ id: examSet.id }));
-    }
+    },
   },
 
   Mutation: {
@@ -51,40 +50,30 @@ export const resolvers: Resolvers = {
       const examSet = await ExamSet.query().insertAndFetch({
         year,
         season,
-        semesterId
+        semesterId,
       });
 
       let examSetQno = 1;
       for (let question of questions) {
-        const { answer1, answer2, answer3, correctAnswers, text, images } = question;
+        const { text, images } = question;
 
         const newQuestion = await Question.query().insertAndFetch({
           text,
-          answer1,
-          answer2,
-          answer3,
           examSetQno,
-          examSetId: examSet.id
+          examSetId: examSet.id,
         });
         examSetQno++;
-
-        for (let correctAnswer of correctAnswers) {
-          await QuestionCorrectAnswer.query().insert({
-            answer: correctAnswer,
-            questionId: newQuestion.id
-          });
-        }
 
         for (let image of images) {
           await QuestionImage.query().insert({
             link: image,
-            questionId: newQuestion.id
+            questionId: newQuestion.id,
           });
         }
       }
 
       return { id: examSet.id };
-    }
+    },
   },
 
   ExamSet: {
@@ -102,11 +91,8 @@ export const resolvers: Resolvers = {
       return { id: examSet.semesterId };
     },
     questionCount: async ({ id }) => {
-      const result = await Question.query()
-        .where({ examSetId: id })
-        .count()
-        .first();
+      const result = await Question.query().where({ examSetId: id }).count().first();
       return result['count(*)'];
-    }
-  }
+    },
+  },
 };

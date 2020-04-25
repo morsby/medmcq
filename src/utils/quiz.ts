@@ -1,5 +1,5 @@
 import Question from 'classes/Question';
-import { AnswerInput } from 'types/generated';
+import { UserAnswerInput, QuestionAnswer } from 'types/generated';
 
 export const smoothScroll = (h?: number, dir = 'up') => {
   let top = window.pageYOffset || document.documentElement.scrollTop;
@@ -27,38 +27,43 @@ export const smoothScroll = (h?: number, dir = 'up') => {
   }
 };
 
-export const evalAnswer = (question, userAnswer, answerNo, examMode) => {
-  if (!userAnswer) return null; // hvis ikke svaret
+export const evalAnswer = (
+  userAnswer: UserAnswerInput,
+  answer: QuestionAnswer,
+  examMode: boolean,
+  isAnswered: boolean
+) => {
+  if (!isAnswered) return null; // hvis ikke svaret
 
-  if (examMode) {
-    if (answerNo === userAnswer) {
-      return 'blue';
+  // ExamMode
+  if (examMode && userAnswer && answer.id === userAnswer.answerId) {
+    return 'blue';
+  }
+
+  if (!examMode) {
+    if (answer.isCorrect) {
+      return 'green';
+    } else if (answer.id === userAnswer?.answerId) {
+      return 'red'; // hvis forkert svar
     }
   } else {
-    if (question.correctAnswers.includes(answerNo)) {
-      return 'green';
-    } else if (answerNo === userAnswer) {
-      return 'red'; // hvis forkert svar
-    } else {
-      return 'grey'; // ikke valgt mulighed
-    }
+    return 'grey'; // ikke valgt mulighed
   }
 };
 
-export const calculateResults = (questions: Question[], answers: Partial<AnswerInput>[]) => {
+export const calculateResults = (
+  questions: Question[],
+  userAnswers: Partial<UserAnswerInput>[]
+) => {
   let res = {
     status: true,
     n: 0,
     correct: 0,
     percentage: '0%',
   };
-  for (let answer of answers) {
+  for (let userAnswer of userAnswers) {
     res.n++;
-    if (
-      questions
-        .find((question) => question.id === answer.questionId)
-        ?.correctAnswers.includes(answer.answer)
-    )
+    if (questions.flatMap((q) => q.answers).find((a) => userAnswer.answerId === a.id)?.isCorrect)
       res.correct++;
   }
 
@@ -71,10 +76,10 @@ export const calculateResults = (questions: Question[], answers: Partial<AnswerI
   return res;
 };
 
-export const subSupScript = (text) => {
+export const subSupScript = (text: string) => {
   return text.replace(/\^(.+?)\^/g, '<sup>$1</sup>').replace(/~(.+?)~/g, '<sub>$1</sub>');
 };
 
-export const isAnswered = (question: Question, answers: AnswerInput[]) => {
-  return !!answers.find((answer) => answer.questionId === question.id);
+export const isAnswered = (question: Question, userAnswers: UserAnswerInput[]) => {
+  return userAnswers.some((ua) => question.answers.some((qa) => qa.id === ua.answerId));
 };

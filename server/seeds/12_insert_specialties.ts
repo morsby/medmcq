@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import sampleSpecialer from './data/12_sample_specialer.json';
 
-exports.seed = function(knex) {
+exports.seed = function (knex) {
   // Deletes ALL existing entries
   return knex('question_specialty')
     .del()
@@ -14,7 +14,7 @@ exports.seed = function(knex) {
         sampleSpecialer.map((s) => {
           return {
             name: s.name,
-            semester_id: _.find(semesters, { short_name: s.semester_name }).id
+            semester_id: _.find(semesters, { shortName: s.semester_name }).id,
           };
         })
       );

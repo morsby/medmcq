@@ -6,11 +6,11 @@ import { useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import AnswerDetailsTableExtendedRow from './AnswerDetailsTableExtendedRow';
 import { ReduxState } from 'redux/reducers';
-import { Answer } from 'types/generated';
 import { TableRowSelection } from 'antd/lib/table/interface';
+import { UserAnswer } from 'types/generated';
 
 export interface AnswersDetailsTableProps {
-  answers: Answer[];
+  answers: UserAnswer[];
   toggleCheckbox: Function;
   selectedIds: number[];
 }
@@ -36,8 +36,8 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
   const columns = [
     {
       title: <Translate id="profileAnswerDetails.table_headers.performance" />,
-      render: (record: Answer) => {
-        const attempt = tries.find((attempt) => attempt.questionId === record.question.id);
+      render: (record: UserAnswer) => {
+        const attempt = tries.find((attempt) => attempt.questionId === record.answer.question.id);
 
         return (
           <Tag color={getColor(attempt)}>
@@ -59,32 +59,35 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
     {
       title: <Translate id="profileAnswerDetails.table_headers.question" />,
       key: 'text',
-      render: (record: Answer) => (
-        <p style={{ cursor: 'pointer' }} onClick={() => history.push(`quiz/${record.question.id}`)}>
-          {record.question.text.substr(0, 100)}...
+      render: (record: UserAnswer) => (
+        <p
+          style={{ cursor: 'pointer' }}
+          onClick={() => history.push(`quiz/${record.answer.question.id}`)}
+        >
+          {record.answer.question.text.substr(0, 100)}...
         </p>
       ),
     },
     {
       title: <Translate id="profileAnswerDetails.table_headers.specialty" />,
-      render: (record: Answer) =>
-        record.question.specialties.map((s) => {
+      render: (record: UserAnswer) =>
+        record.answer.question.specialties.map((s) => {
           const specialty = specialties.find((sp) => sp.id === s.id);
           return <Tag color="blue">{specialty.name}</Tag>;
         }),
     },
     {
       title: 'Tags',
-      render: (record: Answer) =>
-        record.question.tags.map((tag) => {
+      render: (record: UserAnswer) =>
+        record.answer.question.tags.map((tag) => {
           tag = tags.find((t) => t.id === tag.id);
           return <Tag color="geekblue">{tag.name}</Tag>;
         }),
     },
     {
       title: <Translate id="profileAnswerDetails.table_headers.set" />,
-      render: (record: Answer) => {
-        const examSet = examSets.find((set) => set.id === record.question.examSet.id);
+      render: (record: UserAnswer) => {
+        const examSet = examSets.find((set) => set.id === record.answer.question.examSet.id);
         return (
           <>
             <Translate id={`profileAnswerDetails.${examSet.season}`} />
@@ -107,16 +110,16 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
       <Table
         size="small"
         rowSelection={rowSelection}
-        rowKey={(record: Answer) => record.id}
+        rowKey={(record: UserAnswer) => record.id}
         bordered
         columns={columns}
         dataSource={answers}
-        expandedRowRender={(record: Answer) => {
+        expandedRowRender={(record: UserAnswer) => {
           return (
             <>
-              <p>{record.question.text}</p>
+              <p>{record.answer.question.text}</p>
               <Divider />
-              <AnswerDetailsTableExtendedRow question={record.question} />
+              <AnswerDetailsTableExtendedRow question={record.answer.question} />
             </>
           );
         }}

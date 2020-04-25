@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import Comment from 'classes/Comment';
 import Profile, { Attempt } from 'classes/Profile';
-import { Answer, Bookmark } from 'types/generated';
+import { UserAnswer, Bookmark } from 'types/generated';
 
 const initialState = {
-  answers: [] as Answer[],
+  userAnswers: [] as UserAnswer[],
   publicComments: [] as Comment[],
   privateComments: [] as Comment[],
   bookmarks: [] as Bookmark[],
-  tries: [] as Attempt[]
+  tries: [] as Attempt[],
 };
 
 const profileReducer = createSlice({
@@ -16,13 +16,13 @@ const profileReducer = createSlice({
   initialState,
   reducers: {
     setProfile: (state, action: PayloadAction<Profile>) => {
-      state.answers = action.payload.answers;
+      state.userAnswers = action.payload.answers;
       state.publicComments = action.payload.publicComments;
       state.privateComments = action.payload.privateComments;
       state.bookmarks = action.payload.bookmarks;
       state.tries = action.payload.tries;
-    }
-  }
+    },
+  },
 });
 
 export default profileReducer;

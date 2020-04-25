@@ -1,7 +1,7 @@
 overwrite: true
 schema: 'http://localhost:3001/graphql'
 generates:
-  client/src/types/generated.tsx:
+  src/types/generated.tsx:
     plugins:
       - 'typescript'
       - 'typescript-operations'

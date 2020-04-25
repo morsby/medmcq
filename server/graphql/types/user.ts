@@ -11,6 +11,8 @@ import ManualCompletedSet from 'models/manual_completed_set';
 import crypto from 'crypto';
 import _ from 'lodash';
 import { Resolvers } from 'types/resolvers-types';
+import Question from 'models/question';
+import QuestionAnswer from 'models/questionAnswer.model';
 
 export const typeDefs = gql`
   extend type Query {
@@ -58,7 +60,7 @@ export const typeDefs = gql`
     password: String
     role: Role
     bookmarks(semester: Int): [Bookmark]
-    answers(semester: Int): [Answer]
+    answers(semester: Int): [UserAnswer]
     specialtyVotes: [SpecialtyVote]
     tagVotes: [TagVote]
     likes: [Like]
@@ -116,7 +118,7 @@ export const resolvers: Resolvers = {
         .skipUndefined()
         .first();
       return !user; // Returns true if username is available (not in use)
-    }
+    },
   },
 
   Mutation: {
@@ -167,8 +169,8 @@ export const resolvers: Resolvers = {
         templateId: 'd-df2ec6ed439b4e63a57d4ae6877721d7',
         dynamic_template_data: {
           username: user.username,
-          email: user.email
-        }
+          email: user.email,
+        },
       };
       sgMail.send(msg);
 
@@ -195,7 +197,7 @@ export const resolvers: Resolvers = {
 
       user = await user.$query().patchAndFetch({
         resetPasswordToken: token,
-        resetPasswordExpires: now
+        resetPasswordExpires: now,
       });
 
       // Send mail
@@ -207,8 +209,8 @@ export const resolvers: Resolvers = {
           username: user.username,
           email: user.email,
           resetLink: `http://${ctx.req.headers.host}${urls.resetPassword}${token}`,
-          forgotLink: `http://${ctx.req.headers.host}${urls.forgotPassword}`
-        }
+          forgotLink: `http://${ctx.req.headers.host}${urls.forgotPassword}`,
+        },
       };
       sgMail.send(msg);
 
@@ -218,7 +220,7 @@ export const resolvers: Resolvers = {
     bookmark: async (root, { questionId }, ctx) => {
       const isBookmarked = await QuestionBookmark.query().findOne({
         questionId,
-        userId: ctx.user.id
+        userId: ctx.user.id,
       });
       if (!isBookmarked) {
         const bookmark = await QuestionBookmark.query().insert({ questionId, userId: ctx.user.id });
@@ -231,7 +233,7 @@ export const resolvers: Resolvers = {
     manualCompleteSet: async (root, { examSetId }, ctx) => {
       const exists = await ManualCompletedSet.query().findOne({
         userId: ctx.user.id,
-        setId: examSetId
+        setId: examSetId,
       });
       if (exists) {
         await exists.$query().delete();
@@ -240,7 +242,7 @@ export const resolvers: Resolvers = {
         await ManualCompletedSet.query().insert({ userId: ctx.user.id, setId: examSetId });
         return 'Set has been marked as completed';
       }
-    }
+    },
   },
 
   User: {
@@ -266,7 +268,8 @@ export const resolvers: Resolvers = {
 
       if (semester) {
         query = query
-          .join('question', 'questionUserAnswer.questionId', 'question.id')
+          .join('questionAnswers', 'questionUserAnswer.answerId', 'questionAnswers.id')
+          .join('question', 'questionAnswers.questionId', 'question.id')
           .join('semesterExamSet', 'question.examSetId', 'semesterExamSet.id')
           .where('semesterExamSet.semesterId', semester);
       }
@@ -298,9 +301,7 @@ export const resolvers: Resolvers = {
       return bookmarks.map((bookmark) => ({ id: bookmark.id }));
     },
     publicComments: async ({ id }, { semester }, ctx) => {
-      let query = QuestionComment.query()
-        .where('questionComment.userId', id)
-        .where({ private: 0 });
+      let query = QuestionComment.query().where('questionComment.userId', id).where({ private: 0 });
 
       if (semester) {
         query = query
@@ -313,9 +314,7 @@ export const resolvers: Resolvers = {
       return publicComments.map((pubC) => ({ id: pubC.id }));
     },
     privateComments: async ({ id }, { semester }, ctx) => {
-      let query = QuestionComment.query()
-        .where('questionComment.userId', id)
-        .where({ private: 1 });
+      let query = QuestionComment.query().where('questionComment.userId', id).where({ private: 1 });
 
       if (semester) {
         query = query
@@ -332,15 +331,19 @@ export const resolvers: Resolvers = {
       return completedSets.map((completedSet) => ({ examSetId: completedSet.setId }));
     },
     answeredSets: async ({ id }, args, ctx) => {
-      // Get all questionIds that have been at least answered once
+      // Get all answerIds that have been at least answered once
       const answeredQuestions = await QuestionUserAnswer.query()
         .where({ userId: id })
-        .distinct('questionId')
-        .select('questionId');
+        .distinct('answerId')
+        .select('answerId');
+      const questionAnswers = await QuestionAnswer.query().whereIn(
+        'id',
+        answeredQuestions.map((aq) => aq.answerId)
+      );
 
-      // Find all questions corresponding to the answeredQuestion Ids
+      // Find all questions corresponding to the answeredIds
       const questions = (
-        await ctx.questionLoader.loadMany(answeredQuestions.map((aq) => aq.questionId))
+        await ctx.questionLoader.loadMany(questionAnswers.map((qa) => qa.questionId))
       ).map((q) => {
         if (q instanceof Error) return;
         return q;
@@ -353,12 +356,12 @@ export const resolvers: Resolvers = {
       for (let examSetId of examSetIds) {
         answeredSets.push({
           examSetId,
-          count: questions.filter((question) => question.examSetId === examSetId).length
+          count: questions.filter((question) => question.examSetId === examSetId).length,
         });
       }
 
       return answeredSets;
-    }
+    },
   },
 
   Bookmark: {
@@ -366,6 +369,6 @@ export const resolvers: Resolvers = {
     question: async ({ id }, args, ctx) => {
       const bookmark = await ctx.bookmarkLoader.load(id);
       return { id: bookmark.questionId };
-    }
-  }
+    },
+  },
 };

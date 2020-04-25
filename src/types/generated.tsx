@@ -11,98 +11,39 @@ export type Scalars = {
   Upload: any;
 };
 
-export type Answer = {
-   __typename?: 'Answer';
-  id?: Maybe<Scalars['Int']>;
-  answer?: Maybe<Scalars['Int']>;
-  question?: Maybe<Question>;
-  answerTime?: Maybe<Scalars['Int']>;
-  createdAt?: Maybe<Scalars['String']>;
-  updatedAt?: Maybe<Scalars['String']>;
-};
-
-export type AnsweredSet = {
-   __typename?: 'AnsweredSet';
-  examSetId?: Maybe<Scalars['Int']>;
-  count?: Maybe<Scalars['Int']>;
-};
-
-export type AnswerInput = {
-  answer: Scalars['Int'];
-  questionId: Scalars['Int'];
-  answerTime: Scalars['Int'];
-};
-
-export type Bookmark = {
-   __typename?: 'Bookmark';
-  id?: Maybe<Scalars['Int']>;
-  question?: Maybe<Question>;
-  user?: Maybe<User>;
-};
-
-export enum CacheControlScope {
-  Public = 'PUBLIC',
-  Private = 'PRIVATE'
-}
-
-export type Comment = {
-   __typename?: 'Comment';
-  id?: Maybe<Scalars['Int']>;
-  text?: Maybe<Scalars['String']>;
-  isPrivate?: Maybe<Scalars['Boolean']>;
-  isAnonymous?: Maybe<Scalars['Boolean']>;
-  user?: Maybe<User>;
-  likes?: Maybe<Array<Maybe<Like>>>;
-  question?: Maybe<Question>;
-  createdAt?: Maybe<Scalars['String']>;
-  updatedAt?: Maybe<Scalars['String']>;
-};
-
-export type CommentInput = {
-  id?: Maybe<Scalars['Int']>;
-  text: Scalars['String'];
-  isPrivate?: Maybe<Scalars['Boolean']>;
-  isAnonymous?: Maybe<Scalars['Boolean']>;
-  questionId?: Maybe<Scalars['Int']>;
-};
-
-export type ContactInput = {
-  subject?: Maybe<Scalars['String']>;
-  message?: Maybe<Scalars['String']>;
-};
-
-export type ExamSet = {
-   __typename?: 'ExamSet';
-  id?: Maybe<Scalars['Int']>;
-  year?: Maybe<Scalars['Int']>;
-  season?: Maybe<Scalars['String']>;
+export type Query = {
+   __typename?: 'Query';
+  _empty?: Maybe<Scalars['String']>;
+  shareLink?: Maybe<Array<Maybe<Question>>>;
+  questions?: Maybe<Array<Question>>;
+  examSets?: Maybe<Array<Maybe<ExamSet>>>;
+  semesters?: Maybe<Array<Maybe<Semester>>>;
   semester?: Maybe<Semester>;
-  createdAt?: Maybe<Scalars['String']>;
-  updatedAt?: Maybe<Scalars['String']>;
-  questionCount?: Maybe<Scalars['Int']>;
+  user?: Maybe<User>;
+  checkUsernameAvailability?: Maybe<Scalars['Boolean']>;
+  profile?: Maybe<User>;
+  maintenance?: Maybe<Maintenance>;
+  notice?: Maybe<Notice>;
 };
 
-export type ExamSetInput = {
-  year: Scalars['Int'];
-  season: Scalars['String'];
-  semesterId: Scalars['Int'];
-  questions?: Maybe<Array<Maybe<QuestionInput>>>;
+
+export type QueryShareLinkArgs = {
+  shareId?: Maybe<Scalars['Int']>;
 };
 
-export type Like = {
-   __typename?: 'Like';
-  commentId?: Maybe<Scalars['Int']>;
-  userId?: Maybe<Scalars['Int']>;
+
+export type QueryQuestionsArgs = {
+  filter: QuestionFilterInput;
 };
 
-export type LoginInput = {
-  username: Scalars['String'];
-  password: Scalars['String'];
+
+export type QuerySemesterArgs = {
+  id: Scalars['Int'];
 };
 
-export type ManualCompletedSet = {
-   __typename?: 'ManualCompletedSet';
-  examSetId?: Maybe<Scalars['Int']>;
+
+export type QueryCheckUsernameAvailabilityArgs = {
+  data?: Maybe<UserAvailableInput>;
 };
 
 export type Mutation = {
@@ -196,7 +137,7 @@ export type MutationDeleteCommentArgs = {
 
 
 export type MutationAnswerArgs = {
-  data: AnswerInput;
+  data: UserAnswerInput;
 };
 
 
@@ -240,73 +181,6 @@ export type MutationContactArgs = {
   data?: Maybe<ContactInput>;
 };
 
-export type Profile = {
-   __typename?: 'Profile';
-  id?: Maybe<Scalars['Int']>;
-};
-
-export type Query = {
-   __typename?: 'Query';
-  _empty?: Maybe<Scalars['String']>;
-  shareLink?: Maybe<Array<Maybe<Question>>>;
-  questions?: Maybe<Array<Question>>;
-  examSets?: Maybe<Array<Maybe<ExamSet>>>;
-  semesters?: Maybe<Array<Maybe<Semester>>>;
-  semester?: Maybe<Semester>;
-  user?: Maybe<User>;
-  checkUsernameAvailability?: Maybe<Scalars['Boolean']>;
-  profile?: Maybe<User>;
-};
-
-
-export type QueryShareLinkArgs = {
-  shareId?: Maybe<Scalars['Int']>;
-};
-
-
-export type QueryQuestionsArgs = {
-  filter: QuestionFilterInput;
-};
-
-
-export type QuerySemesterArgs = {
-  id: Scalars['Int'];
-};
-
-
-export type QueryCheckUsernameAvailabilityArgs = {
-  data?: Maybe<UserAvailableInput>;
-};
-
-export type Question = {
-   __typename?: 'Question';
-  id?: Maybe<Scalars['Int']>;
-  text?: Maybe<Scalars['String']>;
-  answer1?: Maybe<QuestionAnswer>;
-  answer2?: Maybe<QuestionAnswer>;
-  answer3?: Maybe<QuestionAnswer>;
-  images?: Maybe<Array<Maybe<Scalars['String']>>>;
-  oldId?: Maybe<Scalars['String']>;
-  examSetQno?: Maybe<Scalars['Int']>;
-  publicComments?: Maybe<Array<Maybe<Comment>>>;
-  privateComments?: Maybe<Array<Maybe<Comment>>>;
-  correctAnswers?: Maybe<Array<Maybe<Scalars['Int']>>>;
-  specialtyVotes?: Maybe<Array<Maybe<SpecialtyVote>>>;
-  tagVotes?: Maybe<Array<Maybe<TagVote>>>;
-  specialties?: Maybe<Array<Maybe<Specialty>>>;
-  tags?: Maybe<Array<Maybe<Tag>>>;
-  examSet?: Maybe<ExamSet>;
-  createdAt?: Maybe<Scalars['String']>;
-  updatedAt?: Maybe<Scalars['String']>;
-  user?: Maybe<User>;
-};
-
-export type QuestionAnswer = {
-   __typename?: 'QuestionAnswer';
-  answer?: Maybe<Scalars['String']>;
-  correctPercent?: Maybe<Scalars['Int']>;
-};
-
 export type QuestionFilterInput = {
   text?: Maybe<Scalars['String']>;
   specialtyIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
@@ -325,32 +199,48 @@ export type QuestionFilterInput = {
   shareId?: Maybe<Scalars['String']>;
 };
 
+export type Question = {
+   __typename?: 'Question';
+  id?: Maybe<Scalars['Int']>;
+  text?: Maybe<Scalars['String']>;
+  answers?: Maybe<Array<Maybe<QuestionAnswer>>>;
+  images?: Maybe<Array<Maybe<Scalars['String']>>>;
+  oldId?: Maybe<Scalars['String']>;
+  examSetQno?: Maybe<Scalars['Int']>;
+  publicComments?: Maybe<Array<Maybe<Comment>>>;
+  privateComments?: Maybe<Array<Maybe<Comment>>>;
+  specialtyVotes?: Maybe<Array<Maybe<SpecialtyVote>>>;
+  tagVotes?: Maybe<Array<Maybe<TagVote>>>;
+  specialties?: Maybe<Array<Maybe<Specialty>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  examSet?: Maybe<ExamSet>;
+  createdAt?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['String']>;
+  user?: Maybe<User>;
+};
+
+export type QuestionAnswer = {
+   __typename?: 'QuestionAnswer';
+  id?: Maybe<Scalars['Int']>;
+  index?: Maybe<Scalars['Int']>;
+  isCorrect?: Maybe<Scalars['Boolean']>;
+  text?: Maybe<Scalars['String']>;
+  correctPercent?: Maybe<Scalars['Int']>;
+  question?: Maybe<Question>;
+};
+
 export type QuestionInput = {
   id?: Maybe<Scalars['Int']>;
-  answer1: Scalars['String'];
-  answer2: Scalars['String'];
-  answer3: Scalars['String'];
-  correctAnswers: Array<Scalars['Int']>;
+  answers?: Maybe<Array<Maybe<QuestionAnswerInput>>>;
   text: Scalars['String'];
   images?: Maybe<Array<Maybe<Scalars['String']>>>;
   examSetId: Scalars['Int'];
 };
 
-export type Role = {
-   __typename?: 'Role';
-  id?: Maybe<Scalars['Int']>;
-};
-
-export type Semester = {
-   __typename?: 'Semester';
-  id?: Maybe<Scalars['Int']>;
-  value?: Maybe<Scalars['Int']>;
-  name?: Maybe<Scalars['String']>;
-  shortName?: Maybe<Scalars['String']>;
-  examSets?: Maybe<Array<Maybe<ExamSet>>>;
-  specialties?: Maybe<Array<Maybe<Specialty>>>;
-  tags?: Maybe<Array<Maybe<Tag>>>;
-  questionCount?: Maybe<Scalars['Int']>;
+export type QuestionAnswerInput = {
+  text?: Maybe<Scalars['String']>;
+  index?: Maybe<Scalars['Int']>;
+  isCorrect?: Maybe<Scalars['Boolean']>;
 };
 
 export type Specialty = {
@@ -362,15 +252,6 @@ export type Specialty = {
   updatedAt?: Maybe<Scalars['String']>;
   oldId?: Maybe<Scalars['String']>;
   questionCount?: Maybe<Scalars['Int']>;
-};
-
-export type SpecialtyVote = {
-   __typename?: 'SpecialtyVote';
-  id?: Maybe<Scalars['Int']>;
-  specialty?: Maybe<Specialty>;
-  question?: Maybe<Question>;
-  user?: Maybe<User>;
-  vote?: Maybe<Scalars['Int']>;
 };
 
 export type Tag = {
@@ -394,6 +275,106 @@ export type TagVote = {
   vote?: Maybe<Scalars['Int']>;
 };
 
+export type SpecialtyVote = {
+   __typename?: 'SpecialtyVote';
+  id?: Maybe<Scalars['Int']>;
+  specialty?: Maybe<Specialty>;
+  question?: Maybe<Question>;
+  user?: Maybe<User>;
+  vote?: Maybe<Scalars['Int']>;
+};
+
+export type VoteInput = {
+  questionId: Scalars['Int'];
+  metadataId: Scalars['Int'];
+  vote?: Maybe<Scalars['Int']>;
+};
+
+export type ExamSet = {
+   __typename?: 'ExamSet';
+  id?: Maybe<Scalars['Int']>;
+  year?: Maybe<Scalars['Int']>;
+  season?: Maybe<Scalars['String']>;
+  semester?: Maybe<Semester>;
+  createdAt?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['String']>;
+  questionCount?: Maybe<Scalars['Int']>;
+};
+
+export type ExamSetInput = {
+  year: Scalars['Int'];
+  season: Scalars['String'];
+  semesterId: Scalars['Int'];
+  questions?: Maybe<Array<Maybe<QuestionInput>>>;
+};
+
+export type Semester = {
+   __typename?: 'Semester';
+  id?: Maybe<Scalars['Int']>;
+  value?: Maybe<Scalars['Int']>;
+  name?: Maybe<Scalars['String']>;
+  shortName?: Maybe<Scalars['String']>;
+  examSets?: Maybe<Array<Maybe<ExamSet>>>;
+  specialties?: Maybe<Array<Maybe<Specialty>>>;
+  tags?: Maybe<Array<Maybe<Tag>>>;
+  questionCount?: Maybe<Scalars['Int']>;
+};
+
+export type Comment = {
+   __typename?: 'Comment';
+  id?: Maybe<Scalars['Int']>;
+  text?: Maybe<Scalars['String']>;
+  isPrivate?: Maybe<Scalars['Boolean']>;
+  isAnonymous?: Maybe<Scalars['Boolean']>;
+  user?: Maybe<User>;
+  likes?: Maybe<Array<Maybe<Like>>>;
+  question?: Maybe<Question>;
+  createdAt?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['String']>;
+};
+
+export type CommentInput = {
+  id?: Maybe<Scalars['Int']>;
+  text: Scalars['String'];
+  isPrivate?: Maybe<Scalars['Boolean']>;
+  isAnonymous?: Maybe<Scalars['Boolean']>;
+  questionId?: Maybe<Scalars['Int']>;
+};
+
+export type UserAnswer = {
+   __typename?: 'UserAnswer';
+  id?: Maybe<Scalars['Int']>;
+  answer?: Maybe<QuestionAnswer>;
+  answerTime?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['String']>;
+};
+
+export type UserAnswerInput = {
+  answerId: Scalars['Int'];
+  answerTime: Scalars['Int'];
+};
+
+export type LoginInput = {
+  username: Scalars['String'];
+  password: Scalars['String'];
+};
+
+export type UserInput = {
+  username: Scalars['String'];
+  password: Scalars['String'];
+  email?: Maybe<Scalars['String']>;
+};
+
+export type UserAvailableInput = {
+  username?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+};
+
+export type UserEditInput = {
+  password?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+};
 
 export type User = {
    __typename?: 'User';
@@ -403,7 +384,7 @@ export type User = {
   password?: Maybe<Scalars['String']>;
   role?: Maybe<Role>;
   bookmarks?: Maybe<Array<Maybe<Bookmark>>>;
-  answers?: Maybe<Array<Maybe<Answer>>>;
+  answers?: Maybe<Array<Maybe<UserAnswer>>>;
   specialtyVotes?: Maybe<Array<Maybe<SpecialtyVote>>>;
   tagVotes?: Maybe<Array<Maybe<TagVote>>>;
   likes?: Maybe<Array<Maybe<Like>>>;
@@ -434,26 +415,60 @@ export type UserPrivateCommentsArgs = {
   semester?: Maybe<Scalars['Int']>;
 };
 
-export type UserAvailableInput = {
-  username?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['String']>;
+export type AnsweredSet = {
+   __typename?: 'AnsweredSet';
+  examSetId?: Maybe<Scalars['Int']>;
+  count?: Maybe<Scalars['Int']>;
 };
 
-export type UserEditInput = {
-  password?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['String']>;
+export type Role = {
+   __typename?: 'Role';
+  id?: Maybe<Scalars['Int']>;
 };
 
-export type UserInput = {
-  username: Scalars['String'];
-  password: Scalars['String'];
-  email?: Maybe<Scalars['String']>;
+export type Bookmark = {
+   __typename?: 'Bookmark';
+  id?: Maybe<Scalars['Int']>;
+  question?: Maybe<Question>;
+  user?: Maybe<User>;
 };
 
-export type VoteInput = {
-  questionId: Scalars['Int'];
-  metadataId: Scalars['Int'];
-  vote?: Maybe<Scalars['Int']>;
+export type Profile = {
+   __typename?: 'Profile';
+  id?: Maybe<Scalars['Int']>;
 };
+
+export type ManualCompletedSet = {
+   __typename?: 'ManualCompletedSet';
+  examSetId?: Maybe<Scalars['Int']>;
+};
+
+export type Like = {
+   __typename?: 'Like';
+  commentId?: Maybe<Scalars['Int']>;
+  userId?: Maybe<Scalars['Int']>;
+};
+
+export type Maintenance = {
+   __typename?: 'Maintenance';
+  message?: Maybe<Scalars['String']>;
+};
+
+export type Notice = {
+   __typename?: 'Notice';
+  message?: Maybe<Scalars['String']>;
+  color?: Maybe<Scalars['String']>;
+};
+
+export type ContactInput = {
+  subject?: Maybe<Scalars['String']>;
+  message?: Maybe<Scalars['String']>;
+};
+
+export enum CacheControlScope {
+  Public = 'PUBLIC',
+  Private = 'PRIVATE'
+}
+
 
 

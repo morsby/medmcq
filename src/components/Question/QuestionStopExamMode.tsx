@@ -9,7 +9,7 @@ import { LocalizeContextProps, withLocalize, Translate } from 'react-localize-re
 export interface QuestionStopExamModeProps extends LocalizeContextProps {}
 
 const QuestionStopExamMode: React.SFC<QuestionStopExamModeProps> = ({ translate }) => {
-  const answers = useSelector((state: ReduxState) => state.quiz.answers);
+  const answers = useSelector((state: ReduxState) => state.quiz.userAnswers);
   const questions = useSelector((state: ReduxState) => state.questions.questions);
   const [modalOpen, setModalOpen] = useState(false);
 

@@ -1,16 +1,17 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import moment from 'moment-timezone';
-import { AnswerInput } from 'types/generated';
+import { UserAnswerInput } from 'types/generated';
+import { insertOrReplace } from 'utils/common';
 
 const initialState = {
-  answers: [] as AnswerInput[],
+  userAnswers: [] as UserAnswerInput[],
   questionIndex: 0,
   didInvalidate: false,
   imgOpen: false,
   hidePercentages: false,
   examMode: true,
   examModeStart: null as Date | null,
-  usedExamTime: ''
+  usedExamTime: '',
 };
 
 const quizReducer = createSlice({
@@ -18,7 +19,7 @@ const quizReducer = createSlice({
   initialState,
   reducers: {
     resetQuiz: (state) => {
-      state.answers = [];
+      state.userAnswers = [];
       state.questionIndex = 0;
       state.usedExamTime = '';
     },
@@ -28,14 +29,18 @@ const quizReducer = createSlice({
     setImgOpen: (state, action: PayloadAction<boolean>) => {
       state.imgOpen = action.payload;
     },
-    answer: (state, action: PayloadAction<AnswerInput>) => {
-      const index = state.answers.findIndex(
-        (answer) => answer.questionId === action.payload.questionId
+    answer: (state, action: PayloadAction<{ answer: UserAnswerInput; answerIds: number[] }>) => {
+      // Check if question is already answered. Then we are in examMode.
+      const index = state.userAnswers.findIndex((answer) =>
+        action.payload.answerIds.includes(answer.answerId)
       );
+
       if (index !== -1) {
-        state.answers[index] = action.payload;
+        if (state.examMode) {
+          state.userAnswers[index] = action.payload.answer;
+        }
       } else {
-        state.answers.push(action.payload);
+        state.userAnswers.push(action.payload.answer);
       }
     },
     togglePercentages: (state) => {
@@ -51,8 +56,8 @@ const quizReducer = createSlice({
       state.examMode = false;
       state.hidePercentages = false;
       state.examModeStart = null;
-    }
-  }
+    },
+  },
 });
 
 export default quizReducer;

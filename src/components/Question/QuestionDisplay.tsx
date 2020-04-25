@@ -17,8 +17,10 @@ const QuestionDisplay: React.SFC<QuestionDisplayProps> = () => {
   const question = useSelector(
     (state: ReduxState) => state.questions.questions[currentQuestionIndex]
   );
-  const answered = useSelector(
-    (state: ReduxState) => !!state.quiz.answers.find((answer) => answer.questionId === question.id)
+  const answered = useSelector((state: ReduxState) =>
+    state.quiz.userAnswers.some((userAnswer) =>
+      question.answers.some((qa) => qa.id === userAnswer.answerId)
+    )
   );
   const examMode = useSelector((state: ReduxState) => state.quiz.examMode);
   const imgOpen = useSelector((state: ReduxState) => state.quiz.imgOpen);
@@ -55,11 +57,12 @@ const QuestionDisplay: React.SFC<QuestionDisplayProps> = () => {
         !e.metaKey
       ) {
         e.preventDefault();
-        let answer = Number(e.key);
+        let key = Number(e.key);
 
         let keys = [1, 2, 3];
-        if (keys.includes(answer)) {
-          handleAnswer(answer);
+        if (keys.includes(key)) {
+          const answer = question.answers.find((a) => a.index === key);
+          handleAnswer(answer.id);
         }
       }
     };
@@ -71,9 +74,13 @@ const QuestionDisplay: React.SFC<QuestionDisplayProps> = () => {
     };
   }, [question, answered, examMode]);
 
-  const handleAnswer = (answer: number) => {
+  const handleAnswer = (answerId: number) => {
     if (answered && !examMode) return;
-    Quiz.answer({ answer, answerTime, questionId: question.id }, examMode);
+    Quiz.answer(
+      { answerId, answerTime },
+      question.answers.map((a) => a.id),
+      examMode
+    );
   };
 
   const text = subSupScript(question.text);
@@ -86,8 +93,8 @@ const QuestionDisplay: React.SFC<QuestionDisplayProps> = () => {
               style={{ fontSize: '18px' }}
               dangerouslySetInnerHTML={{
                 __html: marked(text, {
-                  smartypants: true
-                })
+                  smartypants: true,
+                }),
               }}
             />
             <Responsive as="div" minWidth={breakpoints.mobile + 1}>

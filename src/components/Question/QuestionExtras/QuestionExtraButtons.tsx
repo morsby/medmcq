@@ -20,7 +20,7 @@ const QuestionExtraButtons: React.SFC<QuestionExtraButtonsProps> = ({
   onPublicCommentsToggle,
   privateCommentsOpen,
   publicCommentsOpen,
-  reportOpen
+  reportOpen,
 }) => {
   const dispatch = useDispatch();
   const user = useSelector((state: ReduxState) => state.auth.user);
@@ -30,8 +30,8 @@ const QuestionExtraButtons: React.SFC<QuestionExtraButtonsProps> = ({
   const comments = useSelector((state: ReduxState) =>
     state.questions.comments.filter((comment) => comment.question.id === question.id)
   );
-  const isAnswered = !!useSelector((state: ReduxState) =>
-    state.quiz.answers.find((answer) => answer.questionId === question.id)
+  const isAnswered = useSelector((state: ReduxState) =>
+    state.quiz.userAnswers.some((ua) => question.answers.some((a) => a.id === ua.answerId))
   );
   const publicComments = comments.filter((comment) => !comment.isPrivate).length;
   const privateComments = comments.filter((comment) => comment.isPrivate).length;

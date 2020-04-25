@@ -2,9 +2,8 @@ import { Model } from 'objection';
 
 interface QuestionUserAnswer {
   id: number;
-  answer: number;
-  questionId: number;
   userId: number;
+  answerId: number;
   answerTime: number;
   createdAt: Date;
   updatedAt: Date;

@@ -3,7 +3,8 @@ import { gql } from 'apollo-boost';
 import Apollo from './Apollo';
 import profileReducer from 'redux/reducers/profile';
 import { store } from 'IndexApp';
-import { User as UserType, Answer } from 'types/generated';
+import { User as UserType, UserAnswer } from 'types/generated';
+import Question from './Question';
 
 interface Profile extends UserType {
   tries: Attempt[];
@@ -11,18 +12,20 @@ interface Profile extends UserType {
 
 export type Attempt = { tries: number; correct: number; questionId: number };
 
-const mapAnswers = (answers: Answer[]): Attempt[] => {
+const mapAnswers = (userAnswers: UserAnswer[]): Attempt[] => {
   let attempts = [] as Attempt[];
 
-  for (let answer of answers) {
-    const attemptExists = attempts.find((attempt) => attempt.questionId === answer.question.id);
+  for (let userAnswer of userAnswers) {
+    const attemptExists = attempts.find(
+      (attempt) => attempt.questionId === userAnswer.answer.question.id
+    );
 
     if (!attemptExists) {
-      attempts.push({ correct: 0, tries: 0, questionId: answer.question.id });
+      attempts.push({ correct: 0, tries: 0, questionId: userAnswer.answer.question.id });
     }
-    attempts.find((attempt) => attempt.questionId === answer.question.id).tries++;
-    if (answer.question.correctAnswers.includes(answer.answer)) {
-      attempts.find((attempt) => attempt.questionId === answer.question.id).correct++;
+    attempts.find((attempt) => attempt.questionId === userAnswer.answer.question.id).tries++;
+    if (userAnswer.answer.isCorrect) {
+      attempts.find((attempt) => attempt.questionId === userAnswer.answer.question.id).correct++;
     }
   }
 
@@ -36,29 +39,24 @@ class Profile {
         profile {
           answers(semester: $semester) {
             id
-            answer
             answerTime
-            question {
-              id
-              text
-              correctAnswers
-              answer1 {
-                answer
-              }
-              answer2 {
-                answer
-              }
-              answer3 {
-                answer
-              }
-              tags {
+            answer {
+              ...QuestionAnswer
+              question {
                 id
-              }
-              specialties {
-                id
-              }
-              examSet {
-                id
+                text
+                answers {
+                  ...QuestionAnswer
+                }
+                tags {
+                  id
+                }
+                specialties {
+                  id
+                }
+                examSet {
+                  id
+                }
               }
             }
           }
@@ -85,21 +83,15 @@ class Profile {
             question {
               id
               text
-              correctAnswers
-              answer1 {
-                answer
-              }
-              answer2 {
-                answer
-              }
-              answer3 {
-                answer
+              answers {
+                ...QuestionAnswer
               }
             }
           }
         }
       }
       ${Comment.fragmentFull}
+      ${Question.questionAnswerFragment}
     `;
 
     const profileData = await Apollo.query<Profile>('profile', query, {

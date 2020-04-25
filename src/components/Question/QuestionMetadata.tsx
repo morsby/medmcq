@@ -38,7 +38,7 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
       state.metadata.semesters.find((semester) => semester.id === semesterId).specialties
   );
   const answers = useSelector((state: ReduxState) =>
-    state.quiz.answers.filter((answer) => answer.questionId === question.id)
+    state.quiz.userAnswers.filter((ua) => question.answers.some((a) => a.id === ua.answerId))
   );
   const specialtyVotes = question.specialtyVotes;
   const tagVotes = question.tagVotes;

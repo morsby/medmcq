@@ -4,7 +4,7 @@ import quizReducer from 'redux/reducers/quiz';
 import { ReduxState } from 'redux/reducers';
 import { gql } from 'apollo-boost';
 import Apollo from './Apollo';
-import { AnswerInput, QuestionFilterInput } from 'types/generated';
+import { UserAnswerInput, QuestionFilterInput } from 'types/generated';
 
 interface Quiz {}
 
@@ -20,7 +20,7 @@ class Quiz {
       onlyNew,
       onlyWrong,
       search,
-      type
+      type,
     } = reduxStore.selection;
 
     if (!filter) {
@@ -50,26 +50,25 @@ class Quiz {
     await Question.fetch(filter, true);
   };
 
-  static answer = async (data: AnswerInput, examMode: boolean) => {
-    const { questionId, answer, answerTime } = data;
+  static answer = async (data: UserAnswerInput, answerIds: number[], examMode?: boolean) => {
+    const { answerId, answerTime } = data;
     const mutation = gql`
-      mutation($data: AnswerInput!) {
+      mutation($data: UserAnswerInput!) {
         answer(data: $data)
       }
     `;
 
     if (!examMode) Apollo.mutate('answer', mutation, { data });
-    await store.dispatch(quizReducer.actions.answer({ questionId, answer, answerTime }));
+    await store.dispatch(
+      quizReducer.actions.answer({ answer: { answerId, answerTime }, answerIds })
+    );
   };
 
   static stopExam = async () => {
     const state: ReduxState = store.getState() as any;
 
-    for (let answer of state.quiz.answers) {
-      await Quiz.answer(
-        { questionId: answer.questionId, answer: answer.answer, answerTime: answer.answerTime },
-        false
-      );
+    for (let answer of state.quiz.userAnswers) {
+      await Quiz.answer({ answerId: answer.answerId, answerTime: answer.answerTime }, [], false);
     }
 
     store.dispatch(quizReducer.actions.stopExamMode());

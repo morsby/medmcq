@@ -42,30 +42,18 @@ const Bookmarks: React.SFC<BookmarksProps> = () => {
         .filter(
           (bookmark) =>
             bookmark.question.text.toLowerCase().includes(search.toLowerCase()) ||
-            bookmark.question.answer1.answer.toLowerCase().includes(search.toLowerCase()) ||
-            bookmark.question.answer2.answer.toLowerCase().includes(search.toLowerCase()) ||
-            bookmark.question.answer3.answer.toLowerCase().includes(search.toLowerCase())
+            bookmark.question.answers.some((a) => a.text.includes(search.toLowerCase()))
         )
         .map((bookmark, i) => (
           <div key={bookmark.id}>
             {Number(i) > 0 && <Divider />}
             <div dangerouslySetInnerHTML={{ __html: marked(bookmark.question.text) }} />
             <ol type="A">
-              <li
-                className={bookmark.question.correctAnswers.indexOf(1) > -1 ? 'svar-korrekt' : ''}
-              >
-                <Highlight search={search}>{bookmark.question.answer1.answer}</Highlight>
-              </li>
-              <li
-                className={bookmark.question.correctAnswers.indexOf(2) > -1 ? 'svar-korrekt' : ''}
-              >
-                <Highlight search={search}>{bookmark.question.answer2.answer}</Highlight>
-              </li>
-              <li
-                className={bookmark.question.correctAnswers.indexOf(3) > -1 ? 'svar-korrekt' : ''}
-              >
-                <Highlight search={search}>{bookmark.question.answer3.answer}</Highlight>
-              </li>
+              {bookmark.question.answers.map((a) => (
+                <li className={a.isCorrect ? 'svar-korrekt' : ''}>
+                  <Highlight search={search}>{a.text}</Highlight>
+                </li>
+              ))}
             </ol>
             <div style={{ textAlign: 'center', margin: '1rem' }}>
               <Button

@@ -1,5 +1,5 @@
 **/node_modules
 **/.git
 server/build
-client/build
+build
 npm-debug.log

@@ -45,7 +45,10 @@ const Footer: React.SFC<FooterProps> = ({ addTranslation }) => {
                 <Translate id="footer.permission" />
               </p>
               <div>
-                <Icon name="heartbeat" /> <Translate id="footer.developed_by" />
+                <Icon name="anchor" /> <Translate id="footer.developed_by" />
+              </div>
+              <div>
+                <Icon name="ship" /> <Translate id="footer.created_by" />
               </div>
               <div>
                 <Icon name="sitemap" /> <span>Version 2.1.0</span>

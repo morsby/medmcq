@@ -37,7 +37,7 @@ export interface AnswersProps {}
 const Answers: React.SFC<AnswersProps> = () => {
   const [details, toggleDetails] = useState(false);
   const [tagDetailsOpen, setTagsDetailsOpen] = useState(false);
-  const { answers, publicComments, privateComments } = useSelector(
+  const { userAnswers: answers, publicComments, privateComments } = useSelector(
     (state: ReduxState) => state.profile
   );
   const tries = useSelector((state: ReduxState) => state.profile.tries);
@@ -47,7 +47,7 @@ const Answers: React.SFC<AnswersProps> = () => {
   );
 
   let totalAnswers = answers.length;
-  const uniqQuestions = _.uniqBy(answers, (a) => a.question.id);
+  const uniqQuestions = _.uniqBy(answers, (a) => a.answer.question.id);
   let allRight = tries.filter((attempt) => attempt.tries === attempt.correct).length;
   let allWrong = tries.filter((a) => a.correct === 0).length;
   let mixed = tries.filter((a) => a.correct > 0 && a.correct < a.tries).length;

@@ -16,7 +16,7 @@ const AnswerTagsDetailsTable: React.SFC<AnswerTagsDetailsTableProps> = () => {
   const [answeredTags, setAnsweredTags] = useState([]);
   const history = useHistory();
   const selectedSemester = useSelector((state: ReduxState) => state.selection.semesterId);
-  const answers = useSelector((state: ReduxState) => state.profile.answers);
+  const userAnswers = useSelector((state: ReduxState) => state.profile.userAnswers);
   const tries = useSelector((state: ReduxState) => state.profile.tries);
   const tags = useSelector(
     (state: ReduxState) =>
@@ -54,14 +54,14 @@ const AnswerTagsDetailsTable: React.SFC<AnswerTagsDetailsTableProps> = () => {
         id: tag.id,
         name: tag.name,
         correct: 0,
-        tries: 0
+        tries: 0,
       };
     }
 
     // For each answer, add the count to answeredTags
     for (let attempt of tries) {
-      for (let tag of answers.find((answer) => answer.question.id === attempt.questionId).question
-        .tags) {
+      for (let tag of userAnswers.find((ua) => ua.answer.question.id === attempt.questionId).answer
+        .question.tags) {
         if (answeredTags[tag.id]) {
           answeredTags[tag.id].correct += attempt.correct;
           answeredTags[tag.id].tries += attempt.tries;
@@ -84,17 +84,17 @@ const AnswerTagsDetailsTable: React.SFC<AnswerTagsDetailsTableProps> = () => {
           {record.name}
         </p>
       ),
-      sorter: (a: AnsweredTag, b: AnsweredTag) => a.name.localeCompare(b.name)
+      sorter: (a: AnsweredTag, b: AnsweredTag) => a.name.localeCompare(b.name),
     },
     {
       title: 'Korrekt',
       dataIndex: 'correct',
-      sorter: (a: AnsweredTag, b: AnsweredTag) => a.correct - b.correct
+      sorter: (a: AnsweredTag, b: AnsweredTag) => a.correct - b.correct,
     },
     {
       title: 'Forsøg',
       dataIndex: 'tries',
-      sorter: (a: AnsweredTag, b: AnsweredTag) => a.tries - b.tries
+      sorter: (a: AnsweredTag, b: AnsweredTag) => a.tries - b.tries,
     },
     {
       title: 'Percent',
@@ -105,8 +105,8 @@ const AnswerTagsDetailsTable: React.SFC<AnswerTagsDetailsTableProps> = () => {
           return <Tag color={getColor(record)}>{getPercentCorrect(record)}%</Tag>;
         }
       },
-      sorter: (a: AnsweredTag, b: AnsweredTag) => getPercentCorrect(a) - getPercentCorrect(b)
-    }
+      sorter: (a: AnsweredTag, b: AnsweredTag) => getPercentCorrect(a) - getPercentCorrect(b),
+    },
   ];
 
   return (

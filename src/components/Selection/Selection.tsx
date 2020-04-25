@@ -59,7 +59,7 @@ const Selection: React.SFC<SelectionProps> = ({ addTranslation }) => {
           MedMcq
         </Header>
         <Divider />
-        {notice.message && <Message color={notice.color as any}>{notice.message}</Message>}
+        {notice?.message && <Message color={notice.color as any}>{notice.message}</Message>}
         <SelectionSemesterSelector />
         <QuestionCount />
         <Divider />

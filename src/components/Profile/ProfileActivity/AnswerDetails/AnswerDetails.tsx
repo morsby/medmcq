@@ -25,7 +25,7 @@ const AnswerDetails: React.SFC<AnswerDetailsProps> = () => {
   const [selected, setSelected] = useState([]);
   const [quizLoading, setQuizLoading] = useState(false);
   const questions = useSelector((state: ReduxState) => state.questions.questions);
-  let answers = useSelector((state: ReduxState) => state.profile.answers);
+  let userAnswers = useSelector((state: ReduxState) => state.profile.userAnswers);
   const tries = useSelector((state: ReduxState) => state.profile.tries);
   const history = useHistory();
 
@@ -58,32 +58,32 @@ const AnswerDetails: React.SFC<AnswerDetailsProps> = () => {
   if (filter) {
     switch (filter) {
       case 'allRight':
-        answers = answers.filter(
-          (answer) =>
-            tries.find((t) => t.questionId === answer.question.id).correct ===
-            tries.find((t) => t.questionId === answer.question.id).tries
+        userAnswers = userAnswers.filter(
+          (ua) =>
+            tries.find((t) => t.questionId === ua.answer.question.id).correct ===
+            tries.find((t) => t.questionId === ua.answer.question.id).tries
         );
         break;
       case 'allWrong':
-        answers = answers.filter(
-          (answer) => tries.find((t) => t.questionId === answer.question.id).correct === 0
+        userAnswers = userAnswers.filter(
+          (ua) => tries.find((t) => t.questionId === ua.answer.question.id).correct === 0
         );
         break;
       default:
-        answers = answers.filter(
-          (answer) =>
-            tries.find((t) => t.questionId === answer.question.id).correct > 0 &&
-            tries.find((t) => t.questionId === answer.question.id).correct <
-              tries.find((t) => t.questionId === answer.question.id).tries
+        userAnswers = userAnswers.filter(
+          (ua) =>
+            tries.find((t) => t.questionId === ua.answer.question.id).correct > 0 &&
+            tries.find((t) => t.questionId === ua.answer.question.id).correct <
+              tries.find((t) => t.questionId === ua.answer.question.id).tries
         );
     }
   }
 
   if (isSearching) {
-    answers = answers.filter((answer) => answer.question.text.includes(search));
+    userAnswers = userAnswers.filter((ua) => ua.answer.question.text.includes(search));
   }
 
-  answers = _.uniqBy(answers, (a) => a.question.id);
+  userAnswers = _.uniqBy(userAnswers, (ua) => ua.answer.question.id);
   return (
     <div>
       <Button
@@ -100,11 +100,11 @@ const AnswerDetails: React.SFC<AnswerDetailsProps> = () => {
         disabled={quizLoading}
         basic
         color="green"
-        onClick={() => startQuiz(Object.keys(answers))}
+        onClick={() => startQuiz(Object.keys(userAnswers))}
       >
         <Translate
           id="profileAnswerDetails.start_quiz_all_button"
-          data={{ n: Object.keys(answers).length }}
+          data={{ n: Object.keys(userAnswers).length }}
         />
       </Button>
 
@@ -126,7 +126,7 @@ const AnswerDetails: React.SFC<AnswerDetailsProps> = () => {
 
       <AnswersDetailsTable
         selectedIds={selected}
-        answers={answers}
+        answers={userAnswers}
         toggleCheckbox={toggleCheckbox}
       />
     </div>

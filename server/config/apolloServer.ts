@@ -3,10 +3,7 @@ import { resolvers, typeDefs } from 'graphql/types';
 import jsonWebToken from 'jsonwebtoken';
 import Express from 'express';
 import { createCommentsLoader } from '../graphql/dataloaders/commentLoaders';
-import {
-  createUserAnswersLoader,
-  createUserAnswersByQuestionIdLoader,
-} from '../graphql/dataloaders/answerLoaders';
+import { createUserAnswersLoader } from '../graphql/dataloaders/answerLoaders';
 import { createExamSetsLoader } from '../graphql/dataloaders/examSetLoaders';
 import { createLikesLoader } from '../graphql/dataloaders/likeLoaders';
 import {
@@ -15,7 +12,11 @@ import {
   createTagLoader,
   createTagVotesLoader,
 } from '../graphql/dataloaders/metadataLoaders';
-import { createQuestionLoader } from '../graphql/dataloaders/questionLoaders';
+import {
+  createQuestionLoader,
+  createQuestionAnswersLoader,
+  createQuestionAnswersByQuestionLoader,
+} from '../graphql/dataloaders/questionLoaders';
 import { createSemesterLoader } from '../graphql/dataloaders/semesterLoaders';
 import { createUserLoader, createBookmarkLoader } from '../graphql/dataloaders/userLoaders';
 const secret = process.env.SECRET || '';
@@ -33,7 +34,6 @@ const decodeUser = (jwt: string, res: Express.Response) => {
 
 const generateContext = (req: Express.Request, res: Express.Response) => ({
   userAnswersLoader: createUserAnswersLoader(),
-  userAnswersByQuestionIdLoader: createUserAnswersByQuestionIdLoader(),
   examSetsLoader: createExamSetsLoader(),
   likesLoader: createLikesLoader(),
   specialtyLoader: createSpecialtyLoader(),
@@ -45,6 +45,8 @@ const generateContext = (req: Express.Request, res: Express.Response) => ({
   userLoader: createUserLoader(),
   bookmarkLoader: createBookmarkLoader(),
   commentsLoader: createCommentsLoader(),
+  questionAnswersLoader: createQuestionAnswersLoader(),
+  questionAnswersByQuestionLoader: createQuestionAnswersByQuestionLoader(),
   user: decodeUser(req.cookies.user, res) as { id: number } | null,
   res,
   req,

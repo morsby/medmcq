@@ -13,6 +13,15 @@ interface Question extends QuestionType {
 }
 
 class Question {
+  static questionAnswerFragment = gql`
+    fragment QuestionAnswer on QuestionAnswer {
+      id
+      index
+      isCorrect
+      text
+    }
+  `;
+
   static fullFragment = gql`
     fragment Question on Question {
       id
@@ -35,20 +44,11 @@ class Question {
       tagVotes {
         ...TagVote
       }
-      answer1 {
-        answer
-        correctPercent
-      }
-      answer2 {
-        answer
-        correctPercent
-      }
-      answer3 {
-        answer
+      answers {
+        ...QuestionAnswer
         correctPercent
       }
       images
-      correctAnswers
       publicComments {
         ...Comment
       }
@@ -63,6 +63,7 @@ class Question {
     ${Comment.fragmentFull}
     ${Tag.tagVoteFragment}
     ${Specialty.specialtyVoteFragment}
+    ${Question.questionAnswerFragment}
   `;
 
   static fetch = async (filter: Partial<QuestionFilterInput>, newQuiz?: boolean) => {

@@ -27,10 +27,18 @@ const QuestionEditor: React.SFC<QuestionEditorProps> = () => {
     initialValues: {
       id: question.id,
       text: question.text,
-      answer1: question.answer1.answer,
-      answer2: question.answer2.answer,
-      answer3: question.answer3.answer,
-      correctAnswers: question.correctAnswers,
+      answer1: {
+        text: question.answers.find((a) => a.index === 1).text,
+        isCorrect: question.answers.find((a) => a.index === 1).isCorrect,
+      },
+      answer2: {
+        text: question.answers.find((a) => a.index === 2).text,
+        isCorrect: question.answers.find((a) => a.index === 2).isCorrect,
+      },
+      answer3: {
+        text: question.answers.find((a) => a.index === 3).text,
+        isCorrect: question.answers.find((a) => a.index === 3).isCorrect,
+      },
       examSetId: question.examSet.id,
     },
     onSubmit: (values) => handleSubmit(values),
@@ -115,22 +123,6 @@ const QuestionEditor: React.SFC<QuestionEditorProps> = () => {
             </Grid.Row>
           </Grid>
         ))}
-        <Form.Field>
-          <label>Korrekte svar</label>
-          <Dropdown
-            placeholder="Korrekte svar"
-            name="correctAnswers"
-            selection
-            multiple
-            value={formik.values.correctAnswers}
-            options={[
-              { text: 1, value: 1, key: 1 },
-              { text: 2, value: 2, key: 2 },
-              { text: 3, value: 3, key: 3 },
-            ]}
-            onChange={(e, { value }) => formik.setFieldValue('correctAnswers', value)}
-          />
-        </Form.Field>
         <Divider />
         <Form.Button
           loading={isSubmitting}
