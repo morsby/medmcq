@@ -299,7 +299,7 @@ export const resolvers: Resolvers = {
     },
     answers: async ({ id }, args, ctx) => {
       const answers = await ctx.questionAnswersByQuestionLoader.load(id);
-      return answers.map((a) => ({ id: a.id }));
+      return answers.sort((a, b) => a.index - b.index).map((a) => ({ id: a.id }));
     },
     images: async ({ id }, args, ctx) => {
       const images = await QuestionImage.query().where({ questionId: id });
