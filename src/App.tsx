@@ -70,6 +70,7 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
       setLoading(false);
     };
 
+    fetch();
     setInterval(() => {
       fetch();
     }, 1000 * 60 * 2);

@@ -9,7 +9,7 @@ const MaintenancePage: React.SFC<MaintenancePageProps> = () => {
   const maintenance = useSelector((state: ReduxState) => state.settings.maintenance);
 
   return (
-    <Container>
+    <Container className="content">
       <div
         style={{
           display: 'flex',
