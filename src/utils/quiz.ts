@@ -46,9 +46,9 @@ export const evalAnswer = (
     } else if (answer.id === userAnswer?.answerId) {
       return 'red'; // hvis forkert svar
     }
-  } else {
-    return 'grey'; // ikke valgt mulighed
   }
+
+  return 'grey'; // ikke valgt mulighed
 };
 
 export const calculateResults = (
