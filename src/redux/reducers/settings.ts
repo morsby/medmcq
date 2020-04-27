@@ -2,10 +2,10 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 const initialState = {
   language: 'dk', // Hvilket sprog er valgt? kan være 'dk' eller 'gb'
-  version: '2.2.0', // App version
+  version: null, // App version
   firstTime: true, // Is it the users first time? Then display description modal.
   notice: { message: '', color: '' },
-  maintenance: { message: '' },
+  maintenance: { message: '' }
 };
 
 const settingsReducer = createSlice({
@@ -27,8 +27,8 @@ const settingsReducer = createSlice({
     },
     setMaintenance: (state, action: PayloadAction<{ message: string }>) => {
       state.maintenance = action.payload;
-    },
-  },
+    }
+  }
 });
 
 export default settingsReducer;
