@@ -3,12 +3,12 @@ export default {
     header: ['Om siden', 'About this site'],
     openFirstTimeAgain: ['Gå til informationssiden', 'Go to the information page'],
     contactInfo: [
-      'Forbedringer, rettelser eller ideer bedes rettes til mailadressen: <a href="mailto:medmcq@fire.fundersclub.com">medmcq@fire.fundersclub.com</a>.',
-      'For improvements, edits or ideas please contant us at the following email: <a href="mailto:medmcq@fire.fundersclub.com">medmcq@fire.fundersclub.com</a>',
+      'Forbedringer, rettelser eller ideer bedes rettes til mailadressen: <a href="mailto:thjendk@fire.fundersclub.com">thjendk@fire.fundersclub.com</a>.',
+      'For improvements, edits or ideas please contant us at the following email: <a href="mailto:thjendk@fire.fundersclub.com">thjendk@fire.fundersclub.com</a>'
     ],
     frontDisclaimer: [
       '<p>medMCQ besidder MCQ-eksamenspørgsmål fra tidligere semestre og du bør derfor være opmærksom på:</p><ol><li>Nogle besvarelser kan være forældet ift. hvad vil være korrekt i dag.</li><li>Pensum kan siden være ændret, hvorfor du kan møde spørgsmål der ligger uden for pensum. Der kan også være elementer af pensum, som der ikke er spørgsmål indenfor.</li><li>Flere af spørgsmålene er udviklet til MCQ-eksamener med hjælpemidler. Derfor kan du opleve at spørgsmålene har et højere kompleksitetsniveau.</li></ol>',
-      '<p>Welcome to medMCQ. You can test your abilities within different semesters and different medical specialties. Since the site contains MCQ examination questions from earlier semesters, you should be aware that</p><ol><li>Some answers might be outdated.</li><li>The curriculum may be different today, which means that some questions may be irrelevant for your upcoming exam and some areas of relevance may not be covered by the questions.</li><li>Some of the questions were for an examination where aid was permitted, which means you may experience a higher level of complexity in the questions.</li></ol>',
+      '<p>Welcome to medMCQ. You can test your abilities within different semesters and different medical specialties. Since the site contains MCQ examination questions from earlier semesters, you should be aware that</p><ol><li>Some answers might be outdated.</li><li>The curriculum may be different today, which means that some questions may be irrelevant for your upcoming exam and some areas of relevance may not be covered by the questions.</li><li>Some of the questions were for an examination where aid was permitted, which means you may experience a higher level of complexity in the questions.</li></ol>'
     ],
     privacy: {
       header: ['Privatliv og cookies', 'Privacy and cookies'],
@@ -31,9 +31,9 @@ export default {
             </p>
             <p>
                 The site uses no cookies unless you register for an account and log in. In this case, a cookie is set to remember you for your next visit.
-            </p>`,
-      ],
-    },
+            </p>`
+      ]
+    }
   },
   voting: {
     header: ['Stemmesystemet', 'The voting system'],
@@ -43,8 +43,8 @@ export default {
     </p>`,
       `
       <p>When voting for a specialty or tag, your vote will count for 1 point. You can add new tags or specialties in the dropdown menus. If you are the only one, who has voted on the tag, the tag will dissapear, if you downvote it to 0 points. If others have voted on the same specialty or tag, the points will need to reach -1 before it is removed.
-      </p>`,
-    ],
+      </p>`
+    ]
   },
   privacy: {
     header: ['Privatliv og cookies', 'Privacy and cookies'],
@@ -67,8 +67,8 @@ export default {
           </p>
           <p>
               The site uses no cookies unless you register for an account and log in. In this case, a cookie is set to remember you for your next visit.
-          </p>`,
-    ],
+          </p>`
+    ]
   },
   changelog: {
     header: ['Hvad er nyt på siden?', "What's new on the site?"],
@@ -280,8 +280,8 @@ export default {
       </ul>
   </li>
 </ul>
-      `,
-    ],
+      `
+    ]
   },
   firstTime: {
     title: [
@@ -301,7 +301,7 @@ export default {
         <br />
         Some of the features of the page depend on whether you create a free user or not.
       </p>
-    `,
+    `
     ],
     withoutUserTitle: ['Uden bruger', 'Without user'],
     withoutUser: [
@@ -340,7 +340,7 @@ export default {
         <b>Ability to read comments</b> below each question, among the countless of comments that users have left on the site. Many comments contain useful descriptions or tips for the questions.
         </li>
     </ul>
-    `,
+    `
     ],
     withUserTitle: [
       `
@@ -355,7 +355,7 @@ export default {
         <h5>
           You do not have to create a user, but be aware that you with a (totally free!) user will get access to more features. You can:
         </h5>
-        `,
+        `
     ],
     withUser: [
       `
@@ -402,19 +402,19 @@ export default {
   <b>Access your profile page</b> that includes statistics based on which questions answered, and how well you are doing.
 </li>
 </ul>
-`,
+`
     ],
     haveFun: [
       'Du ønskes held og lykke med eksamenslæsningen og god fornøjelse fra os - Sigurd Morsby og Thomas Jensen',
-      'We wish you good luck with your exam-reading and hope that you have a blast - Sigurd Morsby and Thomas Jensen',
+      'We wish you good luck with your exam-reading and hope that you have a blast - Sigurd Morsby and Thomas Jensen'
     ],
     begin: ['Begynd', 'Begin'],
     toastTitle: ['Velkommen til medMCQ!', 'Welcome to medMCQ!'],
     toast: [
       'Om du er her for første gang, eller har brugt siden længe, så ser her for nogle gode tips og tricks!',
-      'Whether you are here for the first time, or are a veteran of the site, then look here for some useful features and tips!',
+      'Whether you are here for the first time, or are a veteran of the site, then look here for some useful features and tips!'
     ],
     toastShowMe: ['Vis mig det!', 'Show me!'],
-    toastNoThanks: ['Ellers tak', 'No thank you'],
-  },
+    toastNoThanks: ['Ellers tak', 'No thank you']
+  }
 };
