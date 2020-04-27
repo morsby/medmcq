@@ -3,11 +3,11 @@ export default {
     header: ['Kontakt os', 'Contact us'],
     disclaimer: [
       `
-Når du sender din besked, bliver den offentligt tilgængelig. Der oprettes en ny tråd på https://github.com/morsby/medmcq/issues.
+Når du sender din besked, bliver den offentligt tilgængelig. Der oprettes en ny tråd på https://github.com/thjendk/medmcq/issues.
 
 Vi har ikke mulighed for at kontakte dig direkte som svar på din henvendelse, så har du behov for opfølgning henvises til ovenstående link.`,
       `
-When you send your message, it will become public. A new thread will be created at https://github.com/morsby/medmcq/issues.
+When you send your message, it will become public. A new thread will be created at https://github.com/thjendk/medmcq/issues.
 
 We cannot contact you directly. If you want to follow up on your message, please visit the link above.`
     ],
@@ -24,8 +24,8 @@ We cannot contact you directly. If you want to follow up on your message, please
       submitted: {
         header: ['Din besked er sendt!', 'Your message has been sent!'],
         body: [
-          'Tak for din besked! Som skrevet kan du følge med i tråden her: https://github.com/morsby/medmcq/issues',
-          'Thank your for your message! As stated above, you can follow the thread here: https://github.com/morsby/medmcq/issues'
+          'Tak for din besked! Som skrevet kan du følge med i tråden her: https://github.com/thjendk/medmcq/issues',
+          'Thank your for your message! As stated above, you can follow the thread here: https://github.com/thjendk/medmcq/issues'
         ]
       }
     }
