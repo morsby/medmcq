@@ -9,19 +9,33 @@ const searchQuestion = () => {
 };
 
 describe('quiz', () => {
-  before(() => {
-    cy.frontpage();
-  });
-
   describe('load quiz from selection', () => {
     it('should load 5 questions', () => {
       loadQuestions();
     });
 
-    it('should answer questions', () => {
-      answerQuestions();
+    it('should load 5 questions when only searching for now answered earlier', () => {
+      cy.login();
+      cy.get('div[class="ui checkbox"]').contains('ikke har svaret på tidligere').click();
+      loadQuestions();
+      cy.logout();
     });
 
+    it('should load 5 questions when only searching for now answered earlier', () => {
+      cy.frontpage();
+      cy.login();
+      cy.get('div[class="ui checkbox"]').contains('svaret rigtigt på').click();
+      loadQuestions();
+      cy.logout();
+    });
+
+    it('should answer questions', () => {
+      loadQuestions();
+      answerQuestions();
+    });
+  });
+
+  describe('comments', () => {
     it('should be able to open public comments', () => {
       cy.contains('offentlig').click();
       cy.contains('Skjul').should('exist');

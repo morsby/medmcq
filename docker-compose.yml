@@ -2,6 +2,8 @@ version: '3'
 services:
   server:
     env_file: .env.development
+    environment:
+      - NODE_ENV=production
     restart: always
     build: .
     ports:

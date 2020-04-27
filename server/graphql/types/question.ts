@@ -101,7 +101,7 @@ export const resolvers: Resolvers = {
         onlyNew,
         onlyWrong,
         commentIds,
-        shareId,
+        shareId
       } = filter;
       let { n } = filter;
 
@@ -192,21 +192,24 @@ export const resolvers: Resolvers = {
       if (ctx.user && onlyWrong) {
         const correctAnswers = QuestionUserAnswer.query()
           .where({ userId: ctx.user.id })
-          .join('questionAnswer', 'questionUserAnswer.answerId', 'questionAnswer.id')
+          .join('questionAnswers', 'questionUserAnswer.answerId', 'questionAnswers.id')
           .where({ isCorrect: 1 })
-          .select('questionUserAnswer.questionId');
+          .select('questionAnswers.questionId');
 
         query = query.whereNotIn('question.id', correctAnswers);
       } else if (ctx.user && onlyNew) {
         query = query.whereNotIn(
           'question.id',
-          QuestionUserAnswer.query().where({ userId: ctx.user.id }).distinct('questionId')
+          QuestionUserAnswer.query()
+            .where({ userId: ctx.user.id })
+            .join('questionAnswers', 'questionUserAnswer.answerId', 'questionAnswers.id')
+            .distinct('questionId')
         );
       }
 
       const questions = await query.groupBy('question.id').select('question.id as id');
       return questions.map((question) => ({ id: question.id }));
-    },
+    }
   },
 
   Mutation: {
@@ -225,7 +228,7 @@ export const resolvers: Resolvers = {
         text,
         examSetId,
         examSetQno,
-        userId: user.id,
+        userId: user.id
       });
       if (!!images) {
         await QuestionImage.query().insertGraph(
@@ -245,7 +248,7 @@ export const resolvers: Resolvers = {
         .$query()
         .updateAndFetch({
           text,
-          examSetId,
+          examSetId
         })
         .skipUndefined();
 
@@ -282,13 +285,13 @@ export const resolvers: Resolvers = {
   A. ${answers.find((a) => a.index === 1).text}<br>
   B. ${answers.find((a) => a.index === 2).text}<br>
   C. ${answers.find((a) => a.index === 3).text}
-  `,
+  `
       };
 
       sgMail.send(msg);
 
       return `Question (ID: ${question.id}) reported`;
-    },
+    }
   },
 
   Question: {
@@ -327,7 +330,7 @@ export const resolvers: Resolvers = {
       let privateComments = await Comment.query().where({
         questionId: id,
         private: 1,
-        userId: ctx.user.id,
+        userId: ctx.user.id
       });
       return privateComments.map((comment) => ({ id: comment.id }));
     },
@@ -373,7 +376,7 @@ export const resolvers: Resolvers = {
       const question = await ctx.questionLoader.load(id);
       if (!question.userId) return null;
       return { id: question.userId };
-    },
+    }
   },
 
   QuestionAnswer: {
@@ -410,6 +413,6 @@ export const resolvers: Resolvers = {
     question: async ({ id }, _, ctx) => {
       const answer = await ctx.questionAnswersLoader.load(id);
       return { id: answer.questionId };
-    },
-  },
+    }
+  }
 };

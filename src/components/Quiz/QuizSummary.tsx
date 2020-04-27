@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { Translate } from 'react-localize-redux';
 import { useSelector } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
+import LoadingPage from 'components/Misc/Utility/LoadingPage';
 
 /**
  * Viser et overblik over alle spørgsmål i quizzen og fremgangen.
@@ -25,8 +26,9 @@ const QuizSummary: React.SFC<QuizSummaryProps> = ({ clickHandler }) => {
   const userAnswers = useSelector((state: ReduxState) => state.quiz.userAnswers);
   const examMode = useSelector((state: ReduxState) => state.quiz.examMode);
   const usedExamTime = useSelector((state: ReduxState) => state.quiz.usedExamTime);
-  let results = calculateResults(questions, userAnswers);
 
+  if (!questions) return <LoadingPage />;
+  const results = calculateResults(questions, userAnswers);
   return (
     <Container>
       <Card fluid>

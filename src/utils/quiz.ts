@@ -59,11 +59,11 @@ export const calculateResults = (
     status: true,
     n: 0,
     correct: 0,
-    percentage: '0%',
+    percentage: '0%'
   };
   for (let userAnswer of userAnswers) {
     res.n++;
-    if (questions.flatMap((q) => q.answers).find((a) => userAnswer.answerId === a.id)?.isCorrect)
+    if (questions?.flatMap((q) => q.answers).find((a) => userAnswer.answerId === a.id)?.isCorrect)
       res.correct++;
   }
 
