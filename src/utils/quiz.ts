@@ -1,5 +1,6 @@
 import Question from 'classes/Question';
 import { UserAnswerInput, QuestionAnswer } from 'types/generated';
+import { flatMap } from 'lodash';
 
 export const smoothScroll = (h?: number, dir = 'up') => {
   let top = window.pageYOffset || document.documentElement.scrollTop;
@@ -63,7 +64,7 @@ export const calculateResults = (
   };
   for (let userAnswer of userAnswers) {
     res.n++;
-    if (questions?.flatMap((q) => q.answers).find((a) => userAnswer.answerId === a.id)?.isCorrect)
+    if (flatMap(questions, (q) => q.answers).find((a) => userAnswer.answerId === a.id)?.isCorrect)
       res.correct++;
   }
 
