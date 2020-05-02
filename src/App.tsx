@@ -67,6 +67,7 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
     const fetch = async () => {
       await User.fetch();
       await SelectionClass.fetchMaintenance();
+      await SelectionClass.fetchNotice();
       setLoading(false);
     };
 
@@ -85,13 +86,13 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
       initialize({
         languages: [
           { name: 'Danish', code: 'dk' },
-          { name: 'English', code: 'gb' },
+          { name: 'English', code: 'gb' }
         ],
         options: {
           renderToStaticMarkup,
           renderInnerHtml: true,
-          defaultLanguage,
-        },
+          defaultLanguage
+        }
       })
     );
 
@@ -99,7 +100,7 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
       toast.success(<FirstTimeToast language={defaultLanguage} />, {
         autoClose: false,
         onClose: () => dispatch(settingsReducer.actions.setFirstTime(false)),
-        closeOnClick: false,
+        closeOnClick: false
       });
     }
 

@@ -9,11 +9,9 @@ import { useSelector } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
 import Semester from 'classes/Semester';
 import LoadingPage from 'components/Misc/Utility/LoadingPage';
-import User from 'classes/User';
 import SelectionStartButton from './SelectionComponents/SelectionStartButton';
 import QuestionCount from './SelectionComponents/QuestionCount';
 import { useHistory } from 'react-router-dom';
-import SelectionClass from 'classes/Selection';
 const SelectionRandom = lazy(() => import('./SelectionRandom'));
 const SelectionMetadata = lazy(() => import('./SelectionMetadata'));
 const SelectionSets = lazy(() => import('./SelectionSets'));
@@ -37,19 +35,6 @@ const Selection: React.SFC<SelectionProps> = ({ addTranslation }) => {
     addTranslation(selectionTranslations);
     Semester.fetchAll();
   }, [addTranslation]);
-
-  /**
-   * Fetch user whenever the user goes back to the selection screen
-   */
-  useEffect(() => {
-    const fetch = async () => {
-      await User.fetch();
-      await SelectionClass.fetchMaintenance();
-      await SelectionClass.fetchNotice();
-    };
-
-    fetch();
-  }, []);
 
   if (!semesters || semesters.length < 0) return <LoadingPage />;
   return (
