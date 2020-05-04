@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 // GraphQL
-import { ApolloProvider } from 'react-apollo-hooks';
+import { ApolloProvider } from 'react-apollo';
 import apolloClient from 'apolloClient';
 // Redux
 import { Provider } from 'react-redux';

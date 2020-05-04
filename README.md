@@ -11,11 +11,10 @@ For at køre appen, skal du placere en fil med navnet ".env.development" med fø
 ```
 SECRET=thisisasecret
 DB_URL=mysql://user:password@ip:port/schema
-KEYGRIP_SECRETS="example example example example example example example example"
 ```
 
 Se mere om omsætningen i dokumentation for dotenv-flow.
-  
+
 Derefter skal du køre `npm install`, efterfulgt af `cd server && knex migrate:latest` og derefter `npm run dev` for at starte dit development workflow. Held og lykke!
 
 ## Development

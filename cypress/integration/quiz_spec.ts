@@ -14,14 +14,14 @@ describe('quiz', () => {
       loadQuestions();
     });
 
-    it('should load 5 questions when only searching for now answered earlier', () => {
+    it('should load 5 questions when only searching for not answered earlier', () => {
       cy.login();
       cy.get('div[class="ui checkbox"]').contains('ikke har svaret på tidligere').click();
       loadQuestions();
       cy.logout();
     });
 
-    it('should load 5 questions when only searching for now answered earlier', () => {
+    it('should load 5 questions when excluding correctly answered questions', () => {
       cy.frontpage();
       cy.login();
       cy.get('div[class="ui checkbox"]').contains('svaret rigtigt på').click();

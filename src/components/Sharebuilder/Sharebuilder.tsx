@@ -215,7 +215,8 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
       render: (record: Question) => (
         <>
           <Button
-            type={picked.findIndex((p) => p.id === record.id) !== -1 ? 'danger' : 'primary'}
+            type="primary"
+            danger={picked.findIndex((p) => p.id === record.id) !== -1}
             onClick={() => handlePick(record)}
           >
             {picked.findIndex((p) => p.id === record.id) !== -1 ? <CloseOutlined /> : 'Tilføj'}
