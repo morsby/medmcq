@@ -15,7 +15,8 @@ const SelectionStartButton: React.SFC<SelectionStartButtonProps> = () => {
   const semesterId = useSelector((state: ReduxState) => state.selection.semesterId);
   const history = useHistory();
   const quizQuestions = useSelector((state: ReduxState) => state.questions.questions);
-  const isDisabled = startLoading || !semesterId;
+  const selection = useSelector((state: ReduxState) => state.selection);
+  const isDisabled = startLoading || !semesterId || (selection.n < 1 && selection.type !== 'set');
 
   const handleStart = async (examMode?: boolean) => {
     setStartLoading(true);

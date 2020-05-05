@@ -136,10 +136,9 @@ export const resolvers: Resolvers = {
           });
 
       // Start filtering based on other values
-
       query = query.orderByRaw('rand()');
 
-      if (!n || n > 300) n = 300; // Man må ikke hente mere end 300
+      if (!n || n > 100) n = 100; // Man må ikke hente mere end 100
       query = query.limit(n);
 
       if (year) {

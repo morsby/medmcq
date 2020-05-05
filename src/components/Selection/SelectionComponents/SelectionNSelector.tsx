@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { allowedNs } from 'utils/common';
 
@@ -19,21 +19,16 @@ const radioOptions = [5, 10, 20, 40, 80];
 export interface SelectionNSelectorProps {}
 
 const SelectionNSelector: React.SFC<SelectionNSelectorProps> = () => {
+  const [error, setError] = useState(false);
   const n = useSelector((state: ReduxState) => state.selection.n);
 
-  let labelError;
-  if (n > allowedNs.max || n < allowedNs.min) {
-    labelError = (
-      <Label basic color="red" pointing>
-        <Translate
-          id="selectionNSelector.err_n_range"
-          data={{ min: allowedNs.min, max: allowedNs.max }}
-        />
-      </Label>
-    );
-  }
-
   const handleChange = (value: number) => {
+    if (value > 100) {
+      setError(true);
+      value = 100;
+    } else {
+      setError(false);
+    }
     Selection.change({ type: 'n', value });
   };
 
@@ -74,12 +69,18 @@ const SelectionNSelector: React.SFC<SelectionNSelectorProps> = () => {
                         label={translate('selectionNSelector.other_value')}
                         name="n"
                         type="number"
-                        min="1"
                         value={n}
                         labelPosition="left"
-                        onChange={(e, { value }) => handleChange(Number(value))}
+                        onChange={(e) => handleChange(Number(e.target.value))}
                       />
-                      {labelError}
+                      {error && (
+                        <Label basic color="red" pointing>
+                          <Translate
+                            id="selectionNSelector.err_n_range"
+                            data={{ min: allowedNs.min, max: allowedNs.max }}
+                          />
+                        </Label>
+                      )}
                     </>
                   )}
                 </Translate>
