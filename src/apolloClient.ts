@@ -1,7 +1,7 @@
 import ApolloClient from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
 import { RetryLink } from 'apollo-link-retry';
-import { HttpLink } from 'apollo-link-http';
+import { BatchHttpLink } from 'apollo-link-batch-http';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 
 const link = ApolloLink.from([
@@ -14,7 +14,7 @@ const link = ApolloLink.from([
       return data;
     });
   }),
-  new HttpLink({ uri: '/graphql' })
+  new BatchHttpLink({ uri: '/graphql' })
 ]);
 
 const client = new ApolloClient({
