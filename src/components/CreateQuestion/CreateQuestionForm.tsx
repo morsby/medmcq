@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Segment, Form, Dropdown, Container, Divider, Message } from 'semantic-ui-react';
+import {
+  Segment,
+  Form,
+  Dropdown,
+  Container,
+  Divider,
+  Message,
+  Grid,
+  Button
+} from 'semantic-ui-react';
 import { useFormik } from 'formik';
 import { useSelector, useDispatch } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
@@ -9,6 +18,8 @@ import Semester from 'classes/Semester';
 import axios from 'axios';
 import { QuestionInput } from 'types/generated';
 import questionsReducer from 'redux/reducers/question';
+import { imageURL } from 'utils/common';
+import QuestionImage from 'components/Question/QuestionImage';
 
 export interface CreateQuestionFormProps {
   question?: Question;
@@ -203,6 +214,20 @@ const CreateQuestionForm: React.SFC<CreateQuestionFormProps> = ({ question }) =>
                 examSets.find((s) => s.id === formik.values.examSetId).year}
             </p>
           </Form.Field>
+          {question?.images.map((image) => (
+            <Grid columns="equal" celled>
+              <Grid.Row>
+                <Grid.Column>
+                  <QuestionImage key={image} img={imageURL(image)} />
+                </Grid.Column>
+                <Grid.Column textAlign="center">
+                  <Button basic color="red">
+                    Slet billede (ikke implementeret)
+                  </Button>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          ))}
           <Divider />
           <Form.Button
             loading={isSubmitting}
