@@ -46,6 +46,7 @@ Cypress.Commands.add('loginOther', () => {
 
 Cypress.Commands.add('logout', () => {
   cy.contains('button', 'Log ud').click();
+  cy.wait(500);
   cy.getCookie('user').should('not.be.ok');
 });
 
