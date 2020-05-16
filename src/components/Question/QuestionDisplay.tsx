@@ -45,7 +45,7 @@ const QuestionDisplay: React.SFC<QuestionDisplayProps> = () => {
      * For at kunne svare med tal på keyboardet
      * Tager højde for modifier keys (alt, ctrl, meta)
      */
-    const onKeydown = (e) => {
+    const onKeydown = (e: KeyboardEvent) => {
       if (
         !imgOpen &&
         !(
@@ -67,10 +67,10 @@ const QuestionDisplay: React.SFC<QuestionDisplayProps> = () => {
       }
     };
 
-    document.addEventListener('keydown', onKeydown);
+    document.addEventListener('keydown', onKeydown as any);
 
     return () => {
-      document.removeEventListener('keydown', onKeydown);
+      document.removeEventListener('keydown', onKeydown as any);
     };
   }, [question, answered, examMode]);
 
@@ -93,8 +93,8 @@ const QuestionDisplay: React.SFC<QuestionDisplayProps> = () => {
               style={{ fontSize: '18px' }}
               dangerouslySetInnerHTML={{
                 __html: marked(text, {
-                  smartypants: true,
-                }),
+                  smartypants: true
+                })
               }}
             />
             <Responsive as="div" minWidth={breakpoints.mobile + 1}>

@@ -47,12 +47,12 @@ const SelectionSpecialtiesSelector: React.SFC<SelectionSpecialtiesSelectorProps>
         }));
     };
 
-    const getChildrenOfMetadata = (tagId: number) => {
+    const getChildrenOfMetadata = (tagId: number): TagSelectionObject[] => {
       return semester.tags
         .filter((t) => t.parent.id === tagId)
         .map((t) => ({
           title: `${t.name} (${t.questionCount})`,
-          key: t.id,
+          key: t.id.toString(),
           children: getChildrenOfMetadata(t.id)
         }));
     };

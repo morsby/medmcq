@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
+import React, { Component, ErrorInfo } from 'react';
 import { Button, Container, Divider } from 'semantic-ui-react';
 
 class ErrorBoundary extends Component {
   state = { hasError: false };
 
   //eslint-disable-next-line no-unused-vars
-  static getDerivedStateFromError(error) {
+  static getDerivedStateFromError(error: Error) {
     return { hasError: true };
   }
 
-  componentDidCatch(error, info) {
+  componentDidCatch(error: Error, info: ErrorInfo) {
     //eslint-disable-next-line no-console
     console.error(error, info);
   }

@@ -10,8 +10,10 @@ import { ReduxState } from 'redux/reducers';
 import Specialty from 'classes/Specialty';
 const { SubMenu } = Menu;
 
+type TagTreeItem = { title: string; key: number; children: TagTreeItem[] };
+
 export interface QuestionMetadataDropdownProps {
-  onChange: Function;
+  onChange: (id: number) => void;
   type: 'specialty' | 'tag';
 }
 
@@ -25,7 +27,7 @@ const QuestionMetadataDropdown: React.SFC<QuestionMetadataDropdownProps> = ({ on
   );
   const options = type === 'specialty' ? specialties : tags;
 
-  const handleDropdownPick = (id) => {
+  const handleDropdownPick = (id: number) => {
     onChange(id);
   };
 
@@ -38,7 +40,7 @@ const QuestionMetadataDropdown: React.SFC<QuestionMetadataDropdownProps> = ({ on
       }));
     };
 
-    const getChildrenOfMetadata = (tagId) => {
+    const getChildrenOfMetadata = (tagId: number): any => {
       return _.filter(options, (t: Tag) => t.parent?.id === tagId).map((t: Tag) => ({
         title: t.name,
         key: t.id,
@@ -49,7 +51,7 @@ const QuestionMetadataDropdown: React.SFC<QuestionMetadataDropdownProps> = ({ on
     setTagTree(convertMetadataToTree());
   }, [options]);
 
-  const createDropdownItems = (tags) => {
+  const createDropdownItems = (tags: TagTreeItem[]) => {
     let items = [];
 
     for (const t of tags) {

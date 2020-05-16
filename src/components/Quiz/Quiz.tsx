@@ -64,7 +64,7 @@ const Quiz: React.SFC<QuizProps> = ({ addTranslation }) => {
    * Tjekker om det aktive element er et TEXTAREA (kommentarfeltet) og
    * navigerer i så fald IKKE
    */
-  const handleKeyDown = (e) => {
+  const handleKeyDown = (e: KeyboardEvent) => {
     if (imgOpen) return;
     if (document.activeElement.tagName === 'TEXTAREA') return;
 

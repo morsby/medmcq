@@ -18,7 +18,7 @@ export interface HeaderProps {}
 const Header: React.SFC<HeaderProps> = () => {
   const history = useHistory();
 
-  const handleNavigation = (url) => {
+  const handleNavigation = (url: string) => {
     history.push(url);
   };
 

@@ -68,7 +68,7 @@ export const resolvers: Resolvers = {
       const exists = await QuestionTagVote.query().findOne({
         questionId,
         tagId: metadataId,
-        userId,
+        userId
       });
       let tagVote: QuestionTagVote;
       if (exists) {
@@ -78,7 +78,7 @@ export const resolvers: Resolvers = {
           userId,
           tagId: metadataId,
           questionId,
-          value: vote,
+          value: vote
         });
       }
 
@@ -90,13 +90,13 @@ export const resolvers: Resolvers = {
       const exists = await QuestionSpecialtyVote.query().findOne({
         questionId,
         specialtyId: metadataId,
-        userId,
+        userId
       });
 
       let specialtyVote: QuestionSpecialtyVote;
       if (exists) {
         specialtyVote = await exists.$query().updateAndFetch({
-          value: vote,
+          value: vote
         });
         // await QuestionSpecialtyVote.query().deleteById(exists.id);
       } else {
@@ -104,7 +104,7 @@ export const resolvers: Resolvers = {
           userId: ctx.user.id,
           specialtyId: metadataId,
           questionId,
-          value: vote,
+          value: vote
         });
       }
 
@@ -131,12 +131,12 @@ export const resolvers: Resolvers = {
   A. ${answers.find((a) => a.index === 1).text}<br>
   B. ${answers.find((a) => a.index === 2).text}<br>
   C. ${answers.find((a) => a.index === 3).text}
-  `,
+  `
       };
 
       sgMail.send(msg);
       return `Tag "${tagName}" has been suggested.`;
-    },
+    }
   },
   TagVote: {
     id: ({ id }) => id,
@@ -155,7 +155,7 @@ export const resolvers: Resolvers = {
     vote: async ({ id }, _, ctx) => {
       const tagVote = await ctx.tagVotesLoader.load(id);
       return tagVote.value;
-    },
+    }
   },
   SpecialtyVote: {
     id: ({ id }) => id,
@@ -174,7 +174,7 @@ export const resolvers: Resolvers = {
     vote: async ({ id }, args, ctx) => {
       const specialtyVote = await ctx.specialtyVoteLoader.load(id);
       return specialtyVote.value;
-    },
+    }
   },
   Tag: {
     id: ({ id }) => id,
@@ -191,7 +191,7 @@ export const resolvers: Resolvers = {
       return { id: tag.parentId };
     },
     questionCount: async ({ id }, _, ctx) => {
-      const getChildIds = async (parentId: number) => {
+      const getChildIds = async (parentId: number): Promise<number[]> => {
         const children = await Tag.query().where({ parentId }).select('id');
         if (children.length === 0) return [];
         let ids = [];
@@ -211,7 +211,7 @@ export const resolvers: Resolvers = {
         .select('questionId');
 
       return questions.length;
-    },
+    }
   },
   Specialty: {
     id: ({ id }) => id,
@@ -233,6 +233,6 @@ export const resolvers: Resolvers = {
         .select('questionId');
 
       return questions.length;
-    },
-  },
+    }
+  }
 };

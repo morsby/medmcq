@@ -3,7 +3,6 @@ import Semester from 'classes/Semester';
 
 export const initialState = {
   semesters: [] as Semester[],
-  result: [],
   lastUpdated: 0,
   didInvalidate: false,
   isFetching: false

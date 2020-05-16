@@ -182,19 +182,15 @@ export type MutationContactArgs = {
 };
 
 export type QuestionFilterInput = {
-  text?: Maybe<Scalars['String']>;
   specialtyIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
   tagIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
   semesterId?: Maybe<Scalars['Int']>;
-  year?: Maybe<Scalars['Int']>;
-  season?: Maybe<Scalars['String']>;
   ids?: Maybe<Array<Maybe<Scalars['Int']>>>;
   n?: Maybe<Scalars['Int']>;
   examSetId?: Maybe<Scalars['Int']>;
   onlyNew?: Maybe<Scalars['Boolean']>;
   onlyWrong?: Maybe<Scalars['Boolean']>;
   commentIds?: Maybe<Array<Maybe<Scalars['Int']>>>;
-  profile?: Maybe<Scalars['Boolean']>;
   search?: Maybe<Scalars['String']>;
   shareId?: Maybe<Scalars['String']>;
 };

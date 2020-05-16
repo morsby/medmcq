@@ -6,7 +6,7 @@ import QuestionExtras from 'components/Question/QuestionExtras';
 import { ReduxState } from 'redux/reducers';
 import QuestionDisplay from './QuestionDisplay';
 import useWidth from 'hooks/useWidth';
-import QuestionEditor from './QuestionEditor';
+import CreateQuestionForm from 'components/CreateQuestion/CreateQuestionForm';
 
 /**
  * Component ansvarlig for at vise selve spørgsmålet, evt. billeder, kommentarer
@@ -18,11 +18,15 @@ const Question: React.SFC<QuestionProps> = () => {
   const { width } = useWidth();
   const isEditing = useSelector((state: ReduxState) => state.questions.isEditing);
   const examMode = useSelector((state: ReduxState) => state.quiz.examMode);
+  const currentQuestionIndex = useSelector((state: ReduxState) => state.quiz.questionIndex);
+  const question = useSelector(
+    (state: ReduxState) => state.questions.questions[currentQuestionIndex]
+  );
 
   return (
     <Container className="question">
       <Segment>
-        {isEditing ? <QuestionEditor /> : <QuestionDisplay />}
+        {isEditing ? <CreateQuestionForm question={question} /> : <QuestionDisplay />}
         {!examMode && <QuestionMetadata />}
         {!examMode && <QuestionExtras width={width} />}
       </Segment>

@@ -9,6 +9,7 @@ import { signupSchema } from 'utils/validationSchemas';
 import { useFormik } from 'formik';
 import FormField from './Fields/FormField';
 import DebouncedField from './Fields/DebouncedField';
+import { UserInput } from 'types/generated';
 
 export interface SignupFormProps extends LocalizeContextProps {}
 
@@ -30,7 +31,7 @@ const SignupForm: React.SFC<SignupFormProps> = ({ translate }) => {
     validateOnBlur: true
   });
 
-  const handleSubmit = async ({ username, email, password }) => {
+  const handleSubmit = async ({ username, email, password }: UserInput) => {
     await User.signup({ username, email, password });
     history.push('/');
   };

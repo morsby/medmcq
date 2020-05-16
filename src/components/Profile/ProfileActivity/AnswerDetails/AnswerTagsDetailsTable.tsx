@@ -6,6 +6,7 @@ import { useHistory } from 'react-router';
 import { ReduxState } from 'redux/reducers';
 import Quiz from 'classes/Quiz';
 import Selection from 'classes/Selection';
+import { Attempt } from 'classes/Profile';
 
 type AnsweredTag = { id: number; name: string; correct: number; tries: number };
 type AnsweredTags = { [key: string]: AnsweredTag };
@@ -23,13 +24,13 @@ const AnswerTagsDetailsTable: React.SFC<AnswerTagsDetailsTableProps> = () => {
       state.metadata.semesters.find((semester) => semester.id === selectedSemester).tags
   );
 
-  const getPercentCorrect = (record) => {
+  const getPercentCorrect = (record: AnsweredTag) => {
     const percent = Math.round((record.correct / record.tries) * 100);
     if (isNaN(percent)) return 0;
     return percent;
   };
 
-  const getColor = (record) => {
+  const getColor = (record: AnsweredTag) => {
     const percent = getPercentCorrect(record);
 
     if (percent >= 80) return 'green';
@@ -54,7 +55,7 @@ const AnswerTagsDetailsTable: React.SFC<AnswerTagsDetailsTableProps> = () => {
         id: tag.id,
         name: tag.name,
         correct: 0,
-        tries: 0,
+        tries: 0
       };
     }
 
@@ -84,17 +85,17 @@ const AnswerTagsDetailsTable: React.SFC<AnswerTagsDetailsTableProps> = () => {
           {record.name}
         </p>
       ),
-      sorter: (a: AnsweredTag, b: AnsweredTag) => a.name.localeCompare(b.name),
+      sorter: (a: AnsweredTag, b: AnsweredTag) => a.name.localeCompare(b.name)
     },
     {
       title: 'Korrekt',
       dataIndex: 'correct',
-      sorter: (a: AnsweredTag, b: AnsweredTag) => a.correct - b.correct,
+      sorter: (a: AnsweredTag, b: AnsweredTag) => a.correct - b.correct
     },
     {
       title: 'Forsøg',
       dataIndex: 'tries',
-      sorter: (a: AnsweredTag, b: AnsweredTag) => a.tries - b.tries,
+      sorter: (a: AnsweredTag, b: AnsweredTag) => a.tries - b.tries
     },
     {
       title: 'Percent',
@@ -105,8 +106,8 @@ const AnswerTagsDetailsTable: React.SFC<AnswerTagsDetailsTableProps> = () => {
           return <Tag color={getColor(record)}>{getPercentCorrect(record)}%</Tag>;
         }
       },
-      sorter: (a: AnsweredTag, b: AnsweredTag) => getPercentCorrect(a) - getPercentCorrect(b),
-    },
+      sorter: (a: AnsweredTag, b: AnsweredTag) => getPercentCorrect(a) - getPercentCorrect(b)
+    }
   ];
 
   return (

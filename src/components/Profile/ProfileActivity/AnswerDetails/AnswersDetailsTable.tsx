@@ -8,6 +8,7 @@ import AnswerDetailsTableExtendedRow from './AnswerDetailsTableExtendedRow';
 import { ReduxState } from 'redux/reducers';
 import { TableRowSelection } from 'antd/lib/table/interface';
 import { UserAnswer } from 'types/generated';
+import { Attempt } from 'classes/Profile';
 
 export interface AnswersDetailsTableProps {
   answers: UserAnswer[];
@@ -18,7 +19,7 @@ export interface AnswersDetailsTableProps {
 const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
   answers,
   toggleCheckbox,
-  selectedIds,
+  selectedIds
 }) => {
   const history = useHistory();
   const semesterId = useSelector((state: ReduxState) => state.selection.semesterId);
@@ -27,7 +28,7 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
     state.metadata.semesters.find((s) => s.id === semesterId)
   );
 
-  const getColor = (answer) => {
+  const getColor = (answer: Attempt) => {
     if (answer.correct === answer.tries) return 'green';
     if (answer.correct < answer.tries && answer.correct > 0) return 'orange';
     if (answer.correct === 0) return 'red';
@@ -47,14 +48,14 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
           </Tag>
         );
       },
-      sorter: (a, b) => {
-        const aAttempts = tries.find((attempt) => attempt.questionId === a.question.id);
-        const bAttempts = tries.find((attempt) => attempt.questionId === b.question.id);
+      sorter: (a: Attempt, b: Attempt) => {
+        const aAttempts = tries.find((attempt) => attempt.questionId === a.questionId);
+        const bAttempts = tries.find((attempt) => attempt.questionId === b.questionId);
         return (
           Math.round((aAttempts.correct / aAttempts.tries) * 100) -
           Math.round((bAttempts.correct / bAttempts.tries) * 100)
         );
-      },
+      }
     },
     {
       title: <Translate id="profileAnswerDetails.table_headers.question" />,
@@ -66,7 +67,7 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
         >
           {record.answer.question.text.substr(0, 100)}...
         </p>
-      ),
+      )
     },
     {
       title: <Translate id="profileAnswerDetails.table_headers.specialty" />,
@@ -74,7 +75,7 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
         record.answer.question.specialties.map((s) => {
           const specialty = specialties.find((sp) => sp.id === s.id);
           return <Tag color="blue">{specialty.name}</Tag>;
-        }),
+        })
     },
     {
       title: 'Tags',
@@ -82,7 +83,7 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
         record.answer.question.tags.map((tag) => {
           tag = tags.find((t) => t.id === tag.id);
           return <Tag color="geekblue">{tag.name}</Tag>;
-        }),
+        })
     },
     {
       title: <Translate id="profileAnswerDetails.table_headers.set" />,
@@ -94,15 +95,15 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
             {examSet.year}
           </>
         );
-      },
-    },
+      }
+    }
   ];
 
   const rowSelection: TableRowSelection<any> = {
     onChange: (selectedRowKeys) => {
       toggleCheckbox(selectedRowKeys);
     },
-    selectedRowKeys: selectedIds,
+    selectedRowKeys: selectedIds
   };
 
   return (

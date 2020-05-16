@@ -20,7 +20,7 @@ const Footer: React.SFC<FooterProps> = ({ addTranslation }) => {
 
   const iconStyle = {
     float: 'none',
-    marginRight: '3px',
+    marginRight: '3px'
   };
 
   const footerStyle = {
@@ -28,10 +28,10 @@ const Footer: React.SFC<FooterProps> = ({ addTranslation }) => {
     margin: '10px 0 0 0',
     padding: '1rem',
     width: '100%',
-    color: '#fff',
+    color: '#fff'
   };
 
-  const handleClick = (path) => {
+  const handleClick = (path: string) => {
     history.push(path);
   };
 

@@ -12,7 +12,7 @@ const Sidebar: React.SFC<SideBarProps> = ({ children }) => {
   const history = useHistory();
   const [visible, setVisible] = useState(false);
 
-  const handleNavigation = (url) => {
+  const handleNavigation = (url: string) => {
     setVisible(false);
     history.push(url);
   };

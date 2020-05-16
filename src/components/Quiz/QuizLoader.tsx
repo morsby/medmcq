@@ -28,7 +28,7 @@ const QuizLoader: React.SFC<QuizLoaderProps> = ({ handleAbort, text }) => {
   }, []);
 
   let longWait;
-  if (this.state.seconds >= 2) {
+  if (hasLoadedSeconds >= 2) {
     longWait = (
       <div style={{ margin: '5px 0' }}>
         <Divider hidden />

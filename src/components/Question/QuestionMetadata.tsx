@@ -48,7 +48,7 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
   );
   const user = useSelector((state: ReduxState) => state.auth.user);
 
-  const metadataVote = async (type, metadataId) => {
+  const metadataVote = async (type: 'specialty' | 'tag', metadataId: number) => {
     await Metadata.vote({ type, questionId: question.id, metadataId, vote: 1 });
   };
 
@@ -63,7 +63,7 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
     setSuggestTagMessage('Dit tag er blevet foreslået');
   };
 
-  const handleChange = (e, { value }) => {
+  const handleChange = (e: any, { value }: { value: string }) => {
     setNewTag(value);
   };
 

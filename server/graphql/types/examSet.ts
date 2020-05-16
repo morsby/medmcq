@@ -37,7 +37,7 @@ export const resolvers: Resolvers = {
     examSets: async () => {
       const examSets = await ExamSet.query().select('id');
       return examSets.map((examSet) => ({ id: examSet.id }));
-    },
+    }
   },
 
   Mutation: {
@@ -50,7 +50,7 @@ export const resolvers: Resolvers = {
       const examSet = await ExamSet.query().insertAndFetch({
         year,
         season,
-        semesterId,
+        semesterId
       });
 
       let examSetQno = 1;
@@ -60,20 +60,20 @@ export const resolvers: Resolvers = {
         const newQuestion = await Question.query().insertAndFetch({
           text,
           examSetQno,
-          examSetId: examSet.id,
+          examSetId: examSet.id
         });
         examSetQno++;
 
         for (let image of images) {
           await QuestionImage.query().insert({
             link: image,
-            questionId: newQuestion.id,
+            questionId: newQuestion.id
           });
         }
       }
 
       return { id: examSet.id };
-    },
+    }
   },
 
   ExamSet: {
@@ -91,8 +91,8 @@ export const resolvers: Resolvers = {
       return { id: examSet.semesterId };
     },
     questionCount: async ({ id }) => {
-      const result = await Question.query().where({ examSetId: id }).count().first();
+      const result: any = await Question.query().where({ examSetId: id }).count().first();
       return result['count(*)'];
-    },
-  },
+    }
+  }
 };

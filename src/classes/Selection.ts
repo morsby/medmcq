@@ -1,6 +1,6 @@
 import { store } from 'IndexApp';
-import selectionReducer from 'redux/reducers/selection';
-import { QuestionFilterInput, ContactInput } from 'types/generated';
+import selectionReducer, { SelectionOptions } from 'redux/reducers/selection';
+import { ContactInput } from 'types/generated';
 import { gql } from 'apollo-boost';
 import Apollo from './Apollo';
 import settingsReducer from 'redux/reducers/settings';
@@ -8,7 +8,7 @@ import settingsReducer from 'redux/reducers/settings';
 interface Selection {}
 
 class Selection {
-  static change = (data: { type: keyof QuestionFilterInput | 'type'; value: any }) => {
+  static change = (data: { type: SelectionOptions | 'type'; value: any }) => {
     store.dispatch(selectionReducer.actions.changeSelection(data));
   };
 

@@ -9,6 +9,7 @@ import { ReduxState } from 'redux/reducers';
 import DebouncedField from './Fields/DebouncedField';
 import FormField from './Fields/FormField';
 import { editProfileSchema } from 'utils/validationSchemas';
+import { UserInput } from 'types/generated';
 
 export interface EditProfileProps extends LocalizeContextProps {}
 
@@ -29,7 +30,7 @@ const EditProfile: React.SFC<EditProfileProps> = ({ translate }) => {
     validationSchema: editProfileSchema
   });
 
-  const handleSubmit = async ({ password, email }) => {
+  const handleSubmit = async ({ password, email }: Partial<UserInput>) => {
     if (!formik.isValid) return;
     setLoading(true);
     await User.edit({ password, email });

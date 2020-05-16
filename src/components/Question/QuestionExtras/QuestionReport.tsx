@@ -2,9 +2,23 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Form, Message } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
+import Question from 'classes/Question';
 
-// TODO: TRANSLATION
-const QuestionReport = ({ report, handleChange, handleSubmit, reportSent, question }) => {
+export interface QuestionReportProps {
+  report: string;
+  handleChange: (text: string) => void;
+  handleSubmit: (e: React.FormEvent<any>) => void;
+  reportSent: boolean;
+  question: Question;
+}
+
+const QuestionReport: React.SFC<QuestionReportProps> = ({
+  report,
+  handleChange,
+  handleSubmit,
+  reportSent,
+  question
+}) => {
   const [checked, setChecked] = useState(false);
   if (reportSent) {
     return (
@@ -20,19 +34,18 @@ const QuestionReport = ({ report, handleChange, handleSubmit, reportSent, questi
       <Translate>
         {({ translate }) => (
           <Form onSubmit={checked ? handleSubmit : null}>
-            {question.semester === 11 && (
+            {question.examSet.semester === 11 && (
               <Message color="yellow">
                 <Translate id="questionReport.pictureMissing11" />
               </Message>
             )}
-            {question.disclaimer && <Message color="yellow">{question.disclaimer}</Message>}
             <Message>
               <Translate id="questionReport.checkIssue" data={{ link: question.id }} />
             </Message>
             <Form.Field>
               <Form.TextArea
                 name="report"
-                onChange={handleChange}
+                onChange={(e, { value }) => handleChange(value as string)}
                 label={translate('questionReport.label')}
                 placeholder={translate('questionReport.placeholder')}
                 value={report}
@@ -56,21 +69,6 @@ const QuestionReport = ({ report, handleChange, handleSubmit, reportSent, questi
       </Translate>
     );
   }
-};
-
-QuestionReport.propTypes = {
-  /**
-   * TextArea input
-   */
-  report: PropTypes.string,
-
-  handleChange: PropTypes.func,
-  handleSubmit: PropTypes.func,
-
-  /**
-   * Er der sendt en rapport? I så fald vises en toast.
-   */
-  reportSent: PropTypes.bool
 };
 
 export default QuestionReport;

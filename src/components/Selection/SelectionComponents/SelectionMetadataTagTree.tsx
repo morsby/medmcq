@@ -43,13 +43,13 @@ const SelectionMetadataTagTree: React.SFC<SelectionMetadataTagTreeProps> = ({
         }));
     };
 
-    const getChildrenOfMetadata = (tagId: number) => {
+    const getChildrenOfMetadata = (tagId: number): TagSelectionObject[] => {
       return semester.tags
         .filter((t) => !search || t.name.toLowerCase().includes(search.toLowerCase()))
         .filter((t) => t.parent.id === tagId)
         .map((t) => ({
           title: `${t.name} (${t.questionCount})`,
-          key: t.id,
+          key: t.id.toString(),
           children: getChildrenOfMetadata(t.id)
         }));
     };
@@ -76,7 +76,7 @@ const SelectionMetadataTagTree: React.SFC<SelectionMetadataTagTreeProps> = ({
         checkStrictly
         checkedKeys={tagIds.map((id) => id)}
         onCheck={(tags: number[], { node, checked }) => {
-          if (checked) return handleChange([...tagIds, node.key], 'tagIds');
+          if (checked) return handleChange([...tagIds, node.key as number], 'tagIds');
           handleChange(
             tagIds.filter((id) => id !== node.key),
             'tagIds'

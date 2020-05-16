@@ -6,7 +6,7 @@
     "baseUrl": "./",
     "sourceMap": true,
     "isolatedModules": false,
-    "noImplicitAny": false,
+    "noImplicitAny": true,
     "noEmit": false
   },
   "include": ["./**/*"]

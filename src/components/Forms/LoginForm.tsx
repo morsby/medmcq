@@ -29,7 +29,7 @@ const LoginForm: React.SFC<LoginFormProps> = ({ translate }) => {
     }
   });
 
-  const handleNavigation = (path) => {
+  const handleNavigation = (path: keyof typeof urls) => {
     history.push(urls[path]);
   };
 

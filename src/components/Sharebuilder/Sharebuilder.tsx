@@ -20,8 +20,9 @@ const domain =
   process.env.NODE_ENV === 'production' ? 'https://medmcq.au.dk' : 'http://localhost:3000';
 
 const initialFilter = {
-  specialtyIds: [],
-  tagIds: []
+  specialtyIds: [] as number[],
+  tagIds: [] as number[],
+  search: ''
 };
 
 export interface SharebuilderProps {}
@@ -35,7 +36,7 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
   const [selectedId, setSelectedId] = useState('');
   const history = useHistory();
   const [link, setLink] = useState('');
-  const [filter, setFilter] = useState<Partial<QuestionFilterInput>>(initialFilter);
+  const [filter, setFilter] = useState(initialFilter);
   const shareLink = `${domain}/share/${link}`;
 
   // Redux
@@ -58,7 +59,10 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
   const pickedQuestions = useSelector((state: ReduxState) => state.shareBuilder.picked);
   const shouldNotFetch =
     !semesterId ||
-    (!selectedId && !filter.text && filter.tagIds.length === 0 && filter.specialtyIds.length === 0);
+    (!selectedId &&
+      !filter.search &&
+      filter.tagIds.length === 0 &&
+      filter.specialtyIds.length === 0);
 
   // Debounce filter, for ikke at query på hvert keystroke (delay er 1 sekund, som angivet herunder)
   const debounceQueryFilter = useCallback(
@@ -131,7 +135,7 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
       filterIcon: <SearchOutlined style={{ color: selectedId ? '#1890ff' : undefined }} />,
       filterDropdown: (
         <SearchDropdown
-          onChange={(value) => setSelectedId(value)}
+          onChange={(value: string) => setSelectedId(value)}
           value={selectedId}
           type="search"
         />
@@ -143,16 +147,16 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
       key: 'text',
       filterDropdown: (
         <SearchDropdown
-          onChange={(value) => handleChange(value, 'text')}
-          value={filter.text}
+          onChange={(value: string) => handleChange(value, 'search')}
+          value={filter.search}
           type="search"
         />
       ),
-      filterIcon: <SearchOutlined style={{ color: filter.text ? '#1890ff' : undefined }} />,
-      render: (text) => (
+      filterIcon: <SearchOutlined style={{ color: filter.search ? '#1890ff' : undefined }} />,
+      render: (text: string) => (
         <Highlighter
           matchStyle={{ backgroundColor: '#ffc069', padding: 0 }}
-          search={filter.text}
+          search={filter.search}
           matchElement="span"
         >
           {text}
@@ -164,7 +168,7 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
       key: 'specialties',
       filterDropdown: (
         <SearchDropdown
-          onChange={(value) => handleChange(value, 'specialtyIds')}
+          onChange={(value: number[]) => handleChange(value, 'specialtyIds')}
           options={specialties
             .filter((specialty) => specialty.semester.id === semesterId)
             .map((s) => ({
@@ -196,7 +200,7 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
               text: t.name,
               value: t.id
             }))}
-          onChange={(value) => handleChange(value, 'tagIds')}
+          onChange={(value: number[]) => handleChange(value, 'tagIds')}
           value={filter.tagIds.map((tag) => String(tag))}
           type="dropdown"
         />

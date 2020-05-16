@@ -1,15 +1,16 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { Container } from 'semantic-ui-react';
 
-import { withLocalize, Translate } from 'react-localize-redux';
+import { withLocalize, Translate, LocalizeContextProps } from 'react-localize-redux';
 import errorTranslation from './404Translation.json';
 
 /**
  * 404-page.
  */
-const ErrorPage = ({ addTranslation }) => {
+export interface ErrorPageProps extends LocalizeContextProps {}
+
+const ErrorPage: React.SFC<ErrorPageProps> = ({ addTranslation }) => {
   addTranslation(errorTranslation);
   return (
     <div className="flex-container">
@@ -23,14 +24,6 @@ const ErrorPage = ({ addTranslation }) => {
       </Container>
     </div>
   );
-};
-
-ErrorPage.propTypes = {
-  /**
-   * Func der tilføjer oversættelser
-   * Fra react-localize-redux
-   */
-  addTranslation: PropTypes.func
 };
 
 export default withLocalize(ErrorPage);

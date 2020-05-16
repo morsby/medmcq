@@ -35,17 +35,18 @@ const AnswerDetails: React.SFC<AnswerDetailsProps> = () => {
    * @param  {bool}    checked Is the checkbox already checked? Should we check or uncheck?
    * @return {null}            Returns nothing, simply updates state.
    */
-  const toggleCheckbox = (ids) => {
+  const toggleCheckbox = (ids: number[]) => {
     setSelected(ids);
   };
 
-  const startQuiz = async (ids) => {
+  const startQuiz = async (ids: string[]) => {
     setQuizLoading(true);
-    await Quiz.start({ ids });
+    const nIds = ids.map((id) => Number(id));
+    await Quiz.start({ ids: nIds });
     history.push(urls.quiz);
   };
 
-  const handleSearch = (search) => {
+  const handleSearch = (search: string) => {
     if (search.length > 1) {
       setIsSearching(true);
     } else {

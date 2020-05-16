@@ -49,7 +49,7 @@ const Profile: React.SFC<ProfileProps> = () => {
       }
     };
 
-    let panes = [];
+    let panes: any[] = [];
     semesters.map((semester) =>
       panes.push({
         menuItem: generatePaneLabel(semester),
@@ -66,19 +66,19 @@ const Profile: React.SFC<ProfileProps> = () => {
               <ProfileActivity />
             </Tab.Pane>
           );
-        },
+        }
       })
     );
 
     setPanes(panes);
   }, [loading]);
 
-  const handleTabChange = (e, { activeIndex }) => {
+  const handleTabChange = (e: any, { activeIndex }: { activeIndex: number }) => {
     const semesterId = semesters[activeIndex].id;
     Selection.change({ type: 'semesterId', value: semesterId });
   };
 
-  const handleNavigation = (path) => {
+  const handleNavigation = (path: keyof typeof urls) => {
     history.push(urls[path]);
   };
 
@@ -89,7 +89,7 @@ const Profile: React.SFC<ProfileProps> = () => {
           <Translate
             id="profile.header"
             data={{
-              username: user.username[0].toUpperCase() + user.username.substring(1),
+              username: user.username[0].toUpperCase() + user.username.substring(1)
             }}
           />
         </h2>

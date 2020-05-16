@@ -14,7 +14,7 @@ const SelectionSearch: React.SFC<SelectionSearchProps> = ({ translate }) => {
   const history = useHistory();
   const search = useSelector((state: ReduxState) => state.selection.search);
 
-  const handleKeyPress = (e) => {
+  const handleKeyPress = (e: KeyboardEvent) => {
     if (e.key === 'Enter') {
       Quiz.start();
       history.push(urls.quiz);
@@ -40,7 +40,7 @@ const SelectionSearch: React.SFC<SelectionSearchProps> = ({ translate }) => {
         icon="search"
         iconPosition="left"
         placeholder={translate('search.placeholder')}
-        onKeyPress={(e) => handleKeyPress(e)}
+        onKeyPress={(e: KeyboardEvent) => handleKeyPress(e)}
       />
     </div>
   );

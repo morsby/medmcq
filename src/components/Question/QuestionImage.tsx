@@ -3,11 +3,11 @@ import React, { useState } from 'react';
 import { Image } from 'semantic-ui-react';
 import Lightbox from 'react-image-lightbox';
 
-/**
- * Viser spørgsmålsbilledet. Kaldes hvis billedet findes. Props er fra Question.js
- * @param {String}  img     src til billede
- */
-const QuestionImage = ({ img }) => {
+export interface QuestionImageProps {
+  img: string;
+}
+
+const QuestionImage: React.SFC<QuestionImageProps> = ({ img }) => {
   const [imageOpen, setImageOpen] = useState(false);
 
   return (

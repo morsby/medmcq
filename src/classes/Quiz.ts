@@ -20,7 +20,7 @@ class Quiz {
       onlyNew,
       onlyWrong,
       search,
-      type,
+      type
     } = reduxStore.selection;
 
     if (!filter) {

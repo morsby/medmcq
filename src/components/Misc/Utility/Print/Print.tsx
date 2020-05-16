@@ -31,7 +31,7 @@ const Print: React.SFC<PrintProps> = ({ addTranslation }) => {
     setShowCorrect(!showCorrect);
   };
 
-  const handleNavigation = (path) => {
+  const handleNavigation = (path: keyof typeof urls) => {
     history.push(urls[path]);
   };
 

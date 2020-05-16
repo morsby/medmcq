@@ -69,7 +69,7 @@ const QuestionExtras: React.SFC<QuestionExtrasProps> = ({ width }) => {
           <Divider hidden />
           <QuestionReport
             report={report}
-            handleChange={(e) => setReport(e.target.value)}
+            handleChange={(value) => setReport(value)}
             handleSubmit={onReportSubmit}
             reportSent={reportSent}
             question={question}

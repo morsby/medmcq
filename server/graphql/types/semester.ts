@@ -28,9 +28,7 @@ export const typeDefs = gql`
 export const resolvers: Resolvers = {
   Query: {
     semesters: async (root, args, ctx) => {
-      const user = await User.query()
-        .findById(ctx.user?.id)
-        .skipUndefined();
+      const user = await User.query().findById(ctx.user?.id).skipUndefined();
       let semesters: Semester[];
       if (user?.roleId < 4) {
         semesters = await Semester.query();
@@ -60,12 +58,8 @@ export const resolvers: Resolvers = {
       return semester.shortName;
     },
     questionCount: async ({ id }) => {
-      const examSetIds = ExamSet.query()
-        .where({ semesterId: id })
-        .select('id');
-      const count = await Question.query()
-        .whereIn('examSetId', examSetIds)
-        .count();
+      const examSetIds = ExamSet.query().where({ semesterId: id }).select('id');
+      const count: any = await Question.query().whereIn('examSetId', examSetIds).count();
       return count[0]['count(*)']; // Wierd way to get count from Objection/Knex
     },
     examSets: async ({ id }) => {

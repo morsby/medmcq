@@ -9,9 +9,10 @@ import QuestionComment from 'models/question_comment';
 import { urls } from 'misc/vars';
 import sgMail from '@sendgrid/mail';
 import _ from 'lodash';
-import User from 'models/user';
 import { Resolvers } from 'types/resolvers-types';
 import ShareLink from 'models/shareLink';
+import { permitAdmin } from 'graphql/utils';
+import QuestionAnswer from 'models/questionAnswer.model';
 
 export const typeDefs = gql`
   extend type Query {
@@ -25,19 +26,15 @@ export const typeDefs = gql`
   }
 
   input QuestionFilterInput {
-    text: String
     specialtyIds: [Int]
     tagIds: [Int]
     semesterId: Int
-    year: Int
-    season: String
     ids: [Int]
     n: Int
     examSetId: Int
     onlyNew: Boolean
     onlyWrong: Boolean
     commentIds: [Int]
-    profile: Boolean
     search: String
     shareId: String
   }
@@ -90,10 +87,7 @@ export const resolvers: Resolvers = {
     questions: async (args, { filter }, ctx) => {
       const {
         ids,
-        season,
-        year,
         semesterId,
-        text,
         tagIds,
         specialtyIds,
         examSetId,
@@ -141,14 +135,6 @@ export const resolvers: Resolvers = {
       if (!n || n > 100) n = 100; // Man må ikke hente mere end 100
       query = query.limit(n);
 
-      if (year) {
-        query = query.where('examSet.year', '=', year);
-      }
-
-      if (season) {
-        query = query.where('examSet.season', '=', season);
-      }
-
       if (specialtyIds && specialtyIds.length > 0) {
         const votes = await QuestionSpecialtyVote.query()
           .whereIn('specialtyId', specialtyIds)
@@ -181,13 +167,6 @@ export const resolvers: Resolvers = {
           );
       }
 
-      if (text) {
-        query = query.whereRaw(
-          'MATCH (text, answer1, answer2, answer3) AGAINST (? IN BOOLEAN MODE)',
-          filter.text
-        );
-      }
-
       if (ctx.user && onlyWrong) {
         const correctAnswers = QuestionUserAnswer.query()
           .where({ userId: ctx.user.id })
@@ -213,8 +192,7 @@ export const resolvers: Resolvers = {
 
   Mutation: {
     createQuestion: async (root, { data }, ctx) => {
-      const user = await User.query().findById(ctx.user?.id);
-      if (user?.roleId >= 3) throw new Error('Not permitted');
+      const user = await permitAdmin(ctx);
       const { text, images, examSetId } = data;
       const questions = await Question.query().where({ examSetId });
       const examSetQno =
@@ -229,6 +207,14 @@ export const resolvers: Resolvers = {
         examSetQno,
         userId: user.id
       });
+      await QuestionAnswer.query().insertGraph(
+        data.answers.map((a) => ({
+          text: a.text,
+          index: a.index,
+          isCorrect: (a.isCorrect ? 1 : 0) as 1 | 0,
+          questionId: question.id
+        }))
+      );
       if (!!images) {
         await QuestionImage.query().insertGraph(
           images.map((image) => ({ link: image, questionId: question.id }))
@@ -238,8 +224,7 @@ export const resolvers: Resolvers = {
       return { id: question.id };
     },
     updateQuestion: async (root, { data }, ctx) => {
-      const user = await User.query().findById(ctx.user?.id);
-      if (user?.roleId >= 3) throw new Error('Not permitted');
+      const user = await permitAdmin(ctx);
       let question = await Question.query().findById(data.id);
       if (question.userId !== user.id && user.roleId !== 1) throw new Error('Not permitted');
       const { text, images, examSetId } = data;
@@ -254,6 +239,18 @@ export const resolvers: Resolvers = {
       if (!!images) {
         await QuestionImage.query().insertGraph(
           images.map((image) => ({ link: image, questionId: question.id }))
+        );
+      }
+      if (data.answers.length > 0) {
+        await QuestionAnswer.query().where({ questionId: question.id }).delete();
+        console.log(data.answers);
+        await QuestionAnswer.query().insertGraph(
+          data.answers.map((a) => ({
+            questionId: question.id,
+            text: a.text,
+            index: a.index,
+            isCorrect: (a.isCorrect ? 1 : 0) as 1 | 0
+          }))
         );
       }
 

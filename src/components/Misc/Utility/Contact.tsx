@@ -12,7 +12,7 @@ export interface ContactProps extends LocalizeContextProps {}
 const Contact: React.SFC<ContactProps> = ({ addTranslation }) => {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
-  const formik = useFormik({
+  const formik: any = useFormik({
     initialValues: {
       subject: '',
       message: ''

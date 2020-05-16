@@ -34,7 +34,7 @@ import 'react-image-lightbox/style.css'; // This only needs to be imported once 
 const migrations: any = {
   10: (state: ReduxState) => ({
     ...state,
-    questions: null
+    questions: null as any
   }),
   11: (state: ReduxState) => ({}),
   12: (state: ReduxState) => ({ ...state, shareBuilder: {} })

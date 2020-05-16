@@ -94,7 +94,7 @@ class Question {
     await Apollo.mutate('reportQuestion', mutation, data);
   };
 
-  static create = async (data: Partial<QuestionInput>) => {
+  static create = async (data: QuestionInput) => {
     const mutation = gql`
       mutation CreateQuestion($data: QuestionInput) {
         createQuestion(data: $data) {

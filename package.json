@@ -97,6 +97,7 @@
     "@types/multer": "^1.4.3",
     "@types/node": "^13.13.4",
     "@types/react": "^16.9.34",
+    "@types/react-copy-to-clipboard": "^4.3.0",
     "@types/react-dom": "^16.9.7",
     "@types/react-highlighter": "^0.3.4",
     "@types/react-redux": "^7.1.7",
