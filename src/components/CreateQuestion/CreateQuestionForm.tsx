@@ -20,6 +20,7 @@ import { QuestionInput } from 'types/generated';
 import questionsReducer from 'redux/reducers/question';
 import { imageURL } from 'utils/common';
 import QuestionImage from 'components/Question/QuestionImage';
+import _ from 'lodash';
 
 export interface CreateQuestionFormProps {
   question?: Question;
@@ -36,6 +37,7 @@ const CreateQuestionForm: React.SFC<CreateQuestionFormProps> = ({ question }) =>
   );
   const semester = semesters.find((semester) => semester.id === semesterId);
   const examSets = semester.examSets;
+  const [imageKey, setImageKey] = useState(_.random(1, 1000)); // This is used to rerender the input, since it's uncontrollable
   const formik = useFormik({
     initialValues: {
       id: question?.id || null,
@@ -62,6 +64,7 @@ const CreateQuestionForm: React.SFC<CreateQuestionFormProps> = ({ question }) =>
     onSubmit: (values) => handleSubmit(values),
     enableReinitialize: true
   });
+  const hasChosenAnswer = formik.values.answers.some((a) => a.isCorrect);
 
   useEffect(() => {
     Semester.fetchAll();
@@ -71,7 +74,13 @@ const CreateQuestionForm: React.SFC<CreateQuestionFormProps> = ({ question }) =>
     formik.resetForm();
   }, [semesterId]);
 
+  const handleError = (error: string) => {
+    setError(error);
+    setIsSubmitting(false);
+  };
+
   const updateQuestion = async (values: Partial<QuestionInput>) => {
+    if (!hasChosenAnswer) return handleError('Du skal angive mindst 1 korrekt svar');
     setIsSubmitting(true);
     try {
       if (!!images) {
@@ -92,15 +101,18 @@ const CreateQuestionForm: React.SFC<CreateQuestionFormProps> = ({ question }) =>
       setIsSubmitting(false);
       setError('');
       dispatch(questionsReducer.actions.toggleEditing());
+      setImageKey(_.random(1, 1000));
     } catch (error) {
       console.log('error: ', error);
-      setError(error.message);
-      setIsSubmitting(false);
+      handleError(
+        'Der gik noget galt. Prøv venligst igen. Hvis denne fejl persisterer, kontakt os nederst til højre.'
+      );
     }
   };
 
   const createQuestion = async (values: QuestionInput) => {
     try {
+      if (!hasChosenAnswer) return handleError('Du skal angive mindst 1 korrekt svar');
       delete values.id;
       if (!!images) {
         const formData = new FormData();
@@ -117,12 +129,14 @@ const CreateQuestionForm: React.SFC<CreateQuestionFormProps> = ({ question }) =>
       await Semester.fetchAll();
       formik.resetForm();
       setImages(null);
+      setImageKey(_.random(1, 1000)); // This rerenders the file input, since this is the only way to clear it. It is uncontrollable otherwise.
       setIsSubmitting(false);
       setError('');
     } catch (error) {
       console.log('error: ', error);
-      setError(error.message);
-      setIsSubmitting(false);
+      handleError(
+        'Der gik noget galt. Prøv venligst igen. Hvis denne fejl persisterer, kontakt os nederst til højre.'
+      );
     }
   };
 
@@ -205,6 +219,7 @@ const CreateQuestionForm: React.SFC<CreateQuestionFormProps> = ({ question }) =>
             type="file"
             multiple
             name="images"
+            key={imageKey}
             onChange={(e) => setImages(e.target.files)}
           />
           <Form.Field>
