@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { Form, Message } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
 import Question from 'classes/Question';
+import { useSelector } from 'react-redux';
+import { ReduxState } from 'redux/reducers';
 
 export interface QuestionReportProps {
   report: string;
@@ -20,6 +21,10 @@ const QuestionReport: React.SFC<QuestionReportProps> = ({
   question
 }) => {
   const [checked, setChecked] = useState(false);
+  const semester = useSelector((state: ReduxState) =>
+    state.metadata.semesters.find((s) => s.id === question.examSet.semester.id)
+  );
+
   if (reportSent) {
     return (
       <Message success>
@@ -34,7 +39,7 @@ const QuestionReport: React.SFC<QuestionReportProps> = ({
       <Translate>
         {({ translate }) => (
           <Form onSubmit={checked ? handleSubmit : null}>
-            {question.examSet.semester === 11 && (
+            {semester.value === 11 && (
               <Message color="yellow">
                 <Translate id="questionReport.pictureMissing11" />
               </Message>
