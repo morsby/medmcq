@@ -392,18 +392,18 @@ export const resolvers: Resolvers = {
     correctPercent: async ({ id }, args, ctx) => {
       const answer = await ctx.questionAnswersLoader.load(id);
       const questionAnswers = await ctx.questionAnswersByQuestionLoader.load(answer.questionId);
-      const allUserAnswers = await QuestionUserAnswer.query().whereIn(
+      let allUserAnswers = await QuestionUserAnswer.query().whereIn(
         'answerId',
         questionAnswers.map((qa) => qa.id)
       );
       if (allUserAnswers.length < 1) return 0;
 
-      let userAnswers = allUserAnswers.filter((ua) => ua.answerId === id);
-      userAnswers = _(userAnswers)
+      const firstTimeAnswers = _(allUserAnswers)
         .sortBy((answer) => answer.createdAt, 'asc')
         .uniqBy((answer) => answer.userId)
         .value();
-      const correctPercent = Math.round((userAnswers.length / allUserAnswers.length) * 100);
+      const answeredThisCount = firstTimeAnswers.filter((ua) => ua.answerId === id);
+      const correctPercent = Math.round((answeredThisCount.length / firstTimeAnswers.length) * 100);
       return correctPercent;
     },
     question: async ({ id }, _, ctx) => {
