@@ -100,7 +100,7 @@ const RightMenu: React.SFC<RightMenuProps> = ({ setActiveLanguage, languages, si
               textAlign: 'center',
               borderRadius: '100%',
               marginLeft: '5px',
-              backgroundColor: 'darkred'
+              backgroundColor: notifications.length > 0 ? 'darkred' : null
             }}
           >
             {notifications.length}
