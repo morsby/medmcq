@@ -6,7 +6,6 @@ import { useHistory } from 'react-router';
 import { ReduxState } from 'redux/reducers';
 import Quiz from 'classes/Quiz';
 import Selection from 'classes/Selection';
-import { Attempt } from 'classes/Profile';
 
 type AnsweredTag = { id: number; name: string; correct: number; tries: number };
 type AnsweredTags = { [key: string]: AnsweredTag };

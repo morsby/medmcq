@@ -7,10 +7,9 @@ import { Link } from 'react-router-dom';
 import { urls } from '../../../../../utils/common';
 
 import newVersionMessageTranslations from './newVersionMessageTranslations.json';
-
-import { version } from '../../../../../version';
 import { ReduxState } from 'redux/reducers';
 import settingsReducer from 'redux/reducers/settings';
+const version = '2.3.0';
 
 export interface LinkToAboutProps {}
 

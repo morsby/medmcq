@@ -1,7 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import moment from 'moment-timezone';
 import { UserAnswerInput } from 'types/generated';
-import { insertOrReplace } from 'utils/common';
 
 const initialState = {
   userAnswers: [] as UserAnswerInput[],
@@ -11,7 +10,7 @@ const initialState = {
   hidePercentages: false,
   examMode: true,
   examModeStart: null as Date | null,
-  usedExamTime: '',
+  usedExamTime: ''
 };
 
 const quizReducer = createSlice({
@@ -56,8 +55,8 @@ const quizReducer = createSlice({
       state.examMode = false;
       state.hidePercentages = false;
       state.examModeStart = null;
-    },
-  },
+    }
+  }
 });
 
 export default quizReducer;

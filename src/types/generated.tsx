@@ -24,6 +24,7 @@ export type Query = {
   profile?: Maybe<User>;
   maintenance?: Maybe<Maintenance>;
   notice?: Maybe<Notice>;
+  notifications?: Maybe<Array<Maybe<Notification>>>;
 };
 
 
@@ -459,6 +460,16 @@ export type Notice = {
 export type ContactInput = {
   subject?: Maybe<Scalars['String']>;
   message?: Maybe<Scalars['String']>;
+};
+
+export type Notification = {
+   __typename?: 'Notification';
+  id?: Maybe<Scalars['Int']>;
+  message?: Maybe<Scalars['String']>;
+  user?: Maybe<User>;
+  isRead?: Maybe<Scalars['Boolean']>;
+  createdAt?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['String']>;
 };
 
 export enum CacheControlScope {

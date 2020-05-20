@@ -74,6 +74,12 @@ export default {
     header: ['Hvad er nyt på siden?', "What's new on the site?"],
     body: [
       `
+      <h3>v.2.3.0 - 24/04-2020</h3>
+      <ul>
+        <li>
+          Yes! En ventet og højt ønsket funktion er kommet. Notifikationer! Denne feature vil over den kommende tid blive opgraderet, men jeg synes I skulle have den mindste version med det samme. Hver gang en person kommenterer på et spørgsmål, som du tidligere har kommenteret på, vil du få en notifikation.
+        </li>
+      </ul>
       <h3>v.2.2.0 - 24/04-2020</h3>
       <ul>
         <li>
@@ -191,6 +197,12 @@ export default {
   </li>
 </ul>`,
       `
+      <h3>v.2.3.0 - 24/04-2020</h3>
+      <ul>
+        <li>
+          Translation missing...
+        </li>
+      </ul>
       <h3>v.2.2.0 - 24/04-2020</h3>
       <ul>
         <li>

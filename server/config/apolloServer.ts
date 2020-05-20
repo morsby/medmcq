@@ -10,15 +10,19 @@ import {
   createSpecialtyLoader,
   createSpecialtyVoteLoader,
   createTagLoader,
-  createTagVotesLoader,
+  createTagVotesLoader
 } from '../graphql/dataloaders/metadataLoaders';
 import {
   createQuestionLoader,
   createQuestionAnswersLoader,
-  createQuestionAnswersByQuestionLoader,
+  createQuestionAnswersByQuestionLoader
 } from '../graphql/dataloaders/questionLoaders';
 import { createSemesterLoader } from '../graphql/dataloaders/semesterLoaders';
-import { createUserLoader, createBookmarkLoader } from '../graphql/dataloaders/userLoaders';
+import {
+  createUserLoader,
+  createBookmarkLoader,
+  createNotificationLoader
+} from '../graphql/dataloaders/userLoaders';
 const secret = process.env.SECRET || '';
 const isDev = process.env.NODE_ENV === 'production' ? false : true;
 
@@ -47,9 +51,10 @@ const generateContext = (req: Express.Request, res: Express.Response) => ({
   commentsLoader: createCommentsLoader(),
   questionAnswersLoader: createQuestionAnswersLoader(),
   questionAnswersByQuestionLoader: createQuestionAnswersByQuestionLoader(),
+  notificationLoader: createNotificationLoader(),
   user: decodeUser(req.cookies.user, res) as { id: number } | null,
   res,
-  req,
+  req
 });
 
 export type Context = ReturnType<typeof generateContext>;
@@ -59,5 +64,5 @@ export default new ApolloServer({
   typeDefs,
   context: ({ req, res }) => generateContext(req, res),
   playground: isDev,
-  tracing: isDev,
+  tracing: isDev
 });

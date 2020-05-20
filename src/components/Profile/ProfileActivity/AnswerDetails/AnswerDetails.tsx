@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 import { Button, Divider } from 'semantic-ui-react';
@@ -24,7 +24,6 @@ const AnswerDetails: React.SFC<AnswerDetailsProps> = () => {
   const [isSearching, setIsSearching] = useState(false);
   const [selected, setSelected] = useState([]);
   const [quizLoading, setQuizLoading] = useState(false);
-  const questions = useSelector((state: ReduxState) => state.questions.questions);
   let userAnswers = useSelector((state: ReduxState) => state.profile.userAnswers);
   const tries = useSelector((state: ReduxState) => state.profile.tries);
   const history = useHistory();

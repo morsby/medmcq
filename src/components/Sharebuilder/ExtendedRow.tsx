@@ -1,5 +1,4 @@
 import React from 'react';
-import _ from 'lodash';
 import Question from 'classes/Question';
 
 export interface ExtendedRowProps {

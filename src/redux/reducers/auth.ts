@@ -1,9 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import User from 'classes/User';
 import { Bookmark } from 'types/generated';
+import Notification from 'classes/Notification.class';
 
 const initialState = {
   user: null as User | null,
+  notifications: [] as Notification[]
 };
 
 const authReducer = createSlice({
@@ -39,7 +41,10 @@ const authReducer = createSlice({
         state.user.bookmarks.splice(index, 1);
       }
     },
-  },
+    setNotifications: (state, action: PayloadAction<Notification[]>) => {
+      state.notifications = action.payload;
+    }
+  }
 });
 
 export default authReducer;

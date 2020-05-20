@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
-import Question from 'classes/Question';
 import { subSupScript, evalAnswer } from 'utils/quiz';
 import marked from 'marked';
 import { Button, Popup } from 'semantic-ui-react';
@@ -23,7 +22,7 @@ const ButtonInnerDiv = styled.div`
 
 const QuestionAnswerButton: React.SFC<QuestionAnswerButtonProps> = ({
   answerNumber,
-  handleAnswer,
+  handleAnswer
 }) => {
   const questionIndex = useSelector((state: ReduxState) => state.quiz.questionIndex);
   const question = useSelector((state: ReduxState) => state.questions.questions[questionIndex]);
@@ -70,7 +69,7 @@ const QuestionAnswerButton: React.SFC<QuestionAnswerButtonProps> = ({
       <ButtonInnerDiv>
         <div
           dangerouslySetInnerHTML={{
-            __html: marked(answerText),
+            __html: marked(answerText)
           }}
         />
         {isAnswered && !percentagesHided && (

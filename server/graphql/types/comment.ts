@@ -2,6 +2,9 @@ import { gql } from 'apollo-server-express';
 import QuestionCommentLike from 'models/question_comment_like';
 import QuestionComment from 'models/question_comment';
 import { Resolvers } from 'types/resolvers-types';
+import Notification from 'models/notification.class';
+const domain =
+  process.env.NODE_ENV === 'production' ? 'https://medmcq.au.dk' : 'http://localhost:3000';
 
 export const typeDefs = gql`
   type Comment {
@@ -43,9 +46,7 @@ export const resolvers: Resolvers = {
         userId: ctx.user.id
       });
       if (alreadyLiked) {
-        await QuestionCommentLike.query()
-          .where({ commentId, userId })
-          .delete();
+        await QuestionCommentLike.query().where({ commentId, userId }).delete();
       } else {
         await QuestionCommentLike.query().insert({ commentId, userId });
       }
@@ -68,6 +69,20 @@ export const resolvers: Resolvers = {
         questionId,
         userId: ctx.user.id
       });
+
+      // Notification for other users in thread
+      const comments = await QuestionComment.query()
+        .where({ questionId })
+        .whereNot({ userId: ctx.user.id, private: 1 })
+        .distinct('userId');
+      for (let c of comments) {
+        await Notification.query().insert({
+          message: `Der er kommet en ny kommentar på et spørgsmål du har kommenteret på.    
+          [Gå til spørgsmålet](${domain}/quiz/${questionId})`,
+          userId: c.userId
+        });
+      }
+
       return { id: comment.id };
     },
     editComment: async (root, { data }, ctx) => {

@@ -1,5 +1,4 @@
 import React from 'react';
-import _ from 'lodash';
 import Question from 'classes/Question';
 
 export interface AnswerDetailsTableExtendedRow {
@@ -12,7 +11,7 @@ const AnswerDetailsTableExtendedRow: React.SFC<AnswerDetailsTableExtendedRow> = 
       {question.answers.map((a) => (
         <p
           style={{
-            color: a.isCorrect ? 'green' : undefined,
+            color: a.isCorrect ? 'green' : undefined
           }}
         >
           Svarmulighed {a.index}: {a.text}

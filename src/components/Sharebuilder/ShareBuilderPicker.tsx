@@ -1,5 +1,5 @@
 import React from 'react';
-import { Segment, Grid, Divider, Header, Icon, Button, Container } from 'semantic-ui-react';
+import { Segment, Grid, Divider, Header, Icon, Button } from 'semantic-ui-react';
 import { useHistory } from 'react-router-dom';
 
 export interface ShareBuilderPickerProps {}

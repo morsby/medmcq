@@ -38,8 +38,8 @@ describe('setup', () => {
   });
 
   it('should close the new version popup', () => {
-    cy.get('.close').click();
-    cy.get('.close').should('not.exist');
+    cy.get('.message > .close').click();
+    cy.get('.message > .close').should('not.exist');
   });
 
   it('should be able to pick semester', () => {

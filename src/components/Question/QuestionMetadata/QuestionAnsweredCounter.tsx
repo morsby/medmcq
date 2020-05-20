@@ -1,8 +1,6 @@
 import React from 'react';
 import { Grid } from 'semantic-ui-react';
 import { Translate } from 'react-localize-redux';
-import { useSelector } from 'react-redux';
-import { ReduxState } from 'redux/reducers';
 
 export interface QuestionAnsweredCounterProps {}
 
