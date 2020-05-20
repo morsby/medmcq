@@ -17,7 +17,7 @@ const Notifications: React.SFC<NotificationsProps> = () => {
           <p style={{ color: 'grey' }}>{new Date(n.createdAt).toLocaleString()}</p>
         </Menu.Item>
       ))}
-      {notifications.length === 0 && <p>Du har ingen notifikationer</p>}
+      {notifications.length === 0 && <Menu.Item>Du har ingen notifikationer</Menu.Item>}
     </div>
   );
 };
