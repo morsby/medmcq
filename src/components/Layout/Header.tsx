@@ -1,5 +1,4 @@
 import React from 'react';
-import { Translate } from 'react-localize-redux';
 
 import { Menu } from 'semantic-ui-react';
 import styles from './Header.module.css';

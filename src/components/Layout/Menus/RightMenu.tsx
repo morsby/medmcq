@@ -92,10 +92,15 @@ const RightMenu: React.SFC<RightMenuProps> = ({ setActiveLanguage, languages, si
           <Icon style={{ margin: '0 auto' }} name="bell outline" />
           <span
             style={{
+              width: '20px',
+              height: '20px',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              textAlign: 'center',
+              borderRadius: '100%',
               marginLeft: '5px',
-              borderRadius: '40px',
-              backgroundColor: 'darkred',
-              padding: '4px 6px'
+              backgroundColor: 'darkred'
             }}
           >
             {notifications.length}

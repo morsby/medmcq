@@ -1,5 +1,5 @@
 import React from 'react';
-import { Sidebar as SemanticSidebar, Menu, Icon } from 'semantic-ui-react';
+import { Sidebar as SemanticSidebar, Menu, Icon, Button } from 'semantic-ui-react';
 import RightMenu from 'components/Layout/Menus/RightMenu';
 import { Translate } from 'react-localize-redux';
 import { useHistory } from 'react-router-dom';
@@ -64,9 +64,18 @@ const Sidebar: React.SFC<SideBarProps> = ({ children }) => {
         dimmed
         visible={rightSidebarOpen}
       >
-        <div style={{ overflowX: 'auto' }}>
-          <Notifications />
-        </div>
+        <Menu.Item>
+          <Button
+            size="mini"
+            onClick={() => toggleSidebar('right', false)}
+            fluid
+            basic
+            color="black"
+          >
+            Luk
+          </Button>
+        </Menu.Item>
+        <Notifications />
       </SemanticSidebar>
 
       <SemanticSidebar.Pusher
