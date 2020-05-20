@@ -23,9 +23,9 @@ const SelectionNSelector: React.SFC<SelectionNSelectorProps> = () => {
   const n = useSelector((state: ReduxState) => state.selection.n);
 
   const handleChange = (value: number) => {
-    if (value > 100) {
+    if (value > allowedNs.max) {
       setError(true);
-      value = 100;
+      value = allowedNs.max;
     } else {
       setError(false);
     }

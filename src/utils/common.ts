@@ -35,7 +35,7 @@ export const truncateText = (text: string, length = 30) => {
 
 export const allowedNs = {
   min: 1,
-  max: 100
+  max: 300
 };
 
 export const insertOrReplace = <T extends any>(array: T[], item: T, comparison: string = 'id') => {
