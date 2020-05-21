@@ -70,17 +70,19 @@ export const resolvers: Resolvers = {
         userId: ctx.user.id
       });
 
-      // Notification for other users in thread
-      const comments = await QuestionComment.query()
-        .where({ questionId })
-        .whereNot({ userId: ctx.user.id, private: 1 })
-        .distinct('userId');
-      for (let c of comments) {
-        await Notification.query().insert({
-          message: `Der er kommet en ny kommentar på et spørgsmål du har kommenteret på.    
-          [Gå til spørgsmålet](${domain}/quiz/${questionId})`,
-          userId: c.userId
-        });
+      if (!isPrivate) {
+        // Notification for other users in thread
+        const comments = await QuestionComment.query()
+          .where({ questionId })
+          .whereNot({ userId: ctx.user.id, private: 1 })
+          .distinct('userId');
+        for (let c of comments) {
+          await Notification.query().insert({
+            message: `Der er kommet en ny kommentar på et spørgsmål du har kommenteret på.    
+            [Gå til spørgsmålet](${domain}/quiz/${questionId})`,
+            userId: c.userId
+          });
+        }
       }
 
       return { id: comment.id };

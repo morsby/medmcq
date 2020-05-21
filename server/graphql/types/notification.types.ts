@@ -21,7 +21,9 @@ export const notificationResolvers: Resolvers = {
   Query: {
     notifications: async (root, args, ctx) => {
       if (!ctx.user) return [];
-      const notifications = await Notification.query().where({ userId: ctx.user.id });
+      const notifications = await Notification.query()
+        .where({ userId: ctx.user.id })
+        .orderBy('createdAt', 'desc');
       return notifications.map((n) => ({ id: n.id }));
     }
   },
