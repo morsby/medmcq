@@ -17,17 +17,22 @@ const password = Yup.string().matches(
   'Kodeordet skal være mindst 6 tegn, indeholde mindst et stort bogstav, et lille bogstav og et tal'
 );
 const email = Yup.string().email();
-const confirmPassword = Yup.string().oneOf([Yup.ref('password')], 'Kodeord skal være ens');
+const confirmPassword = Yup.string().oneOf(
+  [Yup.ref('password')],
+  'Kodeord skal være ens / The passwords should match'
+);
 
 export const resetSchema = Yup.object().shape({
-  password: password.required('Dette felt er krævet'),
-  confirmPassword: confirmPassword.required('Dette felt er krævet')
+  password: password.required('Du skal angive et kodeord / You must provide a password'),
+  confirmPassword: confirmPassword.required(
+    'Du skal angive dit kodeord igen / You must provide your password again'
+  )
 });
 
 export const signupSchema = Yup.object().shape({
-  username: username.required('Dette felt er krævet'),
-  email: email.required('Dette felt er krævet'),
-  password: password.required('Dette felt er krævet'),
+  username: username.required('Du skal angive et brugernavn / You must provide a username'),
+  email: email.notRequired(),
+  password: password.required('Du skal angive et kodeord / You must provide a password'),
   confirmPassword
 });
 

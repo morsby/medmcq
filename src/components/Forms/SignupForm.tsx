@@ -26,13 +26,16 @@ const SignupForm: React.SFC<SignupFormProps> = ({ translate }) => {
       password: '',
       confirmPassword: ''
     },
-    onSubmit: (values) => handleSubmit(values),
-    validationSchema: signupSchema,
-    validateOnBlur: true
+    onSubmit: (values, { validateForm }) => {
+      validateForm();
+      handleSubmit(values);
+    },
+    validationSchema: signupSchema
   });
 
   const handleSubmit = async ({ username, email, password }: UserInput) => {
-    await User.signup({ username, email, password });
+    if (!formik.isValid) return;
+    await User.signup({ username, email: email ? email : null, password });
     history.push('/');
   };
 
@@ -67,11 +70,7 @@ const SignupForm: React.SFC<SignupFormProps> = ({ translate }) => {
           />
         ))}
         <Divider hidden />
-        <Form.Button
-          disabled={!formik.isValid || hasError.username || hasError.email}
-          color="green"
-          type="submit"
-        >
+        <Form.Button disabled={!formik.isValid} color="green" type="submit">
           <Icon name="check" /> <Translate id="signup.form_fields.submit" />
         </Form.Button>
       </Form>

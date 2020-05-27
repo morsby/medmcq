@@ -32,9 +32,11 @@ const settingsReducer = createSlice({
     },
     toggleSidebar: (state, action: PayloadAction<{ side: 'left' | 'right'; open: boolean }>) => {
       if (action.payload.side === 'left') {
+        state.rightSidebarOpen = action.payload.open ? false : state.rightSidebarOpen;
         state.leftSidebarOpen = action.payload.open;
       }
       if (action.payload.side === 'right') {
+        state.leftSidebarOpen = action.payload.open ? false : state.leftSidebarOpen;
         state.rightSidebarOpen = action.payload.open;
       }
     }

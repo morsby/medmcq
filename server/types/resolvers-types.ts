@@ -74,6 +74,8 @@ export type Mutation = {
   manualCompleteSet?: Maybe<Scalars['String']>;
   bookmark?: Maybe<Bookmark>;
   contact?: Maybe<Scalars['String']>;
+  toggleReadNotification?: Maybe<Notification>;
+  toggleReadAllNotifications?: Maybe<Scalars['String']>;
 };
 
 
@@ -182,6 +184,11 @@ export type MutationBookmarkArgs = {
 
 export type MutationContactArgs = {
   data?: Maybe<ContactInput>;
+};
+
+
+export type MutationToggleReadNotificationArgs = {
+  id?: Maybe<Scalars['Int']>;
 };
 
 export type QuestionFilterInput = {
@@ -677,6 +684,8 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   manualCompleteSet?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationManualCompleteSetArgs, 'examSetId'>>,
   bookmark?: Resolver<Maybe<ResolversTypes['Bookmark']>, ParentType, ContextType, RequireFields<MutationBookmarkArgs, 'questionId'>>,
   contact?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationContactArgs, never>>,
+  toggleReadNotification?: Resolver<Maybe<ResolversTypes['Notification']>, ParentType, ContextType, RequireFields<MutationToggleReadNotificationArgs, never>>,
+  toggleReadAllNotifications?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
 }>;
 
 export type QuestionResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Question'] = ResolversParentTypes['Question']> = ResolversObject<{

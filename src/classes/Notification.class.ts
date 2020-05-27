@@ -30,6 +30,33 @@ class Notification {
     console.log(notifications);
     return store.dispatch(authReducer.actions.setNotifications(notifications));
   };
+
+  static toggleRead = async (id: number) => {
+    const mutation = gql`
+      mutation ToggleReadNotification($id: Int) {
+        toggleReadNotification(id: $id) {
+          ...Notification
+        }
+      }
+      ${Notification.fragment}
+    `;
+
+    const notification = await Apollo.mutate<Notification>('toggleReadNotification', mutation, {
+      id
+    });
+    return store.dispatch(authReducer.actions.setNotifications(notification));
+  };
+
+  static readAll = async () => {
+    const mutation = gql`
+      mutation ToggleReadAllNotifications {
+        toggleReadAllNotifications
+      }
+    `;
+
+    await Apollo.mutate<string>('toggleReadAllNotifications', mutation);
+    await Notification.find();
+  };
 }
 
 export default Notification;

@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import User from 'classes/User';
 import { Bookmark } from 'types/generated';
 import Notification from 'classes/Notification.class';
+import { insertOrReplace } from 'utils/common';
 
 const initialState = {
   user: null as User | null,
@@ -41,8 +42,8 @@ const authReducer = createSlice({
         state.user.bookmarks.splice(index, 1);
       }
     },
-    setNotifications: (state, action: PayloadAction<Notification[]>) => {
-      state.notifications = action.payload;
+    setNotifications: (state, action: PayloadAction<Notification[] | Notification>) => {
+      insertOrReplace(state.notifications, action.payload);
     }
   }
 });

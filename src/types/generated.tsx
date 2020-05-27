@@ -72,6 +72,8 @@ export type Mutation = {
   manualCompleteSet?: Maybe<Scalars['String']>;
   bookmark?: Maybe<Bookmark>;
   contact?: Maybe<Scalars['String']>;
+  toggleReadNotification?: Maybe<Notification>;
+  toggleReadAllNotifications?: Maybe<Scalars['String']>;
 };
 
 
@@ -180,6 +182,11 @@ export type MutationBookmarkArgs = {
 
 export type MutationContactArgs = {
   data?: Maybe<ContactInput>;
+};
+
+
+export type MutationToggleReadNotificationArgs = {
+  id?: Maybe<Scalars['Int']>;
 };
 
 export type QuestionFilterInput = {

@@ -90,6 +90,7 @@ const RightMenu: React.SFC<RightMenuProps> = ({ setActiveLanguage, languages, si
           style={{ cursor: 'pointer' }}
         >
           <Icon style={{ margin: '0 auto' }} name="bell outline" />
+          {'  '}
           <span
             style={{
               width: '20px',
@@ -99,7 +100,6 @@ const RightMenu: React.SFC<RightMenuProps> = ({ setActiveLanguage, languages, si
               alignItems: 'center',
               textAlign: 'center',
               borderRadius: '100%',
-              marginLeft: '5px',
               backgroundColor: notifications.length > 0 ? 'darkred' : null
             }}
           >

@@ -7,6 +7,11 @@ export const notificationTypeDefs = gql`
     notifications: [Notification]
   }
 
+  extend type Mutation {
+    toggleReadNotification(id: Int): Notification
+    toggleReadAllNotifications: String
+  }
+
   type Notification {
     id: Int
     message: String
@@ -25,6 +30,21 @@ export const notificationResolvers: Resolvers = {
         .where({ userId: ctx.user.id })
         .orderBy('createdAt', 'desc');
       return notifications.map((n) => ({ id: n.id }));
+    }
+  },
+
+  Mutation: {
+    toggleReadNotification: async (root, { id }, ctx) => {
+      let notification = await Notification.query().findById(id);
+      if (notification.userId !== ctx.user.id) throw new Error('Not permitted');
+      notification = await notification
+        .$query()
+        .updateAndFetch({ isRead: notification.isRead ? 0 : 1 }); // Toggle isRead
+      return { id: notification.id };
+    },
+    toggleReadAllNotifications: async (root, args, ctx) => {
+      await Notification.query().where({ userId: ctx.user.id }).update({ isRead: 1 });
+      return 'Updated';
     }
   },
 
