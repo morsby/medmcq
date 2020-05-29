@@ -56,12 +56,14 @@ const RightMenu: React.SFC<RightMenuProps> = ({ setActiveLanguage, languages, si
   };
 
   useEffect(() => {
-    setInterval(() => {
-      Notification.find();
-    }, 1000 * 60);
+    if (user) {
+      setInterval(() => {
+        Notification.find();
+      }, 1000 * 60);
 
-    Notification.find();
-  }, []);
+      Notification.find();
+    }
+  }, [user]);
 
   if (width < breakpoints.mobile && !sidebar)
     return (
