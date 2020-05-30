@@ -132,7 +132,12 @@ export const resolvers: Resolvers = {
       // Start filtering based on other values
       query = query.orderByRaw('rand()');
 
-      if (!n || n > 300) n = 300; // Man må ikke hente mere end 300
+      if (ctx.user) {
+        if (!n || n > 600) n = 600; // Man må ikke hente mere end 600, hvis man er logget ind
+      } else {
+        if (!n || n > 300) n = 300; // Man må ikke hente mere end 300, hvis man ikke er logget ind
+      }
+
       query = query.limit(n);
 
       if (specialtyIds && specialtyIds.length > 0) {

@@ -12,6 +12,7 @@ import LoadingPage from 'components/Misc/Utility/LoadingPage';
 import SelectionStartButton from './SelectionComponents/SelectionStartButton';
 import QuestionCount from './SelectionComponents/QuestionCount';
 import { useHistory } from 'react-router-dom';
+import SuspenseLoader from 'components/Misc/Utility/SuspenseLoader';
 const SelectionRandom = lazy(() => import('./SelectionRandom'));
 const SelectionMetadata = lazy(() => import('./SelectionMetadata'));
 const SelectionSets = lazy(() => import('./SelectionSets'));
@@ -50,7 +51,7 @@ const Selection: React.SFC<SelectionProps> = ({ addTranslation }) => {
         <Divider />
         <SelectionTypeSelector />
         <Divider hidden />
-        <Suspense fallback={<LoadingPage />}>
+        <Suspense fallback={<SuspenseLoader />}>
           {type === 'random' && <SelectionRandom />}
           {type === 'metadata' && <SelectionMetadata />}
           {type === 'set' && <SelectionSets />}

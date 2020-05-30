@@ -1,7 +1,4 @@
 import React, { useState } from 'react';
-
-import { allowedNs } from 'utils/common';
-
 import styles from './SelectionNSelector.module.css';
 
 import { Translate } from 'react-localize-redux';
@@ -21,14 +18,17 @@ export interface SelectionNSelectorProps {}
 const SelectionNSelector: React.SFC<SelectionNSelectorProps> = () => {
   const [error, setError] = useState(false);
   const n = useSelector((state: ReduxState) => state.selection.n);
+  const user = useSelector((state: ReduxState) => state.auth.user);
+  const allowedMax = user ? 600 : 300;
 
   const handleChange = (value: number) => {
-    if (value > allowedNs.max) {
+    if (value > allowedMax) {
       setError(true);
-      value = allowedNs.max;
+      value = allowedMax;
     } else {
       setError(false);
     }
+
     Selection.change({ type: 'n', value });
   };
 
@@ -77,7 +77,7 @@ const SelectionNSelector: React.SFC<SelectionNSelectorProps> = () => {
                         <Label basic color="red" pointing>
                           <Translate
                             id="selectionNSelector.err_n_range"
-                            data={{ min: allowedNs.min, max: allowedNs.max }}
+                            data={{ min: 1, max: allowedMax }}
                           />
                         </Label>
                       )}

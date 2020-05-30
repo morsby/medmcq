@@ -1,25 +1,14 @@
 import React from 'react';
+import { Loader } from 'semantic-ui-react';
 
-import { Placeholder, Container } from 'semantic-ui-react';
+export interface LoadingPageProps {}
 
-/**
- * Loading page. Bruges mens data hentes på visse sider, fx profil, feedback.
- */
-const LoadingPage = () => (
-  <Container>
-    <Placeholder fluid>
-      <Placeholder.Header>
-        <Placeholder.Line />
-        <Placeholder.Line />
-      </Placeholder.Header>
-      <Placeholder.Paragraph>
-        <Placeholder.Line />
-        <Placeholder.Line />
-        <Placeholder.Line />
-        <Placeholder.Line />
-      </Placeholder.Paragraph>
-    </Placeholder>
-  </Container>
-);
+const LoadingPage: React.SFC<LoadingPageProps> = () => {
+  return (
+    <div style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Loader active size="huge" />
+    </div>
+  );
+};
 
 export default LoadingPage;

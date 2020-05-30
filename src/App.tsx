@@ -31,6 +31,7 @@ import LoadingPage from 'components/Misc/Utility/LoadingPage';
 import Layout from 'components/Layout/Layout';
 import NewVersionMessage from './components/Misc/Utility/About/NewVersion/NewVersionMessage';
 import MaintenancePage from 'components/Misc/Utility/MaintenancePage';
+import SuspenseLoader from 'components/Misc/Utility/SuspenseLoader';
 
 // Lazy components
 const Selection = lazy(() => import('./components/Selection/Selection'));
@@ -117,13 +118,7 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
     );
   return (
     <BrowserRouter>
-      <Suspense
-        fallback={
-          <Layout>
-            <LoadingPage />
-          </Layout>
-        }
-      >
+      <Suspense fallback={<SuspenseLoader />}>
         <ScrollToTop>
           <NewVersionMessage />
           <ToastContainer
