@@ -120,6 +120,7 @@ export const resolvers: Resolvers = {
     },
     user: async ({ id }, _, ctx) => {
       const comment = await ctx.commentsLoader.load(id);
+      if (comment.anonymous && comment.userId !== ctx.user?.id) return { id: 924 };
       return { id: comment.userId };
     },
     createdAt: async ({ id }, _, ctx) => {
