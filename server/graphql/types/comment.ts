@@ -3,6 +3,7 @@ import QuestionCommentLike from 'models/question_comment_like';
 import QuestionComment from 'models/question_comment';
 import { Resolvers } from 'types/resolvers-types';
 import Notification from 'models/notification.class';
+import ExamSet from 'models/exam_set';
 const domain =
   process.env.NODE_ENV === 'production' ? 'https://medmcq.au.dk' : 'http://localhost:3000';
 
@@ -62,7 +63,7 @@ export const resolvers: Resolvers = {
     },
     addComment: async (root, { data }, ctx) => {
       const { text, isPrivate, isAnonymous, questionId } = data;
-      const comment = await QuestionComment.query().insertAndFetch({
+      let comment = await QuestionComment.query().insertAndFetch({
         text,
         private: isPrivate ? 1 : 0,
         anonymous: isAnonymous ? 1 : 0,
@@ -72,14 +73,23 @@ export const resolvers: Resolvers = {
 
       if (!isPrivate) {
         // Notification for other users in thread
+        comment = await comment
+          .$query()
+          .join('question', 'questionId', 'question.id')
+          .join('semesterExamSet', 'examSetId', 'semesterExamSet.id')
+          .join('semester', 'semesterId', 'semester.id')
+          .select('questionComment.text', 'semester.value', 'questionComment.id');
         const comments = await QuestionComment.query()
           .where({ questionId })
           .whereNot({ userId: ctx.user.id, private: 1 })
           .distinct('userId');
         for (let c of comments) {
           await Notification.query().insert({
-            message: `Der er kommet en ny kommentar på et spørgsmål du har kommenteret på.    
-            [Gå til spørgsmålet](${domain}/quiz/${questionId})`,
+            message: `Ny kommentar "${comment.text.substr(0, 20)}${
+              comment.text.length > 20 ? '...' : ''
+            }" på ${
+              (comment as any).value
+            }. semester.<br />[Gå til spørgsmålet](${domain}/quiz/${questionId}).`,
             userId: c.userId
           });
         }

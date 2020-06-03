@@ -42,8 +42,11 @@ const authReducer = createSlice({
         state.user.bookmarks.splice(index, 1);
       }
     },
-    setNotifications: (state, action: PayloadAction<Notification[] | Notification>) => {
+    addNotifications: (state, action: PayloadAction<Notification[] | Notification>) => {
       insertOrReplace(state.notifications, action.payload);
+    },
+    setNotifications: (state, action: PayloadAction<Notification[]>) => {
+      state.notifications = action.payload;
     }
   }
 });

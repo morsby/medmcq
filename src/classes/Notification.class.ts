@@ -44,7 +44,7 @@ class Notification {
     const notification = await Apollo.mutate<Notification>('toggleReadNotification', mutation, {
       id
     });
-    return store.dispatch(authReducer.actions.setNotifications(notification));
+    return store.dispatch(authReducer.actions.addNotifications(notification));
   };
 
   static readAll = async () => {
