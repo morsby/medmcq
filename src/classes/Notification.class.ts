@@ -27,7 +27,6 @@ class Notification {
     `;
 
     const notifications = await Apollo.query<Notification[]>('notifications', query);
-    console.log(notifications);
     return store.dispatch(authReducer.actions.setNotifications(notifications));
   };
 

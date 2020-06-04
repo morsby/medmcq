@@ -248,7 +248,6 @@ export const resolvers: Resolvers = {
       }
       if (data.answers.length > 0) {
         await QuestionAnswer.query().where({ questionId: question.id }).delete();
-        console.log(data.answers);
         await QuestionAnswer.query().insertGraph(
           data.answers.map((a) => ({
             questionId: question.id,
