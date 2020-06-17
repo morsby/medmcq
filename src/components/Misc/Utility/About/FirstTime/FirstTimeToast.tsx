@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router';
 import { Button } from 'semantic-ui-react';
 import {
@@ -21,7 +21,10 @@ const FirstTimeToast: React.SFC<FirstTimeToastProps> = ({ closeToast, addTransla
   const language = useSelector((state: ReduxState) => state.settings.language);
   const [changedLanguage, setChangedLanguage] = useState(false);
   const dispatch = useDispatch();
-  addTranslation(aboutTranslations);
+
+  useEffect(() => {
+    addTranslation(aboutTranslations);
+  }, []);
 
   const handleClick = () => {
     closeToast();

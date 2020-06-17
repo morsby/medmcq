@@ -31,6 +31,7 @@ import LoadingPage from 'components/Misc/Utility/LoadingPage';
 import Layout from 'components/Layout/Layout';
 import NewVersionMessage from './components/Misc/Utility/About/NewVersion/NewVersionMessage';
 import MaintenancePage from 'components/Misc/Utility/MaintenancePage';
+import FirstTimeToast from 'components/Misc/Utility/About/FirstTime/FirstTimeToast';
 
 // Lazy components
 const Selection = lazy(() => import('./components/Selection/Selection'));
@@ -47,7 +48,6 @@ const ResetPassword = lazy(() => import('./components/Forms/ResetPassword'));
 const QuizShareRoute = lazy(() => import('components/Quiz/QuizShareRoute'));
 const QuizShareBuilderLoader = lazy(() => import('components/Quiz/QuizShareBuilderLoader'));
 const Sharebuilder = lazy(() => import('components/Sharebuilder/Sharebuilder'));
-const FirstTimeToast = lazy(() => import('components/Misc/Utility/About/FirstTime/FirstTimeToast'));
 const FirstTime = lazy(() => import('components/Misc/Utility/About/FirstTime/FirstTime'));
 const CreateQuestionForm = lazy(() => import('components/CreateQuestion/CreateQuestionForm'));
 const SharebuilderPicker = lazy(() => import('components/Sharebuilder/ShareBuilderPicker'));
