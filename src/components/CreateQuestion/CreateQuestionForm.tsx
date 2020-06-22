@@ -29,6 +29,7 @@ export interface CreateQuestionFormProps {
 const CreateQuestionForm: React.SFC<CreateQuestionFormProps> = ({ question }) => {
   const [error, setError] = useState('');
   const [semesterId, setSemesterId] = useState(5);
+  const [examSetId, setExamSetId] = useState(null);
   const [images, setImages] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useDispatch();
@@ -59,7 +60,7 @@ const CreateQuestionForm: React.SFC<CreateQuestionFormProps> = ({ question }) =>
           text: question?.answers.find((a) => a.index === 3).text || ''
         }
       ],
-      examSetId: examSets[0]?.id
+      examSetId: examSetId
     } as QuestionInput,
     onSubmit: (values) => handleSubmit(values),
     enableReinitialize: true
@@ -155,6 +156,11 @@ const CreateQuestionForm: React.SFC<CreateQuestionFormProps> = ({ question }) =>
     value: semester.id,
     key: semester.id
   }));
+  const examSetOptions = examSets.map((examSet) => ({
+    text: `${examSet.year}${examSet.season}`,
+    value: examSet.id,
+    key: examSet.id
+  }));
 
   return (
     <Container style={{ marginTop: '2rem' }}>
@@ -224,10 +230,13 @@ const CreateQuestionForm: React.SFC<CreateQuestionFormProps> = ({ question }) =>
           />
           <Form.Field>
             <label>Sæt</label>
-            <p>
-              {examSets.find((s) => s.id === formik.values.examSetId).season +
-                examSets.find((s) => s.id === formik.values.examSetId).year}
-            </p>
+            <Dropdown
+              fluid
+              selection
+              options={examSetOptions}
+              value={formik.values.examSetId}
+              onChange={(e, { value }) => setExamSetId(value as number)}
+            />
           </Form.Field>
           {question?.images.map((image) => (
             <Grid columns="equal" celled>
