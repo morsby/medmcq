@@ -55,30 +55,30 @@ const Answers: React.SFC<AnswersProps> = () => {
     {
       name: 'Korrekte',
       value: allRight,
-      color: 'green',
+      color: 'green'
     },
     {
       name: 'Forkerte',
       value: allWrong,
-      color: 'red',
+      color: 'red'
     },
     {
       name: 'Blandede',
       value: mixed,
-      color: '#ebbd34',
-    },
+      color: '#ebbd34'
+    }
   ];
   const commentData = [
     {
       name: 'Offentlige',
       value: publicComments.length,
-      color: 'green',
+      color: 'green'
     },
     {
       name: 'Private',
       value: privateComments.length,
-      color: '#ebbd34',
-    },
+      color: '#ebbd34'
+    }
   ];
 
   return (
@@ -99,7 +99,7 @@ const Answers: React.SFC<AnswersProps> = () => {
           </StatLabel>
         </StatBox>
         <StatBox>
-          <PieChart height={180} width={250}>
+          <PieChart height={200} width={250}>
             <Pie data={data} label nameKey="name" dataKey="value">
               {data.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={data[index].color} />
@@ -114,7 +114,7 @@ const Answers: React.SFC<AnswersProps> = () => {
           </StatLabel>
         </StatBox>
         <StatBox>
-          <PieChart height={180} width={250}>
+          <PieChart height={200} width={250}>
             <Pie data={commentData} label nameKey="name" dataKey="value">
               {commentData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={commentData[index].color} />

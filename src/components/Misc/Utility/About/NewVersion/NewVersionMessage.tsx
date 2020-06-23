@@ -4,12 +4,11 @@ import { withLocalize, Translate, LocalizeContextProps } from 'react-localize-re
 import { useDispatch, useSelector } from 'react-redux';
 import { Message } from 'semantic-ui-react';
 import { Link } from 'react-router-dom';
-import { urls } from '../../../../../utils/common';
+import { urls, appVersion } from '../../../../../utils/common';
 
 import newVersionMessageTranslations from './newVersionMessageTranslations.json';
 import { ReduxState } from 'redux/reducers';
 import settingsReducer from 'redux/reducers/settings';
-const version = '2.3.0';
 
 export interface LinkToAboutProps {}
 
@@ -32,10 +31,10 @@ const NewVersionMessage: React.SFC<NewVersionMessageProps> = ({ addTranslation }
   });
 
   const handleDismiss = () => {
-    dispatch(settingsReducer.actions.changeSettings({ type: 'version', value: version }));
+    dispatch(settingsReducer.actions.changeSettings({ type: 'version', value: appVersion }));
   };
 
-  if (version !== prevVersion) {
+  if (appVersion !== prevVersion) {
     return (
       <div
         style={{

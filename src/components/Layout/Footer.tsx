@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router';
 import { Grid, Icon, Container, Menu } from 'semantic-ui-react';
-import { urls } from '../../utils/common';
+import { urls, appVersion } from '../../utils/common';
 import { Translate, withLocalize, LocalizeContextProps } from 'react-localize-redux';
 import layoutTranslations from './layoutTranslations.json';
 
@@ -51,7 +51,7 @@ const Footer: React.SFC<FooterProps> = ({ addTranslation }) => {
                 <Icon name="ship" /> <Translate id="footer.created_by" />
               </div>
               <div>
-                <Icon name="sitemap" /> <span>Version 2.3.0</span>
+                <Icon name="sitemap" /> <span>Version {appVersion}</span>
               </div>
             </Grid.Column>
             <Grid.Column largeScreen={4} computer={4} tablet={6} mobile={16}>

@@ -31,9 +31,9 @@ export const resolvers: Resolvers = {
       const user = await User.query().findById(ctx.user?.id).skipUndefined();
       let semesters: Semester[];
       if (user?.roleId < 4) {
-        semesters = await Semester.query();
+        semesters = await Semester.query().orderBy('value', 'ASC');
       } else {
-        semesters = await Semester.query().where({ locked: 0 });
+        semesters = await Semester.query().where({ locked: 0 }).orderBy('value', 'ASC');
       }
       return semesters.map((semester) => ({ id: semester.id }));
     },

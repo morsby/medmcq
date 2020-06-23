@@ -74,6 +74,12 @@ export default {
     header: ['Hvad er nyt på siden?', "What's new on the site?"],
     body: [
       `
+      <h3>v.2.4.0 - 24/04-2020</h3>
+      <ul>
+        <li>
+          Patologi har joinet medMCQ! Byd dem hjerteligt velkommen.
+        </li>
+      </ul>
       <h3>v.2.3.0 - 24/04-2020</h3>
       <ul>
         <li>
@@ -197,6 +203,12 @@ export default {
   </li>
 </ul>`,
       `
+      <h3>v.2.4.0 - 24/04-2020</h3>
+      <ul>
+        <li>
+          Patologi has joined medMCQ! Make them feel like home.
+        </li>
+      </ul>
       <h3>v.2.3.0 - 24/04-2020</h3>
       <ul>
         <li>

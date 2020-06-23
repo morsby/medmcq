@@ -19,11 +19,13 @@ describe('profile', () => {
   });
 
   it('should be able to change semesters', () => {
-    cy.contains('a', '7. semester', { matchCase: false }).click();
-    cy.contains('a', '7. semester', { matchCase: false }).should('have.class', 'active');
+    cy.get('div[class~="dropdown"]').click();
+    cy.contains('span', '7. semester', { matchCase: false }).click();
+    cy.get('div[class~="dropdown"]').should('contain', '7. semester');
     cy.contains('p', 'besvarede spørgsmål', { matchCase: false }).should('exist');
-    cy.contains('a', '8. semester', { matchCase: false }).click();
-    cy.contains('a', '7. semester', { matchCase: false }).should('not.have.class', 'active');
+    cy.get('div[class~="dropdown"]').click();
+    cy.contains('span', '8. semester', { matchCase: false }).click();
+    cy.get('div[class~="dropdown"]').should('contain', '8. semester');
   });
 
   describe('answerDetails', () => {
