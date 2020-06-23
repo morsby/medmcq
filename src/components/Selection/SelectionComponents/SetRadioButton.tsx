@@ -18,16 +18,6 @@ const SetRadioButton: React.SFC<SetRadioButtonProps> = ({ set }) => {
   const handleChange = async (examSetId: number) => {
     Selection.change({ type: 'examSetId', value: examSetId });
   };
-  const reExam = (season: ExamSet['season'], activeLanguage: { code: string }) => {
-    const isEnglish = activeLanguage.code === 'gb';
-    if (season.match(/re/)) {
-      if (isEnglish) {
-        return 'Reexam';
-      }
-      return 'Reeksamen';
-    }
-    return '';
-  };
 
   const translateSeason = (season: ExamSet['season'], activeLanguage: { code: string }) => {
     const isEnglish = activeLanguage.code === 'gb';
@@ -53,10 +43,9 @@ const SetRadioButton: React.SFC<SetRadioButtonProps> = ({ set }) => {
           {({ activeLanguage = { code: 'dk' } }) => (
             <>
               <Radio
-                label={`${translateSeason(set.season, activeLanguage)} ${set.year} ${reExam(
-                  set.season,
-                  activeLanguage
-                )}`}
+                label={`${translateSeason(set.season, activeLanguage)} ${set.year} ${
+                  set.reexam ? (activeLanguage.code === 'gb' ? 'Re-exam' : 'Reeksamen') : ''
+                }`}
                 checked={set.id === chosenSetId}
                 name="selectedSetId"
                 onChange={() => handleChange(set.id)}

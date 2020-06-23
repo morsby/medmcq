@@ -300,6 +300,7 @@ export type ExamSet = {
   year?: Maybe<Scalars['Int']>;
   season?: Maybe<Scalars['String']>;
   semester?: Maybe<Semester>;
+  reexam?: Maybe<Scalars['Boolean']>;
   createdAt?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
   questionCount?: Maybe<Scalars['Int']>;

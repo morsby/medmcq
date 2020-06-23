@@ -19,6 +19,7 @@ export const typeDefs = gql`
     year: Int
     season: String
     semester: Semester
+    reexam: Boolean
     createdAt: String
     updatedAt: String
     questionCount: Int
@@ -89,6 +90,10 @@ export const resolvers: Resolvers = {
     semester: async ({ id }, args, ctx) => {
       const examSet = await ctx.examSetsLoader.load(id);
       return { id: examSet.semesterId };
+    },
+    reexam: async ({ id }, args, ctx) => {
+      const examSet = await ctx.examSetsLoader.load(id);
+      return !!examSet.reexam;
     },
     questionCount: async ({ id }) => {
       const result: any = await Question.query().where({ examSetId: id }).count().first();

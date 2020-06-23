@@ -302,6 +302,7 @@ export type ExamSet = {
   year?: Maybe<Scalars['Int']>;
   season?: Maybe<Scalars['String']>;
   semester?: Maybe<Semester>;
+  reexam?: Maybe<Scalars['Boolean']>;
   createdAt?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
   questionCount?: Maybe<Scalars['Int']>;
@@ -764,6 +765,7 @@ export type ExamSetResolvers<ContextType = Context, ParentType extends Resolvers
   year?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
   season?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   semester?: Resolver<Maybe<ResolversTypes['Semester']>, ParentType, ContextType>,
+  reexam?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   updatedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   questionCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,

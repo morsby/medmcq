@@ -10,6 +10,7 @@ class ExamSet {
       id
       year
       season
+      reexam
       semester {
         id
       }
