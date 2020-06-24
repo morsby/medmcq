@@ -130,7 +130,6 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
               <Translate id="questionMetadata.tags" />{' '}
               {_(question.tags)
                 .map((t) => tags.find((tag) => tag.id === t.id))
-                .filter((t) => !!t.parent.id)
                 .orderBy('votes', 'desc')
                 .map((t) => {
                   if (!t) return null;

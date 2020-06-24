@@ -49,7 +49,7 @@ const QuestionMetadataLabel: React.SFC<QuestionMetadataLabelProps> = ({
     if (type === 'specialty') return true; // Specialer har ingen children, og derfór altid alle children tagged
     const questionTagIds = question.tags.map((tag) => tag.id);
     const children = tagChildren.map((t) => t.id);
-    if (children.length < 1) return true; // Hvis der ingen children er, er alle children tagges by default
+    if (children.length < 1) return true; // Hvis der ingen children er, er alle children tagged by default
     const isChildrenTagged = children.some((c) => questionTagIds.includes(c)); // Tjek om en af children er tagged
     return isChildrenTagged;
   };
