@@ -272,7 +272,7 @@ export const resolvers: Resolvers = {
         subject: `Fejl i spørgsmål med id ${question.id}`,
         text: `
   Der er blevet rapporteret en fejl i følgende spørgsmål:
-  - ID: ${question.id}
+  - Link: https://medmcq.au.dk/quiz/${question.id}
   - Semester: ${semester.value}
   - Sæt: ${examSet.year}/${examSet.season}
   - Spørgsmålnummer: ${question.examSetQno}
