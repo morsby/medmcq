@@ -10,6 +10,7 @@ export interface NotificationsProps {}
 const Notifications: React.SFC<NotificationsProps> = () => {
   const [loading, setLoading] = useState(false);
   const notifications = useSelector((state: ReduxState) => state.auth.notifications);
+  const semesterId = useSelector((state: ReduxState) => state.selection.semesterId);
   const notReadCount = notifications.reduce((sum, n) => (n.isRead ? sum : sum + 1), 0);
 
   const handleRead = async (id: number) => {

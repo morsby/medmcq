@@ -49,6 +49,11 @@ export type QueryCheckUsernameAvailabilityArgs = {
   data?: Maybe<UserAvailableInput>;
 };
 
+
+export type QueryNotificationsArgs = {
+  semesterId?: Maybe<Scalars['Int']>;
+};
+
 export type Mutation = {
    __typename?: 'Mutation';
   _empty?: Maybe<Scalars['String']>;
@@ -56,6 +61,7 @@ export type Mutation = {
   reportQuestion?: Maybe<Scalars['String']>;
   createQuestion?: Maybe<Question>;
   updateQuestion?: Maybe<Question>;
+  ignoreQuestion?: Maybe<Question>;
   voteTag?: Maybe<Question>;
   voteSpecialty?: Maybe<Question>;
   suggestTag?: Maybe<Scalars['String']>;
@@ -97,6 +103,11 @@ export type MutationCreateQuestionArgs = {
 
 export type MutationUpdateQuestionArgs = {
   data?: Maybe<QuestionInput>;
+};
+
+
+export type MutationIgnoreQuestionArgs = {
+  id?: Maybe<Scalars['Int']>;
 };
 
 
@@ -223,6 +234,7 @@ export type Question = {
   createdAt?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
+  isIgnored?: Maybe<Scalars['Boolean']>;
 };
 
 export type QuestionAnswer = {
@@ -391,6 +403,7 @@ export type User = {
   password?: Maybe<Scalars['String']>;
   role?: Maybe<Role>;
   bookmarks?: Maybe<Array<Maybe<Bookmark>>>;
+  ignored?: Maybe<Array<Maybe<Question>>>;
   answers?: Maybe<Array<Maybe<UserAnswer>>>;
   specialtyVotes?: Maybe<Array<Maybe<SpecialtyVote>>>;
   tagVotes?: Maybe<Array<Maybe<TagVote>>>;
@@ -404,6 +417,11 @@ export type User = {
 
 
 export type UserBookmarksArgs = {
+  semester?: Maybe<Scalars['Int']>;
+};
+
+
+export type UserIgnoredArgs = {
   semester?: Maybe<Scalars['Int']>;
 };
 
@@ -658,7 +676,7 @@ export type QueryResolvers<ContextType = Context, ParentType extends ResolversPa
   profile?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
   maintenance?: Resolver<Maybe<ResolversTypes['Maintenance']>, ParentType, ContextType>,
   notice?: Resolver<Maybe<ResolversTypes['Notice']>, ParentType, ContextType>,
-  notifications?: Resolver<Maybe<Array<Maybe<ResolversTypes['Notification']>>>, ParentType, ContextType>,
+  notifications?: Resolver<Maybe<Array<Maybe<ResolversTypes['Notification']>>>, ParentType, ContextType, RequireFields<QueryNotificationsArgs, never>>,
 }>;
 
 export type MutationResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = ResolversObject<{
@@ -667,6 +685,7 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   reportQuestion?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationReportQuestionArgs, 'report' | 'questionId'>>,
   createQuestion?: Resolver<Maybe<ResolversTypes['Question']>, ParentType, ContextType, RequireFields<MutationCreateQuestionArgs, never>>,
   updateQuestion?: Resolver<Maybe<ResolversTypes['Question']>, ParentType, ContextType, RequireFields<MutationUpdateQuestionArgs, never>>,
+  ignoreQuestion?: Resolver<Maybe<ResolversTypes['Question']>, ParentType, ContextType, RequireFields<MutationIgnoreQuestionArgs, never>>,
   voteTag?: Resolver<Maybe<ResolversTypes['Question']>, ParentType, ContextType, RequireFields<MutationVoteTagArgs, never>>,
   voteSpecialty?: Resolver<Maybe<ResolversTypes['Question']>, ParentType, ContextType, RequireFields<MutationVoteSpecialtyArgs, never>>,
   suggestTag?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationSuggestTagArgs, 'tagName' | 'questionId'>>,
@@ -706,6 +725,7 @@ export type QuestionResolvers<ContextType = Context, ParentType extends Resolver
   createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   updatedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   user?: Resolver<Maybe<ResolversTypes['User']>, ParentType, ContextType>,
+  isIgnored?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
@@ -813,6 +833,7 @@ export type UserResolvers<ContextType = Context, ParentType extends ResolversPar
   password?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   role?: Resolver<Maybe<ResolversTypes['Role']>, ParentType, ContextType>,
   bookmarks?: Resolver<Maybe<Array<Maybe<ResolversTypes['Bookmark']>>>, ParentType, ContextType, RequireFields<UserBookmarksArgs, never>>,
+  ignored?: Resolver<Maybe<Array<Maybe<ResolversTypes['Question']>>>, ParentType, ContextType, RequireFields<UserIgnoredArgs, never>>,
   answers?: Resolver<Maybe<Array<Maybe<ResolversTypes['UserAnswer']>>>, ParentType, ContextType, RequireFields<UserAnswersArgs, never>>,
   specialtyVotes?: Resolver<Maybe<Array<Maybe<ResolversTypes['SpecialtyVote']>>>, ParentType, ContextType>,
   tagVotes?: Resolver<Maybe<Array<Maybe<ResolversTypes['TagVote']>>>, ParentType, ContextType>,

@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import Comment from 'classes/Comment';
 import Profile, { Attempt } from 'classes/Profile';
 import { UserAnswer, Bookmark } from 'types/generated';
+import Question from 'classes/Question';
 
 const initialState = {
   userAnswers: [] as UserAnswer[],
@@ -9,6 +10,7 @@ const initialState = {
   privateComments: [] as Comment[],
   bookmarks: [] as Bookmark[],
   tries: [] as Attempt[],
+  ignored: [] as Question[]
 };
 
 const profileReducer = createSlice({
@@ -21,8 +23,9 @@ const profileReducer = createSlice({
       state.privateComments = action.payload.privateComments;
       state.bookmarks = action.payload.bookmarks;
       state.tries = action.payload.tries;
-    },
-  },
+      state.ignored = action.payload.ignored;
+    }
+  }
 });
 
 export default profileReducer;

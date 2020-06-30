@@ -15,6 +15,7 @@ import Metadata from 'classes/Metadata';
 import User from 'classes/User';
 import Tag from 'classes/Tag';
 import questionsReducer from 'redux/reducers/question';
+import Question from 'classes/Question';
 
 export interface QuestionMetadataProps {}
 
@@ -22,6 +23,7 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
   const dispatch = useDispatch();
   const [newTag, setNewTag] = useState('');
   const [isBookmarking, setIsBookmarking] = useState(false);
+  const [isIgnoring, setIsIgnoring] = useState(false);
   const [addingNewTag, setAddingNewTag] = useState(false);
   const [suggestTagMessage, setSuggestTagMessage] = useState('');
   const questionIndex = useSelector((state: ReduxState) => state.quiz.questionIndex);
@@ -76,6 +78,12 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
     setIsBookmarking(true);
     await User.bookmark({ questionId: question.id });
     setIsBookmarking(false);
+  };
+
+  const handleIgnore = async () => {
+    setIsIgnoring(true);
+    await Question.ignore(question.id);
+    setIsIgnoring(false);
   };
 
   return (
@@ -187,36 +195,36 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
         </Grid.Row>
       </Grid.Column>
       {user && isAnswered(question, answers) && (
-        <>
-          <Grid.Row>
-            <Grid.Column>
-              {!addingNewTag && (
-                <Button basic color="yellow" onClick={() => setAddingNewTag(true)}>
+        <Grid.Row verticalAlign="middle">
+          <Grid.Column>
+            {!addingNewTag && (
+              <Button basic color="yellow" onClick={() => setAddingNewTag(true)}>
+                <Translate id="voting.suggest_tag" />
+              </Button>
+            )}
+            {addingNewTag && (
+              <>
+                <Input
+                  style={{ marginRight: '1rem' }}
+                  width={5}
+                  placeholder="Tag ..."
+                  value={newTag}
+                  onChange={handleChange}
+                  error={!!addingTagError}
+                />
+                <Button basic color="green" onClick={suggestTag}>
                   <Translate id="voting.suggest_tag" />
                 </Button>
-              )}
-              {addingNewTag && (
-                <>
-                  <Input
-                    style={{ marginRight: '1rem' }}
-                    width={5}
-                    placeholder="Tag ..."
-                    value={newTag}
-                    onChange={handleChange}
-                    error={!!addingTagError}
-                  />
-                  <Button basic color="green" onClick={suggestTag}>
-                    <Translate id="voting.suggest_tag" />
-                  </Button>
-                  <Button basic color="red" onClick={() => setAddingNewTag(false)}>
-                    <Translate id="voting.cancel" />
-                  </Button>
-                </>
-              )}
-              {addingTagError && <Message color="red">{addingTagError}</Message>}
-              {suggestTagMessage && <Message color="green">{suggestTagMessage}</Message>}
-            </Grid.Column>
-            <Grid.Column width={5} textAlign="right">
+                <Button basic color="red" onClick={() => setAddingNewTag(false)}>
+                  <Translate id="voting.cancel" />
+                </Button>
+              </>
+            )}
+            {addingTagError && <Message color="red">{addingTagError}</Message>}
+            {suggestTagMessage && <Message color="green">{suggestTagMessage}</Message>}
+          </Grid.Column>
+          <Grid.Column width={5} textAlign="right">
+            <div>
               <span style={{ color: 'grey' }}>Gem spørgsmål - </span>
               {isBookmarking ? (
                 <Loader active inline size="small" />
@@ -233,9 +241,24 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
                   size="large"
                 />
               )}
-            </Grid.Column>
-          </Grid.Row>
-        </>
+            </div>
+            <div style={{ height: '5px' }} />
+            <div>
+              <span style={{ color: 'grey' }}>Vis mig ikke spørgsmålet igen - </span>
+              {isIgnoring ? (
+                <Loader active inline size="small" />
+              ) : (
+                <Icon
+                  style={{ cursor: 'pointer' }}
+                  onClick={handleIgnore}
+                  color={question.isIgnored ? 'red' : 'grey'}
+                  name="close"
+                  size="large"
+                />
+              )}
+            </div>
+          </Grid.Column>
+        </Grid.Row>
       )}
     </Grid>
   );

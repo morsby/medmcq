@@ -13,6 +13,7 @@ import _ from 'lodash';
 import { Resolvers } from 'types/resolvers-types';
 import Question from 'models/question';
 import QuestionAnswer from 'models/questionAnswer.model';
+import QuestionIgnores from 'models/questionIgnores.model';
 
 export const typeDefs = gql`
   extend type Query {
@@ -60,6 +61,7 @@ export const typeDefs = gql`
     password: String
     role: Role
     bookmarks(semester: Int): [Bookmark]
+    ignored(semester: Int): [Question]
     answers(semester: Int): [UserAnswer]
     specialtyVotes: [SpecialtyVote]
     tagVotes: [TagVote]
@@ -360,6 +362,19 @@ export const resolvers: Resolvers = {
       }
 
       return answeredSets;
+    },
+    ignored: async ({ id }, { semester }) => {
+      let query = QuestionIgnores.query().where('questionIgnores.userId', id);
+
+      if (semester) {
+        query = query
+          .join('question', 'questionId', 'question.id')
+          .join('semesterExamSet', 'question.examSetId', 'semesterExamSet.id')
+          .where({ semesterId: semester });
+      }
+
+      const ignoredQuestions = await query;
+      return ignoredQuestions.map((q) => ({ id: q.questionId }));
     }
   },
 

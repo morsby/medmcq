@@ -4,7 +4,7 @@ import Notification from 'models/notification.class';
 
 export const notificationTypeDefs = gql`
   extend type Query {
-    notifications: [Notification]
+    notifications(semesterId: Int): [Notification]
   }
 
   extend type Mutation {
@@ -24,7 +24,7 @@ export const notificationTypeDefs = gql`
 
 export const notificationResolvers: Resolvers = {
   Query: {
-    notifications: async (root, args, ctx) => {
+    notifications: async (root, { semesterId }, ctx) => {
       if (!ctx.user) return [];
       const notifications = await Notification.query()
         .where({ userId: ctx.user.id })

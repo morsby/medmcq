@@ -4,27 +4,26 @@ import { Translate } from 'react-localize-redux';
 import { Divider, Button, Input } from 'semantic-ui-react';
 import { useHistory } from 'react-router';
 import Quiz from 'classes/Quiz';
-import { useSelector } from 'react-redux';
-import { ReduxState } from 'redux/reducers';
-import _ from 'lodash';
 import Highlight from 'react-highlighter';
+import Question from 'classes/Question';
 
 /**
  * Component that displays questions
  */
-export interface BookmarksProps {}
+export interface QuestionTableProps {
+  questions: Question[];
+}
 
-const Bookmarks: React.SFC<BookmarksProps> = () => {
+const QuestionTable: React.SFC<QuestionTableProps> = ({ questions }) => {
   const [search, setSearch] = useState('');
   const history = useHistory();
-  const bookmarks = useSelector((state: ReduxState) => state.profile.bookmarks);
-  if (bookmarks.length === 0) return <Translate id="profileBookmarks.no_bookmarks" />;
 
   const openAll = async () => {
-    Quiz.start({ ids: _.map(bookmarks, (bookmark) => bookmark.question.id) });
+    Quiz.start({ ids: questions.map((q) => q.id) });
     history.push('/quiz');
   };
 
+  if (questions.length === 0) return <p>Ingen spørgsmål...</p>;
   return (
     <div>
       <Button basic color="blue" onClick={openAll}>
@@ -38,29 +37,25 @@ const Bookmarks: React.SFC<BookmarksProps> = () => {
         placeholder="Søg..."
       />
       <Divider />
-      {bookmarks
+      {questions
         .filter(
-          (bookmark) =>
-            bookmark.question.text.toLowerCase().includes(search.toLowerCase()) ||
-            bookmark.question.answers.some((a) => a.text.includes(search.toLowerCase()))
+          (q) =>
+            q.text.toLowerCase().includes(search.toLowerCase()) ||
+            q.answers.some((a) => a.text.includes(search.toLowerCase()))
         )
-        .map((bookmark, i) => (
-          <div key={bookmark.id}>
+        .map((question, i) => (
+          <div key={question.id}>
             {Number(i) > 0 && <Divider />}
-            <div dangerouslySetInnerHTML={{ __html: marked(bookmark.question.text) }} />
+            <div dangerouslySetInnerHTML={{ __html: marked(question.text) }} />
             <ol type="A">
-              {bookmark.question.answers.map((a) => (
+              {question.answers.map((a) => (
                 <li className={a.isCorrect ? 'svar-korrekt' : ''}>
                   <Highlight search={search}>{a.text}</Highlight>
                 </li>
               ))}
             </ol>
             <div style={{ textAlign: 'center', margin: '1rem' }}>
-              <Button
-                basic
-                color="black"
-                onClick={() => history.push(`/quiz/${bookmark.question.id}`)}
-              >
+              <Button basic color="black" onClick={() => history.push(`/quiz/${question.id}`)}>
                 <Translate id="profileActivity.accordionElements.accordionButton" />
               </Button>
             </div>
@@ -70,4 +65,4 @@ const Bookmarks: React.SFC<BookmarksProps> = () => {
   );
 };
 
-export default Bookmarks;
+export default QuestionTable;

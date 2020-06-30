@@ -59,6 +59,7 @@ class Question {
         id
         username
       }
+      isIgnored
     }
     ${Comment.fragmentFull}
     ${Tag.tagVoteFragment}
@@ -119,6 +120,20 @@ class Question {
     `;
 
     const question = await Apollo.mutate<Question>('updateQuestion', mutation, { data });
+    store.dispatch(questionsReducer.actions.addQuestion(question));
+  };
+
+  static ignore = async (id: number) => {
+    const mutation = gql`
+      mutation IgnoreQuestion($id: Int) {
+        ignoreQuestion(id: $id) {
+          ...Question
+        }
+      }
+      ${Question.fullFragment}
+    `;
+
+    const question = await Apollo.mutate<Question>('ignoreQuestion', mutation, { id });
     store.dispatch(questionsReducer.actions.addQuestion(question));
   };
 }

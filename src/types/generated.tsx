@@ -47,6 +47,11 @@ export type QueryCheckUsernameAvailabilityArgs = {
   data?: Maybe<UserAvailableInput>;
 };
 
+
+export type QueryNotificationsArgs = {
+  semesterId?: Maybe<Scalars['Int']>;
+};
+
 export type Mutation = {
    __typename?: 'Mutation';
   _empty?: Maybe<Scalars['String']>;
@@ -54,6 +59,7 @@ export type Mutation = {
   reportQuestion?: Maybe<Scalars['String']>;
   createQuestion?: Maybe<Question>;
   updateQuestion?: Maybe<Question>;
+  ignoreQuestion?: Maybe<Question>;
   voteTag?: Maybe<Question>;
   voteSpecialty?: Maybe<Question>;
   suggestTag?: Maybe<Scalars['String']>;
@@ -95,6 +101,11 @@ export type MutationCreateQuestionArgs = {
 
 export type MutationUpdateQuestionArgs = {
   data?: Maybe<QuestionInput>;
+};
+
+
+export type MutationIgnoreQuestionArgs = {
+  id?: Maybe<Scalars['Int']>;
 };
 
 
@@ -221,6 +232,7 @@ export type Question = {
   createdAt?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
   user?: Maybe<User>;
+  isIgnored?: Maybe<Scalars['Boolean']>;
 };
 
 export type QuestionAnswer = {
@@ -389,6 +401,7 @@ export type User = {
   password?: Maybe<Scalars['String']>;
   role?: Maybe<Role>;
   bookmarks?: Maybe<Array<Maybe<Bookmark>>>;
+  ignored?: Maybe<Array<Maybe<Question>>>;
   answers?: Maybe<Array<Maybe<UserAnswer>>>;
   specialtyVotes?: Maybe<Array<Maybe<SpecialtyVote>>>;
   tagVotes?: Maybe<Array<Maybe<TagVote>>>;
@@ -402,6 +415,11 @@ export type User = {
 
 
 export type UserBookmarksArgs = {
+  semester?: Maybe<Scalars['Int']>;
+};
+
+
+export type UserIgnoredArgs = {
   semester?: Maybe<Scalars['Int']>;
 };
 

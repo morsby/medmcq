@@ -13,6 +13,7 @@ import { Resolvers } from 'types/resolvers-types';
 import ShareLink from 'models/shareLink';
 import { permitAdmin } from 'graphql/utils';
 import QuestionAnswer from 'models/questionAnswer.model';
+import QuestionIgnores from 'models/questionIgnores.model';
 
 export const typeDefs = gql`
   extend type Query {
@@ -23,6 +24,7 @@ export const typeDefs = gql`
     reportQuestion(report: String!, questionId: Int!): String
     createQuestion(data: QuestionInput): Question
     updateQuestion(data: QuestionInput): Question
+    ignoreQuestion(id: Int): Question
   }
 
   input QuestionFilterInput {
@@ -56,6 +58,7 @@ export const typeDefs = gql`
     createdAt: String
     updatedAt: String
     user: User
+    isIgnored: Boolean
   }
 
   type QuestionAnswer {
@@ -172,6 +175,14 @@ export const resolvers: Resolvers = {
           );
       }
 
+      if (ctx.user) {
+        const ignoredQuestions = await QuestionIgnores.query().where({ userId: ctx.user.id });
+        query = query.whereNotIn(
+          'question.id',
+          ignoredQuestions.map((q) => q.questionId)
+        );
+      }
+
       if (ctx.user && onlyWrong) {
         const correctAnswers = QuestionUserAnswer.query()
           .where({ userId: ctx.user.id })
@@ -259,6 +270,17 @@ export const resolvers: Resolvers = {
       }
 
       return { id: question.id };
+    },
+    ignoreQuestion: async (root, { id }, ctx) => {
+      if (!ctx.user) throw new Error('Should be logged in');
+      const exists = await QuestionIgnores.query().findOne({ questionId: id, userId: ctx.user.id });
+      if (exists) {
+        await exists.$query().delete();
+      } else {
+        await QuestionIgnores.query().insert({ questionId: id, userId: ctx.user.id });
+      }
+
+      return { id };
     },
     reportQuestion: async (root, { report, questionId }, ctx) => {
       const question = await ctx.questionLoader.load(questionId);
@@ -377,6 +399,14 @@ export const resolvers: Resolvers = {
       const question = await ctx.questionLoader.load(id);
       if (!question.userId) return null;
       return { id: question.userId };
+    },
+    isIgnored: async ({ id }, args, ctx) => {
+      if (!ctx.user) return false;
+      const ignored = await QuestionIgnores.query().findOne({
+        questionId: id,
+        userId: ctx.user.id
+      });
+      return !!ignored;
     }
   },
 

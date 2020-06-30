@@ -5,7 +5,7 @@ import { Accordion } from 'semantic-ui-react';
 import ProfileActivityAccordionElem from './ProfileActivityAccordionElem';
 
 import Answers from './Answers';
-import Bookmarks from './Bookmarks';
+import QuestionTable from './Bookmarks';
 import Comments from './Comments';
 import { useSelector } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
@@ -16,7 +16,9 @@ import { ReduxState } from 'redux/reducers';
 export interface ProfileActivityProps {}
 
 const ProfileActivity: React.SFC<ProfileActivityProps> = () => {
-  const { publicComments, privateComments } = useSelector((state: ReduxState) => state.profile);
+  const { publicComments, privateComments, bookmarks, ignored } = useSelector(
+    (state: ReduxState) => state.profile
+  );
 
   const [activeIndex, setActiveIndex] = useState(0);
   return (
@@ -65,7 +67,21 @@ const ProfileActivity: React.SFC<ProfileActivityProps> = () => {
             active={activeIndex === 3}
             handleClick={setActiveIndex}
           >
-            {activeIndex === 3 && <Bookmarks />}
+            {activeIndex === 3 && (
+              <QuestionTable questions={bookmarks.flatMap((b) => b.question)} />
+            )}
+          </ProfileActivityAccordionElem>
+        )}
+      </Translate>
+      <Translate>
+        {({ translate }) => (
+          <ProfileActivityAccordionElem
+            title="Ignorerede spørgsmål"
+            index={4}
+            active={activeIndex === 4}
+            handleClick={setActiveIndex}
+          >
+            {activeIndex === 4 && <QuestionTable questions={ignored} />}
           </ProfileActivityAccordionElem>
         )}
       </Translate>

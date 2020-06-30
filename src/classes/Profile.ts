@@ -88,6 +88,13 @@ class Profile {
               }
             }
           }
+          ignored(semester: $semester) {
+            id
+            text
+            answers {
+              ...QuestionAnswer
+            }
+          }
         }
       }
       ${Comment.fragmentFull}
@@ -95,11 +102,9 @@ class Profile {
     `;
 
     const profileData = await Apollo.query<Profile>('profile', query, {
-      semester: options.semester,
+      semester: options.semester
     });
-
     profileData.tries = mapAnswers(profileData.answers);
-
     store.dispatch(profileReducer.actions.setProfile(profileData));
   };
 }
