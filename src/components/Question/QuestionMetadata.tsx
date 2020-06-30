@@ -47,6 +47,7 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
       state.metadata.semesters.find((semester) => semester.id === semesterId).tags
   );
   const user = useSelector((state: ReduxState) => state.auth.user);
+  const [addingTagError, setAddingTagError] = useState('');
 
   const metadataVote = async (type: 'specialty' | 'tag', metadataId: number) => {
     await Metadata.vote({ type, questionId: question.id, metadataId, vote: 1 });
@@ -57,7 +58,11 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
   }, [question]);
 
   const suggestTag = async () => {
+    if (tags.some((t) => t.name.toLowerCase() === newTag.toLowerCase())) {
+      return setAddingTagError('Tagget eksisterer allerede. Vælg det under menuen "+ Tilføj tag".');
+    }
     await Tag.suggest({ tagName: newTag, questionId: question.id });
+    setAddingTagError('');
     setNewTag('');
     setAddingNewTag(false);
     setSuggestTagMessage('Dit tag er blevet foreslået');
@@ -198,6 +203,7 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
                     placeholder="Tag ..."
                     value={newTag}
                     onChange={handleChange}
+                    error={!!addingTagError}
                   />
                   <Button basic color="green" onClick={suggestTag}>
                     <Translate id="voting.suggest_tag" />
@@ -207,6 +213,7 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
                   </Button>
                 </>
               )}
+              {addingTagError && <Message color="red">{addingTagError}</Message>}
               {suggestTagMessage && <Message color="green">{suggestTagMessage}</Message>}
             </Grid.Column>
             <Grid.Column width={5} textAlign="right">

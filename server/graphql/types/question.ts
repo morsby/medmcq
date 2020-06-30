@@ -276,6 +276,7 @@ export const resolvers: Resolvers = {
   - Semester: ${semester.value}
   - Sæt: ${examSet.year}/${examSet.season}
   - Spørgsmålnummer: ${question.examSetQno}
+  - BrugerId: ${ctx.user?.id}
   <hr>
   <strong>Indrapporteringen lyder:</strong>
   ${report}

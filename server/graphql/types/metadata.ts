@@ -127,6 +127,7 @@ export const resolvers: Resolvers = {
   - Semester: ${semester.value}
   - Sæt: ${examSet.year}/${examSet.season}
   - Spørgsmålnummer: ${question.examSetQno}
+  - BrugerId: ${ctx.user?.id}
   ${question.text}<br>
   A. ${answers.find((a) => a.index === 1).text}<br>
   B. ${answers.find((a) => a.index === 2).text}<br>
