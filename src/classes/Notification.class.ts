@@ -13,20 +13,26 @@ class Notification {
       message
       isRead
       createdAt
+      semester {
+        id
+        value
+      }
     }
   `;
 
-  static find = async () => {
+  static find = async (semesterId: number) => {
     const query = gql`
-      query Notifications {
-        notifications {
+      query Notifications($semesterId: Int) {
+        notifications(semesterId: $semesterId) {
           ...Notification
         }
       }
       ${Notification.fragment}
     `;
 
-    const notifications = await Apollo.query<Notification[]>('notifications', query);
+    const notifications = await Apollo.query<Notification[]>('notifications', query, {
+      semesterId
+    });
     return store.dispatch(authReducer.actions.setNotifications(notifications));
   };
 
@@ -46,7 +52,7 @@ class Notification {
     return store.dispatch(authReducer.actions.addNotifications(notification));
   };
 
-  static readAll = async () => {
+  static readAll = async (semesterId: number) => {
     const mutation = gql`
       mutation ToggleReadAllNotifications {
         toggleReadAllNotifications
@@ -54,7 +60,7 @@ class Notification {
     `;
 
     await Apollo.mutate<string>('toggleReadAllNotifications', mutation);
-    await Notification.find();
+    await Notification.find(semesterId);
   };
 }
 

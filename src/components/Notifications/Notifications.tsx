@@ -11,6 +11,9 @@ const Notifications: React.SFC<NotificationsProps> = () => {
   const [loading, setLoading] = useState(false);
   const notifications = useSelector((state: ReduxState) => state.auth.notifications);
   const semesterId = useSelector((state: ReduxState) => state.selection.semesterId);
+  const semester = useSelector((state: ReduxState) =>
+    state.metadata.semesters.find((s) => s.id === semesterId)
+  );
   const notReadCount = notifications.reduce((sum, n) => (n.isRead ? sum : sum + 1), 0);
 
   const handleRead = async (id: number) => {
@@ -19,7 +22,7 @@ const Notifications: React.SFC<NotificationsProps> = () => {
 
   const handleReadAll = async () => {
     setLoading(true);
-    await Notification.readAll();
+    await Notification.readAll(semesterId);
     setLoading(false);
   };
 
@@ -43,8 +46,12 @@ const Notifications: React.SFC<NotificationsProps> = () => {
       {notifications.map((n) => (
         <Menu.Item style={{ backgroundColor: n.isRead ? null : '#f0ffff' }}>
           <div dangerouslySetInnerHTML={{ __html: marked(n.message, { smartypants: true }) }} />
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <p style={{ color: 'grey' }}>{new Date(n.createdAt).toLocaleString()}</p>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <p style={{ color: 'grey' }}>
+              {n.semester.value}. semester
+              <br />
+              {new Date(n.createdAt).toLocaleString()}
+            </p>
             {n.isRead ? (
               <Icon
                 style={{ cursor: 'pointer' }}
@@ -63,7 +70,13 @@ const Notifications: React.SFC<NotificationsProps> = () => {
           </div>
         </Menu.Item>
       ))}
-      {notifications.length === 0 && <Menu.Item>Du har ingen notifikationer</Menu.Item>}
+      {notifications.length === 0 && (
+        <Menu.Item style={{ textAlign: 'center' }}>
+          {semester?.value
+            ? `Du har ingen notifikationer på ${semester.value}. semester`
+            : 'Vælg et semester for at se notifikationer'}
+        </Menu.Item>
+      )}
     </div>
   );
 };

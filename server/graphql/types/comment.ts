@@ -77,20 +77,16 @@ export const resolvers: Resolvers = {
           .$query()
           .join('question', 'questionId', 'question.id')
           .join('semesterExamSet', 'examSetId', 'semesterExamSet.id')
-          .join('semester', 'semesterId', 'semester.id')
-          .select('questionComment.text', 'semester.value', 'questionComment.id');
+          .select('questionComment.text', 'semesterId', 'questionComment.id');
         const comments = await QuestionComment.query()
           .where({ questionId })
           .whereNot({ userId: ctx.user.id, private: 1 })
           .distinct('userId');
         for (let c of comments) {
           await Notification.query().insert({
-            message: `Ny kommentar "${comment.text.substr(0, 20)}${
-              comment.text.length > 20 ? '...' : ''
-            }" på ${
-              (comment as any).value
-            }. semester.<br />[Gå til spørgsmålet](${domain}/quiz/${questionId}).`,
-            userId: c.userId
+            message: `Ny kommentar på spørgsmål ${questionId}.<br />[Gå til spørgsmålet](${domain}/quiz/${questionId}).`,
+            userId: c.userId,
+            semesterId: (comment as any).semesterId
           });
         }
       }

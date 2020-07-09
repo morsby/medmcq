@@ -496,6 +496,7 @@ export type Notification = {
   isRead?: Maybe<Scalars['Boolean']>;
   createdAt?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
+  semester?: Maybe<Semester>;
 };
 
 export enum CacheControlScope {

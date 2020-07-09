@@ -22,21 +22,13 @@ export interface RightMenuProps extends LocalizeContextProps {
 const RightMenu: React.SFC<RightMenuProps> = ({ setActiveLanguage, languages, sidebar }) => {
   const { width } = useWidth();
   const history = useHistory();
-  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const activeLanguage = useSelector((state: ReduxState) => state.settings.language);
   const user = useSelector((state: ReduxState) => state.auth.user);
   const notifications = useSelector((state: ReduxState) =>
     state.auth.notifications.filter((n) => !n.isRead)
   );
-
-  const startQuizByLikes = async (commentIds: Comment['id'][]) => {
-    setLoading(true);
-    commentIds = _.uniq(commentIds);
-    await Quiz.start({ commentIds });
-    history.push('/quiz');
-    setLoading(false);
-  };
+  const semesterId = useSelector((state: ReduxState) => state.selection.semesterId);
 
   const changeLang = (lang: string) => {
     setActiveLanguage(lang);
@@ -58,12 +50,12 @@ const RightMenu: React.SFC<RightMenuProps> = ({ setActiveLanguage, languages, si
   useEffect(() => {
     if (user) {
       setInterval(() => {
-        Notification.find();
+        Notification.find(semesterId);
       }, 1000 * 60);
 
-      Notification.find();
+      Notification.find(semesterId);
     }
-  }, [user]);
+  }, [user, semesterId]);
 
   if (width < breakpoints.mobile && !sidebar)
     return (
@@ -108,15 +100,9 @@ const RightMenu: React.SFC<RightMenuProps> = ({ setActiveLanguage, languages, si
             {notifications.length}
           </span>
         </Menu.Item>
-        {!loading ? (
-          <Menu.Item onClick={() => startQuizByLikes(user.likes.map((like) => like.commentId))}>
-            <Icon name="thumbs up outline" /> {user.likes.length}
-          </Menu.Item>
-        ) : (
-          <Menu.Item>
-            <Loader active inline size="tiny" />
-          </Menu.Item>
-        )}
+        <Menu.Item>
+          <Icon name="thumbs up outline" /> {user.likes.length}
+        </Menu.Item>
         <Menu.Item>
           <Button
             inverted

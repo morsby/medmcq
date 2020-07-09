@@ -19,6 +19,7 @@ export const notificationTypeDefs = gql`
     isRead: Boolean
     createdAt: String
     updatedAt: String
+    semester: Semester
   }
 `;
 
@@ -28,6 +29,9 @@ export const notificationResolvers: Resolvers = {
       if (!ctx.user) return [];
       const notifications = await Notification.query()
         .where({ userId: ctx.user.id })
+        .where(function () {
+          this.where({ semesterId }).orWhereNull('semesterId');
+        })
         .orderBy('createdAt', 'desc');
       return notifications.map((n) => ({ id: n.id }));
     }
@@ -69,6 +73,10 @@ export const notificationResolvers: Resolvers = {
     updatedAt: async ({ id }, args, ctx) => {
       const notification = await ctx.notificationLoader.load(id);
       return notification.updatedAt.toISOString();
+    },
+    semester: async ({ id }, args, ctx) => {
+      const notification = await ctx.notificationLoader.load(id);
+      return { id: notification.semesterId };
     }
   }
 };

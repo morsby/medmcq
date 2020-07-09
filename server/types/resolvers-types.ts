@@ -498,6 +498,7 @@ export type Notification = {
   isRead?: Maybe<Scalars['Boolean']>;
   createdAt?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
+  semester?: Maybe<Semester>;
 };
 
 export enum CacheControlScope {
@@ -898,6 +899,7 @@ export type NotificationResolvers<ContextType = Context, ParentType extends Reso
   isRead?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   updatedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  semester?: Resolver<Maybe<ResolversTypes['Semester']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 }>;
 
