@@ -25,6 +25,8 @@ const QuizLoader: React.SFC<QuizLoaderProps> = ({ handleAbort, text }) => {
 
     const interval = setInterval(tick, 5000);
     return clearInterval(interval);
+
+    // eslint-disable-next-line
   }, []);
 
   let longWait;

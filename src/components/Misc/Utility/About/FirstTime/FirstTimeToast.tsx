@@ -24,7 +24,7 @@ const FirstTimeToast: React.SFC<FirstTimeToastProps> = ({ closeToast, addTransla
 
   useEffect(() => {
     addTranslation(aboutTranslations);
-  }, []);
+  }, [addTranslation]);
 
   const handleClick = () => {
     closeToast();

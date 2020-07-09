@@ -16,7 +16,7 @@ const About: React.SFC<AboutProps> = ({ addTranslation }) => {
 
   useEffect(() => {
     addTranslation(aboutTranslations);
-  }, []);
+  }, [addTranslation]);
 
   return (
     <div className="flex-container">

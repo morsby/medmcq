@@ -20,7 +20,7 @@ const QuestionExamModeCounter: React.SFC<QuestionExamModeCounterProps> = () => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [examModeStart]);
 
   if (!counter)
     return (

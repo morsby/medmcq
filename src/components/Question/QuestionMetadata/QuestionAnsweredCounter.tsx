@@ -7,6 +7,7 @@ export interface QuestionAnsweredCounterProps {}
 // Udregner hvor mange rigtige brugeren har svaret på
 const QuestionAnsweredCounter: React.SFC<QuestionAnsweredCounterProps> = () => {
   return null; // TODO
+  // eslint-disable-next-line
   return (
     <Grid.Column textAlign="right" floated="right" width="5">
       {/* En ret verbose måde at udregne besvarede spørgsmål på, men det fungerer. Muligvis lidt refactor er nyttigt, men jeg har ikke kunnet regne en bedre måde ud, en alle de IFs. */}

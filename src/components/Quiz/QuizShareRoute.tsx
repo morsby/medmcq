@@ -33,7 +33,7 @@ const QuizShareRoute: React.SFC<QuizShareRouteProps> = () => {
     };
 
     fetchQuestions();
-  }, [history, params.ids]);
+  }, [history, params.ids, ids]);
 
   if (hasError) {
     toast('Intet spørgsmål blev fundet', { autoClose: 3000, type: toast.TYPE.ERROR });

@@ -26,7 +26,7 @@ const SetRadioButtonMetadata: React.SFC<SetRadioButtonMetadataProps> = ({ user, 
   const getPercentage = useCallback(() => {
     if (examSet.questionCount === 0) return 100; // Since 0/0 is NaN in javascript
     return Math.round((getCount() / examSet.questionCount) * 100);
-  }, [examSet, user]);
+  }, [examSet, getCount]);
 
   const getColor = () => {
     if (getCount() === examSet.questionCount) {

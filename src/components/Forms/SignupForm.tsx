@@ -14,7 +14,7 @@ import { UserInput } from 'types/generated';
 export interface SignupFormProps extends LocalizeContextProps {}
 
 const SignupForm: React.SFC<SignupFormProps> = ({ translate }) => {
-  const [hasError, setHasError] = useState({
+  const [, setHasError] = useState({
     username: false,
     email: false
   });

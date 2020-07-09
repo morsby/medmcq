@@ -73,7 +73,7 @@ const CreateQuestionForm: React.SFC<CreateQuestionFormProps> = ({ question }) =>
 
   useEffect(() => {
     formik.resetForm();
-  }, [semesterId]);
+  }, [semesterId, formik]);
 
   const handleError = (error: string) => {
     setError(error);

@@ -1,14 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { withLocalize, Translate, LocalizeContextProps } from 'react-localize-redux';
 import { useDispatch, useSelector } from 'react-redux';
-import { Menu, Icon, Button, Loader, Image } from 'semantic-ui-react';
+import { Menu, Icon, Button, Image } from 'semantic-ui-react';
 import Flag from 'react-flagkit';
-import _ from 'lodash';
 import { ReduxState } from 'redux/reducers';
 import settingsReducer from 'redux/reducers/settings';
 import User from 'classes/User';
-import Quiz from 'classes/Quiz';
-import Comment from 'classes/Comment';
 import Notification from 'classes/Notification.class';
 import { useHistory } from 'react-router-dom';
 import { breakpoints } from 'utils/common';
@@ -77,6 +74,9 @@ const RightMenu: React.SFC<RightMenuProps> = ({ setActiveLanguage, languages, si
             />
           </strong>
         </Menu.Item>
+        <Menu.Item>
+          <Icon name="thumbs up outline" /> {user.likes.length}
+        </Menu.Item>
         <Menu.Item
           onClick={() =>
             dispatch(settingsReducer.actions.toggleSidebar({ side: 'right', open: true }))
@@ -99,9 +99,6 @@ const RightMenu: React.SFC<RightMenuProps> = ({ setActiveLanguage, languages, si
           >
             {notifications.length}
           </span>
-        </Menu.Item>
-        <Menu.Item>
-          <Icon name="thumbs up outline" /> {user.likes.length}
         </Menu.Item>
         <Menu.Item>
           <Button

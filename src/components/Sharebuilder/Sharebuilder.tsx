@@ -110,7 +110,7 @@ const Sharebuilder: React.SFC<SharebuilderProps> = () => {
     };
 
     fetchInitial();
-  }, []);
+  }, [semester]);
 
   // Kalder redux når man har valgt et spørgsmål, og lægger det her (under shareBuilder reducer -> picked)
   const handlePick = (value: Question) => {

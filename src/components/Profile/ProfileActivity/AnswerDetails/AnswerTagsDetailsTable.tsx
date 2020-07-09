@@ -71,7 +71,7 @@ const AnswerTagsDetailsTable: React.SFC<AnswerTagsDetailsTableProps> = () => {
 
     // Send the array to state, to refresh table
     setAnsweredTags(_.map(answeredTags));
-  }, []);
+  }, [tags, tries, userAnswers]);
 
   const columns = [
     {

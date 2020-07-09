@@ -24,7 +24,7 @@ const QuizShareBuilderLoader: React.SFC<QuizShareBuilderLoader> = () => {
     };
 
     fetchQuestions();
-  }, [params.id]);
+  }, [params.id, shareId]);
 
   if (loading) return <LoadingPage />;
   if (isInvalid)

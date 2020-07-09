@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Grid, Responsive, Divider } from 'semantic-ui-react';
 import QuestionAnswerButtons from './QuestionAnswerButtons';
 import { subSupScript } from 'utils/quiz';
@@ -25,6 +25,18 @@ const QuestionDisplay: React.SFC<QuestionDisplayProps> = () => {
   const examMode = useSelector((state: ReduxState) => state.quiz.examMode);
   const imgOpen = useSelector((state: ReduxState) => state.quiz.imgOpen);
 
+  const handleAnswer = useCallback(
+    (answerId: number) => {
+      if (answered && !examMode) return;
+      Quiz.answer(
+        { answerId, answerTime },
+        question.answers.map((a) => a.id),
+        examMode
+      );
+    },
+    [answerTime, answered, examMode, question.answers]
+  );
+
   useEffect(() => {
     setAnswerTime(0);
   }, [question]);
@@ -38,6 +50,7 @@ const QuestionDisplay: React.SFC<QuestionDisplayProps> = () => {
       clearInterval(answerTimeInterval);
       setAnswerTime(0);
     };
+    // eslint-disable-next-line
   }, [question]);
 
   useEffect(() => {
@@ -72,16 +85,7 @@ const QuestionDisplay: React.SFC<QuestionDisplayProps> = () => {
     return () => {
       document.removeEventListener('keydown', onKeydown as any);
     };
-  }, [question, answered, examMode]);
-
-  const handleAnswer = (answerId: number) => {
-    if (answered && !examMode) return;
-    Quiz.answer(
-      { answerId, answerTime },
-      question.answers.map((a) => a.id),
-      examMode
-    );
-  };
+  }, [question, answered, examMode, handleAnswer, imgOpen]);
 
   const text = subSupScript(question.text);
   return (

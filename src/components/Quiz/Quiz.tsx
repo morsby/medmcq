@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Translate, LocalizeContextProps, withLocalize } from 'react-localize-redux';
 import quizTranslations from './quizTranslations.json';
@@ -39,45 +39,49 @@ const Quiz: React.SFC<QuizProps> = ({ addTranslation }) => {
   const { isFetching } = useSelector((state: ReduxState) => state.questions);
   const max = questions.length;
 
-  useEffect(() => {
-    addTranslation(quizTranslations);
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [questionIndex]);
-
-  useEffect(() => {
-    if (!semesters) Semester.fetchAll();
-  }, []);
-
-  const handleChangeQuestion = (questionNumber: number) => {
-    dispatch(quizReducer.actions.changeQuestion(questionNumber));
-    smoothScroll();
-  };
-
   /**
    * Navigation ved piletaster
    * Tjekker om det aktive element er et TEXTAREA (kommentarfeltet) og
    * navigerer i så fald IKKE
    */
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (imgOpen) return;
-    if (document.activeElement.tagName === 'TEXTAREA') return;
 
-    if (e.key === 'ArrowLeft') {
-      if (questionIndex > 0) {
-        handleChangeQuestion(questionIndex - 1);
+  const handleChangeQuestion = useCallback(
+    (questionNumber: number) => {
+      dispatch(quizReducer.actions.changeQuestion(questionNumber));
+      smoothScroll();
+    },
+    [dispatch]
+  );
+
+  useEffect(() => {
+    addTranslation(quizTranslations);
+  }, [addTranslation]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (imgOpen) return;
+      if (document.activeElement.tagName === 'TEXTAREA') return;
+
+      if (e.key === 'ArrowLeft') {
+        if (questionIndex > 0) {
+          handleChangeQuestion(questionIndex - 1);
+        }
+      } else if (e.key === 'ArrowRight') {
+        if (questionIndex < max - 1) {
+          handleChangeQuestion(questionIndex + 1);
+        }
       }
-    } else if (e.key === 'ArrowRight') {
-      if (questionIndex < max - 1) {
-        handleChangeQuestion(questionIndex + 1);
-      }
-    }
-  };
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [questionIndex, handleChangeQuestion, imgOpen, max]);
+
+  useEffect(() => {
+    if (!semesters) Semester.fetchAll();
+  }, [semesters]);
 
   const swiped = (deltaX: number) => {
     if (imgOpen) return;

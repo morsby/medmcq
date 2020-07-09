@@ -25,7 +25,7 @@ const Print: React.SFC<PrintProps> = ({ addTranslation }) => {
 
   useEffect(() => {
     addTranslation(printTranslations);
-  }, []);
+  }, [addTranslation]);
 
   const toggleAnswers = () => {
     setShowCorrect(!showCorrect);
