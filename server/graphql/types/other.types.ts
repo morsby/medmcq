@@ -36,7 +36,7 @@ export const resolvers: Resolvers = {
     },
     notice: async () => {
       return knex('notice').first();
-    },
+    }
   },
 
   Mutation: {
@@ -46,14 +46,14 @@ export const resolvers: Resolvers = {
         to: urls.issue,
         from: {
           name: 'MedMCQ',
-          email: urls.fromEmail,
+          email: urls.fromEmail
         },
         subject: subject,
-        text: message + '<br><br><em>Sendt via kontaktformularen</em>',
+        text: message + '<br><br><em>Sendt via kontaktformularen</em>'
       };
 
       await sgMail.send(msg);
       return 'Message sent';
-    },
-  },
+    }
+  }
 };

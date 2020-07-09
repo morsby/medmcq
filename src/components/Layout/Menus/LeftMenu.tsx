@@ -15,7 +15,7 @@ const LeftMenu: React.SFC<LeftMenuProps> = () => {
   const dispatch = useDispatch();
 
   return (
-    <Menu.Item onClick={() => history.push('/')}>
+    <Menu.Menu>
       {width < breakpoints.mobile && (
         <Menu.Item
           onClick={() =>
@@ -25,8 +25,16 @@ const LeftMenu: React.SFC<LeftMenuProps> = () => {
           <Icon name="bars" inverted size="large" />
         </Menu.Item>
       )}
-      {width > breakpoints.mobile && <Image src={logo} size="small" style={{ height: '30px' }} />}
-    </Menu.Item>
+
+      {width > breakpoints.mobile && (
+        <>
+          <Menu.Item onClick={() => history.push('/')}>
+            <Image src={logo} size="small" style={{ height: '30px' }} />
+          </Menu.Item>
+          <Menu.Item style={{ fontSize: '1.5em' }}>MedMCQ</Menu.Item>
+        </>
+      )}
+    </Menu.Menu>
   );
 };
 

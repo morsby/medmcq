@@ -16,7 +16,7 @@ const MaintenancePage: React.SFC<MaintenancePageProps> = () => {
           flexDirection: 'column',
           justifyContent: 'center',
           alignItems: 'center',
-          flexGrow: 10,
+          flexGrow: 10
         }}
       >
         <h1 style={{ fontSize: '3em' }}>MedMCQ</h1>
