@@ -35,10 +35,10 @@ export const truncateText = (text: string, length = 30) => {
   } else return text;
 };
 
-export const insertOrReplace = <T extends any>(
+export const insertOrReplace = <T extends { id?: any }>(
   array: T[],
   items: T | T[],
-  comparison: string = 'id'
+  comparison: keyof T = 'id'
 ) => {
   const replace = (item: T) => {
     const index = array.findIndex((arrayItem) => arrayItem[comparison] === item[comparison]);
@@ -55,7 +55,11 @@ export const insertOrReplace = <T extends any>(
   }
 };
 
-export const removeFromState = <T extends any>(array: T[], id: number, comparison = 'id') => {
-  const index = array.findIndex((m) => m[comparison] === id);
+export const removeFromState = <T extends { id?: number }>(
+  array: T[],
+  id: number,
+  comparison: keyof T = 'id'
+) => {
+  const index = array.findIndex((m) => (m[comparison] as any) === id);
   array.splice(index, 1);
 };
