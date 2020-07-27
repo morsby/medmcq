@@ -31,7 +31,7 @@ const LeftMenu: React.SFC<LeftMenuProps> = () => {
           <Menu.Item onClick={() => history.push('/')}>
             <Image src={logo} size="small" style={{ height: '30px' }} />
           </Menu.Item>
-          <Menu.Item style={{ fontSize: '1.5em' }}>MedMCQ</Menu.Item>
+          <Menu.Item style={{ fontSize: '1.2em' }}>MedMCQ</Menu.Item>
         </>
       )}
     </Menu.Menu>

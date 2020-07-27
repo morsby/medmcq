@@ -36,20 +36,20 @@ describe('profile', () => {
 
     it('should be able to sort the answerDetails table by correct', () => {
       cy.contains('button', 'altid rigtige', { matchCase: false }).click();
-      cy.contains('span', '50%').should('not.exist');
-      cy.contains('span', ' 0%').should('not.exist');
+      cy.get('table').children().contains('span', '50%').should('not.exist');
+      cy.get('table').children().contains('span', ' 0%').should('not.exist');
     });
 
     it('should be able to sort the answerDetails table by incorrect', () => {
       cy.contains('button', 'altid forkerte', { matchCase: false }).click();
-      cy.contains('span', '100%').should('not.exist');
-      cy.contains('span', '50%').should('not.exist');
+      cy.get('table').children().contains('span', '100%').should('not.exist');
+      cy.get('table').children().contains('span', '50%').should('not.exist');
     });
 
     it('should be able to sort the answerDetails table by mixed', () => {
       cy.contains('button', 'blandede', { matchCase: false }).click();
-      cy.contains('span', '100%').should('not.exist');
-      cy.contains('span', ' 0%').should('not.exist');
+      cy.get('table').children().contains('span', '100%').should('not.exist');
+      cy.get('table').children().contains('span', ' 0%').should('not.exist');
     });
 
     it('should be able to sort the answerDetails table by all', () => {
