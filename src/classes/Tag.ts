@@ -1,5 +1,5 @@
-import { gql } from 'apollo-boost';
-import Apollo from './Apollo';
+import gql from 'graphql-tag';
+import API from './API.class';
 import { Tag as TagType } from 'types/generated';
 
 interface Tag extends TagType {}
@@ -42,7 +42,7 @@ class Tag {
       }
     `;
 
-    await Apollo.mutate('suggestTag', mutation, data);
+    await API.mutate('suggestTag', mutation, data);
   };
 }
 

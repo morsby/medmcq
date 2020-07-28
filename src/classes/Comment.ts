@@ -1,5 +1,5 @@
-import { gql } from 'apollo-boost';
-import Apollo from './Apollo';
+import gql from 'graphql-tag';
+import API from './API.class';
 import { store } from 'IndexApp';
 import questionsReducer from 'redux/reducers/question';
 import { Comment as CommentType, CommentInput } from 'types/generated';
@@ -38,7 +38,7 @@ class Comment {
       ${Comment.fragmentFull}
     `;
 
-    const comment = await Apollo.mutate<Comment>('addComment', mutation, { data });
+    const comment = await API.mutate<Comment>('addComment', mutation, { data });
     store.dispatch(questionsReducer.actions.addComment({ comment }));
   };
 
@@ -49,7 +49,7 @@ class Comment {
       }
     `;
 
-    await Apollo.mutate('deleteComment', mutation, { commentId });
+    await API.mutate('deleteComment', mutation, { commentId });
     store.dispatch(questionsReducer.actions.removeComment({ commentId }));
   };
 
@@ -63,7 +63,7 @@ class Comment {
       ${Comment.fragmentFull}
     `;
 
-    const comment = await Apollo.mutate<Comment>('editComment', mutation, { data });
+    const comment = await API.mutate<Comment>('editComment', mutation, { data });
     store.dispatch(questionsReducer.actions.editComment({ comment }));
   };
 
@@ -77,7 +77,7 @@ class Comment {
       ${Comment.fragmentFull}
     `;
 
-    const comment = await Apollo.mutate<Comment>('likeComment', mutation, { commentId });
+    const comment = await API.mutate<Comment>('likeComment', mutation, { commentId });
     store.dispatch(questionsReducer.actions.editComment({ comment }));
   };
 }

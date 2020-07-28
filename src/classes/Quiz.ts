@@ -2,8 +2,8 @@ import Question from './Question';
 import { store } from 'IndexApp';
 import quizReducer from 'redux/reducers/quiz';
 import { ReduxState } from 'redux/reducers';
-import { gql } from 'apollo-boost';
-import Apollo from './Apollo';
+import gql from 'graphql-tag';
+import API from './API.class';
 import { UserAnswerInput, QuestionFilterInput } from 'types/generated';
 
 interface Quiz {}
@@ -58,7 +58,7 @@ class Quiz {
       }
     `;
 
-    if (!examMode) Apollo.mutate('answer', mutation, { data });
+    if (!examMode) API.mutate('answer', mutation, { data });
     await store.dispatch(
       quizReducer.actions.answer({ answer: { answerId, answerTime }, answerIds })
     );

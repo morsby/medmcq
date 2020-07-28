@@ -1,4 +1,4 @@
-import { gql } from 'apollo-boost';
+import gql from 'graphql-tag';
 import { Specialty as SpecialtyType } from 'types/generated';
 
 interface Specialty extends SpecialtyType {}

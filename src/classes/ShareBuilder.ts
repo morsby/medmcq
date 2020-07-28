@@ -1,5 +1,5 @@
-import { gql } from 'apollo-boost';
-import Apollo from './Apollo';
+import gql from 'graphql-tag';
+import API from './API.class';
 
 class ShareBuilder {
   static createShareLink = async ({ questionIds }: { questionIds: number[] }) => {
@@ -9,7 +9,7 @@ class ShareBuilder {
       }
     `;
 
-    const link = await Apollo.mutate<string>('createShareLink', mutation, { questionIds });
+    const link = await API.mutate<string>('createShareLink', mutation, { questionIds });
 
     return link;
   };

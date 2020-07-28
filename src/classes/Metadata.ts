@@ -1,5 +1,5 @@
-import { gql } from 'apollo-boost';
-import Apollo from './Apollo';
+import gql from 'graphql-tag';
+import API from './API.class';
 import { store } from 'IndexApp';
 import ExamSet from './ExamSet';
 import Tag from './Tag';
@@ -50,7 +50,7 @@ class Metadata {
     }
 
     const data = { questionId, metadataId, vote };
-    const question = await Apollo.mutate<Question>(name, mutation, { data });
+    const question = await API.mutate<Question>(name, mutation, { data });
 
     if (type === 'specialty') {
       await store.dispatch(questionsReducer.actions.addQuestion(question));

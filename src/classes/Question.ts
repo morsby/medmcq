@@ -1,9 +1,9 @@
-import { gql } from 'apollo-boost';
+import gql from 'graphql-tag';
 import Comment from 'classes/Comment';
 import Specialty from 'classes/Specialty';
 import Tag from './Tag';
 import { store } from 'IndexApp';
-import Apollo from './Apollo';
+import API from './API.class';
 import questionsReducer from 'redux/reducers/question';
 import quizReducer from 'redux/reducers/quiz';
 import { Question as QuestionType, QuestionFilterInput, QuestionInput } from 'types/generated';
@@ -77,7 +77,7 @@ class Question {
       ${Question.fullFragment}
     `;
 
-    const questions = await Apollo.query<Question[]>('questions', query, { filter });
+    const questions = await API.query<Question[]>('questions', query, { filter });
 
     if (newQuiz) {
       store.dispatch(quizReducer.actions.resetQuiz());
@@ -92,7 +92,7 @@ class Question {
       }
     `;
 
-    await Apollo.mutate('reportQuestion', mutation, data);
+    await API.mutate('reportQuestion', mutation, data);
   };
 
   static create = async (data: QuestionInput) => {
@@ -105,7 +105,7 @@ class Question {
       ${Question.fullFragment}
     `;
 
-    const question = await Apollo.mutate<Question>('createQuestion', mutation, { data });
+    const question = await API.mutate<Question>('createQuestion', mutation, { data });
     store.dispatch(questionsReducer.actions.addQuestion(question));
   };
 
@@ -119,7 +119,7 @@ class Question {
       ${Question.fullFragment}
     `;
 
-    const question = await Apollo.mutate<Question>('updateQuestion', mutation, { data });
+    const question = await API.mutate<Question>('updateQuestion', mutation, { data });
     store.dispatch(questionsReducer.actions.addQuestion(question));
   };
 
@@ -133,7 +133,7 @@ class Question {
       ${Question.fullFragment}
     `;
 
-    const question = await Apollo.mutate<Question>('ignoreQuestion', mutation, { id });
+    const question = await API.mutate<Question>('ignoreQuestion', mutation, { id });
     store.dispatch(questionsReducer.actions.addQuestion(question));
   };
 }

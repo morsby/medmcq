@@ -1,6 +1,6 @@
-import client from 'apolloClient';
-import { gql } from 'apollo-boost';
+import gql from 'graphql-tag';
 import { ExamSet as ExamSetType } from 'types/generated';
+import API from './API.class';
 
 interface ExamSet extends ExamSetType {}
 
@@ -19,18 +19,17 @@ class ExamSet {
   `;
 
   static fetchAll = async () => {
-    const res = await client.query<{ examSets: ExamSet[] }>({
-      query: gql`
-        query {
-          examSets {
-            ...ExamSet
-          }
+    const query = gql`
+      query {
+        examSets {
+          ...ExamSet
         }
-        ${ExamSet.fragmentFull}
-      `
-    });
+      }
+      ${ExamSet.fragmentFull}
+    `;
 
-    return res.data.examSets;
+    const examSets = await API.query<ExamSet[]>('examSets', query);
+    return examSets;
   };
 }
 

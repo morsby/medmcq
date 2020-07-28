@@ -1,7 +1,6 @@
-import client from 'apolloClient';
-import { gql } from 'apollo-boost';
+import gql from 'graphql-tag';
 import { store } from 'IndexApp';
-import Apollo from './Apollo';
+import API from './API.class';
 import authReducer from 'redux/reducers/auth';
 import { User as UserType, LoginInput, UserInput, Bookmark } from 'types/generated';
 
@@ -15,7 +14,7 @@ class User {
       }
     `;
 
-    await Apollo.mutate<string>('login', mutation, { data }); // Sets a JWT as cookie
+    await API.mutate<string>('login', mutation, { data }); // Sets a JWT as cookie
     const user = await User.fetch();
     return user;
   };
@@ -27,7 +26,7 @@ class User {
       }
     `;
 
-    await Apollo.mutate('logout', mutation); // Removes the JWT cookie
+    await API.mutate('logout', mutation); // Removes the JWT cookie
     await store.dispatch(authReducer.actions.logout());
   };
 
@@ -38,7 +37,7 @@ class User {
       }
     `;
 
-    await Apollo.mutate<string>('signup', mutation, { data });
+    await API.mutate<string>('signup', mutation, { data });
     await User.fetch();
   };
 
@@ -75,30 +74,29 @@ class User {
       }
     `;
 
-    const user = await Apollo.query<User>('user', query);
+    const user = await API.query<User>('user', query);
     await store.dispatch(authReducer.actions.login(user));
     return user;
   };
 
   static getAnsweredQuestions = async () => {
-    const res = await client.query<{ user: Partial<User> }>({
-      query: gql`
-        query {
-          user {
-            answers {
+    const query = gql`
+      query {
+        user {
+          answers {
+            id
+            answer
+            answerTime
+            question {
               id
-              answer
-              answerTime
-              question {
-                id
-              }
             }
           }
         }
-      `
-    });
+      }
+    `;
 
-    return res.data.user;
+    const user = await API.query<User>('user', query);
+    return user;
   };
 
   static resetPassword = async ({
@@ -114,7 +112,7 @@ class User {
       }
     `;
 
-    const message = await Apollo.mutate<string>('resetPassword', mutation, { token, password });
+    const message = await API.mutate<string>('resetPassword', mutation, { token, password });
     return message;
   };
 
@@ -125,7 +123,7 @@ class User {
       }
     `;
 
-    await Apollo.mutate('forgotPassword', mutation, { email });
+    await API.mutate('forgotPassword', mutation, { email });
   };
 
   static edit = async (data: Partial<User>) => {
@@ -135,7 +133,7 @@ class User {
       }
     `;
 
-    await Apollo.mutate('editUser', mutation, { data });
+    await API.mutate('editUser', mutation, { data });
     await User.fetch();
   };
 
@@ -149,7 +147,7 @@ class User {
       }
     `;
 
-    const isAvailable = await Apollo.query<boolean>('checkUsernameAvailability', query, {
+    const isAvailable = await API.query<boolean>('checkUsernameAvailability', query, {
       data
     });
     return isAvailable;
@@ -165,7 +163,7 @@ class User {
       }
     `;
 
-    await Apollo.mutate('manualCompleteSet', mutation, { examSetId });
+    await API.mutate('manualCompleteSet', mutation, { examSetId });
     await store.dispatch(authReducer.actions.manualCompleteSet({ examSetId }));
   };
 
@@ -181,7 +179,7 @@ class User {
       }
     `;
 
-    const bookmark = await Apollo.mutate<Bookmark>('bookmark', mutation, { questionId });
+    const bookmark = await API.mutate<Bookmark>('bookmark', mutation, { questionId });
     if (!bookmark)
       return store.dispatch(
         authReducer.actions.addOrRemoveBookmark({ question: { id: questionId } })

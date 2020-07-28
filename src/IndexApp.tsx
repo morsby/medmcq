@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import * as serviceWorker from './serviceWorker';
 // GraphQL
-import { ApolloProvider } from 'react-apollo';
-import apolloClient from 'apolloClient';
+import { Provider as UrqlProvider } from 'urql';
+import urqlClient from 'urqlClient';
 // Redux
 import { Provider } from 'react-redux';
 import { createMigrate, persistStore, persistReducer } from 'redux-persist';
@@ -63,11 +63,11 @@ ReactDOM.render(
   <ErrorBoundary>
     <Provider store={store}>
       <PersistGate loading={<LoadingPage />} persistor={persistor}>
-        <ApolloProvider client={apolloClient}>
+        <UrqlProvider value={urqlClient}>
           <LocalizeProvider store={store}>
             <LocalizedApp />
           </LocalizeProvider>
-        </ApolloProvider>
+        </UrqlProvider>
       </PersistGate>
     </Provider>
   </ErrorBoundary>,

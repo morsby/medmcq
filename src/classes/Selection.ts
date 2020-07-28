@@ -1,8 +1,8 @@
 import { store } from 'IndexApp';
 import selectionReducer, { SelectionOptions } from 'redux/reducers/selection';
 import { ContactInput } from 'types/generated';
-import { gql } from 'apollo-boost';
-import Apollo from './Apollo';
+import gql from 'graphql-tag';
+import API from './API.class';
 import settingsReducer from 'redux/reducers/settings';
 
 interface Selection {}
@@ -19,7 +19,7 @@ class Selection {
       }
     `;
 
-    await Apollo.mutate('contact', mutation, { data });
+    await API.mutate('contact', mutation, { data });
   };
 
   static fetchNotice = async () => {
@@ -32,7 +32,7 @@ class Selection {
       }
     `;
 
-    const notice = await Apollo.query<{ message: string; color: string }>('notice', query);
+    const notice = await API.query<{ message: string; color: string }>('notice', query);
     store.dispatch(settingsReducer.actions.setNotice(notice));
   };
 
@@ -45,7 +45,7 @@ class Selection {
       }
     `;
 
-    const maintenance = await Apollo.query<{ message: string }>('maintenance', query);
+    const maintenance = await API.query<{ message: string }>('maintenance', query);
     store.dispatch(settingsReducer.actions.setMaintenance(maintenance));
   };
 }

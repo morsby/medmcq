@@ -1,6 +1,6 @@
 import { Notification as NotificationType } from 'types/generated';
-import { gql } from 'apollo-boost';
-import Apollo from './Apollo';
+import gql from 'graphql-tag';
+import API from './API.class';
 import { store } from 'IndexApp';
 import authReducer from 'redux/reducers/auth';
 
@@ -30,7 +30,7 @@ class Notification {
       ${Notification.fragment}
     `;
 
-    const notifications = await Apollo.query<Notification[]>('notifications', query, {
+    const notifications = await API.query<Notification[]>('notifications', query, {
       semesterId
     });
     return store.dispatch(authReducer.actions.setNotifications(notifications));
@@ -46,7 +46,7 @@ class Notification {
       ${Notification.fragment}
     `;
 
-    const notification = await Apollo.mutate<Notification>('toggleReadNotification', mutation, {
+    const notification = await API.mutate<Notification>('toggleReadNotification', mutation, {
       id
     });
     return store.dispatch(authReducer.actions.addNotifications(notification));
@@ -59,7 +59,7 @@ class Notification {
       }
     `;
 
-    await Apollo.mutate<string>('toggleReadAllNotifications', mutation);
+    await API.mutate<string>('toggleReadAllNotifications', mutation);
     await Notification.find(semesterId);
   };
 }

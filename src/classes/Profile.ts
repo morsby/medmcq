@@ -1,6 +1,6 @@
 import Comment from 'classes/Comment';
-import { gql } from 'apollo-boost';
-import Apollo from './Apollo';
+import gql from 'graphql-tag';
+import API from './API.class';
 import profileReducer from 'redux/reducers/profile';
 import { store } from 'IndexApp';
 import { User as UserType, UserAnswer } from 'types/generated';
@@ -101,7 +101,7 @@ class Profile {
       ${Question.questionAnswerFragment}
     `;
 
-    const profileData = await Apollo.query<Profile>('profile', query, {
+    const profileData = await API.query<Profile>('profile', query, {
       semester: options.semester
     });
     profileData.tries = mapAnswers(profileData.answers);

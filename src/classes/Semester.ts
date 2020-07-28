@@ -1,5 +1,5 @@
-import { gql } from 'apollo-boost';
-import Apollo from './Apollo';
+import gql from 'graphql-tag';
+import API from './API.class';
 import { store } from 'IndexApp';
 import metadataReducer from 'redux/reducers/metadata';
 import ExamSet from './ExamSet';
@@ -35,7 +35,7 @@ class Semester {
       ${Specialty.fragmentFull}
     `;
 
-    const semesters = await Apollo.query<Semester[]>('semesters', query);
+    const semesters = await API.query<Semester[]>('semesters', query);
 
     await store.dispatch(metadataReducer.actions.setSemesters(semesters));
   };

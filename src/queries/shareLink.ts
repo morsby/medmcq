@@ -1,4 +1,4 @@
-import { gql } from 'apollo-boost';
+import gql from 'graphql-tag';
 
 // Returns an array of questionIds
 export const fetchQuestionIdsFromShareLink = gql`
