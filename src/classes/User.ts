@@ -32,7 +32,7 @@ class User {
 
   static signup = async (data: UserInput) => {
     const mutation = gql`
-      mutation($data: UserInput) {
+      mutation Signup($data: UserInput) {
         signup(data: $data)
       }
     `;
@@ -47,7 +47,7 @@ class User {
    */
   static fetch = async () => {
     const query = gql`
-      query {
+      query User {
         user {
           id
           username
@@ -75,7 +75,7 @@ class User {
     `;
 
     const user = await API.query<User>('user', query);
-    await store.dispatch(authReducer.actions.login(user));
+    store.dispatch(authReducer.actions.login(user));
     return user;
   };
 
