@@ -15,18 +15,10 @@ const IE11: React.SFC<IE11Props> = () => {
     >
       <h1 style={{ color: 'blue' }}>MedMCQ</h1>
       <h2>
-        Din internet browser er forældet, og understøttes derfor ikke.
+        Din internet browser understøtter ikke nyere teknologi, og kan derfor ikke køre MedMCQ.
         <br />
         Benyt venligst Chrome, Firefox, Edge eller anden nyrere browser i stedet.
       </h2>
-      <h3>Denne advarsel gælder ikke kun for medMCQ.</h3>
-      <h4>
-        Regionscomputere bruger som standard alle internet explorer, men under apps kan man i stedet
-        finde Chrome.
-        <br />
-        Det anbefales på det kraftigste at skifte. Der er store sikkerhedsmæssige mangler i internet
-        explorer, da den ikke længere modtager opdateringer fra Microsoft.
-      </h4>
     </div>
   );
 };
