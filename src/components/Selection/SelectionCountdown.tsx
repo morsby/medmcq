@@ -36,7 +36,15 @@ const SelectionCountdown = (props: SelectionCountdownProps) => {
     );
   return (
     <Message style={{ border: '2px solid red' }}>
-      <div style={{ textAlign: 'center', fontSize: '2em', color: 'red', fontWeight: 'bolder' }}>
+      <div
+        style={{
+          textAlign: 'center',
+          fontSize: '2em',
+          color: 'red',
+          fontWeight: 'bolder',
+          marginBottom: '5px'
+        }}
+      >
         <Countdown date={new Date(2020, 10, 12, 16)} />
       </div>
       <Divider hidden />
