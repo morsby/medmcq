@@ -39,6 +39,7 @@ const SelectionCountdown = (props: SelectionCountdownProps) => {
       <div style={{ textAlign: 'center', fontSize: '2em', color: 'red', fontWeight: 'bolder' }}>
         <Countdown date={new Date(2020, 10, 12, 16)} />
       </div>
+      <Divider hidden />
       <h2 style={{ textAlign: 'center' }}>
         {user
           ? `${user.username.toTitleCase()}, jeg har brug for din hjælp`
