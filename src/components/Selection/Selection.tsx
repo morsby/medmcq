@@ -45,7 +45,6 @@ const Selection: React.SFC<SelectionProps> = ({ addTranslation }) => {
         <Header as="h1" style={{ textAlign: 'center' }}>
           MedMCQ
         </Header>
-        <SelectionCountdown />
         <Divider />
         {notice?.message && <Message color={notice.color as any}>{notice.message}</Message>}
         <SelectionSemesterSelector />
