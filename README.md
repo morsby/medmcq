@@ -6,7 +6,7 @@ Siden er lavet med tilladelse fra Institut for Klinisk Medicin, Health, Aarhus U
 
 ## Opsætning
 
-For at køre appen, skal du placere en fil med navnet ".env.development" med følgende enviromental variables i server mappen:
+For at køre appen, skal du placere en fil med navnet ".env.development" med følgende environmental variables i server mappen:
 
 ```
 SECRET=thisisasecret

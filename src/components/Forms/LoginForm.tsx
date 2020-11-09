@@ -38,13 +38,14 @@ const LoginForm: React.SFC<LoginFormProps> = ({ translate }) => {
     try {
       const user = await User.login(data);
       if (!user) {
+        setLoading(false);
         return dispatch(makeToast('loginForm.errs.login_failed', 'error'));
       }
 
       return handleNavigation('root');
     } catch (error) {
-      dispatch(makeToast('loginForm.errs.login_failed', 'error'));
       setLoading(false);
+      dispatch(makeToast('loginForm.errs.login_failed', 'error'));
     }
   };
 

@@ -7,7 +7,8 @@ const initialState = {
   notice: { message: '', color: '' },
   maintenance: { message: '' },
   leftSidebarOpen: false,
-  rightSidebarOpen: false
+  rightSidebarOpen: false,
+  hasVoted: false
 };
 
 const settingsReducer = createSlice({
@@ -39,6 +40,9 @@ const settingsReducer = createSlice({
         state.leftSidebarOpen = action.payload.open ? false : state.leftSidebarOpen;
         state.rightSidebarOpen = action.payload.open;
       }
+    },
+    toggleHasVoted: (state) => {
+      state.hasVoted = !state.hasVoted
     }
   }
 });

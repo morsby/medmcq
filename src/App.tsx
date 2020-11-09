@@ -29,7 +29,6 @@ import User from 'classes/User';
 // Components
 import LoadingPage from 'components/Misc/Utility/LoadingPage';
 import Layout from 'components/Layout/Layout';
-import NewVersionMessage from './components/Misc/Utility/About/NewVersion/NewVersionMessage';
 import MaintenancePage from 'components/Misc/Utility/MaintenancePage';
 import FirstTimeToast from 'components/Misc/Utility/About/FirstTime/FirstTimeToast';
 
@@ -118,7 +117,6 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
   return (
     <BrowserRouter>
       <ScrollToTop>
-        <NewVersionMessage />
         <ToastContainer
           position="top-center"
           autoClose={3000}

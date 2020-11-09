@@ -37,11 +37,6 @@ describe('setup', () => {
     cy.get('.Toastify__close-button').should('not.exist');
   });
 
-  it('should close the new version popup', () => {
-    cy.get('.message > .close').click();
-    cy.get('.message > .close').should('not.exist');
-  });
-
   it('should be able to pick semester', () => {
     cy.get('.selection').click();
     cy.get('.selection > .visible > :nth-child(2)').should('contain', 'semester');
