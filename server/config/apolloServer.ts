@@ -1,6 +1,5 @@
 import { ApolloServer } from 'apollo-server-express';
 import { resolvers, typeDefs } from 'graphql/types';
-import jsonWebToken from 'jsonwebtoken';
 import Express from 'express';
 import { createCommentsLoader } from '../graphql/dataloaders/commentLoaders';
 import { createUserAnswersLoader } from '../graphql/dataloaders/answerLoaders';
@@ -23,20 +22,10 @@ import {
   createBookmarkLoader,
   createNotificationLoader
 } from '../graphql/dataloaders/userLoaders';
-const secret = process.env.SECRET || '';
+import User from 'models/user';
 const isDev = process.env.NODE_ENV === 'production' ? false : true;
 
-const decodeUser = (jwt: string, res: Express.Response) => {
-  if (!jwt) return null;
-  try {
-    return jsonWebToken.verify(jwt, secret);
-  } catch (error) {
-    res.cookie('user', {}, { expires: new Date(0) });
-    return null;
-  }
-};
-
-const generateContext = (req: Express.Request, res: Express.Response) => ({
+const generateContext = (req: Express.Request & {user: User}, res: Express.Response) => ({
   userAnswersLoader: createUserAnswersLoader(),
   examSetsLoader: createExamSetsLoader(),
   likesLoader: createLikesLoader(),
@@ -52,7 +41,7 @@ const generateContext = (req: Express.Request, res: Express.Response) => ({
   questionAnswersLoader: createQuestionAnswersLoader(),
   questionAnswersByQuestionLoader: createQuestionAnswersByQuestionLoader(),
   notificationLoader: createNotificationLoader(),
-  user: decodeUser(req.cookies.user, res) as { id: number } | null,
+  user: req.user,
   res,
   req
 });
@@ -62,7 +51,7 @@ export type Context = ReturnType<typeof generateContext>;
 export default new ApolloServer({
   resolvers,
   typeDefs,
-  context: ({ req, res }) => generateContext(req, res),
+  context: ({ req, res }) => generateContext(req as any, res),
   playground: isDev,
   tracing: isDev
 });

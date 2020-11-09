@@ -9,6 +9,10 @@ import imageRoute from 'routes/image';
 import apolloServer from './config/apolloServer';
 import path from 'path';
 import sgMail from '@sendgrid/mail';
+import examsetRoute from 'routes/examSets'
+import jsonWebToken from 'jsonwebtoken';
+import User from 'models/user';
+const secret = process.env.SECRET || '';
 
 const port = process.env.PORT || 3001;
 const app = express();
@@ -20,12 +24,25 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-// Logging of all requests
-// app.use(logger);
-
 // GraphQL and routes
-apolloServer.applyMiddleware({ app });
+app.use(async (req, res, next) => {
+  // Decode user
+  const jwt = req.cookies.user;
+  if (!jwt) return next();
+  try {
+    let user = jsonWebToken.verify(jwt, secret) as User;
+    user = await User.query().findById(user.id);
+    if (!user) throw new Error('Login failed');
+    (req as any).user = user;
+  } catch (error) {
+    res.cookie('user', {}, { expires: new Date(0) });
+  } finally {
+    next()
+  }
+})
 app.use('/images', imageRoute);
+app.use('/examsets', examsetRoute)
+apolloServer.applyMiddleware({ app });
 
 // Serve index.js
 app.use(express.static(path.join(__dirname, '..')));

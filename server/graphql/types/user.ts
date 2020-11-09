@@ -101,7 +101,7 @@ export const resolvers: Resolvers = {
   Query: {
     user: async (_root, _args, ctx) => {
       if (!ctx.user) return null;
-      const user = await ctx.userLoader.load(ctx.user.id);
+      const user = ctx.user;
       if (!user) {
         ctx.res.cookie('user', {}, { expires: new Date(0) });
         return null;
@@ -110,7 +110,7 @@ export const resolvers: Resolvers = {
     },
     profile: async (_root, _args, ctx) => {
       if (!ctx.user) return null;
-      const user = await ctx.userLoader.load(ctx.user.id);
+      const user = ctx.user;
       return { id: user.id };
     },
     checkUsernameAvailability: async (root, { data: { username, email } }) => {
