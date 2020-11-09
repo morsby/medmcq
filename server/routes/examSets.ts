@@ -36,7 +36,7 @@ router.post('/create', async (req: any, res) => {
 
       for (let image of images) {
         await QuestionImage.query().insert({
-          link: image,
+          link: image.link,
           questionId: newQuestion.id
         });
       }
