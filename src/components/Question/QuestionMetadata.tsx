@@ -57,6 +57,7 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
 
   useEffect(() => {
     setSuggestTagMessage('');
+    setAddingTagError('');
   }, [question]);
 
   const suggestTag = async () => {
