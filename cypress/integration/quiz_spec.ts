@@ -48,6 +48,7 @@ describe('quiz', () => {
     });
   });
 
+  /*
   describe('search', () => {
     it('should fail if searching for word that is unavailable', () => {
       cy.frontpage();
@@ -71,4 +72,5 @@ describe('quiz', () => {
       searchQuestion();
     });
   });
+  */
 });
