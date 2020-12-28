@@ -20,7 +20,7 @@ const QuestionExtraButtons: React.SFC<QuestionExtraButtonsProps> = ({
   onPublicCommentsToggle,
   privateCommentsOpen,
   publicCommentsOpen,
-  reportOpen,
+  reportOpen
 }) => {
   const dispatch = useDispatch();
   const user = useSelector((state: ReduxState) => state.auth.user);
@@ -76,9 +76,11 @@ const QuestionExtraButtons: React.SFC<QuestionExtraButtonsProps> = ({
             <Translate id="question.hide_percentages" />
           )}
         </Menu.Item>
-        <Menu.Item color="orange" active={reportOpen} onClick={onReportToggle}>
-          <Translate id="question.report_question" />
-        </Menu.Item>
+        {user && (
+          <Menu.Item color="orange" active={reportOpen} onClick={onReportToggle}>
+            <Translate id="question.report_question" />
+          </Menu.Item>
+        )}
       </Menu.Menu>
     </Menu>
   );
