@@ -100,7 +100,7 @@ const AnswerDetails: React.SFC<AnswerDetailsProps> = () => {
         disabled={quizLoading}
         basic
         color="green"
-        onClick={() => startQuiz(Object.keys(userAnswers))}
+        onClick={() => startQuiz(userAnswers.map((ua) => ua.answer.question.id.toString()))}
       >
         <Translate
           id="profileAnswerDetails.start_quiz_all_button"
