@@ -111,7 +111,7 @@ const AnswersDetailsTable: React.SFC<AnswersDetailsTableProps> = ({
       <Table
         size="small"
         rowSelection={rowSelection}
-        rowKey={(record: UserAnswer) => record.id}
+        rowKey={(record: UserAnswer) => record.answer.question.id}
         bordered
         columns={columns}
         dataSource={answers}
