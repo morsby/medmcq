@@ -60,11 +60,14 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
   }, [question]);
 
   const suggestTag = async () => {
-    if (tags.some((t) => t.name.toLowerCase() === newTag.toLowerCase())) {
+    if (tags.some((t) => t.name.toLowerCase() === newTag.trim().toLowerCase())) {
       return setAddingTagError('Tagget eksisterer allerede. Vælg det under menuen "+ Tilføj tag".');
     }
-    await Tag.suggest({ tagName: newTag, questionId: question.id });
+    if (newTag.trim().length === 0) {
+      return setAddingTagError('Du skal angive et navn på det tag du foreslår.');
+    }
     setAddingTagError('');
+    await Tag.suggest({ tagName: newTag, questionId: question.id });
     setNewTag('');
     setAddingNewTag(false);
     setSuggestTagMessage('Dit tag er blevet foreslået');
