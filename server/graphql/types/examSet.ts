@@ -17,6 +17,7 @@ export const typeDefs = gql`
     createdAt: String
     updatedAt: String
     questionCount: Int
+    hadHelp: Boolean
   }
 
   input ExamSetInput {
@@ -58,6 +59,10 @@ export const resolvers: Resolvers = {
     questionCount: async ({ id }) => {
       const result: any = await Question.query().where({ examSetId: id }).count().first();
       return result['count(*)'];
-    }
+    },
+    hadHelp: async ({ id }, args, ctx) => {
+      const examSet = await ctx.examSetsLoader.load(id);
+      return !!examSet.hadHelp;
+    },
   }
 };

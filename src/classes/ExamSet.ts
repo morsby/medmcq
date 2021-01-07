@@ -15,6 +15,7 @@ class ExamSet {
         id
       }
       questionCount
+      hadHelp
     }
   `;
 

@@ -7,6 +7,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  Any: any;
   /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
@@ -63,7 +64,6 @@ export type Mutation = {
   voteTag?: Maybe<Question>;
   voteSpecialty?: Maybe<Question>;
   suggestTag?: Maybe<Scalars['String']>;
-  createExamSet?: Maybe<ExamSet>;
   addComment?: Maybe<Comment>;
   editComment?: Maybe<Comment>;
   likeComment?: Maybe<Comment>;
@@ -123,11 +123,6 @@ export type MutationVoteSpecialtyArgs = {
 export type MutationSuggestTagArgs = {
   tagName: Scalars['String'];
   questionId: Scalars['Int'];
-};
-
-
-export type MutationCreateExamSetArgs = {
-  data?: Maybe<ExamSetInput>;
 };
 
 
@@ -256,7 +251,7 @@ export type QuestionInput = {
   answers?: Maybe<Array<Maybe<QuestionAnswerInput>>>;
   text: Scalars['String'];
   images?: Maybe<Array<Maybe<Scalars['String']>>>;
-  examSetId: Scalars['Int'];
+  examSetId?: Maybe<Scalars['Int']>;
 };
 
 export type QuestionAnswerInput = {
@@ -322,6 +317,7 @@ export type ExamSet = {
   createdAt?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
   questionCount?: Maybe<Scalars['Int']>;
+  hadHelp?: Maybe<Scalars['Boolean']>;
 };
 
 export type ExamSetInput = {
@@ -330,6 +326,7 @@ export type ExamSetInput = {
   semesterId: Scalars['Int'];
   questions?: Maybe<Array<Maybe<QuestionInput>>>;
 };
+
 
 export type Semester = {
   __typename?: 'Semester';

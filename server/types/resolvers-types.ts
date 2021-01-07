@@ -10,6 +10,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  Any: any;
   /** The `Upload` scalar type represents a file upload. */
   Upload: any;
 };
@@ -66,7 +67,6 @@ export type Mutation = {
   voteTag?: Maybe<Question>;
   voteSpecialty?: Maybe<Question>;
   suggestTag?: Maybe<Scalars['String']>;
-  createExamSet?: Maybe<ExamSet>;
   addComment?: Maybe<Comment>;
   editComment?: Maybe<Comment>;
   likeComment?: Maybe<Comment>;
@@ -126,11 +126,6 @@ export type MutationVoteSpecialtyArgs = {
 export type MutationSuggestTagArgs = {
   tagName: Scalars['String'];
   questionId: Scalars['Int'];
-};
-
-
-export type MutationCreateExamSetArgs = {
-  data?: Maybe<ExamSetInput>;
 };
 
 
@@ -259,7 +254,7 @@ export type QuestionInput = {
   answers?: Maybe<Array<Maybe<QuestionAnswerInput>>>;
   text: Scalars['String'];
   images?: Maybe<Array<Maybe<Scalars['String']>>>;
-  examSetId: Scalars['Int'];
+  examSetId?: Maybe<Scalars['Int']>;
 };
 
 export type QuestionAnswerInput = {
@@ -325,6 +320,7 @@ export type ExamSet = {
   createdAt?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
   questionCount?: Maybe<Scalars['Int']>;
+  hadHelp?: Maybe<Scalars['Boolean']>;
 };
 
 export type ExamSetInput = {
@@ -333,6 +329,7 @@ export type ExamSetInput = {
   semesterId: Scalars['Int'];
   questions?: Maybe<Array<Maybe<QuestionInput>>>;
 };
+
 
 export type Semester = {
   __typename?: 'Semester';
@@ -620,6 +617,7 @@ export type ResolversTypes = ResolversObject<{
   VoteInput: ResolverTypeWrapper<Partial<VoteInput>>;
   ExamSet: ResolverTypeWrapper<Partial<ExamSet>>;
   ExamSetInput: ResolverTypeWrapper<Partial<ExamSetInput>>;
+  Any: ResolverTypeWrapper<Partial<Scalars['Any']>>;
   Semester: ResolverTypeWrapper<Partial<Semester>>;
   Comment: ResolverTypeWrapper<Partial<Comment>>;
   CommentInput: ResolverTypeWrapper<Partial<CommentInput>>;
@@ -665,6 +663,7 @@ export type ResolversParentTypes = ResolversObject<{
   VoteInput: Partial<VoteInput>;
   ExamSet: Partial<ExamSet>;
   ExamSetInput: Partial<ExamSetInput>;
+  Any: Partial<Scalars['Any']>;
   Semester: Partial<Semester>;
   Comment: Partial<Comment>;
   CommentInput: Partial<CommentInput>;
@@ -715,7 +714,6 @@ export type MutationResolvers<ContextType = Context, ParentType extends Resolver
   voteTag?: Resolver<Maybe<ResolversTypes['Question']>, ParentType, ContextType, RequireFields<MutationVoteTagArgs, never>>;
   voteSpecialty?: Resolver<Maybe<ResolversTypes['Question']>, ParentType, ContextType, RequireFields<MutationVoteSpecialtyArgs, never>>;
   suggestTag?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationSuggestTagArgs, 'tagName' | 'questionId'>>;
-  createExamSet?: Resolver<Maybe<ResolversTypes['ExamSet']>, ParentType, ContextType, RequireFields<MutationCreateExamSetArgs, never>>;
   addComment?: Resolver<Maybe<ResolversTypes['Comment']>, ParentType, ContextType, RequireFields<MutationAddCommentArgs, never>>;
   editComment?: Resolver<Maybe<ResolversTypes['Comment']>, ParentType, ContextType, RequireFields<MutationEditCommentArgs, never>>;
   likeComment?: Resolver<Maybe<ResolversTypes['Comment']>, ParentType, ContextType, RequireFields<MutationLikeCommentArgs, 'commentId'>>;
@@ -816,8 +814,13 @@ export type ExamSetResolvers<ContextType = Context, ParentType extends Resolvers
   createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   updatedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   questionCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
+  hadHelp?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType>;
 }>;
+
+export interface AnyScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Any'], any> {
+  name: 'Any';
+}
 
 export type SemesterResolvers<ContextType = Context, ParentType extends ResolversParentTypes['Semester'] = ResolversParentTypes['Semester']> = ResolversObject<{
   id?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -949,6 +952,7 @@ export type Resolvers<ContextType = Context> = ResolversObject<{
   TagVote?: TagVoteResolvers<ContextType>;
   SpecialtyVote?: SpecialtyVoteResolvers<ContextType>;
   ExamSet?: ExamSetResolvers<ContextType>;
+  Any?: GraphQLScalarType;
   Semester?: SemesterResolvers<ContextType>;
   Comment?: CommentResolvers<ContextType>;
   UserAnswer?: UserAnswerResolvers<ContextType>;

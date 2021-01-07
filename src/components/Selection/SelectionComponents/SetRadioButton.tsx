@@ -6,6 +6,7 @@ import ExamSet from 'classes/ExamSet';
 import { ReduxState } from 'redux/reducers';
 import Selection from 'classes/Selection';
 import SetRadioButtonMetadata from './SetRadioButtonMetadata';
+import QuestionHadHelpLabel from 'components/Question/QuestionMetadata/QuestionHadHelpLabel';
 
 export interface SetRadioButtonProps {
   set: ExamSet;
@@ -50,7 +51,8 @@ const SetRadioButton: React.SFC<SetRadioButtonProps> = ({ set }) => {
                 name="selectedSetId"
                 onChange={() => handleChange(set.id)}
               />{' '}
-              {user && <SetRadioButtonMetadata user={user} examSet={set} />}
+              {user && <SetRadioButtonMetadata user={user} examSet={set} />}{' '}
+              <QuestionHadHelpLabel hadHelp={set.hadHelp} />
             </>
           )}
         </Translate>

@@ -16,6 +16,7 @@ import User from 'classes/User';
 import Tag from 'classes/Tag';
 import questionsReducer from 'redux/reducers/question';
 import Question from 'classes/Question';
+import QuestionHadHelpLabel from './QuestionMetadata/QuestionHadHelpLabel';
 
 export interface QuestionMetadataProps {}
 
@@ -101,7 +102,7 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
             ) : (
               <Translate id="questionMetadata.set_season.E" />
             )}{' '}
-            {examSet.year}
+            {examSet.year} <QuestionHadHelpLabel hadHelp={examSet.hadHelp} />
           </div>
           {question.user && (
             <div>
