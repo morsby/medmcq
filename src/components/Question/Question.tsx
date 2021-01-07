@@ -16,6 +16,7 @@ export interface QuestionProps {}
 
 const Question: React.SFC<QuestionProps> = () => {
   const { width } = useWidth();
+  const user = useSelector((state: ReduxState) => state.auth.user);
   const isEditing = useSelector((state: ReduxState) => state.questions.isEditing);
   const examMode = useSelector((state: ReduxState) => state.quiz.examMode);
   const currentQuestionIndex = useSelector((state: ReduxState) => state.quiz.questionIndex);
@@ -26,7 +27,11 @@ const Question: React.SFC<QuestionProps> = () => {
   return (
     <Container className="question">
       <Segment>
-        {isEditing ? <CreateQuestionForm question={question} /> : <QuestionDisplay />}
+        {user?.role.id < 3 && isEditing ? (
+          <CreateQuestionForm question={question} />
+        ) : (
+          <QuestionDisplay />
+        )}
         {!examMode && <QuestionMetadata />}
         {!examMode && <QuestionExtras width={width} />}
       </Segment>

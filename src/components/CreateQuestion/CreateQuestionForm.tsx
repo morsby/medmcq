@@ -28,14 +28,11 @@ export interface CreateQuestionFormProps {
 
 const CreateQuestionForm: React.SFC<CreateQuestionFormProps> = ({ question }) => {
   const [error, setError] = useState('');
-  const [semesterId, setSemesterId] = useState(5);
-  const [examSetId, setExamSetId] = useState(null);
+  const [semesterId, setSemesterId] = useState(question.examSet.semester.id || null);
   const [images, setImages] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useDispatch();
-  const semesters = useSelector((state: ReduxState) =>
-    state.metadata.semesters.filter((semester) => semester.id > 4)
-  );
+  const semesters = useSelector((state: ReduxState) => state.metadata.semesters);
   const semester = semesters.find((semester) => semester.id === semesterId);
   const examSets = semester.examSets;
   const [imageKey, setImageKey] = useState(_.random(1, 1000)); // This is used to rerender the input, since it's uncontrollable
@@ -60,7 +57,7 @@ const CreateQuestionForm: React.SFC<CreateQuestionFormProps> = ({ question }) =>
           text: question?.answers.find((a) => a.index === 3).text || ''
         }
       ],
-      examSetId: examSetId
+      examSetId: question?.examSet.id || null
     } as QuestionInput,
     onSubmit: (values) => handleSubmit(values),
     enableReinitialize: true
@@ -73,7 +70,7 @@ const CreateQuestionForm: React.SFC<CreateQuestionFormProps> = ({ question }) =>
 
   useEffect(() => {
     formik.resetForm();
-  }, [semesterId, formik]);
+  }, [semesterId]);
 
   const handleError = (error: string) => {
     setError(error);
@@ -235,7 +232,7 @@ const CreateQuestionForm: React.SFC<CreateQuestionFormProps> = ({ question }) =>
               selection
               options={examSetOptions}
               value={formik.values.examSetId}
-              onChange={(e, { value }) => setExamSetId(value as number)}
+              onChange={(e, { value }) => formik.setFieldValue('examSetId', value)}
             />
           </Form.Field>
           {question?.images.map((image) => (

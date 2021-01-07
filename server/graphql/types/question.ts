@@ -75,7 +75,7 @@ export const typeDefs = gql`
     answers: [QuestionAnswerInput]
     text: String!
     images: [String]
-    examSetId: Int!
+    examSetId: Int
   }
 
   input QuestionAnswerInput {
@@ -242,22 +242,17 @@ export const resolvers: Resolvers = {
     updateQuestion: async (root, { data }, ctx) => {
       const user = await permitAdmin(ctx);
       let question = await Question.query().findById(data.id);
-      if (question.userId !== user.id && user.roleId !== 1) throw new Error('Not permitted');
-      const { text, images, examSetId } = data;
+      const { text, images } = data;
       question = await question
         .$query()
-        .updateAndFetch({
-          text,
-          examSetId
-        })
-        .skipUndefined();
+        .updateAndFetch({ text })
 
       if (!!images) {
         await QuestionImage.query().insertGraph(
           images.map((image) => ({ link: image, questionId: question.id }))
         );
       }
-      if (data.answers.length > 0) {
+      if (data.answers.length === 3) {
         await QuestionAnswer.query().where({ questionId: question.id }).delete();
         await QuestionAnswer.query().insertGraph(
           data.answers.map((a) => ({
