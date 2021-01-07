@@ -33,19 +33,27 @@ const QuestionMetadataDropdown: React.SFC<QuestionMetadataDropdownProps> = ({ on
 
   useEffect(() => {
     const convertMetadataToTree = () => {
-      return _.filter(options, (t: Tag) => !t.parent?.id).map((t: Tag) => ({
-        title: t.name,
-        key: t.id,
-        children: getChildrenOfMetadata(t.id)
-      }));
+      return _(options)
+        .filter((t: Tag) => !t.parent?.id)
+        .sortBy((t: Tag) => t.name)
+        .map((t: Tag) => ({
+          title: t.name,
+          key: t.id,
+          children: getChildrenOfMetadata(t.id)
+        }))
+        .value();
     };
 
     const getChildrenOfMetadata = (tagId: number): any => {
-      return _.filter(options, (t: Tag) => t.parent?.id === tagId).map((t: Tag) => ({
-        title: t.name,
-        key: t.id,
-        children: getChildrenOfMetadata(t.id)
-      }));
+      return _(options)
+        .filter((t: Tag) => t.parent?.id === tagId)
+        .sortBy((t: Tag) => t.name)
+        .map((t: Tag) => ({
+          title: t.name,
+          key: t.id,
+          children: getChildrenOfMetadata(t.id)
+        }))
+        .value();
     };
 
     setTagTree(convertMetadataToTree());
@@ -97,13 +105,14 @@ const QuestionMetadataDropdown: React.SFC<QuestionMetadataDropdownProps> = ({ on
     }
 
     if (type === 'specialty') {
-      return _.map(options, (s: Specialty) => {
-        return (
+      return _(options)
+        .sortBy((s: Specialty) => s.name)
+        .map((s: Specialty) => (
           <Menu.Item onClick={() => handleDropdownPick(s.id)} key={s.id}>
             {s.name}
           </Menu.Item>
-        );
-      });
+        ))
+        .value();
     }
   };
 

@@ -13,6 +13,7 @@ import SelectionStartButton from './SelectionComponents/SelectionStartButton';
 import QuestionCount from './SelectionComponents/QuestionCount';
 import { useHistory } from 'react-router-dom';
 import SuspenseLoader from 'components/Misc/Utility/SuspenseLoader';
+// eslint-disable-next-line
 import SelectionCountdown from './SelectionCountdown';
 const SelectionRandom = lazy(() => import('./SelectionRandom'));
 const SelectionMetadata = lazy(() => import('./SelectionMetadata'));

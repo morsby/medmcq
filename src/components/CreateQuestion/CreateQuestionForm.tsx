@@ -70,6 +70,8 @@ const CreateQuestionForm: React.SFC<CreateQuestionFormProps> = ({ question }) =>
 
   useEffect(() => {
     formik.resetForm();
+
+    // eslint-disable-next-line
   }, [semesterId]);
 
   const handleError = (error: string) => {
