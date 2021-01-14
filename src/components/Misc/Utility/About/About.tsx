@@ -29,11 +29,6 @@ const About: React.SFC<AboutProps> = ({ addTranslation }) => {
         </Button>
 
         <h2>
-          <Translate id="changelog.header" />
-        </h2>
-        <Translate id="changelog.body" />
-
-        <h2>
           <Translate id="voting.header" />
         </h2>
         <Translate id="voting.body" />

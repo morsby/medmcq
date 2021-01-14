@@ -50,9 +50,6 @@ const Footer: React.SFC<FooterProps> = ({ addTranslation }) => {
               <div>
                 <Icon name="ship" /> <Translate id="footer.created_by" />
               </div>
-              <div>
-                <Icon name="sitemap" /> <span>Version {appVersion}</span>
-              </div>
             </Grid.Column>
             <Grid.Column largeScreen={4} computer={4} tablet={6} mobile={16}>
               <Menu secondary vertical inverted fluid>
