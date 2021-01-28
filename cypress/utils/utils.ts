@@ -2,11 +2,11 @@
  * Answers 3 questions
  */
 export const answerQuestions = () => {
-  cy.get(':nth-child(2) > .fluid > :nth-child(3)').click();
+  cy.contains('button', 'A.').click();
   cy.get('.top-nav > .ui > :nth-child(3)').click();
-  cy.get('.column > :nth-child(2) > .fluid > :nth-child(1)').click();
+  cy.contains('button', 'B.').click();
   cy.get('.top-nav > .ui > :nth-child(3)').click();
-  cy.get('.fluid > :nth-child(5)').click();
+  cy.contains('button', 'C.').click();
   cy.get('.header > div').should('contain', 3);
 };
 
