@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useHistory } from 'react-router';
 import { Grid, Icon, Container, Menu } from 'semantic-ui-react';
-import { urls, appVersion } from '../../utils/common';
+import { urls } from '../../utils/common';
 import { Translate, withLocalize, LocalizeContextProps } from 'react-localize-redux';
 import layoutTranslations from './layoutTranslations.json';
 

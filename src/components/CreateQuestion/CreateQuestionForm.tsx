@@ -28,12 +28,15 @@ export interface CreateQuestionFormProps {
 
 const CreateQuestionForm: React.SFC<CreateQuestionFormProps> = ({ question }) => {
   const [error, setError] = useState('');
-  const [semesterId, setSemesterId] = useState(question.examSet.semester.id || null);
+  const semesters = useSelector((state: ReduxState) => state.metadata.semesters);
+  const selectionSemesterId = useSelector((state: ReduxState) => state.selection.semesterId);
+  const [semesterId, setSemesterId] = useState(
+    question?.examSet.semester.id || selectionSemesterId
+  );
+  const semester = semesters.find((semester) => semester.id === semesterId);
   const [images, setImages] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useDispatch();
-  const semesters = useSelector((state: ReduxState) => state.metadata.semesters);
-  const semester = semesters.find((semester) => semester.id === semesterId);
   const examSets = semester.examSets;
   const [imageKey, setImageKey] = useState(_.random(1, 1000)); // This is used to rerender the input, since it's uncontrollable
   const formik = useFormik({
