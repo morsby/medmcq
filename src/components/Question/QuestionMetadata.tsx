@@ -17,6 +17,8 @@ import Tag from 'classes/Tag';
 import questionsReducer from 'redux/reducers/question';
 import Question from 'classes/Question';
 import QuestionHadHelpLabel from './QuestionMetadata/QuestionHadHelpLabel';
+import Semester from 'classes/Semester';
+import LoadingPage from 'components/Misc/Utility/LoadingPage';
 
 export interface QuestionMetadataProps {}
 
@@ -33,12 +35,12 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
   const semesterId = question.examSet.semester.id;
   const examSet = useSelector((state: ReduxState) =>
     state.metadata.semesters
-      .find((semester) => semester.id === semesterId)
-      .examSets.find((examSet) => examSet.id === question.examSet.id)
+      .flatMap((s) => s.examSets)
+      .find((examSet) => examSet.id === question.examSet.id)
   );
   const specialties = useSelector(
     (state: ReduxState) =>
-      state.metadata.semesters.find((semester) => semester.id === semesterId).specialties
+      state.metadata.semesters.find((semester) => semester.id === semesterId)?.specialties
   );
   const answers = useSelector((state: ReduxState) =>
     state.quiz.userAnswers.filter((ua) => question.answers.some((a) => a.id === ua.answerId))
@@ -47,7 +49,7 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
   const tagVotes = question.tagVotes;
   const tags = useSelector(
     (state: ReduxState) =>
-      state.metadata.semesters.find((semester) => semester.id === semesterId).tags
+      state.metadata.semesters.find((semester) => semester.id === semesterId)?.tags
   );
   const user = useSelector((state: ReduxState) => state.auth.user);
   const [addingTagError, setAddingTagError] = useState('');
@@ -59,6 +61,7 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
   useEffect(() => {
     setSuggestTagMessage('');
     setAddingTagError('');
+    Semester.fetchAll();
   }, [question]);
 
   const suggestTag = async () => {
@@ -91,6 +94,7 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
     setIsIgnoring(false);
   };
 
+  if (!examSet) return <LoadingPage />;
   return (
     <Grid celled stackable columns="equal">
       <Grid.Column>

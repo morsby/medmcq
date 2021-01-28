@@ -68,6 +68,7 @@ export const typeDefs = gql`
     text: String
     correctPercent: Int
     question: Question
+    explanation: String
   }
 
   input QuestionInput {
@@ -414,6 +415,10 @@ export const resolvers: Resolvers = {
     index: async ({ id }, _, ctx) => {
       const answer = await ctx.questionAnswersLoader.load(id);
       return answer.index;
+    },
+    explanation: async ({ id }, _, ctx) => {
+      const answer = await ctx.questionAnswersLoader.load(id);
+      return answer.explanation;
     },
     isCorrect: async ({ id }, _, ctx) => {
       const answer = await ctx.questionAnswersLoader.load(id);

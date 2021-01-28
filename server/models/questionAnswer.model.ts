@@ -6,6 +6,7 @@ interface QuestionAnswer {
   index: number;
   isCorrect: 1 | 0;
   questionId: number;
+  explanation: string;
 }
 
 class QuestionAnswer extends Model {

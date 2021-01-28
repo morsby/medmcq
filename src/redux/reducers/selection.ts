@@ -6,7 +6,7 @@ const initialState = {
   n: 10,
   onlyNew: false,
   onlyWrong: false,
-  semesterId: null as number,
+  semesterId: 1,
   examSetId: null as number,
   specialtyIds: [] as number[],
   tagIds: [] as number[],

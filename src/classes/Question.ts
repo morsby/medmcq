@@ -19,6 +19,7 @@ class Question {
       index
       isCorrect
       text
+      explanation
     }
   `;
 

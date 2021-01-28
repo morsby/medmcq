@@ -61,6 +61,7 @@ const QuestionAnswerButton: React.SFC<QuestionAnswerButtonProps> = ({
 
   return (
     <Button
+      fluid
       style={{ textAlign: 'left' }}
       onClick={() => handleAnswer(answer.id)}
       color={evalAnswer(userAnswer, answer, examMode, isAnswered)}

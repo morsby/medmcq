@@ -1,6 +1,7 @@
 import React from 'react';
-import { Button, Divider } from 'semantic-ui-react';
+import { Divider } from 'semantic-ui-react';
 import QuestionAnswerButton from './QuestionAnswerButton';
+import QuestionAnswerExplanation from './QuestionAnswerExplanation';
 
 /**
  * Component der viser svarmuligheder.
@@ -15,13 +16,16 @@ export interface QuestionAnswerButtonsProps {
 
 const QuestionAnswerButtons: React.SFC<QuestionAnswerButtonsProps> = ({ handleAnswer }) => {
   return (
-    <Button.Group vertical fluid>
+    <div>
       <QuestionAnswerButton answerNumber={1} handleAnswer={handleAnswer} />
+      <QuestionAnswerExplanation answerNumber={1} />
       <Divider hidden />
       <QuestionAnswerButton answerNumber={2} handleAnswer={handleAnswer} />
+      <QuestionAnswerExplanation answerNumber={2} />
       <Divider hidden />
       <QuestionAnswerButton answerNumber={3} handleAnswer={handleAnswer} />
-    </Button.Group>
+      <QuestionAnswerExplanation answerNumber={3} />
+    </div>
   );
 };
 
