@@ -44,7 +44,7 @@
       "Choose a semester to see available exam sets"
     ],
     "header": [
-      "For ${semester}. semester er der følgende eksamenssæt at vælge mellem:",
+      "Vælg mellem følgen:",
       "For the ${semester}th semester, the following exam sets can be selected:"
     ],
     "subtitle": [
@@ -57,14 +57,8 @@
       "Vælg et semester for at se tilgængelige specialer",
       "Choose a specialty to see available specialties"
     ],
-    "header": [
-      "For ${semester}. semester er der følgende specialer at vælge mellem:",
-      "For the ${semester}th semester, the following specialties can be selected:"
-    ],
-    "tags": [
-      "For ${semester}. semester er der følgende tags at vælge mellem:",
-      "For the ${semester}th semester, the following tags can be selected:"
-    ],
+    "header": ["Specialer", "Specialties"],
+    "tags": ["Tags", "Tags"],
     "tags_explanation": [
       "Vælger du både specialer og tags, vil siden udvælge spørgsmål, hvor mindst ét speciale og ét tag overlapper. Vælges f.eks. specialet lungemedicin og tagget ekg, vil kun spørgsmål hvor begge ting er opfyldt blive valgt -- ønskes også kardiologisk ekg'er, må kardiologi medtages som speciale.",
       "If you select both specialties and tags, the site will select questions where at least one specialty and one tag overlap. I.e., if you select the specialty pediatrics and the tag paraclinical, only questions fulfilling both requirements will be selected."

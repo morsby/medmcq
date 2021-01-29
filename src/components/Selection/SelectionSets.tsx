@@ -26,9 +26,6 @@ const SelectionSets: React.SFC<SelectionSetsProps> = () => {
   }
   return (
     <Form>
-      <Header as="h3">
-        <Translate id="selectionSetSelector.header" data={{ semester: semester.value }} />
-      </Header>
       {user && (
         <p>
           <Translate id="selectionSetSelector.subtitle" />
