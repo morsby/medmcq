@@ -19,9 +19,9 @@ const QuestionAnswerExplanation = ({ answer }: { answer: QuestionAnswer }) => {
   );
   const singleMode = useSelector((state: ReduxState) => state.quiz.singleMode);
   const hasBeenAnswered = allUserAnswers.length > 0;
-  const multiActivated = singleMode && hasBeenAnswered;
+  const singleActivated = singleMode && hasBeenAnswered;
 
-  if ((!isAnswered && !multiActivated) || !answer.explanation || examMode) return null;
+  if ((!isAnswered && !singleActivated) || !answer.explanation || examMode) return null;
   return (
     <Message
       color={answer.isCorrect ? 'green' : 'grey'}

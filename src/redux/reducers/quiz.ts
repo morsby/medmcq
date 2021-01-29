@@ -53,7 +53,6 @@ const quizReducer = createSlice({
       state.examMode = false;
       state.hidePercentages = false;
       state.examModeStart = null;
-      state.singleMode = true;
     },
     toggleSingleMode: (state) => {
       state.singleMode = !state.singleMode;

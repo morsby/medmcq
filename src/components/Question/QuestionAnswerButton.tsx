@@ -39,7 +39,7 @@ const QuestionAnswerButton: React.SFC<QuestionAnswerButtonProps> = ({ answer }) 
   const imgOpen = useSelector((state: ReduxState) => state.quiz.imgOpen);
   const singleMode = useSelector((state: ReduxState) => state.quiz.singleMode);
   const hasBeenAnswered = allUserAnswers.length > 0;
-  const multiActivated = singleMode && hasBeenAnswered;
+  const singleActivated = singleMode && hasBeenAnswered;
 
   /**
    * Set up button text
@@ -90,14 +90,14 @@ const QuestionAnswerButton: React.SFC<QuestionAnswerButtonProps> = ({ answer }) 
 
   const handleAnswer = useCallback(
     (answerId: number) => {
-      if ((isAnswered || multiActivated) && !examMode) return;
+      if ((isAnswered || singleActivated) && !examMode) return;
       Quiz.answer(
         { answerId, answerTime },
         question.answers.map((a) => a.id),
         examMode
       );
     },
-    [answerTime, isAnswered, examMode, question.answers, multiActivated]
+    [answerTime, isAnswered, examMode, question.answers, singleActivated]
   );
 
   useEffect(() => {
@@ -148,7 +148,7 @@ const QuestionAnswerButton: React.SFC<QuestionAnswerButtonProps> = ({ answer }) 
             __html: marked(answerText)
           }}
         />
-        {(isAnswered || multiActivated) && !percentagesHided && (
+        {(isAnswered || singleActivated) && !percentagesHided && (
           <Popup position="top center" trigger={<span>{answer.correctPercent}%</span>}>
             <Translate id="question.percentage_popup" />
           </Popup>
