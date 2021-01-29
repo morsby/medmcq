@@ -59,9 +59,7 @@ class Quiz {
     `;
 
     if (!examMode) API.mutate('answer', mutation, { data });
-    await store.dispatch(
-      quizReducer.actions.answer({ answer: { answerId, answerTime }, answerIds })
-    );
+    store.dispatch(quizReducer.actions.answer({ answer: { answerId, answerTime }, answerIds }));
   };
 
   static stopExam = async () => {

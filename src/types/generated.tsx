@@ -321,6 +321,7 @@ export type ExamSet = {
   updatedAt?: Maybe<Scalars['String']>;
   questionCount?: Maybe<Scalars['Int']>;
   hadHelp?: Maybe<Scalars['Boolean']>;
+  name?: Maybe<Scalars['String']>;
 };
 
 export type ExamSetInput = {

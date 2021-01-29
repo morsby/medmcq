@@ -4,14 +4,15 @@ import { useSelector } from 'react-redux';
 import { ReduxState } from 'redux/reducers';
 import { Translate } from 'react-localize-redux';
 import Selection from 'classes/Selection';
+import { sortBy } from 'lodash';
 
 export interface SelectionSemesterSelectorProps {}
 
 const SelectionSemesterSelector: React.SFC<SelectionSemesterSelectorProps> = () => {
   const selectedSemester = useSelector((state: ReduxState) => state.selection.semesterId);
   const semesters = useSelector((state: ReduxState) => state.metadata.semesters);
-  const mappedSemesters = semesters.map((semester) => ({
-    text: `${semester.value}. semester - ${semester.name}`,
+  const mappedSemesters = sortBy(semesters, (s) => s.value).map((semester) => ({
+    text: semester.value ? `${semester.value}. semester - ${semester.name}` : semester.name,
     value: semester.id,
     key: semester.id
   }));

@@ -94,20 +94,29 @@ const QuestionMetadata: React.SFC<QuestionMetadataProps> = () => {
     setIsIgnoring(false);
   };
 
+  const setName = () => {
+    if (examSet.name) {
+      return <p>{examSet.name}</p>;
+    }
+    return (
+      <div>
+        <Translate id="questionMetadata.set" />{' '}
+        {examSet.season === 'F' ? (
+          <Translate id="questionMetadata.set_season.F" />
+        ) : (
+          <Translate id="questionMetadata.set_season.E" />
+        )}{' '}
+        {examSet.year} <QuestionHadHelpLabel hadHelp={examSet.hadHelp} />
+      </div>
+    );
+  };
+
   if (!examSet) return <LoadingPage />;
   return (
     <Grid celled stackable columns="equal">
       <Grid.Column>
         <Grid.Row>
-          <div>
-            <Translate id="questionMetadata.set" />{' '}
-            {examSet.season === 'F' ? (
-              <Translate id="questionMetadata.set_season.F" />
-            ) : (
-              <Translate id="questionMetadata.set_season.E" />
-            )}{' '}
-            {examSet.year} <QuestionHadHelpLabel hadHelp={examSet.hadHelp} />
-          </div>
+          {setName()}
           {question.user && (
             <div>
               <p>Lavet af: {question.user.username.toTitleCase()}</p>

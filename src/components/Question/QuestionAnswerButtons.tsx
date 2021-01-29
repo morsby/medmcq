@@ -1,4 +1,6 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+import { ReduxState } from 'redux/reducers';
 import { Divider } from 'semantic-ui-react';
 import QuestionAnswerButton from './QuestionAnswerButton';
 import QuestionAnswerExplanation from './QuestionAnswerExplanation';
@@ -10,21 +12,23 @@ import QuestionAnswerExplanation from './QuestionAnswerExplanation';
  * @param {func}    onAnswer Func der kaldes når der svares på spg.
  * @param {object}  question Selve spørgsmålet.
  */
-export interface QuestionAnswerButtonsProps {
-  handleAnswer: Function;
-}
+export interface QuestionAnswerButtonsProps {}
 
-const QuestionAnswerButtons: React.SFC<QuestionAnswerButtonsProps> = ({ handleAnswer }) => {
+const QuestionAnswerButtons: React.SFC<QuestionAnswerButtonsProps> = () => {
+  const currentQuestionIndex = useSelector((state: ReduxState) => state.quiz.questionIndex);
+  const question = useSelector(
+    (state: ReduxState) => state.questions.questions[currentQuestionIndex]
+  );
+
   return (
     <div>
-      <QuestionAnswerButton answerNumber={1} handleAnswer={handleAnswer} />
-      <QuestionAnswerExplanation answerNumber={1} />
-      <Divider hidden />
-      <QuestionAnswerButton answerNumber={2} handleAnswer={handleAnswer} />
-      <QuestionAnswerExplanation answerNumber={2} />
-      <Divider hidden />
-      <QuestionAnswerButton answerNumber={3} handleAnswer={handleAnswer} />
-      <QuestionAnswerExplanation answerNumber={3} />
+      {question.answers.map((a) => (
+        <div>
+          <QuestionAnswerButton answer={a} />
+          <QuestionAnswerExplanation answer={a} />
+          <Divider hidden />
+        </div>
+      ))}
     </div>
   );
 };

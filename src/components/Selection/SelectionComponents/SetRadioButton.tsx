@@ -37,6 +37,15 @@ const SetRadioButton: React.SFC<SetRadioButtonProps> = ({ set }) => {
     }
   };
 
+  const radioName = (activeLanguage: { code: string }) => {
+    if (set.name) {
+      return set.name;
+    }
+    return `${translateSeason(set.season, activeLanguage)} ${set.year} ${
+      set.reexam ? (activeLanguage.code === 'gb' ? 'Re-exam' : 'Reeksamen') : ''
+    }`;
+  };
+
   return (
     <Form.Group key={set.id}>
       <Form.Field>
@@ -44,15 +53,13 @@ const SetRadioButton: React.SFC<SetRadioButtonProps> = ({ set }) => {
           {({ activeLanguage = { code: 'dk' } }) => (
             <>
               <Radio
-                label={`${translateSeason(set.season, activeLanguage)} ${set.year} ${
-                  set.reexam ? (activeLanguage.code === 'gb' ? 'Re-exam' : 'Reeksamen') : ''
-                }`}
+                label={radioName(activeLanguage)}
                 checked={set.id === chosenSetId}
                 name="selectedSetId"
                 onChange={() => handleChange(set.id)}
               />{' '}
               {user && <SetRadioButtonMetadata user={user} examSet={set} />}{' '}
-              <QuestionHadHelpLabel hadHelp={set.hadHelp} />
+              {!set.name && <QuestionHadHelpLabel hadHelp={set.hadHelp} />}
             </>
           )}
         </Translate>

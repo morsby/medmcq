@@ -81,8 +81,8 @@
       "The value must be between ${min} and ${max}."
     ],
     "total_n": [
-      "Der er ${n} spørgsmål på ${semesterNumber}. semester.",
-      "There are ${n} questions available on the ${semesterNumber}th semester."
+      "Der er ${n} spørgsmål at vælge imellem.",
+      "There are ${n} questions to choose between."
     ]
   },
   "selectionUniqueSelector": {

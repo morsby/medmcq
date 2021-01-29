@@ -35,9 +35,13 @@ const QuestionExtraButtons: React.SFC<QuestionExtraButtonsProps> = ({
   );
   const publicComments = comments.filter((comment) => !comment.isPrivate).length;
   const privateComments = comments.filter((comment) => comment.isPrivate).length;
+  const isSingleMode = useSelector((state: ReduxState) => state.quiz.singleMode);
 
   const handleHidePercentages = () => {
     dispatch(quizReducer.actions.togglePercentages());
+  };
+  const handleSingleMode = () => {
+    dispatch(quizReducer.actions.toggleSingleMode());
   };
 
   return (
@@ -69,6 +73,9 @@ const QuestionExtraButtons: React.SFC<QuestionExtraButtonsProps> = ({
         </Menu.Item>
       )}
       <Menu.Menu position="right">
+        <Menu.Item onClick={handleSingleMode}>
+          {isSingleMode ? 'Single answer enabled' : 'Single answer disabled'}
+        </Menu.Item>
         <Menu.Item onClick={handleHidePercentages}>
           {percentagesHided ? (
             <Translate id="question.show_percentages" />

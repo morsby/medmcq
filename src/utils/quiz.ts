@@ -1,5 +1,5 @@
 import Question from 'classes/Question';
-import { UserAnswerInput, QuestionAnswer } from 'types/generated';
+import { UserAnswerInput } from 'types/generated';
 import { flatMap } from 'lodash';
 
 export const smoothScroll = (h?: number, dir = 'up') => {
@@ -26,30 +26,6 @@ export const smoothScroll = (h?: number, dir = 'up') => {
       window.scrollTo(0, bottom);
     }
   }
-};
-
-export const evalAnswer = (
-  userAnswer: UserAnswerInput,
-  answer: QuestionAnswer,
-  examMode: boolean,
-  isAnswered: boolean
-) => {
-  if (!isAnswered) return null; // hvis ikke svaret
-
-  // ExamMode
-  if (examMode && userAnswer && answer.id === userAnswer.answerId) {
-    return 'blue';
-  }
-
-  if (!examMode) {
-    if (answer.isCorrect) {
-      return 'green';
-    } else if (answer.id === userAnswer?.answerId) {
-      return 'red'; // hvis forkert svar
-    }
-  }
-
-  return 'grey'; // ikke valgt mulighed
 };
 
 export const calculateResults = (

@@ -31,6 +31,7 @@ import LoadingPage from 'components/Misc/Utility/LoadingPage';
 import Layout from 'components/Layout/Layout';
 import MaintenancePage from 'components/Misc/Utility/MaintenancePage';
 import FirstTimeToast from 'components/Misc/Utility/About/FirstTime/FirstTimeToast';
+import SemesterRerouter from 'components/Selection/SemesterRerouter';
 
 // Lazy components
 const Selection = lazy(() => import('./components/Selection/Selection'));
@@ -151,6 +152,7 @@ const App: React.SFC<AppProps> = ({ addTranslation, initialize }) => {
               <Route path={urls.forgotPassword} component={ForgotPassword} />
               <Route path={`${urls.resetPassword}/:token`} component={ResetPassword} />
               <Route path="/print" component={Print} />
+              <Route path="/:semesterId" component={SemesterRerouter} />
               <Route exact path="/" component={Selection} />
               <Route component={ErrorPage} />
             </Switch>

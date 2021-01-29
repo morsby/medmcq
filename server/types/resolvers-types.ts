@@ -324,6 +324,7 @@ export type ExamSet = {
   updatedAt?: Maybe<Scalars['String']>;
   questionCount?: Maybe<Scalars['Int']>;
   hadHelp?: Maybe<Scalars['Boolean']>;
+  name?: Maybe<Scalars['String']>;
 };
 
 export type ExamSetInput = {
@@ -819,6 +820,7 @@ export type ExamSetResolvers<ContextType = Context, ParentType extends Resolvers
   updatedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   questionCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
   hadHelp?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>;
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 

@@ -4,21 +4,28 @@ import { ReduxState } from 'redux/reducers';
 import { Message } from 'semantic-ui-react';
 import { QuestionAnswer } from 'types/generated';
 
-const QuestionAnswerExplanation = ({ answerNumber }: { answerNumber: number }) => {
+const QuestionAnswerExplanation = ({ answer }: { answer: QuestionAnswer }) => {
   const questionIndex = useSelector((state: ReduxState) => state.quiz.questionIndex);
   const question = useSelector((state: ReduxState) => state.questions.questions[questionIndex]);
-  const answer: QuestionAnswer = question.answers.find((a) => a.index === answerNumber);
-  const isAnswered = useSelector((state: ReduxState) =>
-    state.quiz.userAnswers.some((userAnswer) =>
-      question.answers.map((a) => a.id).includes(userAnswer.answerId)
+  const userAnswer = useSelector((state: ReduxState) =>
+    state.quiz.userAnswers.find((userAnswer) => userAnswer.answerId === answer.id)
+  );
+  const examMode = useSelector((state: ReduxState) => state.quiz.examMode);
+  const isAnswered = !!userAnswer;
+  const allUserAnswers = useSelector((state: ReduxState) =>
+    state.quiz.userAnswers.filter((userAnswer) =>
+      question.answers.some((a) => a.id === userAnswer.answerId)
     )
   );
+  const singleMode = useSelector((state: ReduxState) => state.quiz.singleMode);
+  const hasBeenAnswered = allUserAnswers.length > 0;
+  const multiActivated = singleMode && hasBeenAnswered;
 
-  if (!isAnswered || !answer.explanation) return null;
+  if ((!isAnswered && !multiActivated) || !answer.explanation || examMode) return null;
   return (
     <Message
       color={answer.isCorrect ? 'green' : 'grey'}
-      key={'answerExplanation' + answerNumber.toString()}
+      key={'answerExplanation' + answer.index.toString()}
     >
       {answer.explanation}
     </Message>

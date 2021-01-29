@@ -20,8 +20,7 @@ const QuestionCount: React.SFC<QuestionCountProps> = () => {
       <Translate
         id="selectionNSelector.total_n"
         data={{
-          n: semester.questionCount,
-          semesterNumber: semester.value,
+          n: semester.questionCount
         }}
       />
     </div>

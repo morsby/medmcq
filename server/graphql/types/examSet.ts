@@ -18,6 +18,7 @@ export const typeDefs = gql`
     updatedAt: String
     questionCount: Int
     hadHelp: Boolean
+    name: String
   }
 
   input ExamSetInput {
@@ -64,5 +65,9 @@ export const resolvers: Resolvers = {
       const examSet = await ctx.examSetsLoader.load(id);
       return !!examSet.hadHelp;
     },
+    name: async ({ id }, args, ctx) => {
+      const examSet = await ctx.examSetsLoader.load(id);
+      return examSet.name;
+    }
   }
 };
