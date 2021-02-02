@@ -159,7 +159,7 @@ const CreateQuestionForm: React.SFC<CreateQuestionFormProps> = ({ question }) =>
     key: semester.id
   }));
   const examSetOptions = examSets.map((examSet) => ({
-    text: `${examSet.season}${examSet.year}${examSet.reexam ? ' Reeksamen' : ''}`,
+    text: examSet.name || `${examSet.season}${examSet.year}${examSet.reexam ? ' Reeksamen' : ''}`,
     value: examSet.id,
     key: examSet.id
   }));
