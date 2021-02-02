@@ -13,12 +13,8 @@ const SelectionRandom: React.FC<SelectionRandomProps> = () => {
   return (
     <div>
       <SelectionNSelector />
-      {user?.role.id <= 3 && (
-        <>
-          <Divider />
-          <SelectionSearch />
-        </>
-      )}
+      <Divider />
+      <SelectionSearch />
     </div>
   );
 };
