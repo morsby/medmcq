@@ -1,0 +1,30 @@
+import React from 'react';
+import { Translate } from 'react-localize-redux';
+import { useSelector } from 'react-redux';
+import { ReduxState } from 'redux/reducers';
+
+export interface QuestionCountProps {}
+
+const QuestionCount: React.SFC<QuestionCountProps> = () => {
+  const selectedSemester = useSelector((state: ReduxState) => state.selection.semesterId);
+  const semester = useSelector((state: ReduxState) =>
+    state.metadata.semesters.find((semester) => semester.id === selectedSemester)
+  );
+
+  if (!semester)
+    return (
+      <p style={{ marginTop: '5px' }}>Vælg venligst et semester for at komme igang &#128578;</p>
+    );
+  return (
+    <div style={{ margin: '1rem auto' }}>
+      <Translate
+        id="selectionNSelector.total_n"
+        data={{
+          n: semester.questionCount
+        }}
+      />
+    </div>
+  );
+};
+
+export default QuestionCount;

@@ -1,0 +1,57 @@
+//@import './_colors.less';
+
+html,
+body,
+#root {
+  min-height: 100vh;
+}
+
+.flex-container {
+  flex: 1;
+
+  flex-direction: column;
+}
+.content {
+  padding-top: 15px;
+}
+
+.main-header {
+  background: $color-two;
+  color: #fff;
+  padding: 15px 0;
+
+  .header-text {
+    float: left;
+    line-height: 36px;
+    vertical-align: middle;
+  }
+}
+
+.main-footer {
+  margin-top: 25px;
+  background: $color-two;
+  color: #fff;
+  flex-shrink: 0;
+  padding: 25px 0;
+  .footer-text {
+    float: left;
+  }
+}
+
+.ui.form.custom {
+  .ui.message {
+    margin-top: 5px;
+  }
+}
+
+.ui {
+  &.blue,
+  &.primary {
+    background-color: $color-one !important;
+  }
+
+  &.blue.basic {
+    border-color: $color-one !important;
+    background-color: initial !important;
+  }
+}

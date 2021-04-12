@@ -1,10 +1,12 @@
 version: '3'
 services:
   server:
-    env_file: server/.env.development
+    env_file: .env.development
+    environment:
+      - NODE_ENV=production
     restart: always
     build: .
     ports:
       - '8080:3001'
     volumes:
-      - './images:/usr/src/app/client/build/images'
+      - './images:/usr/src/app/build/images'

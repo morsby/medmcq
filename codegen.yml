@@ -1,16 +1,15 @@
 overwrite: true
 schema: 'http://localhost:3001/graphql'
 generates:
-  client/src/types/generated.tsx:
+  src/types/generated.tsx:
     plugins:
       - 'typescript'
       - 'typescript-operations'
-      - 'typescript-react-apollo'
   server/types/resolvers-types.ts:
     plugins:
       - 'typescript'
       - 'typescript-resolvers'
     config:
       useIndexSignature: true
-      contextType: graphql/apolloServer#Context
+      contextType: config/apolloServer#Context
       defaultMapper: Partial<{T}>

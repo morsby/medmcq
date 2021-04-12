@@ -110,10 +110,11 @@ export const resolvers: Resolvers = {
 
       return { id: questionId };
     },
-    suggestTag: async (root, { tagName, questionId }) => {
-      const question = await Question.query().findById(questionId);
-      const examSet = await ExamSet.query().findById(question.examSetId);
-      const semester = await Semester.query().findById(examSet.semesterId);
+    suggestTag: async (root, { tagName, questionId }, ctx) => {
+      const question = await ctx.questionLoader.load(questionId);
+      const examSet = await ctx.examSetsLoader.load(question.examSetId);
+      const semester = await ctx.semesterLoader.load(examSet.semesterId);
+      const answers = await ctx.questionAnswersByQuestionLoader.load(questionId);
 
       const msg = {
         to: urls.issue,
@@ -122,14 +123,15 @@ export const resolvers: Resolvers = {
         text: `
   Der er blevet foreslået et nyt tag: ${tagName}.
   Det blev foreslået til spørgsmålet: 
-  - ID: ${question.id}
+  - Link: https://medmcq.au.dk/quiz/${question.id}
   - Semester: ${semester.value}
   - Sæt: ${examSet.year}/${examSet.season}
   - Spørgsmålnummer: ${question.examSetQno}
+  - BrugerId: ${ctx.user?.id}
   ${question.text}<br>
-  A. ${question.answer1}<br>
-  B. ${question.answer2}<br>
-  C. ${question.answer3}
+  A. ${answers.find((a) => a.index === 1).text}<br>
+  B. ${answers.find((a) => a.index === 2).text}<br>
+  C. ${answers.find((a) => a.index === 3).text}
   `
       };
 
@@ -190,10 +192,8 @@ export const resolvers: Resolvers = {
       return { id: tag.parentId };
     },
     questionCount: async ({ id }, _, ctx) => {
-      const getChildIds = async (parentId: number) => {
-        const children = await Tag.query()
-          .where({ parentId })
-          .select('id');
+      const getChildIds = async (parentId: number): Promise<number[]> => {
+        const children = await Tag.query().where({ parentId }).select('id');
         if (children.length === 0) return [];
         let ids = [];
         for (let child of children) {

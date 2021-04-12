@@ -1,0 +1,24 @@
+{
+  "header": {
+    "greeting": ["Velkommen, ${user}", "Welcome, ${user}"],
+    "profile": ["Profil", "Profile"],
+    "login": ["Log ind", "Login"],
+    "logout": ["Log ud", "Logout"],
+    "home": ["Forside", "Home"],
+    "credit": ["Spørgsmål er printet fra medMCQ", "Questions have been printed using medMCQ"],
+    "close": ["Luk", "Close"]
+  },
+  "footer": {
+    "about_link": ["Om siden", "About this site"],
+    "contact_link": ["Kontakt", "Contact"],
+    "permission": [
+      "Siden er lavet med tilladelse fra Institut for Klinisk Medicin og støttet af <a style=\"color:white;text-decoration: underline;\" target=\"_blank\" href=\"https://cesu.au.dk\">CESU</a>, Health, Aarhus Universitet.",
+      "The site is developed with permission from The Department of Clinical Medicine and supported by <a style=\"color:white;text-decoration: underline;\" target=\"_blank\" href=\"https://cesu.au.dk\">CESU</a>, Health, Aarhus University"
+    ],
+    "developed_by": [
+      "Udvikles af <a style=\"color:white;text-decoration: underline;\" href=\"https://pure.au.dk/portal/da/persons/thomas-jensen(f3739755-fb40-406e-b577-af166c82442a).html\" target=\"_blank\">Thomas Jensen</a>",
+      "Developed by <a style=\"color:white;text-decoration: underline;\" href=\"https://pure.au.dk/portal/da/persons/thomas-jensen(f3739755-fb40-406e-b577-af166c82442a).html\" target=\"_blank\">Thomas Jensen</a>"
+    ],
+    "created_by": ["Søsat af Sigurd Morsby Larsen", "Founded by Sigurd Morsby Larsen"]
+  }
+}

@@ -3,5 +3,7 @@
   "tabWidth": 2,
   "arrowParens": "always",
   "printWidth": 100,
-  "endOfLine": "lf"
+  "endOfLine": "lf",
+  "trailingComma": "none",
+  "bracketSpacing": true
 }

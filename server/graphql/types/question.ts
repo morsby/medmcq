@@ -2,18 +2,18 @@ import { gql } from 'apollo-server-express';
 import Question from 'models/question';
 import QuestionSpecialtyVote from 'models/question_specialty_vote';
 import Comment from 'models/question_comment';
-import QuestionCorrectAnswer from 'models/question_correct_answer';
 import QuestionTagVote from 'models/question_tag_vote';
 import QuestionImage from 'models/question_image';
 import QuestionUserAnswer from 'models/question_user_answer';
 import QuestionComment from 'models/question_comment';
 import { urls } from 'misc/vars';
-import ExamSet from 'models/exam_set';
-import Semester from 'models/semester';
 import sgMail from '@sendgrid/mail';
 import _ from 'lodash';
-import User from 'models/user';
 import { Resolvers } from 'types/resolvers-types';
+import ShareLink from 'models/shareLink';
+import { permitAdmin } from 'graphql/utils';
+import QuestionAnswer from 'models/questionAnswer.model';
+import QuestionIgnores from 'models/questionIgnores.model';
 
 export const typeDefs = gql`
   extend type Query {
@@ -23,37 +23,33 @@ export const typeDefs = gql`
   extend type Mutation {
     reportQuestion(report: String!, questionId: Int!): String
     createQuestion(data: QuestionInput): Question
+    updateQuestion(data: QuestionInput): Question
+    ignoreQuestion(id: Int): Question
   }
 
   input QuestionFilterInput {
-    text: String
     specialtyIds: [Int]
     tagIds: [Int]
     semesterId: Int
-    year: Int
-    season: String
     ids: [Int]
     n: Int
     examSetId: Int
     onlyNew: Boolean
     onlyWrong: Boolean
     commentIds: [Int]
-    profile: Boolean
     search: String
+    shareId: String
   }
 
   type Question {
     id: Int
     text: String
-    answer1: QuestionAnswer
-    answer2: QuestionAnswer
-    answer3: QuestionAnswer
+    answers: [QuestionAnswer]
     images: [String]
     oldId: String
     examSetQno: Int
     publicComments: [Comment]
     privateComments: [Comment]
-    correctAnswers: [Int]
     specialtyVotes: [SpecialtyVote]
     tagVotes: [TagVote]
     specialties: [Specialty]
@@ -61,22 +57,32 @@ export const typeDefs = gql`
     examSet: ExamSet
     createdAt: String
     updatedAt: String
+    user: User
+    isIgnored: Boolean
   }
 
   type QuestionAnswer {
-    answer: String
+    id: Int
+    index: Int
+    isCorrect: Boolean
+    text: String
     correctPercent: Int
+    question: Question
+    explanation: String
   }
 
   input QuestionInput {
-    answer1: String!
-    answer2: String!
-    answer3: String!
-    correctAnswers: [Int!]!
+    id: Int
+    answers: [QuestionAnswerInput]
     text: String!
     images: [String]
-    examSetQno: Int!
-    examSetId: Int!
+    examSetId: Int
+  }
+
+  input QuestionAnswerInput {
+    text: String
+    index: Int
+    isCorrect: Boolean
   }
 `;
 
@@ -85,17 +91,15 @@ export const resolvers: Resolvers = {
     questions: async (args, { filter }, ctx) => {
       const {
         ids,
-        season,
-        year,
         semesterId,
-        text,
         tagIds,
         specialtyIds,
         examSetId,
         search,
         onlyNew,
         onlyWrong,
-        commentIds
+        commentIds,
+        shareId
       } = filter;
       let { n } = filter;
 
@@ -103,10 +107,12 @@ export const resolvers: Resolvers = {
       let query = Question.query();
 
       if (ids) return query.findByIds(ids);
+      if (shareId) {
+        const shareObjs = await ShareLink.query().where({ shareId }).select('questionId');
+        return query.findByIds(shareObjs.map((obj) => obj.questionId));
+      }
       if (commentIds)
-        return QuestionComment.query()
-          .findByIds(commentIds)
-          .select('questionId as id');
+        return QuestionComment.query().findByIds(commentIds).select('questionId as id');
 
       query = query
         .join('semesterExamSet as examSet', 'question.examSetId', 'examSet.id')
@@ -118,25 +124,25 @@ export const resolvers: Resolvers = {
       // Specifics
       if (examSetId) return query.where('examSet.id', examSetId);
       if (search)
-        return query.whereRaw(
-          'MATCH (text, answer1, answer2, answer3) AGAINST (? IN BOOLEAN MODE)',
-          search
-        );
+        return query
+          .join('questionAnswers', 'question.id', 'questionAnswers.questionId')
+          .where(function () {
+            this.whereRaw('MATCH (question.text) AGAINST (? IN BOOLEAN MODE)', search).orWhereRaw(
+              'MATCH (question_answers.text) AGAINST (? IN BOOLEAN MODE)',
+              search
+            );
+          });
 
       // Start filtering based on other values
-
       query = query.orderByRaw('rand()');
 
-      if (!n || n > 300) n = 300; // Man må ikke hente mere end 300
+      if (ctx.user) {
+        if (!n || n > 600) n = 600; // Man må ikke hente mere end 600, hvis man er logget ind
+      } else {
+        if (!n || n > 300) n = 300; // Man må ikke hente mere end 300, hvis man ikke er logget ind
+      }
+
       query = query.limit(n);
-
-      if (year) {
-        query = query.where('examSet.year', '=', year);
-      }
-
-      if (season) {
-        query = query.where('examSet.season', '=', season);
-      }
 
       if (specialtyIds && specialtyIds.length > 0) {
         const votes = await QuestionSpecialtyVote.query()
@@ -170,24 +176,20 @@ export const resolvers: Resolvers = {
           );
       }
 
-      if (text) {
-        query = query.whereRaw(
-          'MATCH (text, answer1, answer2, answer3) AGAINST (? IN BOOLEAN MODE)',
-          filter.text
+      if (ctx.user) {
+        const ignoredQuestions = await QuestionIgnores.query().where({ userId: ctx.user.id });
+        query = query.whereNotIn(
+          'question.id',
+          ignoredQuestions.map((q) => q.questionId)
         );
       }
 
       if (ctx.user && onlyWrong) {
         const correctAnswers = QuestionUserAnswer.query()
           .where({ userId: ctx.user.id })
-          .join(
-            'questionCorrectAnswer',
-            'questionUserAnswer.questionId',
-            '=',
-            'questionCorrectAnswer.questionId'
-          )
-          .whereRaw('question_user_answer.answer = question_correct_answer.answer')
-          .select('questionUserAnswer.questionId');
+          .join('questionAnswers', 'questionUserAnswer.answerId', 'questionAnswers.id')
+          .where({ isCorrect: 1 })
+          .select('questionAnswers.questionId');
 
         query = query.whereNotIn('question.id', correctAnswers);
       } else if (ctx.user && onlyNew) {
@@ -195,6 +197,7 @@ export const resolvers: Resolvers = {
           'question.id',
           QuestionUserAnswer.query()
             .where({ userId: ctx.user.id })
+            .join('questionAnswers', 'questionUserAnswer.answerId', 'questionAnswers.id')
             .distinct('questionId')
         );
       }
@@ -206,29 +209,28 @@ export const resolvers: Resolvers = {
 
   Mutation: {
     createQuestion: async (root, { data }, ctx) => {
-      const user = await User.query().findById(ctx.user?.id);
-      if (user?.roleId >= 3) throw new Error('Not permitted');
-      const {
-        answer1,
-        answer2,
-        answer3,
-        correctAnswers,
-        text,
-        images,
-        examSetQno,
-        examSetId
-      } = data;
+      const user = await permitAdmin(ctx);
+      const { text, images, examSetId } = data;
+      const questions = await Question.query().where({ examSetId });
+      const examSetQno =
+        questions.reduce(
+          (max, question) => (question.examSetQno > max ? question.examSetQno : max),
+          0
+        ) + 1;
+
       const question = await Question.query().insertAndFetch({
-        answer1,
-        answer2,
-        answer3,
         text,
         examSetId,
         examSetQno,
         userId: user.id
       });
-      await QuestionCorrectAnswer.query().insertGraph(
-        correctAnswers.map((answer) => ({ answer, questionId: question.id }))
+      await QuestionAnswer.query().insertGraph(
+        data.answers.map((a) => ({
+          text: a.text,
+          index: a.index,
+          isCorrect: (a.isCorrect ? 1 : 0) as 1 | 0,
+          questionId: question.id
+        }))
       );
       if (!!images) {
         await QuestionImage.query().insertGraph(
@@ -238,10 +240,49 @@ export const resolvers: Resolvers = {
 
       return { id: question.id };
     },
-    reportQuestion: async (root, { report, questionId }) => {
-      const question = await Question.query().findById(questionId);
-      const examSet = await ExamSet.query().findById(question.examSetId);
-      const semester = await Semester.query().findById(examSet.semesterId);
+    updateQuestion: async (root, { data }, ctx) => {
+      const user = await permitAdmin(ctx);
+      let question = await Question.query().findById(data.id);
+      const { text, images } = data;
+      question = await question
+        .$query()
+        .updateAndFetch({ text })
+
+      if (!!images) {
+        await QuestionImage.query().insertGraph(
+          images.map((image) => ({ link: image, questionId: question.id }))
+        );
+      }
+      if (data.answers.length === 3) {
+        await QuestionAnswer.query().where({ questionId: question.id }).delete();
+        await QuestionAnswer.query().insertGraph(
+          data.answers.map((a) => ({
+            questionId: question.id,
+            text: a.text,
+            index: a.index,
+            isCorrect: (a.isCorrect ? 1 : 0) as 1 | 0
+          }))
+        );
+      }
+
+      return { id: question.id };
+    },
+    ignoreQuestion: async (root, { id }, ctx) => {
+      if (!ctx.user) throw new Error('Should be logged in');
+      const exists = await QuestionIgnores.query().findOne({ questionId: id, userId: ctx.user.id });
+      if (exists) {
+        await exists.$query().delete();
+      } else {
+        await QuestionIgnores.query().insert({ questionId: id, userId: ctx.user.id });
+      }
+
+      return { id };
+    },
+    reportQuestion: async (root, { report, questionId }, ctx) => {
+      const question = await ctx.questionLoader.load(questionId);
+      const examSet = await ctx.examSetsLoader.load(question.examSetId);
+      const semester = await ctx.semesterLoader.load(examSet.semesterId);
+      const answers = await ctx.questionAnswersByQuestionLoader.load(questionId);
 
       const msg = {
         to: urls.issue,
@@ -249,19 +290,20 @@ export const resolvers: Resolvers = {
         subject: `Fejl i spørgsmål med id ${question.id}`,
         text: `
   Der er blevet rapporteret en fejl i følgende spørgsmål:
-  - ID: ${question.id}
+  - Link: https://medmcq.au.dk/quiz/${question.id}
   - Semester: ${semester.value}
   - Sæt: ${examSet.year}/${examSet.season}
   - Spørgsmålnummer: ${question.examSetQno}
+  - BrugerId: ${ctx.user?.id}
   <hr>
   <strong>Indrapporteringen lyder:</strong>
   ${report}
   <hr>
   <strong>Spørgsmålet lyder:</strong>
   ${question.text}<br>
-  A. ${question.answer1}<br>
-  B. ${question.answer2}<br>
-  C. ${question.answer3}
+  A. ${answers.find((a) => a.index === 1).text}<br>
+  B. ${answers.find((a) => a.index === 2).text}<br>
+  C. ${answers.find((a) => a.index === 3).text}
   `
       };
 
@@ -277,44 +319,9 @@ export const resolvers: Resolvers = {
       const question = await ctx.questionLoader.load(id);
       return question.text;
     },
-    answer1: async ({ id }, args, ctx) => {
-      const question = await ctx.questionLoader.load(id);
-      let answers = await ctx.userAnswersByQuestionIdLoader.load(id);
-      answers = _(answers)
-        .sortBy((answer) => answer.createdAt, 'asc')
-        .uniqBy((answer) => answer.userId)
-        .value();
-      let correctPercent = 100;
-      if (answers.length > 0) {
-        correctPercent = Math.round(
-          (answers.filter((answer) => answer.answer === 1).length / answers.length) * 100
-        );
-      }
-      return { answer: question.answer1, correctPercent };
-    },
-    answer2: async ({ id }, args, ctx) => {
-      const question = await ctx.questionLoader.load(id);
-      let answers = await ctx.userAnswersByQuestionIdLoader.load(id);
-      answers = _(answers)
-        .sortBy((answer) => answer.createdAt, 'asc')
-        .uniqBy((answer) => answer.userId)
-        .value();
-      const correctPercent = Math.round(
-        (answers.filter((answer) => answer.answer === 2).length / answers.length) * 100
-      );
-      return { answer: question.answer2, correctPercent };
-    },
-    answer3: async ({ id }, args, ctx) => {
-      const question = await ctx.questionLoader.load(id);
-      let answers = await ctx.userAnswersByQuestionIdLoader.load(id);
-      answers = _(answers)
-        .sortBy((answer) => answer.createdAt, 'asc')
-        .uniqBy((answer) => answer.userId)
-        .value();
-      const correctPercent = Math.round(
-        (answers.filter((answer) => answer.answer === 3).length / answers.length) * 100
-      );
-      return { answer: question.answer3, correctPercent };
+    answers: async ({ id }, args, ctx) => {
+      const answers = await ctx.questionAnswersByQuestionLoader.load(id);
+      return answers.sort((a, b) => a.index - b.index).map((a) => ({ id: a.id }));
     },
     images: async ({ id }, args, ctx) => {
       const images = await QuestionImage.query().where({ questionId: id });
@@ -334,9 +341,7 @@ export const resolvers: Resolvers = {
       return { id: examSet.id };
     },
     publicComments: async ({ id }, _, ctx) => {
-      const publicComments = await Comment.query()
-        .where('questionId', id)
-        .where({ private: 0 });
+      const publicComments = await Comment.query().where('questionId', id).where({ private: 0 });
       return publicComments.map((pc) => ({ id: pc.id }));
     },
     privateComments: async ({ id }, args, ctx) => {
@@ -347,10 +352,6 @@ export const resolvers: Resolvers = {
         userId: ctx.user.id
       });
       return privateComments.map((comment) => ({ id: comment.id }));
-    },
-    correctAnswers: async ({ id }, args, ctx) => {
-      const correctAnswers = await QuestionCorrectAnswer.query().where('questionId', id);
-      return correctAnswers.map((ca) => ca.answer);
     },
     specialtyVotes: async ({ id }, args, ctx) => {
       const specialtyVotes = await QuestionSpecialtyVote.query().where('questionId', id);
@@ -389,6 +390,60 @@ export const resolvers: Resolvers = {
         .select('tagId');
 
       return tags.map((t) => ({ id: t.tagId }));
+    },
+    user: async ({ id }, args, ctx) => {
+      const question = await ctx.questionLoader.load(id);
+      if (!question.userId) return null;
+      return { id: question.userId };
+    },
+    isIgnored: async ({ id }, args, ctx) => {
+      if (!ctx.user) return false;
+      const ignored = await QuestionIgnores.query().findOne({
+        questionId: id,
+        userId: ctx.user.id
+      });
+      return !!ignored;
+    }
+  },
+
+  QuestionAnswer: {
+    id: ({ id }) => id,
+    text: async ({ id }, _, ctx) => {
+      const answer = await ctx.questionAnswersLoader.load(id);
+      return answer.text;
+    },
+    index: async ({ id }, _, ctx) => {
+      const answer = await ctx.questionAnswersLoader.load(id);
+      return answer.index;
+    },
+    explanation: async ({ id }, _, ctx) => {
+      const answer = await ctx.questionAnswersLoader.load(id);
+      return answer.explanation;
+    },
+    isCorrect: async ({ id }, _, ctx) => {
+      const answer = await ctx.questionAnswersLoader.load(id);
+      return !!answer.isCorrect;
+    },
+    correctPercent: async ({ id }, args, ctx) => {
+      const answer = await ctx.questionAnswersLoader.load(id);
+      const questionAnswers = await ctx.questionAnswersByQuestionLoader.load(answer.questionId);
+      let allUserAnswers = await QuestionUserAnswer.query().whereIn(
+        'answerId',
+        questionAnswers.map((qa) => qa.id)
+      );
+      if (allUserAnswers.length < 1) return 0;
+
+      const firstTimeAnswers = _(allUserAnswers)
+        .sortBy((answer) => answer.createdAt, 'asc')
+        .uniqBy((answer) => answer.userId)
+        .value();
+      const answeredThisCount = firstTimeAnswers.filter((ua) => ua.answerId === id);
+      const correctPercent = Math.round((answeredThisCount.length / firstTimeAnswers.length) * 100);
+      return correctPercent;
+    },
+    question: async ({ id }, _, ctx) => {
+      const answer = await ctx.questionAnswersLoader.load(id);
+      return { id: answer.questionId };
     }
   }
 };

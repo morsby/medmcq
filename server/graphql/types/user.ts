@@ -11,6 +11,9 @@ import ManualCompletedSet from 'models/manual_completed_set';
 import crypto from 'crypto';
 import _ from 'lodash';
 import { Resolvers } from 'types/resolvers-types';
+import Question from 'models/question';
+import QuestionAnswer from 'models/questionAnswer.model';
+import QuestionIgnores from 'models/questionIgnores.model';
 
 export const typeDefs = gql`
   extend type Query {
@@ -57,8 +60,9 @@ export const typeDefs = gql`
     email: String
     password: String
     role: Role
-    bookmarks: [Bookmark]
-    answers(semester: Int): [Answer]
+    bookmarks(semester: Int): [Bookmark]
+    ignored(semester: Int): [Question]
+    answers(semester: Int): [UserAnswer]
     specialtyVotes: [SpecialtyVote]
     tagVotes: [TagVote]
     likes: [Like]
@@ -97,12 +101,16 @@ export const resolvers: Resolvers = {
   Query: {
     user: async (_root, _args, ctx) => {
       if (!ctx.user) return null;
-      const user = await ctx.userLoader.load(ctx.user.id);
+      const user = ctx.user;
+      if (!user) {
+        ctx.res.cookie('user', {}, { expires: new Date(0) });
+        return null;
+      }
       return { id: user.id };
     },
     profile: async (_root, _args, ctx) => {
       if (!ctx.user) return null;
-      const user = await ctx.userLoader.load(ctx.user.id);
+      const user = ctx.user;
       return { id: user.id };
     },
     checkUsernameAvailability: async (root, { data: { username, email } }) => {
@@ -157,7 +165,6 @@ export const resolvers: Resolvers = {
       await user.$query().patch({ password, resetPasswordToken: null, resetPasswordExpires: null });
 
       // Send mail
-      sgMail.setApiKey(process.env.SENDGRID);
       const msg = {
         to: user.email,
         from: urls.fromEmail,
@@ -196,7 +203,6 @@ export const resolvers: Resolvers = {
       });
 
       // Send mail
-      sgMail.setApiKey(process.env.SENDGRID);
       const msg = {
         to: user.email,
         from: urls.fromEmail,
@@ -264,7 +270,8 @@ export const resolvers: Resolvers = {
 
       if (semester) {
         query = query
-          .join('question', 'questionUserAnswer.questionId', 'question.id')
+          .join('questionAnswers', 'questionUserAnswer.answerId', 'questionAnswers.id')
+          .join('question', 'questionAnswers.questionId', 'question.id')
           .join('semesterExamSet', 'question.examSetId', 'semesterExamSet.id')
           .where('semesterExamSet.semesterId', semester);
       }
@@ -282,14 +289,21 @@ export const resolvers: Resolvers = {
       const liked = await QuestionCommentLike.query().where({ userId: id });
       return liked.map((like) => ({ commentId: like.commentId, userId: like.userId }));
     },
-    bookmarks: async ({ id }, args, ctx) => {
-      const bookmarks = await QuestionBookmark.query().where({ userId: id });
+    bookmarks: async ({ id }, { semester }, ctx) => {
+      let query = QuestionBookmark.query().where('questionBookmark.userId', id);
+
+      if (semester) {
+        query = query
+          .join('question', 'questionId', 'question.id')
+          .join('semesterExamSet', 'question.examSetId', 'semesterExamSet.id')
+          .where({ semesterId: semester });
+      }
+
+      const bookmarks = await query;
       return bookmarks.map((bookmark) => ({ id: bookmark.id }));
     },
     publicComments: async ({ id }, { semester }, ctx) => {
-      let query = QuestionComment.query()
-        .where('questionComment.userId', id)
-        .where({ private: 0 });
+      let query = QuestionComment.query().where('questionComment.userId', id).where({ private: 0 });
 
       if (semester) {
         query = query
@@ -302,9 +316,7 @@ export const resolvers: Resolvers = {
       return publicComments.map((pubC) => ({ id: pubC.id }));
     },
     privateComments: async ({ id }, { semester }, ctx) => {
-      let query = QuestionComment.query()
-        .where('questionComment.userId', id)
-        .where({ private: 1 });
+      let query = QuestionComment.query().where('questionComment.userId', id).where({ private: 1 });
 
       if (semester) {
         query = query
@@ -324,13 +336,20 @@ export const resolvers: Resolvers = {
       // Get all questionIds that have been at least answered once
       const answeredQuestions = await QuestionUserAnswer.query()
         .where({ userId: id })
+        .distinct('answerId')
+        .select('answerId');
+      const questionAnswers = await QuestionAnswer.query()
+        .whereIn(
+          'id',
+          answeredQuestions.map((aq) => aq.answerId)
+        )
         .distinct('questionId')
         .select('questionId');
 
-      // Find all questions corresponding to the answeredQuestion Ids
-      const questions = await ctx.questionLoader.loadMany(
-        answeredQuestions.map((aq) => aq.questionId)
-      );
+      // Find all questions corresponding to the answeredIds
+      const answeredQuestionIds = questionAnswers.map((qa) => qa.questionId);
+      const questions = await Question.query().findByIds(answeredQuestionIds);
+
       const examSetIds = _.uniq(questions.map((question) => question.examSetId));
 
       // Count the questions answered based on each examSetId
@@ -343,6 +362,19 @@ export const resolvers: Resolvers = {
       }
 
       return answeredSets;
+    },
+    ignored: async ({ id }, { semester }) => {
+      let query = QuestionIgnores.query().where('questionIgnores.userId', id);
+
+      if (semester) {
+        query = query
+          .join('question', 'questionId', 'question.id')
+          .join('semesterExamSet', 'question.examSetId', 'semesterExamSet.id')
+          .where({ semesterId: semester });
+      }
+
+      const ignoredQuestions = await query;
+      return ignoredQuestions.map((q) => ({ id: q.questionId }));
     }
   },
 

@@ -1,23 +1,20 @@
 [
   {
-    "username": "TestBruger",
+    "username": "testBruger",
     "email": "test@test.dk",
-    "password": "$2b$10$MxtwzTWxOQWYyvr0Ag7qyenMUwBGKCpHB.LWd/WPGctcwqUd794V2",
-    "old_id": "gammel_id_1",
+    "password": "$2b$10$2uWCBjWQKs5evsy.OWGH/emQu/EAKNZuzXj8BNybyfUZvmrmXbEWK",
     "role_id": "user"
   },
   {
-    "username": "TestAdmin",
-    "email": "admin@test.dk",
-    "password": "$2b$10$MxtwzTWxOQWYyvr0Ag7qyenMUwBGKCpHB.LWd/WPGctcwqUd794V2",
-    "old_id": "gammel_id_2",
-    "role_id": "admin"
+    "username": "testBruger2",
+    "email": "test2@test.dk",
+    "password": "$2b$10$H0TCFWB7jBcBRBzL22ED5.fM6uluexdWm0LQDccrh1pFJ1A6ZuiRK",
+    "role_id": "user"
   },
   {
-    "username": "TestEditor",
-    "email": "editor@test.dk",
-    "password": "$2b$10$MxtwzTWxOQWYyvr0Ag7qyenMUwBGKCpHB.LWd/WPGctcwqUd794V2",
-    "old_id": "gammel_id_3",
-    "role_id": "editor"
+    "username": "testAdmin",
+    "email": "admin@test.dk",
+    "password": "$2b$10$2uWCBjWQKs5evsy.OWGH/emQu/EAKNZuzXj8BNybyfUZvmrmXbEWK",
+    "role_id": "admin"
   }
 ]

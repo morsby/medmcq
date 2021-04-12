@@ -28,14 +28,12 @@ export const typeDefs = gql`
 export const resolvers: Resolvers = {
   Query: {
     semesters: async (root, args, ctx) => {
-      const user = await User.query()
-        .findById(ctx.user?.id)
-        .skipUndefined();
+      const user = await User.query().findById(ctx.user?.id).skipUndefined();
       let semesters: Semester[];
       if (user?.roleId < 4) {
-        semesters = await Semester.query();
+        semesters = await Semester.query().orderBy('value', 'ASC');
       } else {
-        semesters = await Semester.query().where({ locked: 0 });
+        semesters = await Semester.query().where({ locked: 0 }).orderBy('value', 'ASC');
       }
       return semesters.map((semester) => ({ id: semester.id }));
     },
@@ -60,12 +58,8 @@ export const resolvers: Resolvers = {
       return semester.shortName;
     },
     questionCount: async ({ id }) => {
-      const examSetIds = ExamSet.query()
-        .where({ semesterId: id })
-        .select('id');
-      const count = await Question.query()
-        .whereIn('examSetId', examSetIds)
-        .count();
+      const examSetIds = ExamSet.query().where({ semesterId: id }).select('id');
+      const count: any = await Question.query().whereIn('examSetId', examSetIds).count();
       return count[0]['count(*)']; // Wierd way to get count from Objection/Knex
     },
     examSets: async ({ id }) => {

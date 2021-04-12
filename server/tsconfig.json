@@ -1,12 +1,13 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "target": "es6",
     "module": "commonjs",
-    "outDir": "./build",
+    "outDir": "../build/server",
     "baseUrl": "./",
-    "sourceMap": true
+    "sourceMap": true,
+    "isolatedModules": false,
+    "noImplicitAny": false,
+    "noEmit": false
   },
-  "include": ["./**/*"],
-  "exclude": ["./__tests__", "./build"]
+  "include": ["./**/*"]
 }

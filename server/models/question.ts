@@ -5,12 +5,9 @@ interface Question {
   oldId: string;
   text: string;
   image: string;
-  answer1: string;
-  answer2: string;
-  answer3: string;
-  userId: number;
   examSetQno: number;
   examSetId: number;
+  userId: number;
   createdAt: Date;
   updatedAt: Date;
 }

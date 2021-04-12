@@ -1,37 +1,26 @@
 [
   {
-    "question_id": "5c586e06e914bbe68ded3c91",
-    "user_id": "TestBruger",
+    "user_id": "testBruger",
     "specialty_id": "Hæmatologi"
   },
   {
-    "question_id": "5c586e06e914bbe68ded3c91",
-    "user_id": "TestBruger",
+    "user_id": "testBruger",
     "specialty_id": "Infektionsmedicin"
   },
   {
-    "question_id": "5c586e06e914bbe68ded3c91",
-    "user_id": "TestAdmin",
+    "user_id": "testAdmin",
     "specialty_id": "Hæmatologi"
   },
   {
-    "question_id": "5bf6e2c182ad7772c64bf565",
-    "user_id": "TestAdmin",
+    "user_id": "testAdmin",
     "specialty_id": "Abdominalkirurgi"
   },
   {
-    "question_id": "5bf6e2c182ad7772c64bf565",
-    "user_id": "TestAdmin",
+    "user_id": "testAdmin",
     "specialty_id": "Urologi"
   },
   {
-    "question_id": "5bf6e2c182ad7772c64bf565",
-    "user_id": "TestBruger",
+    "user_id": "testBruger",
     "specialty_id": "Abdominalkirurgi"
-  },
-  {
-    "question_id": "5c586e06e914bbe68ded3c91",
-    "user_id": "TestEditor",
-    "specialty_id": "Hæmatologi"
   }
 ]

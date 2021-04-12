@@ -5,6 +5,9 @@ interface ExamSet {
   year: number;
   season: string;
   semesterId: number;
+  reexam: 1 | 0;
+  hadHelp: 1 | 0;
+  name: string;
 }
 
 class ExamSet extends Model {

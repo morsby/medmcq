@@ -1,32 +1,26 @@
 [
   {
-    "question_id": "5bf6e2c182ad7772c64bf51e",
-    "user_id": "TestBruger",
+    "user_id": "testBruger",
     "tag_id": "Paraklinik"
   },
   {
-    "question_id": "5bf6e2c182ad7772c64bf51e",
-    "user_id": "TestBruger",
+    "user_id": "testBruger",
     "tag_id": "Radiologi"
   },
   {
-    "question_id": "5bf6e2c182ad7772c64bf51e",
-    "user_id": "TestAdmin",
+    "user_id": "testAdmin",
     "tag_id": "Paraklinik"
   },
   {
-    "question_id": "5bf6e2c182ad7772c64bf565",
-    "user_id": "TestAdmin",
+    "user_id": "testAdmin",
     "tag_id": "Leversygdomme"
   },
   {
-    "question_id": "5bf6e2c182ad7772c64bf565",
-    "user_id": "TestAdmin",
+    "user_id": "testAdmin",
     "tag_id": "Børn"
   },
   {
-    "question_id": "5bf6e2c182ad7772c64bf565",
-    "user_id": "TestBruger",
+    "user_id": "testBruger",
     "tag_id": "Leversygdomme"
   }
 ]

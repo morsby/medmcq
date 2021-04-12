@@ -9,6 +9,9 @@ import { typeDefs as Answer, resolvers as answerResolvers } from './answer';
 import { typeDefs as Vote, resolvers as voteResolvers } from './metadata';
 import { typeDefs as User, resolvers as userResolvers } from './user';
 import { typeDefs as Like, resolvers as likeResolvers } from './like';
+import { typeDefs as Other, resolvers as otherResolvers } from './other.types';
+import { notificationTypeDefs, notificationResolvers } from './notification.types';
+import { logResolvers, logTypeDefs } from './log';
 
 const Query = gql`
   type Query {
@@ -30,7 +33,10 @@ export const typeDefs = [
   Answer,
   Vote,
   User,
-  Like
+  Like,
+  Other,
+  notificationTypeDefs,
+  logTypeDefs
 ];
 
 export const resolvers = [
@@ -43,5 +49,8 @@ export const resolvers = [
   answerResolvers,
   voteResolvers,
   userResolvers,
-  likeResolvers
+  likeResolvers,
+  otherResolvers,
+  notificationResolvers,
+  logResolvers
 ];

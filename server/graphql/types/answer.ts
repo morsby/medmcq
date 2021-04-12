@@ -1,25 +1,22 @@
 import { gql } from 'apollo-server-express';
-import Question from 'models/question';
 import QuestionUserAnswer from 'models/question_user_answer';
 import { Resolvers } from 'types/resolvers-types';
 
 export const typeDefs = gql`
-  type Answer {
+  type UserAnswer {
     id: Int
-    answer: Int
-    question: Question
+    answer: QuestionAnswer
     answerTime: Int
     createdAt: String
     updatedAt: String
   }
 
   extend type Mutation {
-    answer(data: AnswerInput!): String
+    answer(data: UserAnswerInput!): String
   }
 
-  input AnswerInput {
-    answer: Int!
-    questionId: Int!
+  input UserAnswerInput {
+    answerId: Int!
     answerTime: Int!
   }
 `;
@@ -27,36 +24,28 @@ export const typeDefs = gql`
 export const resolvers: Resolvers = {
   Mutation: {
     answer: async (root, { data }, ctx) => {
-      const { answer, questionId, answerTime } = data;
+      const { answerId, answerTime } = data;
       const userId = ctx.user?.id;
 
       await QuestionUserAnswer.query().insert({
-        questionId,
         userId,
-        answer,
-        answerTime
+        answerId,
+        answerTime,
       });
 
       return 'Succesfully saved answer';
-    }
+    },
   },
 
-  Answer: {
+  UserAnswer: {
     id: ({ id }) => id,
     answer: async ({ id }, _, ctx) => {
       const answer = await ctx.userAnswersLoader.load(id);
-      return answer.answer;
+      return { id: answer.answerId };
     },
     answerTime: async ({ id }, _, ctx) => {
       const answer = await ctx.userAnswersLoader.load(id);
       return answer.answerTime;
-    },
-    question: async ({ id }, _, ctx) => {
-      const answer = await ctx.userAnswersLoader.load(id);
-      const question = await Question.query()
-        .findById(answer.questionId)
-        .select('id');
-      return { id: question.id };
     },
     createdAt: async ({ id }, _, ctx) => {
       const answer = await ctx.userAnswersLoader.load(id);
@@ -65,6 +54,6 @@ export const resolvers: Resolvers = {
     updatedAt: async ({ id }, _, ctx) => {
       const answer = await ctx.userAnswersLoader.load(id);
       return answer.updatedAt.toISOString();
-    }
-  }
+    },
+  },
 };

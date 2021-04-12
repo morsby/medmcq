@@ -2,6 +2,10 @@ import { gql } from 'apollo-server-express';
 import QuestionCommentLike from 'models/question_comment_like';
 import QuestionComment from 'models/question_comment';
 import { Resolvers } from 'types/resolvers-types';
+import Notification from 'models/notification.class';
+import ExamSet from 'models/exam_set';
+const domain =
+  process.env.NODE_ENV === 'production' ? 'https://medmcq.au.dk' : 'http://localhost:3000';
 
 export const typeDefs = gql`
   type Comment {
@@ -43,9 +47,7 @@ export const resolvers: Resolvers = {
         userId: ctx.user.id
       });
       if (alreadyLiked) {
-        await QuestionCommentLike.query()
-          .where({ commentId, userId })
-          .delete();
+        await QuestionCommentLike.query().where({ commentId, userId }).delete();
       } else {
         await QuestionCommentLike.query().insert({ commentId, userId });
       }
@@ -61,13 +63,34 @@ export const resolvers: Resolvers = {
     },
     addComment: async (root, { data }, ctx) => {
       const { text, isPrivate, isAnonymous, questionId } = data;
-      const comment = await QuestionComment.query().insertAndFetch({
+      let comment = await QuestionComment.query().insertAndFetch({
         text,
         private: isPrivate ? 1 : 0,
         anonymous: isAnonymous ? 1 : 0,
         questionId,
         userId: ctx.user.id
       });
+
+      if (!isPrivate) {
+        // Notification for other users in thread
+        comment = await comment
+          .$query()
+          .join('question', 'questionId', 'question.id')
+          .join('semesterExamSet', 'examSetId', 'semesterExamSet.id')
+          .select('questionComment.text', 'semesterId', 'questionComment.id');
+        const comments = await QuestionComment.query()
+          .where({ questionId })
+          .whereNot({ userId: ctx.user.id, private: 1 })
+          .distinct('userId');
+        for (let c of comments) {
+          await Notification.query().insert({
+            message: `Ny kommentar på spørgsmål ${questionId}.<br />[Gå til spørgsmålet](${domain}/quiz/${questionId}).`,
+            userId: c.userId,
+            semesterId: (comment as any).semesterId
+          });
+        }
+      }
+
       return { id: comment.id };
     },
     editComment: async (root, { data }, ctx) => {
@@ -103,6 +126,7 @@ export const resolvers: Resolvers = {
     },
     user: async ({ id }, _, ctx) => {
       const comment = await ctx.commentsLoader.load(id);
+      if (comment.anonymous && comment.userId !== ctx.user?.id) return { id: 924 };
       return { id: comment.userId };
     },
     createdAt: async ({ id }, _, ctx) => {
